@@ -10,7 +10,9 @@ class Document < ActiveFedora::Base
 
   self.human_readable_type = 'Document'
 
+  #
   # NOTE: we might want to abstract this out to a `Spot::LdrMetadata` concern?
+  #
 
   # `abstract` is currently being compounded with `description` (the label says 
   # "Abstract or Summary"). so let's break this out into its own thing + have description
@@ -39,8 +41,6 @@ class Document < ActiveFedora::Base
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization'), multiple: true do |index|
     index.as :stored_searchable, :facetable
   end
-
-  puts properties.count
 
   # This must be included at the end, because it finalizes the metadata
   # schema (by adding accepts_nested_attributes)
