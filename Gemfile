@@ -72,3 +72,5 @@ gem 'hydra-role-management'
 
 gem 'rubyzip'
 gem 'mimemagic'
+
+gem 'sidekiq'
