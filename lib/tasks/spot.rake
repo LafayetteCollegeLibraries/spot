@@ -1,3 +1,5 @@
+# bin/rails spot:ingest
+
 namespace :spot do
   # TODO: create separate ingest tasks for each type/collection
   task :ingest => :environment do
@@ -12,52 +14,82 @@ namespace :spot do
     #   3d. attach file (data/<hash>.pdf) to `doc`
     #   3e. save `doc`
 
+    tmp_directory = 'tmp/ingest'
+
+    DIRECTORY_NAME = Rails.root.join('ingest')
+    TMP_DIRECTORY = Rails.root.join('tmp', 'ingest')
+    SKIP_ENTRIES = %w{. .. .keep .DS_Store}
+
     user = User.find_by_email('malantoa@lafayette.edu')
+    paths = {}
 
-    # save ourselves the hassle by just defining the metadata
-    imported_attributes = {
-      :contributor => ["Ohlin, Alix"],
-      :title => ["In trouble with the Dutchman"],
-      :issued => "2006",
-      :publisher => ["Massachusetts Review"],
-      :identifier => ["http://hdl.handle.net/10385/47"],
-      :language => ["en_US"],
-      :department => ["English"],
-      :division => ["Humanities"],
-      :organization => ["Lafayette College"],
-    }
+    Dir.mkdir(TMP_DIRECTORY) unless Dir.exist?(TMP_DIRECTORY)
+
+    Dir.entries(DIRECTORY_NAME).each do |listing|
+      next if SKIP_ENTRIES.include?(listing)
+
+      file_path = DIRECTORY_NAME.join(listing)
+      
+      puts "ingesting #{listing}"
+
+      Zip::File.open(file_path) do |zip_file|
+        file = zip_file.glob('data/*.pdf')
+        metadata = zip_file.glob('data/*.csv')
+
+        raise "uh-oh! more than one pdf!" if file.count > 1
+        raise "uh-oh! more than one csv!" if metadata.count > 1
+
+        file = file.first
+        metadata = metadata.first
+
+        paths[:file] = TMP_DIRECTORY.join(File.basename(file.name))
+        paths[:metadata] = TMP_DIRECTORY.join(File.basename(metadata.name))
+
+        file.extract(paths[:file])
+        metadata.extract(paths[:metadata])
+      end
+
+      raw_metadata = CSV.read(paths[:metadata])
+      attributes = {}
+
+      raw_metadata.each do |record|
+        predicate, object = record[0..1]
+        doc_attributes = Document.properties.values.select { |val| val.predicate.to_s == predicate }.map { |val| val }
+
+        doc_attributes.each do |attribute|
+          if attribute.multiple?
+            attributes[attribute.term.to_sym] = object.split(';')
+          else
+            attributes[attribute.term.to_sym] = object.split(';').first
+          end
+        end
+      end
     
-    visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      visibility = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
-    doc = Document.new
-    doc.attributes = imported_attributes
-    doc.visibility = visibility
-    doc.admin_set = AdminSet.find('5999n3367') # LDR admin-set
-    doc.date_uploaded = Hyrax::TimeService.time_in_utc
-    doc.date_modified = Hyrax::TimeService.time_in_utc
-    doc.apply_depositor_metadata(user.user_key)
-    doc.save
+      doc = Document.new
+      doc.attributes = attributes
+      doc.visibility = visibility
+      doc.admin_set = AdminSet.find('5999n3367') # LDR admin-set
+      doc.date_uploaded = Hyrax::TimeService.time_in_utc
+      doc.date_modified = Hyrax::TimeService.time_in_utc
+      doc.apply_depositor_metadata(user.user_key)
+      doc.save
 
-    file = File.open('ingest/3/data/30777430134051182729313705105830045094.pdf')
-    file_set = FileSet.new
+      file = File.open(paths[:file])
+      file_set = FileSet.new
 
-    actor = Hyrax::Actors::FileSetActor.new(file_set, user)
-    actor.create_metadata(visibility: visibility)
-    actor.create_content(file)
-    actor.attach_to_work(doc)
-    actor.file_set.permissions_attributes = doc.permissions.map(&:to_hash)
+      actor = Hyrax::Actors::FileSetActor.new(file_set, user)
+      actor.create_metadata(visibility: visibility)
+      actor.create_content(file)
+      actor.attach_to_work(doc)
+      actor.file_set.permissions_attributes = doc.permissions.map(&:to_hash)
 
-    file_set.save
+      file_set.save
 
-    Hyrax::Workflow::WorkflowFactory.create(doc, imported_attributes, user)
+      Hyrax::Workflow::WorkflowFactory.create(doc, attributes, user)
+    end
+
+    paths.each_value { |path| File.unlink(path) }
   end
-
-
-
-
-    # Zip::File.open("ingest/3.zip") do |zip_file|
-    #   zip_file.each do |entry|
-    #     puts "entry: #{entry}"
-    #   end
-    # end
 end
