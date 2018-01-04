@@ -36,8 +36,20 @@ namespace :spot do
         file = zip_file.glob('data/*.pdf')
         metadata = zip_file.glob('data/*.csv')
 
-        raise "uh-oh! more than one pdf!" if file.count > 1
-        raise "uh-oh! more than one csv!" if metadata.count > 1
+        if file.count > 1
+          puts "> uh-oh! contains more than one pdf!"
+          next
+        end
+
+        if metadata.count > 1
+          puts "> uh-oh! contains more than one csv!"
+          next
+        end
+
+        if file.first.nil?
+          puts "> no pdfs found, skipping"
+          next
+        end
 
         file = file.first
         metadata = metadata.first
