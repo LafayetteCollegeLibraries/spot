@@ -69,3 +69,6 @@ group :development, :test do
 end
 
 gem 'hydra-role-management'
+
+gem 'rubyzip'
+gem 'mimemagic'

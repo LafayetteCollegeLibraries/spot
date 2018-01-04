@@ -451,6 +451,7 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
+    mimemagic (0.3.2)
     mini_magick (4.8.0)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
@@ -743,10 +744,12 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
+  mimemagic
   puma (~> 3.7)
   rails (~> 5.1.4)
   rsolr (>= 1.0)
   rspec-rails
+  rubyzip
   sass-rails (~> 5.0)
   selenium-webdriver
   solr_wrapper (>= 0.3)
