@@ -54,10 +54,10 @@ en:
         description: "Free-text notes about the work. Examples include a brief description or citation information for a journal article."
 
   hyrax:
-    product_name:           "Hyrax"
+    product_name:           "Spot"
     product_twitter_handle: "@SamveraRepo"
-    institution_name:       "Institution"
-    institution_name_full:  "The Institution Name"
+    institution_name:       "Lafayette College"
+    institution_name_full:  "Lafayette College"
     account_name:           "My Institution Account Id"
     directory:
       suffix:               "@example.org"
