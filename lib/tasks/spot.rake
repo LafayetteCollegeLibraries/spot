@@ -19,6 +19,7 @@ namespace :spot do
     DIRECTORY_NAME = Rails.root.join('ingest')
     TMP_DIRECTORY = Rails.root.join('tmp', 'ingest')
     SKIP_ENTRIES = %w{. .. .keep .DS_Store}
+    ADMIN_SET = AdminSet.where(title: 'Lafayette Digital Repository').first
 
     user = User.find_by_email('malantoa@lafayette.edu')
     paths = {}
@@ -82,7 +83,7 @@ namespace :spot do
       doc = Document.new
       doc.attributes = attributes
       doc.visibility = visibility
-      doc.admin_set = AdminSet.find('5999n3367') # LDR admin-set
+      doc.admin_set = ADMIN_SET
       doc.date_uploaded = Hyrax::TimeService.time_in_utc
       doc.date_modified = Hyrax::TimeService.time_in_utc
       doc.apply_depositor_metadata(user.user_key)
@@ -102,6 +103,6 @@ namespace :spot do
       Hyrax::Workflow::WorkflowFactory.create(doc, attributes, user)
     end
 
-    paths.each_value { |path| File.unlink(path) }
+    # paths.each_value { |path| File.unlink(path) }
   end
 end
