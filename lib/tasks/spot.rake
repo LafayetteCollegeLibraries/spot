@@ -1,7 +1,7 @@
 # bin/rails spot:ingest
-
 namespace :spot do
   # TODO: create separate ingest tasks for each type/collection
+  desc 'ingest BagIt items stored in <app>/ingest'
   task :ingest => :environment do
     # here's what we should do:
     # 
