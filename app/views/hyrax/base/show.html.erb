@@ -8,6 +8,11 @@
       <%= render 'work_title', presenter: @presenter %>
     </header>
   </div>
+
+  <div class="viewer-container col-xs-12">
+    <%= render 'representative_media', presenter: @presenter %>
+  </div>
+
   <div class="col-sm-8">
     <%= render 'work_description', presenter: @presenter %>
     <%= render 'relationships', presenter: @presenter %>
@@ -17,9 +22,7 @@
     <%= render "show_actions", presenter: @presenter %>
     <%# Use the fully qualified path to avoid RSpec error: translation missing: en.hyrax.base.show.html.erb.last_modified %>
     <%= t('hyrax.base.show.last_modified', value: @presenter.date_modified) %>
-    <%= render 'representative_media', presenter: @presenter %>
-    <%= render 'social_media' %>
-    <%= render 'citations', presenter: @presenter %>
+    <%= render 'document_controls' %>
   </div>
 </div>
 
@@ -27,8 +30,5 @@
   <div class="col-sm-12">
     <%= render 'items', presenter: @presenter %>
     <%= render 'workflow_actions_widget', presenter: @presenter %>
-    <%# TODO: we may consider adding these partials in the future %>
-    <%#= render 'sharing_with', presenter: @presenter %>
-    <%#= render 'user_activity', presenter: @presenter %>
   </div>
 </div>
