@@ -1,0 +1,12 @@
+<div class="download-controls">
+  <% unless @presenter.representative_presenter.nil? %>
+  <%= link_to hyrax.download_path(@presenter.representative_presenter),
+              data: { turbolinks: false },
+              target: :_blank,
+              id: "file_download",
+              data: { label: @presenter.representative_presenter.id },
+              class: "btn btn-default" do %>
+                <%= t('hyrax.file_set.show.downloadable_content.pdf_link') %>
+                <% end %>
+  <% end %>
+</div>
