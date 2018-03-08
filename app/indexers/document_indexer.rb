@@ -9,6 +9,11 @@ class DocumentIndexer < Hyrax::WorkIndexer
   # this behavior
   include Hyrax::IndexesLinkedMetadata
 
+  def generate_solr_document
+    super.tap do |solr_doc|
+      solr_doc['issued_tesi'] = object.issued
+    end
+  end
 
   # Uncomment this block if you want to add custom indexing behavior:
   # def generate_solr_document
