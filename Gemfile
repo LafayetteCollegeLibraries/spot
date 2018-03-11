@@ -74,3 +74,7 @@ gem 'rubyzip'
 gem 'mimemagic'
 
 gem 'sidekiq'
+
+group :development, :test do
+  gem 'factory_bot'
+end
