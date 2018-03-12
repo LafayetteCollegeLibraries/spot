@@ -4,7 +4,7 @@ include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
 RSpec.feature 'Create a Document', js: false do
-  context 'a logged in user' do
+  skip 'a logged in user' do
     let(:user_attributes) do
       { email: 'test@example.com' }
     end

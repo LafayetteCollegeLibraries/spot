@@ -63,9 +63,14 @@ gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
+
 group :development, :test do
   gem 'fcrepo_wrapper'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.6'
+  gem 'rspec-its', '~> 1.1'
+  gem 'factory_bot_rails', '~> 4.0', require: false
+  gem 'shoulda-matchers', '~> 3.1'
+  gem 'database_cleaner'
 end
 
 gem 'hydra-role-management'
@@ -74,7 +79,3 @@ gem 'rubyzip'
 gem 'mimemagic'
 
 gem 'sidekiq'
-
-group :development, :test do
-  gem 'factory_bot'
-end
