@@ -1,0 +1,4 @@
+# Place any default configuration for fcrepo_wrapper here
+port: 8986
+enable_jms: false
+fcrepo_home_dir: tmp/fcrepo4-test-data
