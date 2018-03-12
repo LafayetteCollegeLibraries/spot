@@ -7,6 +7,23 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rspec/rails'
 require 'factory_bot_rails'
+require 'ffaker'
+require 'active_fedora/cleaner'
+require 'capybara/rspec'
+require 'capybara/rails'
+require 'capybara/webkit'
+require 'capybara-screenshot/rspec'
+
+Capybara.javascript_driver = :webkit
+
+Capybara::Webkit.configure do |config|
+  config.raise_javascript_errors = true
+end
+
+Capybara::Screenshot.prune_strategy = :keep_last_run
+
+# require support files
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb}"].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
