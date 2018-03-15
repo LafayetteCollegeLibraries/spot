@@ -1,4 +1,6 @@
 Hyrax.config do |config|
+  # Injected via `rails g hyrax:work Trustee::Document`
+  config.register_curation_concern :"trustee/document"
   # Injected via `rails g hyrax:work Document`
   config.register_curation_concern :document
   # Register roles that are expected by your implementation.
