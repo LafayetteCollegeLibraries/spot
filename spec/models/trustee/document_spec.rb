@@ -1,5 +1,3 @@
-# Generated via
-#  `rails generate hyrax:work Trustee::Document`
 RSpec.describe Trustee::Document do
   let(:page_number) { 1234 }
   let(:title) { ['Title of Document'] }
@@ -7,9 +5,14 @@ RSpec.describe Trustee::Document do
   its(:human_readable_type) { should eq 'Trustee Document' }
 
   describe '#start_page' do
-    it 'must be numerical' do
-      expect { described_class.create!(title: title, start_page: 'nope') }
-      .to raise_error(ActiveFedora::RecordInvalid)
+    it 'should be an integer' do
+      expect { described_class.create!(title: title, start_page: '1234') }
+        .to raise_error(ActiveFedora::RecordInvalid)
+    end
+
+    it 'can be nil' do
+      expect { described_class.create!(title: title, start_page: nil) }
+        .not_to raise_error
     end
 
     context 'with a new Trustee::Document' do
@@ -30,9 +33,14 @@ RSpec.describe Trustee::Document do
   end
 
   describe '#end_page' do
-    it 'must be numerical' do
-      expect { described_class.create!(title: title, start_page: 'nope') }
+    it 'should be an integer' do
+      expect { described_class.create!(title: title, end_page: '1234') }
         .to raise_error(ActiveFedora::RecordInvalid)
+    end
+
+    it 'can be nil' do
+      expect { described_class.create!(title: title, end_page: nil) }
+        .not_to raise_error
     end
 
     context 'with a new Trustee::Document' do
