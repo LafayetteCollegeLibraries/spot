@@ -11,8 +11,7 @@ module Spot
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 
-    # inline the ActiveJob adapter for the moment
-    # https://github.com/samvera/hyrax#start-background-workers
+    # use sidekiq for async jobs
     config.active_job.queue_adapter = :sidekiq
 
     # Settings in config/environments/* take precedence over those specified here.
