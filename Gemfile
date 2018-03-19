@@ -45,14 +45,14 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'hyrax', '2.0.1'
+gem 'hyrax', '2.0.2'
 
 gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
 
-gem 'hydra-role-management'
+gem 'hydra-role-management', '~> 1.0'
 
 gem 'rubyzip'
 gem 'mimemagic'

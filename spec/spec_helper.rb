@@ -94,13 +94,29 @@ RSpec.configure do |config|
 
   config.render_views = true
 
-  config.before do |example|
-    ActiveFedora::Cleaner.clean! if example.metadata[:clean]
+  config.before(:suite) do
     DatabaseCleaner.clean_with :truncation
+    ActiveFedora::Cleaner.clean!
   end
 
-  config.after do
+  config.before do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(js: true) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
     DatabaseCleaner.clean
+  end
+
+  config.after(js: true) do
+    ActiveFedora::Cleaner.clean!
   end
 end
 

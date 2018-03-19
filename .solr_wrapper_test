@@ -1,7 +1,0 @@
-version: 7.1.0
-instance_dir: tmp/solr-test
-port: 8985
-collection:
-  persist: true
-  dir: solr/config/
-  name: hydra-test
