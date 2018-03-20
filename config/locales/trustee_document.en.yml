@@ -1,8 +1,8 @@
 en:
   hyrax:
     icons:
-      'trustee/document':     'fa fa-file-text-o'
+      trustee_document:     'fa fa-file-text-o'
     select_type:
-      'trustee/document':
+      trustee_document:
         name:               "Trustee Document"
         description:        "Board of Trustee documents"

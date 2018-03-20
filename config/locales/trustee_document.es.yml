@@ -1,9 +1,9 @@
 es:
   hyrax:
     icons:
-      document:     'fa fa-file-text-o'
+      trustee_document:     'fa fa-file-text-o'
     select_type:
-      document:
+      trustee_document:
         # TODO: translate `human_name` into Spanish
         name:               "Document"
         # TODO: translate `human_name` into Spanish
