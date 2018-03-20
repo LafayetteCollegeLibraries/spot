@@ -14,7 +14,7 @@ class Document < ActiveFedora::Base
   # NOTE: we might want to abstract this out to a `Spot::LdrMetadata` concern?
   #
 
-  # `abstract` is currently being compounded with `description` (the label says 
+  # `abstract` is currently being compounded with `description` (the label says
   # "Abstract or Summary"). so let's break this out into its own thing + have description
   # be its own thing
   property :abstract, predicate: ::RDF::Vocab::DC.abstract, multiple: false do |index|

@@ -40,6 +40,15 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # use the test queue for async jobs
-  config.active_job.queue_adapter = :test
+  # for now, inline active jobs during testing to prevent this
+  # warning from popping up:
+  #
+  #    Passing 'script' command to redis as is; administrative
+  #    commands cannot be effectively namespaced and should be
+  #    called on the redis connection directly; passthrough has
+  #    been deprecated and will be removed in redis-namespace 2.0
+  #
+  # TODO: come up with a way to not require calling ActiveFedora::Cleaner.clean!
+  # so much during tests.
+  config.active_job.queue_adapter = :inline
 end
