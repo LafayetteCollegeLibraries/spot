@@ -1,17 +1,8 @@
-# Generated via
-#  `rails generate hyrax:work Trustee::Document`
-require 'rails_helper'
 include Warden::Test::Helpers
 
-# NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'Create a Trustee::Document', js: false do
-  skip 'a logged in user' do
-    let(:user_attributes) do
-      { email: 'test@example.com' }
-    end
-    let(:user) do
-      User.new(user_attributes) { |u| u.save(validate: false) }
-    end
+RSpec.feature 'Create a Trustee::Document', :clean, :js do
+  context 'a logged in user' do
+    let(:user) { create(:user) }
 
     before do
       AdminSet.find_or_create_default_admin_set_id
@@ -19,15 +10,15 @@ RSpec.feature 'Create a Trustee::Document', js: false do
     end
 
     scenario do
-      visit '/dashboard'
+      visit '/dashboard?locale=en'
       click_link "Works"
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines
-      # choose "payload_concern", option: "Trustee::Document"
-      # click_button "Create work"
+      choose "payload_concern", option: "Trustee::Document"
+      click_button "Create work"
 
-      expect(page).to have_content "Add New Document"
+      expect(page).to have_content "Add New Trustee Document"
     end
   end
 end

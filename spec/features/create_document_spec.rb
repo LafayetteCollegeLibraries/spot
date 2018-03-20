@@ -3,7 +3,7 @@
 include Warden::Test::Helpers
 
 # NOTE: If you generated more than one work, you have to set "js: true"
-RSpec.feature 'Create a Document', js: true do
+RSpec.feature 'Create a Document', :clean, :js do
   context 'a logged in user' do
     let(:user) { create(:user) }
 
@@ -13,13 +13,13 @@ RSpec.feature 'Create a Document', js: true do
     end
 
     scenario do
-      visit '/dashboard'
+      visit '/dashboard?locale=en'
       click_link "Works"
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines
-      # choose "payload_concern", option: "Document"
-      # click_button "Create work"
+      choose "payload_concern", option: "Document"
+      click_button "Create work"
 
       expect(page).to have_content "Add New Document"
     end
