@@ -58,6 +58,7 @@ gem 'rubyzip'
 gem 'mimemagic'
 
 gem 'sidekiq'
+gem 'dotenv-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -77,4 +78,3 @@ group :development, :test do
   gem 'capybara-webkit'
   gem 'capybara-screenshot'
 end
-

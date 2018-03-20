@@ -26,3 +26,7 @@ fits.log
 # Ignore the ingest directory
 /ingest
 !/ingest/.keep
+
+# Ignore .env files
+.env*
+!.env.sample
