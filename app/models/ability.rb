@@ -10,6 +10,10 @@ class Ability
       can [:create, :show, :add_user, :remove_user, :index, :edit, :update, :destroy], Role
     end
 
+    if current_user.trustee? || current_user.admin?
+      can [:discover, :show, :update, :edit, :destroy], TrusteeDocument
+    end
+
     # Limits deleting objects to a the admin user
     #
     # if current_user.admin?

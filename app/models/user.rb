@@ -4,12 +4,9 @@ class User < ApplicationRecord
   # Connects this user object to Role-management behaviors.
   include Hydra::RoleManagement::UserRoles
 
-
   # Connects this user object to Hyrax behaviors.
   include Hyrax::User
   include Hyrax::UserUsageStats
-
-
 
   if Blacklight::Utils.needs_attr_accessible?
     attr_accessible :email, :password, :password_confirmation
@@ -26,5 +23,9 @@ class User < ApplicationRecord
   # the account.
   def to_s
     email
+  end
+
+  def trustee?
+    roles.where(name: 'trustee').exists?
   end
 end
