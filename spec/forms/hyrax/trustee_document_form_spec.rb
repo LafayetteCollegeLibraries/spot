@@ -4,7 +4,7 @@ RSpec.describe Hyrax::TrusteeDocumentForm do
 
     it { is_expected.to include :title }
     it { is_expected.to include :date_created }
-    it { is_expected.to include :classification }
+    it { is_expected.to include :source }
   end
 
   describe '.terms' do
@@ -14,7 +14,7 @@ RSpec.describe Hyrax::TrusteeDocumentForm do
     it { is_expected.to include :date_created }
     it { is_expected.to include :start_page }
     it { is_expected.to include :end_page }
-    it { is_expected.to include :classification }
+    it { is_expected.to include :source }
   end
 
   describe '.model_attributes' do
@@ -27,7 +27,7 @@ RSpec.describe Hyrax::TrusteeDocumentForm do
           date_created: ['2018-03-20'],
           start_page: '1234',
           end_page: '1289',
-          classification: ['']
+          source: ['']
         )
       end
 
@@ -44,7 +44,7 @@ RSpec.describe Hyrax::TrusteeDocumentForm do
           date_created: ['2018-03-20'],
           start_page: '',
           end_page: '',
-          classification: ['']
+          source: ['']
         )
       end
 

@@ -7,7 +7,7 @@ module Hyrax
     self.required_fields = [
       :title,
       :date_created,
-      :classification
+      :source
     ]
 
     self.terms = [
@@ -15,7 +15,7 @@ module Hyrax
       :date_created,
       :start_page,
       :end_page,
-      :classification
+      :source
     ]
 
     def self.model_attributes(_)
