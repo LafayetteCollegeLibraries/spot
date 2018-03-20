@@ -4,6 +4,11 @@ module Hyrax
   class DocumentForm < Hyrax::Forms::WorkForm
     self.model_class = ::Document
 
+    self.required_fields = [
+      :title,
+      :contributor,
+    ]
+
     # if you want to change the order, the complete list is at
     # https://github.com/samvera/hyrax/blob/2.0-stable/app/forms/hyrax/forms/work_form.rb
 
@@ -44,10 +49,5 @@ module Hyrax
       :member_of_collection_ids,
       :admin_set_id,
      ]
-
-    self.required_fields = [
-      :title,
-      :contributor,
-    ]
   end
 end
