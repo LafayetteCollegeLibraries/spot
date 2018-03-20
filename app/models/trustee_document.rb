@@ -1,4 +1,4 @@
-class Trustee::Document < ActiveFedora::Base
+class TrusteeDocument < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 
   # Change this to restrict which works can be added as a child.
@@ -6,7 +6,7 @@ class Trustee::Document < ActiveFedora::Base
   validates :title, presence: { message: 'Your work must have a title.' }
   validate :pages_must_be_integers_or_nil
 
-  self.indexer = Trustee::DocumentIndexer
+  self.indexer = TrusteeDocumentIndexer
 
   self.human_readable_type = 'Trustee Document'
 

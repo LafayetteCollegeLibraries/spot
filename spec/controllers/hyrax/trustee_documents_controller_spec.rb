@@ -1,8 +1,8 @@
 # Generated via
-#  `rails generate hyrax:work Trustee::Document`
+#  `rails generate hyrax:work TrusteeDocument`
 require 'rails_helper'
 
-RSpec.describe Hyrax::Trustee::DocumentPresenter do
+RSpec.describe Hyrax::TrusteeDocumentsController do
   it "has tests" do
     skip "Add your tests here"
   end

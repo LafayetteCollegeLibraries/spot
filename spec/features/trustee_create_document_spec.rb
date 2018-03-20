@@ -1,6 +1,6 @@
 include Warden::Test::Helpers
 
-RSpec.feature 'Create a Trustee::Document', :clean, :js do
+RSpec.feature 'Create a TrusteeDocument', :clean, :js do
   context 'a logged in user' do
     let(:user) { create(:user) }
 
@@ -15,7 +15,7 @@ RSpec.feature 'Create a Trustee::Document', :clean, :js do
       click_link "Add new work"
 
       # If you generate more than one work uncomment these lines
-      choose "payload_concern", option: "Trustee::Document"
+      choose "payload_concern", option: "TrusteeDocument"
       click_button "Create work"
 
       expect(page).to have_content "Add New Trustee Document"

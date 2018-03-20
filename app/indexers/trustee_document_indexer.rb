@@ -1,6 +1,4 @@
-# Generated via
-#  `rails generate hyrax:work Trustee::Document`
-class Trustee::DocumentIndexer < Hyrax::WorkIndexer
+class TrusteeDocumentIndexer < Hyrax::WorkIndexer
   # This indexes the default metadata. You can remove it if you want to
   # provide your own metadata and indexing.
   include Hyrax::IndexesBasicMetadata

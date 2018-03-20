@@ -1,4 +1,4 @@
-RSpec.describe Trustee::Document do
+RSpec.describe TrusteeDocument do
   let(:page_number) { 1234 }
   let(:title) { ['Title of Document'] }
 
@@ -15,7 +15,7 @@ RSpec.describe Trustee::Document do
         .not_to raise_error
     end
 
-    context 'with a new Trustee::Document' do
+    context 'with a new TrusteeDocument' do
       subject { described_class.new }
 
       its(:start_page) { is_expected.to be_nil }
@@ -43,7 +43,7 @@ RSpec.describe Trustee::Document do
         .not_to raise_error
     end
 
-    context 'with a new Trustee::Document' do
+    context 'with a new TrusteeDocument' do
       subject { described_class.new }
 
       its(:end_page) { is_expected.to be_nil }
