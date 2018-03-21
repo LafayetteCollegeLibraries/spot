@@ -87,6 +87,8 @@ RSpec.configure do |config|
   # /end rspec/rails
   ##
 
+  config.include Warden::Test::Helpers
+
   # FactoryBot setup
   config.include FactoryBot::Syntax::Methods
 

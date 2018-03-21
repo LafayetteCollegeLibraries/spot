@@ -1,7 +1,7 @@
 RSpec.describe User do
   describe '#trustee?' do
     context "when a user's groups contain 'trustee'" do
-      subject { create(:trustee) }
+      subject { create(:trustee_user) }
 
       its(:trustee?) { is_expected.to be true }
     end

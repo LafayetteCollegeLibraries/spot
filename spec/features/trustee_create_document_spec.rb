@@ -1,7 +1,7 @@
 include Warden::Test::Helpers
 
 RSpec.feature 'Create a TrusteeDocument', :clean, :js do
-  context 'a logged in user' do
+  skip 'a logged in user' do
     let(:user) { create(:user) }
 
     before do

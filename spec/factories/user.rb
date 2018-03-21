@@ -10,11 +10,11 @@ FactoryBot.define do
       guest true
     end
 
-    factory :admin do
+    factory :admin_user do
       roles { [Role.where(name: 'admin').first_or_create] }
     end
 
-    factory :trustee do
+    factory :trustee_user do
       roles { [Role.where(name: 'trustee').first_or_create] }
     end
   end
