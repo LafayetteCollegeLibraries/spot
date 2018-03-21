@@ -8,10 +8,11 @@ class Ability
   def custom_permissions
     if current_user.admin?
       can %i[create show add_user remove_user index edit update destroy], Role
+      can %i[create update edit destroy], TrusteeDocument
     end
 
     if current_user.trustee? || current_user.admin?
-      can %i[create discover show update edit destroy], TrusteeDocument
+      can %i[discover show], TrusteeDocument
     end
   end
 

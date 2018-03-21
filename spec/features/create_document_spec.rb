@@ -1,12 +1,12 @@
 RSpec.feature 'Create a Document', :clean, :js do
-  let(:user) { create(:user) }
-
   before do
     AdminSet.find_or_create_default_admin_set_id
     login_as user
   end
 
   context 'a logged in (regular) user' do
+    let(:user) { create(:user) }
+    
     describe 'should be taken directly to the new Document form' do
       scenario do
         visit '/dashboard?locale=en'
@@ -18,24 +18,6 @@ RSpec.feature 'Create a Document', :clean, :js do
         # Document form. when the time comes, the following test should work(?)
         #
         # expect(page).not_to have_css('input[value="TrusteeDocument"]')
-
-        expect(page).to have_content "Add New Document"
-      end
-    end
-  end
-
-  context 'a trustee user' do
-    let(:user) { create(:trustee_user) }
-
-    describe 'should be presented with multiple options' do
-      scenario do
-        visit '/dashboard?locale=en'
-        click_link "Works"
-        click_link "Add new work"
-
-        # If you generate more than one work uncomment these lines
-        choose "payload_concern", option: "Document"
-        click_button "Create work"
 
         expect(page).to have_content "Add New Document"
       end
