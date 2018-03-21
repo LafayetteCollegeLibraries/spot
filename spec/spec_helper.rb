@@ -11,13 +11,31 @@ require 'ffaker'
 require 'active_fedora/cleaner'
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'capybara/webkit'
 require 'capybara-screenshot/rspec'
 
-Capybara.javascript_driver = :webkit
+# copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
+#
+# @note In January 2018, TravisCI disabled Chrome sandboxing in its Linux
+#       container build environments to mitigate Meltdown/Spectre
+#       vulnerabilities, at which point Hyrax could no longer use the
+#       Capybara-provided :selenium_chrome_headless driver (which does not
+#       include the `--no-sandbox` argument).
+Capybara.register_driver :selenium_chrome_headless_sandboxless do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options.args << '--headless'
+  browser_options.args << '--disable-gpu'
+  browser_options.args << '--no-sandbox'
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+end
 
-Capybara::Webkit.configure do |config|
-  config.raise_javascript_errors = true
+Capybara.default_driver = :rack_test # This is a faster driver
+Capybara.javascript_driver = :selenium_chrome_headless_sandboxless # This is slower
+
+# since we've created a custsom driver (that is a wrapper around a Selenium
+# driver), we need to tell capybara-screenshot how to take a screenshot
+# (which is copied from the Selenium configuration)
+Capybara::Screenshot.register_driver(:selenium_chrome_headless_sandboxless) do |driver, path|
+  driver.browser.save_screenshot(path)
 end
 
 Capybara::Screenshot.prune_strategy = :keep_last_run
