@@ -4,19 +4,6 @@ require 'active_fedora/cleaner'
 
 namespace :spot do
   namespace :dev do
-    task __reset: [
-      :environment,
-      :__clean_repo,
-      :'db:drop',
-      :'db:setup',
-      :'hyrax:default_admin_set:create',
-      :'hyrax:workflow:load'
-    ]
-
-    task :__clean_repo do
-      ActiveFedora::Cleaner.clean!
-    end
-
     desc '[CAUTION] clear out fcrepo + solr + postgresql database'
     task reset: :environment do
       ENV['RAILS_ENV'] = 'development'
@@ -31,13 +18,30 @@ namespace :spot do
       Rake::Task['spot:dev:__reset'].invoke
     end
 
-    def clear_redis
-      Redis.current.keys.map { |key| Redis.current.del(key) }
-    rescue => e
-      Logger.new(STDOUT).warn "WARNING: Redis might be down: #{e}"
+    task __reset: [
+      :environment,
+      :__clean_repo,
+      :'db:drop',
+      :'__clear_redis',
+      :'__reset_directories',
+      :'db:setup',
+      :'hyrax:default_admin_set:create',
+      :'hyrax:workflow:load'
+    ]
+
+    task :__clean_repo do
+      ActiveFedora::Cleaner.clean!
     end
 
-    def reset_directories
+    task __clear_redis: :environment do
+      begin
+        Redis.current.keys.map { |key| Redis.current.del(key) }
+      rescue => e
+        Logger.new(STDOUT).warn "WARNING: Redis might be down: #{e}"
+      end
+    end
+    
+    task __reset_directories: :environment do
       # clear derivatives
       FileUtils.rm_rf Hyrax.config.derivatives_path
       FileUtils.mkdir_p Hyrax.config.derivatives_path
