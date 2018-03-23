@@ -23,19 +23,41 @@ requirements
 installing + starting
 ---------------------
 
-```bash
+```
 git clone https://github.com/LafayetteCollegeLibraries/spot
 cd spot
 bundle install
-bundle exec rake db:migrate
+bundle exec rails db:migrate
 ```
 
-Open up console tabs to run the following commands (in `/path/to/spot`)
-concurrently:
+You'll need to have a PostgreSQL database created. See
+[the postgres setup guide] in the Spot wiki.
 
-1. `fcrepo_wrapper` - to start a test Fedora Repository
-2. `solr_wrapper` - to start the Solr engine
-3. `bundle exec sidekiq` - use Sidekiq for async jobs
+In a separate console tab, `cd /path/to/spot` and start the Fedora + Solr
+servers:
+
+```
+bundle exec rails spot:dev_server
+```
+
+And in yet another, `cd /path/to/spot` and start the Sidekiq server (for
+async processing/jobs):
+
+```
+bundle exec sidekiq
+```
+
+Back in your first console, you'll need to first create the default admin set:
+
+```
+bundle exec rails hyrax:default_admin_set:create
+```
+
+And then you're good start Spot:
+
+```
+bundle exec rails server
+```
 
 
 [Hyrax]: http://hyr.ax/
@@ -46,3 +68,4 @@ concurrently:
 [FITS]: https://github.com/samvera/hyrax#characterization
 [LibreOffice]: https://github.com/samvera/hyrax#derivatives
 [ffmpeg]: https://github.com/samvera/hyrax#transcoding
+[the postgres setup guide]: https://github.com/LafayetteCollegeLibraries/spot/wiki/Setting-up-PostgreSQL
