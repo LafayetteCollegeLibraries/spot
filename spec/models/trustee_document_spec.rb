@@ -15,6 +15,11 @@ RSpec.describe TrusteeDocument do
         .not_to raise_error
     end
 
+    it 'can be an empty string' do
+      expect { described_class.create!(title: title, start_page: '') }
+        .not_to raise_error
+    end
+
     context 'with a new TrusteeDocument' do
       subject { described_class.new }
 
@@ -40,6 +45,11 @@ RSpec.describe TrusteeDocument do
 
     it 'can be nil' do
       expect { described_class.create!(title: title, end_page: nil) }
+        .not_to raise_error
+    end
+
+    it 'can be an empty string' do
+      expect { described_class.create!(title: title, end_page: '') }
         .not_to raise_error
     end
 

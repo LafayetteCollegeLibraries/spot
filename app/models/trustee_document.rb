@@ -33,7 +33,7 @@ class TrusteeDocument < ActiveFedora::Base
 
   def validate_integerality_of(field)
     value = self.send(field)
-    return if value.nil? || value.is_a?(Integer)
+    return if value.blank? || value.is_a?(Integer)
 
     errors.add(field, 'must be an integer')
   end
