@@ -1,34 +1,41 @@
 FactoryBot.define do
   factory :document do
     id { ActiveFedora::Noid::Service.new.mint }
+
     title [FFaker::Book.title]
-    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-
-    transient do
-      user { nil }
-      pdf { nil }
-    end
-
-    after(:build) do |work, evaluator|
-      work.apply_depositor_metadata(evaluator.user.user_key)
-
-      if evaluator.pdf
-        actor = Hyrax::Actors::FileSetActor.new(FileSet.create, evaluator.user)
-        actor.create_metadata({})
-        actor.create_content(Hyrax::UploadedFile.create(file: evaluator.pdf))
-        actor.attach_to_work(work)
-      end
-    end
+    date_created { [FFaker::Time.date] }
 
     admin_set do
       AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
     end
 
-    creator { ["#{FFaker::Name.last_name}, #{FFaker::Name.first_name}"] }
+    trait :public do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
 
-    depositor do
-      u = create(:user, display_name: creator.first)
-      u.user_key
+    trait :authenticated do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+    end
+
+    trait :private do
+      visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    end
+
+    transient do
+      file { nil }
+      user { nil }
+    end
+
+    after(:build) do |work, evaluator|
+      work.apply_depositor_metadata(evaluator.user.user_key) if evaluator.user
+
+      # TODO: add ability to attach multiple files
+      unless evaluator.file.nil?
+        actor = Hyrax::Actors::FileSetActor.new(FileSet.create, evaluator.user)
+        actor.create_metadata({})
+        actor.create_content(Hyrax::UploadedFile.create(file: evaluator.file))
+        actor.attach_to_work(work)
+      end
     end
   end
 end
