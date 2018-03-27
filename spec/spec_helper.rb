@@ -106,6 +106,7 @@ RSpec.configure do |config|
   ##
 
   config.include Warden::Test::Helpers
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   # FactoryBot setup
   config.include FactoryBot::Syntax::Methods
