@@ -49,8 +49,7 @@ RSpec.feature 'Create a TrusteeDocument', :clean, :js do
 
         # give Spot a chance to process the document (but not characterize
         # the document)
-        doc = TrusteeDocument.where(title: attrs[:title].first) while doc.nil?
-        doc = doc.first
+        doc = TrusteeDocument.where(title: attrs[:title]).first while doc.nil?
 
         expect(page).to have_content doc.title.first
         expect(page).to have_content doc.date_created.first

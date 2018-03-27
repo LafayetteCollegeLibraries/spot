@@ -6,7 +6,7 @@ RSpec.feature 'Create a Document', :clean, :js do
 
   context 'a logged in (regular) user' do
     let(:user) { create(:user) }
-    
+
     describe 'should be taken directly to the new Document form' do
       scenario do
         visit '/dashboard?locale=en'
@@ -33,7 +33,11 @@ RSpec.feature 'Create a Document', :clean, :js do
         click_link "Works"
         click_link "Add new work"
 
-        # If you generate more than one work uncomment these lines
+        # we're moving too fast for js
+        sleep(1)
+        
+        expect(page.find_all('input[name="payload_concern"]').length).to be > 1
+
         choose "payload_concern", option: "Document"
         click_button "Create work"
 

@@ -12,12 +12,12 @@ class TrusteeDocument < ActiveFedora::Base
 
   property :start_page, predicate: ::RDF::Vocab::MODS.partStart, multiple: false do |index|
     index.type :integer
-    index.as :stored_sortable
+    index.as :stored_searchable
   end
 
   property :end_page, predicate: ::RDF::Vocab::MODS.partEnd, multiple: false do |index|
     index.type :integer
-    index.as :stored_sortable
+    index.as :stored_searchable
   end
 
   # This must be included at the end, because it finalizes the metadata

@@ -8,11 +8,10 @@ class Ability
   def custom_permissions
     if current_user.admin?
       can %i[create show add_user remove_user index edit update destroy], Role
-      can %i[create update edit destroy], TrusteeDocument
     end
 
     if current_user.trustee? || current_user.admin?
-      can %i[discover show], TrusteeDocument
+      can %i[create read discover update edit destroy], TrusteeDocument
     end
   end
 
@@ -24,6 +23,6 @@ class Ability
 
   def everyone_can_create_most_curation_concerns
     return unless registered_user?
-    can :create, curation_concerns_models - blacklisted_models
+    can :create, (curation_concerns_models - blacklisted_models)
   end
 end

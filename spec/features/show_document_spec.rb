@@ -1,7 +1,7 @@
-RSpec.feature 'Show Document page', js: true do
+RSpec.feature 'Show Document page', :js do
   let(:user) { create(:user) }
   let(:pdf) { File.open("#{::Rails.root}/spec/fixtures/image-document.pdf") }
-  let(:doc) { create(:document, user: user, pdf: pdf) }
+  let(:doc) { create(:document, :public, user: user, file: pdf) }
 
   before do
     allow(CharacterizeJob).to receive(:perform_later) # There is no fits installed on travis-ci
