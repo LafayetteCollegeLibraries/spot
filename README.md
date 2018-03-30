@@ -1,6 +1,8 @@
 spot
 ====
 
+[![Build Status](https://travis-ci.org/LafayetteCollegeLibraries/spot.svg?branch=master)](https://travis-ci.org/LafayetteCollegeLibraries/spot)
+
 :warning: _**this project is under active construction**_ :warning:
 
 Spot is the future Digital Collections and Institutional Repository
