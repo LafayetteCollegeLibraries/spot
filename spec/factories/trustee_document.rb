@@ -12,8 +12,8 @@ FactoryBot.define do
       ["Lafayette College : #{source.first}, #{date}"]
     end
 
-    sequence :start_page { |n| n + 100 }
-    sequence :end_page { |n| n + 110 }
+    sequence(:start_page) { |n| n + 100 }
+    sequence(:end_page) { |n| n + 110 }
 
     admin_set do
       AdminSet.find(AdminSet.find_or_create_default_admin_set_id)

@@ -3,8 +3,6 @@ default: &default
   pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
   timeout: 5000
   encoding: unicode
-  username: "<%= ENV.fetch('PSQL_USER') %>"
-  password: "<%= ENV.fetch('PSQL_PASSWORD') %>"
 
 development:
   <<: *default
@@ -20,3 +18,5 @@ test:
 production:
   <<: *default
   database: "<%= ENV.fetch('PSQL_DATABASE') %>"
+  username: "<%= ENV.fetch('PSQL_USER') %>"
+  password: "<%= ENV.fetch('PSQL_PASSWORD') %>"
