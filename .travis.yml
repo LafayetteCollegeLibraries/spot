@@ -25,7 +25,7 @@ rvm:
 before_script:
   - bundle exec rake db:create
 script:
-  - xvfb-run -a bundle exec rake ci
+  - bundle exec rake spot:ci
 services:
   - redis-server
   - postgresql
