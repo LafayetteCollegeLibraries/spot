@@ -4,6 +4,8 @@ lock "~> 3.10.1"
 set :application, "spot"
 set :repo_url, "https://github.com/LafayetteCollegeLibraries/spot.git"
 
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads'
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
