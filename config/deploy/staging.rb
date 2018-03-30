@@ -1,6 +1,7 @@
 server 'rhodes0.stage.lafayette.edu', user: 'deploy', roles: %w[app db]
 
 set :rails_env, 'production'
+append :linked_files, '.env.production'
 
 # server-based syntax
 # ======================

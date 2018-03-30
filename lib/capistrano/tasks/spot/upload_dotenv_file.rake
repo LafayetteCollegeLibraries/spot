@@ -10,4 +10,4 @@ namespace :spot do
   end
 end
 
-before 'deploy:migrate', 'spot:upload_dotenv_file'
+before 'deploy:check:linked_files', 'spot:upload_dotenv_file'
