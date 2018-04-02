@@ -19,7 +19,7 @@ requirements
 - [FITS] - for file information
 - [LibreOffice] - for document derivatives
 - [ffmpeg] - for a/v derivatives / transcoding
-- Ruby, version 2.4.1
+- Ruby, version 2.4.2
 - Rails, `>= 5.1.4`
 
 installing + starting
