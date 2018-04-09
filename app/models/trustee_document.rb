@@ -10,12 +10,12 @@ class TrusteeDocument < ActiveFedora::Base
 
   self.human_readable_type = 'Trustee Document'
 
-  property :start_page, predicate: ::RDF::Vocab::MODS.partStart, multiple: false do |index|
+  property :page_start, predicate: ::RDF::Vocab::MODS.partStart, multiple: false do |index|
     index.type :integer
     index.as :stored_searchable
   end
 
-  property :end_page, predicate: ::RDF::Vocab::MODS.partEnd, multiple: false do |index|
+  property :page_end, predicate: ::RDF::Vocab::MODS.partEnd, multiple: false do |index|
     index.type :integer
     index.as :stored_searchable
   end
@@ -27,8 +27,8 @@ class TrusteeDocument < ActiveFedora::Base
   private
 
   def pages_must_be_integers_or_nil
-    validate_integerality_of(:start_page)
-    validate_integerality_of(:end_page)
+    validate_integerality_of(:page_start)
+    validate_integerality_of(:page_end)
   end
 
   def validate_integerality_of(field)
