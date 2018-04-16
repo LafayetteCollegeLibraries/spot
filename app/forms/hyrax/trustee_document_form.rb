@@ -13,15 +13,15 @@ module Hyrax
     self.terms = [
       :title,
       :date_created,
-      :start_page,
-      :end_page,
+      :page_start,
+      :page_end,
       :source
     ]
 
     def self.model_attributes(_)
       super.tap do |attrs|
-        attrs[:start_page] = attrs[:start_page].to_i unless attrs[:start_page].blank?
-        attrs[:end_page] = attrs[:end_page].to_i unless attrs[:end_page].blank?
+        attrs[:page_start] = attrs[:page_start].to_i unless attrs[:page_start].blank?
+        attrs[:page_end] = attrs[:page_end].to_i unless attrs[:page_end].blank?
       end
     end
   end
