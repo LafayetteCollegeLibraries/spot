@@ -23,7 +23,7 @@ FactoryBot.define do
 
     transient do
       file { nil }
-      user { nil }
+      user { create(:user) }
     end
 
     after(:build) do |work, evaluator|

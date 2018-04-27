@@ -25,7 +25,8 @@ RSpec.describe Hyrax::TrusteeDocumentsController do
     let(:doc) { create(:trustee_document) }
 
     # TODO: skipping until we figure out auth issues with TrusteeDocuments
-    skip 'returns Unauthorized' do
+    it 'returns Unauthorized' do
+      skip 'Skipping until we figure out auth issues with TrusteeDocuments'
       expect(response.status).to eq 401
       expect(response.message).to eq 'Unauthorized'
     end

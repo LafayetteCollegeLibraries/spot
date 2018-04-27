@@ -4,69 +4,69 @@ RSpec.describe TrusteeDocument do
 
   its(:human_readable_type) { should eq 'Trustee Document' }
 
-  describe '#start_page' do
+  describe '#page_start' do
     it 'should be an integer' do
-      expect { described_class.create!(title: title, start_page: '1234') }
+      expect { described_class.create!(title: title, page_start: '1234') }
         .to raise_error(ActiveFedora::RecordInvalid)
     end
 
     it 'can be nil' do
-      expect { described_class.create!(title: title, start_page: nil) }
+      expect { described_class.create!(title: title, page_start: nil) }
         .not_to raise_error
     end
 
     it 'can be an empty string' do
-      expect { described_class.create!(title: title, start_page: '') }
+      expect { described_class.create!(title: title, page_start: '') }
         .not_to raise_error
     end
 
     context 'with a new TrusteeDocument' do
       subject { described_class.new }
 
-      its(:start_page) { is_expected.to be_nil }
+      its(:page_start) { is_expected.to be_nil }
     end
 
     context 'with a doc that has a start page' do
       subject do
         described_class.new.tap do |doc|
-          doc.start_page = page_number
+          doc.page_start = page_number
         end
       end
 
-      its(:start_page) { is_expected.to eq page_number }
+      its(:page_start) { is_expected.to eq page_number }
     end
   end
 
-  describe '#end_page' do
+  describe '#page_end' do
     it 'should be an integer' do
-      expect { described_class.create!(title: title, end_page: '1234') }
+      expect { described_class.create!(title: title, page_end: '1234') }
         .to raise_error(ActiveFedora::RecordInvalid)
     end
 
     it 'can be nil' do
-      expect { described_class.create!(title: title, end_page: nil) }
+      expect { described_class.create!(title: title, page_end: nil) }
         .not_to raise_error
     end
 
     it 'can be an empty string' do
-      expect { described_class.create!(title: title, end_page: '') }
+      expect { described_class.create!(title: title, page_end: '') }
         .not_to raise_error
     end
 
     context 'with a new TrusteeDocument' do
       subject { described_class.new }
 
-      its(:end_page) { is_expected.to be_nil }
+      its(:page_end) { is_expected.to be_nil }
     end
 
     context 'with a doc that has a end page' do
       subject do
         described_class.new.tap do |doc|
-          doc.end_page = page_number
+          doc.page_end = page_number
         end
       end
 
-      its(:end_page) { is_expected.to eq page_number }
+      its(:page_end) { is_expected.to eq page_number }
     end
   end
 end

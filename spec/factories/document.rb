@@ -23,7 +23,15 @@ FactoryBot.define do
 
     transient do
       file { nil }
-      user { nil }
+
+      # Hyrax Works always need a depositor, otherwise the
+      # filter_suppressed_with_roles search builder raises:
+      #
+      #      NoMethodError:
+      #        undefined method `first' for nil:NilClass
+      #
+      # https://github.com/samvera/hyrax/commit/2daec42842497057741ec95162074ea9397318fa#diff-c34834626a3b0ac8c846cda6457fe38aR34
+      user { create(:user) }
     end
 
     after(:build) do |work, evaluator|
