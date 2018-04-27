@@ -31,8 +31,8 @@ RSpec.feature 'Create a TrusteeDocument', :clean, :js do
 
         click_link 'Additional fields'
 
-        fill_in 'Start page', with: attrs[:start_page]
-        fill_in 'End page', with: attrs[:end_page]
+        fill_in 'Page start', with: attrs[:page_start]
+        fill_in 'Page end', with: attrs[:page_end]
 
         # TODO: for some reason, we're not able to have a TrusteeDocument's
         # visibility set to 'Public' (or, rather 'open')
@@ -56,8 +56,8 @@ RSpec.feature 'Create a TrusteeDocument', :clean, :js do
         expect(page).to have_content doc.source.first
 
         # these need to be configured within the catalog_controller.rb first
-        # expect(page).to have_content doc.start_page
-        # expect(page).to have_content doc.end_page
+        # expect(page).to have_content doc.page_start
+        # expect(page).to have_content doc.page_end
       end
     end
   end

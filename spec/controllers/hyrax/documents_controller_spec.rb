@@ -2,7 +2,9 @@ RSpec.describe Hyrax::DocumentsController do
   context 'when visiting a known document' do
     let(:doc) { create(:document, :public) }
 
-    before { get :show, params: { id: doc.id } }
+    before do
+      get :show, params: { id: doc.id }
+    end
 
     it { expect(response).to be_successful }
   end
@@ -19,7 +21,9 @@ RSpec.describe Hyrax::DocumentsController do
   context 'when visiting a Private Document as a guest' do
     let(:doc) { create(:document, :private) }
 
-    before { get :show, params: { id: doc.id } }
+    before do
+      get :show, params: { id: doc.id }
+    end
 
     it 'redirects to the login page' do
       expect(response.status).to eq 302
