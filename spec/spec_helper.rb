@@ -41,7 +41,7 @@ end
 Capybara::Screenshot.prune_strategy = :keep_last_run
 
 # require support files
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb}"].each { |f| require f }
+Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 

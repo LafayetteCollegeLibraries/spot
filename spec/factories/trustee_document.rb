@@ -2,7 +2,7 @@ require 'date'
 
 FactoryBot.define do
   factory :trustee_document do
-    id { ActiveFedora::Noid::Service.new.mint }
+    id { NoidSupport.assign_id }
 
     date_created { [FFaker::Time.date] }
     source ['Meeting of the Board of Trustees']
@@ -12,8 +12,8 @@ FactoryBot.define do
       ["Lafayette College : #{source.first}, #{date}"]
     end
 
-    sequence(:start_page) { |n| n + 100 }
-    sequence(:end_page) { |n| n + 110 }
+    sequence(:page_start) { |n| n + 100 }
+    sequence(:page_end) { |n| n + 110 }
 
     admin_set do
       AdminSet.find(AdminSet.find_or_create_default_admin_set_id)

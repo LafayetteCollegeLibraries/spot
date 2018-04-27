@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :document do
-    id { ActiveFedora::Noid::Service.new.mint }
+    id { NoidSupport.assign_id }
 
     title [FFaker::Book.title]
     date_created { [FFaker::Time.date] }
