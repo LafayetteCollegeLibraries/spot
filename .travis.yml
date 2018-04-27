@@ -23,6 +23,9 @@ jdk:
 rvm:
   - 2.4.2
 before_script:
+  - psql -c "create user $PSQL_USER with password '$PSQL_PASSWORD';" -U postgres
+  - psql -c "create database $PSQL_DATABASE;" -U postgres
+  - psql -c "grant all on database $PSQL_DATABASE to $PSQL_USER;" -U postgres
   - bundle exec rake db:create
 script:
   - bundle exec rake spot:ci
