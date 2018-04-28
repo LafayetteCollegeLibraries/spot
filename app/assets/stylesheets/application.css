@@ -14,3 +14,7 @@
  *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
  *= require_self
  */
+
+.ui-autocomplete-loading {
+  background: white url("/assets/spinner-24.gif") right center no-repeat;
+}
