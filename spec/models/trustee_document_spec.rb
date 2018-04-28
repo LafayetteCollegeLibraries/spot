@@ -2,8 +2,6 @@ RSpec.describe TrusteeDocument do
   let(:page_number) { 1234 }
   let(:title) { ['Title of Document'] }
 
-  its(:human_readable_type) { should eq 'Trustee Document' }
-
   describe '#page_start' do
     it 'should be an integer' do
       expect { described_class.create!(title: title, page_start: '1234') }

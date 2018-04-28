@@ -1,8 +1,6 @@
 # Generated via
 #  `rails generate hyrax:work Document`
 RSpec.describe Document do
-  its(:human_readable_type) { should eq 'Document' }
-
   describe '.create' do
     context 'without a title provided' do
       it 'raises a validation error' do

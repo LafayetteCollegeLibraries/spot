@@ -4,6 +4,8 @@ RSpec.feature 'Create a Document', :clean, :js do
     login_as user
   end
 
+  let(:i18n_term) { I18n.t(:'activefedora.models.document') }
+
   context 'a logged in (regular) user' do
     let(:user) { create(:user) }
 
@@ -19,7 +21,7 @@ RSpec.feature 'Create a Document', :clean, :js do
         #
         # expect(page).not_to have_css('input[value="TrusteeDocument"]')
 
-        expect(page).to have_content "Add New Document"
+        expect(page).to have_content "Add New #{i18n_term}"
       end
     end
   end
@@ -35,13 +37,13 @@ RSpec.feature 'Create a Document', :clean, :js do
 
         # we're moving too fast for js
         sleep(1)
-        
+
         expect(page.find_all('input[name="payload_concern"]').length).to be > 1
 
         choose "payload_concern", option: "Document"
         click_button "Create work"
 
-        expect(page).to have_content "Add New Document"
+        expect(page).to have_content "Add New #{i18n_term}"
       end
     end
   end

@@ -8,8 +8,6 @@ class TrusteeDocument < ActiveFedora::Base
 
   self.indexer = TrusteeDocumentIndexer
 
-  self.human_readable_type = 'Trustee Document'
-
   property :page_start, predicate: ::RDF::Vocab::MODS.partStart, multiple: false do |index|
     index.type :integer
     index.as :stored_searchable

@@ -7,6 +7,8 @@ RSpec.feature 'Create a TrusteeDocument', :clean, :js do
     allow(CharacterizeJob).to receive(:perform_later)
   end
 
+  let(:i18n_term) { I18n.t(:'activefedora.models.trustee_document') }
+
   context 'an admin user' do
     let(:user) { create(:admin_user) }
     let(:attrs) { attributes_for(:trustee_document) }
@@ -14,7 +16,7 @@ RSpec.feature 'Create a TrusteeDocument', :clean, :js do
     describe 'can create a Trustee Document' do
       scenario do
         visit '/concern/trustee_documents/new'
-        expect(page).to have_content 'Add New Trustee Document'
+        expect(page).to have_content "Add New #{i18n_term}"
 
         click_link 'Files'
         within '#addfiles' do
@@ -75,7 +77,7 @@ RSpec.feature 'Create a TrusteeDocument', :clean, :js do
         # choose 'payload_concern', option: 'TrusteeDocument'
         # click_button 'Create work'
 
-        expect(page).not_to have_content 'Add New Trustee Document'
+        expect(page).not_to have_content "Add New #{i18n_term}"
       end
     end
 

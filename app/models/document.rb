@@ -9,8 +9,6 @@ class Document < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
 
-  self.human_readable_type = 'Document'
-
   #
   # NOTE: we might want to abstract this out to a `Spot::LdrMetadata` concern?
   #
