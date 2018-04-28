@@ -2,6 +2,7 @@
 #  `rails generate hyrax:work Document`
 class Document < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+  include Spot::LafayetteMetadata
 
   self.indexer = DocumentIndexer
   # Change this to restrict which works can be added as a child.
@@ -28,18 +29,6 @@ class Document < ActiveFedora::Base
 
   property :provenance, predicate: ::RDF::Vocab::DC.provenance, multiple: false do |index|
     index.as :stored_searchable
-  end
-
-  property :department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Department'), multiple: true do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division'), multiple: true do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization'), multiple: true do |index|
-    index.as :stored_searchable, :facetable
   end
 
   # This must be included at the end, because it finalizes the metadata
