@@ -42,6 +42,7 @@ gem 'hydra-role-management', '~> 1.0'
 
 gem 'rubyzip'
 gem 'mimemagic'
+gem 'darlingtonia', '~> 1.0'
 
 gem 'sidekiq'
 gem 'dotenv-rails'

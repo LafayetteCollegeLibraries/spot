@@ -183,6 +183,8 @@ GEM
       tins (~> 1.6)
     crass (1.0.4)
     daemons (1.2.6)
+    darlingtonia (1.0.0)
+      active-fedora (>= 11.0, <= 12.99)
     database_cleaner (1.7.0)
     declarative (0.0.10)
     declarative-option (0.1.0)
@@ -824,6 +826,7 @@ DEPENDENCIES
   chromedriver-helper
   coffee-rails (~> 4.2)
   coveralls (~> 0.8)
+  darlingtonia (~> 1.0)
   database_cleaner
   devise
   devise-guests (~> 0.6)
