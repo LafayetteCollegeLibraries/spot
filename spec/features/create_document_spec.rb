@@ -31,6 +31,8 @@ RSpec.feature 'Create a Document', :clean, :js do
 
     describe 'should be presented with multiple options' do
       scenario do
+        pending 'will return to when more work types are defined'
+
         visit '/dashboard?locale=en'
         click_link "Works"
         click_link "Add new work"
