@@ -1,8 +1,0 @@
-it:
-  hyrax:
-    icons:
-      trustee_document:     'fa fa-file-text-o'
-    select_type:
-      trustee_document:
-        name:               "Document"
-        description:        "Document opere"
