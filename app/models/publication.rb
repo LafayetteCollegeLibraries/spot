@@ -1,6 +1,5 @@
 class Publication < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
-  include Spot::LafayetteMetadata
 
   self.indexer = PublicationIndexer
   # Change this to restrict which works can be added as a child.
