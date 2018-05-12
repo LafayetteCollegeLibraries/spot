@@ -1,6 +1,6 @@
-RSpec.describe Hyrax::DocumentsController do
-  context 'when visiting a known document' do
-    let(:doc) { create(:document, :public) }
+RSpec.describe Hyrax::PublicationsController do
+  context 'when visiting a known publication' do
+    let(:doc) { create(:publication, :public) }
 
     before do
       get :show, params: { id: doc.id }
@@ -9,7 +9,7 @@ RSpec.describe Hyrax::DocumentsController do
     it { expect(response).to be_successful }
   end
 
-  context 'when visiting a non-existant document' do
+  context 'when visiting a non-existant publication' do
     # TODO: this shouldn't be raising an exception, but rather be rendering a 404
 
     it 'raises a Blacklight::RecordNotFound error' do
@@ -18,8 +18,8 @@ RSpec.describe Hyrax::DocumentsController do
     end
   end
 
-  context 'when visiting a Private Document as a guest' do
-    let(:doc) { create(:document, :private) }
+  context 'when visiting a Private Publication as a guest' do
+    let(:doc) { create(:publication, :private) }
 
     before do
       get :show, params: { id: doc.id }

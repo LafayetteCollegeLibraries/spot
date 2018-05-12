@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :document do
+  factory :publication do
     id { NoidSupport.assign_id }
 
     title [FFaker::Book.title]

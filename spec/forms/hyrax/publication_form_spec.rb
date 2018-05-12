@@ -1,4 +1,4 @@
-RSpec.describe Hyrax::DocumentForm do
+RSpec.describe Hyrax::PublicationForm do
   describe '.required_fields' do
     subject { described_class.required_fields }
 

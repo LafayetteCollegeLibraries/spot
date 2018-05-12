@@ -1,10 +1,8 @@
-# Generated via
-#  `rails generate hyrax:work Document`
-RSpec.describe Document do
+RSpec.describe Publication do
   describe '.create' do
     context 'without a title provided' do
       it 'raises a validation error' do
-        expect { Document.create! }.to raise_error(ActiveFedora::RecordInvalid)
+        expect { Publication.create! }.to raise_error(ActiveFedora::RecordInvalid)
       end
     end
   end
@@ -14,13 +12,13 @@ RSpec.describe Document do
       'A summary of a text, scientific article, document, speech, etc.'
     end
 
-    context 'with a new Document' do
+    context 'with a new Publication' do
       subject { described_class.new }
 
       its(:abstract) { is_expected.to be_nil }
     end
 
-    context 'with a Document that has an abstract' do
+    context 'with a Publication that has an abstract' do
       subject do
         described_class.new.tap do |doc|
           doc.abstract = abstract_text
@@ -34,13 +32,13 @@ RSpec.describe Document do
   describe '#issued' do
     let(:issued_date) { '2018-03-14' }
 
-    context 'with a new Document' do
+    context 'with a new Publication' do
       subject { described_class.new }
 
       its(:issued) { is_expected.to be_nil }
     end
 
-    context 'with a Document that has an issued date' do
+    context 'with a Publication that has an issued date' do
       subject do
         described_class.new.tap do |doc|
           doc.issued = issued_date
@@ -54,13 +52,13 @@ RSpec.describe Document do
   describe '#provenance' do
     let(:where_they_from) { 'Bethlehem, PA' }
 
-    context 'with a new Document' do
+    context 'with a new Publication' do
       subject { described_class.new }
 
       its(:provenance) { is_expected.to be_nil }
     end
 
-    context 'with a Document that has provenance' do
+    context 'with a Publication that has provenance' do
       subject do
         described_class.new.tap do |doc|
           doc.provenance = where_they_from
@@ -74,13 +72,13 @@ RSpec.describe Document do
   describe '#department' do
     let(:departments) { %w[Art Science History] }
 
-    context 'with a new Document' do
+    context 'with a new Publication' do
       subject { described_class.new }
 
       its(:department) { is_expected.to be_empty }
     end
 
-    context 'with a Document that has departments' do
+    context 'with a Publication that has departments' do
       subject do
         described_class.new.tap do |doc|
           doc.department = departments
@@ -94,13 +92,13 @@ RSpec.describe Document do
   describe '#division' do
     let(:bio_division) { %w[Biology] }
 
-    context 'with a new Document' do
+    context 'with a new Publication' do
       subject { described_class.new }
 
       its(:division) { is_expected.to be_empty }
     end
 
-    context 'with a Document that has divisions' do
+    context 'with a Publication that has divisions' do
       subject do
         described_class.new.tap do |doc|
           doc.division = bio_division
@@ -114,13 +112,13 @@ RSpec.describe Document do
   describe '#organization' do
     let(:org) { ['Lafayette College'] }
 
-    context 'with a new Document' do
+    context 'with a new Publication' do
       subject { described_class.new }
 
       its(:organization) { is_expected.to be_empty }
     end
 
-    context 'with a Document that has organizations' do
+    context 'with a Publication that has organizations' do
       subject do
         described_class.new.tap do |doc|
           doc.organization = org

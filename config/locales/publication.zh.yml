@@ -1,0 +1,10 @@
+zh:
+  hyrax:
+    icons:
+      publication:     'fa fa-file-text-o'
+    select_type:
+      publication:
+        # TODO: translate `human_name` into Chinese
+        name:               "Publication"
+        # TODO: translate `human_name` into Chinese
+        description:        "Publication 作品"
