@@ -7,27 +7,70 @@ class Publication < ActiveFedora::Base
   # self.valid_child_concerns = []
   validates :title, presence: { message: 'Your work must have a title.' }
 
-  #
-  # NOTE: we might want to abstract this out to a `Spot::LdrMetadata` concern?
-  #
+  property :publisher, predicate: ::RDF::Vocab::DC11.publisher do |index|
+    index.as :stored_searchable, :facetable
+  end
 
-  # `abstract` is currently being compounded with `description` (the label says
-  # "Abstract or Summary"). so let's break this out into its own thing + have description
-  # be its own thing
-  property :abstract, predicate: ::RDF::Vocab::DC.abstract, multiple: false do |index|
-    index.type :text
+  property :source, predicate: ::RDF::Vocab::DC.source do |index|
     index.as :stored_searchable
   end
 
-  property :issued, predicate: ::RDF::Vocab::DC.issued, multiple: false do |index|
+  property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  # TODO: we'll want to index the full-string version of the language,
+  # instead of (or in addition to) its RFC-5646 value
+  property :language, predicate: ::RDF::Vocab::DC11.language
+
+  property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
   end
 
-  property :provenance, predicate: ::RDF::Vocab::DC.provenance, multiple: false do |index|
+  property :description, predicate: ::RDF::Vocab::DC11.description do |index|
     index.as :stored_searchable
   end
 
-  # This must be included at the end, because it finalizes the metadata
-  # schema (by adding accepts_nested_attributes)
-  include ::Hyrax::BasicMetadata
+  property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
+    index.as :stored_searchable
+  end
+
+  property :issued, predicate: ::RDF::Vocab::DC.issued do |index|
+    # index.type :date
+    index.as :stored_searchable
+  end
+
+  property :available, predicate: ::RDF::Vocab::DC.available do |index|
+    # index.type :datetime
+    index.as :stored_searchable
+  end
+
+  property :date_created, predicate: ::RDF::Vocab::DC.created do |index|
+    # index.type :datetime
+    index.as :stored_searchable
+  end
+
+  property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
+    index.as :stored_searchable
+  end
+
+  property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
+    index.as :stored_searchable
+  end
+
+  property :rights, predicate: ::RDF::Vocab::DC.rights do |index|
+    index.as :stored_searchable
+  end
+
+  property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
+    index.as :stored_searchable, :facetable
+  end
+
+  property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
+    index.as :stored_searchable, :facetable
+  end
 end
