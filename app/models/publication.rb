@@ -1,9 +1,23 @@
 class Publication < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 
+  # The `controlled_properties` attribute is used by the Hyrax::DeepIndexingService,
+  # which is used to fetch RDF labels for indexing. This is used out-of-the-box
+  # for :based_near (which, I believe, uses GeoNames), but could be used for,
+  # say, LCSH headings in other models, if not this one. This is implemented in
+  # Hyrax::BasicMetadata, but since we're implementing our basic metadata fields
+  # outside of that mixin, we'll need to define this manually.
+  #
+  # (You'll probably also need to switch on `accepts_nested_attributes` below)
+
+  # class_attribute :controlled_properties
+  # self.controlled_properties = []
+
   self.indexer = PublicationIndexer
+
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
+
   validates :title, presence: { message: 'Your work must have a title.' }
 
   property :publisher, predicate: ::RDF::Vocab::DC11.publisher do |index|
@@ -57,7 +71,7 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :rights, predicate: ::RDF::Vocab::DC.rights do |index|
+  property :rights_statement, predicate: ::RDF::Vocab::DC.rights do |index|
     index.as :stored_searchable
   end
 
@@ -72,4 +86,13 @@ class Publication < ActiveFedora::Base
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
     index.as :stored_searchable, :facetable
   end
+
+  # accepts_nested_attributes_for needs to be defined at the end of the model.
+  # see note from Hyrax::BasicMetadata mixin:
+  #
+  #   This must be mixed after all other properties are defined because no other
+  #   properties will be defined once accepts_nested_attributes_for is called
+
+  # id_blank = proc { |attributes| attributes[:id].blank? }
+  # accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
 end

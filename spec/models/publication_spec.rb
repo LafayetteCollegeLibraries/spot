@@ -93,8 +93,8 @@ describe Publication do
     it_behaves_like 'a read and writable multiple property'
   end
 
-  describe '#rights' do
-    subject { pub.rights }
+  describe '#rights_statement' do
+    subject { pub.rights_statement }
 
     it_behaves_like 'a read and writable multiple property'
   end
