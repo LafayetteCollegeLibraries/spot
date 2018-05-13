@@ -1,46 +1,66 @@
 RSpec.describe Hyrax::PublicationForm do
+  shared_context 'required fields' do
+    it 'contains required fields' do
+      expect(subject).to include :title
+      expect(subject).to include :contributor
+      expect(subject).to include :date_created
+      expect(subject).to include :issued
+      expect(subject).to include :available
+      expect(subject).to include :rights_statement
+    end
+  end
+
   describe '.required_fields' do
     subject { described_class.required_fields }
 
-    it { is_expected.to include :title }
-    it { is_expected.to include :contributor }
+    include_context 'required fields'
   end
 
   describe '.terms' do
-    subject { described_class.terms }
+    subject(:terms) { described_class.terms }
 
-    it { is_expected.to include :title }
-    it { is_expected.to include :contributor }
-    it { is_expected.to include :creator }
-    it { is_expected.to include :language }
-    it { is_expected.to include :abstract }
-    it { is_expected.to include :description }
-    it { is_expected.to include :identifier }
-    it { is_expected.to include :issued }
-    it { is_expected.to include :publisher }
-    it { is_expected.to include :date_created }
-    it { is_expected.to include :provenance }
-    it { is_expected.to include :department }
-    it { is_expected.to include :division }
-    it { is_expected.to include :organization }
-    it { is_expected.to include :subject }
-    it { is_expected.to include :related_url }
-    it { is_expected.to include :source }
-    it { is_expected.to include :license }
-    it { is_expected.to include :rights_statement }
-    it { is_expected.to include :representative_id }
-    it { is_expected.to include :thumbnail_id }
-    it { is_expected.to include :files }
-    it { is_expected.to include :visibility_during_embargo }
-    it { is_expected.to include :visibility_after_embargo }
-    it { is_expected.to include :embargo_release_date }
-    it { is_expected.to include :visibility_during_lease }
-    it { is_expected.to include :visibility_after_lease }
-    it { is_expected.to include :lease_expiration_date }
-    it { is_expected.to include :visibility }
-    it { is_expected.to include :ordered_member_ids }
-    it { is_expected.to include :in_works_ids }
-    it { is_expected.to include :member_of_collection_ids }
-    it { is_expected.to include :admin_set_id }
+    include_context 'required fields'
+
+    it 'includes optional fields' do
+      expect(terms).to include :creator
+      expect(terms).to include :publisher
+      expect(terms).to include :source
+      expect(terms).to include :resource_type
+      expect(terms).to include :language
+      expect(terms).to include :abstract
+      expect(terms).to include :description
+      expect(terms).to include :identifier
+      expect(terms).to include :academic_department
+      expect(terms).to include :division
+      expect(terms).to include :organization
+    end
+
+    it 'includes internal_form_fields' do
+      expect(terms).to include :representative_id
+      expect(terms).to include :thumbnail_id
+      expect(terms).to include :files
+      expect(terms).to include :visibility_during_embargo
+      expect(terms).to include :visibility_after_embargo
+      expect(terms).to include :embargo_release_date
+      expect(terms).to include :visibility_during_lease
+      expect(terms).to include :visibility_after_lease
+      expect(terms).to include :lease_expiration_date
+      expect(terms).to include :visibility
+      expect(terms).to include :ordered_member_ids
+      expect(terms).to include :in_works_ids
+      expect(terms).to include :member_of_collection_ids
+      expect(terms).to include :admin_set_id
+    end
+  end
+
+  describe '.multiple?' do
+    it 'marks singular fields as false' do
+      expect(described_class.multiple?('title')).to be false
+      expect(described_class.multiple?('type')).to be false
+      expect(described_class.multiple?('abstract')).to be false
+      expect(described_class.multiple?('issued')).to be false
+      expect(described_class.multiple?('available')).to be false
+      expect(described_class.multiple?('date_created')).to be false
+    end
   end
 end
