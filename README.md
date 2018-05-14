@@ -2,6 +2,7 @@ spot
 ====
 
 [![Build Status](https://travis-ci.org/LafayetteCollegeLibraries/spot.svg?branch=master)](https://travis-ci.org/LafayetteCollegeLibraries/spot)
+[![Coverage Status](https://coveralls.io/repos/github/LafayetteCollegeLibraries/spot/badge.svg?branch=master)](https://coveralls.io/github/LafayetteCollegeLibraries/spot?branch=master)
 
 :warning: _**this project is under active construction**_ :warning:
 
