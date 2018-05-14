@@ -79,4 +79,6 @@ group :development, :test do
   gem 'capybara-screenshot'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
+
+  gem 'pry-rails'
 end
