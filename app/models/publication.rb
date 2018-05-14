@@ -21,15 +21,18 @@ class Publication < ActiveFedora::Base
   validates :title, presence: { message: 'Your work must have a title.' }
 
   property :publisher, predicate: ::RDF::Vocab::DC11.publisher do |index|
-    index.as :stored_searchable, :facetable
+    # publisher_ssim
+    index.as :symbol
   end
 
   property :source, predicate: ::RDF::Vocab::DC.source do |index|
-    index.as :stored_searchable
+    # source_ssim
+    index.as :symbol
   end
 
   property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
-    index.as :stored_searchable, :facetable
+    # resource_type_ssim
+    index.as :symbol
   end
 
   # TODO: we'll want to index the full-string version of the language,
@@ -37,15 +40,18 @@ class Publication < ActiveFedora::Base
   property :language, predicate: ::RDF::Vocab::DC11.language
 
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
+    # abstract_tesim
     index.as :stored_searchable
   end
 
   property :description, predicate: ::RDF::Vocab::DC11.description do |index|
+    # description_tesim
     index.as :stored_searchable
   end
 
   property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
-    index.as :stored_searchable
+    # identifier_ssim
+    index.as :symbol
   end
 
   property :issued, predicate: ::RDF::Vocab::DC.issued do |index|
@@ -64,27 +70,31 @@ class Publication < ActiveFedora::Base
   end
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
-    index.as :stored_searchable
+    # creator_ssim
+    index.as :symbol
   end
 
   property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
-    index.as :stored_searchable
+    # contributor_ssim
+    index.as :symbol
   end
 
-  property :rights_statement, predicate: ::RDF::Vocab::DC.rights do |index|
-    index.as :stored_searchable
-  end
+  # no need to store these in the index
+  property :rights_statement, predicate: ::RDF::Vocab::DC.rights
 
   property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
-    index.as :stored_searchable, :facetable
+    # academic_department_ssim
+    index.as :symbol
   end
 
   property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
-    index.as :stored_searchable, :facetable
+    # division_ssim
+    index.as :symbol
   end
 
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
-    index.as :stored_searchable, :facetable
+    # organization_ssim
+    index.as :symbol
   end
 
   # accepts_nested_attributes_for needs to be defined at the end of the model.
