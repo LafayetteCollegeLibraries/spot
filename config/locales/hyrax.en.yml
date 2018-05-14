@@ -1,8 +1,7 @@
 en:
   activefedora:
     models:
-      document: 'Document'
-      trustee_document: 'Board of Trustees Document'
+      publication: 'Publication'
   blacklight:
     search:
       fields:

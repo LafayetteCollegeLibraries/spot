@@ -1,7 +1,7 @@
 RSpec.feature 'Show Document page', :js do
   let(:user) { create(:user) }
   let(:pdf) { File.open("#{::Rails.root}/spec/fixtures/image-document.pdf") }
-  let(:doc) { create(:document, :public, user: user, file: pdf) }
+  let(:doc) { create(:publication, :public, user: user, file: pdf) }
 
   before do
     allow(CharacterizeJob).to receive(:perform_later) # There is no fits installed on travis-ci
@@ -16,7 +16,7 @@ RSpec.feature 'Show Document page', :js do
       .to receive(:show)
       .and_return pdf
 
-    visit "/concern/documents/#{doc.id}"
+    visit "/concern/publications/#{doc.id}"
 
     expect(page).to have_content doc.title.first
 
