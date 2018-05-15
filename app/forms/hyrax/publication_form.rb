@@ -4,24 +4,16 @@ module Hyrax
 
     self.required_fields = [
       :title,
-      :contributor,
       :date_created,
       :issued,
       :available,
       :rights_statement
     ]
 
-    self.terms = [
-      # required fields
-      :title,
-      :contributor,
-      :date_created,
-      :issued,
-      :available,
-      :rights_statement,
-
+    self.terms = required_fields + [
       # optional fields
       :creator,
+      :contributor,
       :publisher,
       :source,
       :resource_type,
@@ -50,18 +42,17 @@ module Hyrax
       :admin_set_id
     ]
 
-    def self.singular_fields
-      [
-        :title,
-        :type,
-        :abstract,
-        :issued,
-        :available,
-        :date_created
-      ]
+    def self.model_attributes(_)
+      singular_fields = %i(resource_type abstract issued available date_created)
+      super.tap do |attrs|
+        singular_fields.each do |field|
+          attrs[field] = Array(attrs[field]) if attrs[field]
+        end
+      end
     end
 
-    def self.multiple?(field)
+    def multiple?(field)
+      singular_fields = %i(resource_type abstract issued available date_created)
       if singular_fields.include? field.to_sym
         false
       else

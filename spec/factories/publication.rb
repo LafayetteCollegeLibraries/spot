@@ -2,8 +2,26 @@ FactoryBot.define do
   factory :publication do
     id { NoidSupport.assign_id }
 
+    # required fields
     title [FFaker::Book.title]
     date_created { [FFaker::Time.date] }
+    issued { [FFaker::Time.date] }
+    available { [FFaker::Time.date] }
+    rights_statement ['http://rightsstatements.org/vocab/CNE/1.0/']
+
+    # optional fields
+    creator { [FFaker::Name.name] }
+    contributor { [FFaker::Name.name] }
+    publisher [FFaker::Company.name]
+    source ['Lafayette College']
+    resource_type ['Article']
+    language ['English']
+    abstract { [FFaker::CheesyLingo.paragraph] }
+    description { [FFaker::CheesyLingo.paragraph] }
+    identifier ['http://example.org/abc/123']
+    academic_department ['Art']
+    division ['Humanities']
+    organization ['Lafayette College']
 
     admin_set do
       AdminSet.find(AdminSet.find_or_create_default_admin_set_id)

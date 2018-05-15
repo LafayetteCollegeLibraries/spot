@@ -1,6 +1,6 @@
 RSpec.feature 'Show Publication page', :js do
   let(:user) { create(:user) }
-  let(:pdf) { File.open("#{::Rails.root}/spec/fixtures/image-document.pdf") }
+  let(:pdf) { File.open("#{::Rails.root}/spec/fixtures/document.pdf") }
   let(:pub) { create(:publication, :public, user: user, file: pdf) }
 
   before do

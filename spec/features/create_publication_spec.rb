@@ -8,6 +8,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
   context 'a logged in (regular) user' do
     let(:user) { create(:user) }
+    let(:attrs) { attributes_for(:publication) }
 
     describe 'should be taken directly to the new Publication form' do
       scenario do
@@ -20,6 +21,94 @@ RSpec.feature 'Create a Publication', :clean, :js do
         # Publication form.
 
         expect(page).to have_content "Add New #{i18n_term}"
+
+        ##
+        # fill in required fields
+        ##
+
+        fill_in 'Title', with: attrs[:title].first
+        expect(page).to have_css '.publication_title .controls-add-text'
+
+        fill_in 'Date Created', with: attrs[:date_created].first
+        expect(page).not_to have_css '.publication_date_created .controls-add-text'
+
+        fill_in 'Issued', with: attrs[:issued].first
+        expect(page).not_to have_css '.publication_issued .controls-add-text'
+
+        fill_in 'Available', with: attrs[:available].first
+        expect(page).not_to have_css '.publication_available .controls-add-text'
+
+        select 'No Known Copyright', from: 'Rights statement'
+
+        ##
+        # fill in optional fields
+        ##
+
+        click_link 'Additional fields'
+
+        fill_in 'Creator', with: attrs[:creator].first
+        expect(page).to have_css '.publication_creator .controls-add-text'
+
+        fill_in 'Contributor', with: attrs[:contributor].first
+        expect(page).to have_css '.publication_contributor .controls-add-text'
+
+        fill_in 'Publisher', with: attrs[:publisher].first
+        expect(page).to have_css '.publication_publisher .controls-add-text'
+
+        fill_in 'Source', with: attrs[:source].first
+        expect(page).to have_css '.publication_source .controls-add-text'
+
+        select 'Article', from: 'Resource type'
+
+        fill_in 'Language', with: attrs[:language].first
+        expect(page).to have_css '.publication_language .controls-add-text'
+
+        fill_in 'Abstract', with: attrs[:abstract].first
+        expect(page).not_to have_css '.publication_abstract .controls-add-text'
+
+        fill_in 'Description', with: attrs[:description].first
+        expect(page).to have_css '.publication_description .controls-add-text'
+
+        fill_in 'Identifier', with: attrs[:identifier].first
+        expect(page).to have_css '.publication_identifier .controls-add-text'
+
+        fill_in 'Academic department', with: attrs[:academic_department].first
+        expect(page).to have_css '.publication_academic_department .controls-add-text'
+
+        fill_in 'Division', with: attrs[:division].first
+        expect(page).to have_css '.publication_division .controls-add-text'
+
+        fill_in 'Organization', with: attrs[:organization].first
+        expect(page).to have_css '.publication_organization .controls-add-text'
+
+        ##
+        # add files
+        ##
+
+        click_link 'Files'
+
+        expect(page).to have_content 'Add files'
+
+        within('span#addfiles') do
+          attach_file('files[]', "#{::Rails.root}/spec/fixtures/document.pdf", visible: false)
+        end
+
+        ##
+        # select visibility
+        ##
+
+        choose 'publication_visibility_open'
+
+        ##
+        # check the agreement
+        ##
+
+        check 'agreement'
+
+        click_on 'Save'
+
+        expect(page).to have_content attrs[:title].first
+        expect(page).to have_content 'Your files are being processed by Spot in the background.'
       end
     end
   end

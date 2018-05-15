@@ -49,7 +49,9 @@ en:
           title_tesim: Title
   simple_form:
     labels:
-      description: 'Summary'
+      defaults:
+        description: Description
+
     hints:
       defaults:
         # TODO: add abstract text
