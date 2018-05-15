@@ -6,11 +6,13 @@ class CatalogController < ApplicationController
   before_action :enforce_show_permissions, only: :show
 
   def self.uploaded_field
-    solr_name('system_create', :stored_sortable, type: :date)
+    # solr_name('system_create', :stored_sortable, type: :date)
+    'system_create_dtsi'
   end
 
   def self.modified_field
-    solr_name('system_modified', :stored_sortable, type: :date)
+    # solr_name('system_modified', :stored_sortable, type: :date)
+    'system_modified_dtsi'
   end
 
   configure_blacklight do |config|
@@ -66,32 +68,22 @@ class CatalogController < ApplicationController
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field 'title_tesim', label: "Title", itemprop: 'name', if: false
-    config.add_index_field 'academic_department_ssim', label: "Department", itemprop: 'department', link_to_search: solr_name("department", :facetable)
+    config.add_index_field 'resource_type_ssim', label: 'Type', itemprop: 'resourceType', link_to_search: 'resource_type_ssim'
+    config.add_index_field 'academic_department_ssim', label: "Department", itemprop: 'department', link_to_search: 'department_sim'
     config.add_index_field 'description_tesim', itemprop: 'description', helper_method: :iconify_auto_link
-    config.add_index_field 'keyword_tesim', itemprop: 'keywords', link_to_search: solr_name("keyword", :facetable)
-    config.add_index_field 'subject_tesim', itemprop: 'about', link_to_search: solr_name("subject", :facetable)
-    config.add_index_field 'creator_tesim', itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
-    config.add_index_field 'contributor_tesim', itemprop: 'contributor', link_to_search: solr_name("contributor", :facetable)
+    config.add_index_field 'keyword_tesim', itemprop: 'keywords', link_to_search: 'keyword_sim'
+    config.add_index_field 'subject_tesim', itemprop: 'about', link_to_search: 'subject_sim'
+    config.add_index_field 'creator_tesim', itemprop: 'creator', link_to_search: 'creator_sim'
+    config.add_index_field 'contributor_tesim', itemprop: 'contributor', link_to_search: 'contributor_sim'
     # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
-<<<<<<< HEAD
-    config.add_index_field solr_name("depositor"), label: "Uploaded by", helper_method: :link_to_profile
-    config.add_index_field solr_name("publisher", :stored_searchable), itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
-    config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
-    config.add_index_field solr_name("language", :stored_searchable), itemprop: 'inLanguage', link_to_search: solr_name("language", :facetable)
-    config.add_index_field solr_name("date_uploaded", :stored_sortable, type: :date), itemprop: 'datePublished', helper_method: :human_readable_date
-    # config.add_index_field solr_name("date_modified", :stored_sortable, type: :date), itemprop: 'dateModified', helper_method: :human_readable_date
-=======
     config.add_index_field 'depositor_tesim', label: "Owner", helper_method: :link_to_profile
-    config.add_index_field 'publisher_tesim', itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
+    config.add_index_field 'publisher_tesim', itemprop: 'publisher', link_to_search: 'publisher_sim'
     # config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
     config.add_index_field 'language_tesim', itemprop: 'inLanguage', link_to_search: solr_name("language", :facetable)
-    config.add_index_field 'date_uploaded_dtsi', itemprop: 'datePublished', helper_method: :human_readable_date
     config.add_index_field 'date_modified_dtsi', itemprop: 'dateModified', helper_method: :human_readable_date
->>>>>>> use solr keys for catalog index pages
     # config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
     config.add_index_field 'rights_statement_tesim', helper_method: :rights_statement_links
     config.add_index_field 'license_tesim',  helper_method: :license_links
-    config.add_index_field 'resource_type_tesim', label: "Resource Type", link_to_search: solr_name("resource_type", :facetable)
     # config.add_index_field solr_name("file_format", :stored_searchable), link_to_search: solr_name("file_format", :facetable)
     config.add_index_field 'identifier_tesim', helper_method: :index_field_link, field_name: 'identifier'
     config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
