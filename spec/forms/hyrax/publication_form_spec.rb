@@ -2,7 +2,6 @@ RSpec.describe Hyrax::PublicationForm do
   shared_context 'required fields' do
     it 'contains required fields' do
       expect(subject).to include :title
-      expect(subject).to include :contributor
       expect(subject).to include :date_created
       expect(subject).to include :issued
       expect(subject).to include :available
@@ -23,6 +22,7 @@ RSpec.describe Hyrax::PublicationForm do
 
     it 'includes optional fields' do
       expect(terms).to include :creator
+      expect(terms).to include :contributor
       expect(terms).to include :publisher
       expect(terms).to include :source
       expect(terms).to include :resource_type
@@ -54,13 +54,28 @@ RSpec.describe Hyrax::PublicationForm do
   end
 
   describe '.multiple?' do
+    subject(:form) { described_class.new(Publication.new, nil, nil) }
+
     it 'marks singular fields as false' do
-      expect(described_class.multiple?('title')).to be false
-      expect(described_class.multiple?('type')).to be false
-      expect(described_class.multiple?('abstract')).to be false
-      expect(described_class.multiple?('issued')).to be false
-      expect(described_class.multiple?('available')).to be false
-      expect(described_class.multiple?('date_created')).to be false
+      expect(form.multiple?('resource_type')).to be false
+      expect(form.multiple?('abstract')).to be false
+      expect(form.multiple?('issued')).to be false
+      expect(form.multiple?('available')).to be false
+      expect(form.multiple?('date_created')).to be false
+    end
+
+    it 'marks multiple fields as true' do
+      expect(form.multiple?('title')).to be true
+      expect(form.multiple?('creator')).to be true
+      expect(form.multiple?('contributor')).to be true
+      expect(form.multiple?('publisher')).to be true
+      expect(form.multiple?('source')).to be true
+      expect(form.multiple?('language')).to be true
+      expect(form.multiple?('description')).to be true
+      expect(form.multiple?('identifier')).to be true
+      expect(form.multiple?('academic_department')).to be true
+      expect(form.multiple?('division')).to be true
+      expect(form.multiple?('organization')).to be true
     end
   end
 end
