@@ -93,19 +93,16 @@ RSpec.feature 'Create a Publication', :clean, :js do
           attach_file('files[]', "#{::Rails.root}/spec/fixtures/document.pdf", visible: false)
         end
 
-        ##
         # select visibility
-        ##
-
         choose 'publication_visibility_open'
 
-        ##
-        # check the agreement
-        ##
-
+        # check the submission agreement
         check 'agreement'
 
-        click_on 'Save'
+        # give javascript a chance to catch up (otherwise the save button is hidden)
+        sleep(1)
+
+        page.find('#with_files_submit').click
 
         expect(page).to have_content attrs[:title].first
         expect(page).to have_content 'Your files are being processed by Spot in the background.'
