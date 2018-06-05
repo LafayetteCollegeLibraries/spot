@@ -31,7 +31,7 @@ gem 'jbuilder', '~> 2.5'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'hyrax', '2.1.0rc1'
+gem 'hyrax', '2.1.0'
 
 gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
