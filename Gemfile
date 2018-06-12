@@ -47,6 +47,8 @@ gem 'darlingtonia', '~> 1.0'
 gem 'sidekiq'
 gem 'dotenv-rails'
 gem 'pg'
+gem 'bagit'
+gem 'rdf-vocab'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
