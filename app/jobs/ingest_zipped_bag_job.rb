@@ -2,6 +2,6 @@
 
 class IngestZippedBagJob < ApplicationJob
   def perform(zip_path)
-    IngestZippedBag.new(zip_path).perform
+    Spot::IngestZippedBag.new(zip_path).perform
   end
 end
