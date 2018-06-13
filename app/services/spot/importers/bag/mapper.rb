@@ -23,7 +23,7 @@ module Spot::Importers
         division: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division').to_s,
         organization: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization').to_s,
 
-        # subject: ::RDF::Vocab::DC11.subject,
+        subject: ::RDF::Vocab::DC11.subject,
         # extent: ::RDF::Vocab::DC.extent,
 
         # :spatial => ::RDF::Vocab::DC.spatial,

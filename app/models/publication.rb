@@ -79,7 +79,7 @@ class Publication < ActiveFedora::Base
     index.as :symbol
   end
 
-  # no need to store these in the index
+  # rights_statement_tesim, i think?
   property :rights_statement, predicate: ::RDF::Vocab::DC.rights
 
   property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
@@ -94,6 +94,16 @@ class Publication < ActiveFedora::Base
 
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
     # organization_ssim
+    index.as :symbol
+  end
+
+  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
+    # subject_ssim
+    index.as :symbol
+  end
+
+  property :keyword, predicate: ::RDV::Vocab::Schema.keywords do |index|
+    # keyword_ssim
     index.as :symbol
   end
 
