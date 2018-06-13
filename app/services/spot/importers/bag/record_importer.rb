@@ -11,7 +11,7 @@ module Spot::Importers::Bag
     end
 
     def creator
-      User.find_by(email: 'malantoa@lafayette.edu')
+      User.find_by(email: 'dss@lafayette.edu')
     end
 
     def create_for(record:)
