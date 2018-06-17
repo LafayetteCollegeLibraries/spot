@@ -21,7 +21,7 @@ module Spot::Importers::Bag
       created = import_type.new
       attributes = record.attributes
       attributes[:uploaded_files] = files(record.representative_file)
-      attributes[:visibility] = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      attributes[:visibility] = record.visibility
 
       actor_env = Hyrax::Actors::Environment.new(created, ability, attributes)
 

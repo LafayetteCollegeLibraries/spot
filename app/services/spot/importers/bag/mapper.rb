@@ -60,6 +60,11 @@ module Spot::Importers
       def representative_file
         @metadata[:representative_files]
       end
+
+      # TODO: determine the visibility based on a field within the metadata
+      def visibility
+        ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      end
     end
   end
 end
