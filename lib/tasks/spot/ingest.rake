@@ -1,6 +1,6 @@
 namespace :spot do
   namespace :ingest do
-    task :zipped_bag, [:path] do |t, args|
+    task :zipped_bag, [:path] => :environment do |t, args|
       unless args[:path]
         puts 'No :path provided!'
         puts "Use `bundle exec rails #{t}[/path/to/bag_file.zip]`"
