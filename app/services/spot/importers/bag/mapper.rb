@@ -49,8 +49,13 @@ module Spot::Importers
         # :embargo => 'http://projecthydra.org/ns/auth/acl#hasEmbargo'
       }.freeze
 
+      # Mapper#fields is what generates the hash of attributes that are passed
+      # to the model's `.new` method. for the most part, the PREDICATES_MAP
+      # hash will work fine, but there are some cases where we'll provide our
+      # own methods to this class (see: Mapper#visibility) that will do their
+      # own thing and return a value instead.
       def fields
-        PREDICATES_MAP.keys
+        PREDICATES_MAP.keys + [:visibility]
       end
 
       def map_field(name)
