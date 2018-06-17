@@ -102,7 +102,7 @@ class Publication < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :keyword, predicate: ::RDV::Vocab::Schema.keywords do |index|
+  property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
     # keyword_ssim
     index.as :symbol
   end
