@@ -6,10 +6,6 @@ module Spot::Importers::Bag
 
     private
 
-    def ability
-      Ability.new(creator)
-    end
-
     def creator
       User.find_by(email: 'dss@lafayette.edu')
     end
@@ -20,23 +16,33 @@ module Spot::Importers::Bag
 
       created = import_type.new
       attributes = record.attributes
-      attributes[:uploaded_files] = files(record.representative_file)
+
+      depositor_email = attributes.delete(:depositor)
+      depositor_email ||= 'dss@lafayette.edu'
+      depositor = User.find_or_initialize_by(email: depositor_email)
+      depositor.save(validate: false) if depositor.new_record?
+
+      ability = Ability.new(depositor)
+
+      attributes[:uploaded_files] = files(record.representative_file, user: depositor)
       attributes[:visibility] = record.visibility
 
       actor_env = Hyrax::Actors::Environment.new(created, ability, attributes)
 
-      Hyrax::CurationConcern.actor.create(actor_env)
+      Hyrax::CurationConcern.actor.create(actor_env) &&
+        (info_stream << "Record created: #{created.id}\n")
 
-      info_stream << "Record created: #{created.id}\n"
     rescue Errno::ENOENT => e
       error_stream << e.message
+    rescue ::Ldp::Gone => e
+      error_stream << "Ldp::Gone => #{e.message}"
     end
 
-    def files(file_list)
+    def files(file_list, user: creator)
       return if file_list.nil?
 
       file_list.map do |file|
-        Hyrax::UploadedFile.create(file: File.open(file), user: creator).id
+        Hyrax::UploadedFile.create(file: File.open(file), user: user).id
       end
     end
   end

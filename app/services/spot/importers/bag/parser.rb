@@ -35,15 +35,14 @@ module Spot::Importers::Bag
     private
 
     def input_record_from(metadata)
-      Darlingtonia::InputRecord.from(metadata: metadata,
-                                     mapper: Spot::Importers::Bag::Mapper.new)
+      Spot::Importers::Bag::InputRecord.from(metadata: metadata)
     end
 
     def parse_csv_metadata
       csv_path = File.join(data_dir, metadata_filename)
       {}.tap do |output|
-        ::CSV.foreach(csv_path) do |(predicate, value)|
-          output[predicate] = value.split(';')
+        ::CSV.foreach(csv_path) do |(key, value)|
+          output[key] = value.split(';')
         end
       end
     end
