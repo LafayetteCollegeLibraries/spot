@@ -4,9 +4,17 @@ require 'fileutils'
 
 module Spot
   class IngestZippedBag
-    def initialize(zip_path)
+    AVAILABLE_MAPPERS = {
+      ldr: Spot::Importers::Bag::LdrDspaceMapper,
+    }
+
+    def initialize(zip_path, source: nil)
+      raise ArgumentError, 'Need to provide a `source:` value for a mapper' if source.nil?
+      raise ArgumentError, "Unknown `source`: #{source}. Choose one of: #{sources.join(', ')}" unless sources.include?(source)
+
       @zip_path = zip_path
       @tmp_bag_path = ::Rails.root.join('tmp', 'ingest', File.basename(@zip_path, '.zip'))
+      @mapper = AVAILABLE_MAPPERS[source]
     end
 
     def perform
@@ -16,6 +24,10 @@ module Spot
     end
 
     private
+
+    def sources
+      AVAILABLE_MAPPERS.keys
+    end
 
     def unzip_to_tmp_path
       FileUtils.mkdir_p @tmp_bag_path
@@ -32,7 +44,7 @@ module Spot
     end
 
     def parser
-      @parser ||= Spot::Importers::Bag::Parser.new(file: @tmp_bag_path)
+      @parser ||= Spot::Importers::Bag::Parser.new(file: @tmp_bag_path, mapper: @mapper.new)
     end
 
     def record_importer

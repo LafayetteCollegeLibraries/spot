@@ -1,6 +1,6 @@
 namespace :spot do
   namespace :ingest do
-    task :zipped_bag, [:path] => :environment do |t, args|
+    task :ldr, [:path] => :environment do |t, args|
       unless args[:path]
         puts 'No :path provided!'
         puts "Use `bundle exec rails #{t}[/path/to/bag_file.zip]`"
@@ -9,13 +9,16 @@ namespace :spot do
       end
 
       path = args[:path]
+      source = 'ldr'
+
+      raise ArgumentError, 'File or path does not exist' unless File.exist?(path)
 
       if File.directory? path
         Dir[File.join(path, '*.zip')].each do |entry|
-          ::IngestZippedBagJob.perform_later entry
+          ::IngestZippedBagJob.perform_later(entry, source: source)
         end
       else
-        ::IngestZippedBagJob.perform_later path
+        ::IngestZippedBagJob.perform_later(path, source: source)
       end
     end
   end

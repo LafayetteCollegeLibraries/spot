@@ -3,7 +3,7 @@ require 'uri'
 
 module Spot::Importers
   module Bag
-    class Mapper < ::Darlingtonia::HashMapper
+    class LdrDspaceMapper < ::Darlingtonia::HashMapper
       FIELDS_MAP = {
         abstract: 'description.abstract',
         creator: 'contributor.author',

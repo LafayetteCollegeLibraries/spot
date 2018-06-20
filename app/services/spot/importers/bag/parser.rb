@@ -4,6 +4,11 @@ module Spot::Importers::Bag
   class Parser < Darlingtonia::Parser
     DEFAULT_VALIDATORS = [Spot::Importers::Bag::Validator.new].freeze
 
+    def initialize(file:, mapper: nil)
+      super
+      @mapper = mapper
+    end
+
     # Darlingtonia::Parser is expecting :file to be an instance of File,
     # but Bags are generally directories. We're in a position where we
     # should either:
@@ -35,7 +40,7 @@ module Spot::Importers::Bag
     private
 
     def input_record_from(metadata)
-      Spot::Importers::Bag::InputRecord.from(metadata: metadata)
+      Spot::Importers::Bag::InputRecord.from(metadata: metadata, mapper: @mapper)
     end
 
     def parse_csv_metadata
