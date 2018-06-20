@@ -1,4 +1,4 @@
-# borrowed pretty extensively from psu's scholarsphere app
+  # borrowed pretty extensively from psu's scholarsphere app
 # (https://github.com/psu-stewardship/scholarsphere/blob/b78954d/tasks/dev.rake#L32)
 require 'active_fedora/cleaner'
 
@@ -18,15 +18,15 @@ namespace :spot do
       Rake::Task['spot:dev:__reset'].invoke
     end
 
-    task __reset: [
-      :environment,
-      :__clean_repo,
-      :'db:drop',
-      :'__clear_redis',
-      :'__reset_directories',
-      :'db:setup',
-      :'hyrax:default_admin_set:create',
-      :'hyrax:workflow:load'
+    task __reset: %i[
+      environment
+      __clean_repo
+      db:drop
+      __clear_redis
+      __reset_directories
+      db:setup
+      db:seed
+      hyrax:workflow:load
     ]
 
     task :__clean_repo do
@@ -40,7 +40,7 @@ namespace :spot do
         Logger.new(STDOUT).warn "WARNING: Redis might be down: #{e}"
       end
     end
-    
+
     task __reset_directories: :environment do
       # clear derivatives
       FileUtils.rm_rf Hyrax.config.derivatives_path

@@ -17,6 +17,7 @@ TRUSTEE_USERS = %w[
 
 Rake::Task['spot:roles:default'].invoke
 Rake::Task['hyrax:default_admin_set:create'].invoke
+Rake::Task['hyrax:default_collection_types:create'].invoke
 
 DEFAULT_USERS.each { |email| User.create(email: email, password: 'letmein') }
 # create a depositor user
