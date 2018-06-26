@@ -63,11 +63,11 @@ class Publication < ActiveFedora::Base
   end
 
   property :date_issued, predicate: ::RDF::Vocab::DC.issued do |index|
-    index.as :stored_sortable
+    index.as :symbol, :facetable
   end
 
   property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
-    index.as :stored_sortable
+    index.as :symbol, :facetable
   end
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|

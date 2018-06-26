@@ -3,6 +3,7 @@ class PublicationIndexer < Hyrax::WorkIndexer
     super.tap do |solr_doc|
       attach_individual_identifiers(solr_doc)
       translate_iso_language(solr_doc)
+      store_license(solr_doc)
     end
   end
 
@@ -23,6 +24,11 @@ class PublicationIndexer < Hyrax::WorkIndexer
         doc[key] += Array(value)
       end
     end
+  end
+
+  # we're storing licenses but not indexing them
+  def store_license(doc)
+    doc['license_tsm'] = object.license
   end
 
   def translate_iso_language(doc)
