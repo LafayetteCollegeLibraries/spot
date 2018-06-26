@@ -40,7 +40,7 @@ module Spot::Importers::Bag
     private
 
     def input_record_from(metadata)
-      Spot::Importers::Bag::InputRecord.from(metadata: metadata, mapper: @mapper)
+      Darlingtonia::InputRecord.from(metadata: metadata, mapper: @mapper)
     end
 
     def parse_csv_metadata
