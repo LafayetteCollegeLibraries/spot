@@ -1,0 +1,16 @@
+<%# display all of our terms up front instead of splitting required/optional
+    with a collapse element. using the | operator with the two arrays
+    will remove duplicates within 'secondary_terms' (which contains the
+    values of `f.object.terms` without the hyrax internal fields (for
+    embargo, files, etc) %>
+
+<%- fields = f.object.primary_terms | f.object.secondary_terms %>
+        <div class="base-terms">
+          <% fields.each do |field| %>
+            <%= render_edit_field_partial(field, f: f) %>
+          <% end %>
+        </div>
+
+        <%# TODO: move form_media to its own tab? %>
+        <%= render 'form_media', f: f %>
+
