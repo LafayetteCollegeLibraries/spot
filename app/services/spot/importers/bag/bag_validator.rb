@@ -2,10 +2,13 @@
 require 'bagit'
 
 module Spot::Importers::Bag
-  class Validator < Darlingtonia::Validator
+  class BagValidator < Darlingtonia::Validator
     private
 
     def run_validation(parser:, **)
+      return ['Bag does not exist'] unless File.exist?(parser.file)
+      return ['Bag is not a directory'] unless File.directory?(parser.file)
+
       bag = BagIt::Bag.new(parser.file)
       return [] if bag.valid?
 

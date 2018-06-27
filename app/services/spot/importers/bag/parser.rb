@@ -2,7 +2,7 @@
 
 module Spot::Importers::Bag
   class Parser < Darlingtonia::Parser
-    DEFAULT_VALIDATORS = [Spot::Importers::Bag::Validator.new].freeze
+    DEFAULT_VALIDATORS = [Spot::Importers::Bag::BagValidator.new].freeze
 
     def initialize(file:, mapper: nil)
       super
