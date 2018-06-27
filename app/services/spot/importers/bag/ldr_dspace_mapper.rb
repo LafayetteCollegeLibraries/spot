@@ -50,11 +50,15 @@ module Spot::Importers
       end
 
       def depositor
-        submitted = metadata['description.provenance'].first
+        default_email = 'dss@lafayette.edu'
+        key = 'description.provenance'
+        return default_email unless metadata[key].is_a?(Array)
+
+        submitted = metadata[key].first
         match = submitted.match(/Submitted by [^(]+ \((\w+@\w+.\w+)\)/)
         return match[1] unless match.nil?
 
-        'dss@lafayette.edu'
+        default_email
       end
 
       def description
