@@ -22,35 +22,14 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         expect(page).to have_content "Add New #{i18n_term}"
 
-        ##
-        # fill in required fields
-        ##
-
-        fill_in 'Title', with: attrs[:title].first
+        fill_in 'publication_title', with: attrs[:title].first
         expect(page).to have_css '.publication_title .controls-add-text'
 
-        fill_in 'Date Created', with: attrs[:date_created].first
-        expect(page).not_to have_css '.publication_date_created .controls-add-text'
+        fill_in 'Subtitle', with: attrs[:subtitle].first
+        expect(page).to have_css '.publication_subtitle .controls-add-text'
 
-        fill_in 'Issued', with: attrs[:issued].first
-        expect(page).not_to have_css '.publication_issued .controls-add-text'
-
-        fill_in 'Available', with: attrs[:available].first
-        expect(page).not_to have_css '.publication_available .controls-add-text'
-
-        select 'No Known Copyright', from: 'Rights statement'
-
-        ##
-        # fill in optional fields
-        ##
-
-        click_link 'Additional fields'
-
-        fill_in 'Creator', with: attrs[:creator].first
-        expect(page).to have_css '.publication_creator .controls-add-text'
-
-        fill_in 'Contributor', with: attrs[:contributor].first
-        expect(page).to have_css '.publication_contributor .controls-add-text'
+        fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
+        expect(page).to have_css '.publication_title_alternative .controls-add-text'
 
         fill_in 'Publisher', with: attrs[:publisher].first
         expect(page).to have_css '.publication_publisher .controls-add-text'
@@ -59,6 +38,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         expect(page).to have_css '.publication_source .controls-add-text'
 
         select 'Article', from: 'Resource type'
+        expect(page).not_to have_css '.publication_resource_type .controls-add-text'
 
         fill_in 'Language', with: attrs[:language].first
         expect(page).to have_css '.publication_language .controls-add-text'
@@ -72,6 +52,24 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Identifier', with: attrs[:identifier].first
         expect(page).to have_css '.publication_identifier .controls-add-text'
 
+        fill_in 'Bibliographic citation', with: attrs[:bibliographic_citation].first
+        expect(page).to have_css '.publication_bibliographic_citation .controls-add-text'
+
+        fill_in 'Date issued', with: attrs[:date_issued].first
+        expect(page).not_to have_css '.publication_date_issued .controls-add-text'
+
+        fill_in 'Date available', with: attrs[:date_available].first
+        expect(page).not_to have_css '.publication_date_available .controls-add-text'
+
+        fill_in 'Creator', with: attrs[:creator].first
+        expect(page).to have_css '.publication_creator .controls-add-text'
+
+        fill_in 'Contributor', with: attrs[:contributor].first
+        expect(page).to have_css '.publication_contributor .controls-add-text'
+
+        fill_in 'Editor', with: attrs[:editor].first
+        expect(page).to have_css '.publication_editor .controls-add-text'
+
         fill_in 'Academic department', with: attrs[:academic_department].first
         expect(page).to have_css '.publication_academic_department .controls-add-text'
 
@@ -80,6 +78,14 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         fill_in 'Organization', with: attrs[:organization].first
         expect(page).to have_css '.publication_organization .controls-add-text'
+
+        fill_in 'Keyword', with: attrs[:keyword].first
+        expect(page).to have_css '.publication_keyword .controls-add-text'
+
+        fill_in 'Subject', with: attrs[:subject].first
+        expect(page).to have_css '.publication_subject .controls-add-text'
+
+        select 'No Known Copyright', from: 'Rights statement'
 
         ##
         # add files

@@ -1,0 +1,29 @@
+id,1
+contributor.author,Author Name
+contributor,Contributor Name
+contributor.editor,Editor Name
+contributor.other,Other Contributor
+date.issued,2018-06
+date.available,2018-06-27T00:00:00Z
+date.accessioned,2018-06-27T00:00:00Z
+description.uri,http://example.org
+description.provenance,"Submitted by Adam Malantonio (malantonio@example.edu) on 2018-06-27T00:00:00Z
+No. of bitstreams: 1
+FileName.pdf: 275527 bytes, checksum: b6b8a565838f4a381fa981f5804115eb (MD5);Made available in DSpace on 2018-06-27T00:00:00Z (GMT). No. of bitstreams: 1
+FileName.pdf: 275527 bytes, checksum: b6b8a565838f4a381fa981f5804115eb (MD5)
+  Previous issue date: 2010"
+description,Description of the item
+description.sponsorship,Who sponsored the item
+description.abstract,The abstract is a shorter description
+identifier.citation,"Name, Author (2018) ""Title of work"" Source value, 129 (1): 168-176."
+identifier.doi,10.0000/00000
+identifier.isbn,0000-0000
+identifier.uri,http://example.org/0000/0000
+identifier.issn,978-0-00-000000-0
+language.iso,en_US
+publisher,Publisher
+relation.ispartofseries,A larger work
+source,Source value
+subject,Example Items
+title,Title of work
+type,Article

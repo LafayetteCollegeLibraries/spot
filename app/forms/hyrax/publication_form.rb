@@ -3,25 +3,19 @@ module Hyrax
     SINGULAR_FIELDS = %i(
       resource_type
       abstract
-      issued
-      available
-      date_created
+      date_issued
+      date_available
     )
 
     self.model_class = ::Publication
 
     self.required_fields = [
       :title,
-      :date_created,
-      :issued,
-      :available,
-      :rights_statement
     ]
 
     self.terms = required_fields + [
-      # optional fields
-      :creator,
-      :contributor,
+      :subtitle,
+      :title_alternative,
       :publisher,
       :source,
       :resource_type,
@@ -29,9 +23,25 @@ module Hyrax
       :abstract,
       :description,
       :identifier,
+      :bibliographic_citation,
+      :date_issued,
+      :date_available,
+      :creator,
+      :contributor,
+      :editor,
       :academic_department,
       :division,
       :organization,
+
+      # :related_resource
+
+      :keyword,
+      :subject,
+
+      # :license
+      :rights_statement,
+
+      # optional fields
 
       # internal form fields
       :representative_id,

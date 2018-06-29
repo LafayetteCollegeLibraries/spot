@@ -20,81 +20,97 @@ class Publication < ActiveFedora::Base
 
   validates :title, presence: { message: 'Your work must have a title.' }
 
+  # title is included with ::ActiveFedora::Base
+  property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
+    index.as :stored_searchable
+  end
+
+  property :title_alternative, predicate: ::RDF::Vocab::DC.alternative do |index|
+    index.as :stored_searchable
+  end
+
   property :publisher, predicate: ::RDF::Vocab::DC11.publisher do |index|
-    # publisher_ssim
-    index.as :symbol
+    index.as :stored_searchable, :facetable
   end
 
   property :source, predicate: ::RDF::Vocab::DC.source do |index|
-    # source_ssim
-    index.as :symbol
+    index.as :stored_searchable, :facetable
   end
 
   property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
-    # resource_type_ssim
+    index.as :symbol, :facetable
+  end
+
+  # see PublicationIndexer for indexing of this field
+  property :language, predicate: ::RDF::Vocab::DC11.language do |index|
     index.as :symbol
   end
 
-  # TODO: we'll want to index the full-string version of the language,
-  # instead of (or in addition to) its RFC-5646 value
-  property :language, predicate: ::RDF::Vocab::DC11.language
-
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
-    # abstract_tesim
     index.as :stored_searchable
   end
 
   property :description, predicate: ::RDF::Vocab::DC11.description do |index|
-    # description_tesim
     index.as :stored_searchable
   end
 
   property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
-    # identifier_ssim
-    index.as :symbol
+    index.as :symbol, :facetable
   end
 
-  property :issued, predicate: ::RDF::Vocab::DC.issued do |index|
-    # index.type :date
+  property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
     index.as :stored_searchable
   end
 
-  property :available, predicate: ::RDF::Vocab::DC.available do |index|
-    # index.type :datetime
-    index.as :stored_searchable
+  property :date_issued, predicate: ::RDF::Vocab::DC.issued do |index|
+    index.as :symbol, :facetable
   end
 
-  property :date_created, predicate: ::RDF::Vocab::DC.created do |index|
-    # index.type :datetime
-    index.as :stored_searchable
+  property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
+    index.as :symbol, :facetable
   end
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
-    # creator_ssim
-    index.as :symbol
+    index.as :stored_searchable, :facetable
   end
 
   property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
-    # contributor_ssim
-    index.as :symbol
+    index.as :stored_searchable, :facetable
   end
 
-  # no need to store these in the index
-  property :rights_statement, predicate: ::RDF::Vocab::DC.rights
+  property :editor, predicate: ::RDF::Vocab::DC11.contributor do |index|
+    index.as :stored_searchable, :facetable
+  end
 
   property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
-    # academic_department_ssim
-    index.as :symbol
+    index.as :symbol, :facetable
   end
 
   property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
-    # division_ssim
-    index.as :symbol
+    index.as :symbol, :facetable
   end
 
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
-    # organization_ssim
+    index.as :symbol, :facetable
+  end
+
+  property :related_resource, predicate: ::RDF::RDFS.seeAlso do |index|
     index.as :symbol
+  end
+
+  property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
+    index.as :symbol, :facetable
+  end
+
+  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
+    index.as :symbol, :facetable
+  end
+
+  property :license, predicate: ::RDF::Vocab::DC.rights
+
+  # rights_statements are stored as URIs
+  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights do |index|
+    index.as :symbol, :facetable
   end
 
   # accepts_nested_attributes_for needs to be defined at the end of the model.

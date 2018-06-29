@@ -2,26 +2,36 @@ FactoryBot.define do
   factory :publication do
     id { NoidSupport.assign_id }
 
-    # required fields
-    title [FFaker::Book.title]
-    date_created { [FFaker::Time.date] }
-    issued { [FFaker::Time.date] }
-    available { [FFaker::Time.date] }
-    rights_statement ['http://rightsstatements.org/vocab/CNE/1.0/']
-
-    # optional fields
-    creator { [FFaker::Name.name] }
-    contributor { [FFaker::Name.name] }
+    title { [FFaker::Book.title] }
+    subtitle { [FFaker::Book.title] }
+    title_alternative { [FFaker::Book.title] }
     publisher [FFaker::Company.name]
     source ['Lafayette College']
     resource_type ['Article']
-    language ['English']
+    language ['en']
+
     abstract { [FFaker::CheesyLingo.paragraph] }
     description { [FFaker::CheesyLingo.paragraph] }
-    identifier ['http://example.org/abc/123']
+
+    identifier ['hdl:123/456']
+
+    bibliographic_citation { ["Lastname, First. Title of piece."] }
+
+    date_issued { [FFaker::Time.date] }
+    date_available { [FFaker::Time.date] }
+
+    creator { [FFaker::Name.name] }
+    contributor { [FFaker::Name.name] }
+    editor { [FFaker::Name.name] }
+
     academic_department ['Art']
     division ['Humanities']
     organization ['Lafayette College']
+
+    keyword { [FFaker::CheesyLingo.word] }
+    subject ["Cheese - Other"]
+
+    rights_statement ['http://rightsstatements.org/vocab/CNE/1.0/']
 
     admin_set do
       AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
