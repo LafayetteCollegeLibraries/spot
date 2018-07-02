@@ -55,7 +55,7 @@ class Publication < ActiveFedora::Base
   end
 
   property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
