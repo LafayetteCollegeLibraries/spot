@@ -29,9 +29,9 @@ class CatalogController < ApplicationController
 
     ## Default parameters to send to solr for all search-like requests. See also SolrHelper#solr_search_params
     config.default_solr_params = {
-      qt: "search",
+      qt: 'search',
       rows: 10,
-      qf: "title_tesim description_tesim creator_tesim keyword_tesim"
+      qf: 'title_tesim description_tesim creator_tesim keyword_tesim'
     }
 
     # solr field configuration for document/show views
@@ -41,14 +41,17 @@ class CatalogController < ApplicationController
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
-    config.add_facet_field solr_name("human_readable_type", :facetable), label: "Type", limit: 5
-    config.add_facet_field solr_name("resource_type", :facetable), label: "Resource Type", limit: 5
-    config.add_facet_field solr_name("creator", :facetable), limit: 5
-    config.add_facet_field solr_name("contributor", :facetable), label: "Contributor", limit: 5
-    config.add_facet_field solr_name("keyword", :facetable), limit: 5
-    config.add_facet_field solr_name("subject", :facetable), limit: 5
-    config.add_facet_field solr_name('department', :facetable), label: 'Department', limit: 5
-    config.add_facet_field solr_name("language", :facetable), limit: 5
+    # config.add_facet_field 'human_readable_type_sim', label: 'Work Type', limit: 5
+    config.add_facet_field 'resource_type_sim', label: 'Resource Type', limit: 5
+    config.add_facet_field 'depositor_ssim', label: 'Uploaded by', limit: 5
+    # config.add_facet_field 'admin_set_sim', label: 'Administrative Set', limit: 5
+
+    config.add_facet_field 'creator_sim', label: 'Creator', limit: 5
+    config.add_facet_field 'contributor_sim', label: 'Contributor', limit: 5
+    config.add_facet_field 'keyword_sim', label: 'Keyword', limit: 5
+    config.add_facet_field 'subject_sim', label: 'Subject', limit: 5
+    config.add_facet_field 'academic_department_sim', label: 'Department', limit: 5
+    config.add_facet_field 'language_display_ssim', label: 'Language', limit: 5
     config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
     config.add_facet_field solr_name("publisher", :facetable), limit: 5
     config.add_facet_field solr_name("file_format", :facetable), limit: 5
@@ -56,7 +59,7 @@ class CatalogController < ApplicationController
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
-    config.add_facet_field solr_name("generic_type", :facetable), if: false
+    config.add_facet_field 'generic_type_sim', if: false
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -73,7 +76,7 @@ class CatalogController < ApplicationController
     config.add_index_field solr_name("creator", :stored_searchable), itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
     config.add_index_field solr_name("contributor", :stored_searchable), itemprop: 'contributor', link_to_search: solr_name("contributor", :facetable)
     # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
-    config.add_index_field solr_name("depositor"), label: "Owner", helper_method: :link_to_profile
+    config.add_index_field solr_name("depositor"), label: "Uploaded by", helper_method: :link_to_profile
     config.add_index_field solr_name("publisher", :stored_searchable), itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
     config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
     config.add_index_field solr_name("language", :stored_searchable), itemprop: 'inLanguage', link_to_search: solr_name("language", :facetable)
