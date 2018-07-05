@@ -106,6 +106,10 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
+  property :based_near, predicate: ::RDF::Vocab::FOAF.based_near do |index|
+    index.as :symbol, :facetable
+  end
+
   property :license, predicate: ::RDF::Vocab::DC.rights
 
   # rights_statements are stored as URIs
@@ -113,12 +117,14 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
+  # property :rights_holder, predicate: ::RDF::Vocab::DC11.rightsHolder
+
   # accepts_nested_attributes_for needs to be defined at the end of the model.
   # see note from Hyrax::BasicMetadata mixin:
   #
   #   This must be mixed after all other properties are defined because no other
   #   properties will be defined once accepts_nested_attributes_for is called
 
-  # id_blank = proc { |attributes| attributes[:id].blank? }
-  # accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
+  id_blank = proc { |attributes| attributes[:id].blank? }
+  accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
 end
