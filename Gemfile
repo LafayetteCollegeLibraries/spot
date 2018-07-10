@@ -90,3 +90,5 @@ group :test do
   gem 'simplecov', require: false
   gem 'coveralls', '~> 0.8', require: false
 end
+
+gem 'riiif', '~> 1.1'
