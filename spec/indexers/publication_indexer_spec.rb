@@ -91,7 +91,7 @@ RSpec.describe PublicationIndexer do
     let(:work) { build(:publication, identifier: identifiers) }
 
     describe 'stores the raw identifiers in work#identifier' do
-      let(:fields) { %w[identifier_ssim identifier_sim] }
+      let(:fields) { %w[identifier_ssim] }
       it_behaves_like 'simple model indexing'
     end
 
