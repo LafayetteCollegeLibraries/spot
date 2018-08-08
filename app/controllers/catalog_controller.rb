@@ -50,7 +50,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'contributor_sim', label: "Contributor", limit: 5
     config.add_facet_field 'keyword_sim', limit: 5
     config.add_facet_field 'subject_sim', limit: 5
-    config.add_facet_field 'academic_department_ssim', label: 'Department', limit: 5
+    config.add_facet_field 'academic_department_ssim', limit: 5
     # config.add_facet_field solr_name("language", :facetable), limit: 5
     # config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
     config.add_facet_field 'publisher_sim', limit: 5

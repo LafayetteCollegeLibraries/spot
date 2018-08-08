@@ -1,4 +1,5 @@
-<%# byebug %>
+<%# NOTE: :description is skipped in this partial, as it is displayed in the
+    the partial before ('work_description') %>
 
 <%= presenter.attribute_to_html(:subtitle, label: 'Subtitle', html_dl: true) %>
 
@@ -13,8 +14,6 @@
 <%= presenter.attribute_to_html(:language_display, label: 'Language', html_dl: true) %>
 
 <%= presenter.attribute_to_html(:abstract, label: 'Abstract', html_dl: true) %>
-
-<%= presenter.attribute_to_html(:description, label: 'Description', html_dl: true) %>
 
 <%# TODO: create a Hyrax::Renderers::IdentifierAttributeRenderer
     class to let us display these differently depending on what
