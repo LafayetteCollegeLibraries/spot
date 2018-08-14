@@ -5,57 +5,27 @@ en:
   blacklight:
     search:
       fields:
-        facet:
-          academic_department_sim: Academic Department
-          academic_department_ssim: Academic Department
-          based_near_label_sim: Location
-          creator_sim: Creator
-          file_format_sim: Format
-          generic_type_sim: Type
-          keyword_sim: Keyword
-          language_sim: Language
-          publisher_sim: Publisher
-          resource_type_ssim: Type
-          subject_sim: Subject
-        index:
-          academic_department_sim: Academic Department
-          academic_department_ssim: Academic Department
-          based_near_tesim: Location
-          contributor_tesim: Contributor
-          creator_tesim: Creator
-          date_created_tesim: Date Created
-          date_modified_dtsi: Date Modified
-          date_uploaded_dtsi: Date Uploaded
-          description_tesim: Description
-          file_format_tesim: File Format
-          identifier_tesim: Identifier
-          keyword_tesim: Keyword
-          language_tesim: Language
-          license_tesim: License
-          publisher_tesim: Publisher
-          resource_type_ssim: Type
-          rights_statement_tesim: Rights Statement
-          subject_tesim: Subject
-        show:
-          academic_department_sim: Academic Department
-          academic_department_ssim: Academic Department
-          based_near_tesim: Location
-          contributor_tesim: Contributor
-          creator_tesim: Creator
-          date_created_tesim: Date Created
-          date_modified_dtsi: Date Modified
-          date_uploaded_dtsi: Date Uploaded
-          description_tesim: Description
-          file_format_tesim: File Format
-          identifier_tesim: Identifier
-          keyword_tesim: Keyword
-          language_tesim: Language
-          license_tesim: License
-          publisher_tesim: Publisher
-          resource_type_ssim: Type
-          rights_statement_tesim: Rights Statement
-          subject_tesim: Subject
-          title_tesim: Title
+        academic_department: Academic Department
+        based_near: Location
+        contributor: Contributor
+        creator: Creator
+        date_created: Date Created
+        date_modified: Date Modified
+        date_uploaded: Date Uploaded
+        depositor: Deposited by
+        description: Description
+        file_format: File Format
+        identifier: Identifier
+        keyword: Keyword
+        language: Language
+        license: License
+        member_of_collections: Collections
+        publisher: Publisher
+        resource_type: Type
+        rights_statement: Rights Statement
+        subject: Subject
+        title: Title
+
   simple_form:
     labels:
       defaults:
