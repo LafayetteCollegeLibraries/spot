@@ -13,11 +13,11 @@ module Spot
     end
 
     def contributor
-      value_for 'contributor_ssim'
+      value_for 'contributor_tesim'
     end
 
     def creator
-      value_for 'creator_ssim'
+      value_for 'creator_tesim'
     end
 
     def date_available
@@ -37,7 +37,7 @@ module Spot
     end
 
     def editor
-      value_for 'editor_ssim'
+      value_for 'editor_tesim'
     end
 
     def identifier
@@ -65,7 +65,7 @@ module Spot
     end
 
     def source
-      value_for 'source_ssim'
+      value_for 'source_tesim'
     end
 
     def subject
