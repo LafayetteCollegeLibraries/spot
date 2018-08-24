@@ -1,5 +1,5 @@
 require 'csv'
-RSpec.describe Spot::Importers::Bag::LdrDspaceMapper do
+RSpec.describe Spot::Mappers::LdrDspaceMapper do
   let(:mapper) { described_class.new }
   let(:csv_path) { ::Rails.root.join('spec', 'fixtures', 'ldr-bag-metadata.csv') }
   let(:metadata) { CsvSupport.parse_bag_metadata_to_hash(csv_path) }
