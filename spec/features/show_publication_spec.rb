@@ -1,24 +1,26 @@
-RSpec.feature 'Show Publication page', :js do
+RSpec.feature 'Show Publication page', js: false do
   let(:user) { create(:user) }
-  let(:pub) { create(:publication, :public, user: user, file: file) }
+  let(:pub) { create(:publication, user: user, file: file) }
+  let(:item_base_url) { "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}" }
 
+  # Only enqueue the ingest job, not charactarization.
+  # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
   before do
-    allow(CharacterizeJob).to receive(:perform_later) # There is no fits installed on travis-ci
+    ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
-    allow_any_instance_of(Hyrax::DownloadsController)
-      .to receive(:show)
-      .and_return file
-
+    # Since we're not passing our objects through charactarization,
+    # we need to pretend we did and mock a `:presenter_check_method`
+    # to return true
     allow_any_instance_of(Hyrax::FileSetPresenter)
       .to receive(presenter_check_method)
       .and_return true
 
-    visit "/concern/publications/#{pub.id}"
+    visit item_base_url
   end
 
   context 'when Publication is a PDF' do
     let(:presenter_check_method) { :pdf? }
-    let(:file) { File.open("#{::Rails.root}/spec/fixtures/document.pdf") }
+    let(:file) { create(:uploaded_pdf) }
 
     scenario 'the PDF viewer is displayed' do
       expect(page).to have_content pub.title.first
@@ -30,7 +32,7 @@ RSpec.feature 'Show Publication page', :js do
   end
 
   context 'when Publication is an image' do
-    let(:file) { File.open("#{::Rails.root}/spec/fixtures/image.png") }
+    let(:file) { create(:uploaded_image) }
     let(:presenter_check_method) { :image? }
 
     scenario 'the UniversalViewer is displayed' do
@@ -38,7 +40,7 @@ RSpec.feature 'Show Publication page', :js do
 
       viewer = page.find('.uv.viewer')
       expect(viewer).to be_present
-      expect(viewer[:'data-uri']).to eq "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}/manifest"
+      expect(viewer[:'data-uri']).to eq "#{item_base_url}/manifest"
     end
   end
 end
