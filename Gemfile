@@ -61,7 +61,10 @@ group :development do
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.10', require: false
   gem 'capistrano-rails', '~> 1.3', require: false
-
+  gem 'capistrano-bundler', '~> 1.3'
+  gem 'capistrano-ext'
+  gem 'capistrano-passenger'
+  gem 'capistrano-sidekiq', '~> 0.20.0'
 end
 
 group :development, :test do
