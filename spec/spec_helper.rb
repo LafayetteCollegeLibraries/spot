@@ -35,8 +35,20 @@ Capybara.register_driver :selenium_chrome_headless_sandboxless do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
 
+Capybara.register_driver :selenium do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
 Capybara.default_driver = :rack_test # This is a faster driver
 Capybara.javascript_driver = :selenium_chrome_headless_sandboxless # This is slower
+
+
+# Uncomment this block to watch feature tests run in a web browser
+# Capybara.javascript_driver = :selenium
+# Capybara.configure do |config|
+#   config.default_max_wait_time = 10 # seconds
+#   config.default_driver        = :selenium
+# end
 
 # since we've created a custsom driver (that is a wrapper around a Selenium
 # driver), we need to tell capybara-screenshot how to take a screenshot
@@ -122,8 +134,8 @@ RSpec.configure do |config|
 
   config.render_views = true
 
-  config.before(:suite) do
-    DatabaseCleaner.clean_with :truncation
+  config.before :suite do
+    DatabaseCleaner.clean_with(:truncation)
     ActiveFedora::Cleaner.clean!
   end
 
@@ -131,7 +143,13 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(clean: true) do
+  config.before clean: true do
+    DatabaseCleaner.clean
+    ActiveFedora::Cleaner.clean!
+  end
+
+  config.after clean: true do
+    DatabaseCleaner.clean
     ActiveFedora::Cleaner.clean!
   end
 

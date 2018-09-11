@@ -103,13 +103,16 @@ RSpec.feature 'Create a Publication', :clean, :js do
         choose 'publication_visibility_open'
 
         # check the submission agreement
-        check 'agreement'
+        # check 'agreement'
+        sleep(2)
+
+        page.find('#agreement').set(true)
+
 
         # give javascript a chance to catch up (otherwise the save button is hidden)
-        sleep(1)
+        sleep(2)
 
         page.find('#with_files_submit').click
-
         expect(page).to have_content attrs[:title].first
         expect(page).to have_content 'Your files are being processed by Spot in the background.'
       end
