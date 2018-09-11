@@ -145,9 +145,16 @@ GEM
     capistrano-bundler (1.3.0)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-ext (1.2.1)
+      capistrano (>= 1.0.0)
+    capistrano-passenger (0.2.0)
+      capistrano (~> 3.0)
     capistrano-rails (1.3.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano-sidekiq (0.20.0)
+      capistrano (>= 3.9.0)
+      sidekiq (>= 3.4)
     capybara (3.1.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -829,7 +836,11 @@ DEPENDENCIES
   bagit
   byebug
   capistrano (~> 3.10)
+  capistrano-bundler (~> 1.3)
+  capistrano-ext
+  capistrano-passenger
   capistrano-rails (~> 1.3)
+  capistrano-sidekiq (~> 0.20.0)
   capybara
   capybara-screenshot
   chromedriver-helper
@@ -873,4 +884,4 @@ DEPENDENCIES
   web-console (>= 3.3.0)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

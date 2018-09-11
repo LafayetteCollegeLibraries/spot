@@ -10,6 +10,6 @@ test:
   base_path: /test
 production:
   user: fedoraAdmin
-  password: fedoraAdmin
-  url: http://127.0.0.1:8983/fedora/rest
+  password: <%= ENV['FEDORA_PASSWORD'] %>
+  url: <%= ENV['FEDORA_URL'] %>
   base_path: /prod
