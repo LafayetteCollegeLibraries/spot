@@ -19,6 +19,7 @@ require 'active_fedora/cleaner'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
+require 'hyrax/spec/factory_bot/build_strategies'
 
 # copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
 #

@@ -1,0 +1,37 @@
+{
+  "workflows": [
+    { "name": "spot_one_step_process",
+      "label": "One-step processing workflow",
+      "description": "A single-step workflow for adding items from special collections.",
+      "allows_access_grant": false,
+      "actions": [
+        {
+          "name": "deposit",
+          "from_states": [],
+          "transition_to": "processing",
+          "notifications": [],
+          "methods": [
+              "Hyrax::Workflow::DeactivateObject",
+              "Hyrax::Workflow::GrantReadToDepositor",
+              "Hyrax::Workflow::RevokeEditFromDepositor"
+          ]
+        },
+        {
+          "name": "approve",
+          "from_states": [{"names": ["processing"], "roles": ["approving"]}],
+          "transition_to": "processed",
+          "notifications": [],
+          "methods": [
+              "Hyrax::Workflow::GrantReadToDepositor",
+              "Hyrax::Workflow::RevokeEditFromDepositor",
+              "Hyrax::Workflow::ActivateObject"
+          ]
+        },
+        {
+          "name": "comment",
+          "from_states": []
+        }
+      ]
+    }
+  ]
+}
