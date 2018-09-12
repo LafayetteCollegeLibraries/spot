@@ -16,19 +16,12 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#date_issued' do
     subject { mapper.date_issued }
 
-    context 'when date is before 2000' do
-      let(:metadata) { {'PartDate_ISO8601' => '2/11/86'} }
-      let(:value) { ['1986-02-11'] }
-
-      it { is_expected.to eq value }
+    let(:value) { %w[1986-02-11 2002-02-11] }
+    let(:metadata) do
+      { 'PartDate_ISO8601' => ['2/11/86', '2/11/02'] }
     end
 
-    context 'when date is after 2000' do
-      let(:metadata) { {'PartDate_ISO8601' => '2/11/02'} }
-      let(:value) { ['2002-02-11'] }
-
-      it { is_expected.to eq value }
-    end
+    it { is_expected.to eq value }
   end
 
   describe '#resource_type' do

@@ -2,6 +2,8 @@
 
 module Spot::Mappers
   class MagazineMapper < HashMapper
+    include ShortDateConversion
+
     self.fields_map = {
       publisher: 'OriginInfoPublisher',
       source: 'RelatedItemHost_1_TitleInfoTitle',
@@ -26,21 +28,10 @@ module Spot::Mappers
     # mm/dd/yy format. The 'PublicationSequence' field has 1930 listed
     # as 1, so we can infer that '00', for example, is 2000 and not 1900.
     #
-    # @return [String]
+    # @return [Array<String>]
     def date_issued
-      metadata['PartDate_ISO8601'].split(';').map do |raw|
-        m = raw.match(%r[(?<month>\d{1,2})/(?<day>\d{1,2})/(?<year>\d{2})])
-
-        return raw if m.nil?
-
-        year_prefix = m[:year].to_i < 30 ? '20' : '19'
-        padded_year = m[:year].rjust(2, '0')
-
-        year = "#{year_prefix}#{padded_year}"
-        month = m[:month].rjust(2, '0')
-        day = m[:day].rjust(2, '0')
-
-        "#{year}-#{month}-#{day}"
+      metadata['PartDate_ISO8601'].map do |raw|
+        short_date_to_iso(raw, century_threshold: 30)
       end
     end
 
