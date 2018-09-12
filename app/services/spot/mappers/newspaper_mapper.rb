@@ -3,7 +3,11 @@
 module Spot::Mappers
   class NewspaperMapper < ::Darlingtonia::HashMapper
     FIELDS_MAP = {
-
+      description: 'dc:description',
+      keyword: 'dc:subject',
+      publisher: 'dc:publisher',
+      resource_type: 'dc:type',
+      title: 'dc:title'
     }.freeze
 
     def fields
@@ -12,18 +16,18 @@ module Spot::Mappers
       ]
     end
 
-    # Preferring values from `date.dateOther` and falling back to `date.dateIssued`
-    # where necessary.
-    #
     # @return Array[<String>] the date in YYYY-MM-DD format
     def date_issued
-      raw_value = metadata['date.dateOther'] unless metadata['date.dateOther'].empty?
-      raw_value ||= metadata['date.dateIssued']
+      metadata['dc:date'].map do |raw_date|
+        Date.parse(raw_date).strftime('%Y-%m-%d')
+      end
+    end
 
-      return [] unless raw_value
-
-      parsed = Date.parse(raw_value)
-      Array(parsed.strftime('%Y-%m-%d'))
+    # @todo Move to a concern/mixin
+    # @param [String] name The field name
+    # @return [any]
+    def map_field(name)
+      metadata[FIELDS_MAP[name.to_sym]]
     end
   end
 end
