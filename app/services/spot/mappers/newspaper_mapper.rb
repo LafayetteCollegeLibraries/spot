@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class NewspaperMapper < ::Darlingtonia::HashMapper
-    FIELDS_MAP = {
+  class NewspaperMapper < HashMapper
+    self.fields_map = {
       description: 'dc:description',
       keyword: 'dc:subject',
       publisher: 'dc:publisher',
@@ -11,7 +11,7 @@ module Spot::Mappers
     }.freeze
 
     def fields
-      FIELDS_MAP.keys + %i[
+      super + %i[
         date_issued
       ]
     end
@@ -21,13 +21,6 @@ module Spot::Mappers
       metadata['dc:date'].map do |raw_date|
         Date.parse(raw_date).strftime('%Y-%m-%d')
       end
-    end
-
-    # @todo Move to a concern/mixin
-    # @param [String] name The field name
-    # @return [any]
-    def map_field(name)
-      metadata[FIELDS_MAP[name.to_sym]]
     end
   end
 end

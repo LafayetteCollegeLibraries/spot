@@ -134,14 +134,6 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     end
   end
 
-  describe '#map_field' do
-    it do
-      described_class.const_get(:FIELDS_MAP).each do |key, val|
-        expect(mapper.map_field(key)).to eq metadata[val]
-      end
-    end
-  end
-
   describe '#representative_file' do
     subject { mapper.representative_file }
 

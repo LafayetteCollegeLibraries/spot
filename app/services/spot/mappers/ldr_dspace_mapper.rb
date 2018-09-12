@@ -2,8 +2,8 @@
 require 'uri'
 
 module Spot::Mappers
-  class LdrDspaceMapper < ::Darlingtonia::HashMapper
-    FIELDS_MAP = {
+  class LdrDspaceMapper < HashMapper
+    self.fields_map = {
       abstract: 'description.abstract',
       creator: 'contributor.author',
       editor: 'contributor.editor',
@@ -23,7 +23,7 @@ module Spot::Mappers
     # own methods to this class (see: Mapper#visibility) that will do their
     # own thing and return a value instead.
     def fields
-      FIELDS_MAP.keys + %i[
+      super + %i[
         bibliographic_citation
         contributor
         depositor
@@ -78,10 +78,6 @@ module Spot::Mappers
 
     def source
       metadata['type'] == 'Book chapter' ? metadata['publisher'] : []
-    end
-
-    def map_field(name)
-      metadata[FIELDS_MAP[name.to_sym]]
     end
 
     def representative_file

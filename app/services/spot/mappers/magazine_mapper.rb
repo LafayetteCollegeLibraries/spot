@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class MagazineMapper < ::Darlingtonia::HashMapper
-    FIELDS_MAP = {
+  class MagazineMapper < HashMapper
+    self.fields_map = {
       publisher: 'OriginInfoPublisher',
       source: 'RelatedItemHost_1_TitleInfoTitle',
       subtitle: 'TitleInfoSubtitle'
@@ -15,18 +15,11 @@ module Spot::Mappers
     #
     # @return [Array<Symbol>]
     def fields
-      FIELDS_MAP.keys + %i[
+      super + %i[
         date_issued
         resource_type
         title
       ]
-    end
-
-    # @todo Move to a concern/mixin
-    # @param [String] name The field name
-    # @return [any]
-    def map_field(name)
-      metadata[FIELDS_MAP[name.to_sym]]
     end
 
     # Despite being labeled as 'ISO8601', legacy magazine dates are in
