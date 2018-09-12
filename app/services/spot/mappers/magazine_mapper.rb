@@ -58,24 +58,21 @@ module Spot::Mappers
       ['Journal']
     end
 
-    # Magazines contain a field of 'TitleInfoNonSort' which usually stores
-    # the word 'The', but is also sometimes empty. We want to merge these
-    # fields and ensure there is no whitespace remaining.
-    #
-    # This is written a little convolutedly because we want to cover the
-    # possibility of multiple titles being present (which I'm like 99% sure
-    # will never happen). So we'll merge both of the title fields with
-    # `Array#zip` and joining the fields via `Array#join`. We need to start
-    # with 'TitleInfoTitle' because that field is always expected to be present,
-    # whereas 'TitleInfoNonSort' is sometimes absent (and `Array#zip` will
-    # return an empty array if the source array is empty). To fix this, we'll
-    # run `Array#reverse` before joining the fields.
+    # The display title is a combination of the `TitleInfoNonSort`,
+    # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
     #
     # @return [Array<String>]
     def title
-      metadata['TitleInfoTitle']
-        .zip(metadata['TitleInfoNonSort'])
-        .map { |pair| pair.reverse.join(' ').strip }
+      non_sort = metadata['TitleInfoNonSort'].first
+      info_title = metadata['TitleInfoTitle'].first
+      date = metadata['PartDate_NaturalLanguage']
+
+      title = "#{non_sort} #{info_title}".strip
+
+      # date could be nil or '' or []
+      return [title] if date.blank? || date.empty?
+
+      ["#{title} (#{date.first})"]
     end
   end
 end

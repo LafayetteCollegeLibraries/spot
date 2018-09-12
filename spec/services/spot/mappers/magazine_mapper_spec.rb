@@ -81,5 +81,18 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
       it { is_expected.to eq value }
     end
+
+    context 'when `PartDate_NaturalLanguage` is present' do
+      let(:value) { ['The Lafayette (November 1930)'] }
+      let(:metadata) do
+        {
+          'TitleInfoNonSort' => ['The'],
+          'TitleInfoTitle' => ['Lafayette'],
+          'PartDate_NaturalLanguage' => ['November 1930']
+        }
+      end
+
+      it { is_expected.to eq value }
+    end
   end
 end
