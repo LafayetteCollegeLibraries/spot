@@ -4,15 +4,6 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
-  shared_examples 'a mapped field' do
-    subject { mapper.send(method) }
-
-    let(:value) { ['some value'] }
-    let(:metadata) { {field => value} }
-
-    it { is_expected.to eq value }
-  end
-
   describe '#date_issued' do
     subject { mapper.date_issued }
 
