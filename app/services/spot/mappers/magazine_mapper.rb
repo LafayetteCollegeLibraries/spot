@@ -5,6 +5,8 @@ module Spot::Mappers
     include ShortDateConversion
 
     self.fields_map = {
+      creator: 'NamePart_DisplayForm_PersonalAuthor',
+      description: 'TitleInfoPartNumber',
       publisher: 'OriginInfoPublisher',
       source: 'RelatedItemHost_1_TitleInfoTitle',
       subtitle: 'TitleInfoSubtitle'
@@ -12,16 +14,28 @@ module Spot::Mappers
 
     # Darlingtonia's Mapper pattern relies on this returned array to
     # determine what fields to include on the object. When a method is
-    # missing, it uses the <code>FIELDS_MAP</code> Hash to find the
+    # missing, it uses the <code>fields</code> Hash to find the
     # related key for the raw <code>metadata</code> Hash.
     #
     # @return [Array<Symbol>]
     def fields
       super + %i[
+        based_near
         date_issued
         resource_type
         title
       ]
+    end
+
+    # @return [Array<RDF::URI,String>]
+    def based_near
+      metadata['OriginInfoPlaceTerm'].map do |place|
+        if place == 'Easton, PA'
+          RDF::URI('http://sws.geonames.org/5188140/')
+        else
+          place
+        end
+      end
     end
 
     # Despite being labeled as 'ISO8601', legacy magazine dates are in

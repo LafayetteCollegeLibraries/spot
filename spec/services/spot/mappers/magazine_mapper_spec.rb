@@ -4,13 +4,29 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#publisher' do
-    subject { mapper.publisher }
+  describe '#based_near' do
+    subject { mapper.based_near.first }
 
-    let(:metadata) { {'OriginInfoPublisher' => value} }
-    let(:value) { ['Lafayette College Alumni Association'] }
+    let(:metadata) { {'OriginInfoPlaceTerm' => [location]} }
 
-    it { is_expected.to eq value }
+    context 'when the value is "Easton, PA"' do
+      let(:location) { 'Easton, PA' }
+
+      it { is_expected.to be_an RDF::URI }
+    end
+
+    context 'other values' do
+      let(:location) { 'Bethlehem, PA' }
+
+      it { is_expected.to be_a String }
+    end
+  end
+
+  describe '#creator' do
+    let(:method) { :creator }
+    let(:field) { 'NamePart_DisplayForm_PersonalAuthor' }
+
+    it_behaves_like 'a mapped field'
   end
 
   describe '#date_issued' do
@@ -20,6 +36,22 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     let(:metadata) do
       { 'PartDate_ISO8601' => ['2/11/86', '2/11/02'] }
     end
+
+    it { is_expected.to eq value }
+  end
+
+  describe '#description' do
+    let(:method) { :description }
+    let(:field) { 'TitleInfoPartNumber' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#publisher' do
+    subject { mapper.publisher }
+
+    let(:metadata) { {'OriginInfoPublisher' => value} }
+    let(:value) { ['Lafayette College Alumni Association'] }
 
     it { is_expected.to eq value }
   end
