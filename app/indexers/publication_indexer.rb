@@ -1,4 +1,14 @@
+# frozen_string_literal: true
+
 class PublicationIndexer < Hyrax::WorkIndexer
+
+  # replaces the work that including the `Hyrax::IndexesLinkedMetadata`
+  # mixin would do, without also bringing along metadata baggage from
+  # `Hyrax::BasicMetadataIndexer`.
+  def rdf_service
+    Hyrax::DeepIndexingService
+  end
+
   def generate_solr_document
     super.tap do |solr_doc|
       attach_individual_identifiers(solr_doc)

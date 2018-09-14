@@ -4,14 +4,9 @@ class Publication < ActiveFedora::Base
   # The `controlled_properties` attribute is used by the Hyrax::DeepIndexingService,
   # which is used to fetch RDF labels for indexing. This is used out-of-the-box
   # for :based_near (which, I believe, uses GeoNames), but could be used for,
-  # say, LCSH headings in other models, if not this one. This is implemented in
-  # Hyrax::BasicMetadata, but since we're implementing our basic metadata fields
-  # outside of that mixin, we'll need to define this manually.
-  #
-  # (You'll probably also need to switch on `accepts_nested_attributes` below)
-
-  # class_attribute :controlled_properties
-  # self.controlled_properties = []
+  # say, LCSH headings in other models, if not this one.
+  class_attribute :controlled_properties
+  self.controlled_properties = %i[based_near creator]
 
   self.indexer = PublicationIndexer
 
@@ -20,7 +15,10 @@ class Publication < ActiveFedora::Base
 
   validates :title, presence: { message: 'Your work must have a title.' }
 
-  # title is included with ::ActiveFedora::Base
+  #
+  # note: title is included with ::ActiveFedora::Base
+  #
+
   property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
     index.as :stored_searchable
   end
@@ -74,7 +72,10 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
-  property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
+  # Uses the `Spot::SolrizableActiveTriplesResource` to provide a `#solrize`
+  # method to the value.
+  property :creator, predicate: ::RDF::Vocab::DC11.creator,
+                     class_name: Spot::SolrizableActiveTriplesResource do |index|
     index.as :stored_searchable, :facetable
   end
 
