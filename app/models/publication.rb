@@ -78,7 +78,7 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :editor, predicate: ::RDF::Vocab::DC11.contributor do |index|
+  property :editor, predicate: ::RDF::Vocab::BIBO.editor do |index|
     index.as :stored_searchable, :facetable
   end
 
