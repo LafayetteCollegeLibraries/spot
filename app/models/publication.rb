@@ -41,6 +41,10 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
+  property :physical_medium, predicate: ::RDF::Vocab::DC.PhysicalMedium do |index|
+    index.as :symbol, :facetable
+  end
+
   # see PublicationIndexer for indexing of this field
   property :language, predicate: ::RDF::Vocab::DC11.language do |index|
     index.as :symbol
@@ -98,11 +102,11 @@ class Publication < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
+  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
     index.as :symbol, :facetable
   end
 
-  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
+  property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
     index.as :symbol, :facetable
   end
 
