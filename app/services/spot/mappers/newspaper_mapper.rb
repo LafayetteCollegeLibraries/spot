@@ -5,6 +5,7 @@ module Spot::Mappers
     self.fields_map = {
       description: 'dc:description',
       keyword: 'dc:subject',
+      physical_medium: 'dc:source',
       publisher: 'dc:publisher',
       resource_type: 'dc:type',
       title: 'dc:title'
@@ -12,8 +13,20 @@ module Spot::Mappers
 
     def fields
       super + %i[
+        based_near
         date_issued
       ]
+    end
+
+    # @return [Array<RDF::URI,String>]
+    def based_near
+      metadata['dc:coverage'].map do |place|
+        if place == 'United States, Pennsylvania, Northampton County, Easton'
+          RDF::URI('http://sws.geonames.org/5188140/')
+        else
+          place
+        end
+      end
     end
 
     # @return Array[<String>] the date in YYYY-MM-DD format

@@ -4,6 +4,34 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
+  describe '#based_near' do
+    subject(:based_near) { mapper.based_near }
+
+    context 'when location is Easton' do
+      let(:metadata) do
+        {
+          'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton']
+        }
+      end
+
+      it 'is an RDF::URI' do
+        expect(based_near.first).to be_an ::RDF::URI
+      end
+    end
+
+    context 'when it is any place else' do
+      let(:metadata) do
+        {
+          'dc:coverage' => ['Anywhere, USA']
+        }
+      end
+
+      it 'is the supplied value' do
+        expect(based_near.first).to be_a String
+      end
+    end
+  end
+
   describe '#date_issued' do
     subject { mapper.date_issued }
 
@@ -38,6 +66,14 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     subject { mapper.keyword }
 
     let(:field) { 'dc:subject' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#physical_medium' do
+    subject { mapper.physical_medium }
+
+    let(:field) { 'dc:source' }
 
     it_behaves_like 'a mapped field'
   end
