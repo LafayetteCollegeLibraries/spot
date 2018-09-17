@@ -22,6 +22,7 @@ module Spot::Mappers
       super + %i[
         based_near
         date_issued
+        identifier
         related_resource
         resource_type
         title
@@ -48,6 +49,13 @@ module Spot::Mappers
       metadata['PartDate_ISO8601'].map do |raw|
         short_date_to_iso(raw, century_threshold: 30)
       end
+    end
+
+    # Creates a local identifier using the 'Publication Sequence' number
+    #
+    # @return [Array<String>]
+    def identifier
+      metadata['PublicationSequence'].map { |num| "lafayette_magazine:#{num}" }
     end
 
     # Maybe a little clever for its own good, but it gathers the unique

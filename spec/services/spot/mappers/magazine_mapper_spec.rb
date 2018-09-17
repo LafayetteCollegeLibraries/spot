@@ -49,6 +49,15 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#identifier' do
+    subject { mapper.identifier }
+
+    let(:metadata) { {'PublicationSequence' => ['10']} }
+    let(:value) { ['lafayette_magazine:10'] }
+
+    it { is_expected.to eq value }
+  end
+
   describe '#publisher' do
     subject { mapper.publisher }
 
