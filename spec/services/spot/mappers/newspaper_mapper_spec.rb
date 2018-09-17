@@ -7,44 +7,60 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#date_issued' do
     subject { mapper.date_issued }
 
-    let(:value) { %w[2018-09-01 2018-09-02] }
+    let(:value) do
+      %w[
+        2018-09-01
+        2018-09-02
+      ]
+    end
+
     let(:metadata) do
-      { 'dc:date' => %w[2018-09-01T00:00:00Z 2018-09-02T00:00:00Z] }
+      {
+        'dc:date' => %w[
+          2018-09-01T00:00:00Z
+          2018-09-02T00:00:00Z
+        ]
+      }
     end
 
     it { is_expected.to eq value }
   end
 
   describe '#description' do
-    let(:method) { :description }
+    subject { mapper.description }
+
     let(:field) { 'dc:description' }
 
     it_behaves_like 'a mapped field'
   end
 
   describe '#keyword' do
-    let(:method) { :keyword }
+    subject { mapper.keyword }
+
     let(:field) { 'dc:subject' }
 
     it_behaves_like 'a mapped field'
   end
 
   describe '#publisher' do
-    let(:method) { :publisher }
+    subject { mapper.publisher }
+
     let(:field) { 'dc:publisher' }
 
     it_behaves_like 'a mapped field'
   end
 
   describe '#resource_type' do
-    let(:method) { :resource_type }
+    subject { mapper.resource_type }
+
     let(:field) { 'dc:type' }
 
     it_behaves_like 'a mapped field'
   end
 
   describe '#title' do
-    let(:method) { :title }
+    subject { mapper.title }
+
     let(:field) { 'dc:title' }
 
     it_behaves_like 'a mapped field'

@@ -59,14 +59,16 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
   end
 
   describe '#publisher' do
-    let(:method) { :publisher }
+    subject { mapper.publisher }
+
     let(:field) { 'originInfo_Publisher' }
 
     it_behaves_like 'a mapped field'
   end
 
   describe '#source' do
-    let(:method) { :source }
+    subject { mapper.source }
+
     let(:field) { 'relatedItem_typeHost_titleInfo_title' }
 
     it_behaves_like 'a mapped field'

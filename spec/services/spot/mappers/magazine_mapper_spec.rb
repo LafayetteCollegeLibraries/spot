@@ -23,7 +23,8 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   end
 
   describe '#creator' do
-    let(:method) { :creator }
+    subject { mapper.creator }
+
     let(:field) { 'NamePart_DisplayForm_PersonalAuthor' }
 
     it_behaves_like 'a mapped field'
@@ -41,7 +42,8 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   end
 
   describe '#description' do
-    let(:method) { :description }
+    subject { mapper.description }
+
     let(:field) { 'TitleInfoPartNumber' }
 
     it_behaves_like 'a mapped field'
