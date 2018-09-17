@@ -8,6 +8,7 @@ describe Publication do
     publisher
     source
     resource_type
+    physical_medium
     language
     abstract
     description

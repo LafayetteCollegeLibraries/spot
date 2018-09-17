@@ -8,6 +8,7 @@ FactoryBot.define do
     publisher [FFaker::Company.name]
     source ['Lafayette College']
     resource_type ['Article']
+    physical_medium ['Microfiche']
     language ['en']
 
     abstract { [FFaker::CheesyLingo.paragraph] }
@@ -29,7 +30,7 @@ FactoryBot.define do
     organization ['Lafayette College']
 
     keyword { [FFaker::CheesyLingo.word] }
-    subject ["Cheese - Other"]
+    subject ['Cheese - Other']
 
     rights_statement ['http://rightsstatements.org/vocab/CNE/1.0/']
 
