@@ -5,7 +5,7 @@ require 'fileutils'
 module Spot
   class IngestZippedBag
     AVAILABLE_MAPPERS = {
-      ldr: Spot::Importers::Bag::LdrDspaceMapper,
+      ldr: Spot::Mappers::LdrDspaceMapper,
     }
 
     def initialize(zip_path, source: nil)

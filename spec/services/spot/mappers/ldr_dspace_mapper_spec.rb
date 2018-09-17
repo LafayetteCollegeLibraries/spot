@@ -1,8 +1,6 @@
-require 'csv'
-RSpec.describe Spot::Importers::Bag::LdrDspaceMapper do
+RSpec.describe Spot::Mappers::LdrDspaceMapper do
   let(:mapper) { described_class.new }
-  let(:csv_path) { ::Rails.root.join('spec', 'fixtures', 'ldr-bag-metadata.csv') }
-  let(:metadata) { CsvSupport.parse_bag_metadata_to_hash(csv_path) }
+  let(:metadata) { {} }
 
   before do
     mapper.metadata = metadata
@@ -11,7 +9,10 @@ RSpec.describe Spot::Importers::Bag::LdrDspaceMapper do
   describe '#bibliographic_citation' do
     subject { mapper.bibliographic_citation }
 
-    it { is_expected.to eq metadata['identifier.citation'] }
+    let(:metadata) { {'identifier.citation' => value} }
+    let(:value) { ['Author, FirstName. "Title of Piece"'] }
+
+    it { is_expected.to eq value }
 
     context 'when no value present' do
       let(:metadata) { {} }
@@ -23,18 +24,35 @@ RSpec.describe Spot::Importers::Bag::LdrDspaceMapper do
   describe '#contributor' do
     subject { mapper.contributor }
 
-    it { is_expected.to include *metadata['contributor'] }
-    it { is_expected.to include *metadata['contributor.other'] }
+    let(:contributor) { 'Contributor' }
+    let(:contributor_other) { 'Other contributor' }
+
+    let(:metadata) do
+      {
+        'contributor' => [contributor],
+        'contributor.other' => [contributor_other]
+      }
+    end
+
+    it { is_expected.to include contributor }
+    it { is_expected.to include contributor_other }
   end
 
   describe '#date_uploaded' do
     subject { mapper.date_uploaded }
 
-    it { is_expected.to include *metadata['date.accessioned'] }
+    let(:metadata) { {'date.accessioned' => [value]} }
+    let(:value) { '2018-09-17 14:39:00' }
+
+    it { is_expected.not_to be_an Array }
+    it { is_expected.to eq value }
   end
 
   describe '#depositor' do
     subject { mapper.depositor }
+
+    # @todo update this value to a constant / config setting
+    let(:default_email) { 'dss@lafayette.edu' }
 
     context 'when a depositor is provided' do
       let(:email) { 'depositor@lafayette.edu' }
@@ -46,57 +64,87 @@ RSpec.describe Spot::Importers::Bag::LdrDspaceMapper do
     context 'when none is provided (or found)' do
       let(:metadata) { {} }
 
-      it { is_expected.to eq 'dss@lafayette.edu' }
+      it { is_expected.to eq default_email }
+    end
+
+    context 'when a provenance is found but formatted irregularly' do
+      let(:metadata) { {'description.provenance' => ['kilroy was here']} }
+
+      it { is_expected.to eq default_email }
     end
   end
 
   describe '#description' do
     subject { mapper.description }
 
-    it { is_expected.to include *metadata['description'] }
-    it { is_expected.to include *metadata['description.sponsorship'] }
+    let(:description) { 'A description' }
+    let(:sponsorship) { 'Stamps dot com folks!' }
+
+    let(:metadata) do
+      {
+        'description' => [description],
+        'description.sponsorship' => [sponsorship]
+      }
+    end
+
+    it { is_expected.to include description }
+    it { is_expected.to include sponsorship }
   end
 
   describe '#identifier' do
     subject { mapper.identifier }
 
-    let(:values) { metadata["identifier.#{prefix}"].map { |val| "#{prefix}:#{val}" } }
-
     context 'with doi values' do
-      let(:prefix) { 'doi' }
+      let(:value) { 'abc/123' }
+      let(:metadata) { {'identifier.doi' => [value]} }
 
-      it { is_expected.to include *values }
+      it { is_expected.to eq ["doi:#{value}"] }
     end
 
     context 'with isbn values' do
-      let(:prefix) { 'isbn' }
+      let(:value) { '0-0000-0000-0' }
+      let(:metadata) { {'identifier.isbn' => [value]} }
 
-      it { is_expected.to include *values }
+      it { is_expected.to eq ["isbn:#{value}"] }
     end
 
     context 'with issn values' do
-      let(:prefix) { is_expected.to include *values }
+      let(:value) { '0000-0000' }
+      let(:metadata) { {'identifier.issn' => [value]} }
+
+      it { is_expected.to eq ["issn:#{value}"] }
     end
 
     # TODO: this approach has a bad code-smell. go about it differently
     context 'with handles' do
-      let(:values) { mapper.send(:uris_with_handles_mapped) }
+      let(:metadata) do
+        {
+          'identifier.uri' => ["http://hdl.handle.net/#{value1}"],
+          'description.uri' => ["http://hdl.handle.net/#{value2}"]
+        }
+      end
 
-      it { is_expected.to include *values }
+      let(:value1) { 'abc/123' }
+      let(:value2) { 'def/456' }
+
+      it { is_expected.to include "hdl:#{value1}" }
+      it { is_expected.to include "hdl:#{value2}" }
     end
   end
 
   describe '#language' do
     subject { mapper.language }
+
+    let(:value) { ['fr'] }
     let(:metadata) { {'language.iso' => ['fr']} }
 
-    it { is_expected.to eq metadata['language.iso'] }
+    it { is_expected.to eq value }
 
     context 'when language iso value is en_US' do
+      let(:value) { ['en'] }
       let(:metadata) { {'language.iso' => ['en_US']} }
 
-      it { is_expected.to eq ['en'] }
-      it { is_expected.not_to include *metadata['language'] }
+      it { is_expected.to eq value }
     end
   end
 
@@ -131,14 +179,6 @@ RSpec.describe Spot::Importers::Bag::LdrDspaceMapper do
 
       it { is_expected.to be_empty }
       it { is_expected.not_to eq metadata['publisher']}
-    end
-  end
-
-  describe '#map_field' do
-    it do
-      described_class.const_get(:FIELDS_MAP).each do |key, val|
-        expect(mapper.map_field(key)).to eq metadata[val]
-      end
     end
   end
 
