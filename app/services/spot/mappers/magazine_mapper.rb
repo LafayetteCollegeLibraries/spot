@@ -2,7 +2,7 @@
 
 module Spot::Mappers
   class MagazineMapper < HashMapper
-    include ShortDateConversion
+    include ::Spot::Mappers::ShortDateConversion
 
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
@@ -22,6 +22,7 @@ module Spot::Mappers
       super + %i[
         based_near
         date_issued
+        related_resource
         resource_type
         title
       ]
@@ -47,6 +48,18 @@ module Spot::Mappers
       metadata['PartDate_ISO8601'].map do |raw|
         short_date_to_iso(raw, century_threshold: 30)
       end
+    end
+
+    # Maybe a little clever for its own good, but it gathers the unique
+    # values across three metadata fields and strips out any blanks.
+    #
+    # @return [Array<String>]
+    def related_resource
+      (
+        Array(metadata['TitleInfoPartNumber']) |
+        Array(metadata['RelatedItemHost_1_TitleInfoTitle']) |
+        Array(metadata['RelatedItemHost_2_TitleInfoTitle'])
+      ).compact
     end
 
     # All magazines are mapped to the 'Journal' resource_type

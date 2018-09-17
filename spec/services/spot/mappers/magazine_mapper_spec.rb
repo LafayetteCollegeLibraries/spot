@@ -58,6 +58,29 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     it { is_expected.to eq value }
   end
 
+  describe '#related_resource' do
+    subject { mapper.related_resource }
+
+    let(:metadata) do
+      {
+        'TitleInfoPartNumber' => %w[one],
+        'RelatedItemHost_1_TitleInfoTitle' => %w[two red],
+        'RelatedItemHost_2_TitleInfoTitle' => %w[blue one]
+      }
+    end
+
+    let(:value) { %w[one two red blue] }
+
+    it { is_expected.to eq value }
+
+    # our failsafe
+    context 'with no defined values' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
+  end
+
   describe '#resource_type' do
     subject { mapper.resource_type }
 
