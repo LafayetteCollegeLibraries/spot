@@ -94,6 +94,28 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#rights_statement' do
+    subject(:rights_statement) { mapper.rights_statement }
+
+    let(:metadata) { {'dc:rights' => [rights]} }
+
+    context 'when in the Public domain' do
+      let(:rights) { 'Public domain' }
+
+      it 'is an RDF::URI' do
+        expect(rights_statement.first).to be_an ::RDF::URI
+      end
+    end
+
+    context 'when not in the Public domain' do
+      let(:rights) { 'No way you can use this' }
+
+      it 'keeps the existing value' do
+        expect(rights_statement.first).to eq rights
+      end
+    end
+  end
+
   describe '#title' do
     subject { mapper.title }
 
