@@ -4,6 +4,7 @@ module Spot::Mappers
   class NewspaperMapper < HashMapper
     self.fields_map = {
       description: 'dc:description',
+      identifier: 'dc:identifier',
       keyword: 'dc:subject',
       physical_medium: 'dc:source',
       publisher: 'dc:publisher',
@@ -42,7 +43,7 @@ module Spot::Mappers
       metadata['dc:rights'].map do |rights|
         case rights
         when 'Public domain'
-          RDF::URI('https://creativecommons.org/publicdomain/mark/1.0/')
+          ::RDF::URI('https://creativecommons.org/publicdomain/mark/1.0/')
         else
           rights
         end

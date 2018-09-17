@@ -62,6 +62,14 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#identifier' do
+    subject { mapper.identifier }
+
+    let(:field) { 'dc:identifier' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#keyword' do
     subject { mapper.keyword }
 
