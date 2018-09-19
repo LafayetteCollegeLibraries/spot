@@ -92,6 +92,7 @@ end
 group :test do
   gem 'simplecov', require: false
   gem 'coveralls', '~> 0.8', require: false
+  gem 'hyrax-spec'
 end
 
 gem 'riiif', '~> 1.1'
