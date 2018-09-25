@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :publication do
+    abstract ['A short description of the thing']
     academic_department ['Art']
     bibliographic_citation ['Lastname, First. Title of piece.']
     contributor ['Contributor, First-Name', 'Person, Another']
