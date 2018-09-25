@@ -1,5 +1,5 @@
 module Spot
-  class DepartmentAuthorities < ::Hyrax::QaSelectService
+  class AcademicDepartmentAuthorities < ::Hyrax::QaSelectService
     def initialize
       super('lafayette_departments')
     end
