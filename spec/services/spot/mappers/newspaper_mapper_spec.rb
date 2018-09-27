@@ -4,7 +4,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#based_near' do
+  skip '#based_near' do
     subject(:based_near) { mapper.based_near }
 
     context 'when location is Easton' do

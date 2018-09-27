@@ -4,7 +4,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#based_near' do
+  skip '#based_near' do
     subject { mapper.based_near.first }
 
     let(:metadata) { {'OriginInfoPlaceTerm' => [location]} }
