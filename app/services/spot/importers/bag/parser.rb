@@ -33,23 +33,43 @@ module Spot::Importers::Bag
       input_record
     end
 
-    def excluded_representatives
-      [metadata_filename, 'license.txt']
-    end
-
     private
 
+    def excluded_representatives
+      metadata_filenames + %w(license.txt)
+    end
+
+    def file_list
+      Dir[File.join(data_dir, '*')] -
+        excluded_representatives.map {|fn| File.join(data_dir, fn)}
+    end
     def input_record_from(metadata)
       Darlingtonia::InputRecord.from(metadata: metadata, mapper: @mapper)
     end
 
+    # @todo what happens when the file doesn't exist?
     def parse_csv_metadata
-      csv_path = File.join(data_dir, metadata_filename)
       {}.tap do |output|
-        ::CSV.foreach(csv_path) do |(key, value)|
-          output[key] = value.split(';')
+        contents = csv_contents
+        contents.shift # skip header-row
+        contents.each do |row|
+          output[row[0]] = row[1].to_s.split(';')
         end
       end
+    end
+
+    def path_to_csv
+      metadata_filenames
+        .map { |fn| File.join(data_dir, fn) }
+        .find { |path| File.exist?(path) }
+    end
+
+    # breaking this out from +parse_csv_metadata+ so that we can test
+    # +parse_csv_metadata+
+    #
+    # @return [Array<Array<String>>]
+    def csv_contents
+      ::CSV.read(path_to_csv)
     end
 
     def bag_uid
@@ -60,13 +80,13 @@ module Spot::Importers::Bag
       File.join(directory, 'data')
     end
 
-    def metadata_filename
-      "#{bag_uid}_metadata.csv"
-    end
-
-    def file_list
-      Dir[File.join(data_dir, '*')] -
-        excluded_representatives.map {|fn| File.join(data_dir, fn)}
+    # We need to account for an older practice that named the bag's
+    # metadata file after the id of the item (ex: '237_metadata.csv')
+    def metadata_filenames
+      %W(
+        metadata.csv
+        #{bag_uid}_metadata.csv
+      )
     end
   end
 end
