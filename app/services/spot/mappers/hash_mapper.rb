@@ -17,5 +17,9 @@ module Spot::Mappers
 
       metadata[field_name]
     end
+
+    def representative_file
+      metadata[:representative_files]
+    end
   end
 end
