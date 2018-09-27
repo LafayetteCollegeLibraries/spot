@@ -25,7 +25,13 @@ module Spot::Importers::Bag
       ability = Ability.new(depositor)
 
       attributes[:uploaded_files] = files(record.representative_file, user: depositor)
-      attributes[:visibility] = record.visibility
+      attributes[:visibility] = if record.respond_to? :visibility
+                                  record.visibility
+                                else
+                                  default_visibility
+                                end
+
+      puts attributes.inspect
 
       actor_env = Hyrax::Actors::Environment.new(created, ability, attributes)
 
@@ -36,6 +42,10 @@ module Spot::Importers::Bag
       error_stream << e.message
     rescue ::Ldp::Gone => e
       error_stream << "Ldp::Gone => #{e.message}"
+    end
+
+    def default_visibility
+      ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
     def files(file_list, user: creator)
