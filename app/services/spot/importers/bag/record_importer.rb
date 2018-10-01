@@ -49,7 +49,9 @@ module Spot::Importers::Bag
     #
     # @param [String] depositor_email
     # @return [Ability]
-    def ability_for(depositor_email = default_depositor_email)
+    def ability_for(depositor_email)
+      depositor_email ||= default_depositor_email
+
       depositor = User.find_or_initialize_by(email: depositor_email)
       depositor.save(validate: false) if depositor.new_record?
 
