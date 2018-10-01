@@ -18,8 +18,10 @@ module Spot::Mappers
       metadata[field_name]
     end
 
-    def representative_file
+    # @return [Array<String>] paths to files of works to be attached
+    def representative_files
       metadata[:representative_files]
     end
+    alias_method :representative_file, :representative_files
   end
 end
