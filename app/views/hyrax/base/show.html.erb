@@ -11,8 +11,11 @@
       </div>
       <div class="panel-body">
         <div class="row">
-          <%= render 'workflow_actions_widget', presenter: @presenter %>
           <div class="col-sm-12">
+            <%= render 'show_actions', presenter: @presenter %>
+          </div>
+          <%= render 'workflow_actions_widget', presenter: @presenter %>
+          <div class="col-sm-12 work-representative-media">
             <%= render 'representative_media', presenter: @presenter, viewer: @presenter.universal_viewer? %>
           </div>
           <%# <div class="col-sm-3 text-center"> %>

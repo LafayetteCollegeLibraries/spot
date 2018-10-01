@@ -1,0 +1,16 @@
+<% presenter.title.each_with_index do |title, index| %>
+  <div class="row">
+    <div class="col-sm-12">
+      <% if index == 0 %>
+        <h2>
+          <%= title %>
+          <% unless presenter.public? %>
+          <small class="text-muted"><%= presenter.permission_badge %></small>
+          <% end %>
+        </h2>
+      <% else %>
+        <h2><%= title %></h2>
+      <% end %>
+    </div>
+  </div>
+<% end %>

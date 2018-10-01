@@ -1,5 +1,9 @@
 module Spot
   class BasePresenter < Hyrax::WorkShowPresenter
+    def public?
+      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+
     def abstract
       value_for 'abstract_tesim'
     end

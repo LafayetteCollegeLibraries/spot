@@ -26,7 +26,7 @@
   <%= presenter.attribute_to_html(:based_near, html_dl: true) %>
   <%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
   <%= presenter.attribute_to_html(:standard_identifier, html_dl: true) %>
-  <%= presenter.attribute_to_html(:related_resourc, html_dl: true) %>
+  <%= presenter.attribute_to_html(:related_resource, html_dl: true) %>
 
   <%# repository history %>
   <%= presenter.attribute_to_html(:date_created, html_dl: true) %>
@@ -34,4 +34,10 @@
   <%= presenter.attribute_to_html(:date_uploaded, html_dl: true) %>
   <%= presenter.attribute_to_html(:date_modified, html_dl: true) %>
   <%= presenter.attribute_to_html(:local_identifier, html_dl: true) %>
+
+  <%# @todo i18n-ize the title %>
+  <% if current_user %>
+  <dt>Workflow status</dt>
+  <dd><%= presenter.workflow.badge %></dd>
+  <% end %>
 </dl>
