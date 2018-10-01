@@ -28,6 +28,18 @@ module Spot
       value_for 'date_issued_ssim'
     end
 
+    def date_modified
+      value_for 'date_modified_dtsi'
+    end
+
+    def date_uploaded
+      value_for 'date_uploaded_dtsi'
+    end
+
+    def depositor
+      value_for 'depositor_tesim'
+    end
+
     def description
       value_for 'description_tesim'
     end

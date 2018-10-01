@@ -1,0 +1,37 @@
+<%# overriding the metadata display for Publications %>
+<dl class="work-show <%= dom_class(presenter) %>">
+  <%# titles %>
+  <%= presenter.attribute_to_html(:subtitle, html_dl: true) %>
+  <%= presenter.attribute_to_html(:title_alternative, html_dl: true) %>
+
+  <%# provenance %>
+  <%= presenter.attribute_to_html(:creator, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:contributor, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:editor, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:publisher, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:source, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:academic_department, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:division, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:organization, html_dl: true, render_as: :faceted) %>
+
+  <%# description %>
+  <%= presenter.attribute_to_html(:abstract, html_dl: true) %>
+  <%= presenter.attribute_to_html(:date_issued, html_dl: true) %>
+  <%= presenter.attribute_to_html(:date_available, html_dl: true) %>
+  <%= presenter.attribute_to_html(:resource_type, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:physical_medium, html_dl: true) %>
+  <%= presenter.attribute_to_html(:language, html_dl: true) %>
+  <%= presenter.attribute_to_html(:subject, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:keyword, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:based_near, html_dl: true) %>
+  <%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
+  <%= presenter.attribute_to_html(:standard_identifier, html_dl: true) %>
+  <%= presenter.attribute_to_html(:related_resourc, html_dl: true) %>
+
+  <%# repository history %>
+  <%= presenter.attribute_to_html(:date_created, html_dl: true) %>
+  <%= presenter.attribute_to_html(:depositor, html_dl: true, render_as: :faceted) %>
+  <%= presenter.attribute_to_html(:date_uploaded, html_dl: true) %>
+  <%= presenter.attribute_to_html(:date_modified, html_dl: true) %>
+  <%= presenter.attribute_to_html(:local_identifier, html_dl: true) %>
+</dl>
