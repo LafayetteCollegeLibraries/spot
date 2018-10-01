@@ -18,3 +18,11 @@
 .ui-autocomplete-loading {
   background: white url("/assets/spinner-24.gif") right center no-repeat;
 }
+
+.work-show dd {
+  margin-left: 0;
+}
+
+ul.tabular {
+  padding-left: 0;
+}
