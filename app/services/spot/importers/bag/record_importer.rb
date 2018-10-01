@@ -27,6 +27,10 @@ module Spot::Importers::Bag
       attributes[:uploaded_files] = files(record.representative_file,
                                           user: ability.current_user)
 
+      if attributes[:uploaded_files].nil?
+        error_stream << '[WARN] no files found for this bag'
+      end
+
       attributes[:visibility] = if record.respond_to? :visibility
                                   record.visibility
                                 else
