@@ -88,8 +88,13 @@ module Spot::Mappers
     # @return [Array<String>] MODS name fields for role
     def names_with_role(role)
       (1..4).to_a.reduce([]) do |results, num|
-        if metadata["name#{num}_role"].first.include? role
-          results += metadata["name#{num}_displayForm"]
+        role_key = "name#{num}_role"
+        value_key = "name#{num}_displayForm"
+
+        next if metadata[role_key].blank?
+
+        if metadata[role_key].first.include?(role) && metadata[value_key].present?
+          results += metadata[value_key]
         end
 
         results

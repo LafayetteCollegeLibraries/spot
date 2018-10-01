@@ -5,7 +5,10 @@ require 'fileutils'
 module Spot
   class IngestZippedBag
     AVAILABLE_MAPPERS = {
-      ldr: Spot::Mappers::LdrDspaceMapper,
+      ldr: Mappers::LdrDspaceMapper,
+      magazine: Mappers::MagazineMapper,
+      newspaper: Mappers::NewspaperMapper,
+      shakespeare: Mappers::ShakespeareBulletinMapper,
     }
 
     def initialize(zip_path, source: nil)

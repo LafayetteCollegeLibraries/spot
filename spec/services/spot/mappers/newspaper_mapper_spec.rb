@@ -7,7 +7,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#based_near' do
     subject(:based_near) { mapper.based_near }
 
-    context 'when location is Easton' do
+    skip 'when location is Easton' do
       let(:metadata) do
         {
           'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton']
@@ -107,7 +107,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
     let(:metadata) { {'dc:rights' => [rights]} }
 
-    context 'when in the Public domain' do
+    skip 'when in the Public domain' do
       let(:rights) { 'Public domain' }
 
       it 'is an RDF::URI' do
