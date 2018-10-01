@@ -20,12 +20,13 @@
   <%= presenter.attribute_to_html(:date_available, html_dl: true) %>
   <%= presenter.attribute_to_html(:resource_type, html_dl: true, render_as: :faceted) %>
   <%= presenter.attribute_to_html(:physical_medium, html_dl: true) %>
-  <%= presenter.attribute_to_html(:language, html_dl: true) %>
+  <%= presenter.attribute_to_html(:language_display, html_dl: true) %>
   <%= presenter.attribute_to_html(:subject, html_dl: true, render_as: :faceted) %>
   <%= presenter.attribute_to_html(:keyword, html_dl: true, render_as: :faceted) %>
   <%= presenter.attribute_to_html(:based_near, html_dl: true) %>
   <%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
-  <%= presenter.attribute_to_html(:standard_identifier, html_dl: true) %>
+
+  <%= render 'shared/metadata/identifiers', presenter: presenter %>
   <%= presenter.attribute_to_html(:related_resource, html_dl: true) %>
 
   <%# repository history %>

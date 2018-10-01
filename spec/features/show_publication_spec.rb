@@ -50,8 +50,6 @@ RSpec.feature 'Show Publication page', js: false do
       .to eq pub.division.map(&:to_s)
     expect(page.all('.attribute-editor').map(&:text))
       .to eq pub.editor.map(&:to_s)
-    expect(page.all('.attribute-identifier').map(&:text))
-      .to eq pub.identifier.map(&:to_s)
     expect(page.all('.attribute-keyword').map(&:text))
       .to eq pub.keyword.map(&:to_s)
     expect(page.all('.attribute-organization').map(&:text))
@@ -68,6 +66,15 @@ RSpec.feature 'Show Publication page', js: false do
       .to eq pub.subtitle.map(&:to_s)
     expect(page.all('.attribute-title_alternative').map(&:text))
       .to eq pub.title_alternative.map(&:to_s)
+
+    # @todo there's _got_ to be a better way!!
+    pub.identifier.each do |id|
+      key = id.split(':').first
+      all_clean = page.all(".attribute-identifier_#{key}").map do |value|
+                    value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
+                  end
+      expect(all_clean).to include id
+    end
 
     expect(page.all('.attribute-language_display').map(&:text))
       .to eq ['English']
