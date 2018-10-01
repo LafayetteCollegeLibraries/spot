@@ -16,6 +16,7 @@ namespace :spot do
     end
 
     path = args[:path]
+    source = args[:source]
 
     raise ArgumentError, 'File or path does not exist' unless File.exist?(path)
 
