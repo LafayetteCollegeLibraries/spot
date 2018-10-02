@@ -3,10 +3,8 @@
     will remove duplicates within 'secondary_terms' (which contains the
     values of `f.object.terms` without the hyrax internal fields (for
     embargo, files, etc) %>
-
-<%- fields = f.object.primary_terms | f.object.secondary_terms %>
         <div class="base-terms">
-          <% fields.each do |field| %>
+          <% f.object.terms.each do |field| %>
             <%= render_edit_field_partial(field, f: f) %>
           <% end %>
         </div>

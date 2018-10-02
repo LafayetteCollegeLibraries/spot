@@ -1,79 +1,38 @@
+# frozen_string_literal: true
+
 module Hyrax
   class PublicationForm < Hyrax::Forms::WorkForm
-    SINGULAR_FIELDS = %i(
-      resource_type
-      abstract
-      date_issued
-      date_available
-    )
-
-    self.model_class = ::Publication
-
-    self.required_fields = [
+    self.model_class = Publication
+    self.terms = [
+      # titles
       :title,
-    ]
-
-    self.terms = required_fields + [
       :subtitle,
       :title_alternative,
-      :publisher,
-      :source,
-      :resource_type,
-      :language,
-      :abstract,
-      :description,
-      :identifier,
-      :bibliographic_citation,
-      :date_issued,
-      :date_available,
+
+      # provenance
       :creator,
       :contributor,
       :editor,
+      :publisher,
+      :source,
       :academic_department,
       :division,
       :organization,
 
-      # :related_resource
-
-      :keyword,
+      # description
+      :abstract,
+      :description,
+      :date_issued,
+      :date_available,
+      :resource_type,
+      :physical_medium,
+      :language,
       :subject,
-
-      # :license
-      :rights_statement,
-
-      # optional fields
-
-      # internal form fields
-      :representative_id,
-      :thumbnail_id,
-      :files,
-      :visibility_during_embargo,
-      :visibility_after_embargo,
-      :embargo_release_date,
-      :visibility_during_lease,
-      :visibility_after_lease,
-      :lease_expiration_date,
-      :visibility,
-      :ordered_member_ids,
-      :in_works_ids,
-      :member_of_collection_ids,
-      :admin_set_id
+      :keyword,
+      :based_near,
+      :bibliographic_citation,
+      :identifier,
+      :related_resource,
     ]
-
-    def self.model_attributes(_)
-      super.tap do |attrs|
-        SINGULAR_FIELDS.each do |field|
-          attrs[field] = Array(attrs[field]) if attrs[field]
-        end
-      end
-    end
-
-    def multiple?(field)
-      if SINGULAR_FIELDS.include? field.to_sym
-        false
-      else
-        super
-      end
-    end
   end
 end
