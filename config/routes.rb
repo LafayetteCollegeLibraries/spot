@@ -1,10 +1,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  
+
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Blacklight::Engine => '/'
-  
+
     concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   end
 
   mount Sidekiq::Web => '/sidekiq'
+
+  get '/handle/*id', to: 'handle#show', as: 'handle'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
