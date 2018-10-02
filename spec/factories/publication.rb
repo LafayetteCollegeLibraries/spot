@@ -1,42 +1,31 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :publication do
-    id { NoidSupport.assign_id }
-
-    title { [FFaker::Book.title] }
-    subtitle { [FFaker::Book.title] }
-    title_alternative { [FFaker::Book.title] }
-    publisher [FFaker::Company.name]
-    source ['Lafayette College']
-    resource_type ['Article']
-    physical_medium ['Microfiche']
-    language ['en']
-
-    abstract { [FFaker::CheesyLingo.paragraph] }
-    description { [FFaker::CheesyLingo.paragraph] }
-
-    identifier ['hdl:123/456']
-
-    bibliographic_citation { ["Lastname, First. Title of piece."] }
-
-    date_issued { [FFaker::Time.date] }
-    date_available { [FFaker::Time.date] }
-
-    creator { [FFaker::Name.name] }
-    contributor { [FFaker::Name.name] }
-    editor { [FFaker::Name.name] }
-
+    abstract ['A short description of the thing']
     academic_department ['Art']
+    bibliographic_citation ['Lastname, First. Title of piece.']
+    contributor ['Contributor, First-Name', 'Person, Another']
+    creator ['Creator, First-Name']
+    date_issued ['1986-02-11']
+    date_available ['2018-08-24']
+    description ['A description describes a thing', 'it contains multitudes']
     division ['Humanities']
+    editor ['Sweeney, Mary']
+    identifier ['hdl:123/456', 'doi:00.000/00000']
+    keyword ['test', 'item', 'topic']
+    language ['en']
     organization ['Lafayette College']
-
-    keyword { [FFaker::CheesyLingo.word] }
+    publisher ['Prestigious Press', 'Lafayette College']
+    resource_type ['Article']
+    rights_statement [::RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+    source ['Lafayette College', '_The_ Source for Good Publications']
     subject ['Cheese - Other']
+    subtitle ['An exploration']
+    title ['A Prestigious Publication']
+    title_alternative ['A Pretty Popular Publication']
 
-    rights_statement ['http://rightsstatements.org/vocab/CNE/1.0/']
-
-    admin_set do
-      AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
-    end
+    visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     trait :public do
       visibility Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
@@ -70,7 +59,7 @@ FactoryBot.define do
       unless evaluator.file.nil?
         actor = Hyrax::Actors::FileSetActor.new(FileSet.create, evaluator.user)
         actor.create_metadata({})
-        actor.create_content(Hyrax::UploadedFile.create(file: evaluator.file))
+        actor.create_content(evaluator.file)
         actor.attach_to_work(work)
       end
     end

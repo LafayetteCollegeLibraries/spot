@@ -1,5 +1,9 @@
-RSpec.feature 'Create a Publication', :clean, :js do
+  RSpec.feature 'Create a Publication', :clean, :js do
   before do
+    # Only enqueue the ingest job, not charactarization.
+    # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
+    ActiveJob::Base.queue_adapter.filter = [IngestJob]
+
     AdminSet.find_or_create_default_admin_set_id
     login_as user
   end
@@ -131,7 +135,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         click_link "Add new work"
 
         # we're moving too fast for js
-        sleep(1)
+        sleep(5)
 
         expect(page.find_all('input[name="payload_concern"]').length).to be > 1
 

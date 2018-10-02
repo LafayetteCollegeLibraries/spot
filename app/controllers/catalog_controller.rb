@@ -6,11 +6,13 @@ class CatalogController < ApplicationController
   before_action :enforce_show_permissions, only: :show
 
   def self.uploaded_field
-    solr_name('system_create', :stored_sortable, type: :date)
+    # solr_name('system_create', :stored_sortable, type: :date)
+    'system_create_dtsi'
   end
 
   def self.modified_field
-    solr_name('system_modified', :stored_sortable, type: :date)
+    # solr_name('system_modified', :stored_sortable, type: :date)
+    'system_modified_dtsi'
   end
 
   configure_blacklight do |config|
@@ -35,27 +37,40 @@ class CatalogController < ApplicationController
     }
 
     # solr field configuration for document/show views
-    config.index.title_field = solr_name("title", :stored_searchable)
-    config.index.display_type_field = solr_name("has_model", :symbol)
+    config.index.title_field = 'title_tesim'
+    config.index.display_type_field = 'has_model_ssim'
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
-    # config.add_facet_field 'human_readable_type_sim', label: 'Work Type', limit: 5
-    config.add_facet_field 'resource_type_sim', label: 'Resource Type', limit: 5
-    config.add_facet_field 'depositor_ssim', label: 'Uploaded by', limit: 5
-    # config.add_facet_field 'admin_set_sim', label: 'Administrative Set', limit: 5
 
-    config.add_facet_field 'creator_sim', label: 'Creator', limit: 5
-    config.add_facet_field 'contributor_sim', label: 'Contributor', limit: 5
-    config.add_facet_field 'keyword_sim', label: 'Keyword', limit: 5
-    config.add_facet_field 'subject_sim', label: 'Subject', limit: 5
-    config.add_facet_field 'academic_department_sim', label: 'Department', limit: 5
-    config.add_facet_field 'language_display_ssim', label: 'Language', limit: 5
-    config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
-    config.add_facet_field solr_name("publisher", :facetable), limit: 5
-    config.add_facet_field solr_name("file_format", :facetable), limit: 5
-    config.add_facet_field solr_name('member_of_collections', :symbol), limit: 5, label: 'Collections'
+    # config.add_facet_field 'human_readable_type_sim', label: "Type", limit: 5
+    config.add_facet_field 'resource_type_ssim',
+                           label: I18n.t('blacklight.search.fields.resource_type'),
+                           limit: 5
+    config.add_facet_field 'creator_sim',
+                           label: I18n.t('blacklight.search.fields.creator'),
+                           limit: 5
+    config.add_facet_field 'contributor_sim',
+                           label: I18n.t('blacklight.search.fields.contributor'),
+                           limit: 5
+    config.add_facet_field 'keyword_sim',
+                           label: I18n.t('blacklight.search.fields.keyword'),
+                           limit: 5
+    config.add_facet_field 'subject_sim',
+                           label: I18n.t('blacklight.search.fields.subject'),
+                           limit: 5
+    config.add_facet_field 'academic_department_ssim',
+                           label: I18n.t('blacklight.search.fields.academic_department'),
+                           limit: 5
+    # config.add_facet_field solr_name("language", :facetable), limit: 5
+    # config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
+    config.add_facet_field 'publisher_sim',
+                           label: I18n.t('blacklight.search.fields.publisher'),
+                           limit: 5
+    config.add_facet_field 'member_of_collections_ssim',
+                           label: I18n.t('blacklight.search.fields.member_of_collections'),
+                           limit: 5
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
@@ -68,51 +83,69 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field solr_name("title", :stored_searchable), label: "Title", itemprop: 'name', if: false
-    config.add_index_field solr_name("department", :stored_searchable), label: "Department", itemprop: 'department', link_to_search: solr_name("department", :facetable)
-    config.add_index_field solr_name("description", :stored_searchable), itemprop: 'description', helper_method: :iconify_auto_link
-    config.add_index_field solr_name("keyword", :stored_searchable), itemprop: 'keywords', link_to_search: solr_name("keyword", :facetable)
-    config.add_index_field solr_name("subject", :stored_searchable), itemprop: 'about', link_to_search: solr_name("subject", :facetable)
-    config.add_index_field solr_name("creator", :stored_searchable), itemprop: 'creator', link_to_search: solr_name("creator", :facetable)
-    config.add_index_field solr_name("contributor", :stored_searchable), itemprop: 'contributor', link_to_search: solr_name("contributor", :facetable)
+    config.add_index_field 'title_tesim',
+                           label: I18n.t('blacklight.search.fields.title'),
+                           itemprop: 'name',
+                           if: false
+    config.add_index_field 'resource_type_ssim',
+                           label: I18n.t('blacklight.search.fields.resource_type'),
+                           itemprop: 'resourceType',
+                           link_to_search: 'resource_type_ssim'
+    config.add_index_field 'academic_department_ssim',
+                           label: I18n.t('blacklight.search.fields.academic_department'),
+                           itemprop: 'department',
+                           link_to_search: 'department_sim'
+    config.add_index_field 'keyword_tesim',
+                           label: I18n.t('blacklight.search.fields.keyword'),
+                           itemprop: 'keywords',
+                           link_to_search: 'keyword_sim'
+    config.add_index_field 'subject_tesim',
+                           label: I18n.t('blacklight.search.fields.subject'),
+                           itemprop: 'about',
+                           link_to_search: 'subject_sim'
+    config.add_index_field 'creator_tesim',
+                           label: I18n.t('blacklight.search.fields.creator'),
+                           itemprop: 'creator',
+                           link_to_search: 'creator_sim'
+    config.add_index_field 'contributor_tesim',
+                           label: I18n.t('blacklight.search.fields.contributor'),
+                           itemprop: 'contributor',
+                           link_to_search: 'contributor_sim'
     # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
-    config.add_index_field solr_name("depositor"), label: "Uploaded by", helper_method: :link_to_profile
-    config.add_index_field solr_name("publisher", :stored_searchable), itemprop: 'publisher', link_to_search: solr_name("publisher", :facetable)
-    config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
-    config.add_index_field solr_name("language", :stored_searchable), itemprop: 'inLanguage', link_to_search: solr_name("language", :facetable)
-    config.add_index_field solr_name("date_uploaded", :stored_sortable, type: :date), itemprop: 'datePublished', helper_method: :human_readable_date
-    # config.add_index_field solr_name("date_modified", :stored_sortable, type: :date), itemprop: 'dateModified', helper_method: :human_readable_date
+    config.add_index_field 'depositor_tesim',
+                           label: I18n.t('blacklight.search.fields.depositor'),
+                           helper_method: :link_to_profile
+    config.add_index_field 'publisher_tesim',
+                           label: I18n.t('blacklight.search.fields.publisher'),
+                           itemprop: 'publisher',
+                           link_to_search: 'publisher_sim'
+    # config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
+    config.add_index_field 'language_tesim',
+                           label: I18n.t('blacklight.search.fields.language'),
+                           itemprop: 'inLanguage',
+                           link_to_search: 'language_sim'
+    config.add_index_field 'date_modified_dtsi',
+                           label: I18n.t('blacklight.search.fields.date_modified'),
+                           itemprop: 'dateModified',
+                           helper_method: :human_readable_date
     # config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
-    config.add_index_field solr_name("rights_statement", :stored_searchable), helper_method: :rights_statement_links
-    config.add_index_field solr_name("license", :stored_searchable), helper_method: :license_links
-    config.add_index_field solr_name("resource_type", :stored_searchable), label: "Resource Type", link_to_search: solr_name("resource_type", :facetable)
-    config.add_index_field solr_name("file_format", :stored_searchable), link_to_search: solr_name("file_format", :facetable)
-    config.add_index_field solr_name("identifier", :stored_searchable), helper_method: :index_field_link, field_name: 'identifier'
-    config.add_index_field solr_name("embargo_release_date", :stored_sortable, type: :date), label: "Embargo release date", helper_method: :human_readable_date
-    config.add_index_field solr_name("lease_expiration_date", :stored_sortable, type: :date), label: "Lease expiration date", helper_method: :human_readable_date
-
-    # solr fields to be displayed in the show (single result) view
-    #   The ordering of the field names is the order of the display
-    config.add_show_field solr_name("title", :stored_searchable)
-    config.add_show_field solr_name("description", :stored_searchable)
-    config.add_show_field solr_name("keyword", :stored_searchable)
-    config.add_show_field solr_name("subject", :stored_searchable)
-    config.add_show_field solr_name("creator", :stored_searchable)
-    config.add_show_field solr_name("contributor", :stored_searchable)
-    config.add_show_field solr_name("publisher", :stored_searchable)
-    config.add_show_field solr_name("based_near_label", :stored_searchable)
-    config.add_show_field solr_name("language", :stored_searchable)
-    config.add_show_field solr_name("date_uploaded", :stored_searchable)
-    config.add_show_field solr_name("date_modified", :stored_searchable)
-    config.add_show_field solr_name("date_created", :stored_searchable)
-    config.add_show_field solr_name("rights_statement", :stored_searchable)
-    config.add_show_field solr_name("license", :stored_searchable)
-    config.add_show_field solr_name("resource_type", :stored_searchable), label: "Resource Type"
-    config.add_show_field solr_name("format", :stored_searchable)
-    config.add_show_field solr_name("identifier", :stored_searchable)
-
-    config.add_show_field 'start_page', label: 'Start page'
-    config.add_show_field 'end_page', label: 'End page'
+    config.add_index_field 'rights_statement_tesim',
+                           label: I18n.t('blacklight.search.fields.rights_statement'),
+                           helper_method: :rights_statement_links
+    config.add_index_field 'license_tesim',
+                           label: I18n.t('blacklight.search.fields.license'),
+                           helper_method: :license_links
+    # config.add_index_field solr_name("file_format", :stored_searchable), link_to_search: solr_name("file_format", :facetable)
+    config.add_index_field 'identifier_tesim',
+                           label: I18n.t('blacklight.search.fields.identifier'),
+                           helper_method: :index_field_link,
+                           field_name: 'identifier'
+    config.add_index_field 'embargo_release_date_dtsi',
+                           label: 'Embargo release date',
+                           helper_method: :human_readable_date
+    config.add_index_field 'lease_expiration_date_dtsi',
+                           label: 'Lease expiration date',
+                           helper_method: :human_readable_date
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields

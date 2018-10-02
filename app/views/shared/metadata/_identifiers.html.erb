@@ -1,0 +1,18 @@
+<% if presenter.solr_document['identifier_ssim'].present? %>
+  <dt><%= t('blacklight.search.fields.identifier') %></dt>
+  <ul class="tabular">
+  <% {
+    'hdl' => 'Handle',
+    'doi' => 'DOI',
+    'isbn' => 'ISBN',
+    'issn' => 'ISSN'
+  }.each do |key, name| %>
+    <% (presenter.solr_document["identifier_#{key}_ssim"] || []).each do |id| %>
+    <li class="attribute attribute-identifier_<%= key %>">
+      <span class="label label-default"><%= name %></span>
+      <%= id %>
+    </li>
+    <% end %>
+  <%- end -%>
+  </ul>
+<% end %>
