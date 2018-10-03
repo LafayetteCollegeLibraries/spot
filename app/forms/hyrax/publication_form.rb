@@ -33,7 +33,33 @@ module Hyrax
       :bibliographic_citation,
       :identifier,
       :related_resource,
+      :rights_statement,
+
+      # internal fields (from Hyrax::Forms::WorkForm)
+      :representative_id, :thumbnail_id, :rendering_ids, :files,
+      :visibility_during_embargo, :embargo_release_date, :visibility_after_embargo,
+      :visibility_during_lease, :lease_expiration_date, :visibility_after_lease,
+      :visibility, :ordered_member_ids, :in_works_ids,
+      :member_of_collection_ids, :admin_set_id
     ]
+
+    def self.singular_fields
+      %i(
+        resource_type
+        abstract
+        issued
+        available
+        date_created
+      )
+    end
+
+    def self.multiple?(field)
+      if singular_fields.include?(field.to_sym)
+        false
+      else
+        super
+      end
+    end
 
     def self.model_attributes(form_params)
       prefixes = form_params.delete('identifier_prefix')

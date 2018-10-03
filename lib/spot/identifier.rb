@@ -15,6 +15,8 @@ module Spot
     # @param [String] string_value
     # @return [Spot::Identifier]
     def self.from_string(string_value)
+      return new(nil, string_value) unless string_value =~ %r(#{SEPARATOR})
+
       prefix, *the_rest = string_value.split(SEPARATOR)
       new(prefix, the_rest.join(SEPARATOR))
     end
@@ -27,26 +29,6 @@ module Spot
     def initialize(prefix, value)
       @prefix = prefix || nil
       @value = value
-    end
-
-    def doi?
-      prefix == DOI
-    end
-
-    def handle?
-      prefix == HANDLE
-    end
-
-    def isbn?
-      prefix == ISBN
-    end
-
-    def issn?
-      prefix == ISSN
-    end
-
-    def local?
-      prefix == LOCAL
     end
 
     def to_s
