@@ -25,7 +25,7 @@ module Spot
     end
 
     def initialize(prefix, value)
-      @prefix = prefix
+      @prefix = prefix || nil
       @value = value
     end
 
@@ -48,5 +48,14 @@ module Spot
     def local?
       prefix == LOCAL
     end
+
+    def to_s
+      if prefix.nil?
+        value
+      else
+        "#{prefix}#{SEPARATOR}#{value}"
+      end
+    end
+    alias_method :to_string, :to_s
   end
 end
