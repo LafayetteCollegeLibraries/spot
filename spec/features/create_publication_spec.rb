@@ -1,4 +1,4 @@
-  RSpec.feature 'Create a Publication', :clean, :js do
+RSpec.feature 'Create a Publication', :clean, :js do
   before do
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
@@ -13,16 +13,18 @@
   context 'a logged in (regular) user' do
     let(:user) { create(:user) }
     let(:attrs) { attributes_for(:publication) }
+    let(:identifier) { Spot::Identifier.from_string(attrs[:identifier].first) }
 
+    # TODO: until we have more than one option for (non admin/trustee) users
+    # to choose from, when 'Add new work' is clicked, it'll just lead to the
+    # Publication form.
     describe 'should be taken directly to the new Publication form' do
       scenario do
         visit '/dashboard?locale=en'
         click_link 'Works'
         click_link 'Add new work'
 
-        # TODO: until we have more than one option for (non admin/trustee) users
-        # to choose from, when 'Add new work' is clicked, it'll just lead to the
-        # Publication form.
+        sleep 1
 
         expect(page).to have_content "Add New #{i18n_term}"
 
@@ -53,8 +55,31 @@
         fill_in 'Description', with: attrs[:description].first
         expect(page).to have_css '.publication_description .controls-add-text'
 
-        fill_in 'Identifier', with: attrs[:identifier].first
-        expect(page).to have_css '.publication_identifier .controls-add-text'
+        dropdown_toggle = page.find('.identifier-dropdown-toggle')
+        dropdown_toggle.click
+
+        dropdown = page.find('.identifier-prefix-select')
+        expect(dropdown).to be_visible
+
+        id = dropdown.find(%(li a[data-prefix="#{identifier.prefix}"]))
+        expect(id).to be_visible
+
+        # okokok i _hate_ skipping this but i spent way too long trying
+        # to get this working. we're running up against some js timing
+        # issues that aren't updating the hidden input. i would say that
+        # maybe it's more than that, but a) it works in the browser, and
+        # b) i can _sometimes_ get it working in a byebug console (this
+        # requires going through each step of the dropdown process manually
+        # but it works... again, sometimes).
+        #
+        # so anyway, if you want to give this a shot, uncomment the following
+        # three lines and see what you can do. good luck! (2018-10-03 am)
+        #
+        # id.click
+        # hidden_input = page.find('[name="publication[identifier_prefix][]"]', visible: false)
+        # expect(hidden_input.value).to eq identifier.prefix
+
+        fill_in 'publication[identifier_value][]', with: identifier.value
 
         fill_in 'Bibliographic citation', with: attrs[:bibliographic_citation].first
         expect(page).to have_css '.publication_bibliographic_citation .controls-add-text'
@@ -112,37 +137,12 @@
 
         page.find('#agreement').set(true)
 
-
         # give javascript a chance to catch up (otherwise the save button is hidden)
         sleep(2)
 
         page.find('#with_files_submit').click
         expect(page).to have_content attrs[:title].first
         expect(page).to have_content 'Your files are being processed by Spot in the background.'
-      end
-    end
-  end
-
-  context 'an admin user' do
-    let(:user) { create(:admin_user) }
-
-    describe 'should be presented with multiple options' do
-      scenario do
-        pending 'will return to when more work types are defined'
-
-        visit '/dashboard?locale=en'
-        click_link "Works"
-        click_link "Add new work"
-
-        # we're moving too fast for js
-        sleep(5)
-
-        expect(page.find_all('input[name="payload_concern"]').length).to be > 1
-
-        choose "payload_concern", option: "Publication"
-        click_button "Create work"
-
-        expect(page).to have_content "Add New #{i18n_term}"
       end
     end
   end

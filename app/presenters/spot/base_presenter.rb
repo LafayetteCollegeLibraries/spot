@@ -4,6 +4,10 @@ module Spot
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
+    def mapped_identifiers
+      identifier.map { |str| Spot::Identifier.from_string(str) }
+    end
+
     def abstract
       value_for 'abstract_tesim'
     end

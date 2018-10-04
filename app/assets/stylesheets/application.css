@@ -31,3 +31,8 @@ ul.tabular {
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
+
+.attribute-identifier-with-label {
+  margin-bottom: .5rem;
+  margin-top: .5rem;
+}

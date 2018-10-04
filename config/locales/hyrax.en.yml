@@ -36,7 +36,14 @@ en:
         # TODO: add abstract text
         abstract: ''
         description: "Free-text notes about the work. Examples include a brief description or citation information for a journal article."
-
+  spot:
+    identifiers:
+      labels:
+        doi: DOI
+        hdl: Handle
+        issn: ISSN
+        isbn: ISBN
+        lafayette: Local
   hyrax:
     product_name:           "Spot"
     product_twitter_handle: "@SamveraRepo"
