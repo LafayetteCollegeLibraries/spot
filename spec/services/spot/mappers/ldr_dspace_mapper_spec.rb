@@ -6,6 +6,22 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     mapper.metadata = metadata
   end
 
+  describe '#abstract' do
+    subject { mapper.abstract }
+
+    let(:metadata) { {'description.abstract' => value} }
+    let(:value) { ['a short description'] }
+
+    it { is_expected.to eq value }
+
+    context 'when a value previously included a semicolon' do
+      let(:original_value) { ['a short description; you see?'] }
+      let(:value) { original_value.first.split(';') }
+
+      it { is_expected.to eq original_value }
+    end
+  end
+
   describe '#bibliographic_citation' do
     subject { mapper.bibliographic_citation }
 
@@ -18,6 +34,13 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
       let(:metadata) { {} }
 
       it { is_expected.to be_empty }
+    end
+
+    context 'when a value previously included a semicolon' do
+      let(:original_value) { ['one;two;three'] }
+      let(:value) { original_value.first.split(';') }
+
+      it { is_expected.to eq original_value }
     end
   end
 
@@ -77,18 +100,28 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#description' do
     subject { mapper.description }
 
-    let(:description) { 'A description' }
-    let(:sponsorship) { 'Stamps dot com folks!' }
+    let(:description) { ['A description'] }
+    let(:sponsorship) { ['Stamps dot com folks!'] }
 
     let(:metadata) do
       {
-        'description' => [description],
-        'description.sponsorship' => [sponsorship]
+        'description' => description,
+        'description.sponsorship' => sponsorship
       }
     end
 
-    it { is_expected.to include description }
-    it { is_expected.to include sponsorship }
+    it { is_expected.to include description.first }
+    it { is_expected.to include sponsorship.first }
+
+    context 'when original values included semicolons' do
+      let(:original_description) { 'first;second' }
+      let(:description) { original_description.split(';') }
+      let(:original_sponsorship) { 'first;second' }
+      let(:sponsorship) { original_sponsorship.split(';') }
+
+      it { is_expected.to include original_description }
+      it { is_expected.to include original_sponsorship }
+    end
   end
 
   describe '#identifier' do
@@ -115,7 +148,6 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
       it { is_expected.to eq ["issn:#{value}"] }
     end
 
-    # TODO: this approach has a bad code-smell. go about it differently
     context 'with handles' do
       let(:metadata) do
         {
@@ -151,15 +183,22 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#publisher' do
     subject { mapper.publisher }
 
-    context 'when item is a Book chapter' do
-      let(:metadata) {{ 'type' => 'Book chapter', 'publisher' => ['Some journal'] }}
+    let(:metadata) {{ 'type' => type, 'publisher' => ['Some journal'] }}
+
+    context 'when an item is a Book chapter' do
+      let(:type) { 'Book chapter' }
 
       it { is_expected.to be_empty }
-      it { is_expected.not_to eq metadata['publisher']}
+    end
+
+    context 'when an item is a Part of Book' do
+      let(:type) { 'Part of Book' }
+
+      it { is_expected.to be_empty }
     end
 
     context 'when an item is not a Book chapter' do
-      let(:metadata) {{ 'type' => 'Article', 'publisher' => ['Some journal'] }}
+      let(:type) { 'Article' }
 
       it { is_expected.to eq metadata['publisher'] }
     end
@@ -168,18 +207,26 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#source' do
     subject { mapper.source }
 
+    let(:metadata) {{ 'type' => type, 'publisher' => ['Some journal'] }}
+
     context 'when an item is a Book chapter' do
-      let(:metadata) {{ 'type' => 'Book chapter', 'publisher' => ['Some journal'] }}
+      let(:type) { 'Book chapter' }
+
+      it { is_expected.to eq metadata['publisher'] }
+    end
+
+    context 'when an item is Part of Book' do
+      let(:type) { 'Part of Book' }
 
       it { is_expected.to eq metadata['publisher'] }
     end
 
     context 'when an item is not a Book chapter' do
-      let(:metadata) {{ 'type' => 'Article', 'publisher' => ['Some journal'] }}
+      let(:type) { 'Article' }
 
       it { is_expected.to be_empty }
-      it { is_expected.not_to eq metadata['publisher']}
     end
+
   end
 
   describe '#representative_file' do
@@ -188,6 +235,22 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     let(:metadata) { {representative_files: ['some files']} }
 
     it { is_expected.to eq metadata[:representative_files] }
+  end
+
+  describe '#title' do
+    subject { mapper.title }
+
+    let(:metadata) { {'title' => value} }
+    let(:value) { ['title value'] }
+
+    it { is_expected.to eq value }
+
+    context 'when a semicolon was originally present' do
+      let(:original_value) { ['first;second'] }
+      let(:value) { original_value.first.split(';') }
+
+      it { is_expected.to eq original_value }
+    end
   end
 
   # TODO: update when/if we read visibility from a metadata field
