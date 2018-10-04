@@ -4,7 +4,7 @@
     values of `f.object.terms` without the hyrax internal fields (for
     embargo, files, etc) %>
         <div class="base-terms">
-          <% f.object.terms.each do |field| %>
+          <% f.object.primary_terms.each do |field| %>
             <%= render_edit_field_partial(field, f: f) %>
           <% end %>
         </div>

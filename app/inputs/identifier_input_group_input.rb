@@ -22,7 +22,7 @@ class IdentifierInputGroupInput < MultiValueInput
     button_text = selected ? label_for(selected) : 'Select type'
     <<-HTML
     <div class="input-group-btn">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <button type="button" class="btn btn-default dropdown-toggle identifier-dropdown-toggle" data-toggle="dropdown">
         #{button_text} <span class="caret"></span>
       </button>
       <ul class="dropdown-menu identifier-prefix-select">
