@@ -35,13 +35,15 @@ module Spot
     end
 
     def initialize(prefix, value)
-      @prefix = prefix || nil
+      @prefix = prefix
       @value = value
     end
 
     # @return [String]
     def to_s
-      if prefix.nil?
+      if value.empty?
+        ''
+      elsif prefix.empty?
         value
       else
         "#{prefix}#{SEPARATOR}#{value}"
