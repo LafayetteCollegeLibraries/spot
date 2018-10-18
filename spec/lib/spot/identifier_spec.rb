@@ -2,7 +2,7 @@ RSpec.describe Spot::Identifier do
   describe '.from_string' do
     subject(:id) { described_class.from_string(raw_string) }
 
-    let(:prefix) { 'abc' }
+    let(:prefix) { 'hdl' }
     let(:value) { '123:456/lol' }
     let(:raw_string) { "#{prefix}:#{value}" }
 
@@ -19,6 +19,18 @@ RSpec.describe Spot::Identifier do
 
       it 'sets the prefix to nil' do
         expect(id.prefix).to be_nil
+      end
+    end
+
+    context 'when the prefix is not supported' do
+      let(:raw_string) { 'http://cool-example.org' }
+
+      it 'does not provide a prefix' do
+        expect(id.prefix).to be_nil
+      end
+
+      it 'retains the full value' do
+        expect(id.value).to eq raw_string
       end
     end
   end
