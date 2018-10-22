@@ -119,13 +119,14 @@ module Hyrax
         )
       end
 
+      # @return [Hash<Symbol => Array<String>>]
       def model_attributes(form_params)
         prefixes = form_params.delete('identifier_prefix')
         values = form_params.delete('identifier_value')
 
         merged = prefixes.zip(values).map do |(key, value)|
           Spot::Identifier.new(key, value).to_s
-        end
+        end.reject(&:blank?)
 
         super.tap do |params|
           params[:identifier] = merged
