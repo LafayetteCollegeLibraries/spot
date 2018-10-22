@@ -11,9 +11,13 @@ class IdentifierInputGroupInput < MultiValueInput
     identifier = Spot::Identifier.from_string(raw_value)
 
     <<-HTML
-    <div class="input-group">
-      #{build_input_dropdown(identifier.prefix)}
-      #{build_input(identifier.value, index)}
+    <div class="row">
+      <div class="col-sm-4">
+        #{build_input_dropdown(identifier.prefix)}
+      </div>
+      <div class="col-sm-8">
+        #{build_input(identifier.value, index)}
+      </div>
     </div>
     HTML
   end
@@ -21,21 +25,16 @@ class IdentifierInputGroupInput < MultiValueInput
   def build_input_dropdown(selected = nil)
     button_text = selected ? label_for(selected) : 'Select type'
     <<-HTML
-    <div class="input-group-btn">
-      <button type="button" class="btn btn-default dropdown-toggle identifier-dropdown-toggle" data-toggle="dropdown">
-        #{button_text} <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu identifier-prefix-select">
+    <select class="custom-select form-control" name="#{object_name}[identifier_prefix][]" autocomplete="off">
+      <option value="">Select type</option>
       #{prefixes.each_with_object([]) do |prefix, output|
-        output << <<-HTML2
-          <li#{' class="active"' if prefix == selected}>
-            <a href="#" data-prefix="#{prefix}">#{label_for(prefix)}</a>
-          </li>
-        HTML2
+        output << %(
+          <option value="#{prefix}"#{ ' selected' if prefix == selected}>
+            #{label_for(prefix)}
+          </option>
+        )
       end.join.html_safe}
-      </ul>
-      <input type="hidden" name="#{object_name}[identifier_prefix][]" value="#{selected}" />
-    </div>
+    </select>
     HTML
   end
 

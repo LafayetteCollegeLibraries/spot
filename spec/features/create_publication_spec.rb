@@ -55,30 +55,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Description', with: attrs[:description].first
         expect(page).to have_css '.publication_description .controls-add-text'
 
-        dropdown_toggle = page.find('.identifier-dropdown-toggle')
-        dropdown_toggle.click
-
-        dropdown = page.find('.identifier-prefix-select')
-        expect(dropdown).to be_visible
-
-        id = dropdown.find(%(li a[data-prefix="#{identifier.prefix}"]))
-        expect(id).to be_visible
-
-        # okokok i _hate_ skipping this but i spent way too long trying
-        # to get this working. we're running up against some js timing
-        # issues that aren't updating the hidden input. i would say that
-        # maybe it's more than that, but a) it works in the browser, and
-        # b) i can _sometimes_ get it working in a byebug console (this
-        # requires going through each step of the dropdown process manually
-        # but it works... again, sometimes).
-        #
-        # so anyway, if you want to give this a shot, uncomment the following
-        # three lines and see what you can do. good luck! (2018-10-03 am)
-        #
-        # id.click
-        # hidden_input = page.find('[name="publication[identifier_prefix][]"]', visible: false)
-        # expect(hidden_input.value).to eq identifier.prefix
-
+        select 'Handle', from: 'publication[identifier_prefix][]'
         fill_in 'publication[identifier_value][]', with: identifier.value
 
         fill_in 'Bibliographic citation', with: attrs[:bibliographic_citation].first
