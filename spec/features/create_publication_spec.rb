@@ -55,7 +55,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Description', with: attrs[:description].first
         expect(page).to have_css '.publication_description .controls-add-text'
 
-        select 'Handle', from: 'publication[identifier_prefix][]'
+        select identifier.prefix_label, from: 'publication[identifier_prefix][]'
         fill_in 'publication[identifier_value][]', with: identifier.value
 
         fill_in 'Bibliographic citation', with: attrs[:bibliographic_citation].first

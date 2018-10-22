@@ -47,6 +47,6 @@ class IdentifierInputGroupInput < MultiValueInput
   end
 
   def label_for(prefix)
-    t("spot.identifiers.labels.#{prefix}")
+    Spot::Identifier.new(prefix, nil).prefix_label
   end
 end

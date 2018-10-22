@@ -41,6 +41,35 @@ RSpec.describe Spot::Identifier do
     it { is_expected.to include 'doi', 'issn', 'isbn', 'hdl', 'lafayette' }
   end
 
+  describe '.prefix_label' do
+    subject { described_class.prefix_label(prefix) }
+
+    let(:t_prefix_string) { "spot.identifier.labels.#{prefix}" }
+
+    context 'when a translation exists' do
+      let(:translation) { 'ISBN' }
+      let(:prefix) { 'isbn' }
+
+      it { is_expected.to eq translation }
+    end
+
+    context 'when a translation does not exist' do
+      let(:prefix) { 'not an existing prefix' }
+
+      it { is_expected.to eq prefix }
+    end
+  end
+
+  describe '#prefix_label' do
+    let(:prefix) { 'hdl' }
+
+    it "calls #{described_class}.prefix_label" do
+      expect(described_class).to receive(:prefix_label).with(prefix)
+
+      described_class.new(prefix, nil).prefix_label
+    end
+  end
+
   describe '#to_s' do
     subject { described_class.new('prefix', 'value').to_s }
 

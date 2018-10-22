@@ -34,9 +34,19 @@ module Spot
       [DOI, HANDLE, ISBN, ISSN, LOCAL]
     end
 
+    # @return [String]
+    def self.prefix_label(prefix)
+      I18n.t("spot.identifiers.labels.#{prefix}", default: prefix) unless prefix.nil?
+    end
+
     def initialize(prefix, value)
       @prefix = prefix
       @value = value
+    end
+
+    # @return [String]
+    def prefix_label
+      self.class.prefix_label(prefix)
     end
 
     # @return [String]
