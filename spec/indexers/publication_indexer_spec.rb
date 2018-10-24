@@ -81,28 +81,8 @@ RSpec.describe PublicationIndexer do
   end
 
   describe 'identifier' do
-    let(:issn_value) { '1234-5678'}
-    let(:issn) { "issn:#{issn_value}" }
-    let(:isbn_value) { '978-12345-67890' }
-    let(:isbn) { "isbn:#{isbn_value}" }
-    let(:hdl_value) { '10385/10000' }
-    let(:hdl) { "hdl:#{hdl_value}" }
-    let(:identifiers) { [issn, isbn, hdl] }
-    let(:work) { build(:publication, identifier: identifiers) }
-
-    describe 'stores the raw identifiers in work#identifier' do
-      let(:fields) { %w[identifier_ssim] }
-      it_behaves_like 'simple model indexing'
-    end
-
-    it 'parses out each identifier and indexes' do
-      expect(subject).to include 'identifier_issn_ssim'
-      expect(subject['identifier_issn_ssim']).to eq [issn_value]
-      expect(subject).to include 'identifier_isbn_ssim'
-      expect(subject['identifier_isbn_ssim']).to eq [isbn_value]
-      expect(subject).to include 'identifier_hdl_ssim'
-      expect(subject['identifier_hdl_ssim']).to eq [hdl_value]
-    end
+    let(:fields) { %w[identifier_ssim] }
+    it_behaves_like 'simple model indexing'
   end
 
   describe 'bibliographic_citation' do
@@ -180,6 +160,10 @@ RSpec.describe PublicationIndexer do
     # :symbol, :facetable
     let(:fields) { %w[rights_statement_ssim rights_statement_sim] }
     it_behaves_like 'simple model indexing'
+  end
+
+  describe 'based_near' do
+
   end
 end
 

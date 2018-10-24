@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe Spot::HandleController do
-  describe '#show' do
-    subject { get :show, params: { id: handle } }
+RSpec.describe IdentifierController do
+  describe '#handle' do
+    subject { get :handle, params: { id: handle } }
 
     context 'when a handle exists for an item' do
       let(:handle) { '1234/5678' }
