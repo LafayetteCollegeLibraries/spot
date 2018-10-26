@@ -20,6 +20,7 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
 require 'hyrax/spec/factory_bot/build_strategies'
+require 'webmock/rspec'
 
 # copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
 #
@@ -166,6 +167,8 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+WebMock.disable_net_connect!(allow_localhost: true,
+                             net_http_connect_on_start: true)
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
