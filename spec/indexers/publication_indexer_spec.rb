@@ -114,7 +114,7 @@ RSpec.describe PublicationIndexer do
     it_behaves_like 'simple model indexing'
   end
 
-  pending 'related_resource' do
+  describe 'related_resource' do
     # :symbol
     let(:fields) { %w[related_resource_ssim] }
     it_behaves_like 'simple model indexing'

@@ -19,6 +19,7 @@ FactoryBot.define do
     publisher ['Prestigious Press', 'Lafayette College']
     resource_type ['Article']
     rights_statement [::RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+    related_resource ['http://cool-resource.org']
     source ['Lafayette College', '_The_ Source for Good Publications']
     subject ['Cheese - Other']
     subtitle ['An exploration']
