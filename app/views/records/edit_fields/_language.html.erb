@@ -1,12 +1,18 @@
 <%=
   f.input key,
-  as: :multi_value,
+  as: :controlled_vocabulary,
   input_html: {
     class: 'form-control ui-autocomplete-input',
     data: {
       'autocomplete-url' => '/authorities/search/local/languages',
       'autocomplete' => key,
     },
+  },
+  wrapper_html: {
+    data: {
+      'autocomplete-url' => '/authorities/search/local/languages',
+      'field-name' => key
+    }
   },
   required: f.object.required?(key)
 %>
