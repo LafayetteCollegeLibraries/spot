@@ -4,9 +4,18 @@ RSpec.describe PublicationIndexer do
   let(:work) { build(:publication) }
   let(:indexer) { described_class.new(work) }
 
+  before do
+    # zero-out controlled properties so we're not attempting
+    # to perform a look-up of the value (until we want to)
+    work.class.controlled_properties.each do |prop|
+      work.send :"#{prop}=", []
+    end
+  end
+
   describe 'title' do
     # :stored_searchable
     let(:fields) { %w[title_tesim] }
+    let(:metadata) { {title: ['Title of work']} }
     it_behaves_like 'simple model indexing'
   end
 
@@ -38,34 +47,6 @@ RSpec.describe PublicationIndexer do
     # :symbol, :facetable
     let(:fields) { %w[resource_type_ssim] }
     it_behaves_like 'simple model indexing'
-  end
-
-  describe 'language' do
-    {
-      'it' => 'Italian',
-      'es' => 'Spanish',
-      'fr' => 'French',
-      'de' => 'German',
-      'en' => 'English',
-      'ja' => 'Japanese',
-      '!!' => 'Other'
-    }.each_pair do |lang_iso, lang_translated|
-      context "#{lang_iso} to #{lang_translated}" do
-        let(:work) { build(:publication, language: [lang_iso]) }
-
-        it { is_expected.to include 'language_ssim' }
-
-        it 'stores the ISO value in language_ssim' do
-          expect(solr_doc['language_ssim']).to eq [lang_iso]
-        end
-
-        it { is_expected.to include 'language_display_ssim' }
-
-        it 'stores the translated value in language_display_ssim' do
-          expect(solr_doc['language_display_ssim']).to eq [lang_translated]
-        end
-      end
-    end
   end
 
   describe 'abstract' do
@@ -162,8 +143,26 @@ RSpec.describe PublicationIndexer do
     it_behaves_like 'simple model indexing'
   end
 
-  describe 'based_near' do
+  context 'controlled properties' do
+    describe 'language' do
+      before do
+        work.language = [::RDF::URI(language_uri)]
+        stub_request(:any, language_uri).to_return(body: rdf_body)
+      end
+      let(:rdf_body) do
+        '<http://id.loc.gov/vocabulary/iso639-1/en> <http://www.w3.org/2004/02/skos/core#prefLabel> "English"@en . '
+      end
 
+      let(:language_uri) { 'http://id.loc.gov/vocabulary/iso639-1/en' }
+      let(:language_label) { 'English' }
+
+      it 'writes the language uri to language_ssim' do
+        expect(solr_doc['language_ssim']).to eq [language_uri]
+      end
+
+      it 'writes the label to language_label_ssim' do
+        expect(solr_doc['language_label_ssim']).to eq [language_label]
+      end
+    end
   end
 end
-
