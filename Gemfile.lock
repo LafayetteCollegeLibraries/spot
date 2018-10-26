@@ -837,6 +837,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  almond-rails
   bagit
   byebug
   capistrano (~> 3.10)
