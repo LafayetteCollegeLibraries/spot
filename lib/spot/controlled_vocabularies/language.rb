@@ -1,8 +1,15 @@
+# frozen_string_literal: true
+
+# Class for {Publication#language} to allow {Hyrax::DeepIndexingService}
+# to index both the URI and label for a value. (Follows closely to
+# {Hyrax::ControlledVocabularies::Location})
 module Spot
   module ControlledVocabularies
     class Language < ActiveTriples::Resource
       configure rdf_label: ::RDF::Vocab::SKOS.prefLabel
 
+      # @return [Array<String>] either just the URI (if no label is found)
+      #                         or a tuple of the uri and label/uri combined string
       def solrize
         return [rdf_subject.to_s] if rdf_label.first.to_s.blank? || rdf_label.first.to_s == rdf_subject.to_s
 
@@ -14,6 +21,11 @@ module Spot
 
       private
 
+      # In the event that we need to change which language we prefer from
+      # our RDF (unlikely to the point of probably rendering this unnecessary),
+      # we'll try to refer to one source as much as possible.
+      #
+      # @return [Symbol]
       def preferred_language
         ::Spot::RDFAuthorityParser.preferred_language
       end
