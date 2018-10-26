@@ -10,8 +10,10 @@ class Publication < ActiveFedora::Base
   #
   # (You'll probably also need to switch on `accepts_nested_attributes` below)
 
-  # class_attribute :controlled_properties
-  # self.controlled_properties = []
+  class_attribute :controlled_properties
+  self.controlled_properties = [
+    :based_near, :language
+  ]
 
   self.indexer = PublicationIndexer
 
@@ -45,8 +47,8 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
-  # see PublicationIndexer for indexing of this field
-  property :language, predicate: ::RDF::Vocab::DC11.language do |index|
+  property :language, predicate: ::RDF::Vocab::DC11.language,
+                      class_name: Spot::ControlledVocabularies::Language do |index|
     index.as :symbol
   end
 
@@ -110,7 +112,8 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
-  property :based_near, predicate: ::RDF::Vocab::FOAF.based_near do |index|
+  property :based_near, predicate: ::RDF::Vocab::FOAF.based_near,
+                        class_name: Hyrax::ControlledVocabularies::Location do |index|
     index.as :symbol, :facetable
   end
 
@@ -131,4 +134,5 @@ class Publication < ActiveFedora::Base
 
   id_blank = proc { |attributes| attributes[:id].blank? }
   accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
+  accepts_nested_attributes_for :language, reject_if: id_blank, allow_destroy: true
 end
