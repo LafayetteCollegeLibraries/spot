@@ -68,8 +68,8 @@ module Spot
       value_for 'keyword_ssim'
     end
 
-    def language_display
-      value_for 'language_display_ssim'
+    def language_label
+      value_for 'language_label_ssim'
     end
 
     def license
