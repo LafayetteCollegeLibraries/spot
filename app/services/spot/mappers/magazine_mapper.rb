@@ -31,7 +31,7 @@ module Spot::Mappers
     end
 
     # @todo return to this
-    # @return [Array<RDF::URI,String>]
+    # @return [Array<String>]
     def based_near_attributes
       nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
         # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
@@ -39,7 +39,7 @@ module Spot::Mappers
         when 'easton, pa'
           'http://sws.geonames.org/5188140/'
         else
-          Rails.logger.warn("No URI provided for #{place}; skipping")
+          Rails.logger.warn("No URI provided for #{original_value}; skipping")
           ''
         end
       end

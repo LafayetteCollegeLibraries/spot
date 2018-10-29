@@ -1,4 +1,4 @@
-RSpec.describe Spot::Mappers::HashMapper do
+RSpec.describe Spot::Mappers::BaseHashMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 

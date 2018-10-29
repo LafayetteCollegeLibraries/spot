@@ -41,7 +41,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
       end
 
       let(:logger) { FakeLogger.new(File::NULL)  }
-      let(:metadata) { {'dc:coverage' => ['Coolsville, Daddy-O']} }
+      let(:metadata) { {'OriginInfoPlaceTerm' => ['Coolsville, Daddy-O']} }
 
       it 'writes a warning to the logger' do
         expect(based_near_attributes).to be_empty
