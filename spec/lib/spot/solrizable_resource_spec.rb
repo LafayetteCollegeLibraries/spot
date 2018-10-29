@@ -1,4 +1,4 @@
-RSpec.describe Spot::ControlledVocabularies::Language do
+RSpec.describe Spot::SolrizableResource do
   before do
     allow(resource).to receive(:rdf_label).and_return(rdf_label)
   end

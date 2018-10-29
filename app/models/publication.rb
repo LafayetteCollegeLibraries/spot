@@ -48,7 +48,7 @@ class Publication < ActiveFedora::Base
   end
 
   property :language, predicate: ::RDF::Vocab::DC11.language,
-                      class_name: Spot::ControlledVocabularies::Language do |index|
+                      class_name: Spot::SolrizableResource do |index|
     index.as :symbol
   end
 
