@@ -141,6 +141,7 @@ module Hyrax
         super.tap do |params|
           params << { identifier_prefix: [] }
           params << { identifier_value: [] }
+          params << { language_attributes: [:id, :_destroy] }
         end
       end
     end

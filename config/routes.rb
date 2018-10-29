@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   mount Sidekiq::Web => '/sidekiq'
 
-  get '/handle/*id', to: 'handle#show', as: 'handle'
+  get '/handle/*id', to: 'identifier#handle', as: 'handle'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -49,6 +49,7 @@ gem 'dotenv-rails'
 gem 'pg'
 gem 'bagit'
 gem 'rdf-vocab'
+gem 'almond-rails'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -87,6 +88,7 @@ group :development, :test do
   gem 'chromedriver-helper'
 
   gem 'pry-rails'
+  gem 'webmock', '~> 3.4.2'
 end
 
 group :test do
