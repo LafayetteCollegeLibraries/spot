@@ -36,24 +36,23 @@ module Spot::Mappers
       end
     end
 
-    # @return Array[<String>] the date in YYYY-MM-DD format
+    # @return [Array<String>] the date in YYYY-MM-DD format
     def date_issued
       metadata['dc:date'].map do |raw_date|
         Date.parse(raw_date).strftime('%Y-%m-%d')
       end
     end
 
-    # @todo return to this
-    # @return Array[<RDF::URI, String>]
-    # def rights_statement
-    #   metadata['dc:rights'].map do |rights|
-    #     case rights
-    #     when 'Public domain'
-    #       ::RDF::URI('https://creativecommons.org/publicdomain/mark/1.0/')
-    #     else
-    #       rights
-    #     end
-    #   end
-    # end
+    # @return [Array<String>]
+    def rights_statement
+      metadata['dc:rights'].map do |rights|
+        case rights.downcase
+        when 'public domain'
+          'https://creativecommons.org/publicdomain/mark/1.0/'
+        else
+          rights
+        end
+      end
+    end
   end
 end
