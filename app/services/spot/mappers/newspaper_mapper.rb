@@ -5,7 +5,6 @@ module Spot::Mappers
     include NestedAttributes
 
     self.fields_map = {
-      based_near: 'dc:coverage',
       description: 'dc:description',
       identifier: 'dc:identifier',
       keyword: 'dc:subject',
