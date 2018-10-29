@@ -3,9 +3,9 @@
 module Spot::Mappers
   class MagazineMapper < BaseHashMapper
     include ShortDateConversion
+    include NestedAttributes
 
     self.fields_map = {
-      based_near: 'OriginInfoPlaceTerm',
       creator: 'NamePart_DisplayForm_PersonalAuthor',
       description: 'TitleInfoPartNumber',
       publisher: 'OriginInfoPublisher',
@@ -21,7 +21,7 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near
+        based_near_attributes
         date_issued
         identifier
         related_resource
@@ -32,15 +32,18 @@ module Spot::Mappers
 
     # @todo return to this
     # @return [Array<RDF::URI,String>]
-    # def based_near
-    #   metadata['OriginInfoPlaceTerm'].map do |place|
-    #     if place == 'Easton, PA'
-    #       RDF::URI('http://sws.geonames.org/5188140/')
-    #     else
-    #       place
-    #     end
-    #   end
-    # end
+    def based_near_attributes
+      nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
+        # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
+        case original_value.downcase
+        when 'easton, pa'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{place}; skipping")
+          ''
+        end
+      end
+    end
 
     # Despite being labeled as 'ISO8601', legacy magazine dates are in
     # mm/dd/yy format. The 'PublicationSequence' field has 1930 listed

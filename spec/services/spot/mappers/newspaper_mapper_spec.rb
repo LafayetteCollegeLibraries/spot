@@ -4,30 +4,55 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#based_near' do
-    subject(:based_near) { mapper.based_near }
+  describe '#based_near_attributes' do
+    subject(:based_near_attributes) { mapper.based_near_attributes }
 
-    skip 'when location is Easton' do
+    let(:expected_value) do
+      { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
+    end
+
+    context 'when location is Easton' do
       let(:metadata) do
         {
           'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton']
         }
       end
 
-      it 'is an RDF::URI' do
-        expect(based_near.first).to be_an ::RDF::URI
-      end
+      it { is_expected.to eq expected_value }
     end
 
-    context 'when it is any place else' do
-      let(:metadata) do
-        {
-          'dc:coverage' => ['Anywhere, USA']
-        }
+    context 'when location is not in our internal mapping' do
+      before do
+        @original_logger = Rails.logger
+
+        class FakeLogger < Logger
+          attr_reader :messages
+          def initialize(*args)
+            super(File::NULL)
+            @messages = []
+          end
+
+          def add(*args)
+            @messages << args
+            super(*args)
+          end
+        end
+
+        Rails.logger = logger
       end
 
-      it 'is the supplied value' do
-        expect(based_near.first).to be_a String
+      after do
+        Rails.logger = @original_logger
+        Object.send(:remove_const, :FakeLogger)
+      end
+
+      let(:logger) { FakeLogger.new(File::NULL)  }
+      let(:metadata) { {'dc:coverage' => ['Coolsville, Daddy-O']} }
+
+      it 'writes a warning to the logger' do
+        expect(based_near_attributes).to be_empty
+        expect(logger.messages).not_to be_empty
+        expect(logger.messages.first.first).to eq Logger::WARN
       end
     end
   end

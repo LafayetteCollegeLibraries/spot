@@ -2,6 +2,7 @@
 
 module Spot::Mappers
   class NewspaperMapper < BaseHashMapper
+    include NestedAttributes
 
     self.fields_map = {
       based_near: 'dc:coverage',
@@ -17,23 +18,24 @@ module Spot::Mappers
 
     def fields
       super + %i[
-        based_near
+        based_near_attributes
         date_issued
         rights_statement
       ]
     end
 
-    # @todo return to this
     # @return [Array<RDF::URI,String>]
-    # def based_near
-    #   metadata['dc:coverage'].map do |place|
-    #     if place == 'United States, Pennsylvania, Northampton County, Easton'
-    #       RDF::URI('http://sws.geonames.org/5188140/')
-    #     else
-    #       place
-    #     end
-    #   end
-    # end
+    def based_near_attributes
+      nested_attributes_hash_for('dc:coverage') do |place|
+        case place
+        when 'United States, Pennsylvania, Northampton County, Easton'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{place}; skipping")
+          ''
+        end
+      end
+    end
 
     # @return Array[<String>] the date in YYYY-MM-DD format
     def date_issued
