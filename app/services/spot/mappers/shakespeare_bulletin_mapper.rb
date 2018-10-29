@@ -1,5 +1,5 @@
 module Spot::Mappers
-  class ShakespeareBulletinMapper < HashMapper
+  class ShakespeareBulletinMapper < BaseHashMapper
     include ShortDateConversion
 
     self.fields_map = {

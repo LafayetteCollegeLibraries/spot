@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class MagazineMapper < HashMapper
-    include ::Spot::Mappers::ShortDateConversion
+  class MagazineMapper < BaseHashMapper
+    include ShortDateConversion
 
     self.fields_map = {
       based_near: 'OriginInfoPlaceTerm',

@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class NewspaperMapper < HashMapper
+  class NewspaperMapper < BaseHashMapper
+
     self.fields_map = {
       based_near: 'dc:coverage',
       description: 'dc:description',

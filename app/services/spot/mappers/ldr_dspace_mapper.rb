@@ -2,7 +2,7 @@
 require 'uri'
 
 module Spot::Mappers
-  class LdrDspaceMapper < HashMapper
+  class LdrDspaceMapper < BaseHashMapper
     # Our home-grown HashMapper requires this property to return a hash
     # that defines what Publication methods (which must match the keys)
     # map to what metadata headers (which must match the value).

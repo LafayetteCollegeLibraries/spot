@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class HashMapper < ::Darlingtonia::HashMapper
+  class BaseHashMapper < ::Darlingtonia::HashMapper
     class_attribute :fields_map
     self.fields_map = {}
 
