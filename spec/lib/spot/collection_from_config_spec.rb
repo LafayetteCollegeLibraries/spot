@@ -62,16 +62,16 @@ RSpec.describe Spot::CollectionFromConfig do
       it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
     end
 
-    context 'when "private"' do
-      let(:visibility) { 'private' }
-
-      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
-    end
-
-    context 'it defaults to "public"' do
-      let(:visibility) { 'i dunno?' }
+    context 'when "public"' do
+      let(:visibility) { 'public' }
 
       it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+    end
+
+    context 'it defaults to "private"' do
+      let(:visibility) { 'i dunno?' }
+
+      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
   end
 
