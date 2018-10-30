@@ -112,7 +112,7 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
-  property :based_near, predicate: ::RDF::Vocab::FOAF.based_near,
+  property :based_near, predicate: ::RDF::Vocab::DC.spatial,
                         class_name: Hyrax::ControlledVocabularies::Location do |index|
     index.as :symbol, :facetable
   end
