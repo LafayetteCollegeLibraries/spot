@@ -1,13 +1,15 @@
 <% if presenter.identifier.present? %>
   <dt><%= t('blacklight.search.fields.identifier') %></dt>
-  <ul class="tabular">
-  <%- presenter.mapped_identifiers.each do |id| -%>
-    <li class="attribute attribute-identifier_<%= id.prefix %> attribute-identifier-with-label">
-      <% if id.prefix %>
-      <span class="label label-default"><%= t("spot.identifiers.labels.#{id.prefix}") %></span>
-      <% end %>
-      <%= id.value %>
-    </li>
-  <%- end -%>
-  </ul>
+  <dd>
+    <ul class="tabular">
+    <%- presenter.mapped_identifiers.each do |id| -%>
+      <li class="attribute attribute-identifier_<%= id.prefix %> attribute-identifier-with-label">
+        <% if id.prefix %>
+        <span class="label label-default"><%= t("spot.identifiers.labels.#{id.prefix}") %></span>
+        <% end %>
+        <%= id.value %>
+      </li>
+    <%- end -%>
+    </ul>
+  </dd>
 <% end %>

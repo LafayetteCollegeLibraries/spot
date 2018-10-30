@@ -23,7 +23,7 @@
   <%= presenter.attribute_to_html(:language_label, html_dl: true) %>
   <%= presenter.attribute_to_html(:subject, html_dl: true, render_as: :faceted) %>
   <%= presenter.attribute_to_html(:keyword, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:based_near, html_dl: true) %>
+  <%= render 'shared/metadata/based_near', presenter: presenter %>
   <%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
 
   <%= render 'shared/metadata/identifiers', presenter: presenter %>
