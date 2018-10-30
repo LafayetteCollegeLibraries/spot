@@ -22,7 +22,7 @@ module Spot
     def self.from_yaml(config)
       new(
         title: config['title'],
-        metadata: wrap_metadata(config['metadata']),
+        metadata: wrap_metadata(config['metadata'] || {}),
         collection_type: config['collection_type'],
         visibility: config['visibility']
       )
