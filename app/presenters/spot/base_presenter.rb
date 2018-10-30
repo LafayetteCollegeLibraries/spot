@@ -1,5 +1,7 @@
 module Spot
   class BasePresenter < Hyrax::WorkShowPresenter
+    include ActionView::Helpers::UrlHelper
+
     def public?
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
@@ -14,6 +16,15 @@ module Spot
 
     def academic_department
       value_for 'academic_department_ssim'
+    end
+
+    def based_near
+      value_for 'based_near_ssim'
+    end
+
+    def based_near_merged
+      solr_document['based_near_ssim']
+        .zip(solr_document['based_near_label_ssim'])
     end
 
     def bibliographic_citation

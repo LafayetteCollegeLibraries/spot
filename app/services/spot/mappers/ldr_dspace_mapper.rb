@@ -2,7 +2,9 @@
 require 'uri'
 
 module Spot::Mappers
-  class LdrDspaceMapper < HashMapper
+  class LdrDspaceMapper < BaseHashMapper
+    include NestedAttributes
+
     # Our home-grown HashMapper requires this property to return a hash
     # that defines what Publication methods (which must match the keys)
     # map to what metadata headers (which must match the value).
@@ -35,7 +37,7 @@ module Spot::Mappers
         depositor
         description
         identifier
-        language
+        language_attributes
         publisher
         source
         title
@@ -100,8 +102,26 @@ module Spot::Mappers
     end
 
     # @return [Array<String>]
-    def language
-      Array(metadata['language.iso']).map {|lang| lang == 'en_US' ? 'en' : lang }
+    def language_attributes
+      nested_attributes_hash_for('language.iso') do |language|
+        case language
+        when 'en', 'en_US'
+          'http://id.loc.gov/vocabulary/iso639-1/en'
+        when 'de'
+          'http://id.loc.gov/vocabulary/iso639-1/de'
+        when 'es'
+          'http://id.loc.gov/vocabulary/iso639-1/es'
+        when 'fr'
+          'http://id.loc.gov/vocabulary/iso639-1/fr'
+        when 'it'
+          'http://id.loc.gov/vocabulary/iso639-1/it'
+        when 'ja'
+          'http://id.loc.gov/vocabulary/iso639-1/ja'
+        else
+          Rails.logger.warn("No URI provided for #{language}; skipping")
+          ''
+        end
+      end
     end
 
     # If an item is a chapter (or part of a book), we're mapping the

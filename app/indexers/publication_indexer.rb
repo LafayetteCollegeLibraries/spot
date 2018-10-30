@@ -1,4 +1,6 @@
 class PublicationIndexer < Hyrax::WorkIndexer
+  include IndexesRightsStatements
+
   # replaces the work that including the `Hyrax::IndexesLinkedMetadata`
   # mixin would do, without also bringing along metadata baggage from
   # `Hyrax::BasicMetadataIndexer`.

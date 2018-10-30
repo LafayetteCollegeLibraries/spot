@@ -1,6 +1,7 @@
 module Spot::Mappers
-  class ShakespeareBulletinMapper < HashMapper
+  class ShakespeareBulletinMapper < BaseHashMapper
     include ShortDateConversion
+    include NestedAttributes
 
     self.fields_map = {
       publisher: 'originInfo_Publisher',
@@ -10,12 +11,30 @@ module Spot::Mappers
 
     def fields
       super + %i[
+        based_near_attributes
         creator
         date_issued
         editor
         identifier
         title
       ]
+    end
+
+    # @return [Array<Hash>]
+    def based_near_attributes
+      nested_attributes_hash_for('originInfo_place_placeTerm') do |place|
+        case place
+        when 'Burlington, VT'
+          'http://sws.geonames.org/5234372/'
+        when 'Norwood, NJ'
+          'http://sws.geonames.org/5101978/'
+        when 'Easton, PA'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{place}; skipping")
+          ''
+        end
+      end
     end
 
     # @todo Should we return URIs where possible?

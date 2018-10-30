@@ -12,7 +12,7 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
   let(:depositor) { User.find_or_initialize_by(email: 'example@lafayette.edu') }
   let(:environment) { double('environment') }
   let(:file_list) { [1] }
-  let(:mapper) { Spot::Mappers::HashMapper.new }
+  let(:mapper) { Spot::Mappers::BaseHashMapper.new }
   let(:metadata) do
     {
       'title' => ['thee title'],

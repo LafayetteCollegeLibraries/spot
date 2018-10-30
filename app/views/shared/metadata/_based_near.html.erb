@@ -1,0 +1,15 @@
+<% if presenter.based_near.present? %>
+  <dt><%= t('blacklight.search.fields.based_near') %></dt>
+  <dd>
+    <ul class="tabular">
+    <%- presenter.based_near_merged.each do |(uri, label)| -%>
+      <li class="attribute attribute-based_near">
+        <%= link_to(
+              %Q(#{label} <span class="fa fa-external-link"></span>).html_safe,
+              uri,
+              target: '_blank') %>
+      </li>
+    <%- end -%>
+    </ul>
+  </dd>
+<% end %>

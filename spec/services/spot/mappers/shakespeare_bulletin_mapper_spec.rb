@@ -98,4 +98,38 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
       it { is_expected.to eq title }
     end
   end
+
+  describe '#based_near_attributes' do
+    subject { mapper.based_near_attributes }
+
+    let(:metadata) do
+      {
+        'originInfo_place_placeTerm' => [
+          'Burlington, VT',
+          'Norwood, NJ',
+          'Easton, PA'
+        ]
+      }
+    end
+
+    let(:expected_hash) do
+      {
+        '0' => { 'id' => 'http://sws.geonames.org/5234372/' },
+        '1' => { 'id' => 'http://sws.geonames.org/5101978/' },
+        '2' => { 'id' => 'http://sws.geonames.org/5188140/' }
+      }
+    end
+
+    it { is_expected.to eq expected_hash }
+
+    context 'when a value is not expected' do
+      let(:metadata) do
+        { 'originInfo_place_placeTerm' => ['Nowheresville, USA'] }
+      end
+
+      it_behaves_like 'it logs a warning'
+
+      it { is_expected.to be_empty }
+    end
+  end
 end

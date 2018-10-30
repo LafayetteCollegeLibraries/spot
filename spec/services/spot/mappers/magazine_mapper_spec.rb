@@ -4,21 +4,23 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
   before { mapper.metadata = metadata }
 
-  skip '#based_near' do
-    subject { mapper.based_near.first }
+  describe '#based_near_attributes' do
+    subject(:based_near_attributes) { mapper.based_near_attributes }
 
     let(:metadata) { {'OriginInfoPlaceTerm' => [location]} }
-
-    context 'when the value is "Easton, PA"' do
-      let(:location) { 'Easton, PA' }
-
-      it { is_expected.to be_an RDF::URI }
+    let(:location) { 'Easton, PA' }
+    let(:expected_value) do
+      { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
     end
 
-    context 'other values' do
-      let(:location) { 'Bethlehem, PA' }
+    it { is_expected.to eq expected_value }
 
-      it { is_expected.to be_a String }
+    context 'when location is not in our internal mapping' do
+      let(:metadata) { {'OriginInfoPlaceTerm' => ['Coolsville, Daddy-O']} }
+
+      it { is_expected.to be_empty }
+
+      it_behaves_like 'it logs a warning'
     end
   end
 

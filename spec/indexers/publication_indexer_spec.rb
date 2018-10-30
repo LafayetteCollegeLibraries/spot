@@ -138,9 +138,8 @@ RSpec.describe PublicationIndexer do
   end
 
   describe 'rights_statement' do
-    # :symbol, :facetable
-    let(:fields) { %w[rights_statement_ssim rights_statement_sim] }
-    it_behaves_like 'simple model indexing'
+    it { is_expected.to include 'rights_statement_ssim' }
+    it { is_expected.to include 'rights_statement_label_ssim' }
   end
 
   context 'controlled properties' do

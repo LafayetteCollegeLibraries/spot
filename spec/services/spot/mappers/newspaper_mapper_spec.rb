@@ -4,31 +4,29 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#based_near' do
-    subject(:based_near) { mapper.based_near }
+  describe '#based_near_attributes' do
+    subject(:based_near_attributes) { mapper.based_near_attributes }
 
-    skip 'when location is Easton' do
+    let(:expected_value) do
+      { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
+    end
+
+    context 'when location is Easton' do
       let(:metadata) do
         {
           'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton']
         }
       end
 
-      it 'is an RDF::URI' do
-        expect(based_near.first).to be_an ::RDF::URI
-      end
+      it { is_expected.to eq expected_value }
     end
 
-    context 'when it is any place else' do
-      let(:metadata) do
-        {
-          'dc:coverage' => ['Anywhere, USA']
-        }
-      end
+    context 'when location is not in our internal mapping' do
+      let(:metadata) { {'dc:coverage' => ['Coolsville, Daddy-O']} }
 
-      it 'is the supplied value' do
-        expect(based_near.first).to be_a String
-      end
+      it { is_expected.to be_empty }
+
+      it_behaves_like 'it logs a warning'
     end
   end
 
@@ -103,24 +101,21 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   end
 
   describe '#rights_statement' do
-    subject(:rights_statement) { mapper.rights_statement }
+    subject(:rights_statement) { mapper.rights_statement.first }
 
     let(:metadata) { {'dc:rights' => [rights]} }
+    let(:uri) { 'https://creativecommons.org/publicdomain/mark/1.0/' }
 
-    skip 'when in the Public domain' do
+    context 'when in the Public domain' do
       let(:rights) { 'Public domain' }
 
-      it 'is an RDF::URI' do
-        expect(rights_statement.first).to be_an ::RDF::URI
-      end
+      it { is_expected.to eq uri }
     end
 
     context 'when not in the Public domain' do
       let(:rights) { 'No way you can use this' }
 
-      it 'keeps the existing value' do
-        expect(rights_statement.first).to eq rights
-      end
+      it { is_expected.to eq rights }
     end
   end
 

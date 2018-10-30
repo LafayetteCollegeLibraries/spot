@@ -120,9 +120,7 @@ class Publication < ActiveFedora::Base
   property :license, predicate: ::RDF::Vocab::DC.rights
 
   # rights_statements are stored as URIs
-  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights do |index|
-    index.as :symbol, :facetable
-  end
+  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
 
   # property :rights_holder, predicate: ::RDF::Vocab::DC11.rightsHolder
 
