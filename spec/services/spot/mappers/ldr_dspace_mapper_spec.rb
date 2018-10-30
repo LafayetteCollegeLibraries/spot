@@ -164,19 +164,31 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     end
   end
 
-  describe '#language' do
-    subject { mapper.language }
+  describe '#language_attributes' do
+    subject { mapper.language_attributes }
 
-    let(:value) { ['fr'] }
-    let(:metadata) { {'language.iso' => ['fr']} }
+    {
+      'en' => 'http://id.loc.gov/vocabulary/iso639-1/en',
+      'en_US' => 'http://id.loc.gov/vocabulary/iso639-1/en',
+      'de' => 'http://id.loc.gov/vocabulary/iso639-1/de',
+      'es' => 'http://id.loc.gov/vocabulary/iso639-1/es',
+      'fr' => 'http://id.loc.gov/vocabulary/iso639-1/fr',
+      'it' => 'http://id.loc.gov/vocabulary/iso639-1/it',
+      'ja' => 'http://id.loc.gov/vocabulary/iso639-1/ja'
+    }.each do |iso, uri|
+      context "language attribute for #{iso}" do
+        let(:metadata) { {'language.iso' => [iso] } }
+        let(:expected_hash) { {'0' => {'id' => uri}} }
+        it { is_expected.to eq expected_hash }
+      end
+    end
 
-    it { is_expected.to eq value }
+    context 'when a language is not provided' do
+      let(:metadata) { {'language.iso' => ['pig latin'] } }
 
-    context 'when language iso value is en_US' do
-      let(:value) { ['en'] }
-      let(:metadata) { {'language.iso' => ['en_US']} }
+      it { is_expected.to be_empty }
 
-      it { is_expected.to eq value }
+      it_behaves_like 'it logs a warning'
     end
   end
 
