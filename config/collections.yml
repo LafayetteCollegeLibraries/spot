@@ -1,0 +1,25 @@
+- title: Lafayette Magazine archive
+  visibility: public
+  metadata:
+    description: >
+      Digitized archive of Lafayette publications:
+      Lafayette Alumnus, Lafayette Alumni Quarterly,
+      Lafayette Magazine, as well as the Football
+      News Letter and Leopard Letter.
+- title: Lafayette Newspaper archive
+  visibility: public
+  metadata:
+    description: >
+      Digitized archive of The Lafayette, the oldest
+      college newspaper in Pennsylvania.
+- title: Shakespeare Bulletin Archive
+  visibility: public
+  metadata:
+    description: >
+      Digitized Shakespeare Bulletin Archive containing
+      complete runs of Shakespeare Bulletin (1983-2003),
+      the preceding Bulletin of the New York Shakespeare
+      Society (1982-1983), and the incorporated Shakespeare
+      on Film Newsletter (1976-1992).
+- title: Faculty Publications
+  visibility: public
