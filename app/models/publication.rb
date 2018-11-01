@@ -48,7 +48,7 @@ class Publication < ActiveFedora::Base
   end
 
   property :language, predicate: ::RDF::Vocab::DC11.language,
-                      class_name: Spot::SolrizableResource do |index|
+                      class_name: Spot::ControlledVocabularies::Base do |index|
     index.as :symbol
   end
 
@@ -113,7 +113,7 @@ class Publication < ActiveFedora::Base
   end
 
   property :based_near, predicate: ::RDF::Vocab::DC.spatial,
-                        class_name: Hyrax::ControlledVocabularies::Location do |index|
+                        class_name: Spot::ControlledVocabularies::Base do |index|
     index.as :symbol, :facetable
   end
 
