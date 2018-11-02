@@ -6,6 +6,19 @@ RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
   let(:admin_user) { FactoryBot.create(:admin_user) }
   let(:publication) { FactoryBot.actor_create(:publication, :public, user: depositing_user) }
 
+  before do
+    admin_set = AdminSet.find(AdminSet.find_or_create_default_admin_set_id)
+    @previous_workflow = admin_set.permission_template.active_workflow
+    processing_wf = admin_set.permission_template.available_workflows.find_by_name('spot_one_step_process')
+    Sipity::Workflow.activate!(permission_template: admin_set.permission_template, workflow_id: processing_wf.id)
+  end
+
+  after do
+    admin_set = AdminSet.first
+    processing_wf = admin_set.permission_template.available_workflows.find_by_name(@previous_workflow.name)
+    Sipity::Workflow.activate!(permission_template: admin_set.permission_template, workflow_id: processing_wf.id)
+  end
+
   context 'a logged in user' do
     scenario "a user submits a publication and an admin approves it", js: true do
       expect(publication.active_workflow.name).to eq "spot_one_step_process"
