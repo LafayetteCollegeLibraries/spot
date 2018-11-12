@@ -1,11 +1,8 @@
 class PublicationIndexer < Hyrax::WorkIndexer
   include IndexesRightsStatements
 
-  # replaces the work that including the `Hyrax::IndexesLinkedMetadata`
-  # mixin would do, without also bringing along metadata baggage from
-  # `Hyrax::BasicMetadataIndexer`.
   def rdf_service
-    Hyrax::DeepIndexingService
+    Spot::DeepIndexingService
   end
 
   def generate_solr_document
