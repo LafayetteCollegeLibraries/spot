@@ -11,9 +11,7 @@ class Publication < ActiveFedora::Base
   # (You'll probably also need to switch on `accepts_nested_attributes` below)
 
   class_attribute :controlled_properties
-  self.controlled_properties = [
-    :based_near
-  ]
+  self.controlled_properties = [:based_near]
 
   self.indexer = PublicationIndexer
 
@@ -112,8 +110,8 @@ class Publication < ActiveFedora::Base
   end
 
   property :based_near, predicate: ::RDF::Vocab::DC.spatial,
-                        class_name: Spot::ControlledVocabularies::Base do |index|
-    index.as :symbol, :facetable
+                        class_name: Spot::ControlledVocabularies::Location do |index|
+    index.as :symbol
   end
 
   property :license, predicate: ::RDF::Vocab::DC.rights

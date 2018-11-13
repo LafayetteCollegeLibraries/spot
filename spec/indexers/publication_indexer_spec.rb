@@ -4,14 +4,6 @@ RSpec.describe PublicationIndexer do
   let(:work) { build(:publication) }
   let(:indexer) { described_class.new(work) }
 
-  before do
-    # zero-out controlled properties so we're not attempting
-    # to perform a look-up of the value (until we want to)
-    work.class.controlled_properties.each do |prop|
-      work.send :"#{prop}=", []
-    end
-  end
-
   describe 'title' do
     # :stored_searchable
     let(:fields) { %w[title_tesim] }
@@ -152,5 +144,21 @@ RSpec.describe PublicationIndexer do
     end
   end
 
-  pending 'based_near'
+  describe 'based_near' do
+    let(:label) { 'Easton, PA' }
+    let(:uri) { 'http://sws.geonames.org/5188140/' }
+    let(:work) { build(:publication, based_near: [RDF::URI(uri)]) }
+
+    before do
+      RdfLabel.first_or_create(uri: uri, value: label)
+    end
+
+    it 'stores the uri' do
+      expect(solr_doc['based_near_ssim']).to eq [uri]
+    end
+
+    it 'stores the label' do
+      expect(solr_doc['based_near_label_ssim']).to eq [label]
+    end
+  end
 end
