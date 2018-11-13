@@ -12,7 +12,7 @@ class Publication < ActiveFedora::Base
 
   class_attribute :controlled_properties
   self.controlled_properties = [
-    :based_near, :language
+    :based_near
   ]
 
   self.indexer = PublicationIndexer
@@ -47,8 +47,7 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
-  property :language, predicate: ::RDF::Vocab::DC11.language,
-                      class_name: Spot::ControlledVocabularies::Base do |index|
+  property :language, predicate: ::RDF::Vocab::DC11.language do |index|
     index.as :symbol
   end
 

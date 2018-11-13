@@ -142,26 +142,15 @@ RSpec.describe PublicationIndexer do
     it { is_expected.to include 'rights_statement_label_ssim' }
   end
 
-  context 'controlled properties' do
-    describe 'language' do
-      before do
-        work.language = [::RDF::URI(language_uri)]
-        stub_request(:any, language_uri).to_return(body: rdf_body)
-      end
-      let(:rdf_body) do
-        '<http://id.loc.gov/vocabulary/iso639-1/en> <http://www.w3.org/2004/02/skos/core#prefLabel> "English"@en . '
-      end
+  describe 'language' do
+    it 'stores the 2-character ISO-639-1 value' do
+      expect(solr_doc['language_ssim']).to eq ['en']
+    end
 
-      let(:language_uri) { 'http://id.loc.gov/vocabulary/iso639-1/en' }
-      let(:language_label) { 'English' }
-
-      it 'writes the language uri to language_ssim' do
-        expect(solr_doc['language_ssim']).to eq [language_uri]
-      end
-
-      it 'writes the label to language_label_ssim' do
-        expect(solr_doc['language_label_ssim']).to eq [language_label]
-      end
+    it 'stores the label value' do
+      expect(solr_doc['language_label_ssim']).to eq ['English']
     end
   end
+
+  pending 'based_near'
 end

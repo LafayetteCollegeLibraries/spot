@@ -2,7 +2,7 @@ RSpec.feature 'Show Publication page', js: false do
   let(:user) { create(:user) }
   let(:pub) { create(:publication, user: user, file: file, language: language) }
   let(:item_base_url) { "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}" }
-  let(:language) { ['English'] }
+  let(:language) { ['en'] }
 
   # these were previously defined in the 'Publication is a PDF' context
   # but if we're checking metadata outside of that scope we'll need these
@@ -68,6 +68,9 @@ RSpec.feature 'Show Publication page', js: false do
     expect(page.all('.attribute-title_alternative').map(&:text))
       .to eq pub.title_alternative.map(&:to_s)
 
+    expect(page.all('.attribute-language_label').map(&:text))
+      .to eq ['English']
+
     # @todo there's _got_ to be a better way!!
     pub.identifier.each do |id|
       key = id.split(':').first
@@ -76,11 +79,6 @@ RSpec.feature 'Show Publication page', js: false do
                   end
       expect(all_clean).to include id
     end
-
-    # we're stuffing this value since we're not actually going out
-    # and fetching the value for this field
-    expect(page.all('.attribute-language_label').map(&:text))
-      .to eq language
 
     # TODO: revisit Rights Statement when we actually display it on the show page
     #expect(page.all('.attribute-rights_statement').map(&:uri))
