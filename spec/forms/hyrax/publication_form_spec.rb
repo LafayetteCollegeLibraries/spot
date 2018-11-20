@@ -107,29 +107,23 @@ RSpec.describe Hyrax::PublicationForm do
       end
     end
 
-    context 'when passed nested_attributes for language' do
-      subject { attributes[:language] }
-      let(:params) do
-        {
-          'language_attributes' => {
-            '0' => { 'id' => 'en' },
-            '1' => { 'id' => 'eo' }
-          }
-        }
+    context 'handles nested attributes' do
+      describe 'language' do
+        let(:field) { 'language' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
       end
 
-      it { is_expected.to eq %w(en eo) }
+      describe 'academic_department' do
+        let(:field) { 'academic_department' }
 
-      context 'when _destroy is passed' do
-        let(:params) do
-          {
-            'language_attributes' => {
-              '0' => { 'id' => 'en', '_destroy' => 'true' }
-            }
-          }
-        end
+        it_behaves_like 'it transforms a local vocabulary attribute'
+      end
 
-        it { is_expected.to be_empty }
+      describe 'division' do
+        let(:field) { 'division' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
       end
     end
   end

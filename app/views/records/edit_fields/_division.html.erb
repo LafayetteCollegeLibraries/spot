@@ -1,12 +1,18 @@
 <%=
   f.input key,
-  as: :multi_value,
+  as: :local_controlled_vocabulary,
   input_html: {
-    class: 'form-control ui-autocomplete-input',
+    class: 'form-control',
     data: {
       'autocomplete-url' => '/authorities/search/local/lafayette_divisions',
       'autocomplete' => key,
     },
+  },
+  wrapper_html: {
+    data: {
+      'autocomplete-url' => '/authorities/search/local/lafayette_divisions',
+      'field-name' => key
+    }
   },
   required: f.object.required?(key)
 %>
