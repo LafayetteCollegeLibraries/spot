@@ -22,7 +22,6 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :publisher }
       it { is_expected.to include :source }
       it { is_expected.to include :resource_type }
-      it { is_expected.to include :language }
       it { is_expected.to include :abstract }
       it { is_expected.to include :description }
       it { is_expected.to include :identifier }
@@ -105,6 +104,32 @@ RSpec.describe Hyrax::PublicationForm do
         it 'returns nil' do
           expect(attributes[:identifier]).to be_empty
         end
+      end
+    end
+
+    context 'when passed nested_attributes for language' do
+      subject { attributes[:language] }
+      let(:params) do
+        {
+          'language_attributes' => {
+            '0' => { 'id' => 'en' },
+            '1' => { 'id' => 'eo' }
+          }
+        }
+      end
+
+      it { is_expected.to eq %w(en eo) }
+
+      context 'when _destroy is passed' do
+        let(:params) do
+          {
+            'language_attributes' => {
+              '0' => { 'id' => 'en', '_destroy' => 'true' }
+            }
+          }
+        end
+
+        it { is_expected.to be_empty }
       end
     end
   end

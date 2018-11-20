@@ -121,18 +121,38 @@ module Hyrax
 
       # @return [Hash<Symbol => Array<String>>]
       def model_attributes(form_params)
-        prefixes = form_params.delete('identifier_prefix')
-        values = form_params.delete('identifier_value')
-
-        merged = prefixes.zip(values).map do |(key, value)|
-          Spot::Identifier.new(key, value).to_s
-        end.reject(&:blank?)
-
         super.tap do |params|
-          params[:identifier] = merged
+          params[:identifier] = build_identifiers(params)
+          params[:language] = extract_nested_attributes(params, 'language')
 
           singular_terms.each do |term|
             params[term] = Array(params[term]) if params[term]
+          end
+        end
+      end
+
+      # @return [Array<String>]
+      def build_identifiers(params)
+        prefixes = params.delete('identifier_prefix')
+        values = params.delete('identifier_value')
+
+        return unless prefixes && values
+
+        prefixes.zip(values).map do |(key, value)|
+          Spot::Identifier.new(key, value).to_s
+        end.reject(&:blank?)
+      end
+
+      # @return [Array<String>]
+      def extract_nested_attributes(params, field)
+        field = "#{field}_attributes" unless field.include?('_attributes')
+
+        return if params[field].blank?
+
+        [].tap do |out|
+          params.delete(field.to_s).each do |_index, param|
+            next unless param['_destroy'].blank?
+            out << param['id'] if param['id']
           end
         end
       end
