@@ -4,14 +4,6 @@ RSpec.describe PublicationIndexer do
   let(:work) { build(:publication) }
   let(:indexer) { described_class.new(work) }
 
-  before do
-    # zero-out controlled properties so we're not attempting
-    # to perform a look-up of the value (until we want to)
-    work.class.controlled_properties.each do |prop|
-      work.send :"#{prop}=", []
-    end
-  end
-
   describe 'title' do
     # :stored_searchable
     let(:fields) { %w[title_tesim] }
@@ -142,26 +134,31 @@ RSpec.describe PublicationIndexer do
     it { is_expected.to include 'rights_statement_label_ssim' }
   end
 
-  context 'controlled properties' do
-    describe 'language' do
-      before do
-        work.language = [::RDF::URI(language_uri)]
-        stub_request(:any, language_uri).to_return(body: rdf_body)
-      end
-      let(:rdf_body) do
-        '<http://id.loc.gov/vocabulary/iso639-1/en> <http://www.w3.org/2004/02/skos/core#prefLabel> "English"@en . '
-      end
+  describe 'language' do
+    it 'stores the 2-character ISO-639-1 value' do
+      expect(solr_doc['language_ssim']).to eq ['en']
+    end
 
-      let(:language_uri) { 'http://id.loc.gov/vocabulary/iso639-1/en' }
-      let(:language_label) { 'English' }
+    it 'stores the label value' do
+      expect(solr_doc['language_label_ssim']).to eq ['English']
+    end
+  end
 
-      it 'writes the language uri to language_ssim' do
-        expect(solr_doc['language_ssim']).to eq [language_uri]
-      end
+  describe 'based_near' do
+    let(:label) { 'Easton, PA' }
+    let(:uri) { 'http://sws.geonames.org/5188140/' }
+    let(:work) { build(:publication, based_near: [RDF::URI(uri)]) }
 
-      it 'writes the label to language_label_ssim' do
-        expect(solr_doc['language_label_ssim']).to eq [language_label]
-      end
+    before do
+      RdfLabel.first_or_create(uri: uri, value: label)
+    end
+
+    it 'stores the uri' do
+      expect(solr_doc['based_near_ssim']).to eq [uri]
+    end
+
+    it 'stores the label' do
+      expect(solr_doc['based_near_label_ssim']).to eq [label]
     end
   end
 end

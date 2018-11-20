@@ -23,7 +23,9 @@ export default class Autocomplete {
           element,
           url)
         break
+      case 'academic_department':
       case 'based_near':
+      case 'division':
       case 'language':
         new LinkedData(element, url)
       default:

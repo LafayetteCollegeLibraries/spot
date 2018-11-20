@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :publication do
     abstract ['A short description of the thing']
     academic_department ['Art']
+    based_near []
     bibliographic_citation ['Lastname, First. Title of piece.']
     contributor ['Contributor, First-Name', 'Person, Another']
     creator ['Creator, First-Name']
@@ -18,7 +19,7 @@ FactoryBot.define do
     organization ['Lafayette College']
     publisher ['Prestigious Press', 'Lafayette College']
     resource_type ['Article']
-    rights_statement [::RDF::URI('http://rightsstatements.org/vocab/CNE/1.0/')]
+    rights_statement []
     related_resource ['http://cool-resource.org']
     source ['Lafayette College', '_The_ Source for Good Publications']
     subject ['Cheese - Other']

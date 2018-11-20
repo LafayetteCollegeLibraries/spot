@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# @todo We should probably move the local-controlled-vocabulary
+#       transformation stuff into a mixin that adds a class_attribute
+#       where we can define those fields once + it takes care of
+#       the +build_permitted_params+ and +transform_nested_fields+ work
 module Hyrax
   class PublicationForm < Hyrax::Forms::WorkForm
     self.model_class = ::Publication
@@ -119,17 +123,36 @@ module Hyrax
         )
       end
 
+      # adds our custom fields to the fields allowed to be
+      # passed on to our objects
+      def build_permitted_params
+        super.tap do |params|
+          params << { identifier_prefix: [] }
+          params << { identifier_value: [] }
+
+          # locally controlled attibutes
+          params << {
+            language_attributes: [:id, :_destroy],
+            academic_department_attributes: [:id, :_destroy],
+            division_attributes: [:id, :_destroy]
+          }
+        end
+      end
+
+      # responsible for transforming the (permitted) form
+      # fields into attributes to apply to the model. if
+      # a form field needs to be transformed, this is probably
+      # the place to do it.
+      #
+      # @param [ActionController::Parameters, Hash] form_params
       # @return [Hash<Symbol => Array<String>>]
       def model_attributes(form_params)
-        prefixes = form_params.delete('identifier_prefix')
-        values = form_params.delete('identifier_value')
-
-        merged = prefixes.zip(values).map do |(key, value)|
-          Spot::Identifier.new(key, value).to_s
-        end.reject(&:blank?)
-
         super.tap do |params|
-          params[:identifier] = merged
+          transform_identifiers!(params)
+          transform_nested_fields!(params,
+                                  :language,
+                                  :academic_department,
+                                  :division)
 
           singular_terms.each do |term|
             params[term] = Array(params[term]) if params[term]
@@ -137,11 +160,77 @@ module Hyrax
         end
       end
 
-      def build_permitted_params
-        super.tap do |params|
-          params << { identifier_prefix: [] }
-          params << { identifier_value: [] }
-          params << { language_attributes: [:id, :_destroy] }
+      private
+
+      # transforms arrays of identifier prefixes
+      # and values into a single array of identifier
+      # strings and appends it to +form_params['identifier']+
+      #
+      # @param [ActiveController::Parameters, Hash] params
+      # @return [void]
+      def transform_identifiers!(params)
+        prefixes = params.delete('identifier_prefix')
+        values = params.delete('identifier_value')
+
+        return unless prefixes && values
+
+        mapped = prefixes.zip(values).map do |(key, value)|
+          Spot::Identifier.new(key, value).to_s
+        end.reject(&:blank?)
+
+        params['identifier'] = mapped if mapped
+      end
+
+      # there could probably be a clearer name for this.
+      # local controlled vocabulary fields are returned
+      # to the form looking like
+      # +WorkModel.accepts_nested_attributes_for+ properties.
+      # however, they're decidedly _not_ ActiveFedora nested
+      # attributes and they need to be transformed back.
+      # note that this step isn't necessary if we're
+      # just using the jquery-ui autocomplete field type.
+      #
+      # @example
+      #   def model_attributes(form_params)
+      #     super.tap do |params|
+      #       transform_nested_fields!(params, :language, :division)
+      #     end
+      #   end
+      #
+      #   # so that
+      #   #   {'language_attributes' => {'0' => { 'id' => 'en' }}}
+      #   # becomes
+      #   #   {'language' => ['en']}
+      #
+      # @param [ActionController::Parameters, Hash] params
+      # @param [Array<String,Symbol>] fields
+      # @return [void]
+      def transform_nested_fields!(params, *fields)
+        fields.flatten.each do |field|
+          attr_field_key = "#{field}_attributes"
+          next unless params.include?(attr_field_key)
+
+          values = transform_nested_attributes(params, attr_field_key)
+
+          params[field] = values || []
+        end
+      end
+
+      # flattens a nested_attribute hash into an array of
+      # ids. if the +_destroy+ key is present, the field
+      # is skipped, removing it from the record.
+      #
+      # @param [ActionController::Parameters,Hash] params
+      # @param [Symbol,String] field
+      # @return [Array<String>]
+      def transform_nested_attributes(params, field)
+        return if params[field].blank?
+
+        [].tap do |out|
+          params.delete(field.to_s).each do |_index, param|
+            next unless param['_destroy'].blank?
+            out << param['id'] if param['id']
+          end
         end
       end
     end

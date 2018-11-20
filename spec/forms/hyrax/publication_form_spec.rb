@@ -22,7 +22,6 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :publisher }
       it { is_expected.to include :source }
       it { is_expected.to include :resource_type }
-      it { is_expected.to include :language }
       it { is_expected.to include :abstract }
       it { is_expected.to include :description }
       it { is_expected.to include :identifier }
@@ -105,6 +104,26 @@ RSpec.describe Hyrax::PublicationForm do
         it 'returns nil' do
           expect(attributes[:identifier]).to be_empty
         end
+      end
+    end
+
+    context 'handles nested attributes' do
+      describe 'language' do
+        let(:field) { 'language' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
+      end
+
+      describe 'academic_department' do
+        let(:field) { 'academic_department' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
+      end
+
+      describe 'division' do
+        let(:field) { 'division' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
       end
     end
   end
