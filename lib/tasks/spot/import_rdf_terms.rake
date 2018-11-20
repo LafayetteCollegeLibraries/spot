@@ -1,12 +1,9 @@
 namespace :spot do
   namespace :rdf do
-    desc 'Loads LOC Language terms locally'
-    task load_languages: [:environment] do
-      reload_authorities('languages', 'http://id.loc.gov/vocabulary/iso639-1.nt')
-    end
-
-    def reload_authorities(name, source_files)
-      Spot::RDFAuthorityParser.import_rdf(name, Array(source_files))
+    desc 'Loads remote RDF terms locally'
+    task :load, [:name, :uri] => [:environment] do |_t, args|
+      abort 'Need to provide [name, uri] parameters' unless args[:name] && args[:uri]
+      Spot::RDFAuthorityParser.import_rdf(args[:name], Array(args[:uri]))
     end
   end
 end
