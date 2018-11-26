@@ -114,7 +114,7 @@ class Publication < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :license, predicate: ::RDF::Vocab::DC.rights
+  property :license, predicate: ::RDF::Vocab::DC.license
 
   # rights_statements are stored as URIs
   property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
