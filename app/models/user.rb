@@ -24,8 +24,4 @@ class User < ApplicationRecord
   def to_s
     email
   end
-
-  def trustee?
-    roles.where(name: 'trustee').exists?
-  end
 end

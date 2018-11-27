@@ -13,9 +13,5 @@ FactoryBot.define do
     factory :admin_user do
       roles { [Role.where(name: 'admin').first_or_create] }
     end
-
-    factory :trustee_user do
-      roles { [Role.where(name: 'trustee').first_or_create] }
-    end
   end
 end
