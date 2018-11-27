@@ -1,5 +1,3 @@
 RSpec.describe FileSet do
-  it "has tests" do
-    skip "Add your tests here"
-  end
+  it_behaves_like 'a model with hyrax core metadata'
 end
