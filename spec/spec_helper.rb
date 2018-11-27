@@ -19,6 +19,8 @@ require 'active_fedora/cleaner'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
+require 'hyrax/spec/matchers'
+require 'hyrax/spec/shared_examples'
 require 'hyrax/spec/factory_bot/build_strategies'
 require 'webmock/rspec'
 
