@@ -1,5 +1,4 @@
 RSpec.describe Collection do
-  it "has tests" do
-    skip "Add your tests here"
-  end
+  # the basic-metadata calls the core-metadata example
+  it_behaves_like 'a model with hyrax basic metadata'
 end
