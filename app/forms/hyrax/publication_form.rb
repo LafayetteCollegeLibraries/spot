@@ -127,8 +127,14 @@ module Hyrax
       # passed on to our objects
       def build_permitted_params
         super.tap do |params|
-          params << { identifier_prefix: [] }
-          params << { identifier_value: [] }
+          params << {
+            identifier_prefix: [],
+            identifier_value: [],
+
+            # language-tagged fields
+            title_value: [],
+            title_language: [],
+          }
 
           # locally controlled attibutes
           params << {
@@ -153,6 +159,8 @@ module Hyrax
                                   :language,
                                   :academic_department,
                                   :division)
+          transform_language_tagged_fields!(params,
+                                            :title)
 
           singular_terms.each do |term|
             params[term] = Array(params[term]) if params[term]
@@ -179,6 +187,36 @@ module Hyrax
         end.reject(&:blank?)
 
         params['identifier'] = mapped if mapped
+      end
+
+
+      # transforms arrays of field values + languages into RDF::Literals
+      # tagged with said language
+      #
+      # @param [ActiveController::Parameters, Hash<String => Array<String>>] params
+      # @param [String,Symbol] fields
+      # @return [void]
+      def transform_language_tagged_fields!(params, *fields)
+        fields.flatten.each do |field|
+          value_key = "#{field}_value"
+          lang_key = "#{field}_language"
+
+          next unless params.include?(value_key) && params.include?(lang_key)
+
+          values = params.delete(value_key)
+          langs = params.delete(lang_key)
+
+          mapped = values.zip(langs).map do |(value, lang)|
+            # need to skip blank entries here, otherwise we get a blank literal
+            # (""@"") which LDP doesn't like
+            next unless value.present?
+
+            # retain the value if no language tag is passed
+            lang.present? ? RDF::Literal(value, language: lang.to_sym) : value
+          end.reject(&:blank?)
+
+          params[field] = mapped if mapped
+        end
       end
 
       # there could probably be a clearer name for this.

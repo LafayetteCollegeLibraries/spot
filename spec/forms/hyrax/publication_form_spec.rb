@@ -72,8 +72,7 @@ RSpec.describe Hyrax::PublicationForm do
   describe '.build_permitted_params' do
     subject { described_class.build_permitted_params }
 
-    it { is_expected.to include({ identifier_prefix: [] }) }
-    it { is_expected.to include({ identifier_value: [] }) }
+    it { is_expected.to be_an Array }
   end
 
   describe '.model_attributes' do
@@ -125,6 +124,26 @@ RSpec.describe Hyrax::PublicationForm do
 
         it_behaves_like 'it transforms a local vocabulary attribute'
       end
+    end
+
+    context 'parses *_value and *_language into tagged RDF::Literals' do
+      subject { attributes['title'] }
+
+      let(:params) do
+        {
+          'title_value' => ["the Exorcist", 'L\'exorciste', ''],
+          'title_language' => ['', 'fr', '']
+        }
+      end
+
+      let(:tagged_literals) do
+        [
+          'the Exorcist',
+          RDF::Literal("L'exorciste", language: :fr),
+        ]
+      end
+
+      it { is_expected.to eq tagged_literals }
     end
   end
 end
