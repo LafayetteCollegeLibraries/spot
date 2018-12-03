@@ -95,6 +95,10 @@ module Hyrax
       self['date_available'].first
     end
 
+    def title
+      self['title'].first
+    end
+
     class << self
 
       # samvera/hydra-editor uses both the class method (new form) and
@@ -120,6 +124,7 @@ module Hyrax
           abstract
           date_issued
           date_available
+          title
         )
       end
 
@@ -127,20 +132,23 @@ module Hyrax
       # passed on to our objects
       def build_permitted_params
         super.tap do |params|
+          # singular value/language fields
+          params << :title_value
+          params << :title_language
+
           params << {
+            # identifier fields
             identifier_prefix: [],
             identifier_value: [],
 
-            # language-tagged fields
-            title_value: [],
-            title_language: [],
-          }
+            # multiple value/language fields
+            title_alternative_value: [],
+            title_alternative_language: [],
 
-          # locally controlled attibutes
-          params << {
+            # locally controlled attibutes
             language_attributes: [:id, :_destroy],
             academic_department_attributes: [:id, :_destroy],
-            division_attributes: [:id, :_destroy]
+            division_attributes: [:id, :_destroy],
           }
         end
       end
@@ -160,7 +168,8 @@ module Hyrax
                                   :academic_department,
                                   :division)
           transform_language_tagged_fields!(params,
-                                            :title)
+                                            :title,
+                                            :title_alternative)
 
           singular_terms.each do |term|
             params[term] = Array(params[term]) if params[term]
@@ -203,8 +212,8 @@ module Hyrax
 
           next unless params.include?(value_key) && params.include?(lang_key)
 
-          values = params.delete(value_key)
-          langs = params.delete(lang_key)
+          values = Array(params.delete(value_key))
+          langs = Array(params.delete(lang_key))
 
           mapped = values.zip(langs).map do |(value, lang)|
             # need to skip blank entries here, otherwise we get a blank literal
@@ -216,6 +225,7 @@ module Hyrax
           end.reject(&:blank?)
 
           params[field] = mapped if mapped
+          params[field] = params[field].first unless multiple?(field)
         end
       end
 

@@ -66,6 +66,7 @@ RSpec.describe Hyrax::PublicationForm do
       expect(form.multiple?('issued')).to be false
       expect(form.multiple?('available')).to be false
       expect(form.multiple?('date_created')).to be false
+      expect(form.multiple?('title')).to be false
     end
   end
 
@@ -139,7 +140,7 @@ RSpec.describe Hyrax::PublicationForm do
       let(:tagged_literals) do
         [
           'the Exorcist',
-          RDF::Literal("L'exorciste", language: :fr),
+          RDF::Literal("L'exorciste", language: :fr)
         ]
       end
 
