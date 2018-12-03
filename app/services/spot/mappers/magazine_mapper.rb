@@ -7,10 +7,8 @@ module Spot::Mappers
 
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
-      description: 'TitleInfoPartNumber',
       publisher: 'OriginInfoPublisher',
       source: 'RelatedItemHost_1_TitleInfoTitle',
-      subtitle: 'TitleInfoSubtitle'
     }.freeze
 
     # Darlingtonia's Mapper pattern relies on this returned array to
@@ -23,9 +21,11 @@ module Spot::Mappers
       super + %i[
         based_near_attributes
         date_issued
+        description
         identifier
         related_resource
         resource_type
+        subtitle
         title
       ]
     end
@@ -56,6 +56,15 @@ module Spot::Mappers
       end
     end
 
+    # Maps magazine descriptions to English-tagged RDF literals
+    #
+    # @return [Array<RDF::Literal>]
+    def description
+      metadata['TitleInfoPartNumber'].reject(&:blank?).map do |desc|
+        RDF::Literal(desc, language: :en)
+      end
+    end
+
     # Creates a local identifier using the 'Publication Sequence' number
     #
     # @return [Array<String>]
@@ -82,11 +91,29 @@ module Spot::Mappers
       ['Journal']
     end
 
+    # Maps subtitles to English-tagged RDF literals
+    #
+    # @return [Array<RDF::Literal>]
+    def subtitle
+      metadata['TitleInfoSubtitle'].reject(&:blank?).map do |subtitle|
+        RDF::Literal(subtitle, language: :en)
+      end
+    end
+
+    # Our joined titles mapped to RDF literals (tagged English)
+    #
+    # @return [Array<RDF::Literal>]
+    def title
+      parsed_title.map { |title| RDF::Literal(title, language: :en) }
+    end
+
+    private
+
     # The display title is a combination of the `TitleInfoNonSort`,
     # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
     #
     # @return [Array<String>]
-    def title
+    def parsed_title
       non_sort = metadata['TitleInfoNonSort'].first
       info_title = metadata['TitleInfoTitle'].first
       date = metadata['PartDate_NaturalLanguage']
