@@ -50,7 +50,7 @@ module LanguageTagging
   # @param [RDF::Literal, String] raw_value
   # @param [Integer] _index not used
   # @return [String] HTML content for field row
-  def build_field(raw_value, _index = nil)
+  def build_field(raw_value, index = nil)
     value, language = parse_value(raw_value)
 
     <<-HTML
@@ -150,7 +150,7 @@ module LanguageTagging
   #
   # @return [TrueClass, FalseClass]
   def has_multiple_method?
-    self.private_methods.include?(:multiple?) || self.methods.include(:multiple?)
+    self.private_methods.include?(:multiple?) || self.methods.include?(:multiple?)
   end
 
   # extract the value + language from possible raw values: either an RDF::Literal
