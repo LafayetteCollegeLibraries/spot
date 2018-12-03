@@ -78,7 +78,7 @@ module LanguageTagging
     # convert name from 'publication[title]' to 'publication[title_value]'
     options[:name] = options[:name].gsub(/\[([^\]]+)\]/, '[\1_value]')
 
-    if options.delete(:type) == 'textarea'
+    if options.delete(:type).to_s == 'textarea'
       @builder.text_area(attribute_name, options)
     else
       @builder.text_field(attribute_name, options)

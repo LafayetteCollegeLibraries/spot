@@ -128,37 +128,20 @@ RSpec.describe Hyrax::PublicationForm do
     end
 
     context 'parses *_value and *_language into tagged RDF::Literals' do
-      context 'title' do
-        subject { attributes['title'] }
+      %w(title abstract).each do |field_name|
+        context field_name do
+          let(:field) { field_name }
 
-        let(:params) do
-          {
-            'title_value' => 'the Exorcist',
-            'title_language' => 'en'
-          }
+          it_behaves_like 'a parsed language-tagged literal (single)'
         end
-
-        it { is_expected.to eq [RDF::Literal('the Exorcist', language: :en)] }
       end
 
-      context 'title_alternative' do
-        subject { attributes['title_alternative'] }
+      %w(title_alternative subtitle description).each do |field_name|
+        context field_name do
+          let(:field) { field_name }
 
-        let(:params) do
-          {
-            'title_alternative_value' => ['Exorcist, the', 'L\'exorciste', ''],
-            'title_alternative_language' => ['', 'fr', '']
-          }
+          it_behaves_like 'a parsed language-tagged literal (multiple)'
         end
-
-        let(:tagged_literals) do
-          [
-            'Exorcist, the',
-            RDF::Literal("L'exorciste", language: :fr)
-          ]
-        end
-
-        it { is_expected.to eq tagged_literals }
       end
     end
   end

@@ -135,6 +135,8 @@ module Hyrax
           # singular value/language fields
           params << :title_value
           params << :title_language
+          params << :abstract_value
+          params << :abstract_language
 
           params << {
             # identifier fields
@@ -144,6 +146,10 @@ module Hyrax
             # multiple value/language fields
             title_alternative_value: [],
             title_alternative_language: [],
+            subtitle_value: [],
+            subtitle_language: [],
+            description_value: [],
+            description_language: [],
 
             # locally controlled attibutes
             language_attributes: [:id, :_destroy],
@@ -169,7 +175,10 @@ module Hyrax
                                   :division)
           transform_language_tagged_fields!(params,
                                             :title,
-                                            :title_alternative)
+                                            :title_alternative,
+                                            :subtitle,
+                                            :abstract,
+                                            :description)
 
           singular_terms.each do |term|
             params[term] = Array(params[term]) if params[term]
