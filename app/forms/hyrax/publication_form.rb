@@ -6,6 +6,13 @@
 #       the +build_permitted_params+ and +transform_nested_fields+ work
 module Hyrax
   class PublicationForm < Hyrax::Forms::WorkForm
+    include ::IdentifierFormFields
+    include ::LanguageTaggedFormFields
+    include ::NestedFormFields
+
+    transforms_language_tags_for :title, :title_alternative, :subtitle, :abstract, :description
+    transforms_nested_fields_for :language, :academic_department, :division
+
     self.model_class = ::Publication
     self.required_fields = [:title]
     self.terms = [
@@ -80,14 +87,9 @@ module Hyrax
       ]
     end
 
-    # @return [String]
+    # @return [String, RDF::Literal]
     def abstract
       self['abstract'].first
-    end
-
-    # @return [String]
-    def date_issued
-      self['date_issued'].first
     end
 
     # @return [String]
@@ -95,6 +97,12 @@ module Hyrax
       self['date_available'].first
     end
 
+    # @return [String]
+    def date_issued
+      self['date_issued'].first
+    end
+
+    # @return [String, RDF::Literal]
     def title
       self['title'].first
     end
@@ -120,174 +128,37 @@ module Hyrax
       # @return [Array<Symbol>]
       def singular_terms
         %i(
-          resource_type
           abstract
           date_issued
           date_available
+          resource_type
           title
         )
       end
 
-      # adds our custom fields to the fields allowed to be
-      # passed on to our objects
-      def build_permitted_params
-        super.tap do |params|
-          # singular value/language fields
-          params << :title_value
-          params << :title_language
-          params << :abstract_value
-          params << :abstract_language
-
-          params << {
-            # identifier fields
-            identifier_prefix: [],
-            identifier_value: [],
-
-            # multiple value/language fields
-            title_alternative_value: [],
-            title_alternative_language: [],
-            subtitle_value: [],
-            subtitle_language: [],
-            description_value: [],
-            description_language: [],
-
-            # locally controlled attibutes
-            language_attributes: [:id, :_destroy],
-            academic_department_attributes: [:id, :_destroy],
-            division_attributes: [:id, :_destroy],
-          }
-        end
-      end
-
-      # responsible for transforming the (permitted) form
-      # fields into attributes to apply to the model. if
-      # a form field needs to be transformed, this is probably
-      # the place to do it.
+      # Used to transform values from the form into those that
+      # get added to the object.
       #
       # @param [ActionController::Parameters, Hash] form_params
       # @return [Hash<Symbol => Array<String>>]
       def model_attributes(form_params)
         super.tap do |params|
-          transform_identifiers!(params)
-          transform_nested_fields!(params,
-                                  :language,
-                                  :academic_department,
-                                  :division)
-          transform_language_tagged_fields!(params,
-                                            :title,
-                                            :title_alternative,
-                                            :subtitle,
-                                            :abstract,
-                                            :description)
-
-          singular_terms.each do |term|
-            params[term] = Array(params[term]) if params[term]
-          end
+          pluralize_singular_fields!(params)
         end
       end
 
       private
 
-      # transforms arrays of identifier prefixes
-      # and values into a single array of identifier
-      # strings and appends it to +form_params['identifier']+
+      # We've chosen to enforce single fields at the form level,
+      # rather than at the model. This appears to be more flexible
+      # than updating a model property and possibly encountering
+      # ActiveFedora errors when older works are out of sync.
       #
-      # @param [ActiveController::Parameters, Hash] params
+      # @param [ActiveController::Parameters, Hash<String => *>]
       # @return [void]
-      def transform_identifiers!(params)
-        prefixes = params.delete('identifier_prefix')
-        values = params.delete('identifier_value')
-
-        return unless prefixes && values
-
-        mapped = prefixes.zip(values).map do |(key, value)|
-          Spot::Identifier.new(key, value).to_s
-        end.reject(&:blank?)
-
-        params['identifier'] = mapped if mapped
-      end
-
-
-      # transforms arrays of field values + languages into RDF::Literals
-      # tagged with said language
-      #
-      # @param [ActiveController::Parameters, Hash<String => Array<String>>] params
-      # @param [String,Symbol] fields
-      # @return [void]
-      def transform_language_tagged_fields!(params, *fields)
-        fields.flatten.each do |field|
-          value_key = "#{field}_value"
-          lang_key = "#{field}_language"
-
-          next unless params.include?(value_key) && params.include?(lang_key)
-
-          values = Array(params.delete(value_key))
-          langs = Array(params.delete(lang_key))
-
-          mapped = values.zip(langs).map do |(value, lang)|
-            # need to skip blank entries here, otherwise we get a blank literal
-            # (""@"") which LDP doesn't like
-            next unless value.present?
-
-            # retain the value if no language tag is passed
-            lang.present? ? RDF::Literal(value, language: lang.to_sym) : value
-          end.reject(&:blank?)
-
-          params[field] = mapped if mapped
-          params[field] = params[field].first unless multiple?(field)
-        end
-      end
-
-      # there could probably be a clearer name for this.
-      # local controlled vocabulary fields are returned
-      # to the form looking like
-      # +WorkModel.accepts_nested_attributes_for+ properties.
-      # however, they're decidedly _not_ ActiveFedora nested
-      # attributes and they need to be transformed back.
-      # note that this step isn't necessary if we're
-      # just using the jquery-ui autocomplete field type.
-      #
-      # @example
-      #   def model_attributes(form_params)
-      #     super.tap do |params|
-      #       transform_nested_fields!(params, :language, :division)
-      #     end
-      #   end
-      #
-      #   # so that
-      #   #   {'language_attributes' => {'0' => { 'id' => 'en' }}}
-      #   # becomes
-      #   #   {'language' => ['en']}
-      #
-      # @param [ActionController::Parameters, Hash] params
-      # @param [Array<String,Symbol>] fields
-      # @return [void]
-      def transform_nested_fields!(params, *fields)
-        fields.flatten.each do |field|
-          attr_field_key = "#{field}_attributes"
-          next unless params.include?(attr_field_key)
-
-          values = transform_nested_attributes(params, attr_field_key)
-
-          params[field] = values || []
-        end
-      end
-
-      # flattens a nested_attribute hash into an array of
-      # ids. if the +_destroy+ key is present, the field
-      # is skipped, removing it from the record.
-      #
-      # @param [ActionController::Parameters,Hash] params
-      # @param [Symbol,String] field
-      # @return [Array<String>]
-      def transform_nested_attributes(params, field)
-        return if params[field].blank?
-
-        [].tap do |out|
-          params.delete(field.to_s).each do |_index, param|
-            next unless param['_destroy'].blank?
-            out << param['id'] if param['id']
-          end
+      def pluralize_singular_fields!(params)
+        singular_terms.each do |term|
+          params[term] = Array(params[term]) if params[term]
         end
       end
     end

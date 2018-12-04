@@ -81,6 +81,7 @@ RSpec.describe Hyrax::PublicationForm do
 
     let(:raw_params) { ActionController::Parameters.new(params) }
 
+
     context 'when passed identifier_prefix and identifier_value' do
       let(:params) do
         {
