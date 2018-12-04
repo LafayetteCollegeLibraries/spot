@@ -40,12 +40,14 @@
 # (see: #build_field_options, #autocomplete_name) and I have some
 # concerns about its fragility. But so far so good!
 module LanguageTagging
+
   # Overriding the default method to append a notice that this field can be
   # tagged with a language.
   #
   # @todo move this to a locale
+  # @param [Hash] _wrapper_options Not used
   # @return [String]
-  def hint
+  def hint(_wrapper_options = nil)
     default_hint = super
     return unless default_hint
 
