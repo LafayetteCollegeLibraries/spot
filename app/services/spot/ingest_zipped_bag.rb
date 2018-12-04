@@ -4,20 +4,13 @@ require 'fileutils'
 
 module Spot
   class IngestZippedBag
-    AVAILABLE_MAPPERS = {
-      ldr: Mappers::LdrDspaceMapper,
-      magazine: Mappers::MagazineMapper,
-      newspaper: Mappers::NewspaperMapper,
-      shakespeare: Mappers::ShakespeareBulletinMapper,
-    }
-
     def initialize(zip_path, source: nil)
       raise ArgumentError, 'Need to provide a `source:` value for a mapper' if source.nil?
       raise ArgumentError, "Unknown `source`: #{source}. Choose one of: #{sources.join(', ')}" unless sources.include?(source)
 
       @zip_path = zip_path
       @tmp_bag_path = ::Rails.root.join('tmp', 'ingest', File.basename(@zip_path, '.zip'))
-      @mapper = AVAILABLE_MAPPERS[source]
+      @mapper = Spot::Mappers.get(source)
     end
 
     def perform
@@ -29,7 +22,7 @@ module Spot
     private
 
     def sources
-      AVAILABLE_MAPPERS.keys
+      Spot::Mappers.available_mappers.keys
     end
 
     def unzip_to_tmp_path
