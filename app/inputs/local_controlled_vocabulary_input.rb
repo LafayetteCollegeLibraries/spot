@@ -20,14 +20,27 @@
 #
 # Because this isn't a "traditional" nested_attributes case,
 # you'll have to add handling for this field within your
-# hydra-editor form.
+# hydra-editor form (see {NestedFormFields} concern).
 class LocalControlledVocabularyInput < ControlledVocabularyInput
+
+  # We want to piggy-back off the Hyrax ControlledVocabularyInput's
+  # Javascript goodness, so we stuff that value to give the js something
+  # to work with.
+  #
+  # @return [String]
   def input_type
     'controlled_vocabulary'
   end
 
   private
 
+  # Copied from {Hyrax::ControlledVocabularyInput}, but strips out
+  # any of the RDF-related work. This is called from
+  # {LocalControlledVocabularyInput#input}.
+  #
+  # @param [String] value
+  # @param [Integer] index
+  # @return [String] HTML of the input
   def build_field(value, index)
     options = input_html_options.dup
     build_options(value, index, options)
@@ -37,6 +50,13 @@ class LocalControlledVocabularyInput < ControlledVocabularyInput
     text_field(options) + hidden_id_field(value, index) + destroy_widget(attribute_name, index)
   end
 
+  # Builds out the options used to render the text field.
+  # Transforms the options object in place.
+  #
+  # @param [String] value
+  # @param [Integer] index
+  # @param [Hash] options dup'd from {LocalControlledVocabularyInput#input_html_options}
+  # @return [void]
   def build_options(value, index, options)
     options[:name] = name_for(attribute_name, index, 'hidden_label')
     options[:data] ||= {}
@@ -52,6 +72,12 @@ class LocalControlledVocabularyInput < ControlledVocabularyInput
     options[:'aria-labeledby'] = label_id
   end
 
+  # Builds the +<input type="hidden"/>+ element used to capture the
+  # ID from the js autocomplete widget.
+  #
+  # @param [String] value
+  # @param [Integer] index
+  # @return [String] HTML element
   def hidden_id_field(value, index)
     name = name_for(attribute_name, index, 'id')
     id = id_for(attribute_name, index, 'id')
@@ -63,6 +89,10 @@ class LocalControlledVocabularyInput < ControlledVocabularyInput
                           data: { id: 'remote' })
   end
 
+  # Builds out the values for our object and inserts an empty option at the end
+  #
+  # @todo why is this here? :sweat_smile:
+  # @return [Array<String>]
   def collection
     @collection ||= begin
                       val = object[attribute_name]
