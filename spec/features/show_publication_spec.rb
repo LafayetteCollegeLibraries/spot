@@ -100,7 +100,7 @@ RSpec.feature 'Show Publication page', js: false do
     scenario 'the UniversalViewer is displayed' do
       viewer = page.find('.uv.viewer')
       expect(viewer).to be_present
-      expect(viewer[:'data-uri']).to eq "#{item_base_url}/manifest"
+      expect(viewer[:'data-uri']).to include "#{item_base_url}/manifest"
     end
   end
 end
