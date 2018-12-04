@@ -46,9 +46,10 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#description' do
     subject { mapper.description }
 
-    let(:field) { 'TitleInfoPartNumber' }
+    let(:metadata) { {'TitleInfoPartNumber' => ['A description']} }
+    let(:value) { [RDF::Literal('A description', language: :en)] }
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq value }
   end
 
   describe '#identifier' do
@@ -110,8 +111,8 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#subtitle' do
     subject { mapper.subtitle }
 
-    let(:metadata) { {'TitleInfoSubtitle' => value} }
-    let(:value) { ['A prestigious publication'] }
+    let(:metadata) { {'TitleInfoSubtitle' => ['A prestigious publication']} }
+    let(:value) { [RDF::Literal('A prestigious publication', language: :en)] }
 
     it { is_expected.to eq value }
   end
@@ -120,7 +121,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     subject { mapper.title }
 
     context 'when `TitleInfoNonSort` exists' do
-      let(:value) { ['The Lafayette'] }
+      let(:value) { [RDF::Literal('The Lafayette', language: :en)] }
       let(:metadata) do
         {
           'TitleInfoNonSort' => ['The'],
@@ -132,7 +133,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     end
 
     context 'when `TitleInfoNonSort` does not exist' do
-      let(:value) { ['Lafayette'] }
+      let(:value) { [RDF::Literal('Lafayette', language: :en)] }
       let(:metadata) do
         {
           'TitleInfoNonSort' => [],
@@ -144,7 +145,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     end
 
     context 'when `PartDate_NaturalLanguage` is present' do
-      let(:value) { ['The Lafayette (November 1930)'] }
+      let(:value) { [RDF::Literal('The Lafayette (November 1930)', language: :en)] }
       let(:metadata) do
         {
           'TitleInfoNonSort' => ['The'],

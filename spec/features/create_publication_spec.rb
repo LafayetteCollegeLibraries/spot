@@ -29,7 +29,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         expect(page).to have_content "Add New #{i18n_term}"
 
         fill_in 'publication_title', with: attrs[:title].first
-        expect(page).to have_css '.publication_title .controls-add-text'
+        expect(page).not_to have_css '.publication_title .controls-add-text'
 
         fill_in 'Subtitle', with: attrs[:subtitle].first
         expect(page).to have_css '.publication_subtitle .controls-add-text'

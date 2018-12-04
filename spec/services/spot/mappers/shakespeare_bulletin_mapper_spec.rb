@@ -74,10 +74,29 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#subtitle' do
+    subject { mapper.subtitle }
+
+    let(:metadata) do
+      {
+        'titleInfo_subTitle' => ['2 be or not 2 be']
+      }
+    end
+
+    let(:value) { [RDF::Literal('2 be or not 2 be', language: :en)] }
+
+    it { is_expected.to eq value }
+  end
+
   describe '#title' do
     subject { mapper.title }
 
-    let(:title) { ['Shakespeare Bulletin (May, 1983) [vol. 1, no. 11]']}
+    let(:title) do
+      [
+        RDF::Literal('Shakespeare Bulletin (May, 1983) [vol. 1, no. 11]', language: :en)
+      ]
+    end
+
     let(:metadata) do
       {
         'titleInfo_Title' => ['Shakespeare Bulletin'],
@@ -92,7 +111,7 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     it { is_expected.to eq title }
 
     context 'when just a title exists' do
-      let(:title) { ['Shakespeare Bulletin'] }
+      let(:title) { [RDF::Literal('Shakespeare Bulletin', language: :en)] }
       let(:metadata) { {'titleInfo_Title' => ['Shakespeare Bulletin']} }
 
       it { is_expected.to eq title }

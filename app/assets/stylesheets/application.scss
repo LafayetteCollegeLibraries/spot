@@ -36,3 +36,9 @@ ul.tabular {
   margin-bottom: .5rem;
   margin-top: .5rem;
 }
+
+// undoing `max-width: 40em` that hydra-editor sets;
+.multi_value .listing,
+.controlled_vocabulary .listing {
+  max-width: 100%;
+}

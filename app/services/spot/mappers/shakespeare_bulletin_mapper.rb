@@ -6,7 +6,6 @@ module Spot::Mappers
     self.fields_map = {
       publisher: 'originInfo_Publisher',
       source: 'relatedItem_typeHost_titleInfo_title',
-      subtitle: 'titleInfo_subTitle'
     }.freeze
 
     def fields
@@ -16,6 +15,7 @@ module Spot::Mappers
         date_issued
         editor
         identifier
+        subtitle
         title
       ]
     end
@@ -68,6 +68,13 @@ module Spot::Mappers
       end
     end
 
+    # @return [Array<RDF::Literal>]
+    def subtitle
+      metadata['titleInfo_subTitle'].reject(&:blank?).map do |subtitle|
+        RDF::Literal(subtitle, language: :en)
+      end
+    end
+
     # From our remediation notes:
     #
     #   Append <relatedItem_part1_date_qualifierApproximate>
@@ -77,7 +84,7 @@ module Spot::Mappers
     #     AND <relatedItem_part1_detail1_typeIssue_number>
     #     properties to title for Shakespeare Bulletin Collection.
     #
-    # @return [Array<String>]
+    # @return [Array<RDF::Literal>]
     def title
       base_title = metadata['titleInfo_Title'].first
       date_qualifier = metadata['relatedItem_part1_date_qualifierApproximate']
@@ -98,7 +105,9 @@ module Spot::Mappers
       parenthetical = "(#{date_qualifier.first})" unless date_qualifier.blank?
       volume_issue = "[#{volume_issue_block}]" unless volume_issue_block.blank?
 
-      [[base_title, parenthetical, volume_issue].reject(&:blank?).join(' ')]
+      joined = [base_title, parenthetical, volume_issue].reject(&:blank?).join(' ')
+
+      [RDF::Literal(joined, language: :en)]
     end
 
     private

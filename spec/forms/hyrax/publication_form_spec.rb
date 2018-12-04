@@ -66,20 +66,21 @@ RSpec.describe Hyrax::PublicationForm do
       expect(form.multiple?('issued')).to be false
       expect(form.multiple?('available')).to be false
       expect(form.multiple?('date_created')).to be false
+      expect(form.multiple?('title')).to be false
     end
   end
 
   describe '.build_permitted_params' do
     subject { described_class.build_permitted_params }
 
-    it { is_expected.to include({ identifier_prefix: [] }) }
-    it { is_expected.to include({ identifier_value: [] }) }
+    it { is_expected.to be_an Array }
   end
 
   describe '.model_attributes' do
     subject(:attributes) { described_class.model_attributes(raw_params) }
 
     let(:raw_params) { ActionController::Parameters.new(params) }
+
 
     context 'when passed identifier_prefix and identifier_value' do
       let(:params) do
@@ -124,6 +125,24 @@ RSpec.describe Hyrax::PublicationForm do
         let(:field) { 'division' }
 
         it_behaves_like 'it transforms a local vocabulary attribute'
+      end
+    end
+
+    context 'parses *_value and *_language into tagged RDF::Literals' do
+      %w(title abstract).each do |field_name|
+        context field_name do
+          let(:field) { field_name }
+
+          it_behaves_like 'a parsed language-tagged literal (single)'
+        end
+      end
+
+      %w(title_alternative subtitle description).each do |field_name|
+        context field_name do
+          let(:field) { field_name }
+
+          it_behaves_like 'a parsed language-tagged literal (multiple)'
+        end
       end
     end
   end

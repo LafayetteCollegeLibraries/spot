@@ -55,9 +55,10 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#description' do
     subject { mapper.description }
 
-    let(:field) { 'dc:description' }
+    let(:metadata) { { 'dc:description' => ['Some informative words'] } }
+    let(:value) { [RDF::Literal('Some informative words', language: :en)] }
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq value }
   end
 
   describe '#identifier' do
@@ -122,8 +123,9 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#title' do
     subject { mapper.title }
 
-    let(:field) { 'dc:title' }
+    let(:metadata) { { 'dc:title' => ['A modern masterpiece'] } }
+    let(:value) { [RDF::Literal('A modern masterpiece', language: :en)] }
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq value }
   end
 end
