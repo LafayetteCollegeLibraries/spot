@@ -40,6 +40,18 @@
 # (see: #build_field_options, #autocomplete_name) and I have some
 # concerns about its fragility. But so far so good!
 module LanguageTagging
+  # Overriding the default method to append a notice that this field can be
+  # tagged with a language.
+  #
+  # @todo move this to a locale
+  # @return [String]
+  def hint
+    default_hint = super
+    return unless default_hint
+
+    "#{default_hint} <strong>#{hint_text}</strong>".html_safe
+  end
+
   private
 
   # If inheriting from MultiValueInput, this method is called from
@@ -55,10 +67,10 @@ module LanguageTagging
 
     <<-HTML
     <div class="row">
-      <div class="form-group col-sm-10">
+      <div class="col-sm-10">
         #{build_input(value, index)}
       </div>
-      <div class="form-group col-sm-2">
+      <div class="col-sm-2">
         #{build_language_autocomplete(language)}
       </div>
     </div>
@@ -96,6 +108,7 @@ module LanguageTagging
     options = {
       value: val,
       name: autocomplete_name,
+      placeholder: autocomplete_placeholder,
       class: 'form-control',
       data: {
         'autocomplete-url': '/authorities/search/language',
@@ -112,6 +125,7 @@ module LanguageTagging
   #
   # @param [String] value
   # @param [Integer] _index (not used here)
+  # @return [Hash<Symbol => *>]
   def build_field_options(value, _index)
     return super if defined?(super)
 
@@ -126,6 +140,12 @@ module LanguageTagging
       options[:class] += ["#{dom_id} form-control"]
       options[:'aria-labelledby'] ||= "#{dom_id}_label"
     end
+  end
+
+  # @todo move this to a locale
+  # @return [String]
+  def hint_text
+    'This field may be tagged with a language'
   end
 
   # @param [String, Symbol] key
@@ -143,6 +163,12 @@ module LanguageTagging
     return base unless has_multiple_method? && multiple?
 
     "#{base}[]"
+  end
+
+  # @todo move this to a locale
+  # @return [String]
+  def autocomplete_placeholder
+    'Language'
   end
 
   # This has a pretty bad code-smell, but it's the best solution I could
