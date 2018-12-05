@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-require 'zip'
-require 'fileutils'
-
 module Spot
   class IngestZippedBag
     def initialize(zip_path, source: nil)
@@ -26,13 +23,7 @@ module Spot
     end
 
     def unzip_to_tmp_path
-      FileUtils.mkdir_p @tmp_bag_path
-
-      Zip::File.open(@zip_path) do |zip_file|
-        zip_file.each do |entry|
-          entry.extract(File.join(@tmp_bag_path, entry.name))
-        end
-      end
+      ZipService.new(src_path: @zip_path).unzip!(dest_path: @tmp_bag_path)
     end
 
     def delete_tmp_path
