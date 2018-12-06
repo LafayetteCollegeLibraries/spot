@@ -22,6 +22,8 @@ module Spot::Mappers
       date_available: 'date.available'
     }.freeze
 
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+
     # Mapper#fields is what generates the hash of attributes that are passed
     # to the model's `.new` method. for the most part, the FIELDS_MAP
     # hash will work fine, but there are some cases where we'll provide our

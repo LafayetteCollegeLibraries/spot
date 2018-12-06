@@ -11,6 +11,8 @@ module Spot::Mappers
       source: 'RelatedItemHost_1_TitleInfoTitle',
     }.freeze
 
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+
     # Darlingtonia's Mapper pattern relies on this returned array to
     # determine what fields to include on the object. When a method is
     # missing, it uses the <code>fields</code> Hash to find the

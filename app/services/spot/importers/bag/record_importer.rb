@@ -31,12 +31,6 @@ module Spot::Importers::Bag
         error_stream << '[WARN] no files found for this bag'
       end
 
-      attributes[:visibility] = if record.respond_to? :visibility
-                                  record.visibility
-                                else
-                                  default_visibility
-                                end
-
       actor_env = environment.new(created, ability, attributes)
 
       Hyrax::CurationConcern.actor.create(actor_env) &&
@@ -60,13 +54,6 @@ module Spot::Importers::Bag
       depositor.save(validate: false) if depositor.new_record?
 
       Ability.new(depositor)
-    end
-
-    # Defaulting to 'open' visibility
-    #
-    # @return [String]
-    def default_visibility
-      ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
     def environment

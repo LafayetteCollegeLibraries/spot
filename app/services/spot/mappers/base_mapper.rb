@@ -42,8 +42,10 @@
 # @todo Add collection/admin_set handling at this level? If not where?
 module Spot::Mappers
   class BaseMapper < ::Darlingtonia::MetadataMapper
-    class_attribute :fields_map
+    class_attribute :fields_map, :default_visibility
+
     self.fields_map = {}
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
 
     # Fields related to ActiveFedora::Base properties that will be set
     # on new works. This returns an array of symbols and is called from
@@ -51,7 +53,7 @@ module Spot::Mappers
     #
     # @return [Array<Symbol>]
     def fields
-      self.fields_map.keys
+      self.fields_map.keys + [:visibility]
     end
 
     # @param [String, Symbol] name The field name
@@ -77,5 +79,11 @@ module Spot::Mappers
       metadata[:representative_files]
     end
     alias_method :representative_file, :representative_files
+
+    # @return [String]
+    def visibility
+      return metadata[:visibility] if metadata.include?(:visibility)
+      default_visibility
+    end
   end
 end

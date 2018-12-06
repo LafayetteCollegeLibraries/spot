@@ -13,6 +13,8 @@ module Spot::Mappers
       rights_statement: 'dc:rights',
     }.freeze
 
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+
     def fields
       super + %i[
         based_near_attributes

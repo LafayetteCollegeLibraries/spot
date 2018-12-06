@@ -8,6 +8,8 @@ module Spot::Mappers
       source: 'relatedItem_typeHost_titleInfo_title',
     }.freeze
 
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+
     def fields
       super + %i[
         based_near_attributes

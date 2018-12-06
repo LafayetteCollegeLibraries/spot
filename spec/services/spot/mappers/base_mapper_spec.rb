@@ -19,7 +19,7 @@ RSpec.describe Spot::Mappers::BaseMapper do
       mapper.class.fields_map = @previous_fields_map
     end
 
-    it { is_expected.to eq [:title] }
+    it { is_expected.to eq [:title, :visibility] }
   end
 
   describe '#map_field' do
@@ -54,5 +54,20 @@ RSpec.describe Spot::Mappers::BaseMapper do
     let(:metadata) { {representative_files: paths} }
 
     it { is_expected.to eq paths }
+  end
+
+  describe '#visibility' do
+    subject { mapper.visibility }
+
+    context 'when none provided in metadata' do
+      it { is_expected.to eq described_class.default_visibility }
+    end
+
+    context 'when defined in metadata' do
+      let(:value) { 'open!' }
+      let(:metadata) { { visibility: value } }
+
+      it { is_expected.to eq value }
+    end
   end
 end
