@@ -2,7 +2,7 @@
 require 'uri'
 
 module Spot::Mappers
-  class LdrDspaceMapper < BaseHashMapper
+  class LdrDspaceMapper < BaseMapper
     include NestedAttributes
 
     # Our home-grown HashMapper requires this property to return a hash

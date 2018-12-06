@@ -1,5 +1,5 @@
 module Spot::Mappers
-  class ShakespeareBulletinMapper < BaseHashMapper
+  class ShakespeareBulletinMapper < BaseMapper
     include ShortDateConversion
     include NestedAttributes
 

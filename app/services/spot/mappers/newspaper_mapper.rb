@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class NewspaperMapper < BaseHashMapper
+  class NewspaperMapper < BaseMapper
     include NestedAttributes
 
     self.fields_map = {

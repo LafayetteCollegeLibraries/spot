@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class MagazineMapper < BaseHashMapper
+  class MagazineMapper < BaseMapper
     include ShortDateConversion
     include NestedAttributes
 
