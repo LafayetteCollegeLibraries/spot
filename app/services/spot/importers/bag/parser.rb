@@ -43,6 +43,7 @@ module Spot::Importers::Bag
       Dir[File.join(data_dir, '*')] -
         excluded_representatives.map {|fn| File.join(data_dir, fn)}
     end
+
     def input_record_from(metadata)
       Darlingtonia::InputRecord.from(metadata: metadata, mapper: @mapper)
     end
