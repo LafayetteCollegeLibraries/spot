@@ -6,7 +6,7 @@ RSpec.describe Spot::Validators::BagValidator do
   let(:error_stream) { File.open(File::NULL, 'w') }
   let(:parser) { double('parser') }
   let(:fixtures_path) { Rails.root.join('spec', 'fixtures')}
-  let(:bag) { fixtures_path.join('ldr-bag') }
+  let(:bag) { fixtures_path.join('sample-bag') }
 
   before do
     allow(parser).to receive(:file).and_return(bag)
@@ -23,7 +23,7 @@ RSpec.describe Spot::Validators::BagValidator do
     end
 
     context 'when bag is not a directory' do
-      let(:bag) { fixtures_path.join('ldr-bag.zip') }
+      let(:bag) { fixtures_path.join('zip-test-fixture.zip') }
 
       it { is_expected.not_to be_empty }
       it { is_expected.to include 'Bag is not a directory' }

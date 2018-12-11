@@ -20,7 +20,11 @@
 
 module Spot::Importers::Bag
   class Parser < Darlingtonia::Parser
-    DEFAULT_VALIDATORS = [Spot::Validators::BagValidator.new].freeze
+    DEFAULT_VALIDATORS = [
+      Spot::Validators::BagValidator.new,
+      Spot::Validators::BagMetadataValidator.new
+    ].freeze
+
     MULTI_VALUE_CHARACTER = '|'.freeze
 
     # +Darlingtonia::Parser+'s initializer uses the +file+ kwarg
