@@ -1,30 +1,57 @@
 # frozen_string_literal: true
 
+# Parses metadata from a BagIt-style directory. We're expecing the +data/+
+# directory to be laid out as follows:
+#
+#   .
+#   └── data
+#       ├── files
+#       │   └── Barclay-TGK-vol12-2008.pdf
+#       ├── license.txt
+#       └── metadata.csv
+#
+# - Files to be attached now live in a +files/+ subdirectory
+# - Metadata lives in a +metadata.csv+ file at the root. It's expected to
+#   be a "horizontal" file: one header row and one values row (rather than
+#   a "vertical" file that was a series of key/value pairs). This is a more
+#   typical CSV layout.
+# - When present, a License file may live at the root (as "license.txt").
+#   This will be added to the metadata hash under the 'license' key.
+
 module Spot::Importers::Bag
   class Parser < Darlingtonia::Parser
     DEFAULT_VALIDATORS = [Spot::Validators::BagValidator.new].freeze
+    MULTI_VALUE_CHARACTER = '|'.freeze
 
-    def initialize(file:, mapper: nil)
-      super
+    # +Darlingtonia::Parser+'s initializer uses the +file+ kwarg
+    # for the object, but because we're dealing with directories,
+    # we're redefining that attribute here and aliasing the +file+
+    # attribute reader.
+    #
+    # Note: the +directory+ should be an absolute path.
+    #
+    # @param [String, Pathname] directory
+    # @param [Darlingtonia::MetadataMapper] mapper
+    def initialize(directory:, mapper:)
+      super(file: directory)
       @mapper = mapper
     end
 
-    # Darlingtonia::Parser is expecting :file to be an instance of File,
-    # but Bags are generally directories. We're in a position where we
-    # should either:
-    #   - subclass the original Parser and assume that `file:` is a
-    #     String/path to the Bag directory
-    #   - write our Parser class to cater to our needs,
-    #     using `directory:` instead of `file:`, and copying many of
-    #     the methods defined in the original Parser class
-    # in an effort to stay in sync with Darlingtonia, we've chosen to
-    # just alias `file` with `directory` and treat the attached value as
-    # a path to the Bag.
     alias_method :directory, :file
 
+    # I've taken to understand that +Darlingtonia+ is intended for ingest
+    # workflows that involve a CSV file that contains multiple records.
+    # This method, then, would create +Darlingtonia::InputRecords+ for
+    # each and then yield them to be ingested. However, since we're working
+    # with BagIt directories, we're only expecting one record per instance
+    # (I _guess_ you could write this where a Bag contained multitudes).
+    #
+    # @return [Array<Darlingtonia::InputRecord>]
+    # @yield [Array<Darlingtonia::InputRecord>]
     def records
       metadata = parse_csv_metadata
       metadata[:representative_files] = file_list
+      metadata[:license] = license_content if license_present?
 
       input_record = [input_record_from(metadata)]
 
@@ -35,59 +62,61 @@ module Spot::Importers::Bag
 
     private
 
-    def excluded_representatives
-      metadata_filenames + %w(license.txt)
+    # Where the work we'll be doing exists
+    #
+    # @return [String]
+    def data_directory
+      File.join(directory, 'data')
     end
 
+    # @return [Array<String>]
     def file_list
-      Dir[File.join(data_dir, '*')] -
-        excluded_representatives.map {|fn| File.join(data_dir, fn)}
+      Dir[File.join(data_directory, 'files', '**', '*')]
     end
 
+    # @return [Darlingtonia::InputRecord]
     def input_record_from(metadata)
       Darlingtonia::InputRecord.from(metadata: metadata, mapper: @mapper)
     end
 
-    # @todo what happens when the file doesn't exist?
+    # @return [String]
+    def license_content
+      File.read(license_path)
+    end
+
+    # @return [String]
+    def license_path
+      File.join(data_directory, 'license.txt')
+    end
+
+    # @return [true, false]
+    def license_present?
+      File.exist?(license_path)
+    end
+
+    # @return [String]
+    def metadata_path
+      File.join(data_directory, 'metadata.csv')
+    end
+
+    # Converts the CSV::Table into a Hash with symbolized keys
+    # (and removes the +:id+ key, since we're generating ids)
+    #
+    # @return [Hash<String => Array<String>>]
     def parse_csv_metadata
-      {}.tap do |output|
-        contents = csv_contents
-        contents.shift # skip header-row
-        contents.each do |row|
-          output[row[0]] = row[1].to_s.split(';')
-        end
+      read_csv.first.to_h.symbolize_keys.tap do |obj|
+        obj.delete(:id)
       end
     end
 
-    def path_to_csv
-      metadata_filenames
-        .map { |fn| File.join(data_dir, fn) }
-        .find { |path| File.exist?(path) }
-    end
-
-    # breaking this out from +parse_csv_metadata+ so that we can test
-    # +parse_csv_metadata+
+    # Parses the +metadata.csv+ file into a +CSV::Table+ and splits values
+    # on the {MULTI_VALUE_CHARACTER} constant.
     #
-    # @return [Array<Array<String>>]
-    def csv_contents
-      ::CSV.read(path_to_csv)
-    end
-
-    def bag_uid
-      File.basename(directory)
-    end
-
-    def data_dir
-      File.join(directory, 'data')
-    end
-
-    # We need to account for an older practice that named the bag's
-    # metadata file after the id of the item (ex: '237_metadata.csv')
-    def metadata_filenames
-      %W(
-        metadata.csv
-        #{bag_uid}_metadata.csv
-      )
+    # @return [CSV::Table]
+    def read_csv
+      CSV.read(metadata_path,
+               headers: true,
+               converters: ->(v) { v.split(MULTI_VALUE_CHARACTER) })
     end
   end
 end
