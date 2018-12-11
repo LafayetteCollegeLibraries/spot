@@ -3,11 +3,11 @@ FactoryBot.define do
     email { FFaker::Internet.unique.email }
     password { FFaker::Internet.password }
     display_name { "#{FFaker::Name.last_name}, #{FFaker::Name.first_name}" }
-    guest false
-    roles []
+    guest { false }
+    roles { [] }
 
     factory :guest_user do
-      guest true
+      guest { true }
     end
 
     factory :admin_user do
