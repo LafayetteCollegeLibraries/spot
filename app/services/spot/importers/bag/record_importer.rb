@@ -32,15 +32,20 @@ module Spot::Importers::Bag
       attributes[:remote_files] = create_remote_files_list(record)
 
       if attributes[:remote_files].empty?
-        error_stream << '[WARN] no files found for this bag'
+        error_stream << '[WARN] no files found for this bag\n'
       end
 
-      actor_env = environment.new(work_class.new, ability, attributes)
-      actor.create(actor_env) && (info_stream << "Record created: #{created.id}\n")
+      work = work_class.new
+      actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
+
+      Hyrax::CurationConcern.actor.create(actor_env) &&
+        (info_stream << "Record created: #{work.id}\n")
     rescue Errno::ENOENT => e
-      error_stream << e.message
+      error_stream << "#{e.message}\n"
     rescue ::Ldp::Gone => e
-      error_stream << "Ldp::Gone => #{e.message}"
+      error_stream << "Ldp::Gone => [#{work.id}]\n"
+    rescue => e
+      error_stream << "#{e.message}\n"
     end
 
     # determines the ability for an item based on the depositor's account.
@@ -57,14 +62,10 @@ module Spot::Importers::Bag
       Ability.new(depositor)
     end
 
-    def actor
-      Hyrax::CurationConcern.actor
-    end
-
     # @return [Array<Hash<Symbol => String>>]
     def create_remote_files_list(record)
       (record.representative_file || []).map do |filename|
-        { url: "file:#{filename}", name: File.basename(filename) }
+        { url: "file://#{filename}", name: File.basename(filename) }
       end
     end
 

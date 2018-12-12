@@ -68,10 +68,7 @@ module Spot
 
     # @return [Spot::Importers::Bag::RecordImporter]
     def record_importer
-      @record_importer ||= Spot::Importers::Bag::RecordImporter.new(
-                             info_stream: Rails.logger,
-                             error_stream: Rails.logger,
-                             work_class: @work_class)
+      @record_importer ||= Spot::Importers::Bag::RecordImporter.new(work_class: @work_class)
     end
 
     # @return [Darlingtonia::Importer]

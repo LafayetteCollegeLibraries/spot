@@ -48,7 +48,7 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
         author: metadata['dc:author'],
         keyword: metadata['dc:keyword'],
         visibility: mapper.class.default_visibility,
-        remote_files: [{url: 'file:image.png', name: 'image.png'}]
+        remote_files: [{url: 'file://image.png', name: 'image.png'}]
       }
     end
     let(:env_double) { double('instance of env')}

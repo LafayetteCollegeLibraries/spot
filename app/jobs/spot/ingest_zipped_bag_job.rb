@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # Inflates a compressed BagIt directory and ingests the contents.
 # Requires an extra parameter (+working_path:+) as a location to
 # unzip the directory to (since ingestion involves enqueuing other
@@ -7,6 +6,9 @@
 # before the job has a chance to perform)
 #
 # @todo clean up working directory after ingest (via callback?)
+
+require 'fileutils'
+
 module Spot
   class IngestZippedBagJob < ApplicationJob
     # @param [String] zip_path Path to the zip file
@@ -25,6 +27,8 @@ module Spot
       raise ArgumentError, "#{working_path} is not a directory" unless File.directory?(working_path)
 
       destination = File.join(working_path, File.basename(zip_path, '.zip'))
+      FileUtils.remove_entry(destination) if Dir.exist?(destination)
+
       ZipService.new(src_path: zip_path).unzip!(dest_path: destination)
 
       Spot::IngestBagJob.perform_now(bag_path: destination,

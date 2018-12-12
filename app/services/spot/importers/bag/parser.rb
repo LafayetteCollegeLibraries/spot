@@ -103,13 +103,13 @@ module Spot::Importers::Bag
       File.join(data_directory, 'metadata.csv')
     end
 
-    # Converts the CSV::Table into a Hash with symbolized keys
-    # (and removes the +:id+ key, since we're generating ids)
+    # Converts the CSV::Table into a Hash (and removes the
+    # +'id'+ key, since we're generating ids)
     #
     # @return [Hash<String => Array<String>>]
     def parse_csv_metadata
-      read_csv.first.to_h.symbolize_keys.tap do |obj|
-        obj.delete(:id)
+      read_csv.first.to_h.tap do |obj|
+        obj.delete('id')
       end
     end
 
