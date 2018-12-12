@@ -90,6 +90,9 @@ group :development, :test do
 
   gem 'pry-rails'
   gem 'webmock', '~> 3.4.2'
+
+  gem 'rubocop', '~> 0.52.1'
+  gem 'bixby', '~> 1.0.0'
 end
 
 group :test do
