@@ -2,30 +2,44 @@
 
 namespace :spot do
   desc 'Ingest items from zipped BagIt files'
-  task :ingest, [:source, :path] => :environment do |t, args|
-    error_message = if !args[:source]
-                      'No :source provided!'
-                    elsif !args[:path]
-                      'No :path provided!'
+  task ingest: :environment do |t|
+    source = ENV['source']
+    path = ENV['path']
+    work_class = ENV['work_class']
+    working_path = ENV['working_path']
+
+    error_message = if !source
+                      'No `source` provided!'
+                    elsif !path
+                      'No `path` provided!'
+                    elsif !work_class
+                      'No `work_class` provided!'
+                    elsif !working_path
+                      'No `working_path` provided!'
                     end
+
     if error_message
+      common_envs = %w[
+        source=<source>
+        work_class=<work class>
+        working_path=</path/to/working_directory>
+      ]
+
       puts error_message
-      puts "Use `bundle exec rails #{t}[<source>,</path/to/bag_file.zip>]`"
-      puts " or `bundle exec rails #{t}[<source>,</path/to/directory_of_bags>]`"
+      puts "Use `bundle exec rails #{t} #{common_envs} path=</path/to/bag_file.zip>"
+      puts " or `bundle exec rails #{t} #{common_envs} path=</path/to/directory_of_bags"
       exit
     end
 
-    path = args[:path]
-    source = args[:source]
-
     raise ArgumentError, 'File or path does not exist' unless File.exist?(path)
 
-    if File.directory? path
-      Dir[File.join(path, '*.zip')].each do |entry|
-        ::IngestZippedBagJob.perform_later(entry, source: source)
-      end
-    else
-      ::IngestZippedBagJob.perform_later(path, source: source)
+    paths = File.directory?(path) ? Dir[File.join(path, '*.zip')] : [path]
+
+    paths.each do |entry|
+      Spot::IngestZippedBagJob.perform_later(zip_path: entry,
+                                             source: source,
+                                             work_class: work_class,
+                                             working_path: working_path)
     end
   end
 end

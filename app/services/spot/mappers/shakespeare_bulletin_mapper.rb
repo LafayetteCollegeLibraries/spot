@@ -1,5 +1,5 @@
 module Spot::Mappers
-  class ShakespeareBulletinMapper < BaseHashMapper
+  class ShakespeareBulletinMapper < BaseMapper
     include ShortDateConversion
     include NestedAttributes
 
@@ -7,6 +7,8 @@ module Spot::Mappers
       publisher: 'originInfo_Publisher',
       source: 'relatedItem_typeHost_titleInfo_title',
     }.freeze
+
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     def fields
       super + %i[
@@ -48,7 +50,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def date_issued
-      metadata['originInfo_dateIssued_ISO8601'].map do |raw|
+      (metadata['originInfo_dateIssued_ISO8601'] || []).map do |raw|
         short_date_to_iso(raw, century_threshold: 50)
       end
     end
@@ -63,14 +65,14 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def identifier
-      metadata['relatedItem_identifier_typeISSN'].reject(&:blank?).map do |value|
+      (metadata['relatedItem_identifier_typeISSN'] || []).reject(&:blank?).map do |value|
         "issn:#{value}"
       end
     end
 
     # @return [Array<RDF::Literal>]
     def subtitle
-      metadata['titleInfo_subTitle'].reject(&:blank?).map do |subtitle|
+      (metadata['titleInfo_subTitle'] || []).reject(&:blank?).map do |subtitle|
         RDF::Literal(subtitle, language: :en)
       end
     end
@@ -86,7 +88,7 @@ module Spot::Mappers
     #
     # @return [Array<RDF::Literal>]
     def title
-      base_title = metadata['titleInfo_Title'].first
+      base_title = metadata['titleInfo_Title']&.first
       date_qualifier = metadata['relatedItem_part1_date_qualifierApproximate']
       volume_info = [
         metadata['relatedItem_part1_detail1_typeVolume_caption'],

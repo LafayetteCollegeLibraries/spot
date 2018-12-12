@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class NewspaperMapper < BaseHashMapper
+  class NewspaperMapper < BaseMapper
     include NestedAttributes
 
     self.fields_map = {
@@ -12,6 +12,8 @@ module Spot::Mappers
       resource_type: 'dc:type',
       rights_statement: 'dc:rights',
     }.freeze
+
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     def fields
       super + %i[

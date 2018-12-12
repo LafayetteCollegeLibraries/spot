@@ -2,7 +2,7 @@
 require 'uri'
 
 module Spot::Mappers
-  class LdrDspaceMapper < BaseHashMapper
+  class LdrDspaceMapper < BaseMapper
     include NestedAttributes
 
     # Our home-grown HashMapper requires this property to return a hash
@@ -21,6 +21,8 @@ module Spot::Mappers
       date_issued: 'date.issued',
       date_available: 'date.available'
     }.freeze
+
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     # Mapper#fields is what generates the hash of attributes that are passed
     # to the model's `.new` method. for the most part, the FIELDS_MAP

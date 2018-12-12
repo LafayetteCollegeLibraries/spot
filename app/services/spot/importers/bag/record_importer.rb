@@ -5,10 +5,16 @@ module Spot::Importers::Bag
     class_attribute :default_depositor_email
     self.default_depositor_email = 'dss@lafayette.edu'
 
-    # @todo add ability to set this (Image items will be coming in from Bags)
-    # @return [Publication]
-    def import_type
-      ::Publication
+    attr_reader :work_class
+
+    # Adds a +work_class:+ option to the RecordImporter initializer
+    #
+    # @param [ActiveFedora::Base] work_class
+    # @param [#<<] info_stream
+    # @param [#<<] error_stream
+    def initialize(work_class:, info_stream: STDOUT, error_stream: STDOUT)
+      super(info_stream: info_stream, error_stream: error_stream)
+      @work_class = work_class
     end
 
     private
@@ -16,36 +22,30 @@ module Spot::Importers::Bag
     # called from +#import+, which is inherited from
     # +Darlingtonia::RecordImporter+, but this does most of the work
     def create_for(record:)
-      info_stream << 'Creating record: ' \
-                     "#{record.respond_to?(:title) ? record.title : record}.\n"
+      title = record.respond_to?(:title) ? record.title : record.inspect
 
-      created = import_type.new
+      info_stream << "Creating record: #{title}\n"
+
       attributes = record.attributes
 
       ability = ability_for(attributes.delete(:depositor))
+      attributes[:remote_files] = create_remote_files_list(record)
 
-      attributes[:uploaded_files] = files(record.representative_file,
-                                          user: ability.current_user)
-
-      if attributes[:uploaded_files].nil?
-        error_stream << '[WARN] no files found for this bag'
+      if attributes[:remote_files].empty?
+        error_stream << '[WARN] no files found for this bag\n'
       end
 
-      attributes[:visibility] = if record.respond_to? :visibility
-                                  record.visibility
-                                else
-                                  default_visibility
-                                end
-
-      actor_env = environment.new(created, ability, attributes)
+      work = work_class.new
+      actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
 
       Hyrax::CurationConcern.actor.create(actor_env) &&
-        (info_stream << "Record created: #{created.id}\n")
-
+        (info_stream << "Record created: #{work.id}\n")
     rescue Errno::ENOENT => e
-      error_stream << e.message
+      error_stream << "#{e.message}\n"
     rescue ::Ldp::Gone => e
-      error_stream << "Ldp::Gone => #{e.message}"
+      error_stream << "Ldp::Gone => [#{work.id}]\n"
+    rescue => e
+      error_stream << "#{e.message}\n"
     end
 
     # determines the ability for an item based on the depositor's account.
@@ -62,33 +62,15 @@ module Spot::Importers::Bag
       Ability.new(depositor)
     end
 
-    # Defaulting to 'open' visibility
-    #
-    # @return [String]
-    def default_visibility
-      ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    # @return [Array<Hash<Symbol => String>>]
+    def create_remote_files_list(record)
+      (record.representative_file || []).map do |filename|
+        { url: "file://#{filename}", name: File.basename(filename) }
+      end
     end
 
     def environment
       Hyrax::Actors::Environment
-    end
-
-    # creates Hyrax::UploadedFile objects for each item in the +file_list+
-    #
-    # @param [Array<String>, NilClass] file_list an array of file paths
-    # @option opts [User] :user the depositing user
-    # @return [NilClass, Array<Number>]
-    def files(file_list, user: nil)
-      return if file_list.nil?
-
-      # is it valid ruby to pass +User.find_by+ as a default parameter?
-      if user.nil?
-        user = User.find_by(email: default_depositor_email)
-      end
-
-      file_list.map do |file|
-        Hyrax::UploadedFile.create(file: File.open(file), user: user).id
-      end
     end
   end
 end

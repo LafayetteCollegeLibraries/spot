@@ -1,3 +1,0 @@
-0abde4a90ffdc991c9492e5de909712c data/document.pdf
-898b34752386dc160519280445242afc data/ldr-bag_metadata.csv
-9240b64ddbe5b69cbebcacbe2f7c8d09 data/license.txt

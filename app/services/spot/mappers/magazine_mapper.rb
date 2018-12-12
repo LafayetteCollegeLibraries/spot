@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Spot::Mappers
-  class MagazineMapper < BaseHashMapper
+  class MagazineMapper < BaseMapper
     include ShortDateConversion
     include NestedAttributes
 
@@ -10,6 +10,8 @@ module Spot::Mappers
       publisher: 'OriginInfoPublisher',
       source: 'RelatedItemHost_1_TitleInfoTitle',
     }.freeze
+
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
     # Darlingtonia's Mapper pattern relies on this returned array to
     # determine what fields to include on the object. When a method is

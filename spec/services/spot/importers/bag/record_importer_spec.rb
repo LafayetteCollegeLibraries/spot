@@ -1,69 +1,85 @@
-# note: I _hate, hate, hate_ how this test is set up, but it was a necessary evil
-# to get _some_ kind of testing that was more than just checking that the importer
-# calls +Hyrax::CurationConcern.actor.create+ without checking what it's sending.
-# there's _way_ too much mocking going on for my taste, but we're creating a
-# bunch of +.new+ things and need to ensure that they're the same thing (previously
-# I was getting non-equality errors bc of different new objects being called).
-#
-# @todo PLEASE find a way to refactor this.
 RSpec.describe Spot::Importers::Bag::RecordImporter do
-  let(:importer) { described_class.new }
-  let(:ability) { Ability.new(depositor) }
-  let(:depositor) { User.find_or_initialize_by(email: 'example@lafayette.edu') }
-  let(:environment) { double('environment') }
-  let(:file_list) { [1] }
-  let(:mapper) { Spot::Mappers::BaseHashMapper.new }
-  let(:metadata) do
-    {
-      'title' => ['thee title'],
-      'depositor' => depositor.email,
-      'visibility' => 'private',
-      'representative_files' => ['/path/to/file'],
-    }
-  end
-  let(:attributes) do
-    {
-      title: ['thee title'],
-      visibility: 'private',
-      uploaded_files: [1]
-    }
-  end
-  let(:new_publication) { Publication.new }
-  let(:record) { Darlingtonia::InputRecord.from(metadata: metadata, mapper: mapper) }
-  let(:mock_import_type) { double('import type') }
-
-  let(:expected_environment) do
-    Hyrax::Actors::Environment.new(new_publication, ability, attributes)
+  subject(:importer) do
+    described_class.new(work_class: work_class,
+                        info_stream: dev_null,
+                        error_stream: dev_null)
   end
 
-  before do
-    mapper.class.fields_map = { title: 'title', visibility: 'visibility' }
-    mapper.metadata = metadata
+  let(:work_class) { double('work class') }
+  let(:dev_null) { File.open(File::NULL, 'w') }
 
-    allow(importer).to receive(:files).and_return(file_list)
-    allow(importer).to receive(:import_type).and_return(mock_import_type)
-    allow(importer).to receive(:ability_for).and_return(ability)
-    allow(importer).to receive(:environment).and_return(environment)
+  describe 'default_depositor_email' do
+    let(:new_email) { 'cool@example.org' }
 
-    allow(mock_import_type).to receive(:new).and_return(new_publication)
-    allow(environment)
-      .to receive(:new)
-      .with(new_publication, ability, attributes)
-      .and_return(expected_environment)
+    it 'is settable' do
+      expect { described_class.default_depositor_email = new_email }
+        .to change { described_class.default_depositor_email }
+        .to new_email
+    end
   end
 
-  after do
-    depositor.destroy
-  end
-
-  # we don't explicitly define this method in our subclass
-  # but it's essentially a wrapper for our own defined
-  # +#create_for+, so it requires some testing.
   describe '#import' do
-    it 'receives the expected environment object' do
+    subject { importer.import(record: record) }
+
+    let(:record) do
+      Darlingtonia::InputRecord.from(metadata: metadata, mapper: mapper)
+    end
+    # the output from a record parser
+    let(:metadata) do
+      {
+        'dc:title' => ['A good title'],
+        'dc:author' => ['Name, Author'],
+        'dc:keyword' => ['good', 'great'],
+        'representative_files' => ['image.png']
+      }
+    end
+    let(:mapper) { Spot::Mappers::BaseMapper.new }
+    let(:work_double) { double('instance of work') }
+
+    # since we haven't passed a depositor, we need to expect the default one
+    let(:depositor) do
+      create(:user, email: described_class.default_depositor_email)
+    end
+    let(:ability) { Ability.new(depositor) }
+
+    let(:attributes) do
+      {
+        title: metadata['dc:title'],
+        author: metadata['dc:author'],
+        keyword: metadata['dc:keyword'],
+        visibility: mapper.class.default_visibility,
+        remote_files: [{url: 'file://image.png', name: 'image.png'}]
+      }
+    end
+    let(:env_double) { double('instance of env')}
+    let(:ability_double) { double('instance of ability') }
+
+    before do
+      mapper.class.fields_map = {
+        title: 'dc:title',
+        author: 'dc:author',
+        keyword: 'dc:keyword'
+      }
+
+      allow(Ability)
+        .to receive(:new)
+        .with(depositor)
+        .and_return(ability_double)
+
+      allow(work_class)
+        .to receive(:new)
+        .and_return(work_double)
+
+      allow(Hyrax::Actors::Environment)
+        .to receive(:new)
+        .with(work_double, ability, attributes)
+        .and_return(env_double)
+    end
+
+    it 'passes the expected arguments to actor.create' do
       expect(Hyrax::CurationConcern.actor)
         .to receive(:create)
-        .with(expected_environment)
+        .with(env_double)
 
       importer.import(record: record)
     end
