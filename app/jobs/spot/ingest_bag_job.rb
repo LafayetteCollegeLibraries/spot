@@ -11,18 +11,18 @@
 #       source to a String! I _think_ this is fixed in Rails 6.
 #       (see: https://github.com/rails/rails/issues/25993)
 module Spot
-  class IngestBagJob
+  class IngestBagJob < ::ApplicationJob
     # Validates the Bag and imports if it's okay.
     #
     # @param [String, Pathname] bag_path Path to the Bag directory
     # @param [String] source Source collection / which mapper to use
-    # @param [String] work_class
+    # @param [String] work_class Work Type to use for new object
     # @return [void]
     # @raise [ArgumentError] if +source:+ is not defined in {Spot::Mappers.available_mappers}
-    # @raise [ArgumentError] if +work_class:+
+    # @raise [ArgumentError] if +work_class:+ not a valid Work type
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
-    def perform(bag_path, source:, work_class:)
+    def perform(bag_path:, source:, work_class:)
       @bag_path = bag_path
       @source = source
       @work_class = work_class.constantize
@@ -62,7 +62,7 @@ module Spot
 
     # @return [Spot::Importers::Bag::Parser]
     def parser
-      @parser ||= Spot::Importers::Bag::Parser.new(file: bag_path,
+      @parser ||= Spot::Importers::Bag::Parser.new(directory: bag_path,
                                                    mapper: mapper)
     end
 
