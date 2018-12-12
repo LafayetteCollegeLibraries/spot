@@ -51,7 +51,7 @@ RSpec.describe Spot::Mappers::BaseMapper do
     subject { mapper.representative_file }
 
     let(:paths) { ['/path/to/file', '/path/to/another'] }
-    let(:metadata) { {representative_files: paths} }
+    let(:metadata) { {'representative_files' => paths} }
 
     it { is_expected.to eq paths }
   end
@@ -65,7 +65,7 @@ RSpec.describe Spot::Mappers::BaseMapper do
 
     context 'when defined in metadata' do
       let(:value) { 'open!' }
-      let(:metadata) { { visibility: value } }
+      let(:metadata) { { 'visibility' => value } }
 
       it { is_expected.to eq value }
     end

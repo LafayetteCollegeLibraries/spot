@@ -31,13 +31,13 @@ RSpec.describe Spot::Importers::Bag::Parser do
       subject(:metadata) { records.first.mapper.metadata }
 
       it { is_expected.to be_a Hash }
-      it { is_expected.to include :title }
-      it { is_expected.to include :keyword }
-      it { is_expected.to include :license }
-      it { is_expected.to include :representative_files }
+      it { is_expected.to include 'title' }
+      it { is_expected.to include 'keyword' }
+      it { is_expected.to include 'license' }
+      it { is_expected.to include 'representative_files' }
 
       describe 'the representative files' do
-        subject(:files) { metadata[:representative_files] }
+        subject(:files) { metadata['representative_files'] }
 
         let(:file_path) { File.join(bag_path, 'data', 'files', 'image.png') }
 

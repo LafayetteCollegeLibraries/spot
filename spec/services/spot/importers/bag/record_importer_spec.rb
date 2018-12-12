@@ -30,7 +30,7 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
         'dc:title' => ['A good title'],
         'dc:author' => ['Name, Author'],
         'dc:keyword' => ['good', 'great'],
-        representative_files: ['image.png']
+        'representative_files' => ['image.png']
       }
     end
     let(:mapper) { Spot::Mappers::BaseMapper.new }

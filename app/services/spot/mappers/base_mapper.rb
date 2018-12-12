@@ -76,13 +76,13 @@ module Spot::Mappers
 
     # @return [Array<String>] paths to files of works to be attached
     def representative_files
-      metadata[:representative_files]
+      metadata['representative_files']
     end
     alias_method :representative_file, :representative_files
 
     # @return [String]
     def visibility
-      return metadata[:visibility] if metadata.include?(:visibility)
+      return metadata['visibility'] if metadata.include?('visibility')
       default_visibility
     end
   end

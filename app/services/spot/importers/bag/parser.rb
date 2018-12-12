@@ -54,8 +54,8 @@ module Spot::Importers::Bag
     # @yield [Array<Darlingtonia::InputRecord>]
     def records
       metadata = parse_csv_metadata
-      metadata[:representative_files] = file_list
-      metadata[:license] = license_content if license_present?
+      metadata['representative_files'] = file_list
+      metadata['license'] = license_content if license_present?
 
       input_record = [input_record_from(metadata)]
 
