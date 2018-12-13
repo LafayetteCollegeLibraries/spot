@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe PublicationIndexer do
   subject(:solr_doc) { indexer.generate_solr_document }
 
@@ -7,7 +8,7 @@ RSpec.describe PublicationIndexer do
   describe 'title' do
     # :stored_searchable
     let(:fields) { %w[title_tesim] }
-    let(:metadata) { {title: ['Title of work']} }
+    let(:metadata) { { title: ['Title of work'] } }
     it_behaves_like 'simple model indexing'
   end
 

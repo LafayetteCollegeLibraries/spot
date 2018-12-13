@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+#
 # A base class to extend how we're handling the indexing of RDF
 # data within our models. To use this, add a +class_name+
 # parameter to an +ActiveFedora::Base+ model.
@@ -15,7 +15,6 @@
 module Spot
   module ControlledVocabularies
     class Base < ActiveTriples::Resource
-
       # adds GeoNames/name to the list of predicates
       #
       # @return [Array<RDF::URI>]
@@ -63,18 +62,18 @@ module Spot
       #                         or a tuple of the uri and label/uri combined string
       def solrize
         return [rdf_subject.to_s] unless label_present?
-        [rdf_subject.to_s, { label: "#{preferred_label}$#{rdf_subject}"}]
+        [rdf_subject.to_s, { label: "#{preferred_label}$#{rdf_subject}" }]
       end
 
       private
 
-      # @return [String]
-      def pick_preferred_label
-        return rdf_label.first if rdf_label.first.is_a? String
+        # @return [String]
+        def pick_preferred_label
+          return rdf_label.first if rdf_label.first.is_a? String
 
-        eng_label = rdf_label.select { |label| label.language == :en }&.first
-        eng_label.present? ? eng_label.to_s : rdf_label.first.to_s
-      end
+          eng_label = rdf_label.select { |label| label.language == :en }&.first
+          eng_label.present? ? eng_label.to_s : rdf_label.first.to_s
+        end
     end
   end
 end

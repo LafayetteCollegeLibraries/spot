@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::IngestBagJob do
   subject(:job) do
     described_class.perform_now(work_class: work_class,
@@ -9,7 +10,7 @@ RSpec.describe Spot::IngestBagJob do
   let(:work_class) { 'Publication' }
   let(:fixtures_path) { Rails.root.join('spec', 'fixtures') }
   let(:bag_path) { fixtures_path.join('sample-bag') }
-  let(:importer_double) { double('importer') }
+  let(:importer_double) { instance_double(Darlingtonia::Importer, import: true) }
 
   before do
     allow(Darlingtonia::Importer)
@@ -37,29 +38,27 @@ RSpec.describe Spot::IngestBagJob do
 
     context 'when the bag validates okay' do
       it 'calls #import on the importer' do
-        expect(importer_double).to receive(:import)
-
         job
+
+        expect(importer_double).to have_received(:import)
       end
     end
 
     context 'when the bag does not validate' do
-      let(:parser_double) { double('parser') }
+      let(:parser_double) do
+        instance_double(Spot::Importers::Bag::Parser, validate!: false)
+      end
 
       before do
         allow(Spot::Importers::Bag::Parser)
           .to receive(:new)
           .and_return(parser_double)
-
-        allow(parser_double)
-          .to receive(:validate!)
-          .and_return(false)
       end
 
       it 'does nothing' do
-        expect(importer_double).not_to receive(:import)
-
         job
+
+        expect(importer_double).not_to have_received(:import)
       end
     end
   end

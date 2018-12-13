@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+#
+# rubocop:disable RSpec/InstanceVariable
 require 'rails_helper'
 include Warden::Test::Helpers
 
@@ -25,7 +28,8 @@ RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
       expect(publication.to_sipity_entity.reload.workflow_state_name).to eq "processing"
 
       # Check workflow permissions for depositing user
-      available_workflow_actions = Hyrax::Workflow::PermissionQuery.scope_permitted_workflow_actions_available_for_current_state(user: depositing_user, entity: publication.to_sipity_entity).pluck(:name)
+      available_workflow_actions = Hyrax::Workflow::PermissionQuery.scope_permitted_workflow_actions_available_for_current_state(user: depositing_user, entity: publication.to_sipity_entity)
+                                                                   .pluck(:name)
       expect(available_workflow_actions).to be_empty
 
       # Visit the work as a public user. It should not be visible.
@@ -63,3 +67,4 @@ RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
     end
   end
 end
+# rubocop:enable RSpec/InstanceVariable

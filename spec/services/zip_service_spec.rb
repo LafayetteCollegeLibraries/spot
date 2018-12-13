@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # I'm not crazy about these tests, but comparing shasums of zip files
 # fails because the atime/mktime differs between the two files.
 #

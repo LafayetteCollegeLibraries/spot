@@ -1,10 +1,10 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
-
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
@@ -33,39 +33,36 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'hyrax', '2.4.1'
 
-gem 'rsolr', '>= 1.0'
-gem 'jquery-rails'
+gem 'almond-rails'
+gem 'bagit'
+gem 'darlingtonia', '~> 1.0'
 gem 'devise'
 gem 'devise-guests', '~> 0.6'
-
-gem 'hydra-role-management', '~> 1.0'
-
-gem 'rubyzip'
-gem 'mimemagic'
-gem 'darlingtonia', '~> 1.0'
-
-gem 'sidekiq'
 gem 'dotenv-rails'
-gem 'pg'
-gem 'bagit'
-gem 'rdf-vocab'
-gem 'almond-rails'
+gem 'hydra-role-management', '~> 1.0'
 gem 'iso-639'
+gem 'jquery-rails'
+gem 'mimemagic'
+gem 'pg'
+gem 'rdf-vocab'
+gem 'rsolr', '>= 1.0'
+gem 'rubyzip'
+gem 'sidekiq'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.10', require: false
-  gem 'capistrano-rails', '~> 1.3', require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext'
   gem 'capistrano-passenger'
+  gem 'capistrano-rails', '~> 1.3', require: false
   gem 'capistrano-sidekiq', '~> 0.20.0'
 end
 
@@ -76,26 +73,29 @@ group :development, :test do
   gem 'fcrepo_wrapper'
   gem 'solr_wrapper', '>= 0.3'
 
-  gem 'rspec-rails', '~> 3.6'
-  gem 'rspec-its', '~> 1.1'
-  gem 'factory_bot_rails', '~> 4.0', require: false
-  gem 'shoulda-matchers', '~> 3.1'
   gem 'database_cleaner'
+  gem 'factory_bot_rails', '~> 4.0', require: false
   gem 'ffaker'
+  gem 'rspec-its', '~> 1.1'
+  gem 'rspec-rails', '~> 3.6'
+  gem 'shoulda-matchers', '~> 3.1'
 
   gem 'capybara'
   gem 'capybara-screenshot'
-  gem 'selenium-webdriver'
   gem 'chromedriver-helper'
+  gem 'selenium-webdriver'
 
   gem 'pry-rails'
   gem 'webmock', '~> 3.4.2'
+
+  gem 'bixby', '~> 1.0.0'
+  gem 'rubocop', '~> 0.52.1'
 end
 
 group :test do
-  gem 'simplecov', require: false
   gem 'coveralls', '~> 0.8', require: false
   gem 'hyrax-spec'
+  gem 'simplecov', require: false
 end
 
 gem 'riiif', '~> 1.1'

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe Publication do
   subject(:pub) { described_class.new }
 

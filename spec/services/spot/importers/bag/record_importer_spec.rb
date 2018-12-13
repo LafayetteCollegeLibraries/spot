@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Importers::Bag::RecordImporter do
   subject(:importer) do
     described_class.new(work_class: work_class,
@@ -5,7 +6,7 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
                         error_stream: dev_null)
   end
 
-  let(:work_class) { double('work class') }
+  let(:work_class) { class_double('ActiveFedora::Base') }
   let(:dev_null) { File.open(File::NULL, 'w') }
 
   describe 'default_depositor_email' do
@@ -34,7 +35,7 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
       }
     end
     let(:mapper) { Spot::Mappers::BaseMapper.new }
-    let(:work_double) { double('instance of work') }
+    let(:work_double) { instance_double('ActiveFedora::Base') }
 
     # since we haven't passed a depositor, we need to expect the default one
     let(:depositor) do
@@ -48,11 +49,12 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
         author: metadata['dc:author'],
         keyword: metadata['dc:keyword'],
         visibility: mapper.class.default_visibility,
-        remote_files: [{url: 'file://image.png', name: 'image.png'}]
+        remote_files: [{ url: 'file://image.png', name: 'image.png' }]
       }
     end
-    let(:env_double) { double('instance of env')}
-    let(:ability_double) { double('instance of ability') }
+    let(:env_double) { instance_double('Hyrax::Actors::Environment') }
+    let(:ability_double) { instance_double('Ability') }
+    let(:actor_stack_double) { instance_double('Hyrax::Actors::AbstractActor') }
 
     before do
       mapper.class.fields_map = {
@@ -74,14 +76,20 @@ RSpec.describe Spot::Importers::Bag::RecordImporter do
         .to receive(:new)
         .with(work_double, ability, attributes)
         .and_return(env_double)
+
+      allow(Hyrax::CurationConcern)
+        .to receive(:actor)
+        .and_return(actor_stack_double)
+
+      allow(actor_stack_double).to receive(:create)
+
+      importer.import(record: record)
     end
 
     it 'passes the expected arguments to actor.create' do
-      expect(Hyrax::CurationConcern.actor)
-        .to receive(:create)
+      expect(actor_stack_double)
+        .to have_received(:create)
         .with(env_double)
-
-      importer.import(record: record)
     end
   end
 end

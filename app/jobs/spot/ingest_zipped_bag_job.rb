@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+#
 # Inflates a compressed BagIt directory and ingests the contents.
 # Requires an extra parameter (+working_path:+) as a location to
 # unzip the directory to (since ingestion involves enqueuing other

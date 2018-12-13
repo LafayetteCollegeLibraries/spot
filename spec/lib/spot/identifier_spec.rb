@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Identifier do
   describe '.from_string' do
     subject(:id) { described_class.from_string(raw_string) }
@@ -61,12 +62,16 @@ RSpec.describe Spot::Identifier do
   end
 
   describe '#prefix_label' do
+    before do
+      allow(described_class).to receive(:prefix_label)
+    end
+
     let(:prefix) { 'hdl' }
 
     it "calls #{described_class}.prefix_label" do
-      expect(described_class).to receive(:prefix_label).with(prefix)
-
       described_class.new(prefix, nil).prefix_label
+
+      expect(described_class).to have_received(:prefix_label).with(prefix)
     end
   end
 

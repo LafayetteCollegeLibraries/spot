@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # borrowed from hydra_head task.
 # sets up a `dev_server` and `test_server` task to reduce the # of terminal
 # tabs you have to open + start the appropriate wrappers for.

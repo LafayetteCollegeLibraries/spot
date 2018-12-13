@@ -3,10 +3,15 @@
 class PublicationIndexer < Hyrax::WorkIndexer
   include IndexesRightsStatements
 
+  # Overriding the default +Hyrax::DeepIndexingService+ for our own, which
+  # doesn't require +Hyrax::BasicMetadata+
+  #
+  # @return [Class]
   def rdf_service
     Spot::DeepIndexingService
   end
 
+  # @return [Hash]
   def generate_solr_document
     super.tap do |solr_doc|
       store_license(solr_doc)
@@ -16,17 +21,22 @@ class PublicationIndexer < Hyrax::WorkIndexer
 
   private
 
-  # we're storing licenses but not indexing them
-  def store_license(doc)
-    doc['license_tsm'] = object.license
-  end
-
-  def store_language_label(doc)
-    label_key = 'language_label_ssim'
-    doc[label_key] ||= []
-
-    object.language.map do |lang|
-      doc[label_key] << Spot::ISO6391.label_for(lang) || lang
+    # we're storing licenses but not indexing them
+    #
+    # @param [SolrDocument] doc
+    # @return [void]
+    def store_license(doc)
+      doc['license_tsm'] = object.license
     end
-  end
+
+    # @param [SolrDocument] doc
+    # @return [void]
+    def store_language_label(doc)
+      label_key = 'language_label_ssim'
+      doc[label_key] ||= []
+
+      object.language.map do |lang|
+        doc[label_key] << Spot::ISO6391.label_for(lang) || lang
+      end
+    end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Hyrax::PublicationsController do
   context 'when visiting a known publication' do
     let(:doc) { create(:publication, :public) }

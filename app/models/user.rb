@@ -1,3 +1,8 @@
+# frozen_string_literal: true
+#
+# The model for our Users. As of now, this is just the stock items that are
+# included when running +rails generate hyrax:install+ (which also runs installs
+# for hydra and blacklight)
 class User < ApplicationRecord
   # Connects this user object to Hydra behaviors.
   include Hydra::User
@@ -8,11 +13,12 @@ class User < ApplicationRecord
   include Hyrax::User
   include Hyrax::UserUsageStats
 
-  if Blacklight::Utils.needs_attr_accessible?
-    attr_accessible :email, :password, :password_confirmation
-  end
+  attr_accessible :email, :password, :password_confirmation if
+    Blacklight::Utils.needs_attr_accessible?
+
   # Connects this user object to Blacklights Bookmarks.
   include Blacklight::User
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -21,6 +27,8 @@ class User < ApplicationRecord
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
   # the account.
+  #
+  # @return [String]
   def to_s
     email
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Hyrax
   class PublicationsController < ApplicationController
     # Adds Hyrax behaviors to the controller.

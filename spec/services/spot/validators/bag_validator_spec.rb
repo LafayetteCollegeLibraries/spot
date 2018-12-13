@@ -1,11 +1,12 @@
+# frozen_string_literal: true
 require 'tmpdir'
 
 RSpec.describe Spot::Validators::BagValidator do
   let(:validator) { described_class.new(error_stream: error_stream) }
 
   let(:error_stream) { File.open(File::NULL, 'w') }
-  let(:parser) { double('parser') }
-  let(:fixtures_path) { Rails.root.join('spec', 'fixtures')}
+  let(:parser) { instance_double('Spot::Importers::Bag::Parser') }
+  let(:fixtures_path) { Rails.root.join('spec', 'fixtures') }
   let(:bag) { fixtures_path.join('sample-bag') }
 
   before do

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.feature 'Create a Publication', :clean, :js do
   before do
     # Only enqueue the ingest job, not charactarization.

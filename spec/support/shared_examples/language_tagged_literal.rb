@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # can shared examples be nested? it feels redundant to have these
 # two split when the only difference is the +:params+ hash.
 
@@ -19,7 +20,6 @@ shared_examples 'a parsed language-tagged literal (single)' do
 
   it { is_expected.to eq tagged_literals }
 end
-
 
 shared_examples 'a parsed language-tagged literal (multiple)' do
   subject { attributes[field] }

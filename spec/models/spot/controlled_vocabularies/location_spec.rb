@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::ControlledVocabularies::Location do
   subject(:resource) { described_class.new(location_uri) }
 
@@ -42,7 +43,7 @@ RSpec.describe Spot::ControlledVocabularies::Location do
 
         expect(WebMock)
           .to have_requested(:get, api_base)
-          .with(query: {'geonameId' => location_id, 'username' => username})
+          .with(query: { 'geonameId' => location_id, 'username' => username })
       end
     end
 

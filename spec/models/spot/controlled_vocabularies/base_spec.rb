@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::ControlledVocabularies::Base do
   let(:resource) { described_class.new(uri) }
   let(:uri) { RDF::URI('http://id.loc.gov/authorities/subjects/sh85062079') }
@@ -20,8 +21,12 @@ RSpec.describe Spot::ControlledVocabularies::Base do
     subject(:pref_label) { resource.preferred_label }
 
     context 'when a label has been cached already' do
-      # need to trigger first_or_create before checking to see if it exists
-      before { cache }
+      before do
+        allow(resource).to receive(:pick_preferred_label)
+        # need to trigger first_or_create before checking to see if it exists
+        cache
+      end
+
       after { cache.delete }
 
       let(:cache) { RdfLabel.first_or_create(uri: uri, value: new_label) }
@@ -30,7 +35,7 @@ RSpec.describe Spot::ControlledVocabularies::Base do
       it { is_expected.to eq cache.value }
 
       it 'does not proceed to pick the label from the rdf data' do
-        expect(resource).not_to receive(:pick_preferred_label)
+        expect(resource).not_to have_received(:pick_preferred_label)
       end
     end
 
@@ -51,10 +56,10 @@ RSpec.describe Spot::ControlledVocabularies::Base do
   describe '#solrize' do
     subject { resource.solrize }
 
-    let(:generated_label) { "#{label_en}$#{uri}"}
+    let(:generated_label) { "#{label_en}$#{uri}" }
 
     it { is_expected.to include uri.to_s }
-    it { is_expected.to include({ label: generated_label }) }
+    it { is_expected.to include(label: generated_label) }
 
     context 'when a label is not present' do
       before do

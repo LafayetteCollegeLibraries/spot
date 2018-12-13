@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+# rubocop:disable RSpec/InstanceVariable
 RSpec.describe Spot::Mappers::BaseMapper do
   subject(:mapper) { described_class.new }
 
@@ -51,7 +53,7 @@ RSpec.describe Spot::Mappers::BaseMapper do
     subject { mapper.representative_file }
 
     let(:paths) { ['/path/to/file', '/path/to/another'] }
-    let(:metadata) { {'representative_files' => paths} }
+    let(:metadata) { { 'representative_files' => paths } }
 
     it { is_expected.to eq paths }
   end
@@ -71,3 +73,4 @@ RSpec.describe Spot::Mappers::BaseMapper do
     end
   end
 end
+# rubocop:enable RSpec/InstanceVariable

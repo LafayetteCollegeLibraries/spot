@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Mappers::MagazineMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
@@ -7,7 +8,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#based_near_attributes' do
     subject(:based_near_attributes) { mapper.based_near_attributes }
 
-    let(:metadata) { {'OriginInfoPlaceTerm' => [location]} }
+    let(:metadata) { { 'OriginInfoPlaceTerm' => [location] } }
     let(:location) { 'Easton, PA' }
     let(:expected_value) do
       { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
@@ -16,7 +17,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     it { is_expected.to eq expected_value }
 
     context 'when location is not in our internal mapping' do
-      let(:metadata) { {'OriginInfoPlaceTerm' => ['Coolsville, Daddy-O']} }
+      let(:metadata) { { 'OriginInfoPlaceTerm' => ['Coolsville, Daddy-O'] } }
 
       it { is_expected.to be_empty }
 
@@ -46,7 +47,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#description' do
     subject { mapper.description }
 
-    let(:metadata) { {'TitleInfoPartNumber' => ['A description']} }
+    let(:metadata) { { 'TitleInfoPartNumber' => ['A description'] } }
     let(:value) { [RDF::Literal('A description', language: :en)] }
 
     it { is_expected.to eq value }
@@ -55,7 +56,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#identifier' do
     subject { mapper.identifier }
 
-    let(:metadata) { {'PublicationSequence' => ['10']} }
+    let(:metadata) { { 'PublicationSequence' => ['10'] } }
     let(:value) { ['lafayette_magazine:10'] }
 
     it { is_expected.to eq value }
@@ -64,7 +65,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#publisher' do
     subject { mapper.publisher }
 
-    let(:metadata) { {'OriginInfoPublisher' => value} }
+    let(:metadata) { { 'OriginInfoPublisher' => value } }
     let(:value) { ['Lafayette College Alumni Association'] }
 
     it { is_expected.to eq value }
@@ -102,7 +103,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#source' do
     subject { mapper.source }
 
-    let(:metadata) { {'RelatedItemHost_1_TitleInfoTitle' => value} }
+    let(:metadata) { { 'RelatedItemHost_1_TitleInfoTitle' => value } }
     let(:value) { ['Lafayette Magazine'] }
 
     it { is_expected.to eq value }
@@ -111,7 +112,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#subtitle' do
     subject { mapper.subtitle }
 
-    let(:metadata) { {'TitleInfoSubtitle' => ['A prestigious publication']} }
+    let(:metadata) { { 'TitleInfoSubtitle' => ['A prestigious publication'] } }
     let(:value) { [RDF::Literal('A prestigious publication', language: :en)] }
 
     it { is_expected.to eq value }
@@ -125,7 +126,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
       let(:metadata) do
         {
           'TitleInfoNonSort' => ['The'],
-          'TitleInfoTitle' => ['Lafayette'],
+          'TitleInfoTitle' => ['Lafayette']
         }
       end
 

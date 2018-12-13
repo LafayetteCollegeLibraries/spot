@@ -58,52 +58,52 @@ module NestedFormFields
 
     private
 
-    # There may be a clearer name for this. Local controlled
-    # vocabulary fields are returned to the form looking like
-    # +WorkModel.accepts_nested_attributes_for+ properties.
-    # However, they're decidedly _not_ ActiveFedora nested
-    # attributes and they need to be transformed back.
-    #
-    # Essentially, we're receiving attributes that look like:
-    #
-    #   {'language_attributes' => {'0' => { 'id' => 'en' }}}
-    #
-    # and transforming them to look like:
-    #
-    #   {'language' => ['en']}
-    #
-    # Note that this step isn't necessary if we're
-    # just using the jquery-ui autocomplete field type.
-    #
-    # @param [ActionController::Parameters, Hash] params
-    # @return [void]
-    def transform_nested_fields!(params)
-      _nested_fields.each do |field|
-        attr_field_key = "#{field}_attributes"
-        next unless params.include?(attr_field_key)
+      # There may be a clearer name for this. Local controlled
+      # vocabulary fields are returned to the form looking like
+      # +WorkModel.accepts_nested_attributes_for+ properties.
+      # However, they're decidedly _not_ ActiveFedora nested
+      # attributes and they need to be transformed back.
+      #
+      # Essentially, we're receiving attributes that look like:
+      #
+      #   {'language_attributes' => {'0' => { 'id' => 'en' }}}
+      #
+      # and transforming them to look like:
+      #
+      #   {'language' => ['en']}
+      #
+      # Note that this step isn't necessary if we're
+      # just using the jquery-ui autocomplete field type.
+      #
+      # @param [ActionController::Parameters, Hash] params
+      # @return [void]
+      def transform_nested_fields!(params)
+        _nested_fields.each do |field|
+          attr_field_key = "#{field}_attributes"
+          next unless params.include?(attr_field_key)
 
-        values = transform_nested_attributes(params, attr_field_key)
+          values = transform_nested_attributes(params, attr_field_key)
 
-        params[field] = values || []
-      end
-    end
-
-    # flattens a nested_attribute hash into an array of
-    # ids. if the +_destroy+ key is present, the field
-    # is skipped, removing it from the record.
-    #
-    # @param [ActionController::Parameters,Hash] params
-    # @param [Symbol,String] field
-    # @return [Array<String>]
-    def transform_nested_attributes(params, field)
-      return if params[field].blank?
-
-      [].tap do |out|
-        params.delete(field.to_s).each do |_index, param|
-          next unless param['_destroy'].blank?
-          out << param['id'] if param['id']
+          params[field] = values || []
         end
       end
-    end
+
+      # flattens a nested_attribute hash into an array of
+      # ids. if the +_destroy+ key is present, the field
+      # is skipped, removing it from the record.
+      #
+      # @param [ActionController::Parameters,Hash] params
+      # @param [Symbol,String] field
+      # @return [Array<String>]
+      def transform_nested_attributes(params, field)
+        return if params[field].blank?
+
+        [].tap do |out|
+          params.delete(field.to_s).each_pair do |_idx, param|
+            next unless param['_destroy'].blank?
+            out << param['id'] if param['id']
+          end
+        end
+      end
   end
 end

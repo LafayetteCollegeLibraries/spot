@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :spot do
   namespace :roles do
     def create_roles(names)
@@ -14,7 +15,7 @@ namespace :spot do
     end
 
     desc "creates roles supplied by roles=(comma separated strings)"
-    task :create => :environment do
+    task create: [:environment] do
       roles = (ENV['roles'] || '').split(',').map(&:chomp).reject(&:empty?)
       create_roles(roles) do |role|
         Rails.logger.info "Created new role: #{role.name}"
@@ -22,7 +23,7 @@ namespace :spot do
     end
 
     desc "creates default roles"
-    task default: :environment do
+    task default: [:environment] do
       # TODO: move these to an initializer
       roles = %i[
         admin

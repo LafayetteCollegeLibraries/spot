@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Qa::Authorities::Language do
   let(:authority) { described_class.new }
 
@@ -17,12 +18,11 @@ RSpec.describe Qa::Authorities::Language do
   describe '#find' do
     subject { authority.find(id) }
 
-
     context 'when an entry exists' do
       let(:id) { 'en' }
 
       it { is_expected.to be_a Hash }
-      it { is_expected.to eq({id: 'en', label: 'English', value: 'en'}) }
+      it { is_expected.to eq(id: 'en', label: 'English', value: 'en') }
     end
 
     context 'when an entry does not exist' do

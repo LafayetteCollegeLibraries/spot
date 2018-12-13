@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # borrows heavily from
 # samvera/questioning_authority:spec/lib/services/rdf_authority_parser_spec.rb
 RSpec.describe Spot::RDFAuthorityParser do

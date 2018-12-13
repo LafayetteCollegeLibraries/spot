@@ -26,23 +26,33 @@ module Spot::ControlledVocabularies
 
     private
 
-    def pick_preferred_label
-      RdfLabel.first_or_create(uri: rdf_subject.to_s) do |label|
-        label.value = authority_class.label.call(fetch_geonames_data)
-      end.value
-    end
+      # Overrides the RDF way we're set-up to find a preferred label in lieu
+      # of using the Geonames API to return a more detailed label.
+      #
+      # @return [String]
+      def pick_preferred_label
+        RdfLabel.first_or_create(uri: rdf_subject.to_s) do |label|
+          label.value = authority_class.label.call(fetch_geonames_data)
+        end.value
+      end
 
-    def fetch_geonames_data
-      Rails.logger.info "Fetching Geonames API data for #{geonames_id}"
-      authority_class.new.find(geonames_id)
-    end
+      # Uses the Qa::Authorities::Geonames API to fetch Geonames data
+      # for a URI.
+      #
+      # @return [Hash]
+      def fetch_geonames_data
+        Rails.logger.info "Fetching Geonames API data for #{geonames_id}"
+        authority_class.new.find(geonames_id)
+      end
 
-    def geonames_id
-      URI.parse(rdf_subject.to_s).path.gsub(/\//, '')
-    end
+      # @return [String]
+      def geonames_id
+        URI.parse(rdf_subject.to_s).path.gsub(/\//, '')
+      end
 
-    def authority_class
-      Qa::Authorities::Geonames
-    end
+      # @return [Class]
+      def authority_class
+        Qa::Authorities::Geonames
+      end
   end
 end
