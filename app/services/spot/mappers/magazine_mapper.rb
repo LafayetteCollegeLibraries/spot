@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-
+#
+# Metadata mapper for the Lafayette Magazine collection. See {Spot::Mappers::BaseMapper}
+# for usage information.
 module Spot::Mappers
   class MagazineMapper < BaseMapper
     include ShortDateConversion
@@ -8,16 +10,11 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
       publisher: 'OriginInfoPublisher',
-      source: 'RelatedItemHost_1_TitleInfoTitle',
+      source: 'RelatedItemHost_1_TitleInfoTitle'
     }.freeze
 
     self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
-    # Darlingtonia's Mapper pattern relies on this returned array to
-    # determine what fields to include on the object. When a method is
-    # missing, it uses the <code>fields</code> Hash to find the
-    # related key for the raw <code>metadata</code> Hash.
-    #
     # @return [Array<Symbol>]
     def fields
       super + %i[
@@ -111,21 +108,21 @@ module Spot::Mappers
 
     private
 
-    # The display title is a combination of the `TitleInfoNonSort`,
-    # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
-    #
-    # @return [Array<String>]
-    def parsed_title
-      non_sort = metadata['TitleInfoNonSort'].first
-      info_title = metadata['TitleInfoTitle'].first
-      date = metadata['PartDate_NaturalLanguage']
+      # The display title is a combination of the `TitleInfoNonSort`,
+      # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
+      #
+      # @return [Array<String>]
+      def parsed_title
+        non_sort = metadata['TitleInfoNonSort'].first
+        info_title = metadata['TitleInfoTitle'].first
+        date = metadata['PartDate_NaturalLanguage']
 
-      title = "#{non_sort} #{info_title}".strip
+        title = "#{non_sort} #{info_title}".strip
 
-      # date could be nil or '' or []
-      return [title] if date.blank? || date.empty?
+        # date could be nil or '' or []
+        return [title] if date.blank? || date.empty?
 
-      ["#{title} (#{date.first})"]
-    end
+        ["#{title} (#{date.first})"]
+      end
   end
 end

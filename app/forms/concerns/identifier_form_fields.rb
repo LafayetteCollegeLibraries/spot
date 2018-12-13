@@ -50,33 +50,33 @@ module IdentifierFormFields
 
     private
 
-    # transforms arrays of identifier prefixes
-    # and values into a single array of identifier
-    # strings and appends it to +form_params['identifier']+
-    #
-    # @param [ActiveController::Parameters, Hash] params
-    # @return [void]
-    def transform_identifiers!(params)
-      prefixes = params.delete(identifier_prefix_key.to_s)
-      values = params.delete(identifier_value_key.to_s)
+      # transforms arrays of identifier prefixes
+      # and values into a single array of identifier
+      # strings and appends it to +form_params['identifier']+
+      #
+      # @param [ActiveController::Parameters, Hash] params
+      # @return [void]
+      def transform_identifiers!(params)
+        prefixes = params.delete(identifier_prefix_key.to_s)
+        values = params.delete(identifier_value_key.to_s)
 
-      return unless prefixes && values
+        return unless prefixes && values
 
-      mapped = prefixes.zip(values).map do |(key, value)|
-        Spot::Identifier.new(key, value).to_s
-      end.reject(&:blank?)
+        mapped = prefixes.zip(values).map do |(key, value)|
+          Spot::Identifier.new(key, value).to_s
+        end.reject(&:blank?)
 
-      params[identifier_field] = mapped if mapped
-    end
+        params[identifier_field] = mapped if mapped
+      end
 
-    # @return [Symbol]
-    def identifier_prefix_key
-      :"#{identifier_field}_prefix"
-    end
+      # @return [Symbol]
+      def identifier_prefix_key
+        :"#{identifier_field}_prefix"
+      end
 
-    # @return [Symbol]
-    def identifier_value_key
-      :"#{identifier_field}_value"
-    end
+      # @return [Symbol]
+      def identifier_value_key
+        :"#{identifier_field}_value"
+      end
   end
 end

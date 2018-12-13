@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Mappers::LdrDspaceMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
@@ -9,7 +10,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#abstract' do
     subject { mapper.abstract }
 
-    let(:metadata) { {'description.abstract' => value} }
+    let(:metadata) { { 'description.abstract' => value } }
     let(:value) { ['a short description'] }
 
     it { is_expected.to eq value }
@@ -25,7 +26,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#bibliographic_citation' do
     subject { mapper.bibliographic_citation }
 
-    let(:metadata) { {'identifier.citation' => value} }
+    let(:metadata) { { 'identifier.citation' => value } }
     let(:value) { ['Author, FirstName. "Title of Piece"'] }
 
     it { is_expected.to eq value }
@@ -64,7 +65,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#date_uploaded' do
     subject { mapper.date_uploaded }
 
-    let(:metadata) { {'date.accessioned' => [value]} }
+    let(:metadata) { { 'date.accessioned' => [value] } }
     let(:value) { '2018-09-17 14:39:00' }
 
     it { is_expected.not_to be_an Array }
@@ -79,7 +80,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
 
     context 'when a depositor is provided' do
       let(:email) { 'depositor@lafayette.edu' }
-      let(:metadata) { {'description.provenance' => ["Submitted by Person (#{email})"]} }
+      let(:metadata) { { 'description.provenance' => ["Submitted by Person (#{email})"] } }
 
       it { is_expected.to eq email }
     end
@@ -91,7 +92,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     end
 
     context 'when a provenance is found but formatted irregularly' do
-      let(:metadata) { {'description.provenance' => ['kilroy was here']} }
+      let(:metadata) { { 'description.provenance' => ['kilroy was here'] } }
 
       it { is_expected.to eq default_email }
     end
@@ -129,21 +130,21 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
 
     context 'with doi values' do
       let(:value) { 'abc/123' }
-      let(:metadata) { {'identifier.doi' => [value]} }
+      let(:metadata) { { 'identifier.doi' => [value] } }
 
       it { is_expected.to eq ["doi:#{value}"] }
     end
 
     context 'with isbn values' do
       let(:value) { '0-0000-0000-0' }
-      let(:metadata) { {'identifier.isbn' => [value]} }
+      let(:metadata) { { 'identifier.isbn' => [value] } }
 
       it { is_expected.to eq ["isbn:#{value}"] }
     end
 
     context 'with issn values' do
       let(:value) { '0000-0000' }
-      let(:metadata) { {'identifier.issn' => [value]} }
+      let(:metadata) { { 'identifier.issn' => [value] } }
 
       it { is_expected.to eq ["issn:#{value}"] }
     end
@@ -177,14 +178,14 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
       'ja' => 'http://id.loc.gov/vocabulary/iso639-1/ja'
     }.each do |iso, uri|
       context "language attribute for #{iso}" do
-        let(:metadata) { {'language.iso' => [iso] } }
-        let(:expected_hash) { {'0' => {'id' => uri}} }
+        let(:metadata) { { 'language.iso' => [iso] } }
+        let(:expected_hash) { { '0' => { 'id' => uri } } }
         it { is_expected.to eq expected_hash }
       end
     end
 
     context 'when a language is not provided' do
-      let(:metadata) { {'language.iso' => ['pig latin'] } }
+      let(:metadata) { { 'language.iso' => ['pig latin'] } }
 
       it { is_expected.to be_empty }
 
@@ -195,7 +196,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#publisher' do
     subject { mapper.publisher }
 
-    let(:metadata) {{ 'type' => type, 'publisher' => ['Some journal'] }}
+    let(:metadata) { { 'type' => type, 'publisher' => ['Some journal'] } }
 
     context 'when an item is a Book chapter' do
       let(:type) { 'Book chapter' }
@@ -219,7 +220,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#source' do
     subject { mapper.source }
 
-    let(:metadata) {{ 'type' => type, 'publisher' => ['Some journal'] }}
+    let(:metadata) { { 'type' => type, 'publisher' => ['Some journal'] } }
 
     context 'when an item is a Book chapter' do
       let(:type) { 'Book chapter' }
@@ -238,21 +239,20 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
 
       it { is_expected.to be_empty }
     end
-
   end
 
   describe '#representative_file' do
     subject { mapper.representative_file }
 
-    let(:metadata) { {representative_files: ['some files']} }
+    let(:metadata) { { 'representative_files' => ['some files'] } }
 
-    it { is_expected.to eq metadata[:representative_files] }
+    it { is_expected.to eq metadata['representative_files'] }
   end
 
   describe '#title' do
     subject { mapper.title }
 
-    let(:metadata) { {'title' => value} }
+    let(:metadata) { { 'title' => value } }
     let(:value) { ['title value'] }
 
     it { is_expected.to eq value }

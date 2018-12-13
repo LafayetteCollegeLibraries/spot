@@ -13,7 +13,7 @@ module Spot
       #
       # @return [Array<Hash<Symbol => String>>]
       def all
-        @@all ||= mapped_639_1_entries
+        @all ||= mapped_639_1_entries
       end
 
       # Find the label for a language by its 2-char entry.
@@ -26,11 +26,10 @@ module Spot
 
       private
 
-      def mapped_639_1_entries
-        ISO_639::ISO_639_1.select { |e| e.alpha2.present? }
-                          .map { |e| [e.alpha2, e.english_name] }
-                          .to_h
-      end
-    end
+        def mapped_639_1_entries
+          ISO_639::ISO_639_1.select { |e| e.alpha2.present? }
+                            .map { |e| [e.alpha2, e.english_name] }
+                            .to_h
+        end
   end
 end

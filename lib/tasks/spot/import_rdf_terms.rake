@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 namespace :spot do
   namespace :rdf do
     desc 'Loads remote RDF terms locally'

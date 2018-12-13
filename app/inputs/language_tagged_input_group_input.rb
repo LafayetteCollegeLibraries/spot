@@ -28,7 +28,7 @@ class LanguageTaggedInputGroupInput < SimpleForm::Inputs::Base
   #
   # @param [Hash] wrapper_options
   # @return [] text input
-  def input(wrapper_options = nil)
+  def input(_wrapper_options = nil)
     input_html_classes.unshift('string')
     input_html_options[:name] ||= "#{object_name}[#{attribute_name}]"
     value = object.send(attribute_name) || ''
@@ -38,11 +38,11 @@ class LanguageTaggedInputGroupInput < SimpleForm::Inputs::Base
 
   private
 
-  # Explicitly state that this is a single property, rather than expecting
-  # this method to not be defined.
-  #
-  # @return [FalseClass]
-  def multiple?
-    false
-  end
+    # Explicitly state that this is a single property, rather than expecting
+    # this method to not be defined.
+    #
+    # @return [FalseClass]
+    def multiple?
+      false
+    end
 end

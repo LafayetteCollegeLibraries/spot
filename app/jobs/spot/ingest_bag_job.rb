@@ -37,44 +37,44 @@ module Spot
 
     private
 
-    attr_reader :bag_path, :source
+      attr_reader :bag_path, :source
 
-    # Is the work_class provided one of our curation_concerns?
-    #
-    # @return [TrueClass, FalseClass]
-    def work_class_valid?
-      ::Hyrax.config.curation_concerns.include?(@work_class)
-    end
+      # Is the work_class provided one of our curation_concerns?
+      #
+      # @return [TrueClass, FalseClass]
+      def work_class_valid?
+        ::Hyrax.config.curation_concerns.include?(@work_class)
+      end
 
-    # Does the provided symbol have a mapper associated with it?
-    #
-    # @return [Constant, nil]
-    def source_available?
-      Spot::Mappers.available_mappers.include?(@source.to_sym)
-    end
+      # Does the provided symbol have a mapper associated with it?
+      #
+      # @return [Constant, nil]
+      def source_available?
+        Spot::Mappers.available_mappers.include?(@source.to_sym)
+      end
 
-    # The mapper to use, decided by the +:source+ parameter
-    #
-    # @return [Darlingtonia::MetadataMapper]
-    def mapper
-      @mapper ||= Spot::Mappers.get(source.to_sym).new
-    end
+      # The mapper to use, decided by the +:source+ parameter
+      #
+      # @return [Darlingtonia::MetadataMapper]
+      def mapper
+        @mapper ||= Spot::Mappers.get(source.to_sym).new
+      end
 
-    # @return [Spot::Importers::Bag::Parser]
-    def parser
-      @parser ||= Spot::Importers::Bag::Parser.new(directory: bag_path,
-                                                   mapper: mapper)
-    end
+      # @return [Spot::Importers::Bag::Parser]
+      def parser
+        @parser ||= Spot::Importers::Bag::Parser.new(directory: bag_path,
+                                                     mapper: mapper)
+      end
 
-    # @return [Spot::Importers::Bag::RecordImporter]
-    def record_importer
-      @record_importer ||= Spot::Importers::Bag::RecordImporter.new(work_class: @work_class)
-    end
+      # @return [Spot::Importers::Bag::RecordImporter]
+      def record_importer
+        @record_importer ||= Spot::Importers::Bag::RecordImporter.new(work_class: @work_class)
+      end
 
-    # @return [Darlingtonia::Importer]
-    def importer
-      @importer ||= Darlingtonia::Importer.new(parser: parser,
-                                               record_importer: record_importer)
-    end
+      # @return [Darlingtonia::Importer]
+      def importer
+        @importer ||= Darlingtonia::Importer.new(parser: parser,
+                                                 record_importer: record_importer)
+      end
   end
 end

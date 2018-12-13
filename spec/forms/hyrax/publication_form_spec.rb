@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Hyrax::PublicationForm do
   shared_context 'required fields' do
     it 'contains required fields' do
@@ -61,12 +62,9 @@ RSpec.describe Hyrax::PublicationForm do
     subject(:form) { described_class }
 
     it 'marks singular fields as false' do
-      expect(form.multiple?('resource_type')).to be false
-      expect(form.multiple?('abstract')).to be false
-      expect(form.multiple?('issued')).to be false
-      expect(form.multiple?('available')).to be false
-      expect(form.multiple?('date_created')).to be false
-      expect(form.multiple?('title')).to be false
+      %w[resource_type abstract issued available date_created title].each do |f|
+        expect(form.multiple?(f)).to be false
+      end
     end
   end
 
@@ -80,7 +78,6 @@ RSpec.describe Hyrax::PublicationForm do
     subject(:attributes) { described_class.model_attributes(raw_params) }
 
     let(:raw_params) { ActionController::Parameters.new(params) }
-
 
     context 'when passed identifier_prefix and identifier_value' do
       let(:params) do
@@ -129,7 +126,7 @@ RSpec.describe Hyrax::PublicationForm do
     end
 
     context 'parses *_value and *_language into tagged RDF::Literals' do
-      %w(title abstract).each do |field_name|
+      %w[title abstract].each do |field_name|
         context field_name do
           let(:field) { field_name }
 
@@ -137,7 +134,7 @@ RSpec.describe Hyrax::PublicationForm do
         end
       end
 
-      %w(title_alternative subtitle description).each do |field_name|
+      %w[title_alternative subtitle description].each do |field_name|
         context field_name do
           let(:field) { field_name }
 

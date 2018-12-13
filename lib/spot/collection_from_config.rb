@@ -63,57 +63,55 @@ module Spot
 
     private
 
-    # Processes a raw hash from +YAML.safe_load+ to one having
-    # symbolized keys and Array-ified values.
-    #
-    # @param [Hash]
-    # @return [Hash<Symbol => Array>]
-    def self.wrap_metadata(metadata)
-      metadata.each_with_object({}) do |(key, val), obj|
-        obj[key.to_sym] = Array(val)
-      end
-    end
-
-    # If no collection_type is provided, we'll use +user_collection+
-    #
-    # @return [String]
-    def default_collection_type
-      Hyrax::CollectionType::USER_COLLECTION_MACHINE_ID
-    end
-
-    # Finds a CollectionType by a provided +machine_id+ String.
-    #
-    # @param value [String] A CollectionType's +machine_id+ property
-    # @return [Hyrax::CollectionType]
-    # @raise [CollectionTypeDoesNotExistError] if CollectionType machine_id does not exist
-    def parse_collection_type(value)
-      if value.blank?
-        value = default_collection_type
+      # Processes a raw hash from +YAML.safe_load+ to one having
+      # symbolized keys and Array-ified values.
+      #
+      # @param [Hash]
+      # @return [Hash<Symbol => Array>]
+      private_class_method def self.wrap_metadata(metadata)
+        metadata.each_with_object({}) do |(key, val), obj|
+          obj[key.to_sym] = Array(val)
+        end
       end
 
-      type = Hyrax::CollectionType.find_by(machine_id: value)
-      raise CollectionTypeDoesNotExistError, "CollectionType #{value} does not exist" if type.nil?
-
-      type
-    end
-
-    # Converts an easy-to-read value to its official
-    # Hydra::AccessControls value. Only 'authenticated'
-    # and 'public' will result in a different visibility,
-    # everything else defaults to 'private'
-    #
-    # @param value [String] one of 'authenticated', 'public'
-    # @return [String] the Hydra::AccessControls::AccessRight constant
-    def parse_visibility(value)
-      # safe navigating in case visibility is nil
-      case value&.downcase
-      when 'authenticated'
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-      when 'public'
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-      else
-        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+      # If no collection_type is provided, we'll use +user_collection+
+      #
+      # @return [String]
+      def default_collection_type
+        Hyrax::CollectionType::USER_COLLECTION_MACHINE_ID
       end
-    end
+
+      # Finds a CollectionType by a provided +machine_id+ String.
+      #
+      # @param value [String] A CollectionType's +machine_id+ property
+      # @return [Hyrax::CollectionType]
+      # @raise [CollectionTypeDoesNotExistError] if CollectionType machine_id does not exist
+      def parse_collection_type(value)
+        value = default_collection_type if value.blank?
+
+        type = Hyrax::CollectionType.find_by(machine_id: value)
+        raise CollectionTypeDoesNotExistError, "CollectionType #{value} does not exist" if type.nil?
+
+        type
+      end
+
+      # Converts an easy-to-read value to its official
+      # Hydra::AccessControls value. Only 'authenticated'
+      # and 'public' will result in a different visibility,
+      # everything else defaults to 'private'
+      #
+      # @param value [String] one of 'authenticated', 'public'
+      # @return [String] the Hydra::AccessControls::AccessRight constant
+      def parse_visibility(value)
+        # safe navigating in case visibility is nil
+        case value&.downcase
+        when 'authenticated'
+          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+        when 'public'
+          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+        else
+          Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+        end
+      end
   end
 end

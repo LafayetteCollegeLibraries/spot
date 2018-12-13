@@ -8,22 +8,14 @@ namespace :spot do
     work_class = ENV['work_class']
     working_path = ENV['working_path']
 
-    error_message = if !source
-                      'No `source` provided!'
-                    elsif !path
-                      'No `path` provided!'
-                    elsif !work_class
-                      'No `work_class` provided!'
-                    elsif !working_path
-                      'No `working_path` provided!'
+    error_message = if    !source       then 'No `source` provided!'
+                    elsif !path         then 'No `path` provided!'
+                    elsif !work_class   then 'No `work_class` provided!'
+                    elsif !working_path then 'No `working_path` provided!'
                     end
 
     if error_message
-      common_envs = %w[
-        source=<source>
-        work_class=<work class>
-        working_path=</path/to/working_directory>
-      ]
+      common_envs = 'source=<source> work_class=<work class> working_path=</path/to/working_directory>'
 
       puts error_message
       puts "Use `bundle exec rails #{t} #{common_envs} path=</path/to/bag_file.zip>"
@@ -36,10 +28,8 @@ namespace :spot do
     paths = File.directory?(path) ? Dir[File.join(path, '*.zip')] : [path]
 
     paths.each do |entry|
-      Spot::IngestZippedBagJob.perform_later(zip_path: entry,
-                                             source: source,
-                                             work_class: work_class,
-                                             working_path: working_path)
+      Spot::IngestZippedBagJob.perform_later(zip_path: entry, source: source,
+                                             work_class: work_class, working_path: working_path)
     end
   end
 end

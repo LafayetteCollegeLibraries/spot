@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # this is expecting to be called within a block like:
 #
 #   RSpec.describe ImageIndexer do
@@ -13,11 +14,11 @@
 #   end
 
 RSpec.shared_examples 'simple model indexing' do
-  it { is_expected.to include *fields }
+  it { is_expected.to include(*fields) }
   it 'adds the work value to each field' do
     fields.each do |field|
       method = field.sub(/_[a-z]+$/, '').to_sym
-      expect(subject[field]).to match_array work.send(method)
+      expect(solr_doc[field]).to match_array work.send(method)
     end
   end
 end

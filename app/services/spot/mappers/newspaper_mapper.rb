@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-
+#
+# Metadata mapper for the Lafayette newspaper archive collection.
+# See {Spot::Mappers::BaseMapper} for usage information.
 module Spot::Mappers
   class NewspaperMapper < BaseMapper
     include NestedAttributes
@@ -10,11 +12,12 @@ module Spot::Mappers
       physical_medium: 'dc:source',
       publisher: 'dc:publisher',
       resource_type: 'dc:type',
-      rights_statement: 'dc:rights',
+      rights_statement: 'dc:rights'
     }.freeze
 
     self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
+    # @return [Array<Symbol>]
     def fields
       super + %i[
         based_near_attributes

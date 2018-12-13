@@ -4,10 +4,8 @@
 # to search ISO-639-1 languages. See {Spot::ISO6391} for details.
 module Qa::Authorities
   class Language < Qa::Authorities::Base
-    # @return [Array<Hash<Symbol => String>>]
-    def all
-      @@all ||= Spot::ISO6391.all.map { |key, val| wrap(id: key, label: val) }
-    end
+    class_attribute :all
+    self.all = Spot::ISO6391.all.map { |key, val| wrap(id: key, label: val) }
 
     # @param [String] id
     # @return [Hash<Symbol => String>, NilClass]
@@ -27,10 +25,15 @@ module Qa::Authorities
 
     private
 
-    def wrap(id:, label:)
-      return if id.nil? || label.nil?
+      # Wraps our results in a nice JSON response
+      #
+      # @param [String] id
+      # @param [String] label
+      # @return [Hash<Symbol => String>]
+      def wrap(id:, label:)
+        return if id.nil? || label.nil?
 
-      { id: id, label: label, value: id }
-    end
+        { id: id, label: label, value: id }
+      end
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
@@ -53,7 +54,7 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     subject { mapper.identifier }
 
     let(:value) { ['issn:1234-5678'] }
-    let(:metadata) { {'relatedItem_identifier_typeISSN' => ['1234-5678']} }
+    let(:metadata) { { 'relatedItem_identifier_typeISSN' => ['1234-5678'] } }
 
     it { is_expected.to eq value }
   end
@@ -112,7 +113,7 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
 
     context 'when just a title exists' do
       let(:title) { [RDF::Literal('Shakespeare Bulletin', language: :en)] }
-      let(:metadata) { {'titleInfo_Title' => ['Shakespeare Bulletin']} }
+      let(:metadata) { { 'titleInfo_Title' => ['Shakespeare Bulletin'] } }
 
       it { is_expected.to eq title }
     end

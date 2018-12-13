@@ -31,37 +31,37 @@ class IdentifierController < ApplicationController
 
   private
 
-  # Searches for an item based on an identifier attached to the document.
-  # Expected to be called from within a method that handles a route.
-  # The +key+ option allows the params key to be something other than +:id+.
-  # Displays a 404 (via raised +Blacklight::Exceptions::RecordNotFound+
-  # that is handled with +Hydra::Catalog+) if no item is found.
-  #
-  # @param prefix [String]
-  # @option key [Symbol] Optional parameter key to use for lookup
-  #   (defaults to :id)
-  def search_and_redirect_with_prefix(prefix, key: :id)
-    query = query_for_identifier(Spot::Identifier.new(prefix, params[key]))
-    result, _documents = repository.search(query)
+    # Searches for an item based on an identifier attached to the document.
+    # Expected to be called from within a method that handles a route.
+    # The +key+ option allows the params key to be something other than +:id+.
+    # Displays a 404 (via raised +Blacklight::Exceptions::RecordNotFound+
+    # that is handled with +Hydra::Catalog+) if no item is found.
+    #
+    # @param prefix [String]
+    # @option key [Symbol] Optional parameter key to use for lookup
+    #   (defaults to :id)
+    def search_and_redirect_with_prefix(prefix, key: :id)
+      query = query_for_identifier(Spot::Identifier.new(prefix, params[key]))
+      result, _documents = repository.search(query)
 
-    raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
+      raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
 
-    document = result.response['docs'].first
-    controller = document['has_model_ssim'].first.downcase.pluralize
+      document = result.response['docs'].first
+      controller = document['has_model_ssim'].first.downcase.pluralize
 
-    redirect_to controller: "hyrax/#{controller}",
-                action: 'show',
-                id: document['id']
-  end
+      redirect_to controller: "hyrax/#{controller}",
+                  action: 'show',
+                  id: document['id']
+    end
 
-  # @return [String]
-  def identifier_solr_field
-    'identifier_ssim'
-  end
+    # @return [String]
+    def identifier_solr_field
+      'identifier_ssim'
+    end
 
-  # @param id [Spot::Identifier, #to_s] the identifier (with prefix)
-  # @return [Hash<Symbol => String>]
-  def query_for_identifier(id)
-    { q: "{!terms f=#{identifier_solr_field}}#{id.to_s}" }
-  end
+    # @param id [Spot::Identifier, #to_s] the identifier (with prefix)
+    # @return [Hash<Symbol => String>]
+    def query_for_identifier(id)
+      { q: "{!terms f=#{identifier_solr_field}}#{id}" }
+    end
 end

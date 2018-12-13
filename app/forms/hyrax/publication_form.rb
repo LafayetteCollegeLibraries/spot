@@ -1,9 +1,4 @@
 # frozen_string_literal: true
-
-# @todo We should probably move the local-controlled-vocabulary
-#       transformation stuff into a mixin that adds a class_attribute
-#       where we can define those fields once + it takes care of
-#       the +build_permitted_params+ and +transform_nested_fields+ work
 module Hyrax
   class PublicationForm < Hyrax::Forms::WorkForm
     include ::IdentifierFormFields
@@ -56,7 +51,7 @@ module Hyrax
       :visibility_during_embargo, :embargo_release_date, :visibility_after_embargo,
       :visibility_during_lease, :lease_expiration_date, :visibility_after_lease,
       :visibility, :ordered_member_ids, :in_works_ids,
-      :member_of_collection_ids, :admin_set_id,
+      :member_of_collection_ids, :admin_set_id
     ]
 
     # samvera/hydra-editor uses both the class method (new form) and
@@ -83,7 +78,7 @@ module Hyrax
         :visibility_during_embargo, :embargo_release_date, :visibility_after_embargo,
         :visibility_during_lease, :lease_expiration_date, :visibility_after_lease,
         :visibility, :ordered_member_ids, :in_works_ids,
-        :member_of_collection_ids, :admin_set_id,
+        :member_of_collection_ids, :admin_set_id
       ]
     end
 
@@ -108,7 +103,6 @@ module Hyrax
     end
 
     class << self
-
       # samvera/hydra-editor uses both the class method (new form) and
       # instance method (edit form) versions of this method, so we need
       # to provide both (otherwise we're head-first down a rabbit hole
@@ -127,13 +121,13 @@ module Hyrax
 
       # @return [Array<Symbol>]
       def singular_terms
-        %i(
+        %i[
           abstract
           date_issued
           date_available
           resource_type
           title
-        )
+        ]
       end
 
       # Used to transform values from the form into those that

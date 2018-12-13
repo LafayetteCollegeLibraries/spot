@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'tmpdir'
 
 RSpec.describe Spot::IngestZippedBagJob do
@@ -12,36 +13,28 @@ RSpec.describe Spot::IngestZippedBagJob do
   let(:zip_path) { '/path/to/bag.zip' }
   let(:work_class) { 'Publication' }
   let(:source) { 'ldr' }
-  let(:zip_service_double) { double('zip service') }
+  let(:zip_service_double) { instance_double(ZipService, unzip!: true) }
 
   describe '#perform' do
     before do
-      allow(ZipService)
-        .to receive(:new)
-        .with(src_path: zip_path)
-        .and_return(zip_service_double)
+      allow(ZipService).to receive(:new).and_return(zip_service_double)
 
-      allow(zip_service_double)
-        .to receive(:unzip!)
-        .with(dest_path: working_path.join('bag').to_s)
+      allow(Spot::IngestBagJob).to receive(:perform_now)
     end
 
     it 'unzips the bag and passes it to Spot::IngestBagJob' do
-      expect(Spot::IngestBagJob)
-        .to receive(:perform_now)
-        .with(bag_path: working_path.join('bag').to_s,
-              source: source,
-              work_class: work_class)
-
       job
+
+      expect(Spot::IngestBagJob)
+        .to have_received(:perform_now)
+        .with(bag_path: working_path.join('bag').to_s, source: source, work_class: work_class)
     end
 
     context 'when working path isn\'t a directory' do
       let(:working_path) { Pathname.new('/nope/not/here') }
 
       it 'raises an ArgumentError' do
-        expect { job }
-          .to raise_error(ArgumentError, /is not a directory/)
+        expect { job }.to raise_error(ArgumentError, /is not a directory/)
       end
     end
   end

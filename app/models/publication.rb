@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Publication < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 

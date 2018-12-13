@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+#
+# rubocop:disable RSpec/AnyInstance
 RSpec.feature 'Show Publication page', js: false do
   let(:user) { create(:user) }
   let(:pub) { create(:publication, user: user, file: file, language: language) }
@@ -75,14 +78,15 @@ RSpec.feature 'Show Publication page', js: false do
     pub.identifier.each do |id|
       key = id.split(':').first
       all_clean = page.all(".attribute-identifier_#{key}").map do |value|
-                    value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
-                  end
+        value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
+      end
+
       expect(all_clean).to include id
     end
 
     # TODO: revisit Rights Statement when we actually display it on the show page
-    #expect(page.all('.attribute-rights_statement').map(&:uri))
-    #  .to eq pub.rights_statement.map(&:to_s)
+    # expect(page.all('.attribute-rights_statement').map(&:uri))
+    #   .to eq pub.rights_statement.map(&:to_s)
   end
 
   context 'when Publication is a PDF' do
@@ -104,3 +108,4 @@ RSpec.feature 'Show Publication page', js: false do
     end
   end
 end
+# rubocop:enable RSpec/AnyInstance

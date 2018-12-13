@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Mappers::NewspaperMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
@@ -22,7 +23,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     end
 
     context 'when location is not in our internal mapping' do
-      let(:metadata) { {'dc:coverage' => ['Coolsville, Daddy-O']} }
+      let(:metadata) { { 'dc:coverage' => ['Coolsville, Daddy-O'] } }
 
       it { is_expected.to be_empty }
 
@@ -104,7 +105,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#rights_statement' do
     subject(:rights_statement) { mapper.rights_statement.first }
 
-    let(:metadata) { {'dc:rights' => [rights]} }
+    let(:metadata) { { 'dc:rights' => [rights] } }
     let(:uri) { 'https://creativecommons.org/publicdomain/mark/1.0/' }
 
     context 'when in the Public domain' do

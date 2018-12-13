@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Hyrax.config do |config|
   # Injected via `rails g hyrax:work Publication`
   config.register_curation_concern :publication
@@ -139,7 +140,7 @@ Hyrax.config do |config|
   # Returns a URL that resolves to an info.json file provided by a IIIF image server
   config.iiif_info_url_builder = lambda do |file_id, base_url|
     uri = Riiif::Engine.routes.url_helpers.info_url(file_id, host: base_url)
-    puts "[IIIF INFO URI] #{uri}"
+    Rails.logger.debug "[IIIF INFO URI] #{uri}"
 
     uri.sub(%r{/info\.json\Z}, '')
   end

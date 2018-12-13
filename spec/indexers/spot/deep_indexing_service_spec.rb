@@ -1,14 +1,15 @@
+# frozen_string_literal: true
 RSpec.describe Spot::DeepIndexingService do
   describe '#generate_solr_document' do
     subject(:doc) { indexing_service.generate_solr_document }
 
     let(:indexing_service) { described_class.new(object, object.class.index_config) }
-    let(:object) { work_class.new(metadata) }
     let(:metadata) do
       { title: ['Fake work title'], location: [RDF::URI(location_uri)] }
     end
     let(:location_uri) { 'http://sws.geonames.org/4931353/' }
     let(:location_label) { 'Brighton' }
+    let(:object) { work_class.new(metadata) }
 
     # geonames doesn't actually give us n-triples, but let's pretend it does
     let(:rdf_body) do
@@ -41,14 +42,16 @@ RSpec.describe Spot::DeepIndexingService do
     # it indexes our expected fields
     it { is_expected.to include 'title_tesim' }
     it { is_expected.to include 'location_ssim' }
+    it { is_expected.to include 'location_label_ssim' }
 
     context 'when a cached label exists' do
       before do
         RdfLabel.create(uri: location_uri, value: location_label)
+        allow(object.location.first).to receive(:fetch)
       end
 
       it 'does not fetch the label' do
-        expect(object.location.first).not_to receive(:fetch)
+        expect(object.location.first).not_to have_received(:fetch)
       end
 
       it { is_expected.to include 'location_label_ssim' }
@@ -57,17 +60,14 @@ RSpec.describe Spot::DeepIndexingService do
     context 'when a label is not cached' do
       before do
         RdfLabel.where(uri: location_uri, value: location_label).delete_all
+        allow(object.location.first).to receive(:fetch)
       end
 
       it 'fetches the label' do
-        expect(object.location.first).to receive(:fetch)
         indexing_service.generate_solr_document
-      end
 
-      # we need to check this outside of the the previous example
-      # because +expect(<object>).to receive(:method)+ creates a
-      # mock which returns nil
-      it { is_expected.to include 'location_label_ssim' }
+        expect(object.location.first).to have_received(:fetch)
+      end
     end
   end
 end

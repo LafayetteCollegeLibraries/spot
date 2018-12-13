@@ -67,25 +67,25 @@ module Spot
 
     private
 
-    # makes sure the value can be fetched before doing a cache check
-    #
-    # @param [ActiveTriples::Resource] val
-    def fetch_value(val)
-      return unless val.respond_to? :fetch
-      return if val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
+      # makes sure the value can be fetched before doing a cache check
+      #
+      # @param [ActiveTriples::Resource] val
+      def fetch_value(val)
+        return unless val.respond_to? :fetch
+        return if val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
 
-      val.fetch
-    end
+        val.fetch
+      end
 
-    # Return a label for the solrized term.
-    #
-    # @param [Array] val
-    #
-    # @example
-    #   label(["http://id.loc.gov/authorities/subjects/sh85062487", {:label=>"Hotels$http://id.loc.gov/authorities/subjects/sh85062487"}])
-    #   => 'Hotels'
-    def label_for(val)
-      val.last[:label].split('$').first
-    end
+      # Return a label for the solrized term.
+      #
+      # @param [Array] val
+      #
+      # @example
+      #   label(["http://id.loc.gov/authorities/subjects/sh85062487", {:label=>"Hotels$http://id.loc.gov/authorities/subjects/sh85062487"}])
+      #   => 'Hotels'
+      def label_for(val)
+        val.last[:label].split('$').first
+      end
   end
 end

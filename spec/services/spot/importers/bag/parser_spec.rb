@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::Importers::Bag::Parser do
   subject(:parser) do
     described_class.new(directory: bag_path, mapper: mapper)
@@ -17,7 +18,7 @@ RSpec.describe Spot::Importers::Bag::Parser do
 
     it { is_expected.to be_an Array }
 
-    it 'should only contain one item' do
+    it 'contains only one item' do
       expect(records.size).to eq 1
     end
 

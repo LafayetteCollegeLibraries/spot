@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+#
+# Metadata mapper for the Shakespeare Bulletin Archive collection.
+# See {Spot::Mappers::BaseMapper} for usage information.
 module Spot::Mappers
   class ShakespeareBulletinMapper < BaseMapper
     include ShortDateConversion
@@ -5,11 +9,12 @@ module Spot::Mappers
 
     self.fields_map = {
       publisher: 'originInfo_Publisher',
-      source: 'relatedItem_typeHost_titleInfo_title',
+      source: 'relatedItem_typeHost_titleInfo_title'
     }.freeze
 
     self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
 
+    # @return [Array<Symbol>]
     def fields
       super + %i[
         based_near_attributes
@@ -22,6 +27,9 @@ module Spot::Mappers
       ]
     end
 
+    # Looking at the metadata, we should only have these three options for
+    # locations, so we'll hard-code their geonames URIs.
+    #
     # @return [Array<Hash>]
     def based_near_attributes
       nested_attributes_hash_for('originInfo_place_placeTerm') do |place|
@@ -90,22 +98,9 @@ module Spot::Mappers
     def title
       base_title = metadata['titleInfo_Title']&.first
       date_qualifier = metadata['relatedItem_part1_date_qualifierApproximate']
-      volume_info = [
-        metadata['relatedItem_part1_detail1_typeVolume_caption'],
-        metadata['relatedItem_part1_detail1_typeVolume_number']
-      ].flatten.join(' ').strip
-      issue_info = [
-        metadata['relatedItem_part1_detail1_typeIssue_caption'],
-        metadata['relatedItem_part1_detail1_typeIssue_number']
-      ].flatten.join(' ').strip
-
-      volume_issue_block = [volume_info, issue_info]
-                             .reject(&:blank?)
-                             .join(', ')
-                             .strip
 
       parenthetical = "(#{date_qualifier.first})" unless date_qualifier.blank?
-      volume_issue = "[#{volume_issue_block}]" unless volume_issue_block.blank?
+      volume_issue = "[#{title_volume_issue}]" unless title_volume_issue.blank?
 
       joined = [base_title, parenthetical, volume_issue].reject(&:blank?).join(' ')
 
@@ -114,21 +109,38 @@ module Spot::Mappers
 
     private
 
-    # @param [String] role
-    # @return [Array<String>] MODS name fields for role
-    def names_with_role(role)
-      (1..4).to_a.reduce([]) do |results, num|
-        role_key = "name#{num}_role"
-        value_key = "name#{num}_displayForm"
+      # The metadata we're getting has four "name<number>_role" and
+      # "name<number>_displayForm" properties for its authors/editors.
+      # We'll iterate through to find those that match the requested role.
+      #
+      # @param [String] role
+      # @return [Array<String>] MODS name fields for role
+      def names_with_role(role)
+        (1..4).to_a.reduce([]) do |results, num|
+          role_key = "name#{num}_role"
+          value_key = "name#{num}_displayForm"
 
-        next if metadata[role_key].blank?
+          next results if metadata[role_key].blank? || metadata[value_key].blank?
 
-        if metadata[role_key].first.include?(role) && metadata[value_key].present?
-          results += metadata[value_key]
+          results += metadata["name#{num}_displayForm"] if metadata[role_key].first.include?(role)
+
+          results
         end
-
-        results
       end
-    end
+
+      # @return [String]
+      def title_volume_issue
+        volume_info = [
+          metadata['relatedItem_part1_detail1_typeVolume_caption'],
+          metadata['relatedItem_part1_detail1_typeVolume_number']
+        ].flatten.join(' ').strip
+
+        issue_info = [
+          metadata['relatedItem_part1_detail1_typeIssue_caption'],
+          metadata['relatedItem_part1_detail1_typeIssue_number']
+        ].flatten.join(' ').strip
+
+        [volume_info, issue_info].reject(&:blank?).join(', ').strip
+      end
   end
 end

@@ -53,7 +53,7 @@ module Spot::Mappers
     #
     # @return [Array<Symbol>]
     def fields
-      self.fields_map.keys + [:visibility]
+      fields_map.keys + [:visibility]
     end
 
     # @param [String, Symbol] name The field name
@@ -78,7 +78,7 @@ module Spot::Mappers
     def representative_files
       metadata['representative_files']
     end
-    alias_method :representative_file, :representative_files
+    alias representative_file representative_files
 
     # @return [String]
     def visibility

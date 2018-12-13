@@ -19,7 +19,7 @@ module Spot
     # @param [String] string_value
     # @return [Spot::Identifier]
     def self.from_string(string_value)
-      return new(nil, string_value) unless string_value =~ %r(#{SEPARATOR})
+      return new(nil, string_value) unless string_value.match?(%r{#{SEPARATOR}})
 
       prefix, *the_rest = string_value.split(SEPARATOR)
       prefix.downcase!
@@ -59,6 +59,6 @@ module Spot
         "#{prefix}#{SEPARATOR}#{value}"
       end
     end
-    alias_method :to_string, :to_s
+    alias to_string to_s
   end
 end

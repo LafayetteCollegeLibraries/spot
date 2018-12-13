@@ -20,7 +20,7 @@ module LanguageTaggedFormFields
     # be called at the class level so that the fields can be stored in
     # a singleton method to be called later.
     #
-    # @todo is there a better way to do this? my meta-programming naïvity
+    # @todo is there a better way to do this? my meta-programming naivity
     #       might be showing?
     # @param [Array<Symbol>] *fields The fields to transform
     # @return [void]
@@ -64,33 +64,41 @@ module LanguageTaggedFormFields
 
     private
 
-    # transforms arrays of field values + languages into RDF::Literals
-    # tagged with said language
-    #
-    # @param [ActiveController::Parameters, Hash<String => Array<String>>] params
-    # @return [void]
-    def transform_language_tagged_fields!(params)
-      _language_tagged_fields.flatten.each do |field|
-        value_key = "#{field}_value"
-        lang_key = "#{field}_language"
+      # transforms arrays of field values + languages into RDF::Literals
+      # tagged with said language
+      #
+      # @param [ActiveController::Parameters, Hash<String => Array<String>>] params
+      # @return [void]
+      def transform_language_tagged_fields!(params)
+        _language_tagged_fields.flatten.each do |field|
+          value_key = "#{field}_value"
+          lang_key = "#{field}_language"
 
-        next unless params.include?(value_key) && params.include?(lang_key)
+          next unless params.include?(value_key) && params.include?(lang_key)
 
-        values = Array(params.delete(value_key))
-        langs = Array(params.delete(lang_key))
+          values = Array(params.delete(value_key))
+          langs = Array(params.delete(lang_key))
 
-        mapped = values.zip(langs).map do |(value, lang)|
+          mapped = map_rdf_literals(values.zip(langs))
+
+          params[field] = mapped if mapped
+          params[field] = params[field].first unless multiple?(field)
+        end
+      end
+
+      # Transforms an array of value/language pairs into Literals or values
+      #
+      # @param [Array<Array<String>>] tuples
+      # @return [Array<RDF::Literal, String>]
+      def map_rdf_literals(tuples)
+        tuples.map do |(value, language)|
           # need to skip blank entries here, otherwise we get a blank literal
           # (""@"") which LDP doesn't like
           next unless value.present?
 
           # retain the value if no language tag is passed
-          lang.present? ? RDF::Literal(value, language: lang.to_sym) : value
+          language.present? ? RDF::Literal(value, language: language.to_sym) : value
         end.reject(&:blank?)
-
-        params[field] = mapped if mapped
-        params[field] = params[field].first unless multiple?(field)
       end
-    end
   end
 end

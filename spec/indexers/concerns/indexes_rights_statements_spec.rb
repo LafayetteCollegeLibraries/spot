@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe IndexesRightsStatements do
   subject(:doc) { FakeIndexer.new(publication).generate_solr_document }
 

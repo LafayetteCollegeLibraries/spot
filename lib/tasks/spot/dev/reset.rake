@@ -1,4 +1,6 @@
-  # borrowed pretty extensively from psu's scholarsphere app
+# frozen_string_literal: true
+#
+# borrowed pretty extensively from psu's scholarsphere app
 # (https://github.com/psu-stewardship/scholarsphere/blob/b78954d/tasks/dev.rake#L32)
 require 'active_fedora/cleaner'
 

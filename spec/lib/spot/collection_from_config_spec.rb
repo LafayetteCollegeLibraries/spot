@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Spot::CollectionFromConfig do
   subject(:collection) { described_class.new(attributes) }
 
