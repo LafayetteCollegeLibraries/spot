@@ -5,7 +5,14 @@
 module Qa::Authorities
   class Language < Qa::Authorities::Base
     class_attribute :all
-    self.all = Spot::ISO6391.all.map { |key, val| wrap(id: key, label: val) }
+
+    # All of the languages available from the {Spot::ISO6391} service mapped
+    # to a JSON format that QA expects.
+    #
+    # @return [Array<Hash<Symbol => String>>]
+    def all
+      Spot::ISO6391.all.map { |key, val| wrap(id: key, label: val) }
+    end
 
     # @param [String] id
     # @return [Hash<Symbol => String>, NilClass]
