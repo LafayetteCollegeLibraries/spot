@@ -1,0 +1,9 @@
+# TODO: lint *.scss and *.js when we get to the UI sprint
+scss:
+  enabled: false
+
+jshint:
+  enabled: false
+
+rubocop:
+  config_file: .rubocop.yml
