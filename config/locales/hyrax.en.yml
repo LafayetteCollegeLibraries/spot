@@ -42,6 +42,7 @@ en:
         date_issued: Date of formal issuance (e.g., publication) of the resource.
         description: Free-text notes about the work. Examples include a brief description or citation information for a journal article.
         division: A major unit or section within a larger organization.
+        editor: A person having managerial and sometimes policy-making responsibility for the editorial part of a publishing firm or of a newspaper, magazine, or other publication.
         identifier: An unambiguous reference to the resource within a given context.
         keyword: Keywords or tags used to describe this content.
         language: A language of the resource.

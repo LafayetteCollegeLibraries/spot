@@ -59,11 +59,9 @@ RSpec.describe Hyrax::PublicationForm do
   end
 
   describe '.multiple?' do
-    subject(:form) { described_class }
-
     it 'marks singular fields as false' do
       %w[resource_type abstract issued available date_created title].each do |f|
-        expect(form.multiple?(f)).to be false
+        expect(described_class.multiple?(f)).to be false
       end
     end
   end
@@ -140,6 +138,18 @@ RSpec.describe Hyrax::PublicationForm do
 
           it_behaves_like 'a parsed language-tagged literal (multiple)'
         end
+      end
+    end
+  end
+
+  describe '.primary_terms form hints' do
+    described_class.new(Publication.new, nil, nil).primary_terms.each do |term|
+      describe "for #{term}" do
+        subject do
+          I18n.t("simple_form.hints.defaults.#{term}", locale: :en, default: nil)
+        end
+
+        it { is_expected.not_to be_nil, "Hint missing for Publication##{term}" }
       end
     end
   end
