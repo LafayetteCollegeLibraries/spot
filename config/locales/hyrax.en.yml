@@ -33,9 +33,29 @@ en:
 
     hints:
       defaults:
-        # TODO: add abstract text
-        abstract: ''
-        description: "Free-text notes about the work. Examples include a brief description or citation information for a journal article."
+        abstract: A summary of the resource.
+        academic_department: A distinct, usually specialized educational unit within an educational organization.
+        based_near: Spatial characteristics of the resource.
+        bibliographic_citation: A bibliographic reference for the resource.
+        contributor: An entity responsible for making contributions to the resource.
+        date_available: Date that the resource became or will become available.
+        date_issued: Date of formal issuance (e.g., publication) of the resource.
+        description: Free-text notes about the work. Examples include a brief description or citation information for a journal article.
+        division: A major unit or section within a larger organization.
+        identifier: An unambiguous reference to the resource within a given context.
+        keyword: Keywords or tags used to describe this content.
+        language: A language of the resource.
+        license: A legal document giving official permission to do something with the resource.
+        organization: The organization associated with the resource.
+        physical_medium: A physical material or carrier.
+        publisher: An entity responsible for making the resource available.
+        related_resource: Further information about the subject resource.
+        resource_type: The nature or genre of the resource.
+        rights_statement: Information about copyright of the digital object
+        source: A related resource from which the described resource is derived.
+        subject: The topic of the resource.
+        subtitle: An explanatory or alternative title of a publication.
+        title_alternative: An alternative name for the resource.
   spot:
     identifiers:
       labels:
