@@ -2,6 +2,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  devise_for :users
+
   mount Blacklight::Engine => '/'
   mount Hydra::RoleManagement::Engine => '/'
   mount Hyrax::Engine, at: '/'
@@ -16,10 +18,9 @@ Rails.application.routes.draw do
     concerns :searchable
   end
 
-  devise_for :users
-
   resources :welcome, only: 'index'
   root 'hyrax/homepage#index'
+
   curation_concerns_basic_routes
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
