@@ -1,9 +1,7 @@
 # Place any default configuration for solr_wrapper here
 # port: 8983
 
-# pinning to v7.1.0, as v7.2.0 introduces errors to searching that were fixed
-# with samvera/hyrax#2435, but haven't (?) made their way into a release yet.
-version: 7.1.0
+version: 7.5.0
 instance_dir: tmp/solr-development
 collection:
   persist: true
