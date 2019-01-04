@@ -6,16 +6,15 @@ namespace :spot do
     source = ENV['source']
     path = ENV['path']
     work_class = ENV['work_class']
-    working_path = ENV['working_path']
+    working_path = ENV.fetch('working_path') { Rails.root.join('tmp', 'ingest').to_s }
 
     error_message = if    !source       then 'No `source` provided!'
                     elsif !path         then 'No `path` provided!'
                     elsif !work_class   then 'No `work_class` provided!'
-                    elsif !working_path then 'No `working_path` provided!'
                     end
 
     if error_message
-      common_envs = 'source=<source> work_class=<work class> working_path=</path/to/working_directory>'
+      common_envs = 'source=<source> work_class=<work class>'
 
       puts error_message
       puts "Use `bundle exec rails #{t} #{common_envs} path=</path/to/bag_file.zip>"
