@@ -4,6 +4,9 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :users
 
+  # need to call `root` before mounting our engines
+  root 'spot/pages#homepage'
+
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
   mount Hydra::RoleManagement::Engine => '/'
@@ -22,8 +25,6 @@ Rails.application.routes.draw do
     concerns :range_searchable
   end
 
-  resources :welcome, only: 'index'
-  root 'hyrax/homepage#index'
 
   curation_concerns_basic_routes
 

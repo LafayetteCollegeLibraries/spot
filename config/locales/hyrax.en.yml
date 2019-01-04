@@ -70,8 +70,11 @@ en:
         isbn: ISBN
         lafayette: Local
   hyrax:
-    product_name:           "Spot"
-    product_twitter_handle: "@SamveraRepo"
+    product_name: Lafayette Digital Repository
+    product_description: |
+      %{name} is an online archive designed to preserve and make accessible materials from
+      Lafayette College, including administrative publications and the scholarly work of
+      Lafayette faculty.
     institution_name:       "Lafayette College"
     institution_name_full:  "Lafayette College"
     account_name:           "My Institution Account Id"
