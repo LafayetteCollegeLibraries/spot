@@ -1,0 +1,12 @@
+<%#
+  Leaving this intentionally blank. Hyrax is expecting us to use questioning_authority
+  to generate a dropdown to select a license. I believe we'll be generating the license,
+  based on a depositor agreement, as text or a URI and won't be using the form to
+  provide this. Since the `license` field is baked into the Hyrax Collection form
+  (see: https://github.com/samvera/hyrax/blob/0cc633d/app/forms/hyrax/forms/collection_form.rb#L24
+  and https://github.com/samvera/hyrax/blob/0cc633d/app/forms/hyrax/forms/collection_form.rb#L66),
+  Changing the `Hyrax::CollectionsController.form_class` seems to require, at the very
+  least: copying the class into our codebase, setting this class attribute, then tracking
+  changes to the Hyrax class to ensure we're in sync. In an effort to avoid that,
+  we'll just leave this form field blank.
+%>
