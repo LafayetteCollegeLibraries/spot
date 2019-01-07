@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
   mount Sidekiq::Web => '/sidekiq'
   mount Qa::Engine => '/authorities'
+  mount OkComputer::Engine, at: '/status'
 
   concern :exportable, Blacklight::Routes::Exportable.new
   concern :searchable, Blacklight::Routes::Searchable.new
