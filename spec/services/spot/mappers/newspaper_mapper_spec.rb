@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'date'
+
 RSpec.describe Spot::Mappers::NewspaperMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
@@ -51,6 +53,44 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     end
 
     it { is_expected.to eq value }
+
+    context 'when the MAGIC_DATE_UPLOADED is present' do
+      let(:magic_date) { described_class::MAGIC_DATE_UPLOADED }
+      let(:metadata) do
+        {
+          'dc:date' => [
+            '2019-01-08T00:00:00Z',
+            magic_date
+          ]
+        }
+      end
+
+      it { is_expected.to eq ['2019-01-08'] }
+    end
+  end
+
+  describe '#date_uploaded' do
+    subject { mapper.date_uploaded }
+
+    context "when the MAGIC_DATE_UPLOADED isn't present" do
+      let(:metadata) { { 'dc:date' => ['2019-01-08T00:00:00Z'] } }
+
+      it { is_expected.to be nil }
+    end
+
+    context 'when the MAGIC_DATE_UPLOADED is present' do
+      let(:magic_date) { described_class::MAGIC_DATE_UPLOADED }
+      let(:metadata) do
+        {
+          'dc:date' => [
+            '2019-01-08T00:00:00Z',
+            magic_date
+          ]
+        }
+      end
+
+      it { is_expected.to eq magic_date }
+    end
   end
 
   describe '#description' do

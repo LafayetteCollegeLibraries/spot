@@ -2,9 +2,13 @@
 #
 # Metadata mapper for the Lafayette newspaper archive collection.
 # See {Spot::Mappers::BaseMapper} for usage information.
+require 'date'
+
 module Spot::Mappers
   class NewspaperMapper < BaseMapper
     include NestedAttributes
+
+    MAGIC_DATE_UPLOADED = '2010-09-16T00:00:00Z'
 
     self.fields_map = {
       identifier: 'dc:identifier',
@@ -21,6 +25,7 @@ module Spot::Mappers
     def fields
       super + %i[
         based_near_attributes
+        date_available
         date_issued
         description
         rights_statement
@@ -41,9 +46,14 @@ module Spot::Mappers
       end
     end
 
+    # @return [DateTime] The original date uploaded (when present)
+    def date_uploaded
+      MAGIC_DATE_UPLOADED if metadata['dc:date'].include? MAGIC_DATE_UPLOADED
+    end
+
     # @return [Array<String>] the date in YYYY-MM-DD format
     def date_issued
-      metadata['dc:date'].map do |raw_date|
+      (metadata['dc:date'] - [MAGIC_DATE_UPLOADED]).map do |raw_date|
         Date.parse(raw_date).strftime('%Y-%m-%d')
       end
     end
