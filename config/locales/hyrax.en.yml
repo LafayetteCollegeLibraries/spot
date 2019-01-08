@@ -15,7 +15,7 @@ en:
         depositor: Deposited by
         description: Description
         file_format: File Format
-        identifier: Identifier
+        identifier: Standard Identifier
         keyword: Keyword
         language: Language
         license: License
@@ -41,19 +41,19 @@ en:
         creator: The person or group responsible for the work. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;.
         date_available: Date that the resource became or will become available.
         date_issued: Date of formal issuance (e.g., publication) of the resource.
-        description: Free-text notes about the work. Examples include abstracts of a paper or citation information for a journal article.
+        description: A free-text account of the resource.
         division: A major unit or section within a larger organization.
         editor: A person having managerial and sometimes policy-making responsibility for the editorial part of a publishing firm or of a newspaper, magazine, or other publication.
-        identifier: A unique handle identifying the work. An example would be a DOI for a journal article, or an ISBN or OCLC number for a book.
+        identifier: An unambiguous reference to the resource. Recommended best practice is to identify the resource by means of a string conforming to a formal identification system.
         keyword: Words or phrases you select to describe what the work is about. These are used to search for content.
         language: The language of the work's content.
         license: Licensing and distribution information governing access to the work. Select from the provided drop-down list.
         organization: The organization associated with the resource.
-        physical_medium: A physical material or carrier.
+        physical_medium: A physical material or carrier.  Examples include paper, canvas, or DVD.
         publisher: The person or group making the work available. Generally this is the institution.
         related_resource: Further information about the subject resource.
         resource_type: Pre-defined categories to describe the type of content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected.
-        rights_statement: Information about copyright of the digital object
+        rights_statement: Rights statements express the copyright status of a Digital Object, as well as information about how users can access and re-use the objects.
         source: A related resource from which the described resource is derived.
         subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary.
         subtitle: An explanatory or alternative title of a publication.
