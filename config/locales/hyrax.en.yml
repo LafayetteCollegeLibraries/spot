@@ -56,6 +56,7 @@ en:
         source: A related resource from which the described resource is derived.
         subject: The topic of the resource.
         subtitle: An explanatory or alternative title of a publication.
+        title: A name given to the resource.
         title_alternative: An alternative name for the resource.
   spot:
     identifiers:
