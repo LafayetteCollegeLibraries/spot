@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'fileutils'
+require 'zip'
 
 # Abstracting out our zipping/unzipping into its own service so that it's not
 # lumped in with another one.
@@ -36,7 +37,7 @@ class ZipService
   def unzip!(dest_path:)
     FileUtils.mkdir_p(dest_path)
 
-    Zip::File.open(src_path) do |zip_file|
+    ::Zip::File.open(src_path) do |zip_file|
       zip_file.each do |entry|
         entry.extract(File.join(dest_path, entry.name))
       end
@@ -48,7 +49,7 @@ class ZipService
   # @param [String, Pathname] dest_path Destination path (should contain '.zip')
   # @return [Zip::File]
   def zip!(dest_path:)
-    Zip::File.open(dest_path, Zip::File::CREATE) do |zipfile|
+    ::Zip::File.open(dest_path, ::Zip::File::CREATE) do |zipfile|
       write_entries(entries, '', zipfile)
     end
   end
