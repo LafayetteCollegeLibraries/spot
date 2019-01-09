@@ -1,28 +1,26 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::Actors::PublicationActor do
-  let(:actor) { described_class.new(Hyrax::Actors::Terminator.new) }
+  subject(:actor) { pub_actor.create(env) }
 
-  # thumbs-down to testing a private method, but this is (currently) the only
-  # thing we've changed in PublicationActor
+  let(:pub_actor) { described_class.new(Hyrax::Actors::Terminator.new) }
+  let(:work) { Publication.new }
+  let(:user) { build(:user) }
+  let(:ability) { Ability.new(user) }
+  let(:attributes) { {} }
+  let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
+
   describe '#apply_deposit_date' do
-    subject(:apply_date) { actor.send(:apply_deposit_date, env) }
+    before do
+      allow(work).to receive(:save)
+      allow(Hyrax::TimeService).to receive(:time_in_utc).and_return(time_value)
+    end
 
-    let(:work) { Publication.new }
-    let(:user) { build(:user) }
-    let(:ability) { Ability.new(user) }
-    let(:attributes) { {} }
-    let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
+    let(:time_value) { DateTime.now.utc }
     let(:date_uploaded) { '2018-01-08T00:00:00Z' }
 
     context 'when no date_uploaded value is provided' do
-      before do
-        allow(Hyrax::TimeService).to receive(:time_in_utc).and_return(time_value)
-      end
-
-      let(:time_value) { DateTime.now.utc }
-
       it 'sets the date to TimeService.time_in_utc' do
-        expect { apply_date }
+        expect { actor }
           .to change { work.date_uploaded }
           .from(nil)
           .to(time_value)
@@ -33,7 +31,7 @@ RSpec.describe Hyrax::Actors::PublicationActor do
       let(:attributes) { { date_uploaded: date_uploaded } }
 
       it 'sets the date_uploaded of the work to a DateTime of the value' do
-        expect { apply_date }
+        expect { actor }
           .to change { work.date_uploaded }
           .from(nil)
           .to(DateTime.parse(date_uploaded).utc)
@@ -44,7 +42,7 @@ RSpec.describe Hyrax::Actors::PublicationActor do
       let(:work) { Publication.new(date_uploaded: date_uploaded) }
 
       it 'ensures the value is a DateTime' do
-        expect { apply_date }
+        expect { actor }
           .to change { work.date_uploaded }
           .from(date_uploaded)
           .to(DateTime.parse(date_uploaded).utc)
