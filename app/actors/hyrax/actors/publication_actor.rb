@@ -9,14 +9,7 @@ module Hyrax
         #
         # @return [void]
         def apply_deposit_date(env)
-          return super unless date_uploaded_present?(env)
           env.curation_concern.date_uploaded = get_date_uploaded_value(env)
-        end
-
-        # @param [Hyrax::Actors::Environment] env
-        # @return [true, false]
-        def date_uploaded_present?(env)
-          env.attributes[:date_uploaded].present? || env.curation_concern.date_uploaded.present?
         end
 
         # @param [Hyrax::Actors::Environment] env
@@ -24,14 +17,17 @@ module Hyrax
         def get_date_uploaded_value(env)
           concern = env.curation_concern
 
-          if concern.date_uploaded.present?
-            # calling `#to_s` allows us to recycle a previous Time value
-            # or use a string attached to the model (not recommended!)
-            DateTime.parse(concern.date_uploaded.to_s).utc
-          elsif env.attributes[:date_uploaded].present?
+          if env.attributes[:date_uploaded].present?
             DateTime.parse(env.attributes[:date_uploaded]).utc
+          elsif concern.date_uploaded.present?
+            # since this is only being called on `#create`, the concern
+            # shouldn't necessarily have a date_uploaded set already.
+            # but, in the event that it is, we should retain the value
+            # as a UTC DateTime.
+            DateTime.parse(concern.date_uploaded.to_s).utc
           else
-            # Probably unnecessary but I don't want to leave any mystery
+            # this is what `BaseActor#apply_deposit_date` does, so we'll
+            # keep that as our fallback.
             TimeService.time_in_utc
           end
         end
