@@ -24,11 +24,7 @@ namespace :spot do
 
     desc "creates default roles"
     task default: [:environment] do
-      # TODO: move these to an initializer
-      roles = %i[
-        admin
-        trustee
-      ]
+      roles = %i[admin]
 
       create_roles(roles)
     end
