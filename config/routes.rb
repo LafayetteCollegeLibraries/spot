@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   devise_for :users
 
   mount Blacklight::Engine => '/'
+  mount BlacklightAdvancedSearch::Engine => '/'
+
   mount Hydra::RoleManagement::Engine => '/'
   mount Hyrax::Engine, at: '/'
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
