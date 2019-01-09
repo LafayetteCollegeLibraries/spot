@@ -29,6 +29,6 @@ SSHKit.config.command_map[:sidekiqctl] = 'bundle exec sidekiqctl'
 
 # shared things
 append :linked_dirs, 'log'
-append :linked_dirs, 'tmp/pids', 'tmp/cache', 'tmp/sockets'
+append :linked_dirs, 'tmp/cache', 'tmp/ingest', 'tmp/pids', 'tmp/sockets'
 append :linked_dirs, 'vendor/bundle'
 append :linked_dirs, 'public/system', 'public/uploads', 'public/assets'
