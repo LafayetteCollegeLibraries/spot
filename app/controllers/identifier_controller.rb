@@ -62,6 +62,9 @@ class IdentifierController < ApplicationController
     # @param id [Spot::Identifier, #to_s] the identifier (with prefix)
     # @return [Hash<Symbol => String>]
     def query_for_identifier(id)
-      { q: "{!terms f=#{identifier_solr_field}}#{id}" }
+      {
+        q: "{!terms f=#{identifier_solr_field}}#{id}",
+        defType: 'lucene'
+      }
     end
 end
