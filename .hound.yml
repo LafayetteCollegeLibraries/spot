@@ -1,0 +1,7 @@
+# since we can't use external gems for config w/ hound's rubocop
+# we'll skip this and continue to use rubo in our ci tasks
+rubocop:
+  enabled: false
+
+erblint:
+  enabled: true
