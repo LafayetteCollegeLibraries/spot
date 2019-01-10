@@ -87,7 +87,7 @@ class Publication < ActiveFedora::Base
   end
 
   property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
-    index.as :symbol, :facetable
+    index.as :stored_searchable, :facetable
   end
 
   property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
@@ -103,11 +103,11 @@ class Publication < ActiveFedora::Base
   end
 
   property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
-    index.as :symbol, :facetable
+    index.as :stored_searchable, :facetable
   end
 
   property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
-    index.as :symbol, :facetable
+    index.as :stored_searchable, :facetable
   end
 
   property :place, predicate: ::RDF::Vocab::DC.spatial,
