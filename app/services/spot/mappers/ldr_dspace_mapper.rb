@@ -132,9 +132,15 @@ module Spot::Mappers
       []
     end
 
-    # @return [Array<String>]
+    # LDR titles are appended with `_<en>` (or whatever 2-letter language code
+    # necessary), so we'll strip those out and use them in the RDF::Literal we return.
+    #
+    # @return [Array<RDF::Literal>]
     def title
-      singularize_field('title')
+      singularize_field('title').map do |title|
+        next RDF::Literal.new(title) unless (m = title.match(/_<(\w\w)>$/))
+        RDF::Literal.new(title.gsub(m[0], ''), language: m[1].to_sym)
+      end
     end
 
     private
