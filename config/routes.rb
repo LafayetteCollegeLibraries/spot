@@ -6,7 +6,6 @@ Rails.application.routes.draw do
 
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
-
   mount Hydra::RoleManagement::Engine => '/'
   mount Hyrax::Engine, at: '/'
   mount Riiif::Engine => 'images', as: :riiif if Hyrax.config.iiif_image_server?
@@ -15,10 +14,12 @@ Rails.application.routes.draw do
   mount OkComputer::Engine, at: '/status'
 
   concern :exportable, Blacklight::Routes::Exportable.new
+  concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
+    concerns :range_searchable
   end
 
   resources :welcome, only: 'index'
