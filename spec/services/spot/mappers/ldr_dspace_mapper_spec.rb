@@ -259,9 +259,17 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
 
     context 'when a semicolon was originally present' do
       let(:original_value) { ['first;second'] }
+      let(:expected_value) { original_value.map { |v| RDF::Literal.new(v) } }
       let(:value) { original_value.first.split(';') }
 
-      it { is_expected.to eq original_value }
+      it { is_expected.to eq expected_value }
+    end
+
+    context 'when a value has a language tag attached' do
+      let(:value) { ['Une bonne chose_<fr>'] }
+      let(:expected_value) { [RDF::Literal.new('Une bonne chose', language: :fr)] }
+
+      it { is_expected.to eq expected_value }
     end
   end
 
