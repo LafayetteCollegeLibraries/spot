@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class PublicationIndexer < Hyrax::WorkIndexer
   include IndexesRightsStatements
 
@@ -16,6 +15,7 @@ class PublicationIndexer < Hyrax::WorkIndexer
     super.tap do |solr_doc|
       store_license(solr_doc)
       store_language_label(solr_doc)
+      store_years_encompassed(solr_doc)
     end
   end
 
@@ -38,5 +38,11 @@ class PublicationIndexer < Hyrax::WorkIndexer
       object.language.map do |lang|
         doc[label_key] << Spot::ISO6391.label_for(lang) || lang
       end
+    end
+
+    # @param [SolrDocument] doc
+    # @return [void]
+    def store_years_encompassed(doc)
+      doc['years_encompassed_iim'] = object.date_issued.map { |d| DateTime.parse(d).utc.year }
     end
 end

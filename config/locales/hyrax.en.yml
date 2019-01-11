@@ -25,6 +25,7 @@ en:
         rights_statement: Rights Statement
         subject: Subject
         title: Title
+        years_encompassed: Year
 
   simple_form:
     labels:

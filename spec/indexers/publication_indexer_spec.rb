@@ -162,4 +162,13 @@ RSpec.describe PublicationIndexer do
       expect(solr_doc['place_label_ssim']).to eq [label]
     end
   end
+
+  describe 'years_encompassed' do
+    let(:work) { build(:publication, date_issued: ['2019-01-11', '1986-02-11']) }
+    let(:years) { [2019, 1986] }
+
+    it 'parses years from date_issued' do
+      expect(solr_doc['years_encompassed_iim']).to eq years
+    end
+  end
 end
