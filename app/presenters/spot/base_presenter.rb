@@ -27,7 +27,7 @@ module Spot
 
     # @return [Array<String>]
     def academic_department
-      value_for 'academic_department_ssim'
+      value_for 'academic_department_tesim'
     end
 
     # @return [Array<String>]
@@ -108,7 +108,7 @@ module Spot
 
     # @return [Array<String>]
     def keyword
-      value_for 'keyword_ssim'
+      value_for 'keyword_tesim'
     end
 
     # @return [Array<String>]
@@ -138,7 +138,7 @@ module Spot
 
     # @return [Array<String>]
     def subject
-      value_for 'subject_ssim'
+      value_for 'subject_tesim'
     end
 
     # @return [Array<String>]

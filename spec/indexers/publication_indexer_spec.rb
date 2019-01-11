@@ -90,8 +90,8 @@ RSpec.describe PublicationIndexer do
   end
 
   describe 'academic_department' do
-    # :symbol, :facetable
-    let(:fields) { %w[academic_department_ssim academic_department_sim] }
+    # :stored_searchable, :facetable
+    let(:fields) { %w[academic_department_tesim academic_department_sim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -115,13 +115,13 @@ RSpec.describe PublicationIndexer do
 
   describe 'keyword' do
     # :symbol, :facetable
-    let(:fields) { %w[keyword_ssim keyword_sim] }
+    let(:fields) { %w[keyword_tesim keyword_sim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'subject' do
-    # :symbol, :facetable
-    let(:fields) { %w[subject_ssim subject_sim] }
+    # :stored_searchable, :facetable
+    let(:fields) { %w[subject_tesim subject_sim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -164,11 +164,11 @@ RSpec.describe PublicationIndexer do
   end
 
   describe 'years_encompassed' do
-    let(:work) { build(:publication, date_issued: ['2019-01-11', '1986-02-11']) }
-    let(:years) { [2019, 1986] }
+    let(:work) { build(:publication, date_issued: ['1986-02-11', '2019-01-11']) }
+    let(:years) { [1986, 2019] }
 
     it 'parses years from date_issued' do
-      expect(solr_doc['years_encompassed_iim']).to eq years
+      expect(solr_doc['years_encompassed_iim']).to include(*years)
     end
   end
 end
