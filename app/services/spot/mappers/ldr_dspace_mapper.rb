@@ -1,13 +1,10 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ClassLength
 require 'uri'
 
 # Metadata mapper for items in the existing Lafayette Digital Repository (DSpace).
 # See {Spot::Mappers::BaseMapper} for usage information.
 module Spot::Mappers
   class LdrDspaceMapper < BaseMapper
-    include NestedAttributes
-
     # Our home-grown HashMapper requires this property to return a hash
     # that defines what Publication methods (which must match the keys)
     # map to what metadata headers (which must match the value).
@@ -36,7 +33,7 @@ module Spot::Mappers
         depositor
         description
         identifier
-        language_attributes
+        language
         publisher
         source
         title
@@ -99,17 +96,9 @@ module Spot::Mappers
     end
 
     # @return [Array<String>]
-    def language_attributes
-      nested_attributes_hash_for('language.iso') do |language|
-        language = 'en' if language == 'en_US'
-
-        # if it's in our iso-639 map, we'll assume it's valid
-        if Spot::ISO6391.label_for(language)
-          "http://id.loc.gov/vocabulary/iso639-1/#{language}"
-        else
-          Rails.logger.warn("No URI available for #{language}; skipping")
-          ''
-        end
+    def language
+      metadata['language.iso'].map do |language|
+        language == 'en_US' ? 'en' : language
       end
     end
 
@@ -203,4 +192,3 @@ module Spot::Mappers
       end
   end
 end
-# rubocop:enable Metrics/ClassLength
