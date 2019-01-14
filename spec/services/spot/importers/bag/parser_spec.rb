@@ -37,6 +37,10 @@ RSpec.describe Spot::Importers::Bag::Parser do
       it { is_expected.to include 'license' }
       it { is_expected.to include 'representative_files' }
 
+      it 'splits multi-value entries' do
+        expect(metadata['keyword'].length).to satisfy { |v| v > 1 }
+      end
+
       describe 'the representative files' do
         subject(:files) { metadata['representative_files'] }
 

@@ -25,7 +25,7 @@ module Spot::Importers::Bag
       Spot::Validators::BagMetadataValidator.new
     ].freeze
 
-    MULTI_VALUE_CHARACTER = '|'
+    MULTI_VALUE_CHARACTER = ';'
 
     # +Darlingtonia::Parser+'s initializer uses the +file+ kwarg
     # for the object, but because we're dealing with directories,
