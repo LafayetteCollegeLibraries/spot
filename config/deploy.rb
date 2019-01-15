@@ -29,6 +29,7 @@ set :sidekiq_role, :jobs
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 SSHKit.config.command_map[:sidekiq] = 'bundle exec sidekiq'
 SSHKit.config.command_map[:sidekiqctl] = 'bundle exec sidekiqctl'
+SSHKit.config.command_map[:solr] = '/opt/solr/bin/solr'
 
 # shared things
 append :linked_dirs, 'log'
