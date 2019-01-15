@@ -1,0 +1,8 @@
+# Config file for Sidekiq
+#
+# NOTE: this config is run through ERB when being read, so feel free
+# to do some dynamic stuff where necessary.
+---
+:verbose: false
+:timeout: 30
+:concurrency: <%= ENV.fetch('SIDEKIQ_CONCURRENCY') { 2 } %>

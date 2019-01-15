@@ -5,21 +5,24 @@ lock '~> 3.11.0'
 
 # application variables
 set :application, 'spot'
-set :repo_url, 'https://github.com/LafayetteCollegeLibraries/spot.git'
 set :branch, ENV['BRANCH'] || 'master'
 set :deploy_to, '/var/www/spot'
 set :keep_releases, 3
+set :repo_url, 'https://github.com/LafayetteCollegeLibraries/spot.git'
 
 # capistrano-bundler
-set :bundle_flags, '--deployment'
 set :bundle_env_variables, nokogiri_use_system_libraries: 1
+set :bundle_flags, '--deployment'
 
 # capistrano-rails
-set :rails_env, 'production'
+set :assets_prefix, shared_path.join('public', 'assets')
 set :log_level, :debug
-set :assets_prefix, '#{shared_path}/public/assets'
+set :rails_env, 'production'
 
 # capistrano-sidekiq
+set :sidekiq_config, release_path.join('config', 'sidekiq.yml')
+set :sidekiq_env, fetch(:rails_env)
+set :sidekiq_processes, 1
 set :sidekiq_role, :jobs
 
 # remapping commands
