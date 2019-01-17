@@ -8,7 +8,7 @@ namespace :spot do
     args.with_defaults(since: '3')
 
     tmp_dir = Rails.root.join('tmp', 'ingest')
-    find_args = ['-type d', '-d 1']
+    find_args = ['-type d', '-maxdepth 1']
 
     find_args.unshift("-ctime +#{args.since}") unless args.since == '*'
 
