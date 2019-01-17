@@ -26,6 +26,7 @@ set :sidekiq_processes, 1
 set :sidekiq_role, :jobs
 
 # remapping commands
+SSHKit.config.command_map[:rails] = 'bundle exec rails'
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
 SSHKit.config.command_map[:sidekiq] = 'bundle exec sidekiq'
 SSHKit.config.command_map[:sidekiqctl] = 'bundle exec sidekiqctl'
