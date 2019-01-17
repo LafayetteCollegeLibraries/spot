@@ -103,7 +103,9 @@ module Spot::Mappers
     #
     # @return [Array<RDF::Literal>]
     def title
-      parsed_title.map { |title| RDF::Literal(title, language: :en) }
+      Array(parsed_title)
+        .reject(&:blank?) # just in case / you never know
+        .map { |title| RDF::Literal(title, language: :en) }
     end
 
     private
@@ -113,16 +115,17 @@ module Spot::Mappers
       #
       # @return [Array<String>]
       def parsed_title
-        non_sort = metadata['TitleInfoNonSort'].first
-        info_title = metadata['TitleInfoTitle'].first
-        date = metadata['PartDate_NaturalLanguage']
-
+        non_sort = metadata['TitleInfoNonSort']&.first
+        info_title = metadata['TitleInfoTitle']&.first
         title = "#{non_sort} #{info_title}".strip
 
-        # date could be nil or '' or []
-        return [title] if date.blank? || date.empty?
+        volume = metadata['PartDetailTypeVolume']&.first
+        issue = metadata['PartDetailTypeIssue']&.first
+        volume_issue = "#{volume} #{issue}".strip
 
-        ["#{title} (#{date.first})"]
+        date = metadata['PartDate_NaturalLanguage']&.first
+
+        [title, volume_issue, date].reject(&:blank?).join(', ')
       end
   end
 end
