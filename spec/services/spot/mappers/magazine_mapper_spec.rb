@@ -121,8 +121,22 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#title' do
     subject { mapper.title }
 
+    let(:value) { [RDF::Literal(title, language: :en)] }
+    let(:title) { 'The Lafayette Alumnus, Volume 7 Issue 2, February 1937' }
+    let(:metadata) do
+      {
+        'TitleInfoNonSort' => ['The'],
+        'TitleInfoTitle' => ['Lafayette Alumnus'],
+        'PartDetailTypeVolume' => ['Volume 7'],
+        'PartDetailTypeIssue' => ['Issue 2'],
+        'PartDate_NaturalLanguage' => ['February 1937']
+      }
+    end
+
+    it { is_expected.to eq value }
+
     context 'when `TitleInfoNonSort` exists' do
-      let(:value) { [RDF::Literal('The Lafayette', language: :en)] }
+      let(:title) { 'The Lafayette' }
       let(:metadata) do
         {
           'TitleInfoNonSort' => ['The'],
@@ -134,7 +148,7 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     end
 
     context 'when `TitleInfoNonSort` does not exist' do
-      let(:value) { [RDF::Literal('Lafayette', language: :en)] }
+      let(:title) { 'Lafayette' }
       let(:metadata) do
         {
           'TitleInfoNonSort' => [],
@@ -146,12 +160,37 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     end
 
     context 'when `PartDate_NaturalLanguage` is present' do
-      let(:value) { [RDF::Literal('The Lafayette (November 1930)', language: :en)] }
+      let(:title) { 'The Lafayette, November 1930' }
       let(:metadata) do
         {
           'TitleInfoNonSort' => ['The'],
           'TitleInfoTitle' => ['Lafayette'],
           'PartDate_NaturalLanguage' => ['November 1930']
+        }
+      end
+
+      it { is_expected.to eq value }
+    end
+
+    context 'when volume info is present' do
+      let(:title) { 'The Lafayette, Volume 1a' }
+      let(:metadata) do
+        {
+          'TitleInfoNonSort' => ['The'],
+          'TitleInfoTitle' => ['Lafayette'],
+          'PartDetailTypeVolume' => ['Volume 1a']
+        }
+      end
+
+      it { is_expected.to eq value }
+    end
+
+    context 'when issue info is present' do
+      let(:title) { 'Lafayette, Issue 2' }
+      let(:metadata) do
+        {
+          'TitleInfoTitle' => ['Lafayette'],
+          'PartDetailTypeIssue' => ['Issue 2']
         }
       end
 
