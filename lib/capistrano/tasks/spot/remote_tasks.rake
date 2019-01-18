@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 #
 # capistrano wrappings around spot tasks that we might want to do remotely
+# rubocop:disable Metrics/BlockLength
 namespace :spot do
   desc 'ingest a directory of zipped bags'
   task :ingest do
@@ -13,8 +14,11 @@ namespace :spot do
 
     on roles(:app) do
       upload!(path, tmp_path, recursive: true)
+
       within current_path do
-        execute(:rails, 'spot:ingest', "source=#{source}", "work_class=#{work_class}", "path=#{tmp_path}")
+        with rails_env: fetch(:rails_env) do
+          execute(:rails, 'spot:ingest', "source=#{source}", "work_class=#{work_class}", "path=#{tmp_path}")
+        end
       end
     end
   end
@@ -26,9 +30,12 @@ namespace :spot do
 
       on roles(:app) do
         within current_path do
-          execute(:rails, 'spot:roles:add_user_to_role', "user=#{user}", "role=#{role}")
+          with rails_env: fetch(:rails_env) do
+            execute(:rails, 'spot:roles:add_user_to_role', "user=#{user}", "role=#{role}")
+          end
         end
       end
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
