@@ -25,7 +25,7 @@ module LanguageTaggedFormFields
     # @param [Array<Symbol>] *fields The fields to transform
     # @return [void]
     def transforms_language_tags_for(*fields)
-      define_singleton_method(:_language_tagged_fields) { fields.flatten }
+      define_singleton_method(:language_tagged_fields) { fields.flatten }
     end
 
     # Adds two fields to the form object's permitted parameters:
@@ -37,7 +37,7 @@ module LanguageTaggedFormFields
     # @return [Array<Symbol,Hash<Symbol => Array>>]
     def build_permitted_params
       super.tap do |params|
-        _language_tagged_fields.each do |field|
+        language_tagged_fields.each do |field|
           if multiple?(field)
             params << {
               "#{field}_value": [],
@@ -70,7 +70,7 @@ module LanguageTaggedFormFields
       # @param [ActiveController::Parameters, Hash<String => Array<String>>] params
       # @return [void]
       def transform_language_tagged_fields!(params)
-        _language_tagged_fields.flatten.each do |field|
+        language_tagged_fields.flatten.each do |field|
           value_key = "#{field}_value"
           lang_key = "#{field}_language"
 
@@ -79,7 +79,7 @@ module LanguageTaggedFormFields
           values = Array(params.delete(value_key))
           langs = Array(params.delete(lang_key))
 
-          mapped = map_rdf_literals(values.zip(langs))
+          mapped = map_rdf_strings(values.zip(langs))
 
           params[field] = mapped if mapped
           params[field] = params[field].first unless multiple?(field)
@@ -90,15 +90,19 @@ module LanguageTaggedFormFields
       #
       # @param [Array<Array<String>>] tuples
       # @return [Array<RDF::Literal, String>]
-      def map_rdf_literals(tuples)
+      def map_rdf_strings(tuples)
         tuples.map do |(value, language)|
           # need to skip blank entries here, otherwise we get a blank literal
           # (""@"") which LDP doesn't like
           next unless value.present?
 
-          # retain the value if no language tag is passed
-          language.present? ? RDF::Literal(value, language: language.to_sym) : value
+          language = language.present? ? language.to_sym : nil
+          serializer.serialize(RDF::Literal(value, language: language))
         end.reject(&:blank?)
+      end
+
+      def serializer
+        @serializer ||= RdfLiteralSerializer.new
       end
   end
 end
