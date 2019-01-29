@@ -8,6 +8,12 @@ module Spot::Mappers
   class NewspaperMapper < BaseMapper
     include NestedAttributes
 
+    # A handful of records contain two values in 'dc:date':
+    #   1) the date of the newspaper issue
+    #   2) this date which corresponds to a batch ingest
+    # Since this references a single ingest, we can assume that
+    # this will be the only 'magic' date; one that we can explicitly
+    # reference. See {#date_uploaded}
     MAGIC_DATE_UPLOADED = '2010-09-16T00:00:00Z'
 
     self.fields_map = {
@@ -15,7 +21,6 @@ module Spot::Mappers
       keyword: 'dc:subject',
       physical_medium: 'dc:source',
       publisher: 'dc:publisher',
-      resource_type: 'dc:type',
       rights_statement: 'dc:rights'
     }.freeze
 
@@ -28,6 +33,7 @@ module Spot::Mappers
         date_available
         date_issued
         description
+        resource_type
         rights_statement
         title
       ]
@@ -46,6 +52,10 @@ module Spot::Mappers
       end
     end
 
+    # We'll stuff this value if our date values include it. +MAGIC_DATE_UPLOADED+
+    # refers to a single ingest that included the then-current date with the
+    # date attributes.
+    #
     # @return [DateTime] The original date uploaded (when present)
     def date_uploaded
       MAGIC_DATE_UPLOADED if metadata['dc:date'].include? MAGIC_DATE_UPLOADED
@@ -66,15 +76,8 @@ module Spot::Mappers
     end
 
     # @return [Array<String>]
-    def rights_statement
-      metadata['dc:rights'].map do |rights|
-        case rights.downcase
-        when 'public domain'
-          'https://creativecommons.org/publicdomain/mark/1.0/'
-        else
-          rights
-        end
-      end
+    def resource_type
+      ['Periodical']
     end
 
     # @return [Array<RDF::Literal>]
