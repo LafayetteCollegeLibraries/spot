@@ -29,27 +29,14 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near_attributes
         date_available
         date_issued
         description
+        place_attributes
         resource_type
         rights_statement
         title
       ]
-    end
-
-    # @return [Array<RDF::URI,String>]
-    def based_near_attributes
-      nested_attributes_hash_for('dc:coverage') do |place|
-        case place
-        when 'United States, Pennsylvania, Northampton County, Easton'
-          'http://sws.geonames.org/5188140/'
-        else
-          Rails.logger.warn("No URI provided for #{place}; skipping")
-          ''
-        end
-      end
     end
 
     # We'll stuff this value if our date values include it. +MAGIC_DATE_UPLOADED+
@@ -72,6 +59,19 @@ module Spot::Mappers
     def description
       metadata['dc:description'].reject(&:blank?).map do |desc|
         RDF::Literal(desc, language: :en)
+      end
+    end
+
+    # @return [Array<RDF::URI,String>]
+    def place_attributes
+      nested_attributes_hash_for('dc:coverage') do |place|
+        case place
+        when 'United States, Pennsylvania, Northampton County, Easton'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{place}; skipping")
+          ''
+        end
       end
     end
 

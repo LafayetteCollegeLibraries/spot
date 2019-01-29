@@ -19,31 +19,16 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near_attributes
         date_issued
         description
         identifier
+        place_attributes
         related_resource
         resource_type
         subtitle
         title
         title_alternative
       ]
-    end
-
-    # @todo return to this
-    # @return [Array<String>]
-    def based_near_attributes
-      nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
-        # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
-        case original_value.downcase
-        when 'easton, pa'
-          'http://sws.geonames.org/5188140/'
-        else
-          Rails.logger.warn("No URI provided for #{original_value}; skipping")
-          ''
-        end
-      end
     end
 
     # Despite being labeled as 'ISO8601', legacy magazine dates are in
@@ -71,6 +56,20 @@ module Spot::Mappers
     # @return [Array<String>]
     def identifier
       metadata['PublicationSequence'].map { |num| "lafayette_magazine:#{num}" }
+    end
+
+    # @return [Array<String>]
+    def place_attributes
+      nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
+        # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
+        case original_value.downcase
+        when 'easton, pa'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{original_value}; skipping")
+          ''
+        end
+      end
     end
 
     # Maybe a little clever for its own good, but it gathers the unique

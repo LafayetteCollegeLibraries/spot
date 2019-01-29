@@ -4,16 +4,15 @@ fr:
     search:
       fields:
         facet:
-          based_near_label_sim: Emplacement
           creator_sim: Créateur
           file_format_sim: Format
           generic_type_sim: Type
           keyword_sim: Mot-clé
           language_sim: La langue
+          place_label_sim: Emplacement
           publisher_sim: Éditeur
           subject_sim: Assujettir
         index:
-          based_near_tesim: Emplacement
           contributor_tesim: Donateur
           creator_tesim: Créateur
           date_created_tesim: date créée
@@ -26,12 +25,12 @@ fr:
           language_tesim: La langue
           license_statement_tesim: Licence
           license_tesim: Licence
+          place_tesim: Emplacement
           publisher_tesim: Éditeur
           rights_statement_tesim: Déclaration des droits
           rights_tesim: Droits
           subject_tesim: Assujettir
         show:
-          based_near_tesim: Emplacement
           contributor_tesim: Donateur
           creator_tesim: Créateur
           date_created_tesim: date créée
@@ -44,6 +43,7 @@ fr:
           language_tesim: La langue
           license_statement_tesim: Licence
           license_tesim: Licence
+          place_tesim: Emplacement
           publisher_tesim: Éditeur
           rights_statement_tesim: Déclaration des droits
           rights_tesim: Droits

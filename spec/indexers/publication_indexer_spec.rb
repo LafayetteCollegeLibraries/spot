@@ -145,21 +145,21 @@ RSpec.describe PublicationIndexer do
     end
   end
 
-  describe 'based_near' do
+  describe 'place' do
     let(:label) { 'Easton, PA' }
     let(:uri) { 'http://sws.geonames.org/5188140/' }
-    let(:work) { build(:publication, based_near: [RDF::URI(uri)]) }
+    let(:work) { build(:publication, place: [RDF::URI(uri)]) }
 
     before do
       RdfLabel.first_or_create(uri: uri, value: label)
     end
 
     it 'stores the uri' do
-      expect(solr_doc['based_near_ssim']).to eq [uri]
+      expect(solr_doc['place_ssim']).to eq [uri]
     end
 
     it 'stores the label' do
-      expect(solr_doc['based_near_label_ssim']).to eq [label]
+      expect(solr_doc['place_label_ssim']).to eq [label]
     end
   end
 end

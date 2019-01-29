@@ -18,35 +18,15 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near_attributes
         creator
         date_issued
         editor
         identifier
+        place_attributes
         resource_type
         subtitle
         title
       ]
-    end
-
-    # Looking at the metadata, we should only have these three options for
-    # locations, so we'll hard-code their geonames URIs.
-    #
-    # @return [Array<Hash>]
-    def based_near_attributes
-      nested_attributes_hash_for('originInfo_place_placeTerm') do |place|
-        case place
-        when 'Burlington, VT'
-          'http://sws.geonames.org/5234372/'
-        when 'Norwood, NJ'
-          'http://sws.geonames.org/5101978/'
-        when 'Easton, PA'
-          'http://sws.geonames.org/5188140/'
-        else
-          Rails.logger.warn("No URI provided for #{place}; skipping")
-          ''
-        end
-      end
     end
 
     # @todo Should we return URIs where possible?
@@ -77,6 +57,26 @@ module Spot::Mappers
     def identifier
       Array(metadata['relatedItem_identifier_typeISSN']).reject(&:blank?).map do |value|
         "issn:#{value}"
+      end
+    end
+
+    # Looking at the metadata, we should only have these three options for
+    # locations, so we'll hard-code their geonames URIs.
+    #
+    # @return [Array<Hash>]
+    def place_attributes
+      nested_attributes_hash_for('originInfo_place_placeTerm') do |place|
+        case place
+        when 'Burlington, VT'
+          'http://sws.geonames.org/5234372/'
+        when 'Norwood, NJ'
+          'http://sws.geonames.org/5101978/'
+        when 'Easton, PA'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{place}; skipping")
+          ''
+        end
       end
     end
 

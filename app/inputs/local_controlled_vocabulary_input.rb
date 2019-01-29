@@ -12,8 +12,8 @@
 #   export default class Autocomplete {
 #     setup(element, fieldName, url) {
 #       // ...
-#       case 'based_near':
 #       case 'new_field_name':
+#       case 'place':
 #         new LinkedData(element, url)
 #     }
 #   }

@@ -31,20 +31,19 @@ module Spot
     end
 
     # @return [Array<String>]
-    def based_near
-      value_for 'based_near_ssim'
+    def place
+      value_for 'place_ssim'
     end
 
     # Based Near values + labels zipped into tuples.
     #
     # @example
-    #   presenter.based_near_merged
+    #   presenter.place_merged
     #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
     #
     # @return [Array<Array<String>>]
-    def based_near_merged
-      solr_document['based_near_ssim']
-        .zip(solr_document['based_near_label_ssim'])
+    def place_merged
+      value_for('place_ssim').zip(value_for('place_label_ssim'))
     end
 
     # @return [Array<String>]

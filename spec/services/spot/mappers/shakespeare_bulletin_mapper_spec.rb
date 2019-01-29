@@ -139,8 +139,8 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     end
   end
 
-  describe '#based_near_attributes' do
-    subject { mapper.based_near_attributes }
+  describe '#place_attributes' do
+    subject { mapper.place_attributes }
 
     let(:metadata) do
       {

@@ -33,27 +33,27 @@ RSpec.describe Spot::BasePresenter do
     end
   end
 
-  describe '#based_near' do
-    subject { presenter.based_near }
+  describe '#place' do
+    subject { presenter.place }
 
     let(:solr_data) do
       {
-        'based_near_ssim' => ['http://sws.geonames.org/5188140/']
+        'place_ssim' => ['http://sws.geonames.org/5188140/']
       }
     end
 
-    it { is_expected.to eq solr_doc['based_near_ssim'] }
+    it { is_expected.to eq solr_doc['place_ssim'] }
   end
 
-  describe '#based_near_merged' do
-    subject { presenter.based_near_merged.first }
+  describe '#place_merged' do
+    subject { presenter.place_merged.first }
 
     let(:uri) { 'http://sws.geonames.org/5188140/' }
     let(:label) { 'United States, Pennsylvania, Northampton County, Easton' }
     let(:solr_data) do
       {
-        'based_near_ssim' => [uri],
-        'based_near_label_ssim' => [label]
+        'place_ssim' => [uri],
+        'place_label_ssim' => [label]
       }
     end
 
