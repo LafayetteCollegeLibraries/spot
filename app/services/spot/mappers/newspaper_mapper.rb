@@ -8,6 +8,12 @@ module Spot::Mappers
   class NewspaperMapper < BaseMapper
     include NestedAttributes
 
+    # A handful of records contain two values in 'dc:date':
+    #   1) the date of the newspaper issue
+    #   2) this date which corresponds to a batch ingest
+    # Since this references a single ingest, we can assume that
+    # this will be the only 'magic' date; one that we can explicitly
+    # reference. See {#date_uploaded}
     MAGIC_DATE_UPLOADED = '2010-09-16T00:00:00Z'
 
     self.fields_map = {
@@ -15,7 +21,6 @@ module Spot::Mappers
       keyword: 'dc:subject',
       physical_medium: 'dc:source',
       publisher: 'dc:publisher',
-      resource_type: 'dc:type',
       rights_statement: 'dc:rights'
     }.freeze
 
@@ -24,28 +29,20 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near_attributes
         date_available
         date_issued
         description
+        place_attributes
+        resource_type
         rights_statement
         title
       ]
     end
 
-    # @return [Array<RDF::URI,String>]
-    def based_near_attributes
-      nested_attributes_hash_for('dc:coverage') do |place|
-        case place
-        when 'United States, Pennsylvania, Northampton County, Easton'
-          'http://sws.geonames.org/5188140/'
-        else
-          Rails.logger.warn("No URI provided for #{place}; skipping")
-          ''
-        end
-      end
-    end
-
+    # We'll stuff this value if our date values include it. +MAGIC_DATE_UPLOADED+
+    # refers to a single ingest that included the then-current date with the
+    # date attributes.
+    #
     # @return [DateTime] The original date uploaded (when present)
     def date_uploaded
       MAGIC_DATE_UPLOADED if metadata['dc:date'].include? MAGIC_DATE_UPLOADED
@@ -65,16 +62,22 @@ module Spot::Mappers
       end
     end
 
-    # @return [Array<String>]
-    def rights_statement
-      metadata['dc:rights'].map do |rights|
-        case rights.downcase
-        when 'public domain'
-          'https://creativecommons.org/publicdomain/mark/1.0/'
+    # @return [Array<RDF::URI,String>]
+    def place_attributes
+      nested_attributes_hash_for('dc:coverage') do |place|
+        case place
+        when 'United States, Pennsylvania, Northampton County, Easton'
+          'http://sws.geonames.org/5188140/'
         else
-          rights
+          Rails.logger.warn("No URI provided for #{place}; skipping")
+          ''
         end
       end
+    end
+
+    # @return [Array<String>]
+    def resource_type
+      ['Periodical']
     end
 
     # @return [Array<RDF::Literal>]

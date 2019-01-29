@@ -4,7 +4,6 @@ FactoryBot.define do
   factory :publication do
     abstract { ['A short description of the thing'] }
     academic_department { ['Art'] }
-    based_near { [] }
     bibliographic_citation { ['Lastname, First. Title of piece.'] }
     contributor { ['Contributor, First-Name', 'Person, Another'] }
     creator { ['Creator, First-Name'] }
@@ -17,6 +16,7 @@ FactoryBot.define do
     keyword { ['test', 'item', 'topic'] }
     language { ['en'] }
     organization { ['Lafayette College'] }
+    place { [] }
     publisher { ['Prestigious Press', 'Lafayette College'] }
     resource_type { ['Article'] }
     rights_statement { [] }

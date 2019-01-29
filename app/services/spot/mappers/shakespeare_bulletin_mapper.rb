@@ -9,6 +9,7 @@ module Spot::Mappers
 
     self.fields_map = {
       publisher: 'originInfo_Publisher',
+      rights_statement: 'dc:rights',
       source: 'relatedItem_typeHost_titleInfo_title'
     }.freeze
 
@@ -17,21 +18,53 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near_attributes
         creator
         date_issued
         editor
         identifier
+        place_attributes
+        resource_type
         subtitle
         title
       ]
+    end
+
+    # @todo Should we return URIs where possible?
+    # @return [Array<String>]
+    def creator
+      names_with_role('author')
+    end
+
+    # Despite being labeled as 'ISO8601', Bulletin dates are in
+    # mm/dd/yy format.
+    #
+    # @return [Array<String>]
+    def date_issued
+      Array(metadata['originInfo_dateIssued_ISO8601']).map do |raw|
+        short_date_to_iso(raw, century_threshold: 50)
+      end
+    end
+
+    # @todo Should we return URIs where possible?
+    # @return [Array<String>]
+    def editor
+      names_with_role('editor')
+    end
+
+    # the Shakespeare Bulletin contains ISSNs as the sole identifier
+    #
+    # @return [Array<String>]
+    def identifier
+      Array(metadata['relatedItem_identifier_typeISSN']).reject(&:blank?).map do |value|
+        "issn:#{value}"
+      end
     end
 
     # Looking at the metadata, we should only have these three options for
     # locations, so we'll hard-code their geonames URIs.
     #
     # @return [Array<Hash>]
-    def based_near_attributes
+    def place_attributes
       nested_attributes_hash_for('originInfo_place_placeTerm') do |place|
         case place
         when 'Burlington, VT'
@@ -47,42 +80,15 @@ module Spot::Mappers
       end
     end
 
-    # @todo Should we return URIs where possible?
     # @return [Array<String>]
-    def creator
-      names_with_role('author')
-    end
-
-    # Despite being labeled as 'ISO8601', Bulletin dates are in
-    # mm/dd/yy format.
-    #
-    # @return [Array<String>]
-    def date_issued
-      (metadata['originInfo_dateIssued_ISO8601'] || []).map do |raw|
-        short_date_to_iso(raw, century_threshold: 50)
-      end
-    end
-
-    # @todo Should we return URIs where possible?
-    # @return [Array<String>]
-    def editor
-      names_with_role('editor')
-    end
-
-    # the Shakespeare Bulletin contains ISSNs as the sole identifier
-    #
-    # @return [Array<String>]
-    def identifier
-      (metadata['relatedItem_identifier_typeISSN'] || []).reject(&:blank?).map do |value|
-        "issn:#{value}"
-      end
+    def resource_type
+      ['Periodical']
     end
 
     # @return [Array<RDF::Literal>]
     def subtitle
-      (metadata['titleInfo_subTitle'] || []).reject(&:blank?).map do |subtitle|
-        RDF::Literal(subtitle, language: :en)
-      end
+      (Array(metadata['titleInfo_subTitle']) + Array(metadata['titleInfo_partName']))
+        .reject(&:blank?).map { |subtitle| RDF::Literal(subtitle, language: :en) }
     end
 
     # From our remediation notes:

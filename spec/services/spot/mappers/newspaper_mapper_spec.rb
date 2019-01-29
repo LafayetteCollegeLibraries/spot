@@ -7,8 +7,8 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#based_near_attributes' do
-    subject(:based_near_attributes) { mapper.based_near_attributes }
+  describe '#place_attributes' do
+    subject(:place_attributes) { mapper.place_attributes }
 
     let(:expected_value) do
       { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
@@ -137,28 +137,16 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#resource_type' do
     subject { mapper.resource_type }
 
-    let(:field) { 'dc:type' }
-
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq ['Periodical'] }
   end
 
   describe '#rights_statement' do
-    subject(:rights_statement) { mapper.rights_statement.first }
+    subject(:rights_statement) { mapper.rights_statement }
 
-    let(:metadata) { { 'dc:rights' => [rights] } }
+    let(:metadata) { { 'dc:rights' => [uri] } }
     let(:uri) { 'https://creativecommons.org/publicdomain/mark/1.0/' }
 
-    context 'when in the Public domain' do
-      let(:rights) { 'Public domain' }
-
-      it { is_expected.to eq uri }
-    end
-
-    context 'when not in the Public domain' do
-      let(:rights) { 'No way you can use this' }
-
-      it { is_expected.to eq rights }
-    end
+    it { is_expected.to eq [uri] }
   end
 
   describe '#title' do

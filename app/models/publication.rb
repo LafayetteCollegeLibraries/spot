@@ -4,7 +4,7 @@ class Publication < ActiveFedora::Base
 
   # The `controlled_properties` attribute is used by the Hyrax::DeepIndexingService,
   # which is used to fetch RDF labels for indexing. This is used out-of-the-box
-  # for :based_near (which, I believe, uses GeoNames), but could be used for,
+  # for :place (which, I believe, uses GeoNames), but could be used for,
   # say, LCSH headings in other models, if not this one. This is implemented in
   # Hyrax::BasicMetadata, but since we're implementing our basic metadata fields
   # outside of that mixin, we'll need to define this manually.
@@ -12,7 +12,7 @@ class Publication < ActiveFedora::Base
   # (You'll probably also need to switch on `accepts_nested_attributes` below)
 
   class_attribute :controlled_properties
-  self.controlled_properties = [:based_near]
+  self.controlled_properties = [:place]
 
   self.indexer = PublicationIndexer
 
@@ -110,8 +110,8 @@ class Publication < ActiveFedora::Base
     index.as :symbol, :facetable
   end
 
-  property :based_near, predicate: ::RDF::Vocab::DC.spatial,
-                        class_name: Spot::ControlledVocabularies::Location do |index|
+  property :place, predicate: ::RDF::Vocab::DC.spatial,
+                   class_name: Spot::ControlledVocabularies::Location do |index|
     index.as :symbol
   end
 
@@ -119,8 +119,7 @@ class Publication < ActiveFedora::Base
 
   # rights_statements are stored as URIs
   property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
-
-  # property :rights_holder, predicate: ::RDF::Vocab::DC11.rightsHolder
+  property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder
 
   # accepts_nested_attributes_for needs to be defined at the end of the model.
   # see note from Hyrax::BasicMetadata mixin:
@@ -129,5 +128,5 @@ class Publication < ActiveFedora::Base
   #   properties will be defined once accepts_nested_attributes_for is called
 
   id_blank = proc { |attributes| attributes[:id].blank? }
-  accepts_nested_attributes_for :based_near, reject_if: id_blank, allow_destroy: true
+  accepts_nested_attributes_for :place, reject_if: id_blank, allow_destroy: true
 end

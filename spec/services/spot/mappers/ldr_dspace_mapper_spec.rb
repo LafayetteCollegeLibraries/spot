@@ -62,6 +62,45 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     it { is_expected.to include contributor_other }
   end
 
+  describe '#date_available' do
+    subject { mapper.date_available }
+
+    let(:metadata) { { 'date.available' => [date] } }
+    let(:date) { '2019-01-29T13:31:00Z' }
+
+    it { is_expected.to eq [date] }
+  end
+
+  describe '#date_issued' do
+    subject { mapper.date_issued }
+
+    let(:metadata) { { 'date.issued' => [date] } }
+
+    context 'when YYYY' do
+      let(:date) { '2019' }
+
+      it { is_expected.to eq [date] }
+    end
+
+    context 'when YYYY-MM' do
+      let(:date) { '2019-01' }
+
+      it { is_expected.to eq [date] }
+    end
+
+    context 'when YYYY-MM-DD' do
+      let(:date) { '2019-01-29' }
+
+      it { is_expected.to eq [date] }
+    end
+
+    context 'when YYYY-MM-DDTHH:MM:SSZ' do
+      let(:date) { '2019-01-29T13:28:00Z' }
+
+      it { is_expected.to eq ['2019-01-29'] }
+    end
+  end
+
   describe '#date_uploaded' do
     subject { mapper.date_uploaded }
 
@@ -233,6 +272,14 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
     let(:metadata) { { 'representative_files' => ['some files'] } }
 
     it { is_expected.to eq metadata['representative_files'] }
+  end
+
+  describe '#rights_statement' do
+    subject { mapper.rights_statement }
+
+    let(:field) { 'dc:rights' }
+
+    it_behaves_like 'a mapped field'
   end
 
   describe '#title' do

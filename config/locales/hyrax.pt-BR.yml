@@ -4,16 +4,15 @@ pt-BR:
     search:
       fields:
         facet:
-          based_near_label_sim: Localização
           creator_sim: O Criador
           file_format_sim: Formato
           generic_type_sim: Tipo
           keyword_sim: Palavra-chave
           language_sim: Língua
+          place_label_sim: Localização
           publisher_sim: Editor
           subject_sim: Sujeito
         index:
-          based_near_tesim: Localização
           contributor_tesim: Contribuinte
           creator_tesim: O Criador
           date_created_tesim: Data Criada
@@ -25,11 +24,11 @@ pt-BR:
           keyword_tesim: Palavra-chave
           language_tesim: Língua
           license_tesim: Licença
+          place_tesim: Localização
           publisher_tesim: Editor
           rights_statement_tesim: Direitos
           subject_tesim: Sujeito
         show:
-          based_near_tesim: Localização
           contributor_tesim: Contribuinte
           creator_tesim: O Criador
           date_created_tesim: Data Criada
@@ -41,6 +40,7 @@ pt-BR:
           keyword_tesim: Palavra-chave
           language_tesim: Língua
           license_tesim: Licença
+          place_tesim: Localização
           publisher_tesim: Editor
           rights_statement_tesim: Direitos
           subject_tesim: Sujeito

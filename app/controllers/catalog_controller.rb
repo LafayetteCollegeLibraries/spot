@@ -64,7 +64,7 @@ class CatalogController < ApplicationController
                            label: I18n.t('blacklight.search.fields.academic_department'),
                            limit: 5
     # config.add_facet_field solr_name("language", :facetable), limit: 5
-    # config.add_facet_field solr_name("based_near_label", :facetable), limit: 5
+    # config.add_facet_field solr_name("place_label", :facetable), limit: 5
     config.add_facet_field 'publisher_sim',
                            label: I18n.t('blacklight.search.fields.publisher'),
                            limit: 5
@@ -119,7 +119,7 @@ class CatalogController < ApplicationController
                            label: I18n.t('blacklight.search.fields.publisher'),
                            itemprop: 'publisher',
                            link_to_search: 'publisher_sim'
-    # config.add_index_field solr_name("based_near_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("based_near_label", :facetable)
+    # config.add_index_field solr_name("place_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("place_label", :facetable)
     config.add_index_field 'language_tesim',
                            label: I18n.t('blacklight.search.fields.language'),
                            itemprop: 'inLanguage',
@@ -177,7 +177,7 @@ class CatalogController < ApplicationController
     # case for a BL "search field", which is really a dismax aggregate
     # of Solr search fields.
     # creator, title, description, publisher, date_created,
-    # subject, language, resource_type, format, identifier, based_near,
+    # subject, language, resource_type, format, identifier, place,
     config.add_search_field('contributor') do |field|
       # solr_parameters hash are sent to Solr as ordinary url query params.
 
@@ -281,9 +281,9 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('based_near') do |field|
+    config.add_search_field('place') do |field|
       field.label = "Location"
-      solr_name = solr_name("based_near_label", :stored_searchable)
+      solr_name = solr_name("place_label", :stored_searchable)
       field.solr_local_parameters = {
         qf: solr_name,
         pf: solr_name

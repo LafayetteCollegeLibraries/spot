@@ -10,6 +10,7 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
       publisher: 'OriginInfoPublisher',
+      rights_statement: 'dc:rights',
       source: 'RelatedItemHost_1_TitleInfoTitle'
     }.freeze
 
@@ -18,30 +19,16 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + %i[
-        based_near_attributes
         date_issued
         description
         identifier
+        place_attributes
         related_resource
         resource_type
         subtitle
         title
+        title_alternative
       ]
-    end
-
-    # @todo return to this
-    # @return [Array<String>]
-    def based_near_attributes
-      nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
-        # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
-        case original_value.downcase
-        when 'easton, pa'
-          'http://sws.geonames.org/5188140/'
-        else
-          Rails.logger.warn("No URI provided for #{original_value}; skipping")
-          ''
-        end
-      end
     end
 
     # Despite being labeled as 'ISO8601', legacy magazine dates are in
@@ -55,11 +42,11 @@ module Spot::Mappers
       end
     end
 
-    # Maps magazine descriptions to English-tagged RDF literals
+    # Maps magazine notes to English-tagged RDF literals
     #
     # @return [Array<RDF::Literal>]
     def description
-      metadata['TitleInfoPartNumber'].reject(&:blank?).map do |desc|
+      metadata['Note'].reject(&:blank?).map do |desc|
         RDF::Literal(desc, language: :en)
       end
     end
@@ -69,6 +56,20 @@ module Spot::Mappers
     # @return [Array<String>]
     def identifier
       metadata['PublicationSequence'].map { |num| "lafayette_magazine:#{num}" }
+    end
+
+    # @return [Array<String>]
+    def place_attributes
+      nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
+        # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
+        case original_value.downcase
+        when 'easton, pa'
+          'http://sws.geonames.org/5188140/'
+        else
+          Rails.logger.warn("No URI provided for #{original_value}; skipping")
+          ''
+        end
+      end
     end
 
     # Maybe a little clever for its own good, but it gathers the unique
@@ -87,7 +88,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def resource_type
-      ['Journal']
+      ['Periodical']
     end
 
     # Maps subtitles to English-tagged RDF literals
@@ -106,6 +107,13 @@ module Spot::Mappers
       Array(parsed_title)
         .reject(&:blank?) # just in case / you never know
         .map { |title| RDF::Literal(title, language: :en) }
+    end
+
+    # @return [Array<RDF::Literal>]
+    def title_alternative
+      metadata['TitleInfoPartNumber'].reject(&:blank?).map do |alt|
+        RDF::Literal(alt, language: :en)
+      end
     end
 
     private

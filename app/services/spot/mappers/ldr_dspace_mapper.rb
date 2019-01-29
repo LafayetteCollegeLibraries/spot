@@ -11,15 +11,15 @@ module Spot::Mappers
     #
     # @return [Hash{Symbol => String}]
     self.fields_map = {
-      creator: 'contributor.author',
-      editor: 'contributor.editor',
       academic_department: 'department',
+      creator: 'contributor.author',
+      date_available: 'date.available',
       division: 'division',
-      organization: 'organization',
+      editor: 'contributor.editor',
       keyword: 'subject',
+      organization: 'organization',
       resource_type: 'type',
-      date_issued: 'date.issued',
-      date_available: 'date.available'
+      rights_statement: 'dc:rights'
     }.freeze
 
     self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
@@ -30,6 +30,7 @@ module Spot::Mappers
         abstract
         bibliographic_citation
         contributor
+        date_issued
         depositor
         description
         identifier
@@ -60,6 +61,11 @@ module Spot::Mappers
     # @return [Array<String>]
     def contributor
       merge_fields('contributor', 'contributor.other')
+    end
+
+    # @return [Array<String>]
+    def date_issued
+      metadata['date.issued'].map { |d| d.gsub(/T\d{2}:\d{2}:\d{2}Z$/, '') }
     end
 
     # @return [String]
@@ -97,9 +103,7 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def language
-      metadata['language.iso'].map do |language|
-        language == 'en_US' ? 'en' : language
-      end
+      metadata['language.iso'].map { |lang| lang == 'en_US' ? 'en' : lang }
     end
 
     # If an item is a chapter (or part of a book), we're mapping the
@@ -108,8 +112,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def publisher
-      return [] if chapter_or_book?
-      metadata['publisher']
+      chapter_or_book? ? [] : metadata['publisher']
     end
 
     # The inverse of {#publisher}, where we're designating +source+ to
@@ -117,8 +120,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def source
-      return metadata['publisher'] if chapter_or_book?
-      []
+      chapter_or_book? ? metadata['publisher'] : []
     end
 
     # LDR titles are appended with `_<en>` (or whatever 2-letter language code
@@ -148,16 +150,14 @@ module Spot::Mappers
       #
       # @return [Array<String>]
       def gather_identifiers
-        ids = []
+        [].tap do |ids|
+          %w[doi isbn issn].each do |type|
+            key = "identifier.#{type}"
+            ids << metadata[key].map { |id| "#{type}:#{id}" } if metadata[key]
+          end
 
-        %w[doi isbn issn].each do |type|
-          key = "identifier.#{type}"
-          ids << metadata[key].map { |id| "#{type}:#{id}" } if metadata[key]
-        end
-
-        ids << uris_with_handles_mapped
-
-        ids.flatten.compact
+          ids << uris_with_handles_mapped
+        end.flatten.compact
       end
 
       # Helper method to group the values for multiple fields into one place.

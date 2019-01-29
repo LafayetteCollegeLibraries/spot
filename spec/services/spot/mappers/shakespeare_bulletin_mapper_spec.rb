@@ -67,6 +67,20 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    it { is_expected.to eq ['Periodical'] }
+  end
+
+  describe '#rights_statement' do
+    subject { mapper.rights_statement }
+
+    let(:field) { 'dc:rights' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#source' do
     subject { mapper.source }
 
@@ -80,11 +94,17 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
 
     let(:metadata) do
       {
-        'titleInfo_subTitle' => ['2 be or not 2 be']
+        'titleInfo_subTitle' => ['2 be or not 2 be'],
+        'titleInfo_partName' => ['what a good question']
       }
     end
 
-    let(:value) { [RDF::Literal('2 be or not 2 be', language: :en)] }
+    let(:value) do
+      [
+        RDF::Literal('2 be or not 2 be', language: :en),
+        RDF::Literal('what a good question', language: :en)
+      ]
+    end
 
     it { is_expected.to eq value }
   end
@@ -119,8 +139,8 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     end
   end
 
-  describe '#based_near_attributes' do
-    subject { mapper.based_near_attributes }
+  describe '#place_attributes' do
+    subject { mapper.place_attributes }
 
     let(:metadata) do
       {

@@ -4,16 +4,15 @@ de:
     search:
       fields:
         facet:
-          based_near_label_sim: Ort
           creator_sim: Schöpfer
           file_format_sim: Format
           generic_type_sim: Art
           keyword_sim: Stichwort
           language_sim: Sprache
+          place_label_sim: Ort
           publisher_sim: Herausgeber
           subject_sim: Fach
         index:
-          based_near_tesim: Ort
           contributor_tesim: Mitwirkender
           creator_tesim: Schöpfer
           date_created_tesim: Datum erstellt
@@ -25,11 +24,11 @@ de:
           keyword_tesim: Stichwort
           language_tesim: Sprache
           license_tesim: Lizenz
+          place_tesim: Ort
           publisher_tesim: Herausgeber
           rights_statement_tesim: Rechte
           subject_tesim: Fach
         show:
-          based_near_tesim: Ort
           contributor_tesim: Mitwirkender
           creator_tesim: Schöpfer
           date_created_tesim: Datum erstellt
@@ -41,6 +40,7 @@ de:
           keyword_tesim: Stichwort
           language_tesim: Sprache
           license_tesim: Lizenz
+          place_tesim: Ort
           publisher_tesim: Herausgeber
           rights_statement_tesim: Rechte
           subject_tesim: Fach
