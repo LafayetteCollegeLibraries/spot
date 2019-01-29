@@ -35,6 +35,7 @@ gem 'hyrax', '2.4.1'
 
 gem 'almond-rails', '~> 0.1.0'
 gem 'bagit', '~> 0.4.2'
+gem 'bootsnap', '~> 1.3.2'
 gem 'darlingtonia', '~> 1.0'
 gem 'devise', '~> 4.5.0'
 gem 'devise-guests', '~> 0.6'
