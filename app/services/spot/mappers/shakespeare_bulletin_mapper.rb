@@ -9,6 +9,7 @@ module Spot::Mappers
 
     self.fields_map = {
       publisher: 'originInfo_Publisher',
+      rights_statement: 'dc:rights',
       source: 'relatedItem_typeHost_titleInfo_title'
     }.freeze
 
@@ -22,6 +23,7 @@ module Spot::Mappers
         date_issued
         editor
         identifier
+        resource_type
         subtitle
         title
       ]
@@ -58,7 +60,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def date_issued
-      (metadata['originInfo_dateIssued_ISO8601'] || []).map do |raw|
+      Array(metadata['originInfo_dateIssued_ISO8601']).map do |raw|
         short_date_to_iso(raw, century_threshold: 50)
       end
     end
@@ -73,16 +75,20 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def identifier
-      (metadata['relatedItem_identifier_typeISSN'] || []).reject(&:blank?).map do |value|
+      Array(metadata['relatedItem_identifier_typeISSN']).reject(&:blank?).map do |value|
         "issn:#{value}"
       end
     end
 
+    # @return [Array<String>]
+    def resource_type
+      ['Periodical']
+    end
+
     # @return [Array<RDF::Literal>]
     def subtitle
-      (metadata['titleInfo_subTitle'] || []).reject(&:blank?).map do |subtitle|
-        RDF::Literal(subtitle, language: :en)
-      end
+      (Array(metadata['titleInfo_subTitle']) + Array(metadata['titleInfo_partName']))
+        .reject(&:blank?).map { |subtitle| RDF::Literal(subtitle, language: :en) }
     end
 
     # From our remediation notes:
