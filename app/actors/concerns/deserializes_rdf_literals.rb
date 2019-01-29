@@ -35,8 +35,6 @@
 # Also note that Rails edge (> 5.2, == 6?) adds the ability to define
 # serializers for jobs, which would make this convoluted mess unnecessary.
 module DeserializesRdfLiterals
-  extend ActiveSupport::Concern
-
   # We want our deserialization to happen _before_ the other jobs in the
   # work actor, as we're changing the +env.curation_concern+ and +env.attributes+.
   #
@@ -59,14 +57,14 @@ module DeserializesRdfLiterals
 
   private
 
-    # Sets the tagged fields of +env.curation_concern+ with transformed
-    # literal values.
+    # Sets the tagged fields of +env.attributes+ with transformed
+    # literal values unless that field is empty
     #
     # @param env [Hyrax::Actors::Environment]
     # @return [void]
     def deserialize_rdf_literals!(env)
       tagged_fields.each do |field|
-        env.curation_concern[field] = value_for(field, env)
+        env.attributes[field] = value_for(field, env) if env.attributes[field]
       end
     end
 
