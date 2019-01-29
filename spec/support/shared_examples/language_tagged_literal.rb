@@ -12,13 +12,7 @@ shared_examples 'a parsed language-tagged literal (single)' do
     }
   end
 
-  let(:tagged_literals) do
-    [
-      RDF::Literal('Terminator 2: Judgement Day', language: :en)
-    ]
-  end
-
-  it { is_expected.to eq tagged_literals }
+  it { is_expected.to eq ['"Terminator 2: Judgement Day"@en'] }
 end
 
 shared_examples 'a parsed language-tagged literal (multiple)' do
@@ -32,10 +26,7 @@ shared_examples 'a parsed language-tagged literal (multiple)' do
   end
 
   let(:tagged_literals) do
-    [
-      'Exorcist, the',
-      RDF::Literal('L\'exorciste', language: :fr)
-    ]
+    ['"Exorcist, the"', '"L\'exorciste"@fr']
   end
 
   it { is_expected.to eq tagged_literals }

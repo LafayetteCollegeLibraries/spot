@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 #
 # rubocop:disable RSpec/InstanceVariable
-require 'rails_helper'
-include Warden::Test::Helpers
-
 RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
   let(:depositing_user) { FactoryBot.create(:user) }
   let(:admin_user) { FactoryBot.create(:admin_user) }

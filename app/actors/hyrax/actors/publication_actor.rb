@@ -2,6 +2,8 @@
 module Hyrax
   module Actors
     class PublicationActor < Hyrax::Actors::BaseActor
+      include ::DeserializesRdfLiterals
+
       private
 
         # Overrides the BaseActor method to allow us to stuff in
