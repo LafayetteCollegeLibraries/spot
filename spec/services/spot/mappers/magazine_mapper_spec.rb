@@ -47,8 +47,8 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#description' do
     subject { mapper.description }
 
-    let(:metadata) { { 'TitleInfoPartNumber' => ['A description'] } }
-    let(:value) { [RDF::Literal('A description', language: :en)] }
+    let(:metadata) { { 'Note' => ['some information'] } }
+    let(:value) { [RDF::Literal('some information', language: :en)] }
 
     it { is_expected.to eq value }
   end
@@ -97,7 +97,15 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#resource_type' do
     subject { mapper.resource_type }
 
-    it { is_expected.to eq ['Journal'] }
+    it { is_expected.to eq ['Periodical'] }
+  end
+
+  describe '#rights_statement' do
+    subject { mapper.rights_statement }
+
+    let(:field) { 'dc:rights' }
+
+    it_behaves_like 'a mapped field'
   end
 
   describe '#source' do
@@ -196,5 +204,15 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
       it { is_expected.to eq value }
     end
+  end
+
+  describe '#title_alternative' do
+    subject { mapper.title_alternative }
+
+    let(:value) { [RDF::Literal(alt_title, language: :en)] }
+    let(:alt_title) { 'Supplement to The Lafayette Alumnus, Nov., 1937' }
+    let(:metadata) { { 'TitleInfoPartNumber' => [alt_title] } }
+
+    it { is_expected.to eq value }
   end
 end

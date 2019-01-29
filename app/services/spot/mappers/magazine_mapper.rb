@@ -10,6 +10,7 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
       publisher: 'OriginInfoPublisher',
+      rights_statement: 'dc:rights',
       source: 'RelatedItemHost_1_TitleInfoTitle'
     }.freeze
 
@@ -26,6 +27,7 @@ module Spot::Mappers
         resource_type
         subtitle
         title
+        title_alternative
       ]
     end
 
@@ -55,11 +57,11 @@ module Spot::Mappers
       end
     end
 
-    # Maps magazine descriptions to English-tagged RDF literals
+    # Maps magazine notes to English-tagged RDF literals
     #
     # @return [Array<RDF::Literal>]
     def description
-      metadata['TitleInfoPartNumber'].reject(&:blank?).map do |desc|
+      metadata['Note'].reject(&:blank?).map do |desc|
         RDF::Literal(desc, language: :en)
       end
     end
@@ -87,7 +89,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def resource_type
-      ['Journal']
+      ['Periodical']
     end
 
     # Maps subtitles to English-tagged RDF literals
@@ -106,6 +108,13 @@ module Spot::Mappers
       Array(parsed_title)
         .reject(&:blank?) # just in case / you never know
         .map { |title| RDF::Literal(title, language: :en) }
+    end
+
+    # @return [Array<RDF::Literal>]
+    def title_alternative
+      metadata['TitleInfoPartNumber'].reject(&:blank?).map do |alt|
+        RDF::Literal(alt, language: :en)
+      end
     end
 
     private
