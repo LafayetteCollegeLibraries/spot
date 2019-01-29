@@ -119,8 +119,7 @@ class Publication < ActiveFedora::Base
 
   # rights_statements are stored as URIs
   property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
-
-  # property :rights_holder, predicate: ::RDF::Vocab::DC11.rightsHolder
+  property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder
 
   # accepts_nested_attributes_for needs to be defined at the end of the model.
   # see note from Hyrax::BasicMetadata mixin:

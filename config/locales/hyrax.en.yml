@@ -53,6 +53,7 @@ en:
         publisher: The person or group making the work available. Generally this is the institution.
         related_resource: Further information about the subject resource.
         resource_type: Pre-defined categories to describe the type of content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected.
+        rights_holder: A person or organization owning or managing rights over the resource.
         rights_statement: Rights statements express the copyright status of a Digital Object, as well as information about how users can access and re-use the objects.
         source: A related resource from which the described resource is derived.
         subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary.

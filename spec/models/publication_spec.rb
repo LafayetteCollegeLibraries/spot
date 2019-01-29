@@ -40,4 +40,5 @@ describe Publication do
   it { is_expected.to have_editable_property(:place).with_predicate(dc.spatial) }
   it { is_expected.to have_editable_property(:license).with_predicate(dc.license) }
   it { is_expected.to have_editable_property(:rights_statement).with_predicate(edm.rights) }
+  it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
 end
