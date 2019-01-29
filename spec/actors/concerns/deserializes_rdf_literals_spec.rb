@@ -38,13 +38,20 @@ RSpec.describe DeserializesRdfLiterals do
     }
   end
 
+  let(:literal_attributes) do
+    {
+      title: RDF::Literal('Cool Beans', language: :en),
+      description: [RDF::Literal('A work of importance')]
+    }
+  end
+
   shared_examples 'it transforms fields' do
     it 'transforms single fields' do
-      expect(work.title).to eq RDF::Literal('Cool Beans', language: :en)
+      expect(env.attributes[:title]).to eq RDF::Literal('Cool Beans', language: :en)
     end
 
     it 'transforms multiple fields' do
-      expect(work.description).to eq [RDF::Literal('A work of importance')]
+      expect(env.attributes[:description]).to eq [RDF::Literal('A work of importance')]
     end
   end
 
@@ -54,12 +61,7 @@ RSpec.describe DeserializesRdfLiterals do
     it_behaves_like 'it transforms fields'
 
     context 'when attributes are already RDF::Literals (from ingest)' do
-      let(:attributes) do
-        {
-          title: RDF::Literal('Cool Beans', language: :en),
-          description: [RDF::Literal('A work of importance')]
-        }
-      end
+      let(:attributes) { literal_attributes }
 
       it_behaves_like 'it transforms fields'
     end
@@ -71,12 +73,7 @@ RSpec.describe DeserializesRdfLiterals do
     it_behaves_like 'it transforms fields'
 
     context 'when attributes are already RDF::Literals (from ingest)' do
-      let(:attributes) do
-        {
-          title: RDF::Literal('Cool Beans', language: :en),
-          description: [RDF::Literal('A work of importance')]
-        }
-      end
+      let(:attributes) { literal_attributes }
 
       it_behaves_like 'it transforms fields'
     end
