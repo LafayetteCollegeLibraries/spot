@@ -67,6 +67,12 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    it { is_expected.to eq ['Periodical'] }
+  end
+
   describe '#rights_statement' do
     subject { mapper.rights_statement }
 
