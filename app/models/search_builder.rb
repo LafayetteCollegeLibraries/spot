@@ -3,6 +3,10 @@
 # Generated from +rails generate hyrax:install+
 class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior
+  include BlacklightRangeLimit::RangeLimitBuilder
+
+  include BlacklightAdvancedSearch::AdvancedSearchBuilder
+
   # Add a filter query to restrict the search to documents the current user has access to
   include Hydra::AccessControlsEnforcement
   include Hyrax::SearchFilters

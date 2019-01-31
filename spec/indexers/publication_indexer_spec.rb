@@ -67,13 +67,13 @@ RSpec.describe PublicationIndexer do
 
   describe 'date_issued' do
     # :symbol, :facetable
-    let(:fields) { %w[date_issued_ssim date_issued_sim] }
+    let(:fields) { %w[date_issued_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'date_available' do
     # :symbol, :facetable
-    let(:fields) { %w[date_available_ssim date_available_sim] }
+    let(:fields) { %w[date_available_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -90,20 +90,20 @@ RSpec.describe PublicationIndexer do
   end
 
   describe 'academic_department' do
-    # :symbol, :facetable
-    let(:fields) { %w[academic_department_ssim academic_department_sim] }
+    # :stored_searchable, :facetable
+    let(:fields) { %w[academic_department_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'division' do
     # :symbol, :facetable
-    let(:fields) { %w[division_ssim division_sim] }
+    let(:fields) { %w[division_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'organization' do
     # :symbol, :facetable
-    let(:fields) { %w[organization_ssim organization_sim] }
+    let(:fields) { %w[organization_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -115,13 +115,13 @@ RSpec.describe PublicationIndexer do
 
   describe 'keyword' do
     # :symbol, :facetable
-    let(:fields) { %w[keyword_ssim keyword_sim] }
+    let(:fields) { %w[keyword_tesim keyword_sim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'subject' do
-    # :symbol, :facetable
-    let(:fields) { %w[subject_ssim subject_sim] }
+    # :stored_searchable, :facetable
+    let(:fields) { %w[subject_tesim subject_sim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -160,6 +160,15 @@ RSpec.describe PublicationIndexer do
 
     it 'stores the label' do
       expect(solr_doc['place_label_ssim']).to eq [label]
+    end
+  end
+
+  describe 'years_encompassed' do
+    let(:work) { build(:publication, date_issued: ['1986-02-11', '2019-01-11']) }
+    let(:years) { [1986, 2019] }
+
+    it 'parses years from date_issued' do
+      expect(solr_doc['years_encompassed_iim']).to include(*years)
     end
   end
 end

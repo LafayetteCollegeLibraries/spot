@@ -98,12 +98,12 @@ RSpec.describe Spot::BasePresenter do
     'division' => 'ssim',
     'editor' => 'tesim',
     'identifier' => 'ssim',
-    'keyword' => 'ssim',
+    'keyword' => 'tesim',
     'language_label' => 'ssim',
     'organization' => 'ssim',
     'resource_type' => 'ssim',
     'source' => 'tesim',
-    'subject' => 'ssim',
+    'subject' => 'tesim',
     'subtitle' => 'tesim',
     'title_alternative' => 'tesim'
   }.each_pair do |method, suffix|

@@ -17,11 +17,11 @@
 -->
 
 <!--
- This is a stripped down config file used for a simple example...  
- It is *not* a good example to work from. 
+ This is a stripped down config file used for a simple example...
+ It is *not* a good example to work from.
 -->
 <config>
-  
+
   <!-- Controls what version of Lucene various components of Solr
        adhere to.  Generally, you want to use the latest version to
        get all bug fixes and improvements. It is highly recommended
@@ -29,15 +29,15 @@
        affect both how text is indexed and queried.
   -->
   <luceneMatchVersion>5.0.0</luceneMatchVersion>
-  
+
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
   <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib" regex=".*\.jar" />
   <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
 
-  <directoryFactory name="DirectoryFactory" 
+  <directoryFactory name="DirectoryFactory"
                     class="${solr.directoryFactory:solr.NRTCachingDirectoryFactory}">
-  </directoryFactory> 
+  </directoryFactory>
 
   <codecFactory class="solr.SchemaCodecFactory"/>
 
@@ -45,14 +45,14 @@
 
 
   <dataDir>${solr.blacklight-core.data.dir:}</dataDir>
-  
+
   <requestDispatcher handleSelect="true" >
     <requestParsers enableRemoteStreaming="false" multipartUploadLimitInKB="2048000" />
   </requestDispatcher>
-  
+
   <requestHandler name="/analysis/field" startup="lazy" class="solr.FieldAnalysisRequestHandler" />
 
-  <!-- config for the admin interface --> 
+  <!-- config for the admin interface -->
   <admin>
     <defaultQuery>*:*</defaultQuery>
   </admin>
@@ -82,66 +82,161 @@
        queries across multiple shards
     -->
   <requestHandler name="search" class="solr.SearchHandler" default="true">
-    <!-- default values for query parameters can be specified, these
-         will be overridden by parameters in the request
+    <!-- default values are used when an empty query is submitted -->
+    <lst name="defaults">
+      <!--
+        `defType` defines which query parser to use. options include:
+          - lucene
+            - https://lucene.apache.org/solr/guide/7_5/the-standard-query-parser.html
+          - dismax
+            - https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html
+          - edismax
+            - https://lucene.apache.org/solr/guide/7_5/the-extended-dismax-query-parser.html
       -->
-     <lst name="defaults">
-       <str name="defType">edismax</str>
-       <str name="echoParams">explicit</str>
-       <str name="q.alt">*:*</str>
-       <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
-       <int name="qs">1</int>
-       <int name="ps">2</int>
-       <float name="tie">0.01</float>
-       <!-- this qf and pf are used by default, if not otherwise specified by
-            client. The default blacklight_config will use these for the
-            "keywords" search. See the author_qf/author_pf, title_qf, etc
-            below, which the default blacklight_config will specify for
-            those searches. You may also be interested in:
-            http://wiki.apache.org/solr/LocalParams
-       -->
-        <str name="qf">
-          id
-          title_tesim
-          author_tesim
-          subject_tesim
-        </str>
-        <str name="pf">
-          all_text_timv^10
-        </str>
+      <str name="defType">edismax</str>
 
-       <str name="author_qf">
-          author_tesim
-       </str>
-       <str name="author_pf">
-       </str>
-       <str name="title_qf">
-          title_tesim
-       </str>
-       <str name="title_pf">
-       </str>
-       <str name="subject_qf">
-          subject_tesim
-       </str>
-       <str name="subject_pf">
-       </str>
+      <!--
+        in the response, append request parameters that we've explicitly used
+        see: https://wiki.apache.org/solr/CoreQueryParameters#echoParams
+      -->
+      <str name="echoParams">explicit</str>
 
-       <str name="fl">
-         *,
-         score
-       </str>
+      <!--
+        if no `q` parameter is provided, this is the fallback search
+        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#q-alt-parameter
+      -->
+      <str name="q.alt">*:*</str>
 
-       <str name="facet">true</str>
-       <str name="facet.mincount">1</str>
+      <!--
+        using the defaults from Hyrax for now
+        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#mm-minimum-should-match-parameter
+      -->
+      <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
 
-       <str name="spellcheck">true</str>
-       <str name="spellcheck.dictionary">default</str>
-       <str name="spellcheck.onlyMorePopular">true</str>
-       <str name="spellcheck.extendedResults">true</str>
-       <str name="spellcheck.collate">false</str>
-       <str name="spellcheck.count">5</str>
+      <!--
+        the 'query phrase slop' parameter. if I'm reading correctly,
+        'slop' refers to how much reordering is allowed in matching
+        phrases
 
-     </lst>
+        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#qs-query-phrase-slop-parameter
+      -->
+      <int name="qs">1</int>
+
+      <!--
+        the 'phrase slop' parameter
+
+        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#ps-phrase-slop-parameter
+      -->
+      <int name="ps">2</int>
+
+      <!--
+        *shrug emoji* using the defaults from Hyrax
+
+        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#the-tie-tie-breaker-parameter
+      -->
+      <float name="tie">0.01</float>
+
+      <!--
+        ~ qf / pf fields ~
+
+        in short, qf (query fields) defines which fields the query should
+        be conducted against, and pf (phrase fields) is used to boost
+        results based on proximity in phrases. I think?
+
+        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#qf-query-fields-parameter
+        and: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#pf-phrase-fields-parameter
+
+        these first two are used by default
+      -->
+      <str name="qf">
+        id
+        title_tesim
+        creator_tesim
+        contributor_tesim
+        subject_tesim
+      </str>
+      <str name="pf">
+        all_text_timv^10
+      </str>
+
+      <!--
+        the following qf/pf definition blocks build out local params
+        that are available for reference within your catalog_controller,
+        for example. instead of:
+
+            configure_blacklight do |config|
+              # ...
+              config.add_search_field('author') do |field|
+                field.solr_parameters = {
+                  qf: 'creator_tesim^2 contributor_tesim editor_tesim',
+                  pf: ''
+                }
+              end
+            end
+
+        you can instead refer to the definitions here using the local param
+        syntax:
+
+            configure_blacklight do |config|
+              # ...
+              config.add_search_field('author') do |field|
+                field.solr_parameters = {
+                  qf: '$author_qf',
+                  pf: '$author_pf',
+                }
+              end
+            end
+
+        since we're using just Spot for now, this won't be as handy (but
+        certainly isn't a hinderance either), but as we build other applications
+        to access the same Solr server, this will centralize the definitions
+        of these qf/pf params.
+
+        see: http://wiki.apache.org/solr/LocalParams
+      -->
+      <str name="author_qf">
+        creator_tesim^2
+        contributor_tesim
+        editor_tesim
+      </str>
+      <str name="author_pf"></str>
+
+      <str name="title_qf">
+        title_tesim^2
+        title_alternative
+        subtitle
+      </str>
+      <str name="title_pf"></str>
+
+      <str name="subject_qf">
+        subject_tesim
+      </str>
+      <str name="subject_pf"></str>
+
+      <!--
+        what fields should be returned in our response?
+
+        see: https://wiki.apache.org/solr/CommonQueryParameters#fl-1
+      -->
+      <str name="fl">
+        *,
+        score
+      </str>
+
+      <!--
+        show facets when we have at least one result
+      -->
+      <str name="facet">true</str>
+      <str name="facet.mincount">1</str>
+
+      <str name="spellcheck">true</str>
+      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.extendedResults">true</str>
+      <str name="spellcheck.collate">false</str>
+      <str name="spellcheck.count">5</str>
+
+    </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
@@ -201,7 +296,7 @@
 <!-- Spell Check
 
         The spell check component can return a list of alternative spelling
-        suggestions.  
+        suggestions.
 
         http://wiki.apache.org/solr/SpellCheckComponent
      -->
@@ -256,7 +351,7 @@
        </lst>
      -->
 
-    <!-- a spellchecker that use an alternate comparator 
+    <!-- a spellchecker that use an alternate comparator
 
          comparatorClass be one of:
           1. score (default)

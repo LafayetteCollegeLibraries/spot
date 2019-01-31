@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class CatalogController < ApplicationController
+  include BlacklightRangeLimit::ControllerOverride
+  include BlacklightAdvancedSearch::Controller
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
@@ -17,13 +19,20 @@ class CatalogController < ApplicationController
   end
 
   configure_blacklight do |config|
+    # default advanced config values
+    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
+    # config.advanced_search[:qt] ||= 'advanced'
+    config.advanced_search[:url_key] ||= 'advanced'
+    config.advanced_search[:query_parser] ||= 'dismax'
+    config.advanced_search[:form_solr_parameters] ||= {}
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
-    config.search_builder_class = Hyrax::CatalogSearchBuilder
+    config.search_builder_class = Spot::CatalogSearchBuilder
 
     # Show gallery view
     config.view.gallery.partials = [:index_header, :index]
@@ -45,10 +54,13 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
 
     # config.add_facet_field 'human_readable_type_sim', label: "Type", limit: 5
+    config.add_facet_field 'member_of_collections_ssim',
+                           label: I18n.t('blacklight.search.fields.member_of_collections'),
+                           limit: 5
     config.add_facet_field 'resource_type_ssim',
                            label: I18n.t('blacklight.search.fields.resource_type'),
                            limit: 5
-    config.add_facet_field 'creator_sim',
+    config.add_facet_field 'creator_ssim',
                            label: I18n.t('blacklight.search.fields.creator'),
                            limit: 5
     config.add_facet_field 'contributor_sim',
@@ -60,7 +72,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'subject_sim',
                            label: I18n.t('blacklight.search.fields.subject'),
                            limit: 5
-    config.add_facet_field 'academic_department_ssim',
+    config.add_facet_field 'academic_department_sim',
                            label: I18n.t('blacklight.search.fields.academic_department'),
                            limit: 5
     # config.add_facet_field solr_name("language", :facetable), limit: 5
@@ -68,9 +80,9 @@ class CatalogController < ApplicationController
     config.add_facet_field 'publisher_sim',
                            label: I18n.t('blacklight.search.fields.publisher'),
                            limit: 5
-    config.add_facet_field 'member_of_collections_ssim',
-                           label: I18n.t('blacklight.search.fields.member_of_collections'),
-                           limit: 5
+    config.add_facet_field 'years_encompassed_iim',
+                           label: I18n.t('blacklight.search.fields.years_encompassed'),
+                           range: true
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
@@ -173,152 +185,24 @@ class CatalogController < ApplicationController
       }
     end
 
-    # Now we see how to over-ride Solr request handler defaults, in this
-    # case for a BL "search field", which is really a dismax aggregate
-    # of Solr search fields.
-    # creator, title, description, publisher, date_created,
-    # subject, language, resource_type, format, identifier, place,
-    config.add_search_field('contributor') do |field|
-      # solr_parameters hash are sent to Solr as ordinary url query params.
-
-      # :solr_local_parameters will be sent using Solr LocalParams
-      # syntax, as eg {! qf=$title_qf }. This is neccesary to use
-      # Solr parameter de-referencing like $title_qf.
-      # See: http://wiki.apache.org/solr/LocalParams
-      solr_name = solr_name("contributor", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
+    config.add_search_field('title', label: 'Title') do |field|
+      field.solr_parameters = {
+        qf: '$title_qf',
+        pf: '$title_pf'
       }
     end
 
-    config.add_search_field('department') do |field|
-      solr_name = solr_name('department', :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
+    config.add_search_field('author', label: 'Author') do |field|
+      field.solr_parameters = {
+        qf: '$author_qf',
+        pf: '$author_pf'
       }
     end
 
-    config.add_search_field('creator') do |field|
-      solr_name = solr_name("creator", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('title') do |field|
-      solr_name = solr_name("title", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('description') do |field|
-      field.label = "Abstract or Summary"
-      solr_name = solr_name("description", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('publisher') do |field|
-      solr_name = solr_name("publisher", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('date_created') do |field|
-      solr_name = solr_name("created", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('subject') do |field|
-      solr_name = solr_name("subject", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('language') do |field|
-      solr_name = solr_name("language", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('resource_type') do |field|
-      solr_name = solr_name("resource_type", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('format') do |field|
-      solr_name = solr_name("format", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('identifier') do |field|
-      solr_name = solr_name("id", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('place') do |field|
-      field.label = "Location"
-      solr_name = solr_name("place_label", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('keyword') do |field|
-      solr_name = solr_name("keyword", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('depositor') do |field|
-      solr_name = solr_name("depositor", :symbol)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('rights_statement') do |field|
-      solr_name = solr_name("rights_statement", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
-      }
-    end
-
-    config.add_search_field('license') do |field|
-      solr_name = solr_name("license", :stored_searchable)
-      field.solr_local_parameters = {
-        qf: solr_name,
-        pf: solr_name
+    config.add_search_field('subject', label: 'Subject') do |field|
+      field.solr_parameters = {
+        qf: '$subject_qf',
+        pf: '$subject_pf'
       }
     end
 
