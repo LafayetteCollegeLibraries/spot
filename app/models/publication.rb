@@ -39,11 +39,11 @@ class Publication < ActiveFedora::Base
   end
 
   property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :physical_medium, predicate: ::RDF::Vocab::DC.PhysicalMedium do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :language, predicate: ::RDF::Vocab::DC11.language do |index|
@@ -67,11 +67,11 @@ class Publication < ActiveFedora::Base
   end
 
   property :date_issued, predicate: ::RDF::Vocab::DC.issued do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
@@ -91,11 +91,11 @@ class Publication < ActiveFedora::Base
   end
 
   property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
-    index.as :symbol, :facetable
+    index.as :symbol
   end
 
   property :related_resource, predicate: ::RDF::RDFS.seeAlso do |index|

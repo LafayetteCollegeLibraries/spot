@@ -31,22 +31,6 @@ module Spot
     end
 
     # @return [Array<String>]
-    def place
-      value_for 'place_ssim'
-    end
-
-    # Based Near values + labels zipped into tuples.
-    #
-    # @example
-    #   presenter.place_merged
-    #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
-    #
-    # @return [Array<Array<String>>]
-    def place_merged
-      value_for('place_ssim').zip(value_for('place_label_ssim'))
-    end
-
-    # @return [Array<String>]
     def bibliographic_citation
       value_for 'bibliographic_citation_tesim'
     end
@@ -124,6 +108,27 @@ module Spot
     # @return [Array<String>]
     def organization
       value_for 'organization_ssim'
+    end
+
+    # @return [Array<String>]
+    def physical_medium
+      value_for 'physical_medium_ssim'
+    end
+
+    # @return [Array<String>]
+    def place
+      value_for 'place_ssim'
+    end
+
+    # place values + labels zipped into tuples.
+    #
+    # @example
+    #   presenter.place_merged
+    #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
+    #
+    # @return [Array<Array<String>>]
+    def place_merged
+      value_for('place_ssim').zip(value_for('place_label_ssim'))
     end
 
     # @return [Array<String>]
