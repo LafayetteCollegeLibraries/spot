@@ -67,13 +67,13 @@ RSpec.describe PublicationIndexer do
 
   describe 'date_issued' do
     # :symbol, :facetable
-    let(:fields) { %w[date_issued_ssim date_issued_sim] }
+    let(:fields) { %w[date_issued_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'date_available' do
     # :symbol, :facetable
-    let(:fields) { %w[date_available_ssim date_available_sim] }
+    let(:fields) { %w[date_available_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -91,19 +91,19 @@ RSpec.describe PublicationIndexer do
 
   describe 'academic_department' do
     # :stored_searchable, :facetable
-    let(:fields) { %w[academic_department_tesim academic_department_sim] }
+    let(:fields) { %w[academic_department_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'division' do
     # :symbol, :facetable
-    let(:fields) { %w[division_ssim division_sim] }
+    let(:fields) { %w[division_ssim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'organization' do
     # :symbol, :facetable
-    let(:fields) { %w[organization_ssim organization_sim] }
+    let(:fields) { %w[organization_ssim] }
     it_behaves_like 'simple model indexing'
   end
 

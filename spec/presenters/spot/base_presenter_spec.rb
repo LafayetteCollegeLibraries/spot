@@ -87,7 +87,7 @@ RSpec.describe Spot::BasePresenter do
   # these are the straightforward checks
   {
     'abstract' => 'tesim',
-    'academic_department' => 'tesim',
+    'academic_department' => 'ssim',
     'bibliographic_citation' => 'tesim',
     'contributor' => 'tesim',
     'creator' => 'tesim',

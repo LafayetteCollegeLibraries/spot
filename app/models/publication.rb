@@ -87,7 +87,7 @@ class Publication < ActiveFedora::Base
   end
 
   property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
-    index.as :stored_searchable, :facetable
+    index.as :symbol
   end
 
   property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|

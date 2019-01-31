@@ -27,7 +27,7 @@ module Spot
 
     # @return [Array<String>]
     def academic_department
-      value_for 'academic_department_tesim'
+      value_for 'academic_department_ssim'
     end
 
     # @return [Array<String>]
