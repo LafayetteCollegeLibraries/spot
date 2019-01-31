@@ -2,4 +2,6 @@
 #
 # Configuration for Sidekiq services
 
-Sidekiq::Logging.logger.level = Logger::WARN if Rails.env.production?
+Sidekiq.configure_server do
+  ActiveJob::Base.logger = Sidekiq::Logging.logger
+end

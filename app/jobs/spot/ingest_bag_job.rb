@@ -30,8 +30,7 @@ module Spot
       raise ArgumentError, "Unknown source: #{source}." unless source_available?
       raise ArgumentError, "Unknown work_class: #{work_class}" unless work_class_valid?
 
-      Rails.logger.debug "Ingesting bag [#{bag_path}] using #{source} mapper"
-
+      logger.debug "Ingesting bag [#{bag_path}] using #{source} mapper"
       importer.import if parser.validate!
     end
 

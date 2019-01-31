@@ -32,7 +32,7 @@ module Spot::Importers::Bag
                                                    ability_for(attributes.delete(:depositor)),
                                                    attributes)
 
-        info_stream << "Creating record: #{attributes[:title]}\n"
+        info_stream << "Creating record: #{attributes[:title].first}\n"
         Hyrax::CurationConcern.actor.create(actor_env) &&
           (info_stream << "Record created: #{work.id}\n")
       rescue ::Ldp::Gone
