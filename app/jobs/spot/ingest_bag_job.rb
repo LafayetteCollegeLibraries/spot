@@ -30,8 +30,7 @@ module Spot
       raise ArgumentError, "Unknown source: #{source}." unless source_available?
       raise ArgumentError, "Unknown work_class: #{work_class}" unless work_class_valid?
 
-      Rails.logger.debug "Ingesting bag [#{bag_path}] using #{source} mapper"
-
+      logger.debug "Ingesting bag [#{bag_path}] using #{source} mapper"
       importer.import if parser.validate!
     end
 
@@ -68,7 +67,13 @@ module Spot
 
       # @return [Spot::Importers::Bag::RecordImporter]
       def record_importer
-        @record_importer ||= Spot::Importers::Bag::RecordImporter.new(work_class: @work_class)
+        @record_importer ||= begin
+          info = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
+          error = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
+          Spot::Importers::Bag::RecordImporter.new(work_class: @work_class,
+                                                   info_stream: info,
+                                                   error_stream: error)
+        end
       end
 
       # @return [Darlingtonia::Importer]
