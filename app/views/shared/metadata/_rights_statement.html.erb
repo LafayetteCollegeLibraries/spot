@@ -1,0 +1,12 @@
+<% if presenter.rights_statement.present? %>
+  <dt><%= t('blacklight.search.fields.rights_statement') %></dt>
+  <dd>
+    <ul class="tabular">
+    <%- presenter.rights_statement_merged.each do |(uri, label)| -%>
+      <li class="attribute attribute-place">
+        <%= rights_statement_icon(uri, label) %>
+      </li>
+    <%- end -%>
+    </ul>
+  </dd>
+<% end %>

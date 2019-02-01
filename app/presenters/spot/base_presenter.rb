@@ -128,12 +128,22 @@ module Spot
     #
     # @return [Array<Array<String>>]
     def place_merged
-      value_for('place_ssim').zip(value_for('place_label_ssim'))
+      place.zip(value_for('place_label_ssim'))
     end
 
     # @return [Array<String>]
     def resource_type
       value_for 'resource_type_ssim'
+    end
+
+    # @return [Array<String>]
+    def rights_statement
+      value_for('rights_statement_ssim')
+    end
+
+    # @return [Array<Array<String>>]
+    def rights_statement_merged
+      rights_statement.zip(value_for('rights_statement_label_ssim'))
     end
 
     # @return [Array<String>]
