@@ -10,26 +10,18 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//=
 //= require turbolinks
-//
+
 // Required by Blacklight
 //= require jquery
-//= require 'blacklight_advanced_search'
-
-
+//= require blacklight_advanced_search
+//= require blacklight_range_limit
 //= require jquery_ujs
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require blacklight/blacklight
-//
+
 //= require hyrax
-//
+
 //= require almond
 //= require_tree .
-
-
-// For blacklight_range_limit built-in JS, if you don't want it you don't need
-// this:
-//= require 'blacklight_range_limit'
-
