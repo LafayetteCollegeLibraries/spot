@@ -29,6 +29,8 @@
   <%= render 'shared/metadata/identifiers', presenter: presenter %>
   <%= presenter.attribute_to_html(:related_resource, html_dl: true) %>
 
+  <%= render 'shared/metadata/rights_statement', presenter: presenter %>
+
   <%# repository history %>
   <%= presenter.attribute_to_html(:date_created, html_dl: true) %>
   <%= presenter.attribute_to_html(:depositor, html_dl: true, render_as: :faceted) %>
