@@ -4,6 +4,8 @@ RSpec.describe IndexesRightsStatements do
 
   let(:publication) { Publication.new(rights_statement: [rights_statement]) }
   let(:rights_statement) { 'http://rightsstatements.org/vocab/NKC/1.0/' }
+  let(:statement_service) { Hyrax.config.rights_statement_service_class.new }
+  let(:label) { statement_service.label(rights_statement) }
 
   before do
     class FakeIndexer < ActiveFedora::IndexingService
@@ -24,7 +26,7 @@ RSpec.describe IndexesRightsStatements do
     end
 
     it 'stores the label under `rights_statement_label_ssim`' do
-      expect(doc['rights_statement_label_ssim']).to eq ['No Known Copyright']
+      expect(doc['rights_statement_label_ssim']).to eq [label]
     end
   end
 end
