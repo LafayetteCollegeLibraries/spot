@@ -27,7 +27,7 @@ module Spot
 
     # @return [Array<String>]
     def academic_department
-      value_for 'academic_department_ssim'
+      value_for 'academic_department_tesim'
     end
 
     # @return [Array<String>]
@@ -77,7 +77,7 @@ module Spot
 
     # @return [Array<String>]
     def division
-      value_for 'division_ssim'
+      value_for 'division_tesim'
     end
 
     # @return [Array<String>]
@@ -107,12 +107,12 @@ module Spot
 
     # @return [Array<String>]
     def organization
-      value_for 'organization_ssim'
+      value_for 'organization_tesim'
     end
 
     # @return [Array<String>]
     def physical_medium
-      value_for 'physical_medium_ssim'
+      value_for 'physical_medium_tesim'
     end
 
     # @return [Array<String>]
@@ -133,7 +133,7 @@ module Spot
 
     # @return [Array<String>]
     def resource_type
-      value_for 'resource_type_ssim'
+      value_for 'resource_type_tesim'
     end
 
     # @return [Array<String>]
