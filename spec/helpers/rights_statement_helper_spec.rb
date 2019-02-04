@@ -22,20 +22,26 @@ RSpec.describe RightsStatementHelper do
     end
 
     {
-      'http://creativecommons.org/licenses/by/3.0/us/' => 'cc-by',
-      'http://creativecommons.org/licenses/by-sa/3.0/us/' => 'cc-by-sa',
-      'http://creativecommons.org/licenses/by-nc/3.0/us/' => 'cc-by-nc',
-      'http://creativecommons.org/licenses/by-nd/3.0/us/' => 'cc-by-nd',
-      'http://creativecommons.org/licenses/by-nc-nd/3.0/us/' => 'cc-by-nc-nd',
-      'http://creativecommons.org/licenses/by-nc-sa/3.0/us/' => 'cc-by-nc-sa',
+      'http://creativecommons.org/publicdomain/mark/1.0/' => 'pd-mark',
+      'http://rightsstatements.org/vocab/NoC-NC/1.0/' => 'rs-noc-nc',
+      'http://rightsstatements.org/vocab/NoC-OKLR/1.0/' => 'rs-noc-oklr',
+      'http://creativecommons.org/publicdomain/zero/1.0/' => 'pd-zero',
+      'http://creativecommons.org/licenses/by/4.0/' => 'cc-by',
+      'http://creativecommons.org/licenses/by-sa/4.0/' => 'cc-by-sa',
+      'http://creativecommons.org/licenses/by-nd/4.0/' => 'cc-by-nd',
+      'http://creativecommons.org/licenses/by-nc/4.0/' => 'cc-by-nc',
+      'http://creativecommons.org/licenses/by-nc-sa/4.0/' => 'cc-by-nc-sa',
+      'http://creativecommons.org/licenses/by-nc-nd/4.0/' => 'cc-by-nc-nd',
+      'http://rightsstatements.org/vocab/InC/1.0/' => 'rs-inc',
+      'http://rightsstatements.org/vocab/InC-EDU/1.0/' => 'rs-inc-edu',
+      'http://rightsstatements.org/vocab/InC-OW-EU/1.0/' => 'rs-inc-ow-eu',
+      'http://rightsstatements.org/vocab/CNE/1.0/' => 'rs-cne',
       'http://rightsstatements.org/vocab/InC-NC/1.0/' => 'rs-inc-nc',
       'http://rightsstatements.org/vocab/InC-RUU/1.0/' => 'rs-inc-ruu',
       'http://rightsstatements.org/vocab/NoC-CR/1.0/' => 'rs-noc-cr',
       'http://rightsstatements.org/vocab/NoC-US/1.0/' => 'rs-noc-us',
       'http://rightsstatements.org/vocab/UND/1.0/' => 'rs-und',
-      'http://rightsstatements.org/vocab/NKC/1.0/' => 'rs-nkc',
-      'http://creativecommons.org/publicdomain/zero/1.0/' => 'pd-zero',
-      'http://creativecommons.org/publicdomain/mark/1.0/' => 'pd-mark'
+      'http://rightsstatements.org/vocab/NKC/1.0/' => 'rs-nkc'
     }.each_pair do |license, svg_key|
       context license do
         let(:uri) { license }
