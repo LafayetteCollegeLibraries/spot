@@ -3,7 +3,7 @@ module RightsStatementHelper
   # @param uri [String] uri of the rights statement
   # @param label [String] label for the statement
   # @return [String]
-  def rights_statement_icon(uri, label)
+  def rights_statement_icon(uri, label = '')
     label = uri if label.blank?
     image_path = rs_icon_path_for(uri)
     link_content =
