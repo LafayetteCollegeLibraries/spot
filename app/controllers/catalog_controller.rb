@@ -82,7 +82,8 @@ class CatalogController < ApplicationController
                            limit: 5
     config.add_facet_field 'years_encompassed_iim',
                            label: I18n.t('blacklight.search.fields.years_encompassed'),
-                           range: true
+                           range: true,
+                           include_in_advanced_search: false
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
