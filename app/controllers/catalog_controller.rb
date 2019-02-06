@@ -165,7 +165,7 @@ class CatalogController < ApplicationController
     #
     config.add_search_field('all_fields', label: 'All fields') do |field|
       field.solr_parameters = {
-        qf: 'all_fields_search_timv',
+        qf: 'all_fields_search_timv file_format_tesim all_text_timv',
         pf: 'all_text_timv'
       }
     end
@@ -193,6 +193,13 @@ class CatalogController < ApplicationController
       field.solr_parameters = {
         qf: fields.join(' '),
         pf: 'creator_tesim'
+      }
+    end
+
+    config.add_search_field('subject', label: 'Subject') do |field|
+      field.solr_parameters = {
+        qf: 'subject_tesim',
+        pf: ''
       }
     end
 
