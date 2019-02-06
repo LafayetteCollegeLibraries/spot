@@ -80,6 +80,7 @@ group :development, :test do
   gem 'database_cleaner', '~> 1.7.0'
   gem 'factory_bot_rails', '~> 4.0', require: false
   gem 'ffaker', '~> 2.10.0'
+  gem 'rails-controller-testing', '~> 1.0.4'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 3.6'
   gem 'shoulda-matchers', '~> 3.1'
