@@ -42,7 +42,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: 'search',
       rows: 10,
-      qf: 'title_tesim description_tesim creator_tesim keyword_tesim'
+      qf: 'all_text_timv'
     }
 
     # solr field configuration for document/show views
@@ -160,50 +160,46 @@ class CatalogController < ApplicationController
                            label: 'Lease expiration date',
                            helper_method: :human_readable_date
 
-    # "fielded" search configuration. Used by pulldown among other places.
-    # For supported keys in hash, see rdoc for Blacklight::SearchFields
     #
-    # Search fields will inherit the :qt solr request handler from
-    # config[:default_solr_parameters], OR can specify a different one
-    # with a :qt key/value. Below examples inherit, except for subject
-    # that specifies the same :qt as default for our own internal
-    # testing purposes.
+    # search field configuration
     #
-    # The :key is what will be used to identify this BL search field internally,
-    # as well as in URLs -- so changing it after deployment may break bookmarked
-    # urls.  A display label will be automatically calculated from the :key,
-    # or can be specified manually to be different.
-    #
-    # This one uses all the defaults set by the solr request handler. Which
-    # solr request handler? The one set in config[:default_solr_parameters][:qt],
-    # since we aren't specifying it otherwise.
-    config.add_search_field('all_fields', label: 'All Fields') do |field|
-      all_names = config.show_fields.values.map(&:field).join(" ")
-      title_name = solr_name("title", :stored_searchable)
+    config.add_search_field('all_fields', label: 'All fields') do |field|
       field.solr_parameters = {
-        qf: "#{all_names} file_format_tesim all_text_timv",
-        pf: title_name.to_s
+        qf: 'all_fields_search_timv file_format_tesim all_text_timv',
+        pf: 'all_text_timv'
       }
     end
 
     config.add_search_field('title', label: 'Title') do |field|
+      fields = %w[
+        title_tesim^2
+        subtitle_tesim
+        title_alternative_tesim
+      ]
+
       field.solr_parameters = {
-        qf: '$title_qf',
-        pf: '$title_pf'
+        qf: fields.join(' '),
+        pf: 'title_tesim'
       }
     end
 
     config.add_search_field('author', label: 'Author') do |field|
+      fields = %w[
+        creator_tesim
+        contributor_tesim
+        editor_tesim
+      ]
+
       field.solr_parameters = {
-        qf: '$author_qf',
-        pf: '$author_pf'
+        qf: fields.join(' '),
+        pf: 'creator_tesim'
       }
     end
 
     config.add_search_field('subject', label: 'Subject') do |field|
       field.solr_parameters = {
-        qf: '$subject_qf',
-        pf: '$subject_pf'
+        qf: 'subject_tesim',
+        pf: ''
       }
     end
 

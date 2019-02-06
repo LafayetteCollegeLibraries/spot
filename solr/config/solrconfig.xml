@@ -136,18 +136,7 @@
       -->
       <float name="tie">0.01</float>
 
-      <!--
-        ~ qf / pf fields ~
-
-        in short, qf (query fields) defines which fields the query should
-        be conducted against, and pf (phrase fields) is used to boost
-        results based on proximity in phrases. I think?
-
-        see: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#qf-query-fields-parameter
-        and: https://lucene.apache.org/solr/guide/7_5/the-dismax-query-parser.html#pf-phrase-fields-parameter
-
-        these first two are used by default
-      -->
+      <!-- default qf + df properites -->
       <str name="qf">
         id
         title_tesim
@@ -156,63 +145,8 @@
         subject_tesim
       </str>
       <str name="pf">
-        all_text_timv^10
+        all_text_timv
       </str>
-
-      <!--
-        the following qf/pf definition blocks build out local params
-        that are available for reference within your catalog_controller,
-        for example. instead of:
-
-            configure_blacklight do |config|
-              # ...
-              config.add_search_field('author') do |field|
-                field.solr_parameters = {
-                  qf: 'creator_tesim^2 contributor_tesim editor_tesim',
-                  pf: ''
-                }
-              end
-            end
-
-        you can instead refer to the definitions here using the local param
-        syntax:
-
-            configure_blacklight do |config|
-              # ...
-              config.add_search_field('author') do |field|
-                field.solr_parameters = {
-                  qf: '$author_qf',
-                  pf: '$author_pf',
-                }
-              end
-            end
-
-        since we're using just Spot for now, this won't be as handy (but
-        certainly isn't a hinderance either), but as we build other applications
-        to access the same Solr server, this will centralize the definitions
-        of these qf/pf params.
-
-        see: http://wiki.apache.org/solr/LocalParams
-      -->
-      <str name="author_qf">
-        creator_tesim^2
-        contributor_tesim
-        editor_tesim
-      </str>
-      <str name="author_pf"></str>
-
-      <str name="title_qf">
-        title_tesim^2
-        title_alternative
-        subtitle
-      </str>
-      <str name="title_pf"></str>
-
-      <str name="subject_qf">
-        subject_tesim
-      </str>
-      <str name="subject_pf"></str>
-
       <!--
         what fields should be returned in our response?
 
@@ -235,8 +169,8 @@
       <str name="spellcheck.extendedResults">true</str>
       <str name="spellcheck.collate">false</str>
       <str name="spellcheck.count">5</str>
+    </lst> <!-- /end defaults -->
 
-    </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
