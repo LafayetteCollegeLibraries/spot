@@ -17,6 +17,28 @@ RSpec.describe Spot::ControlledVocabularies::Base do
     it { is_expected.to include RDF::Vocab::GEONAMES.name }
   end
 
+  describe '#fetch' do
+    subject(:fetch) { resource.fetch }
+
+    context 'retrying #fetch when it initially fails' do
+      before do
+        stub_request(:any, uri.to_s).and_return(status: [500, 'Internal Server Error'])
+        allow(resource).to receive(:sleep).and_return(true)
+      end
+
+      after { WebMock.reset! }
+
+      it 'retries 3 times' do
+        fetch
+
+        # 3 tries, minus the first try
+        expect(resource).to have_received(:sleep).exactly(2).times
+      end
+
+      it_behaves_like 'it logs a warning'
+    end
+  end
+
   describe '#preferred_label' do
     subject(:pref_label) { resource.preferred_label }
 

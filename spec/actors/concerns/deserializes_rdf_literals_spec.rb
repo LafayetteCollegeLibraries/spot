@@ -25,7 +25,6 @@ RSpec.describe DeserializesRdfLiterals do
 
   let(:work) { WorkType.new }
   let(:ability) { Ability.new(build(:user)) }
-  let(:attributes) { {} }
   let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
   let(:actor) { WorkTypeActor.new(Hyrax::Actors::Terminator.new) }
 
@@ -76,6 +75,26 @@ RSpec.describe DeserializesRdfLiterals do
       let(:attributes) { literal_attributes }
 
       it_behaves_like 'it transforms fields'
+    end
+  end
+
+  # because of how the the create/update tests are set up, testing this case in each
+  # causes a race between their +before+ blocks, which call the methods, and this
+  # +before+ block, which invalidates the fields method. having it run as a shared_example
+  # causes the parent +before+ block to run first, which runs the attributes through
+  # the transformation, and then invalidates the method, which then does nothing.
+  # we can make the logical jump from this test -- when there's no method on the
+  # form, are we getting back an empty array of fields? -- to the inference that
+  # no forms are iterated through.
+  describe '#tagged_fields (private)' do
+    subject { actor.send(:tagged_fields) }
+
+    before do
+      allow(Hyrax::WorkTypeForm).to receive(:language_tagged_fields).and_raise(NoMethodError)
+    end
+
+    context 'when language tagged fields are not defined on the form' do
+      it { is_expected.to be_empty }
     end
   end
 end

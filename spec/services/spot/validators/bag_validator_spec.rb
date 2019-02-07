@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'bagit'
+require 'fileutils'
 require 'tmpdir'
 
 RSpec.describe Spot::Validators::BagValidator do
@@ -30,15 +32,38 @@ RSpec.describe Spot::Validators::BagValidator do
       it { is_expected.to include 'Bag is not a directory' }
     end
 
+    # rubocop:disable RSpec/InstanceVariable
+    #
+    # NOTE: this will unfortunately write to STDOUT even though we're
+    #       using File::NULL for our error stream. the BagIt gem itself
+    #       creates a STDOUT logger within its validity checker
+    #       (see: https://github.com/tipr/bagit/blob/c6be043/lib/bagit/valid.rb#L23)
+    #       so we're stuck seeing an error in our test output
     context 'when bag is invalid' do
       # s/o to https://stackoverflow.com/a/17512070
-      Dir.mktmpdir do |dir|
-        let(:bag) { dir }
+      #    and https://github.com/tipr/bagit/blob/c6be043/spec/validation_spec.rb
+      before do
+        @tmpdir = Dir.mktmpdir
+        @bag = BagIt::Bag.new(@tmpdir)
+        4.times do |n|
+          @bag.add_file("file-#{n}") { |io| io.puts "a new file! ##{n}" }
+        end
+        @bag.manifest!
+        File.open(File.join(@tmpdir, 'data', 'cool-beans'), 'w') do |f|
+          f.puts 'nope this one isnt here'
+        end
 
-        it { is_expected.not_to be_empty }
-        it { is_expected.not_to include 'is invalid' }
+        # have to redefine this here in order to use the instance variable
+        # (calling +let(:bag) { @tmpdir }+ returns nil because that runs before
+        # the before block does)
+        allow(parser).to receive(:file).and_return(@tmpdir)
       end
+
+      after { FileUtils.remove_entry_secure @tmpdir }
+
+      it { is_expected.not_to be_empty }
     end
+    # rubocop:enable RSpec/InstanceVariable
 
     context 'when bag is valid' do
       it { is_expected.to be_empty }

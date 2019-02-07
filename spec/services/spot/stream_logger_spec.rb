@@ -30,5 +30,17 @@ RSpec.describe Spot::StreamLogger do
 
       expect(logger).to have_received(:warn).with(message)
     end
+
+    context 'when a method does not exist' do
+      it 'passes it down' do
+        expect { stream_logger.this_method_doesnt_exist }
+          .to raise_error(NoMethodError)
+      end
+
+      it 'also knows when to say it doesn\'t know how' do
+        expect(stream_logger.respond_to?(:nope_not_me_either))
+          .to be false
+      end
+    end
   end
 end

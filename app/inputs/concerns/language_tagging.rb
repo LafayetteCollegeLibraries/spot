@@ -148,12 +148,6 @@ module LanguageTagging
       'This field may be tagged with a language'
     end
 
-    # @param [String, Symbol] key
-    # @return [String] label for language key
-    def language_label(key)
-      Spot::ISO6391.label_for(key.to_s)
-    end
-
     # Generates a name property for the autocomplete input.
     #
     # @return [String]

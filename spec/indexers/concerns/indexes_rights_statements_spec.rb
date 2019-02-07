@@ -28,5 +28,13 @@ RSpec.describe IndexesRightsStatements do
     it 'stores the label under `rights_statement_label_ssim`' do
       expect(doc['rights_statement_label_ssim']).to eq [label]
     end
+
+    context 'when no label exists for the rights statement' do
+      let(:rights_statement) { 'http://no-you-cant-use-this.org' }
+
+      it 'uses the uri as the label' do
+        expect(doc['rights_statement_label_ssim']).to eq [rights_statement]
+      end
+    end
   end
 end
