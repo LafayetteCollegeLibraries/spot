@@ -76,8 +76,24 @@ RSpec.describe Spot::Identifier do
   end
 
   describe '#to_s' do
-    subject { described_class.new('prefix', 'value').to_s }
+    subject { described_class.new(prefix, value).to_s }
 
-    it { is_expected.to eq 'prefix:value' }
+    let(:prefix) { 'prefix' }
+    let(:value) { 'value' }
+
+    it { is_expected.to eq "#{prefix}:#{value}" }
+
+    context 'when no value is present' do
+      let(:prefix) { '' }
+      let(:value) { '' }
+
+      it { is_expected.to eq '' }
+    end
+
+    context 'when no prefix is present' do
+      let(:prefix) { '' }
+
+      it { is_expected.to eq value.to_s }
+    end
   end
 end

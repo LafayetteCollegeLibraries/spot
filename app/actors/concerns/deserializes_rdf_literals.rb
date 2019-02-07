@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Concern to allow us to pass around RDF values within jobs and have
-# them be applied to work objects as +RDF::Literal+s For this to work
+# them be applied to work objects as +RDF::Literal+s. For this to work
 # properly, you'll have to make sure this syncs up with the Form object
 # for the corresponding work model.
 #
