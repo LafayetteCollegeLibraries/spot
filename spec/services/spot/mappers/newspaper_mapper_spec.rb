@@ -3,7 +3,15 @@ require 'date'
 
 RSpec.describe Spot::Mappers::NewspaperMapper do
   let(:mapper) { described_class.new }
-  let(:metadata) { {} }
+  let(:metadata) do
+    {
+      'dc:title' => ['A modern masterpiece'],
+      'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton'],
+      'dc:date' => %w[2018-09-01T00:00:00Z 1986-02-11T00:00:00Z],
+      'dc:description' => ['Some informative words'],
+      'dc:rights' => ['https://creativecommons.org/publicdomain/mark/1.0/']
+    }
+  end
 
   before { mapper.metadata = metadata }
 
@@ -14,15 +22,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
       { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
     end
 
-    context 'when location is Easton' do
-      let(:metadata) do
-        {
-          'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton']
-        }
-      end
-
-      it { is_expected.to eq expected_value }
-    end
+    it { is_expected.to eq expected_value }
 
     context 'when location is not in our internal mapping' do
       let(:metadata) { { 'dc:coverage' => ['Coolsville, Daddy-O'] } }
@@ -36,67 +36,34 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#date_issued' do
     subject { mapper.date_issued }
 
-    let(:value) do
-      %w[
-        2018-09-01
-        2018-09-02
-      ]
-    end
-
-    let(:metadata) do
-      {
-        'dc:date' => %w[
-          2018-09-01T00:00:00Z
-          2018-09-02T00:00:00Z
-        ]
-      }
-    end
-
-    it { is_expected.to eq value }
-
-    context 'when the MAGIC_DATE_UPLOADED is present' do
-      let(:magic_date) { described_class::MAGIC_DATE_UPLOADED }
-      let(:metadata) do
-        {
-          'dc:date' => [
-            '2019-01-08T00:00:00Z',
-            magic_date
-          ]
-        }
-      end
-
-      it { is_expected.to eq ['2019-01-08'] }
+    it 'chooses the older date for date_issued' do
+      expect(mapper.date_issued).to eq ['1986-02-11']
     end
   end
 
   describe '#date_uploaded' do
-    subject { mapper.date_uploaded }
+    subject(:date_uploaded) { mapper.date_uploaded }
 
-    context "when the MAGIC_DATE_UPLOADED isn't present" do
+    it 'chooses the newer date of dc:date for date_uploaded' do
+      expect(date_uploaded).to eq '2018-09-01T00:00:00Z'
+    end
+
+    context 'when only one date is present' do
       let(:metadata) { { 'dc:date' => ['2019-01-08T00:00:00Z'] } }
 
       it { is_expected.to be nil }
     end
 
-    context 'when the MAGIC_DATE_UPLOADED is present' do
-      let(:magic_date) { described_class::MAGIC_DATE_UPLOADED }
-      let(:metadata) do
-        {
-          'dc:date' => [
-            '2019-01-08T00:00:00Z',
-            magic_date
-          ]
-        }
-      end
+    context 'when there are duplicate dates' do
+      let(:metadata) { { 'dc:date' => %w[2019-02-08T00:00:00Z 2019-02-08T00:00:00Z] } }
 
-      it { is_expected.to eq magic_date }
+      it { is_expected.to be nil }
     end
   end
 
   describe '#description' do
     subject { mapper.description }
 
-    let(:metadata) { { 'dc:description' => ['Some informative words'] } }
     let(:value) { [RDF::Literal('Some informative words', language: :en)] }
 
     it { is_expected.to eq value }
@@ -143,16 +110,12 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#rights_statement' do
     subject(:rights_statement) { mapper.rights_statement }
 
-    let(:metadata) { { 'dc:rights' => [uri] } }
-    let(:uri) { 'https://creativecommons.org/publicdomain/mark/1.0/' }
-
-    it { is_expected.to eq [uri] }
+    it { is_expected.to eq ['https://creativecommons.org/publicdomain/mark/1.0/'] }
   end
 
   describe '#title' do
     subject { mapper.title }
 
-    let(:metadata) { { 'dc:title' => ['A modern masterpiece'] } }
     let(:value) { [RDF::Literal('A modern masterpiece', language: :en)] }
 
     it { is_expected.to eq value }
