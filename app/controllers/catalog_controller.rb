@@ -164,8 +164,15 @@ class CatalogController < ApplicationController
     # search field configuration
     #
     config.add_search_field('all_fields', label: 'All fields') do |field|
+      fields = %w[
+        all_fields_search_timv
+        english_language_date_teim
+        file_format_tesim
+        all_text_timv
+      ]
+
       field.solr_parameters = {
-        qf: 'all_fields_search_timv file_format_tesim all_text_timv',
+        qf: fields.join(' '),
         pf: 'all_text_timv'
       }
     end
