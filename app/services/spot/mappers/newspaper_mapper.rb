@@ -8,14 +8,6 @@ module Spot::Mappers
   class NewspaperMapper < BaseMapper
     include NestedAttributes
 
-    # A handful of records contain two values in 'dc:date':
-    #   1) the date of the newspaper issue
-    #   2) this date which corresponds to a batch ingest
-    # Since this references a single ingest, we can assume that
-    # this will be the only 'magic' date; one that we can explicitly
-    # reference. See {#date_uploaded}
-    MAGIC_DATE_UPLOADED = '2010-09-16T00:00:00Z'
-
     self.fields_map = {
       identifier: 'dc:identifier',
       keyword: 'dc:subject',
@@ -39,20 +31,22 @@ module Spot::Mappers
       ]
     end
 
-    # We'll stuff this value if our date values include it. +MAGIC_DATE_UPLOADED+
-    # refers to a single ingest that included the then-current date with the
-    # date attributes.
+    # Some of our Newspaper dc:date values include multiple values.
+    # We've set a business rule that the newest of those dates is
+    # the date in which the item was uploaded to the original repository.
     #
-    # @return [DateTime] The original date uploaded (when present)
+    # @return [String] The original date uploaded (when present)
     def date_uploaded
-      MAGIC_DATE_UPLOADED if metadata['dc:date'].include? MAGIC_DATE_UPLOADED
+      return if clean_dates.size <= 1
+      clean_dates.last
     end
 
-    # @return [Array<String>] the date in YYYY-MM-DD format
+    # See {#date_uploaded} for details. All but the newest of
+    # our dc:date values, mapped to YYYY-MM-DD format
+    #
+    # @return [Array<String>]
     def date_issued
-      (metadata['dc:date'] - [MAGIC_DATE_UPLOADED]).map do |raw_date|
-        Date.parse(raw_date).strftime('%Y-%m-%d')
-      end
+      clean_dates[0...-1].map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
     end
 
     # @return [Array<RDF::Literal>]
@@ -84,5 +78,15 @@ module Spot::Mappers
     def title
       metadata['dc:title'].map { |title| RDF::Literal(title, language: :en) }
     end
+
+    private
+
+      # Cleans up the dc:date value, which sometimes contains duplicate
+      # values, or unordered ones, and caches it in an instance variable.
+      #
+      # @return [Array<String>]
+      def clean_dates
+        @clean_dates ||= metadata['dc:date'].uniq.sort
+      end
   end
 end
