@@ -5,6 +5,8 @@ RSpec.describe PublicationIndexer do
   let(:work) { build(:publication) }
   let(:indexer) { described_class.new(work) }
 
+  it_behaves_like 'it indexes English-language dates'
+
   describe 'title' do
     # :stored_searchable
     let(:fields) { %w[title_tesim] }

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class PublicationIndexer < Hyrax::WorkIndexer
   include IndexesRightsStatements
+  include IndexesEnglishLanguageDates
 
   # Overriding the default +Hyrax::DeepIndexingService+ for our own, which
   # doesn't require +Hyrax::BasicMetadata+
@@ -43,6 +44,17 @@ class PublicationIndexer < Hyrax::WorkIndexer
     # @param [SolrDocument] doc
     # @return [void]
     def store_years_encompassed(doc)
-      doc['years_encompassed_iim'] = object.date_issued.map { |d| DateTime.parse(d).utc.year }
+      doc['years_encompassed_iim'] = object.date_issued.map { |d| parse_year(d) }.reject(&:blank?)
+    end
+
+    # @param date [String]
+    # @return [Number]
+    def parse_year(date)
+      DateTime.parse(d).utc.year
+    rescue
+      year_match = date.match(/^(\d{4})/)
+      return nil if year_match.nil?
+
+      year_match[1].to_i
     end
 end
