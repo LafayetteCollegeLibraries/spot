@@ -5,12 +5,12 @@ RSpec.shared_examples 'it indexes English-language dates' do
   let(:indexer) { described_class.new(work) }
   let(:work_klass) { described_class.name.gsub(/Indexer$/, '').downcase.to_sym }
   let(:work) { build(work_klass) }
-  let(:date) { ['2019-02-08T00:00:00Z'] }
+  let(:date) { '2019-02-08T00:00:00Z' }
   let(:field_name) { described_class.english_language_date_field }
   let(:date_field) { described_class.date_property_for_english_language_indexing }
 
   before do
-    work.send(:"#{date_field}=", date)
+    work.send(:"#{date_field}=", [date])
   end
 
   it { is_expected.to include field_name }
@@ -36,10 +36,23 @@ RSpec.shared_examples 'it indexes English-language dates' do
       next if values.nil?
 
       context do
-        let(:date) { [Date.new(2019, idx, 8).strftime('%Y-%m-%d')] }
+        let(:date) { Date.new(2019, idx, 8).strftime('%Y-%m-%d') }
 
         it { is_expected.to include(*values) }
       end
+    end
+
+    context 'when the year is YYYY-MM' do
+      let(:date) { '2019-02' }
+      let(:expected_values) { ['February 2019', 'Feb 2019', 'Winter 2019'] }
+
+      it { is_expected.to include(*expected_values) }
+    end
+
+    context 'when only YYYY' do
+      let(:date) { '2019' }
+
+      it { is_expected.to be_empty }
     end
   end
 end

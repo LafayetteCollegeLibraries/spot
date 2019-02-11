@@ -43,18 +43,20 @@ module IndexesEnglishLanguageDates
     # @return [void]
     def add_english_language_dates(solr_doc)
       solr_doc[english_language_date_field] = dates.map do |date|
+        include_day = true
         begin
           parsed = Date.parse(date)
         rescue ArgumentError
-          next date unless date.match?(/^\d{4}-\d{2}/)
+          next unless date.match?(/^\d{4}-\d{2}/)
           parsed = Date.new(*date.split('-').map(&:to_i))
+          include_day = false
         end
 
-        season_names_for_date(parsed) + spelled_out_for_date(parsed)
+        season_names_for_date(parsed) + spelled_out_for_date(parsed, include_day: include_day)
       end.flatten.reject(&:blank?)
     end
 
-    # Determines the season based on the month:
+    # Determines the season based on the month:#
     #   Spring => March, April, May
     #   Summer => June, July, August
     #   Autumn/Fall => September, October, November
@@ -79,13 +81,12 @@ module IndexesEnglishLanguageDates
     #   spelled_out_dates_for_date(Date.parse('2019-02-08'))
     #   => ['February 8 2019', 'Feb 8 2019']
     #
-    # @param date [#strftime, #day, #year]
+    # @param date [#strftime]
     # @return [Array<String>]
-    def spelled_out_for_date(date)
-      [
-        date.strftime("%B #{date.day} #{date.year}"),
-        date.strftime("%b #{date.day} #{date.year}")
-      ]
+    def spelled_out_for_date(date, include_day: true)
+      %w[%B %b].map do |month|
+        date.strftime("#{month}#{include_day ? ' %-d' : ''} %Y")
+      end
     end
 
     # Saves us the hassle of having to type out that long attribute
