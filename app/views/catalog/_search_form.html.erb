@@ -10,37 +10,14 @@
                                                                          :search_field,
                                                                          :qt,
                                                                          :page,
-                                                                         :utf8)) %>
-  <div class="form-group col-sm-4">
-    <% if search_fields.length > 1 %>
-      <label for="search_field" class="sr-only"><%= t('blacklight.search.form.search_field.label') %></label>
-    <% end %>
-    <div class="input-group">
-      <% if search_fields.length > 1 %>
-          <%= select_tag(:search_field,
-                         options_for_select(search_fields, h(params[:search_field])),
-                         title: t('blacklight.search.form.search_field.title'),
-                         id: "search_field",
-                         class: "custom-select search-field") %>
-      <% elsif search_fields.length == 1 %>
-        <%= hidden_field_tag :search_field, search_fields.first.last %>
-      <% end %>
-    </div>
-  </div>
-  <div class="form-group col-sm-8">
-    <label class="control-label sr-only" for="search-field-header">
-      <%= t("hyrax.search.form.q.label", application_name: application_name) %>
-    </label>
+                                                                       :utf8)) %>
+  <div class="input-group col-sm-12">
+    <%= text_field_tag :q, current_search_parameters , class: "q form-control", id: "search-field-header", placeholder: t("hyrax.search.form.q.placeholder") %>
 
-    <div class="input-group col-sm-12">
-      <%= text_field_tag :q, current_search_parameters , class: "q form-control", id: "search-field-header", placeholder: t("hyrax.search.form.q.placeholder") %>
-
-      <div class="input-group-btn">
-        <button type="submit" class="btn btn-primary" id="search-submit-header">
-          <%= t('hyrax.search.button.html') %>
-        </button>
-      </div><!-- /.input-group-btn -->
-    </div><!-- /.input-group -->
-
-  </div><!-- /.form-group -->
+    <div class="input-group-btn">
+      <button type="submit" class="btn btn-primary" id="search-submit-header">
+        <%= t('hyrax.search.button.html') %>
+      </button>
+    </div><!-- /.input-group-btn -->
+  </div><!-- /.input-group -->
 <% end %>

@@ -1,0 +1,64 @@
+<%# search form duplicated from hyrax/catalog/_search_form.html.erb but removes the
+    'search my collections/works' dropdown and adds a 'search field' dropdown %>
+<%= form_tag search_form_action,
+             method: :get,
+             id: 'catalog-search-form',
+             role: 'search' do %>
+
+  <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:q,
+                                                                         :search_field,
+                                                                         :qt,
+                                                                         :page,
+                                                                         :utf8)) %>
+  <div class="row-fluid">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="input-group">
+          <%= search_field_tag :q, current_search_parameters,
+                                   class: 'q form-control',
+                                   id: 'search-field-header',
+                                   placeholder: t('hyrax.search.form.q.placeholder') %>
+
+          <div class="input-group-btn">
+            <button type="submit" class="btn btn-primary" id="search-submit-header">
+              <%= t('hyrax.search.button.html') %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="col-md-6">
+      <div class="form-group">
+        <%= label_tag 'search-field', 'Search field' %>
+        <%= select_tag('search-field',
+                       options_for_select(search_fields, h(params[:search_field])),
+                       title: t('blacklight.search.form.search_field.title'),
+                       id: 'search-field',
+                       class: 'custom-select search-field form-control') %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group col-md-6">
+        <label for="catalog-date-range-start">From</label>
+        <%= text_field_tag 'range[years_encompassed_iim][begin]', nil,
+                                                                  maxlength: 4,
+                                                                  class: 'form-control range_begin',
+                                                                  id: 'catalog-date-range-start',
+                                                                  placeholder: 'ex. 1961' %>
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="catalog-date-range-end">To</label>
+        <%= text_field_tag 'range[years_encompassed_iim][end]', nil,
+                                                                maxlength: 4,
+                                                                class: 'form-control range_begin',
+                                                                id: 'catalog-date-range-end',
+                                                                placeholder: 'ex.2019' %>
+      </div>
+    </div>
+  </div>
+<% end %>
