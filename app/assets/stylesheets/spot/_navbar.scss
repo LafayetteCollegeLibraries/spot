@@ -1,7 +1,5 @@
 // styles applied to the navbar + masthead
-#masthead {
-  &.navbar-inverse {
-    background-color: $red-light;
-    border-bottom: none;
-  }
+.navbar-static-top.navbar-inverse {
+  background-color: $red-light;
+  border-bottom: 0;
 }
