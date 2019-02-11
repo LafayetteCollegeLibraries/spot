@@ -1,0 +1,18 @@
+<footer class="navbar navbar-inverse site-footer">
+  <div class="container-fluid">
+    <div class="navbar-text text-left">
+      <p><%= t('hyrax.product_name') %> v<%= Hyrax::VERSION %></p>
+      <p><%= link_to 'Library staff log-in', main_app.new_user_session_path %></p>
+    </div>
+    <div class="navbar-right">
+      <div class="navbar-text text-right">
+        <% if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'] %>
+        <h4>debug info</h4>
+        <p>spot is running <strong><%= link_to_latest_gh_commit %></strong>
+           on branch <strong><%= link_to_git_branch %></strong></p>
+        <p><%= t('hyrax.background_attribution_html') %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</footer>
