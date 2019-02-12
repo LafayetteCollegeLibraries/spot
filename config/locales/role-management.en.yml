@@ -1,0 +1,36 @@
+en:
+  role-management:
+    index:
+      title: Roles
+      create: Create a new role
+      lead_text: Click on a role to view/edit the name or its users.
+      page_title: 'Roles // %{app_name}'
+    new:
+      title: Create a new Role
+      field_name: Role name
+      add: Add
+      cancel: Cancel
+      page_title: 'Creating new Role // %{app_name}'
+    show:
+      title: 'Viewing Role: %{name}'
+      accounts: Accounts
+      remove: Remove User
+      add_new_account: Add a new account
+      user: User
+      add: Add
+      cancel: Cancel
+      page_title: 'Viewing %{name} // Roles // %{app_name}'
+    edit:
+      title: 'Editing role: %{name}'
+      field_name: Role name
+      update: Update Role
+      accounts: Accounts
+      delete: Delete Role
+      delete_warning: Deleting this role could have unexpected consequences. Please be sure you want to do this!
+      remove: Remove User
+      add_new_account: Add a new account
+      user: User
+      user_placeholder: name@lafayette.edu
+      add: Add User
+      cancel: Cancel
+      page_title: 'Editing %{name} // Roles // %{app_name}'

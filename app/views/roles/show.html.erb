@@ -1,0 +1,21 @@
+<% provide(:page_header) do %>
+  <h1><%= t('role-management.show.title', name: @role.name) %></h1>
+<% end %>
+
+<% provide(:page_title) do
+  t('role-management.show.page_title', name: @role.name, app_name: application_name)
+end %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <%= t('role-management.show.accounts') %>
+    </h3>
+  </div>
+
+  <ul class="list-group">
+    <% @role.users.each do |user| %>
+    <li class="list-group-item"><%= user.user_key %></li>
+    <% end %>
+  </ul>
+</div>

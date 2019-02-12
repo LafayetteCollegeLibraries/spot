@@ -25,7 +25,18 @@
     </li>
     <% if can?(:manage, Sipity::WorkflowResponsibility) %>
       <%= menu.nav_link(hyrax.admin_workflow_roles_path) do %>
-        <span class="fa fa-users" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.workflow_roles') %></span>
+        <span class="fa fa-users" aria-hidden="true"></span>
+        <span class="sidebar-action-text">
+          <%= t('hyrax.admin.sidebar.workflow_roles') %>
+        </span>
       <% end %>
-    <% end # end of configuration block %>
+    <% end %>
+    <% if can?(:manage, Role) %>
+      <%= menu.nav_link(role_management.roles_path) do %>
+        <span class="fa fa-user" aria-hidden="true"></span>
+        <span class="sidebar-action-text">
+          <%= t('role-management.dashboard') %>
+        </span>
+      <% end %>
+    <% end %>
 <% end %>

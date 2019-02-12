@@ -1,5 +1,8 @@
 # these are app-specific translations, pretty much namespaced under 'spot'
 en:
+  role-management:
+    breadcrumb: User Roles
+    dashboard: User Roles
   spot:
     browse_the_catalog: Browse the catalog
     search_the_catalog: Search the catalog
