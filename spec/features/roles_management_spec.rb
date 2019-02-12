@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe 'Role management' do
+RSpec.feature 'Role management' do
   before do
     login_as user
   end
