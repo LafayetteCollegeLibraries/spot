@@ -28,7 +28,7 @@ en:
       delete: Delete Role
       delete_warning: Deleting this role could have unexpected consequences. Please be sure you want to do this!
       remove: Remove User
-      add_new_account: Add a new account
+      add_user_label: Add an account to this role
       user: User
       user_placeholder: name@lafayette.edu
       add: Add User

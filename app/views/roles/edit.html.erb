@@ -23,7 +23,8 @@ end %>
     </h3>
   </div>
 
-  <table class="table table-bordered">
+  <% unless @role.users.empty? %>
+  <table id="users" class="table table-bordered">
     <thead>
       <tr>
         <th>User</th>
@@ -48,10 +49,12 @@ end %>
     <% end %>
     </tbody>
   </table>
+  <% end %>
 
   <div class="panel-body">
-    <%= bootstrap_form_tag url: role_management.role_users_path(@role) do |f| %>
-      <%= f.text_field 'user_key', placeholder: t('role-management.edit.user_placeholder') %>
+    <%= bootstrap_form_tag url: role_management.role_users_path(@role), id: 'add-user-to-role' do |f| %>
+      <%= f.text_field 'user_key', placeholder: t('role-management.edit.user_placeholder'),
+                                   label: t('role-management.edit.add_user_label') %>
       <%= f.submit t('role-management.edit.add'), class: 'btn btn-info' %>
     <% end %>
   </div>
@@ -60,7 +63,7 @@ end %>
 <% if can? :destroy, Role %>
 <div class="panel panel-danger">
   <div class="panel-heading">
-    <h3 class="panel-title">
+    <h3 class="panel-title text-danger">
       <%= t('role-management.edit.delete') %>
     </h3>
   </div>
