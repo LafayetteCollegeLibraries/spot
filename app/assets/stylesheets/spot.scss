@@ -6,7 +6,8 @@
 }
 
 .panel-heading-slim {
-  padding: 2px 15px;
+  padding: 4px 15px;
+  padding-left: 8px; // TODO: this is a magic number; what's the value in bootstrap?
 
   h5,
   h6 {

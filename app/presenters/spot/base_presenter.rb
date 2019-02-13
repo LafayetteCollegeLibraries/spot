@@ -26,6 +26,11 @@ module Spot
     end
 
     # @return [Array<String>]
+    def admin_set
+      value_for 'admin_set_tesim'
+    end
+
+    # @return [Array<String>]
     def academic_department
       value_for 'academic_department_tesim'
     end
