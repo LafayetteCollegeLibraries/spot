@@ -39,4 +39,15 @@
         </span>
       <% end %>
     <% end %>
+    <%#
+      we won't check if the user can see the system status. we'll assume
+      that they're okay because they're able to see the dashboard.
+    %>
+    <%= menu.nav_link(admin_status_path) do %>
+      <span class="fa fa-tachometer" aria-hidden="true"></span>
+      <span class="sidebar-action-text">
+        <%= t('spot.dashboard.status.sidebar') %>
+      </span>
+    <% end %>
+
 <% end %>

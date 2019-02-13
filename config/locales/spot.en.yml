@@ -4,6 +4,13 @@ en:
     breadcrumb: User Roles
     dashboard: User Roles
   spot:
+    # todo: rename these to something more like:
+    # 'spot.catalog.browse', 'spot.catalog.search'
     browse_the_catalog: Browse the catalog
     search_the_catalog: Search the catalog
     welcome_page_title: Welcome to %{name}!
+
+    dashboard:
+      status:
+        sidebar: System Status
+        title: System Status

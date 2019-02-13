@@ -1,0 +1,30 @@
+<% provide(:page_header) do %>
+  <h1><%= t('spot.dashboard.status.title') %></h1>
+<% end %>
+
+<div class="panel panel-default">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Message</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @checks.each_value do |check| %>
+      <tr>
+        <td><%= check.registrant_name %></td>
+        <td class="text-center">
+          <% if check.success? %>
+          <span class="glyphicon glyphicon-ok text-success"></span>
+          <% else %>
+          <span class="glyphicon glyphicon-remove text-danger"></span>
+          <% end %>
+        </td>
+        <td><code><%= check.message %></code></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
