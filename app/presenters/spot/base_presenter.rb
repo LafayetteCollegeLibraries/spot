@@ -115,11 +115,6 @@ module Spot
       value_for 'physical_medium_tesim'
     end
 
-    # @return [Array<String>]
-    def place
-      value_for 'place_ssim'
-    end
-
     # place values + labels zipped into tuples.
     #
     # @example
@@ -127,8 +122,8 @@ module Spot
     #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
     #
     # @return [Array<Array<String>>]
-    def place_merged
-      place.zip(value_for('place_label_ssim'))
+    def place
+      value_for('place_ssim').zip(value_for('place_label_ssim')).reject(&:empty?)
     end
 
     # @return [Array<String>]

@@ -10,7 +10,7 @@ module RightsStatementHelper
       if image_path.nil?
         %(#{label} <span class="fa fa-external-link"></span>).html_safe
       else
-        image_tag(image_path, alt: label)
+        image_tag(image_path, alt: label, class: 'rights-statement-icon')
       end
 
     link_to(link_content, uri, target: '_blank')

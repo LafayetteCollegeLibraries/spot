@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Repository History</h5>
+  </div>
+  <table class="table table-bordered">
+    <tbody>
+      <%= presenter.attribute_to_html(:depositor, render_as: :faceted, search_field: :depositor_ssim) %>
+      <%= presenter.attribute_to_html(:date_created) %>
+      <%= presenter.attribute_to_html(:date_uploaded) %>
+      <%= presenter.attribute_to_html(:date_modified) %>
+      <%= presenter.attribute_to_html(:local_identifier) %>
+      <tr>
+        <th>Workflow status</th>
+        <td><%= presenter.workflow.badge %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

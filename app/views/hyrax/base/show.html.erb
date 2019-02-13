@@ -27,8 +27,8 @@
             <%= render 'metadata', presenter: @presenter %>
           </div>
           <div class="col-sm-12">
-            <%= render 'relationships', presenter: @presenter %>
-            <%= render 'items', presenter: @presenter %>
+            <%# render 'relationships', presenter: @presenter %>
+            <%# render 'items', presenter: @presenter %>
             <%# TODO: we may consider adding these partials in the future %>
             <%# = render 'sharing_with', presenter: @presenter %>
             <%# = render 'user_activity', presenter: @presenter %>
@@ -38,3 +38,9 @@
     </div>
   </div>
 </div>
+
+<script>
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script>

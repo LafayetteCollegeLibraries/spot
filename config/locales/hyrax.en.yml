@@ -20,6 +20,7 @@ en:
         license: License
         member_of_collections: Collections
         place: Location
+        place_label_ssim: Location
         publisher: Publisher
         resource_type: Type
         rights_statement: Rights Statement
