@@ -27,7 +27,8 @@ RSpec.feature 'the system status dashboard panel' do
   end
 
   scenario do
-    visit '/admin/status'
+    visit '/dashboard'
+    click_link 'System Status'
 
     expect(page).to have_content 'System Status'
 
