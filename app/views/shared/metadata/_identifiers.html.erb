@@ -1,11 +1,11 @@
-<%- presenter.mapped_identifiers.each_with_index do |id, idx| -%>
+<%- presenter.identifiers.each_with_index do |id, idx| -%>
 <tr>
   <% if idx.zero? %>
-  <th rowspan="<%= presenter.mapped_identifiers.size %>">
+  <th rowspan="<%= presenter.identifiers.size %>">
     <%= t('blacklight.search.fields.identifier') %>
   </th>
   <% end %>
-  <td>
+  <td class="attribute attribute-identifier<%= id.prefix ? "attribute-identifier_#{prefix}" : '' %>">
     <% if id.prefix %>
       <span class="label label-default"><%= t("spot.identifiers.labels.#{id.prefix}") %></span>
     <% end %>

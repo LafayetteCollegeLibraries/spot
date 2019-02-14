@@ -1,4 +1,14 @@
 # frozen_string_literal: true
+#
+# Attribute renderer for linked-data values. When initialized, it expects
+# the +values+ parameter to be an array in the form of [uri, label].
+#
+# @example
+#   values = [['https://www.carlyraemusic.com/', 'Carly Rae Jepsen']]
+#   renderer = Spot::Renderers::ExternalAuthorityAttributeRenderer.new(:creator,
+#                                                                      values,
+#                                                                      search_field: :creator_label_ssim)
+#   renderer.render
 module Spot
   module Renderers
     class ExternalAuthorityAttributeRenderer < FacetedAttributeRenderer

@@ -76,13 +76,13 @@ RSpec.feature 'Show Publication page', js: false do
       .to eq ['English']
 
     # @todo there's _got_ to be a better way!!
-    pub.identifier.each do |id|
-      key = id.split(':').first
-      all_clean = page.all(".attribute-identifier_#{key}").map do |value|
-        value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
-      end
 
-      expect(all_clean).to include id
+    page_identifiers = page.all('.attribute-identifier').map do |value|
+      value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
+    end
+
+    pub.identifier.each do |id|
+      expect(page_identifiers).to include id
     end
 
     # TODO: revisit Rights Statement when we actually display it on the show page

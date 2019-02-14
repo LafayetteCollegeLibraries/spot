@@ -14,13 +14,6 @@ module Spot
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
-    # Our document's identifiers mapped to Spot::Identifier objects
-    #
-    # @return [Array<Spot::Identifier>]
-    def mapped_identifiers
-      identifier.map { |str| Spot::Identifier.from_string(str) }
-    end
-
     # @return [Array<String>]
     def abstract
       value_for 'abstract_tesim'
@@ -91,9 +84,11 @@ module Spot
       value_for 'editor_tesim'
     end
 
-    # @return [Array<String>]
+    # Our document's identifiers mapped to Spot::Identifier objects
+    #
+    # @return [Array<Spot::Identifier>]
     def identifier
-      value_for 'identifier_ssim'
+      value_for('identifier_ssim').map { |str| Spot::Identifier.from_string(str) }
     end
 
     # @return [Array<String>]
