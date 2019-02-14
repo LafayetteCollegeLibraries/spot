@@ -1,0 +1,12 @@
+<%# collections %>
+<%= render 'relationships_collections',
+           presenters: Array(presenter.grouped_presenters['collection']) %>
+
+<%# part of works %>
+<% presenter.presenter_types.reject { |t| t == 'collection' }.each do |type| %>
+  <% presenter.grouped_presenters(filtered_by: type).each_pair do |_, items| %>
+
+  <% end %>
+<% end %>
+
+<%# part of admin_set (admin only) %>

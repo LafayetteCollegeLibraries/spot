@@ -4,10 +4,7 @@
 
 <div class="work-type" itemscope itemtype="http://schema.org/CreativeWork">
   <%= render 'metadata_and_viewer_panel', presenter: @presenter %>
-
-  <%# TODO: add a +has_relationships?+ check to the presenter %>
-  <%= render 'relationships_panel', presenter: @presenter %>
-
+  <%= render 'relationships', presenter: @presenter %>
   <%= render 'items_panel', presenter: @presenter %>
 </div>
 
