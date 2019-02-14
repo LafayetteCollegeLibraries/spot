@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 #
-# Rewriting the Hyrax AttributeRenderer to better suit how we're
-# displaying metadata.
-module Hyrax
+# Rewriting Hyrax::Renderers::AttributeRenderer to better suit
+# how we're displaying metadata.
+module Spot
   module Renderers
     class AttributeRenderer
       include ActionView::Helpers::UrlHelper
       include ActionView::Helpers::TranslationHelper
       include ActionView::Helpers::TextHelper
-      include ConfiguredMicrodata
+      include ::Hyrax::Renderers::ConfiguredMicrodata
 
       attr_reader :field, :values, :options
 
@@ -22,6 +22,8 @@ module Hyrax
       end
 
       # Draw the table row for the attribute
+      #
+      # @return [String]
       def render
         return '' if values.blank? && !options[:include_empty]
 
@@ -87,8 +89,8 @@ module Hyrax
         # @return [String]
         def label_with_help_text(label_text)
           return label_text unless help_text
-          %(
-            #{label_text}
+
+          %(#{label_text}
             <span
               class="fa fa-question-circle-o"
               data-toggle="popover"

@@ -80,6 +80,7 @@ group :development, :test do
   gem 'solr_wrapper', '~> 2.0.0'
 
   gem 'database_cleaner', '~> 1.7.0'
+  gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 4.0', require: false
   gem 'ffaker', '~> 2.10.0'
   gem 'rails-controller-testing', '~> 1.0.4'

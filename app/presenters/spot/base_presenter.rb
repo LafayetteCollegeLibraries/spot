@@ -5,6 +5,7 @@
 module Spot
   class BasePresenter < Hyrax::WorkShowPresenter
     include ActionView::Helpers::UrlHelper
+    include PresentsAttributes
 
     # Is the document's visibility public?
     #

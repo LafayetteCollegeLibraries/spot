@@ -33,11 +33,12 @@ RSpec.feature 'Show Publication page', js: false do
     expect(page).to have_content pub.title.first
 
     # descriptions are treated differently
-    expect(page.all('.work_description').map(&:text))
-      .to eq pub.description.map(&:to_s)
+    # expect(page.all('.work_description').map(&:text))
+    #   .to eq pub.description.map(&:to_s)
 
-    expect(page.all('.attribute-abstract').map(&:text))
-      .to eq pub.abstract.map(&:to_s)
+    # expect(page.all('.attribute-abstract').map(&:text))
+    #   .to eq pub.abstract.map(&:to_s)
+
     expect(page.all('.attribute-academic_department').map(&:text))
       .to eq pub.academic_department.map(&:to_s)
     expect(page.all('.attribute-bibliographic_citation').map(&:text))

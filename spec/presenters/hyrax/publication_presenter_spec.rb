@@ -1,11 +1,13 @@
 # frozen_string_literal: true
-RSpec.describe Spot::BasePresenter do
+RSpec.describe Hyrax::PublicationPresenter do
   subject(:presenter) { described_class.new(solr_doc, ability) }
 
   let(:solr_doc) { SolrDocument.new(solr_data) }
   let(:solr_data) { object.to_solr }
   let(:object) { build(:publication) }
   let(:ability) { Ability.new(build(:user)) }
+
+  it_behaves_like 'it renders an attribute to HTML'
 
   describe '#public?' do
     subject { presenter.public? }
@@ -36,18 +38,6 @@ RSpec.describe Spot::BasePresenter do
   describe '#place' do
     subject { presenter.place }
 
-    let(:solr_data) do
-      {
-        'place_ssim' => ['http://sws.geonames.org/5188140/']
-      }
-    end
-
-    it { is_expected.to eq solr_doc['place_ssim'] }
-  end
-
-  describe '#place_merged' do
-    subject { presenter.place_merged.first }
-
     let(:uri) { 'http://sws.geonames.org/5188140/' }
     let(:label) { 'United States, Pennsylvania, Northampton County, Easton' }
     let(:solr_data) do
@@ -57,7 +47,7 @@ RSpec.describe Spot::BasePresenter do
       }
     end
 
-    it { is_expected.to eq [uri, label] }
+    it { is_expected.to eq [[uri, label]] }
   end
 
   describe '#date_modified' do
