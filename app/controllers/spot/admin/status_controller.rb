@@ -9,6 +9,10 @@ module Spot
 
       # run the checks + provide the results to the view
       def show
+        add_breadcrumb t('hyrax.controls.home'), root_path
+        add_breadcrumb t('hyrax.dashboard.breadcrumbs.admin'), hyrax.dashboard_path
+        add_breadcrumb t('spot.dashboard.status.title'), admin_status_path
+
         checks = OkComputer::Registry.all
         checks.run
 
