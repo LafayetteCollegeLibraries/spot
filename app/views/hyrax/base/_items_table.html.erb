@@ -1,0 +1,30 @@
+<% array_of_ids = presenter.list_of_item_ids_to_display %>
+<% members = presenter.member_presenters_for(array_of_ids) %>
+
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Contains</h5>
+  </div>
+  <table class="table table-bordered">
+    <tbody>
+    <% members.each do |member| %>
+      <% model_name = member.model_name.singular.to_sym %>
+      <% type = %i[file_set file].include?(model_name) ? 'File' : 'Work' %>
+      <% type_class = type == 'File' ? 'default' : 'primary' %>
+      <tr>
+        <td class="text-center">
+          <span class="label label-<%=type_class%>"><%= type %></span>
+        </td>
+        <td><%= link_to(member.link_name, contextual_path(member, presenter)) %></td>
+        <td>Uploaded <%= member.try(:date_uploaded) %></td>
+        <td><%= member.permission_badge %></td>
+        <td class="text-center">
+        <% if model_name == :file_set %>
+          <%= render "hyrax/file_sets/actions", file_set: member %>
+        <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
