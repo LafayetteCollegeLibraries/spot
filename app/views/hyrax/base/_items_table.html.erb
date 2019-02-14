@@ -13,7 +13,7 @@
       <% type_class = type == 'File' ? 'default' : 'primary' %>
       <tr>
         <td class="text-center">
-          <span class="label label-<%=type_class%>"><%= type %></span>
+          <span class="label label-<%= type_class %>"><%= type %></span>
         </td>
         <td><%= link_to(member.link_name, contextual_path(member, presenter)) %></td>
         <td>Uploaded <%= member.try(:date_uploaded) %></td>

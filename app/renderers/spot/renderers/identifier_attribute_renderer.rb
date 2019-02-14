@@ -7,9 +7,7 @@ module Spot
         # @param value [Spot::Identifier,String]
         # @return [String]
         def li_value(identifier)
-          if identifier.is_a? String
-            identifier = Spot::Identifier.from_string(identifier)
-          end
+          identifier = Spot::Identifier.from_string(identifier) if identifier.is_a? String
 
           [].tap do |html|
             html << prefix_tag(identifier.prefix) unless identifier.prefix.nil?

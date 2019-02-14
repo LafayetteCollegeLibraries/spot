@@ -25,8 +25,8 @@ RSpec.describe Hyrax::PublicationPresenter do
     end
   end
 
-  describe '#mapped_identifiers' do
-    subject(:ids) { presenter.mapped_identifiers }
+  describe '#identifier' do
+    subject(:ids) { presenter.identifier }
 
     let(:object) { build(:publication, identifier: ['abc:123', 'hdl:111/222']) }
 
@@ -87,7 +87,6 @@ RSpec.describe Hyrax::PublicationPresenter do
     'description' => 'tesim',
     'division' => 'tesim',
     'editor' => 'tesim',
-    'identifier' => 'ssim',
     'keyword' => 'tesim',
     'language_label' => 'ssim',
     'organization' => 'tesim',
