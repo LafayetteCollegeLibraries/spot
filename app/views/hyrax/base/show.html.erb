@@ -4,7 +4,11 @@
 
 <div class="work-type" itemscope itemtype="http://schema.org/CreativeWork">
   <%= render 'metadata_and_viewer_panel', presenter: @presenter %>
-  <%= render 'relationships', presenter: @presenter %>
+  <%#
+    need to pass a methodized version of polymorphic_url because it isn't
+    accessible in a partial? i have no idea why.
+  %>
+  <%= render 'relationships', presenter: @presenter, polymorphic_url: method(:polymorphic_url) %>
   <%= render 'items_panel', presenter: @presenter %>
 </div>
 

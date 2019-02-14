@@ -18,6 +18,10 @@
       <div class="col-sm-12">
         <%= render 'work_description', presenter: @presenter %>
         <%= render 'metadata', presenter: @presenter %>
+
+        <% if current_user && current_user.admin? %>
+          <%= render 'shared/metadata/repository_metadata', presenter: presenter %>
+        <% end %>
       </div>
     </div>
   </div>

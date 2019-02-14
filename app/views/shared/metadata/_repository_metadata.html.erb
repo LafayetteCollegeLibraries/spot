@@ -4,6 +4,7 @@
   </div>
   <table class="table table-bordered">
     <tbody>
+      <%= presenter.attribute_to_html(:admin_set, render_as: :faceted, search_field: :admin_set_sim) %>
       <%= presenter.attribute_to_html(:depositor, render_as: :faceted, search_field: :depositor_ssim) %>
       <%= presenter.attribute_to_html(:date_created) %>
       <%= presenter.attribute_to_html(:date_uploaded) %>
