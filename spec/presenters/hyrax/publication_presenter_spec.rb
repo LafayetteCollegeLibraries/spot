@@ -78,6 +78,7 @@ RSpec.describe Hyrax::PublicationPresenter do
   {
     'abstract' => 'tesim',
     'academic_department' => 'tesim',
+    'admin_set' => 'tesim',
     'bibliographic_citation' => 'tesim',
     'contributor' => 'tesim',
     'creator' => 'tesim',
