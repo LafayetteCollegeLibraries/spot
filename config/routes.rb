@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # need to call `root` before mounting our engines
-  root 'spot/pages#homepage'
+  root 'spot/homepage#index'
 
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'

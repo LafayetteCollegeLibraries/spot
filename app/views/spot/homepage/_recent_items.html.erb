@@ -1,0 +1,16 @@
+<div id="recent-items" class="container-fluid">
+  <h2>Recently Added Items</h2>
+  <div class="row">
+    <% items.each do |item| %>
+    <div class="col-sm-2 col-xs-4">
+      <div class="thumbnail">
+        <%= link_to image_tag(item.thumbnail_path), item %>
+      </div>
+
+      <div class="caption">
+        <h4><%= link_to item.title.first, item %></h4>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
