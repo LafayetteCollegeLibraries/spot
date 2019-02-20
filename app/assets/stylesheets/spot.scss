@@ -15,3 +15,29 @@
     margin-top: 0;
   }
 }
+
+.featured-collection {
+  background-size: cover;
+  min-height: 26rem;
+  padding-top: 7rem;
+  position: relative;
+
+  .collection-info {
+    background-color: rgba(0, 0, 0, .7);
+    bottom: 0;
+    color: #fff;
+    display: block;
+    font-size: 1.75rem;
+    left: 0;
+    margin-top: 0;
+    padding: 1rem;
+    position: absolute;
+    width: 100%;
+  }
+
+  .collection-title {
+    font-size: 3rem;
+    font-weight: normal;
+    margin: .5rem 0;
+  }
+}

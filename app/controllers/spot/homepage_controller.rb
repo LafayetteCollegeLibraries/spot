@@ -12,7 +12,7 @@ module Spot
     helper Hyrax::ContentBlockHelper
 
     def index
-      @presenter = presenter_class.new(recent_works)
+      @presenter = presenter_class.new(recent_works, featured_collections)
       render layout: '1_column_no_navbar'
     end
 
@@ -24,6 +24,18 @@ module Spot
         docs
       rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
         []
+      end
+
+      def featured_collections
+        FeaturedCollection.all.map do |c|
+          collection_presenter_class.new(SolrDocument.new(Collection.find(c.collection_id).to_solr),
+                                         current_ability,
+                                         request)
+        end
+      end
+
+      def collection_presenter_class
+        Hyrax::CollectionsController.presenter_class
       end
 
       # @return [Class]

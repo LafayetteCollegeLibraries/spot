@@ -3,6 +3,8 @@
 # The Hyrax::CollectionPresenter with support for FeaturedCollections
 module Spot
   class CollectionPresenter < Hyrax::CollectionPresenter
+    include ActionView::Helpers::UrlHelper
+
     # @return [true,false]
     def collection_featurable?
       user_can_feature_collections? && solr_document.public?
@@ -23,6 +25,10 @@ module Spot
       @featured = FeaturedCollection.where(collection_id: solr_document.id).exists? if @featured.nil?
       @featured
     end
+
+    # @todo this is a no-op at the moment. we'll need to update the metadata to provide
+    #       a URL that provides more information about the collection
+    def learn_more_url; end
 
     # @return [true,false]
     def user_can_feature_collections?

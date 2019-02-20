@@ -28,4 +28,6 @@
 
 <hr />
 
-<%= render 'recent_items', items: @presenter.recent_items %>
+<%= render 'featured_collections', presenter: @presenter %>
+
+<%= render 'recent_items', presenter: @presenter %>
