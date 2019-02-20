@@ -54,6 +54,5 @@ Rails.application.routes.draw do
     end
   end
 
-
   get '/handle/*id', to: 'identifier#handle', as: 'handle'
 end

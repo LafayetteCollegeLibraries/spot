@@ -9,7 +9,7 @@ RSpec.describe Spot::FeaturedCollectionsController do
     before do
       sign_in user
 
-      expect(controller)
+      allow(controller)
         .to receive(:authorize!)
         .with(:create, FeaturedCollection)
         .and_return(true)
@@ -19,7 +19,7 @@ RSpec.describe Spot::FeaturedCollectionsController do
       it 'creates one' do
         expect do
           post :create, params: { id: 'abc123', format: :json }
-        end.to change { FeaturedCollection.count }.by 1
+        end.to change { FeaturedCollection.count }.by(1)
 
         expect(response).to be_successful
       end
@@ -46,7 +46,7 @@ RSpec.describe Spot::FeaturedCollectionsController do
     before do
       sign_in user
 
-      expect(controller)
+      allow(controller)
         .to receive(:authorize!)
         .with(:destroy, FeaturedCollection)
         .and_return true
@@ -58,7 +58,7 @@ RSpec.describe Spot::FeaturedCollectionsController do
       it 'removes it' do
         expect do
           delete :destroy, params: { id: 'abc123', format: :json }
-        end.to change { FeaturedCollection.count }.by -1
+        end.to change { FeaturedCollection.count }.by(-1)
 
         expect(response.status).to eq 204
       end

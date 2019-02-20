@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe FeaturedCollection do
   describe 'validations' do
     describe ':count_within_limit' do

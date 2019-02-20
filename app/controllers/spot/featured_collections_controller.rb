@@ -17,7 +17,7 @@ module Spot
     def destroy
       authorize! :destroy, FeaturedCollection
       @featured_collection = FeaturedCollection.find_by(collection_id: params[:id])
-      @featured_collection.destroy if @featured_collection
+      @featured_collection&.destroy
 
       respond_to do |format|
         format.json { head :no_content }
