@@ -38,15 +38,22 @@ Rails.application.routes.draw do
     end
   end
 
-  # adding administrative pages to the site. we'll keep them under
-  # the 'spot' module, but not include that in the url (hence the
-  # +scope module: 'spot'+ call). note that +hydra-role-management+
-  # isn't here because we're mounting it on '/admin'.
   scope module: 'spot' do
+    # adding administrative pages to the site. we'll keep them under
+    # the 'spot' module, but not include that in the url (hence the
+    # +scope module: 'spot'+ call). note that +hydra-role-management+
+    # isn't here because we're mounting it on '/admin'.
     namespace :admin do
       resource :status, only: :show, controller: 'status'
     end
+
+    resources :collections, only: [] do
+      member do
+        resource :featured_collection, only: [:create, :destroy]
+      end
+    end
   end
+
 
   get '/handle/*id', to: 'identifier#handle', as: 'handle'
 end

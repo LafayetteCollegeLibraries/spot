@@ -22,6 +22,8 @@ module Spot
       # be unneccessary in the future (~3.0 upgrade, probably). the class still
       # exists, so we shouldn't encounter a missing constant error.
       Hyrax::CurationConcern.actor_factory.delete(Hyrax::Actors::TransactionalRequest)
+
+      Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
     end
 
     # Settings in config/environments/* take precedence over those specified here.

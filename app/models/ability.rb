@@ -10,7 +10,10 @@ class Ability
   #
   # @return [void]
   def custom_permissions
-    can(role_abilities, Role) if current_user.admin?
+    if current_user.admin?
+      can(role_abilities, Role)
+      can([:create, :delete, :manage], FeaturedCollection)
+    end
   end
 
   private
