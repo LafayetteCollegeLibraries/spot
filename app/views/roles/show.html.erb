@@ -1,15 +1,15 @@
 <% provide(:page_header) do %>
-  <h1><%= t('role-management.show.title', name: @role.name) %></h1>
+  <h1><%= t('.title', name: @role.name) %></h1>
 <% end %>
 
 <% provide(:page_title) do
-  t('role-management.show.page_title', name: @role.name, app_name: application_name)
+  t('.page_title', name: @role.name, app_name: application_name)
 end %>
 
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
-      <%= t('role-management.show.accounts') %>
+      <%= t('.accounts') %>
     </h3>
   </div>
 

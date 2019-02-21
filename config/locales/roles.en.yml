@@ -1,5 +1,5 @@
 en:
-  role-management:
+  roles:
     index:
       title: Roles
       create: Create a new role

@@ -1,12 +1,12 @@
 <% provide(:page_header) do %>
-  <h1><%= t('role-management.index.title') %></h1>
+  <h1><%= t('.title') %></h1>
 <% end %>
 
 <% provide(:page_title) do
-  t('role-management.index.page_title', app_name: application_name)
+  t('.page_title', app_name: application_name)
 end %>
 
-<p class="lead"><%= t('role-management.index.lead_text') %></p>
+<p class="lead"><%= t('.lead_text') %></p>
 
 <div class="row">
   <div class="col-md-4">
@@ -23,7 +23,7 @@ end %>
     </div>
 
     <% if can? :create, Role %>
-      <%= button_to t('role-management.index.create'), role_management.new_role_path, method: :get, class: 'btn btn-primary' %>
+      <%= button_to t('.create'), role_management.new_role_path, method: :get, class: 'btn btn-primary' %>
     <% end %>
   </div>
 </div>
