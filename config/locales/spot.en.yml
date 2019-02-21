@@ -42,3 +42,7 @@ en:
         issn: ISSN
         isbn: ISBN
         lafayette: Local
+
+    masthead:
+      advanced_search: Advanced Search
+      search_placeholder: Begin your search here

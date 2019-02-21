@@ -1,5 +1,20 @@
 // styles applied to the navbar + masthead
-header > .navbar-static-top.navbar-inverse {
+
+#masthead { // scss-lint:disable IdSelector
   background-color: $red-light;
   border-bottom: 0;
+
+  #catalog-search-form { // scss-lint:disable IdSelector
+    margin-bottom: 0;
+
+    .input-group {
+      margin-bottom: 0;
+    }
+  }
+
+  @media(min-width: 768px) {
+    #search-field-header { // scss-lint:disable IdSelector
+      width: 50rem;
+    }
+  }
 }

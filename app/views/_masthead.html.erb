@@ -12,7 +12,6 @@
         <%= render '/logo' %>
       </div>
 
-
       <div class="collapse navbar-collapse" id="top-navbar-collapse">
         <%= form_tag search_form_action,
                      method: :get,
@@ -24,13 +23,31 @@
           <% fields = search_state.params_for_search.except(*params_to_skip) %>
           <%= render_hash_as_hidden_fields fields %>
 
-          <%= text_field_tag :q,
-                             current_search_parameters,
-                             class: 'q form-control',
-                             id: 'search-field-header',
-                             placeholder: t('hyrax.search.form.q.placeholder') %>
-          <%= button_tag 'Search', type: 'Submit', class: 'btn btn-default' %>
+          <div class="input-group">
+            <%= text_field_tag :q,
+                               current_search_parameters,
+                               class: 'form-control',
+                               id: 'search-field-header',
+                               placeholder: t('spot.masthead.search_placeholder') %>
+            <span class="input-group-btn">
+              <%= button_tag 'Search', type: 'Submit', class: 'btn btn-default' do %>
+                <span class="glyphicon glyphicon-search"></span>
+                Go
+              <% end %>
+            </span>
+          </div>
         <% end %>
+
+        <ul class="nav navbar-nav">
+          <%#
+            TODO: i couldn't get +advanced_search_path+ to work (was just getting 'undefined
+                  method' errors), so this is unfortunately hardcoded. let's not.
+          %>
+          <li>
+            <%= link_to t('spot.masthead.advanced_search'), '/advanced' %>
+          </li>
+        </ul>
+
         <%= render '/user_util_links' %>
       </div>
     </div>
