@@ -14,8 +14,6 @@ GIT_SHA =
     `tail -1 #{revisions_logfile}`.chomp.split(' ')[3].gsub(/\)$/, '')
   elsif Rails.env.development? || Rails.env.test?
     `git rev-parse HEAD`.chomp
-  else
-    nil
   end
 
 GIT_BRANCH =
@@ -23,8 +21,6 @@ GIT_BRANCH =
     `tail -1 #{revisions_logfile}`.chomp.split(' ')[1]
   elsif Rails.env.development? || Rails.env.test?
     `git rev-parse --abbrev-ref HEAD`.chomp
-  else
-    nil
   end
 
 LAST_DEPLOYED =
