@@ -8,7 +8,8 @@ class ApplicationController < ActionController::Base
   # Adds Hyrax behaviors into the application controller
   include Hyrax::Controller
   include Hyrax::ThemedLayoutController
-  with_themed_layout '1_column'
+
+  layout 'hyrax'
 
   # from Blacklight: 'Discarding flash messages on XHR requests is deprecated.'
   skip_after_action :discard_flash_if_xhr

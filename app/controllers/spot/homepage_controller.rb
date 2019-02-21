@@ -13,7 +13,6 @@ module Spot
 
     def index
       @presenter = presenter_class.new(recent_works, featured_collections)
-      render layout: '1_column_no_navbar'
     end
 
     private

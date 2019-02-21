@@ -1,0 +1,49 @@
+$featured-info-bg-color: rgba(0, 0, 0, 0.7);
+$featured-info-text-color: $white;
+
+.welcome-splash {
+  background-position: top center;
+  background-size: cover;
+  min-height: 50rem;
+  position: relative;
+}
+
+.welcome-block {
+  background-color: $featured-info-bg-color;
+  bottom: 0;
+  color: $featured-info-text-color;
+  margin: 4rem;
+  padding: 2rem;
+  right: 0;
+  position: absolute;
+
+  h1 {
+    margin-top: 10px;
+  }
+}
+
+.featured-collection {
+  background-size: cover;
+  min-height: 26rem;
+  padding-top: 7rem;
+  position: relative;
+
+  .collection-info {
+    background-color: $featured-info-bg-color;
+    bottom: 0;
+    color: $featured-info-text-color;
+    display: block;
+    font-size: 1.75rem;
+    left: 0;
+    margin-top: 0;
+    padding: 1rem;
+    position: absolute;
+    width: 100%;
+  }
+
+  .collection-title {
+    font-size: 3rem;
+    font-weight: normal;
+    margin: 0.5rem 0;
+  }
+}

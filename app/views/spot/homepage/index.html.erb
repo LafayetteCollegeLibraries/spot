@@ -1,33 +1,10 @@
-<% provide(:page_title) { t('spot.welcome_page_title', name: t('hyrax.product_name')) } %>
-<% content_for(:navbar) {} %>
+<% provide(:page_title) { t('.page_title', name: t('hyrax.product_name')) } %>
 
 <%= displayable_content_block ContentBlock.for(:announcement), class: 'alert alert-warning' %>
 
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="col-sm-6">
-      <%= image_tag 'welcome-image.jpg', class: 'img-responsive' %>
-    </div>
-    <div class="col-sm-6">
-      <p class="lead">
-        Here is some text about the repository. Have a look, won't you?
-      </p>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <h2><%= t('spot.search_the_catalog') %></h2>
-          <%= render 'search_form' %>
-          <p>
-            <%= link_to t('spot.browse_the_catalog'), search_catalog_path(q: '') %>
-            or use our <a href="#">advanced search</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render 'splash' %>
 
 <hr />
 
 <%= render 'featured_collections', presenter: @presenter %>
-
 <%= render 'recent_items', presenter: @presenter %>

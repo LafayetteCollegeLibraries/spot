@@ -1,0 +1,15 @@
+<div class="row-fluid welcome-splash" style="background-image: url(<%= image_path 'welcome-image.jpg' %>);">
+  <div class="col-md-6 welcome-block">
+    <h1><%= t('.intro_text', name: t('hyrax.product_name')) %></h1>
+    <p class="lead"><%= t('.tagline') %></p>
+    <div class="row">
+      <div class="col-md-6">
+        <%= link_to t('.browse_catalog'), search_catalog_path, class: 'btn btn-info btn-block' %>
+      </div>
+
+      <div class="col-md-6">
+        <%= link_to t('.browse_collections'), browse_collections_url, class: 'btn btn-info btn-block' %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 @import "spot/variables";
 @import "spot/navbar";
-@import "spot/featured-collection";
+@import "spot/homepage";
 
 .rights-statement-icon {
   max-width: 120px;
@@ -17,3 +17,6 @@
   }
 }
 
+[role="main"] {
+  margin-top: 1rem;
+}
