@@ -15,7 +15,6 @@ set :bundle_env_variables, nokogiri_use_system_libraries: 1
 set :bundle_flags, '--deployment'
 
 # capistrano-rails
-set :assets_prefix, shared_path.join('public', 'assets')
 set :log_level, :debug
 set :rails_env, 'production'
 
