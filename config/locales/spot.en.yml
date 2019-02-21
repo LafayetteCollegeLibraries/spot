@@ -3,6 +3,7 @@ en:
   role-management:
     breadcrumb: User Roles
     dashboard: User Roles
+
   spot:
     # todo: rename these to something more like:
     # 'spot.catalog.browse', 'spot.catalog.search'
@@ -24,3 +25,11 @@ en:
           learn_more: Learn More
       recent_items:
         title: Recently Added Items
+
+    identifiers:
+      labels:
+        doi: DOI
+        hdl: Handle
+        issn: ISSN
+        isbn: ISBN
+        lafayette: Local
