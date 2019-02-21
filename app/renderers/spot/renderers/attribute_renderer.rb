@@ -105,9 +105,13 @@ module Spot
           translate(:"simple_form.hints.defaults.#{field.downcase}", default: nil)
         end
 
+        # We need to stuff a value in case +options[:work_type]+ isn't provided,
+        # so we'll go with 'default'. Using +nil+ raises a Blacklight deprecation
+        # notice and hecks up our locales for some reason.
+        #
         # @return [String, nil]
         def work_type_label_key
-          options[:work_type] ? options[:work_type].underscore : nil
+          options[:work_type] ? options[:work_type].underscore : 'default'
         end
     end
   end
