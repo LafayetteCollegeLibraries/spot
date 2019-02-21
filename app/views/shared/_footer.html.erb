@@ -6,12 +6,7 @@
     </div>
     <div class="navbar-right">
       <div class="navbar-text text-right">
-        <% if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'] %>
-        <h4>debug info</h4>
-        <p>spot is running <strong><%= link_to_latest_gh_commit %></strong>
-           on branch <strong><%= link_to_git_branch %></strong></p>
-        <p><%= t('hyrax.background_attribution_html') %></p>
-        <% end %>
+        <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'] %>
       </div>
     </div>
   </div>
