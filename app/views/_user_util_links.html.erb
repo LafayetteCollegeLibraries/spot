@@ -1,5 +1,10 @@
 <ul id="user_utility_links" class="nav navbar-nav navbar-right">
-  <%= render 'shared/locale_picker' if available_translations.size > 1 %>
+  <%#
+    hyrax has the available locales hardcoded, as opposed to using the options available.
+    i'm removing the picker for now just because we only have the community-provided
+    options which we need to flesh out for our own app.
+  %>
+  <%# render 'shared/locale_picker' if available_translations.size > 1 %>
   <% if user_signed_in? %>
     <li>
       <%= render_notifications(user: current_user) %>
