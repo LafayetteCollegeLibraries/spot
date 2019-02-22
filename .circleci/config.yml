@@ -1,13 +1,40 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+executors:
+  ruby:
     docker:
       - image: circleci/ruby:2.4.2
+    working_directory: ~/spot
+    environment:
+      BUNDLE_PATH: vendor/bundle
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+jobs:
+  bundle:
+    executor: ruby
     steps:
-      - checkout
-      - run: echo 'building'
+    - checkout
+    - run:
+        name: Install dependencies
+        command: bundle check || bundle install
+    - persist_to_workspace:
+        root: ~/
+        paths:
+        - spot/*
+        - spot/**/*
+  lint:
+    executor: ruby
+    steps:
+    - attach_workspace:
+        at: ~/
+    - run:
+        name: Get 'em Rubocop!
+        command: bundle exec rubocop
+
 workflows:
   version: 2
   setup_building:
     jobs:
       - build
+      - lint:
+          requires:
+          - build
