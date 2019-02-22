@@ -52,7 +52,7 @@ gem 'rdf-vocab', '3.0.4'
 gem 'riiif', '~> 1.1'
 gem 'rsolr', '2.2.1'
 gem 'rubyzip', '1.2.2'
-gem 'sidekiq', '~> 5.2.3'
+gem 'sidekiq', '5.2.5'
 
 
 group :development do

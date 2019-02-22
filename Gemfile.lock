@@ -612,7 +612,7 @@ GEM
       rails (~> 5.0)
       rdf
     rack (2.0.6)
-    rack-protection (2.0.4)
+    rack-protection (2.0.5)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -705,7 +705,7 @@ GEM
       rdf (~> 3.0)
     redic (1.5.0)
       hiredis
-    redis (4.0.3)
+    redis (4.1.0)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)
     redlock (0.2.2)
@@ -795,8 +795,9 @@ GEM
       sxp (~> 1.0)
     shoulda-matchers (3.1.2)
       activesupport (>= 4.0.0)
-    sidekiq (5.2.3)
+    sidekiq (5.2.5)
       connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
     signet (0.11.0)
@@ -955,7 +956,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   selenium-webdriver (~> 3.141)
   shoulda-matchers (~> 3.1)
-  sidekiq (~> 5.2.3)
+  sidekiq (= 5.2.5)
   simplecov (~> 0.16.1)
   solr_wrapper (~> 2.0.0)
   spring (~> 2.0.2)
