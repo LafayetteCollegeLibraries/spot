@@ -14,29 +14,29 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Install dependencies
-        command: bundle check || bundle install
+          name: Install dependencies
+          command: bundle check || bundle install
       - persist_to_workspace:
-        root: ~/
-        paths:
-          - spot/*
-         - spot/**/*
+          root: ~/
+          paths:
+            - spot/*
+            - spot/**/*
 
   lint:
     executor: ruby
     steps:
     - attach_workspace:
-      at: ~/
+        at: ~/
     - run:
         name: Get 'em Rubocop!
         command: bundle exec rubocop
 
   test:
     docker:
-      - image: circleci/ruby:2.4.2-node-browsers-legacy
+      - image: circleci/ruby:2.4.2-node-browsers
       - image: ualbertalib/docker-fcrepo4:4.7
         environment:
-          CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+          CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
       - image: solr:7.5.0-alpine
         command: bin/solr -cloud -noprompt -f -p 8985
 
@@ -94,8 +94,8 @@ workflows:
     jobs:
     - bundle
     - lint:
-      requires:
-        - bundle
+        requires:
+          - bundle
     - test:
         requires:
           - lint
