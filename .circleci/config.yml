@@ -61,11 +61,12 @@ jobs:
       RAILS_ENV: test
       FCREPO_TEST_PORT: 8080/fcrepo
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      COVERALLS_PARALLEL: true
       PSQL_USER: spot_dev_user
       PSQL_PASSWORD: ''
       PSQL_DATABASE: spot_test
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+      COVERALLS_PARALLEL: true
+      CI: true
 
     steps:
       - attach_workspace:
