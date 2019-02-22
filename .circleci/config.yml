@@ -34,7 +34,7 @@ workflows:
   version: 2
   setup_building:
     jobs:
-      - build
+      - bundle
       - lint:
           requires:
-          - build
+          - bundle
