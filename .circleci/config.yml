@@ -6,8 +6,6 @@ executors:
     working_directory: ~/spot
     environment:
       BUNDLE_PATH: vendor/bundle
-      BUNDLE_JOBS: 4
-      BUNDLE_RETRY: 3
 jobs:
   bundle:
     executor: ruby
@@ -35,6 +33,10 @@ jobs:
     docker:
       - image: circleci/ruby:2.4.2-node-browsers
       - image: postgres:9.4-alpine
+        environment:
+          POSTGRES_USER: spot_dev_user
+          POSTGRES_PASSWORD: ''
+          POSTGRES_DB: spot_test
       - image: ualbertalib/docker-fcrepo4:4.7
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
@@ -46,12 +48,13 @@ jobs:
 
     environment:
       BUNDLE_PATH: vendor/bundle
-      BUNDLE_JOBS: 4
-      BUNDLE_RETRY: 3
       RAILS_ENV: test
       FCREPO_TEST_PORT: 8080/fcrepo
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       COVERALLS_PARALLEL: true
+      PSQL_USER: spot_dev_user
+      PSQL_PASSWORD: ''
+      PSQL_DATABASE: spot_test
 
     steps:
       - attach_workspace:
