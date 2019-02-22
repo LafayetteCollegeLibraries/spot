@@ -83,8 +83,8 @@ jobs:
           command: |
             cd solr/config
             zip -1 spot_solr_config.zip ./*
-            curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip http://localhost:8985/solr/admin/configs?action=UPLOAD&name=spot
-            curl -H 'Content-type: application/json' http://localhost:8985/api/collections/ -d '{create: {name: hydra-test, config: spot, numShards: 1}}'
+            curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8985/solr/admin/configs?action=UPLOAD&name=spot"
+            curl -H "Content-type: application/json" http://localhost:8985/api/collections/ -d "{create: {name: hydra-test, config: spot, numShards: 1}}"
 
       - run:
           name: Run db migrations
