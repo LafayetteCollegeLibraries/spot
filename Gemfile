@@ -34,7 +34,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'hyrax', '2.4.1'
 
 gem 'almond-rails', '~> 0.1.0'
-gem 'bagit', '~> 0.4.2'
+gem 'bagit', '~> 0.4.3'
 gem 'blacklight_advanced_search', '~> 6.4.1'
 gem 'blacklight_range_limit', '~> 6.3.3'
 gem 'bootsnap', '~> 1.3.2'
@@ -49,6 +49,7 @@ gem 'mimemagic', '~> 0.3.2'
 gem 'okcomputer', '~> 1.17.3'
 gem 'pg', '~> 1.1.3'
 gem 'rdf-vocab', '~> 3.0.4'
+gem 'riiif', '~> 1.1'
 gem 'rsolr', '>= 1.0'
 gem 'rubyzip', '~> 1.2.2'
 gem 'sidekiq', '~> 5.2.3'
@@ -105,5 +106,3 @@ group :test do
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'simplecov', '~> 0.16.1', require: false
 end
-
-gem 'riiif', '~> 1.1'
