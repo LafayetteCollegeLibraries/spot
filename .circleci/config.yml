@@ -41,6 +41,7 @@ jobs:
   test:
     docker:
       - image: circleci/ruby:2.4.2-node-browsers
+      - image: circleci/redis:4
       - image: postgres:9.4-alpine
         environment:
           POSTGRES_USER: spot_dev_user
