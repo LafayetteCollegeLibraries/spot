@@ -99,7 +99,7 @@ jobs:
           name: Run RSpec tests
           command: |
             mkdir /tmp/test-results
-            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            CIRCLE_BUILD_NUM=$CIRCLE_WORKFLOW_ID bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
 
       - store_test_results:
           path: /tmp/test-results
@@ -107,6 +107,11 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
+  notify-on-finish:
+    executor: ruby
+    steps:
+      - run: curl -k https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN -d "payload[build_num]=$CIRCLE_WORKFLOW_ID&payload[status]=done"
 
 workflows:
   version: 2
@@ -119,3 +124,6 @@ workflows:
     - test:
         requires:
           - lint
+    - notify-on-finish:
+        requires:
+          - test
