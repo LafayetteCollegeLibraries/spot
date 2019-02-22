@@ -65,6 +65,7 @@ jobs:
       PSQL_USER: spot_dev_user
       PSQL_PASSWORD: ''
       PSQL_DATABASE: spot_test
+      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
 
     steps:
       - attach_workspace:
