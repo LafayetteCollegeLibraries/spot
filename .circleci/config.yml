@@ -34,6 +34,7 @@ jobs:
   test:
     docker:
       - image: circleci/ruby:2.4.2-node-browsers
+      - image: postgres:9.4-alpine
       - image: ualbertalib/docker-fcrepo4:4.7
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
