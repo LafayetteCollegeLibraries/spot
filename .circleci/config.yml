@@ -12,29 +12,90 @@ jobs:
   bundle:
     executor: ruby
     steps:
-    - checkout
-    - run:
+      - checkout
+      - run:
         name: Install dependencies
         command: bundle check || bundle install
-    - persist_to_workspace:
+      - persist_to_workspace:
         root: ~/
         paths:
-        - spot/*
-        - spot/**/*
+          - spot/*
+         - spot/**/*
+
   lint:
     executor: ruby
     steps:
     - attach_workspace:
-        at: ~/
+      at: ~/
     - run:
         name: Get 'em Rubocop!
         command: bundle exec rubocop
 
+  test:
+    docker:
+      - image: circleci/ruby:2.4.2-node-browsers-legacy
+      - image: ualbertalib/docker-fcrepo4:4.7
+        environment:
+          CATALINA_OPTS: "-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC"
+      - image: solr:7.5.0-alpine
+        command: bin/solr -cloud -noprompt -f -p 8985
+
+    working_directory: ~/spot
+    parallelism: 4
+
+    environment:
+      BUNDLE_PATH: vendor/bundle
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+      RAILS_ENV: test
+      FCREPO_TEST_PORT: 8080/fcrepo
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      COVERALLS_PARALLEL: true
+
+    steps:
+      - attach_workspace:
+          at: ~/
+
+      # Update to the latest release of Chrome
+      - run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      - run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+      - run: sudo apt-get update
+      - run: sudo apt-get -y install google-chrome-stable
+
+      - run:
+          name: Make sure dependencies are valid
+          command: bundle check || bundle install
+
+      - run:
+          name: Load config into Solr
+          command: |
+            cd solr/config
+            zip -1 spot_solr_config.zip ./*
+            curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip http://localhost:8985/solr/admin/configs?action=UPLOAD&name=spot
+            curl -H 'Content-type: application/json' http://localhost:8985/api/collections/ -d '{create: {name: solr-test, config: hyrax, numShards: 1}}'
+
+      - run:
+          name: Run RSpec tests
+          command: |
+            mkdir /tmp/test-results
+            bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+      - store_test_results:
+          path: /tmp/test-results
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+
+
 workflows:
   version: 2
-  setup_building:
+  ci:
     jobs:
-      - bundle
-      - lint:
-          requires:
-          - bundle
+    - bundle
+    - lint:
+      requires:
+        - bundle
+    - test:
+        requires:
+          - lint
