@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe CatalogController do
+RSpec.describe CatalogController, clean: true do
   # tryna get that coverage percentage up
   describe '#render_bookmarks_control?' do
     subject { described_class.new.render_bookmarks_control? }

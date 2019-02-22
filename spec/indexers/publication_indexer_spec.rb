@@ -40,7 +40,7 @@ RSpec.describe PublicationIndexer do
 
   describe 'resource_type' do
     # :symbol, :facetable
-    let(:fields) { %w[resource_type_ssim] }
+    let(:fields) { %w[resource_type_tesim resource_type_sim] }
     it_behaves_like 'simple model indexing'
   end
 
@@ -93,25 +93,25 @@ RSpec.describe PublicationIndexer do
 
   describe 'academic_department' do
     # :stored_searchable, :facetable
-    let(:fields) { %w[academic_department_ssim] }
+    let(:fields) { %w[academic_department_tesim academic_department_sim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'division' do
     # :symbol, :facetable
-    let(:fields) { %w[division_ssim] }
+    let(:fields) { %w[division_tesim division_sim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'organization' do
     # :symbol, :facetable
-    let(:fields) { %w[organization_ssim] }
+    let(:fields) { %w[organization_tesim organization_sim] }
     it_behaves_like 'simple model indexing'
   end
 
   describe 'related_resource' do
     # :symbol
-    let(:fields) { %w[related_resource_ssim] }
+    let(:fields) { %w[related_resource_tesim related_resource_sim] }
     it_behaves_like 'simple model indexing'
   end
 

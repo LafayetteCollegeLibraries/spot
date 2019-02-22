@@ -1,0 +1,29 @@
+<% provide(:page_header) do %>
+  <h1><%= t('.title') %></h1>
+<% end %>
+
+<% provide(:page_title) do
+  t('.page_title', app_name: application_name)
+end %>
+
+<p class="lead"><%= t('.lead_text') %></p>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-default">
+      <div class="list-group">
+        <% @roles.each do |role| %>
+          <%= link_to role_management.role_path(role), class: 'list-group-item' do %>
+
+            <%= role.name %>
+            <span class="badge"><%= role.users.count %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <% if can? :create, Role %>
+      <%= button_to t('.create'), role_management.new_role_path, method: :get, class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+</div>

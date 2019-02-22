@@ -1,0 +1,79 @@
+<% can_remove_user = can?(:remove_user, Role) %>
+<% provide(:page_header) do %>
+  <h1><%= t('.title', name: @role.name) %></h1>
+<% end %>
+
+<% provide(:page_title) do
+  t('.page_title', name: @role.name, app_name: application_name)
+end %>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= bootstrap_form_for @role, url: role_management.role_path(@role) do |f| %>
+      <%= f.text_field :name, label: t('.field_name') %>
+      <%= f.submit t('.update'), class: 'btn btn-info' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <%= t('.accounts') %>
+    </h3>
+  </div>
+
+  <% unless @role.users.empty? %>
+  <table id="users" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>User</th>
+        <% if can_remove_user %>
+        <th>Actions</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+    <% @role.users.each do |user| %>
+      <tr>
+        <td><%= user.user_key %></td>
+        <% if can_remove_user %>
+        <td>
+          <%= button_to t('.remove'),
+                        role_management.role_user_path(@role, user.id),
+                        method: :delete,
+                        class: 'btn btn-danger' %>
+        </td>
+        <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <% end %>
+
+  <div class="panel-body">
+    <%= bootstrap_form_tag url: role_management.role_users_path(@role), id: 'add-user-to-role' do |f| %>
+      <%= f.text_field 'user_key', placeholder: t('.user_placeholder'),
+                                   label: t('.add_user_label') %>
+      <%= f.submit t('.add'), class: 'btn btn-info' %>
+    <% end %>
+  </div>
+</div>
+
+<% if can? :destroy, Role %>
+<div class="panel panel-danger">
+  <div class="panel-heading">
+    <h3 class="panel-title text-danger">
+      <%= t('.delete') %>
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <p class="text-danger"><%= t('.delete_warning') %></p>
+    <%= button_to t('.delete'),
+                  role_management.role_path(@role),
+                  method: :delete,
+                  class: 'btn btn-danger' %>
+  </div>
+</div>
+<% end %>

@@ -51,9 +51,9 @@ module Spot
 
     # @return [String]
     def to_s
-      if value.empty?
+      if value.blank?
         ''
-      elsif prefix.empty?
+      elsif prefix.blank?
         value
       else
         "#{prefix}#{SEPARATOR}#{value}"

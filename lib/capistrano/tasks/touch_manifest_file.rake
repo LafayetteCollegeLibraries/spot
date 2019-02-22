@@ -4,7 +4,7 @@
 # prevent +deploy:assets:backup+ from failing on a fresh deployment
 task :touch_manifest_file do
   on roles(:app) do
-    execute :touch, release_path.join('public', fetch(:assets_prefix), 'manifest.tmp') unless
+    execute :touch, shared_path.join('public', 'assets', 'manifest.tmp') unless
       fetch(:assets_manifests).any? { |candidate| test(:ls, candidate) }
   end
 end

@@ -1,0 +1,12 @@
+<% github_base = 'https://github.com/LafayetteCollegeLibraries/spot' %>
+<% github_sha_link = "#{github_base}/commit/#{GIT_SHA}" unless GIT_SHA.nil? %>
+<% github_branch_link = "#{github_base}/tree/#{GIT_BRANCH}" unless GIT_BRANCH.nil? %>
+
+<% if github_sha_link && github_branch_link %>
+<p>
+  spot's most recent commit was <strong><%= link_to GIT_SHA[0..6], github_sha_link %></strong>
+  on branch <strong><%= link_to GIT_BRANCH, github_branch_link %></strong>
+  <br />
+  last deployed: <%= LAST_DEPLOYED %>
+</p>
+<% end %>

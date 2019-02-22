@@ -1,0 +1,18 @@
+<%#
+Hyrax allows five color-related styles to be defined in an admin form:
+  - Header background color
+  - Header text color
+  - Link color
+  - Footer link color
+  - Primary button background color
+
+Since these are fields we're not expecting to change, we've stripped this
+out and will be using our own stylesheets to define these styles. This
+partial appends a <style> tag to the <head> with the custom values defined
+(see: https://github.com/samvera/hyrax/blob/ec78619/app/views/shared/_appearance_styles.html.erb).
+
+This partial is called from the Hyrax head content partial
+(see: https://github.com/samvera/hyrax/blob/1d6f1a7/app/views/layouts/_head_tag_content.html.erb#L26),
+so we'll just leave it blank instead.
+
+%>

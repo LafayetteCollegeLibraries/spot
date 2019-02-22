@@ -1,0 +1,25 @@
+<% if presenter.abstract.present? || presenter.description.present? %>
+<div class="panel panel-default">
+  <% if presenter.abstract.present? %>
+  <div class="panel-heading panel-heading-slim">
+    <h5>Abstract</h5>
+  </div>
+  <ul class="list-group">
+    <% presenter.abstract.each do |abstract| %>
+    <li class="list-group-item"><%= abstract %></li>
+    <% end %>
+  </ul>
+  <% end %>
+
+  <% if presenter.description.present? %>
+  <div class="panel-heading panel-heading-slim">
+    <h5>Description</h5>
+  </div>
+  <ul class="list-group">
+    <% presenter.description.each do |description| %>
+    <li class="list-group-item"><%= description %></li>
+    <% end %>
+  </ul>
+  <% end %>
+</div>
+<% end %>

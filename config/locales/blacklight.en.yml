@@ -1,3 +1,31 @@
 en:
   blacklight:
-    application_name: 'Blacklight'
+    search:
+      fields:
+        academic_department: Academic Department
+        contributor: Contributor
+        creator: Creator
+        date_created: Date Created
+        date_modified_dtsi: Date Modified
+        date_uploaded: Date Uploaded
+        depositor: Deposited by
+        depositor_tesim: Deposited by
+        description: Description
+        file_format: File Format
+        identifier: Standard Identifier
+        keyword: Keyword
+        keyword_sim: Keyword
+        language: Language
+        license: License
+        member_of_collections: Collections
+        place: Location
+        place_label_ssim: Location
+        publisher: Publisher
+        publisher_sim: Publisher
+        publisher_tesim: Publisher
+        resource_type: Type
+        resource_type_ssim: Type
+        rights_statement: Rights Statement
+        subject: Subject
+        title: Title
+        years_encompassed_iim: Year

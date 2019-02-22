@@ -1,6 +1,7 @@
 <% if presenter.place.present? %>
-  <dt><%= t('blacklight.search.fields.place') %></dt>
-  <dd>
+<tr>
+  <th><%= t('blacklight.search.fields.place') %></th>
+  <td>
     <ul class="tabular">
     <%- presenter.place_merged.each do |(uri, label)| -%>
       <li class="attribute attribute-place">
@@ -11,5 +12,6 @@
       </li>
     <%- end -%>
     </ul>
-  </dd>
+  </td>
+</tr>
 <% end %>

@@ -1,8 +1,5 @@
-/* ...
- *= require jquery-ui
- *= require select2
- *= require_self
-*/
+// our own overrides are called _before_ we import hyrax/bootstrap
+@import "spot/variables";
 
 @import "bootstrap-sprockets";
 @import "bootstrap-default-overrides";

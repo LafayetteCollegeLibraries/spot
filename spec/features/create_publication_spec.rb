@@ -10,6 +10,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
   end
 
   let(:i18n_term) { I18n.t(:'activefedora.models.publication') }
+  let(:app_name) { I18n.t('hyrax.product_name') }
 
   context 'a logged in (regular) user' do
     let(:user) { create(:user) }
@@ -126,7 +127,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         page.find('#with_files_submit').click
         expect(page).to have_content attrs[:title].first
-        expect(page).to have_content 'Your files are being processed by Spot in the background.'
+        expect(page).to have_content "Your files are being processed by #{app_name} in the background."
       end
     end
   end

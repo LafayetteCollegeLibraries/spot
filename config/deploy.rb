@@ -15,7 +15,6 @@ set :bundle_env_variables, nokogiri_use_system_libraries: 1
 set :bundle_flags, '--deployment'
 
 # capistrano-rails
-set :assets_prefix, shared_path.join('public', 'assets')
 set :log_level, :debug
 set :rails_env, 'production'
 
@@ -36,4 +35,4 @@ SSHKit.config.command_map[:solr] = '/opt/solr/bin/solr'
 append :linked_dirs, 'log'
 append :linked_dirs, 'tmp/cache', 'tmp/derivatives', 'tmp/ingest', 'tmp/pids', 'tmp/sockets'
 append :linked_dirs, 'vendor/bundle'
-append :linked_dirs, 'public/system', 'public/uploads', 'public/assets'
+append :linked_dirs, 'public/assets', 'public/branding', 'public/system', 'public/uploads'

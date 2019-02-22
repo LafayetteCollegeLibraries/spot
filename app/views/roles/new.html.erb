@@ -1,0 +1,17 @@
+<% provide(:page_header) do %>
+  <h1><%= t('.title') %></h1>
+<% end %>
+
+<% provide(:page_title) do
+  t('.page_title', app_name: application_name)
+end %>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= bootstrap_form_for @role, url: role_management.roles_path do |f| %>
+      <%= f.text_field :name, label: t('.field_name') %>
+      <%= f.submit t('.add'), class: 'btn btn-info' %>
+      <%= link_to t('.cancel'), role_management.roles_path, class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>

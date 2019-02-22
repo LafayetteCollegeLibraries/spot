@@ -1,11 +1,13 @@
 # frozen_string_literal: true
-RSpec.describe Spot::BasePresenter do
+RSpec.describe Hyrax::PublicationPresenter do
   subject(:presenter) { described_class.new(solr_doc, ability) }
 
   let(:solr_doc) { SolrDocument.new(solr_data) }
   let(:solr_data) { object.to_solr }
   let(:object) { build(:publication) }
   let(:ability) { Ability.new(build(:user)) }
+
+  it_behaves_like 'it renders an attribute to HTML'
 
   describe '#public?' do
     subject { presenter.public? }
@@ -23,8 +25,8 @@ RSpec.describe Spot::BasePresenter do
     end
   end
 
-  describe '#mapped_identifiers' do
-    subject(:ids) { presenter.mapped_identifiers }
+  describe '#identifier' do
+    subject(:ids) { presenter.identifier }
 
     let(:object) { build(:publication, identifier: ['abc:123', 'hdl:111/222']) }
 
@@ -36,18 +38,6 @@ RSpec.describe Spot::BasePresenter do
   describe '#place' do
     subject { presenter.place }
 
-    let(:solr_data) do
-      {
-        'place_ssim' => ['http://sws.geonames.org/5188140/']
-      }
-    end
-
-    it { is_expected.to eq solr_doc['place_ssim'] }
-  end
-
-  describe '#place_merged' do
-    subject { presenter.place_merged.first }
-
     let(:uri) { 'http://sws.geonames.org/5188140/' }
     let(:label) { 'United States, Pennsylvania, Northampton County, Easton' }
     let(:solr_data) do
@@ -57,7 +47,7 @@ RSpec.describe Spot::BasePresenter do
       }
     end
 
-    it { is_expected.to eq [uri, label] }
+    it { is_expected.to eq [[uri, label]] }
   end
 
   describe '#date_modified' do
@@ -87,7 +77,8 @@ RSpec.describe Spot::BasePresenter do
   # these are the straightforward checks
   {
     'abstract' => 'tesim',
-    'academic_department' => 'ssim',
+    'academic_department' => 'tesim',
+    'admin_set' => 'tesim',
     'bibliographic_citation' => 'tesim',
     'contributor' => 'tesim',
     'creator' => 'tesim',
@@ -95,13 +86,12 @@ RSpec.describe Spot::BasePresenter do
     'date_issued' => 'ssim',
     'depositor' => 'tesim',
     'description' => 'tesim',
-    'division' => 'ssim',
+    'division' => 'tesim',
     'editor' => 'tesim',
-    'identifier' => 'ssim',
     'keyword' => 'tesim',
     'language_label' => 'ssim',
-    'organization' => 'ssim',
-    'resource_type' => 'ssim',
+    'organization' => 'tesim',
+    'resource_type' => 'tesim',
     'source' => 'tesim',
     'subject' => 'tesim',
     'subtitle' => 'tesim',

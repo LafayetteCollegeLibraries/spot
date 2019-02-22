@@ -68,6 +68,8 @@ group :development do
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rails', '~> 1.3', require: false
   gem 'capistrano-sidekiq', '~> 0.20.0'
+
+  gem 'xray-rails', '~> 0.3.1'
 end
 
 group :development, :test do
@@ -78,6 +80,7 @@ group :development, :test do
   gem 'solr_wrapper', '~> 2.0.0'
 
   gem 'database_cleaner', '~> 1.7.0'
+  gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 4.0', require: false
   gem 'ffaker', '~> 2.10.0'
   gem 'rails-controller-testing', '~> 1.0.4'

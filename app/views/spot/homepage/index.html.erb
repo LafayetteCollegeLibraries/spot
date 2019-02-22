@@ -1,0 +1,10 @@
+<% provide(:page_title) { t('.page_title', name: t('hyrax.product_name')) } %>
+
+<%= displayable_content_block ContentBlock.for(:announcement), class: 'alert alert-warning' %>
+
+<%= render 'splash' %>
+
+<hr />
+
+<%= render 'featured_collections', presenter: @presenter %>
+<%= render 'recent_items', presenter: @presenter %>

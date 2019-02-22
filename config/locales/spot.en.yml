@@ -1,0 +1,48 @@
+# these are app-specific translations, pretty much namespaced under 'spot'
+en:
+  role-management:
+    breadcrumb: User Roles
+    dashboard: User Roles
+
+  spot:
+    # todo: rename these to something more like:
+    # 'spot.catalog.browse', 'spot.catalog.search'
+    browse_the_catalog: Browse the catalog
+    search_the_catalog: Search the catalog
+
+    dashboard:
+      status:
+        sidebar: System Status
+        title: System Status
+
+    homepage:
+      index:
+        page_title: Welcome to the %{name}
+
+      featured_collections:
+        title: Featured Collections
+        browse_html: '<a href="https://dss.lafayette.edu/collections" target="_blank">Click here</a> to browse all collections'
+        collection:
+          view: View Collection
+          learn_more: Learn More
+
+      recent_items:
+        title: Recently Added Items
+
+      splash:
+        browse_catalog: Browse the catalog
+        browse_collections: View collections
+        intro_text: Welcome to the %{name}
+        tagline: Some good stuff for you to peruse
+
+    identifiers:
+      labels:
+        doi: DOI
+        hdl: Handle
+        issn: ISSN
+        isbn: ISBN
+        lafayette: Local
+
+    masthead:
+      advanced_search: Advanced Search
+      search_placeholder: Begin your search here

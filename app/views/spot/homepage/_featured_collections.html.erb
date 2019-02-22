@@ -1,0 +1,35 @@
+<% if presenter.featured_collections.present? %>
+<div id="featured-collections" class="container-fluid">
+  <h2><%= t('.title') %></h2>
+  <p class="lead"><%= t('.browse_html').html_safe %></p>
+  <% presenter.featured_collections.each do |collection| %>
+  <div class="row">
+    <% if collection.banner_file.present? %>
+    <div class="col-sm-12 featured-collection"
+         style="background-image: url(<%= image_path(collection.banner_file) %>)">
+    <% else %>
+    <div class="col-sm-12 featured-collection">
+    <% end %>
+      <div class="collection-info">
+        <h3 class="collection-title"><%= collection.title.first %></h3>
+        <p><%= collection.description.join('</p><p>').html_safe %></p>
+        <%= link_to t('.collection.view'), [hyrax, collection], class: 'btn btn-primary' %>
+
+        <%#
+          TODO: this is a no-op at the moment. we may want to include a metadata property
+                that provides a URL to learn more about the collection
+        %>
+        <% if collection.learn_more_url.present? %>
+          <%= link_to t('.collection.learn_more'),
+                      collection.learn_more_url,
+                      class: 'btn btn-info',
+                      target: '_blank' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+
+<hr />
+<% end %>

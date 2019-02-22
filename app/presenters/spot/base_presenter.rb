@@ -5,6 +5,7 @@
 module Spot
   class BasePresenter < Hyrax::WorkShowPresenter
     include ActionView::Helpers::UrlHelper
+    include PresentsAttributes
 
     # Is the document's visibility public?
     #
@@ -13,21 +14,19 @@ module Spot
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
-    # Our document's identifiers mapped to Spot::Identifier objects
-    #
-    # @return [Array<Spot::Identifier>]
-    def mapped_identifiers
-      identifier.map { |str| Spot::Identifier.from_string(str) }
-    end
-
     # @return [Array<String>]
     def abstract
       value_for 'abstract_tesim'
     end
 
     # @return [Array<String>]
+    def admin_set
+      value_for 'admin_set_tesim'
+    end
+
+    # @return [Array<String>]
     def academic_department
-      value_for 'academic_department_ssim'
+      value_for 'academic_department_tesim'
     end
 
     # @return [Array<String>]
@@ -77,7 +76,7 @@ module Spot
 
     # @return [Array<String>]
     def division
-      value_for 'division_ssim'
+      value_for 'division_tesim'
     end
 
     # @return [Array<String>]
@@ -85,9 +84,11 @@ module Spot
       value_for 'editor_tesim'
     end
 
-    # @return [Array<String>]
+    # Our document's identifiers mapped to Spot::Identifier objects
+    #
+    # @return [Array<Spot::Identifier>]
     def identifier
-      value_for 'identifier_ssim'
+      value_for('identifier_ssim').map { |str| Spot::Identifier.from_string(str) }
     end
 
     # @return [Array<String>]
@@ -107,17 +108,12 @@ module Spot
 
     # @return [Array<String>]
     def organization
-      value_for 'organization_ssim'
+      value_for 'organization_tesim'
     end
 
     # @return [Array<String>]
     def physical_medium
-      value_for 'physical_medium_ssim'
-    end
-
-    # @return [Array<String>]
-    def place
-      value_for 'place_ssim'
+      value_for 'physical_medium_tesim'
     end
 
     # place values + labels zipped into tuples.
@@ -127,13 +123,13 @@ module Spot
     #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
     #
     # @return [Array<Array<String>>]
-    def place_merged
-      place.zip(value_for('place_label_ssim'))
+    def place
+      value_for('place_ssim').zip(value_for('place_label_ssim')).reject(&:empty?)
     end
 
     # @return [Array<String>]
     def resource_type
-      value_for 'resource_type_ssim'
+      value_for 'resource_type_tesim'
     end
 
     # @return [Array<String>]

@@ -10,7 +10,29 @@ class Ability
   #
   # @return [void]
   def custom_permissions
-    can(%i[create show add_user remove_user index edit update destroy], Role) if
-      current_user.admin?
+    # put permissions here that can go to users other than admins
+    return unless current_user.admin?
+
+    can(role_abilities, Role)
+    can([:create, :delete, :manage], FeaturedCollection)
   end
+
+  private
+
+    # save some space by defining the Role abilities here
+    #
+    # @return [Array<Symbol>]
+    def role_abilities
+      %i[
+        create
+        show
+        add_user
+        remove_user
+        index
+        edit
+        update
+        destroy
+        manage
+      ]
+    end
 end

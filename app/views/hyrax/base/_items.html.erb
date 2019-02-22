@@ -1,0 +1,34 @@
+<%#
+  not using this at the moment but i don't want to get rid of it
+  in case we decide against using the tabular display of items
+%>
+<% array_of_ids = presenter.list_of_item_ids_to_display %>
+<% members = presenter.member_presenters_for(array_of_ids) %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      Items
+    </h3>
+  </div>
+
+  <div class="panel-body">
+    <% members.each do |member| %>
+    <div class="media">
+      <div class="media-left">
+        <%= render_thumbnail_tag member, width: '125px' %>
+      </div>
+
+      <div class="media-body">
+        <h4 class="media-heading">
+          <%= link_to(member.link_name, contextual_path(member, presenter)) %>
+        </h4>
+        <ul class="list-unstyled">
+          <li>Uploaded <%= member.try(:date_uploaded) %></li>
+          <li><%= member.permission_badge %></li>
+        </ul>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

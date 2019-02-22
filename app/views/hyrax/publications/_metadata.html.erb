@@ -1,46 +1,35 @@
 <%# overriding the metadata display for Publications %>
-<dl class="work-show <%= dom_class(presenter) %>">
-  <%# titles %>
-  <%= presenter.attribute_to_html(:subtitle, html_dl: true) %>
-  <%= presenter.attribute_to_html(:title_alternative, html_dl: true) %>
+<div class="panel panel-default">
+  <table class="table table-bordered work-show <%= dom_class(presenter) %>">
+    <tbody>
+      <%= presenter.attribute_to_html(:title) %>
+      <%= presenter.attribute_to_html(:subtitle, show_help_text: true) %>
+      <%= presenter.attribute_to_html(:title_alternative) %>
+      <%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:editor, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:publisher, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:source, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:academic_department, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:division, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:organization, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:date_issued) %>
+      <%= presenter.attribute_to_html(:date_available) %>
+      <%= presenter.attribute_to_html(:resource_type, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:physical_medium) %>
+      <%= presenter.attribute_to_html(:language_label,
+                                      render_as: :faceted,
+                                      search_field: :language_label_ssim) %>
+      <%= presenter.attribute_to_html(:subject, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:place,
+                                      render_as: :external_authority,
+                                      search_field: :place_label_ssim) %>
+      <%= presenter.attribute_to_html(:bibliographic_citation) %>
+      <%= presenter.attribute_to_html(:identifier, render_as: :identifier) %>
+      <%= presenter.attribute_to_html(:related_resource) %>
 
-  <%# provenance %>
-  <%= presenter.attribute_to_html(:creator, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:contributor, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:editor, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:publisher, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:source, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:academic_department, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:division, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:organization, html_dl: true, render_as: :faceted) %>
-
-  <%# description %>
-  <%= presenter.attribute_to_html(:abstract, html_dl: true) %>
-  <%= presenter.attribute_to_html(:date_issued, html_dl: true) %>
-  <%= presenter.attribute_to_html(:date_available, html_dl: true) %>
-  <%= presenter.attribute_to_html(:resource_type, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:physical_medium, html_dl: true) %>
-  <%= presenter.attribute_to_html(:language_label, html_dl: true) %>
-  <%= presenter.attribute_to_html(:subject, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:keyword, html_dl: true, render_as: :faceted) %>
-  <%= render 'shared/metadata/place', presenter: presenter %>
-  <%= presenter.attribute_to_html(:bibliographic_citation, html_dl: true) %>
-
-  <%= render 'shared/metadata/identifiers', presenter: presenter %>
-  <%= presenter.attribute_to_html(:related_resource, html_dl: true) %>
-
-  <%= render 'shared/metadata/rights_statement', presenter: presenter %>
-
-  <%# repository history %>
-  <%= presenter.attribute_to_html(:date_created, html_dl: true) %>
-  <%= presenter.attribute_to_html(:depositor, html_dl: true, render_as: :faceted) %>
-  <%= presenter.attribute_to_html(:date_uploaded, html_dl: true) %>
-  <%= presenter.attribute_to_html(:date_modified, html_dl: true) %>
-  <%= presenter.attribute_to_html(:local_identifier, html_dl: true) %>
-
-  <%# @todo i18n-ize the title %>
-  <% if current_user %>
-  <dt>Workflow status</dt>
-  <dd><%= presenter.workflow.badge %></dd>
-  <% end %>
-</dl>
+      <%= render 'shared/metadata/rights_statement', presenter: presenter %>
+    </tbody>
+  </table>
+</div>

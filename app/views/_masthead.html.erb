@@ -1,0 +1,55 @@
+<header>
+  <nav id="masthead" class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <%= render '/logo' %>
+      </div>
+
+      <div class="collapse navbar-collapse" id="top-navbar-collapse">
+        <%= form_tag search_form_action,
+                     method: :get,
+                     id: 'catalog-search-form',
+                     class: 'navbar-form navbar-left',
+                     role: 'search' do %>
+
+          <% params_to_skip = %i[q search_field qt page utf8] %>
+          <% fields = search_state.params_for_search.except(*params_to_skip) %>
+          <%= render_hash_as_hidden_fields fields %>
+
+          <div class="input-group">
+            <%= text_field_tag :q,
+                               current_search_parameters,
+                               class: 'form-control',
+                               id: 'search-field-header',
+                               placeholder: t('spot.masthead.search_placeholder') %>
+            <span class="input-group-btn">
+              <%= button_tag 'Search', type: 'Submit', class: 'btn btn-default' do %>
+                <span class="glyphicon glyphicon-search"></span>
+                Go
+              <% end %>
+            </span>
+          </div>
+        <% end %>
+
+        <ul class="nav navbar-nav">
+          <%#
+            TODO: i couldn't get +advanced_search_path+ to work (was just getting 'undefined
+                  method' errors), so this is unfortunately hardcoded. let's not.
+          %>
+          <li>
+            <%= link_to t('spot.masthead.advanced_search'), '/advanced' %>
+          </li>
+        </ul>
+
+        <%= render '/user_util_links' %>
+      </div>
+    </div>
+  </nav>
+</header>

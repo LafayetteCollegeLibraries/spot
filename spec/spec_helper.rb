@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 ENV['RAILS_ENV'] = 'test'
 
-require File.expand_path('../../config/environment', __FILE__)
-
-# Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
-
 if ENV['COVERAGE'] || ENV['TRAVIS']
   require 'simplecov'
   require 'coveralls'
   SimpleCov.formatter = Coveralls::SimpleCov::Formatter if ENV['TRAVIS']
   SimpleCov.start 'rails'
 end
+
+require File.expand_path('../../config/environment', __FILE__)
+
+# Prevent database truncation if the environment is production
+abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require 'rspec/rails'
 require 'factory_bot_rails'
@@ -24,6 +24,8 @@ require 'hyrax/spec/matchers'
 require 'hyrax/spec/shared_examples'
 require 'hyrax/spec/factory_bot/build_strategies'
 require 'webmock/rspec'
+require 'rspec/matchers'
+require 'equivalent-xml'
 
 # copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
 #

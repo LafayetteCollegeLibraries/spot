@@ -1,32 +1,33 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
- *= require_self
- *= require blacklight_advanced_search
- *= require blacklight_range_limit
-*/
+// This is a manifest file that'll be compiled into application.css, which will include all the files
+// listed below.
+//
+// Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+// vendor/assets/stylesheets directory can be referenced here using a relative path.
+//
+// You're free to add application-wide styles to this file and they'll appear at the bottom of the
+// compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+// files in this directory. Styles in this file should be added after the last require_* statement.
+// It is generally better to create a new file per style scope.
+//
+// jquery-ui + select2 are required _before_ hyrax
+//= require jquery-ui
+//= require select2
+//
+//= require hyrax
+//= require openseadragon
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+//
+//= require spot
+//= require_self
+//= require blacklight_advanced_search
+//= require blacklight_range_limit
 
 .ui-autocomplete-loading {
-  background: white url("/assets/spinner-24.gif") right center no-repeat;
+  background: #fff url("/assets/spinner-24.gif") right center no-repeat;
 }
 
 .work-show dd {
   margin-left: 0;
-}
-
-ul.tabular {
-  padding-left: 0;
 }
 
 .work-representative-media {
@@ -35,12 +36,14 @@ ul.tabular {
 }
 
 .attribute-identifier-with-label {
-  margin-bottom: .5rem;
-  margin-top: .5rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 // undoing `max-width: 40em` that hydra-editor sets;
+// scss-lint:disable SelectorFormat
 .multi_value .listing,
 .controlled_vocabulary .listing {
   max-width: 100%;
 }
+// scss-lint:enable SelectorFormat
