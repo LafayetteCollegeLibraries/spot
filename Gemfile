@@ -48,11 +48,12 @@ gem 'jquery-rails', '4.3.3'
 gem 'mimemagic', '0.3.3'
 gem 'okcomputer', '1.17.3'
 gem 'pg', '1.1.4'
-gem 'rdf-vocab', '~> 3.0.4'
+gem 'rdf-vocab', '3.0.4'
 gem 'riiif', '~> 1.1'
-gem 'rsolr', '>= 1.0'
-gem 'rubyzip', '~> 1.2.2'
+gem 'rsolr', '2.2.1'
+gem 'rubyzip', '1.2.2'
 gem 'sidekiq', '~> 5.2.3'
+
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
