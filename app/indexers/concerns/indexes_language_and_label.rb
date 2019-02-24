@@ -7,7 +7,7 @@ module IndexesLanguageAndLabel
   # @return [Hash]
   def generate_solr_doc
     super.tap do |solr_doc|
-      return if object.language.empty?
+      break solr_doc if object.language.empty?
 
       solr_doc['language_ssim'] = object.language
       solr_doc['language_label_ssim'] ||= []
