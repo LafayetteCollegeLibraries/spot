@@ -55,7 +55,7 @@ RSpec.describe Spot::Forms::CollectionForm do
 
     it { is_expected.to be_an Array }
     it { is_expected.to include :thumbnail_id }
-    it { is_expected.to include({ place_attributes: [:id, :_destroy] }) }
+    it { is_expected.to include(place_attributes: [:id, :_destroy]) }
   end
 
   describe '.model_attributes' do
