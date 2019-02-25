@@ -24,6 +24,7 @@ module Spot
       Hyrax::CurationConcern.actor_factory.delete(Hyrax::Actors::TransactionalRequest)
 
       Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
+      Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
     end
 
     # Settings in config/environments/* take precedence over those specified here.

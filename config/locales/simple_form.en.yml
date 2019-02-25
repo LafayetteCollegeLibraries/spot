@@ -3,6 +3,9 @@ en:
     labels:
       defaults:
         description: Description
+      collection:
+        abstract: Brief Description
+        related_resource: Related URL
     hints:
       defaults:
         abstract: A summary of the resource.
@@ -28,7 +31,11 @@ en:
         rights_holder: A person or organization owning or managing rights over the resource.
         rights_statement: Rights statements express the copyright status of a Digital Object, as well as information about how users can access and re-use the objects.
         source: A related resource from which the described resource is derived.
+        sponsor: A person or organization that supports a thing through a pledge, promise, or financial contribution.
         subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary.
         subtitle: An explanatory or alternative title of a publication.
         title: A name to aid in identifying a work.
         title_alternative: An alternative name for the resource.
+      collection:
+        abstract: A one-or-two sentence description used in Collection previews.
+        related_resource: Further information about the collection (must be an URL)

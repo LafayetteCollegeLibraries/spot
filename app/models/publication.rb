@@ -46,9 +46,8 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :language, predicate: ::RDF::Vocab::DC11.language do |index|
-    index.as :symbol
-  end
+  # see {IndexesLanguageAndLabel} mixin for indexing
+  property :language, predicate: ::RDF::Vocab::DC11.language
 
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
