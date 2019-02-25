@@ -5,12 +5,12 @@ class Collection < ActiveFedora::Base
   class_attribute :controlled_properties
   self.controlled_properties = [:place]
 
-  validates_with Spot::OnlyUrlsValidator, fields: [:related_resource]
+  validates_with ::Spot::OnlyUrlsValidator, fields: [:related_resource]
 
   # title is included with +Hyrax::CoreMetadata+, which is included
   # with +Hyrax::CollectionBehavior+
 
-  property :short_description, predicate: ::RDF::Vocab::DC.abstract do |index|
+  property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
   end
 
