@@ -5,18 +5,29 @@ module IndexesLanguageAndLabel
   #   - language_label_ssim (the translated label or original value)
   #
   # @return [Hash]
-  def generate_solr_doc
-    super.tap do |solr_doc|
-      break solr_doc if object.language.empty?
+  def generate_solr_document
+    super.tap do |doc|
+      break doc if object.language.empty?
 
-      solr_doc['language_ssim'] = object.language
-      solr_doc['language_label_ssim'] ||= []
+      doc[value_field] ||= []
+      doc[label_field] ||= []
 
       object.language.each do |lang|
-        label = Spot::ISO6391.label_for(lang) || lang
-
-        solr_doc['language_label_ssim'] << label
+        doc[value_field] << lang
+        doc[label_field] << (Spot::ISO6391.label_for(lang) || lang)
       end
     end
   end
+
+  private
+
+    # @return [String]
+    def label_field
+      'language_label_ssim'
+    end
+
+    # @return [String]
+    def value_field
+      'language_ssim'
+    end
 end

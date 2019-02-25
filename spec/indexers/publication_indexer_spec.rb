@@ -6,6 +6,7 @@ RSpec.describe PublicationIndexer do
   let(:indexer) { described_class.new(work) }
 
   it_behaves_like 'it indexes English-language dates'
+  it_behaves_like 'it indexes ISO language and label'
 
   describe 'title' do
     # :stored_searchable
@@ -135,16 +136,6 @@ RSpec.describe PublicationIndexer do
   describe 'rights_statement' do
     it { is_expected.to include 'rights_statement_ssim' }
     it { is_expected.to include 'rights_statement_label_ssim' }
-  end
-
-  describe 'language' do
-    it 'stores the 2-character ISO-639-1 value' do
-      expect(solr_doc['language_ssim']).to eq ['en']
-    end
-
-    it 'stores the label value' do
-      expect(solr_doc['language_label_ssim']).to eq ['English']
-    end
   end
 
   describe 'place' do

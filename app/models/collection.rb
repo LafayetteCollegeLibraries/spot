@@ -18,9 +18,8 @@ class Collection < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :language, predicate: ::RDF::Vocab::DC.language do |index|
-    index.as :symbol
-  end
+  # see {IndexesLanguageAndLabel} mixin for indexing
+  property :language, predicate: ::RDF::Vocab::DC.language
 
   property :subject, predicate: ::RDF::Vocab::DC.subject do |index|
     index.as :symbol, :facetable
