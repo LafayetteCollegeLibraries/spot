@@ -11,7 +11,7 @@ RSpec.describe Collection do
 
   it_behaves_like 'a model with hyrax core metadata'
 
-  it { is_expected.to have_editable_property(:short_description).with_predicate(dc.abstract) }
+  it { is_expected.to have_editable_property(:abstract).with_predicate(dc.abstract) }
   it { is_expected.to have_editable_property(:description).with_predicate(dc.description) }
   it { is_expected.to have_editable_property(:subject).with_predicate(dc.subject) }
   it { is_expected.to have_editable_property(:identifier).with_predicate(dc.identifier) }
