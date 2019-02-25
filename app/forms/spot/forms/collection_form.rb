@@ -71,6 +71,13 @@ module Spot
         self['abstract'].first
       end
 
+      # Limiting to one description via the form
+      #
+      # @return [String]
+      def description
+        self['description'].first
+      end
+
       # Copied from +Hyrax::Forms::WorkForm+. We need to initialize
       # controlled vocabulary fields differently from the rest. Otherwise
       # we'll get the field's hint text but no input field.

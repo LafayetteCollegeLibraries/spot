@@ -112,4 +112,42 @@ RSpec.describe Spot::Forms::CollectionForm do
       it { is_expected.to eq '' }
     end
   end
+
+  describe 'singular form fields' do
+    described_class.singular_fields.each do |field|
+      context field.to_s do
+        subject { form.send(field) }
+
+        it { is_expected.not_to be_an Array }
+      end
+    end
+  end
+
+  describe '#primary_terms' do
+    subject { form.primary_terms }
+
+    let(:fields) { %i[visibility thumbnail_id representative_id collection_type_gid] }
+
+    it { is_expected.not_to include(*fields) }
+  end
+
+  describe '#secondary_terms' do
+    subject { form.secondary_terms }
+
+    it { is_expected.to be_empty }
+  end
+
+  describe '.primary_terms form hints' do
+    described_class.new(Collection.new, nil, nil).primary_terms.each do |term|
+      describe "for #{term}" do
+        subject do
+          I18n.t("simple_form.hints.collection.#{term}",
+                 locale: :en,
+                 default: ["simple_form.hints.defaults.#{term}"])
+        end
+
+        it { is_expected.not_to be_nil, "Hint missing for Collection##{term}" }
+      end
+    end
+  end
 end
