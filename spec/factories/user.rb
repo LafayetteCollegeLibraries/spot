@@ -23,9 +23,7 @@ FactoryBot.define do
 
     # from: https://github.com/samvera/hyrax/blob/v2.4.1/spec/factories/users.rb
     after(:build) do |user, evaluator|
-      if evaluator.admin
-        create(:admin_role, users: [user])
-      end
+      create(:admin_role, users: [user]) if evaluator.admin
 
       # In case we have the instance but it has not been persisted
       ::RSpec::Mocks.allow_message(user, :groups).and_return(Array.wrap(evaluator.groups))
