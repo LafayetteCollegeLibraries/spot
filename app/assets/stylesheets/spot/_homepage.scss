@@ -47,3 +47,29 @@ $featured-info-text-color: $white;
     margin: 0.5rem 0;
   }
 }
+
+.recent-item {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  min-height: 225px;
+  padding: 0;
+  position: relative;
+  width: 100%;
+
+  &:hover, &:focus {
+    opacity: 0.66;
+  }
+
+  &-title {
+    background-color: $featured-info-bg-color;
+    bottom: 0;
+    color: $featured-info-text-color;
+    font-size: 1.5rem;
+    height: 33%;
+    overflow: hidden;
+    padding: 0.5rem;
+    position: absolute;
+    width: 100%;
+  }
+}

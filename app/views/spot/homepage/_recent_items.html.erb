@@ -2,14 +2,12 @@
   <h2><%= t('.title') %></h2>
   <div class="row">
     <% presenter.recent_items.each do |item| %>
-    <div class="col-sm-2 col-xs-4">
-      <div class="thumbnail">
-        <%= link_to image_tag(item.thumbnail_path), item %>
+    <div class="col-sm-2 col-xs-6">
+      <%= link_to item do %>
+      <div class="recent-item" style="background-image: url(<%= item.thumbnail_path %>);">
+        <span class="recent-item-title"><%= truncate(item.title.first, length: 50) %></span>
       </div>
-
-      <div class="caption">
-        <h4><%= link_to item.title.first, item %></h4>
-      </div>
+      <% end %>
     </div>
     <% end %>
   </div>
