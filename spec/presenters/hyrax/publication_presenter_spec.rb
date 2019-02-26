@@ -50,57 +50,19 @@ RSpec.describe Hyrax::PublicationPresenter do
     it { is_expected.to eq [[uri, label]] }
   end
 
-  describe '#date_modified' do
-    subject { presenter.date_modified }
+  describe '#rights_statement_merged' do
+    subject { presenter.rights_statement_merged }
 
-    let(:solr_data) { { 'date_modified_dtsi' => '2018-11-27T18:44:05Z' } }
+    let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
+    let(:label) { 'Public Domain Mark (PDM)' }
 
-    it { is_expected.to eq solr_doc['date_modified_dtsi'] }
-  end
-
-  describe '#date_uploaded' do
-    subject { presenter.date_uploaded }
-
-    let(:solr_data) { { 'date_uploaded_dtsi' => '2018-11-27T18:44:05Z' } }
-
-    it { is_expected.to eq solr_doc['date_uploaded_dtsi'] }
-  end
-
-  describe '#license' do
-    subject { presenter.license }
-
-    let(:solr_data) { { 'license_ssim' => 'Public Domain' } }
-
-    it { is_expected.to eq solr_doc['license_ssim'] }
-  end
-
-  # these are the straightforward checks
-  {
-    'abstract' => 'tesim',
-    'academic_department' => 'tesim',
-    'admin_set' => 'tesim',
-    'bibliographic_citation' => 'tesim',
-    'contributor' => 'tesim',
-    'creator' => 'tesim',
-    'date_available' => 'ssim',
-    'date_issued' => 'ssim',
-    'depositor' => 'tesim',
-    'description' => 'tesim',
-    'division' => 'tesim',
-    'editor' => 'tesim',
-    'keyword' => 'tesim',
-    'language_label' => 'ssim',
-    'organization' => 'tesim',
-    'resource_type' => 'tesim',
-    'source' => 'tesim',
-    'subject' => 'tesim',
-    'subtitle' => 'tesim',
-    'title_alternative' => 'tesim'
-  }.each_pair do |method, suffix|
-    describe "##{method}" do
-      subject { presenter.send(method.to_sym) }
-
-      it { is_expected.to eq solr_doc["#{method}_#{suffix}"] }
+    let(:solr_data) do
+      {
+        'rights_statement_ssim' => [uri],
+        'rights_statement_label_ssim' => [label]
+      }
     end
+
+    it { is_expected.to eq [[uri, label]] }
   end
 end

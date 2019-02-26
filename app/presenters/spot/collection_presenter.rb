@@ -5,6 +5,8 @@ module Spot
   class CollectionPresenter < Hyrax::CollectionPresenter
     include ActionView::Helpers::UrlHelper
 
+    delegate :abstract, :related_resource, to: :solr_document
+
     # @return [true,false]
     def collection_featurable?
       user_can_feature_collections? && solr_document.public?
