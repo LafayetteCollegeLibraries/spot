@@ -10,10 +10,23 @@ RSpec.describe SolrDocument do
     contributor: { type: Array, suffix: 'tesim' },
     date_available: { type: Array, suffix: 'ssim' },
     date_issued: { type: Array, suffix: 'ssim' },
+    date_modified: {
+      type: Date,
+      suffix: 'dtsi',
+      value: '2019-02-28T00:00:00Z',
+      expected: Date.parse('2019-02-28T00:00:00Z')
+    },
+    date_uploaded: {
+      type: Date,
+      suffix: 'dtsi',
+      value: '2019-02-28T00:00:00Z',
+      expected: Date.parse('2019-02-28T00:00:00Z')
+    },
     depositor: { type: String, suffix: 'ssim' },
     description: { type: Array, suffix: 'tesim' },
     division: { type: Array, suffix: 'tesim' },
     editor: { type: Array, suffix: 'tesim' },
+    file_size: { type: String, suffix: 'lts' },
     identifier: { type: Array, suffix: 'ssim' },
     keyword: { type: Array, suffix: 'tesim' },
     language: { type: Array, suffix: 'ssim' },
@@ -21,6 +34,7 @@ RSpec.describe SolrDocument do
     license: { type: Array, suffix: 'ssim' },
     organization: { type: Array, suffix: 'tesim' },
     physical_medium: { type: Array, suffix: 'tesim' },
+    page_count: { type: String, suffix: 'tesim', value: '100' },
     place: { type: Array, suffix: 'ssim' },
     place_label: { type: Array, suffix: 'ssim' },
     related_resource: { type: Array, suffix: 'ssim' },
@@ -37,9 +51,12 @@ RSpec.describe SolrDocument do
     describe "##{key}" do
       subject { document.send(key) }
 
+      let(:expected) do
+        config[:expected] || (config[:type] == Array ? Array(value) : Array(value).first)
+      end
+
       let(:_value) { config[:value] || 'a test value' }
-      let(:value) { config[:suffix].ends_with?('m') ? Array(_value) : value }
-      let(:expected) { config[:type] == Array ? Array(value) : Array(value).first }
+      let(:value) { config[:suffix].ends_with?('m') ? Array(_value) : _value }
       let(:metadata) { { "#{key}_#{config[:suffix]}" => value } }
 
       it { is_expected.to be_a config[:type] }
