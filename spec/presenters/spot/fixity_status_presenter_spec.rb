@@ -16,6 +16,12 @@ RSpec.describe Spot::FixityStatusPresenter do
     subject { presenter.summary }
 
     it { is_expected.to include '1 File with 1 total version checked' }
+
+    context 'when fixity hasn\'t been checked' do
+      before { ChecksumAuditLog.destroy_all }
+
+      it { is_expected.to eq 'Fixity checks have not yet been run on this object' }
+    end
   end
 
   describe '#log_records' do
