@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>File Details</h5>
+  </div>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <th><%= t 'blacklight.search.fields.depositor' %></th>
+        <td itemprop="accountablePerson" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name"><%= link_to_profile @presenter.depositor %></span>
+        </td>
+      </tr>
+
+      <tr>
+        <th><%= t 'blacklight.search.fields.date_uploaded' %></th>
+        <td itemprop="datePublished"><%= @presenter.date_uploaded %></td>
+      </tr>
+
+      <tr>
+        <th><%= t 'blacklight.search.fields.date_modified' %></th>
+        <td itemprop="dateModified"><%= @presenter.date_modified %></td>
+      </tr>
+
+      <tr>
+        <th><%= t 'blacklight.search.fields.file_format' %></th>
+        <td><%= @presenter.file_format %></td>
+      </tr>
+
+      <tr>
+        <th><%= t 'blacklight.search.fields.file_size' %></th>
+        <td><%= number_to_human_size @presenter.file_size, precision: 2 %></td>
+      </tr>
+
+      <% if @presenter.page_count %>
+      <tr>
+        <th><%= t 'blacklight.search.fields.page_count' %></th>
+        <td><%= @presenter.page_count %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

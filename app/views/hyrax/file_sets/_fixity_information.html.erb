@@ -1,0 +1,22 @@
+<% fixity = Spot::FixityStatusPresenter.new(presenter.id) %>
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Fixity Check</h5>
+  </div>
+  <div class="panel-body">
+    <%= fixity.summary %>
+  </div>
+
+  <ul class="list-group">
+  <% fixity.log_records.each do |log| %>
+    <% lgi_class = ' list-group-item-danger' if log.failed? %>
+    <% label_class = log.failed? ? 'label-danger' : 'label-success' %>
+    <% label_text = log.failed? ? 'Fail' : 'Pass' %>
+
+    <li class="list-group-item<%= lgi_class %>">
+      <span class="label <%= label_class %>" style="text-transform: uppercase;"><%= label_text %></span>
+      Expected result: <code><%= log.expected_result %></code>
+    </li>
+  <% end %>
+  </ul>
+</div>
