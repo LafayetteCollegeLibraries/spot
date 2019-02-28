@@ -1,24 +1,26 @@
 # frozen_string_literal: true
 RSpec.describe Spot::FixityStatusPresenter do
-  subject(:presenter) { described_class.new('abc123') }
+  subject(:presenter) { described_class.new(id) }
+
+  let(:id) { 'abc123' }
+
+  before do
+    ChecksumAuditLog.create!(passed: true,
+                             checked_uri: 'http://example.org/fs/id',
+                             file_set_id: id,
+                             file_id: 'afile',
+                             expected_result: 'abc123def456ghi789')
+  end
 
   describe '#summary' do
-    before { allow(presenter).to receive(:render_existing_check_summary) }
+    subject { presenter.summary }
 
-    it 'calls #render_existing_check_summary' do
-      presenter.summary
-
-      expect(presenter).to have_received(:render_existing_check_summary)
-    end
+    it { is_expected.to include '1 File with 1 total version checked' }
   end
 
   describe '#log_records' do
-    before { allow(presenter).to receive(:relevant_log_records) }
+    subject { presenter.log_records }
 
-    it 'calls #relevant_log_records' do
-      presenter.log_records
-
-      expect(presenter).to have_received(:relevant_log_records)
-    end
+    it { is_expected.to be_an ActiveRecord::Relation }
   end
 end
