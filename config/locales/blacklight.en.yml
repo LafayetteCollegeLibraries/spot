@@ -12,12 +12,14 @@ en:
         depositor_tesim: Deposited by
         description: Description
         file_format: File Format
+        file_size: File Size
         identifier: Standard Identifier
         keyword: Keyword
         keyword_sim: Keyword
         language: Language
         license: License
         member_of_collections: Collections
+        page_count: Page Count
         place: Location
         place_label_ssim: Location
         publisher: Publisher

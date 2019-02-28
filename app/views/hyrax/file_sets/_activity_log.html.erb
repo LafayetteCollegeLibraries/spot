@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Activity Log</h5>
+  </div>
+
+  <ul class="list-group">
+  <% events.each do |event| %>
+  <% time = Time.zone.at event[:timestamp].to_i %>
+    <li class="list-group-item">
+      <span class="badge">
+        <relative-time datetime="<%= time.getutc.iso8601 %>" title="<%= time.to_formatted_s(:standard) %>">
+          <%= time.to_formatted_s(:long_ordinal) %>
+        </relative-time>
+      </span>
+
+      <%= sanitize event[:action] %>
+    </li>
+  <% end %>
+  </ul>
+</div>

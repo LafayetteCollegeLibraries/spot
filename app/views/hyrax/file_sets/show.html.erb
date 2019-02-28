@@ -1,0 +1,37 @@
+<% provide :page_title, @presenter.page_title %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+      <%#
+        hiding the media display partial for now. i'm making two assumptions:
+          1) users will arrive at the file_set page from the work page, which
+             already features the viewer. this page just provides more info.
+          2) the media_display, within a .col-sm-4 block, ends up being too small
+             to really get a good look at the item.
+
+        i'm open to reintroducing this if there's a demand (honestly, even a
+        request would be good enough for me). in the meantime we'll look to
+        refer the user back to the work or download the object from this page.
+
+        also: we might have to revisit this if we start getting works with
+        multiple file_sets which may throw a wrench in the viewer (the universal
+        viewer might be okay, as long as our iiif manifests list all of the items;
+        the pdf.js viewer doesn't have the ability to switch between documents).
+      %>
+      <%# media_display @presenter %>
+      <%= render 'thumbnail', presenter: @presenter %>
+      <%= render 'single_use_links', presenter: @presenter if @presenter.editor? %>
+    </div>
+    <div itemscope itemtype="<%= @presenter.itemtype %>" class="col-xs-12 col-sm-8">
+      <header>
+        <%= render 'file_set_title', presenter: @presenter %>
+      </header>
+
+      <%= render 'show_actions', presenter: @presenter %>
+
+      <%= render 'show_details' %>
+      <%= render 'fixity_information', presenter: @presenter %>
+      <%= render 'activity_log', events: @presenter.events %>
+    </div><!-- /columns second -->
+  </div> <!-- /.row -->
+</div><!-- /.container-fluid -->
