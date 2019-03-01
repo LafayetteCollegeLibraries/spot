@@ -19,6 +19,7 @@ en:
         language: Language
         license: License
         member_of_collections: Collections
+        original_checksum: Original Checksum (MD5)
         page_count: Page Count
         place: Location
         place_label_ssim: Location

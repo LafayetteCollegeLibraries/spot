@@ -37,6 +37,11 @@
         <td><%= @presenter.page_count %></td>
       </tr>
       <% end %>
+
+      <tr>
+        <th><%= t 'blacklight.search.fields.original_checksum' %></th>
+        <td><code><%= @presenter.original_checksum %></code></td>
+      </tr>
     </tbody>
   </table>
 </div>

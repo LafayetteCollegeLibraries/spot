@@ -39,6 +39,7 @@ module Spot
       attribute :language_label,         ::Blacklight::Types::Array, 'language_label_ssim'
       attribute :license,                ::Blacklight::Types::Array, 'license_ssim'
       attribute :organization,           ::Blacklight::Types::Array, 'organization_tesim'
+      attribute :original_checksum,      ::Blacklight::Types::String, 'original_checksum_tesim'
       attribute :page_count,             ::Blacklight::Types::String, 'page_count_tesim'
       attribute :physical_medium,        ::Blacklight::Types::Array, 'physical_medium_tesim'
       attribute :place,                  ::Blacklight::Types::Array, 'place_ssim'

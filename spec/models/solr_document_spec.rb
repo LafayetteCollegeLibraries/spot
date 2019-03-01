@@ -33,6 +33,7 @@ RSpec.describe SolrDocument do
     language_label: { type: Array, suffix: 'ssim' },
     license: { type: Array, suffix: 'ssim' },
     organization: { type: Array, suffix: 'tesim' },
+    original_checksum: { type: String, suffix: 'tesim' },
     physical_medium: { type: Array, suffix: 'tesim' },
     page_count: { type: String, suffix: 'tesim', value: '100' },
     place: { type: Array, suffix: 'ssim' },
