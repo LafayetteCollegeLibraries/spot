@@ -91,6 +91,8 @@ gem 'rubyzip', '1.2.2'
 # our jobs server
 gem 'sidekiq', '5.2.5'
 
+gem 'slack-ruby-client', '0.14.1'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do

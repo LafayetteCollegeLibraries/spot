@@ -296,6 +296,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.4)
       faraday
+    faraday_middleware (0.13.1)
+      faraday (>= 0.7.4, < 1.0)
     fcrepo_wrapper (0.9.0)
       ruby-progressbar
     ffaker (2.10.0)
@@ -306,6 +308,7 @@ GEM
       jquery-rails
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
+    gli (2.18.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     google-api-client (0.25.0)
@@ -333,6 +336,7 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     hashdiff (0.3.7)
+    hashie (3.6.0)
     hiredis (0.6.3)
     htmlentities (4.3.4)
     http_logger (0.5.1)
@@ -814,6 +818,13 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    slack-ruby-client (0.14.1)
+      activesupport
+      faraday (>= 0.9)
+      faraday_middleware
+      gli
+      hashie
+      websocket-driver
     slop (4.6.2)
     solr_wrapper (2.0.0)
       faraday
@@ -958,6 +969,7 @@ DEPENDENCIES
   shoulda-matchers (~> 3.1)
   sidekiq (= 5.2.5)
   simplecov (~> 0.16.1)
+  slack-ruby-client (= 0.14.1)
   solr_wrapper (~> 2.0.0)
   spring (~> 2.0.2)
   spring-watcher-listen (~> 2.0.0)

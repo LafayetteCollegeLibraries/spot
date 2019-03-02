@@ -13,14 +13,33 @@
 # when the jobs are done running.
 module Spot
   class RepositoryFixityCheckJob < ApplicationJob
-    # @param [true, false] force Ignore the 'max days between check' parameter
+    around_perform :wrap_check
+
+    # @param [true, false] :force Ignore the 'max days between check' parameter
     def perform(force: false)
       opts = { async_jobs: false }
       opts[:max_days_between_fixity_checks] = -1 if force
 
+      @count = 0
+
       ::FileSet.find_each do |file_set|
+        @count += 1
         Hyrax::FileSetFixityCheckService.new(file_set, opts).fixity_check
       end
     end
+
+    private
+
+      # Wraps our check to pass a time to the send_fixity_status_job.
+      #
+      # @yields
+      # @return [void]
+      def wrap_check
+        start = Time.now
+
+        yield
+
+        SendFixityStatusJob.perform_now(item_count: @count, job_time: (Time.now - start))
+      end
   end
 end
