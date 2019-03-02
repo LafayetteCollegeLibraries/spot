@@ -90,6 +90,7 @@ gem 'rubyzip', '1.2.2'
 
 # our jobs server
 gem 'sidekiq', '5.2.5'
+gem 'sidekiq-cron', '1.1.0'
 
 gem 'slack-ruby-client', '0.14.1'
 

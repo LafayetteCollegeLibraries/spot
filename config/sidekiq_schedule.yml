@@ -1,0 +1,9 @@
+# Config file for Sidekiq::Cron jobs loaded at initialization
+# (see config/initializers/sidekiq.rb). Trying out this method
+# of scheduling jobs over environment-specific cron jobs.
+fixity_check_everything:
+  # runs at midnight every Monday
+  cron: '0 0 * * 1'
+  class: 'Spot::RepositoryFixityCheckJob'
+  # @todo create a queue for fixity/cron jobs
+  queue: default

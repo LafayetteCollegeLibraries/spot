@@ -286,6 +286,8 @@ GEM
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
     erubi (1.8.0)
+    et-orbi (1.1.7)
+      tzinfo
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -308,6 +310,9 @@ GEM
       jquery-rails
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
+    fugit (1.1.8)
+      et-orbi (~> 1.1, >= 1.1.7)
+      raabro (~> 1.1)
     gli (2.18.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -610,6 +615,7 @@ GEM
       nokogiri (~> 1.6)
       rails (~> 5.0)
       rdf
+    raabro (1.1.6)
     rack (2.0.6)
     rack-protection (2.0.5)
       rack
@@ -805,6 +811,9 @@ GEM
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sidekiq-cron (1.1.0)
+      fugit (~> 1.1)
+      sidekiq (>= 4.2.1)
     signet (0.11.0)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -968,6 +977,7 @@ DEPENDENCIES
   selenium-webdriver (~> 3.141)
   shoulda-matchers (~> 3.1)
   sidekiq (= 5.2.5)
+  sidekiq-cron (= 1.1.0)
   simplecov (~> 0.16.1)
   slack-ruby-client (= 0.14.1)
   solr_wrapper (~> 2.0.0)
