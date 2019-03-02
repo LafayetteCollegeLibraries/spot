@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     # isn't here because we're mounting it on '/admin'.
     namespace :admin do
       resource :status, only: :show, controller: 'status'
+      resource :fixity_checks, only: :show
     end
 
     resources :collections, only: [] do

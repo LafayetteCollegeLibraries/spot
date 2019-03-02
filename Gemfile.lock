@@ -959,6 +959,7 @@ DEPENDENCIES
   iso-639 (= 0.2.8)
   jbuilder (= 2.8.0)
   jquery-rails (= 4.3.3)
+  kaminari (= 1.1.1)
   listen (>= 3.0.5, < 3.2)
   okcomputer (= 1.17.3)
   pg (= 1.1.4)

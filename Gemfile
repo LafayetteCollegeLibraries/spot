@@ -92,7 +92,12 @@ gem 'rubyzip', '1.2.2'
 gem 'sidekiq', '5.2.5'
 gem 'sidekiq-cron', '1.1.0'
 
+# using Slack for some of our messaging
 gem 'slack-ruby-client', '0.14.1'
+
+# Blacklight/Hyrax use Kaminari for pagination, but since we're
+# using it in other instances, we should require it just in case.
+gem 'kaminari', '1.1.1'
 
 # development dependencies (not as necessary to
 # lock down versions here)
