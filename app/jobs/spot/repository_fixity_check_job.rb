@@ -37,11 +37,11 @@ module Spot
       # @yields
       # @return [void]
       def wrap_check
-        start = Time.now
+        start = Time.zone.now
 
         yield
 
-        SendFixityStatusJob.perform_now(item_count: @count, job_time: (Time.now - start))
+        SendFixityStatusJob.perform_now(item_count: @count, job_time: (Time.zone.now - start))
       end
   end
 end

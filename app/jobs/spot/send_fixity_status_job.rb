@@ -31,6 +31,8 @@ module Spot
                           as_user: true)
       end
 
+      # rubocop:disable Metrics/MethodLength
+      #
       # The expected API format to create a 'block', rather than
       # a text, message to send to slack.
       #
@@ -53,6 +55,7 @@ module Spot
           }
         ]
       end
+      # rubocop:enable Metrics/MethodLength
 
       # @return [Slack::Web::Client]
       def slack_client

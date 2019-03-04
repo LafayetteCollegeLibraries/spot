@@ -35,19 +35,19 @@ RSpec.describe Spot::SendFixityStatusJob do
         {
           channel: '#the-cool-zone',
           blocks: JSON.dump([{
-            type: 'section',
-            text: {
-              type: 'mrkdwn',
-              text: 'Performed 100 fixity checks in 25 seconds on ' \
+                              type: 'section',
+                              text: {
+                                type: 'mrkdwn',
+                                text: 'Performed 100 fixity checks in 25 seconds on ' \
                     "`#{`hostname`.chomp}`"
-            },
-            fields: [
-              { type: 'mrkdwn',     text: ':white_check_mark: *Successes*' },
-              { type: 'mrkdwn',     text: ':warning: *Failures*' },
-              { type: 'plain_text', text: '99' },
-              { type: 'plain_text', text: '1' }
-            ]
-          }]),
+                              },
+                              fields: [
+                                { type: 'mrkdwn', text: ':white_check_mark: *Successes*' },
+                                { type: 'mrkdwn',     text: ':warning: *Failures*' },
+                                { type: 'plain_text', text: '99' },
+                                { type: 'plain_text', text: '1' }
+                              ]
+                            }]),
           as_user: true
         }
       ]
