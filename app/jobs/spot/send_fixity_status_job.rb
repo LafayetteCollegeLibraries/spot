@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+#
+# This may change in the future; it's definitely a first-pass at something new.
+# We want to send a notification that a Fixity Check job has been run and provide
+# the results. Eventually, this could/should be an email and/or an ActiveRecord
+# item (see https://github.com/LafayetteCollegeLibraries/spot/issues/175).
 module Spot
   class SendFixityStatusJob < ApplicationJob
     # @param [Number] :item_count

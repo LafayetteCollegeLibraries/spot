@@ -10,6 +10,7 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
     allow(Hyrax::FileSetFixityCheckService).to receive(:new).and_return(service_double)
     allow(service_double).to receive(:fixity_check)
     fs
+    perform_job!
   end
 
   after { FileSet.destroy_all }
@@ -18,8 +19,6 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
     let(:opts) { { async_jobs: false } }
 
     it 'calls the Hyrax::FileSetFixityCheckService without async_jobs' do
-      perform_job!
-
       expect(Hyrax::FileSetFixityCheckService)
         .to have_received(:new)
         .with(fs, opts)
@@ -33,12 +32,10 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
     let(:job_opts) { { force: true } }
 
     it do
-      perform_job!
-
       expect(Hyrax::FileSetFixityCheckService)
         .to have_received(:new)
-        .at_least(1).times # sometimes there may be some old file_sets hanging around
-        .with(fs, opts)
+        .at_least(1)
+        .times.with(fs, opts)
 
       expect(service_double).to have_received(:fixity_check)
     end
