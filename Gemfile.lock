@@ -286,6 +286,8 @@ GEM
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
     erubi (1.8.0)
+    et-orbi (1.1.7)
+      tzinfo
     execjs (2.7.0)
     factory_bot (4.11.1)
       activesupport (>= 3.0.0)
@@ -296,6 +298,8 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.4)
       faraday
+    faraday_middleware (0.13.1)
+      faraday (>= 0.7.4, < 1.0)
     fcrepo_wrapper (0.9.0)
       ruby-progressbar
     ffaker (2.10.0)
@@ -306,6 +310,10 @@ GEM
       jquery-rails
     font-awesome-rails (4.7.0.4)
       railties (>= 3.2, < 6.0)
+    fugit (1.1.8)
+      et-orbi (~> 1.1, >= 1.1.7)
+      raabro (~> 1.1)
+    gli (2.18.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     google-api-client (0.25.0)
@@ -333,6 +341,7 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     hashdiff (0.3.7)
+    hashie (3.6.0)
     hiredis (0.6.3)
     htmlentities (4.3.4)
     http_logger (0.5.1)
@@ -606,6 +615,7 @@ GEM
       nokogiri (~> 1.6)
       rails (~> 5.0)
       rdf
+    raabro (1.1.6)
     rack (2.0.6)
     rack-protection (2.0.5)
       rack
@@ -801,6 +811,9 @@ GEM
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sidekiq-cron (1.1.0)
+      fugit (~> 1.1)
+      sidekiq (>= 4.2.1)
     signet (0.11.0)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -814,6 +827,13 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    slack-ruby-client (0.14.1)
+      activesupport
+      faraday (>= 0.9)
+      faraday_middleware
+      gli
+      hashie
+      websocket-driver
     slop (4.6.2)
     solr_wrapper (2.0.0)
       faraday
@@ -857,6 +877,8 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     stomp (1.4.8)
+    stub_env (1.0.4)
+      rspec (>= 2.0, < 4.0)
     sxp (1.0.1)
       rdf (>= 2.2, < 4.0)
     temple (0.8.0)
@@ -939,6 +961,7 @@ DEPENDENCIES
   iso-639 (= 0.2.8)
   jbuilder (= 2.8.0)
   jquery-rails (= 4.3.3)
+  kaminari (= 1.1.1)
   listen (>= 3.0.5, < 3.2)
   okcomputer (= 1.17.3)
   pg (= 1.1.4)
@@ -957,10 +980,13 @@ DEPENDENCIES
   selenium-webdriver (~> 3.141)
   shoulda-matchers (~> 3.1)
   sidekiq (= 5.2.5)
+  sidekiq-cron (= 1.1.0)
   simplecov (~> 0.16.1)
+  slack-ruby-client (= 0.14.1)
   solr_wrapper (~> 2.0.0)
   spring (~> 2.0.2)
   spring-watcher-listen (~> 2.0.0)
+  stub_env (~> 1.0.4)
   turbolinks (= 5.2.0)
   tzinfo-data (~> 1.2018)
   uglifier (= 4.1.20)

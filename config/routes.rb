@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'sidekiq/web'
+require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
   devise_for :users
@@ -45,6 +46,7 @@ Rails.application.routes.draw do
     # isn't here because we're mounting it on '/admin'.
     namespace :admin do
       resource :status, only: :show, controller: 'status'
+      resource :fixity_checks, only: :show
     end
 
     resources :collections, only: [] do

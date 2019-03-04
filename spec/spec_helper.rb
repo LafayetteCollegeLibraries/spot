@@ -108,6 +108,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FactoryBot::Syntax::Methods
+  config.include StubEnv::Helpers
 
   config.use_transactional_fixtures = false
   config.render_views = true
