@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 #
-# Overrides made directly onto Hyrax classes/code. Essentially
-# any modifications you need to make, that aren't solved by
-# copying the file locally, should get put here so that it's
-# easily found. Stuff like altering class attributes or class_eval.
-# Leave comments!
+# Where possible, we'll try to use the class_attributes provided by the
+# various Hyrax pieces to provide our own functionality. However, this
+# isn't always possible, and we need to either copy files locally to
+# modify or peak into the classes via +class_eval+. Where the latter
+# case is necessary, we'll put the file into +app/overrides+ and load
+# all of them here, after initialization.
 Rails.application.config.after_initialize do
   # Removes the TransactionalRequest from the actor stack, as it's the culprit
   # for the nasty Ldp::Gone errors that happen when an item fails in the
@@ -20,17 +21,9 @@ Rails.application.config.after_initialize do
   # Uses our own CollectionForm, which itself is a subclass of the Hyrax one
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
 
-  # We've dropped the navbar + banner image that come with Hyrax, and the
-  # 'homepage' layout that the PagesController calls defines content for
-  # this block. By switching to the 'hyrax' layout (which we're using for
-  # the homepage + others), we can drop this component.
-  #
-  # @todo is there a better way to do this?
-  Hyrax::PagesController.class_eval do
-    private
-
-      def pages_layout
-        action_name == 'show' ? 'hyrax' : 'hyrax/dashboard'
-      end
+  # Load all of our overrides/class_evals
+  # (adapted from https://github.com/sciencehistory/chf-sufia/blob/d1c7d58/config/application.rb#L43-L48)
+  Dir.glob(Rails.root.join('app', 'overrides', '**', '*.rb')) do |c|
+    Rails.configuration.cache_classes ? require(c) : load(c)
   end
 end
