@@ -37,6 +37,7 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
 
       expect(Hyrax::FileSetFixityCheckService)
         .to have_received(:new)
+        .at_least(1).times # sometimes there may be some old file_sets hanging around
         .with(fs, opts)
 
       expect(service_double).to have_received(:fixity_check)
