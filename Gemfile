@@ -144,5 +144,6 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1'
   gem 'simplecov', '~> 0.16.1', require: false
   gem 'solr_wrapper', '~> 2.0.0'
+  gem 'stub_env', '~> 1.0.4'
   gem 'webmock', '~> 3.4.2'
 end

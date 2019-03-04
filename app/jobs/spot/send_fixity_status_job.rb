@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 module Spot
   class SendFixityStatusJob < ApplicationJob
-    SLACK_CHANNEL = ENV['SLACK_FIXITY_CHANNEL']
-
+    # @param [Number] :item_count
+    # @param [Number] :job_time
+    # @return [void]
     def perform(item_count:, job_time:)
       return unless slack_ok?
 
@@ -19,13 +20,13 @@ module Spot
       #
       # @return [true, false]
       def slack_ok?
-        SLACK_CHANNEL && ENV.include?('SLACK_API_TOKEN')
+        ENV['SLACK_API_TOKEN'] && ENV['SLACK_FIXITY_CHANNEL']
       end
 
       # @return [void]
       def send_message_to_slack
         slack_client.post('chat.postMessage',
-                          channel: SLACK_CHANNEL,
+                          channel: ENV.fetch('SLACK_FIXITY_CHANNEL'),
                           blocks: JSON.dump(slack_message),
                           as_user: true)
       end
