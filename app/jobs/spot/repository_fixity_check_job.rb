@@ -13,6 +13,8 @@
 # when the jobs are done running.
 module Spot
   class RepositoryFixityCheckJob < ApplicationJob
+    queue_as :low_priority
+
     around_perform :wrap_check
 
     # @param [true, false] :force Ignore the 'max days between check' parameter
