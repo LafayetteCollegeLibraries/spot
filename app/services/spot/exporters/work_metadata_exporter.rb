@@ -1,24 +1,26 @@
 # frozen_string_literal: true
-#
-# Exports a work's metadata to files. I'm not very stoked on this implementation;
-# I'd rather just pass the work and use +Hyrax::GraphExporter+ to generate an RDF
-# graph and use +graph.dump(format)+, however this somehow ties up the Fedora connection
-# more than using Hyrax's presenters (which uses the same thing?). Again, truly miffed
-# about this.
 module Spot
   module Exporters
     class WorkMetadataExporter
-      attr_reader :solr_document, :ability, :request
+      attr_reader :work, :ability, :request
 
       # @param [SolrDocument]
       # @param [Ability, nil]
       # @param [#host]
-      def initialize(solr_document, ability = nil, request = nil)
-        @solr_document = solr_document
+      def initialize(work, ability = nil, request = nil)
+        @work = work
         @ability = ability
         @request = request
       end
 
+      # @param [Pathname, String] :destination
+      #   Where to export the files
+      # @param [Symbol] :format
+      #   Format of exported metadata. Accepts:
+      #     - :all (all formats)
+      #     - :nt (ntriples)
+      #     - :ttl (turtle)
+      #     - :jsonld (json linked-data)
       # @return [void]
       def export!(destination:, format: :all)
         format = all_formats if format == :all
@@ -27,7 +29,7 @@ module Spot
           metadata = export_for_format(f)
           next if metadata.nil? # unsupported format
 
-          out_path = File.join(destination, "#{solr_document.id}.#{f}")
+          out_path = File.join(destination, "#{work.id}.#{f}")
 
           File.open(out_path, 'w') { |io| io.write metadata }
         end
@@ -44,21 +46,16 @@ module Spot
         # @return [String, nil]
         def export_for_format(format)
           case format
-          when :nt then presenter.export_as_nt
-          when :ttl then presenter.export_as_ttl
-          when :jsonld then presenter.export_as_jsonld
+          when :nt then graph.dump(:ntriples)
+          when :ttl then graph.dump(:ttl)
+          when :jsonld then graph.dump(:jsonld, standard_prefixes: true)
           else nil
           end
         end
 
-        # @return [Hyrax::WorkShowPresenter]
-        def presenter
-          presenter_for_solr_document.new(solr_document, ability, request)
-        end
-
-        # @return [Class]
-        def presenter_for_solr_document
-          Hyrax.const_get("#{solr_document.hydra_model}Presenter")
+        # @return [RDF::Graph]
+        def graph
+          Hyrax::GraphExporter.new(SolrDocument.find(work.id), request).fetch
         end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Spot
   class ExportController < ApplicationController
-    attr_reader :solr_document
+    attr_reader :work
 
     before_action :load_and_authorize_resource
 
@@ -9,9 +9,16 @@ module Spot
       # Hyrax::DownloadsController is already equipped to handle downloading
       # file_sets, so just forward those requests there (note: I'm not expecting
       # that to happen, but you never know)
-      redirect_to hyrax.download_path(solr_document) and return if wants_file_set?
+      redirect_to hyrax.download_path(work) and return if wants_file_set?
 
-      send_file(exported_work, filename: "#{solr_document.id}.zip")
+      # for some reason, we need to reset the Fedora connection before
+      # we can run an export of the members + metadata. my best guess is
+      # that number of requests in a short amount of time is too much
+      # for the repository to handle? I'm really unsure about it,
+      # but this at least lets us get an export happening.
+      ActiveFedora::Fedora.reset!
+
+      send_file(exported_work, filename: "#{work.id}.zip")
     end
 
     private
@@ -28,7 +35,7 @@ module Spot
 
       # @return [Pathname]
       def cache_path
-        cache_directory.join("#{solr_document.id}-#{solr_document['_version_']}.zip")
+        cache_directory.join("#{work.id}-#{work.etag[3..-2]}.zip")
       end
 
       # @return [void]
@@ -44,18 +51,18 @@ module Spot
 
       # @return [Spot::Exporters::ZippedWorkExporter]
       def exporter
-        Spot::Exporters::ZippedWorkExporter.new(solr_document, current_ability, request)
+        Spot::Exporters::ZippedWorkExporter.new(work, current_ability, request)
       end
 
-      # @return [SolrDocument]
+      # @return [ActiveFedora::Base]
       # @todo Actually authorize the resource!
       def load_and_authorize_resource
-        @solr_document = ::SolrDocument.find(params[:id])
+        @work = ActiveFedora::Base.find(params[:id])
       end
 
       # @return [true, false]
       def wants_file_set?
-        solr_document.hydra_model == FileSet
+        work.is_a? FileSet
       end
   end
 end

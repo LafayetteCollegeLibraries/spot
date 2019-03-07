@@ -5,29 +5,25 @@ require 'fileutils'
 module Spot
   module Exporters
     class ZippedWorkExporter
-      attr_reader :solr_document, :ability, :request
+      attr_reader :work, :ability, :request
 
-      def initialize(solr_document, ability, request)
-        @solr_document = solr_document
+      # @param [ActiveFedora::Base]
+      # @param [Ability]
+      # @param [ActionDispatch::Request]
+      def initialize(work, ability, request)
+        @work = work
         @ability = ability
         @request = request
       end
 
+      # @param [Pathname, String] :destination
+      # @param [Symbol] :metadata_formats The formats we're looking to export.
+      #   See {Spot::Exporters::WorkMetadataExporter#export!}
       def export!(destination:, metadata_formats: :all)
         @metadata_formats = metadata_formats
 
         in_working_directory do
-          unless metadata_formats.nil?
-            export_metadata!(metadata_formats) if include_metadata?
-
-            # for some reason, we need to reset the Fedora connection after
-            # exporting the metadata or the members (one or the other).
-            # note: this only happens when being called from a controller;
-            # I'm able to get this working fine from the command line.
-            # I am truly miffed!
-            ActiveFedora::Fedora.reset!
-          end
-
+          export_metadata!(metadata_formats) if include_metadata?
           export_members!
           zip_export_to(destination)
         end
@@ -36,6 +32,7 @@ module Spot
       private
         attr_reader :tmpdir
 
+        # @return [void]
         def export_members!
           files_path = tmpdir
           files_path = File.join(files_path, 'files') if include_metadata?
@@ -69,12 +66,17 @@ module Spot
 
         # @return [Spot::Exporters::WorkMembersExporter]
         def members_exporter
-          WorkMembersExporter.new(solr_document)
+          WorkMembersExporter.new(work)
         end
 
         # @return [Spot::Exporters::WorkMetadataExporter]
         def metadata_exporter
           WorkMetadataExporter.new(solr_document, ability, request)
+        end
+
+        # @return [SolrDocument]
+        def solr_document
+          @solr_document ||= SolrDocument.find(work.id)
         end
 
         def zip_export_to(destination)

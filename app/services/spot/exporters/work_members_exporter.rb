@@ -4,11 +4,11 @@
 module Spot
   module Exporters
     class WorkMembersExporter
-      attr_reader :solr_document
+      attr_reader :work
 
-      # @param [SolrDocument] solr_document
-      def initialize(solr_document)
-        @solr_document = solr_document
+      # @param [ActiveFedora::Base] work
+      def initialize(work)
+        @work = work
       end
 
       # Writes each Hydra::PCDM::File of a work to the provided destination
@@ -26,10 +26,6 @@ module Spot
       # @return [Array<Hydra::PCDM::File>]
       def files
         work.file_sets.map(&:original_file)
-      end
-
-      def work
-        ActiveFedora::Base.find(solr_document.id)
       end
     end
   end
