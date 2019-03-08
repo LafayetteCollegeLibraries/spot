@@ -43,6 +43,8 @@ FactoryBot.define do
 
     transient do
       file { nil }
+      file_set_params { nil }
+      ingest_file { false }
 
       # Hyrax Works always need a depositor, otherwise the
       # filter_suppressed_with_roles search builder raises:
@@ -59,10 +61,17 @@ FactoryBot.define do
 
       # TODO: add ability to attach multiple files
       unless evaluator.file.nil?
-        actor = Hyrax::Actors::FileSetActor.new(FileSet.create, evaluator.user)
-        actor.create_metadata({})
+        fs = FileSet.create
+        actor = Hyrax::Actors::FileSetActor.new(fs, evaluator.user)
+        actor.create_metadata(evaluator.file_set_params || {})
         actor.create_content(evaluator.file)
         actor.attach_to_work(work)
+
+        if evaluator.ingest_file
+          Hydra::Works::UploadFileToFileSet.call(fs, evaluator.file, additional_services: [
+            ->(fs) { fs.original_file.file_name = File.basename(evaluator.file.path) }
+          ])
+        end
       end
     end
   end
