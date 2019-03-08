@@ -23,7 +23,7 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
         .to have_received(:new)
         .with(fs, opts)
 
-      expect(service_double).to have_received(:fixity_check)
+      expect(service_double).to have_received(:fixity_check).at_least(1).times
     end
   end
 
