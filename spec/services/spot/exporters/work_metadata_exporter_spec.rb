@@ -31,7 +31,7 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
     let(:graph) { Hyrax::GraphExporter.new(solr_doc, request).fetch }
     let(:output) { graph.dump(format, *args) }
     let(:args) { {} }
-    let(:object_url) { "http://localhost/concern/publications/#{work.id}"}
+    let(:object_url) { "http://localhost/concern/publications/#{work.id}" }
 
     context 'when requesting ttl' do
       let(:format) { :ttl }
@@ -43,7 +43,7 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
         expect(File.exist?(expected_output_file)).to be true
       end
 
-      it { is_expected.to start_with "<#{object_url}> a"}
+      it { is_expected.to start_with "<#{object_url}> a" }
       it { is_expected.to include title_ttl }
     end
 

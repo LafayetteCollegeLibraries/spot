@@ -30,6 +30,7 @@ module Spot
       end
 
       private
+
         attr_reader :tmpdir
 
         # @return [void]

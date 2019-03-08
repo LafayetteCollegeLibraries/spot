@@ -68,9 +68,8 @@ FactoryBot.define do
         actor.attach_to_work(work)
 
         if evaluator.ingest_file
-          Hydra::Works::UploadFileToFileSet.call(fs, evaluator.file, additional_services: [
-            ->(fs) { fs.original_file.file_name = File.basename(evaluator.file.path) }
-          ])
+          change_filename = ->(file_set) { file_set.original_file.file_name = File.basename(evaluator.file.path) }
+          Hydra::Works::UploadFileToFileSet.call(fs, evaluator.file, additional_services: [change_filename])
         end
       end
     end

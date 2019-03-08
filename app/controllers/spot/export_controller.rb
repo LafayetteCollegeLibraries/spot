@@ -9,7 +9,7 @@ module Spot
       # Hyrax::DownloadsController is already equipped to handle downloading
       # file_sets, so just forward those requests there (note: I'm not expecting
       # that to happen, but you never know)
-      redirect_to hyrax.download_path(work) and return if wants_file_set?
+      redirect_to hyrax.download_path(work) && return if wants_file_set?
 
       # for some reason, we need to reset the Fedora connection before
       # we can run an export of the members + metadata. my best guess is

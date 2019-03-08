@@ -49,7 +49,6 @@ module Spot
           when :nt then graph.dump(:ntriples)
           when :ttl then graph.dump(:ttl)
           when :jsonld then graph.dump(:jsonld, standard_prefixes: true)
-          else nil
           end
         end
 
