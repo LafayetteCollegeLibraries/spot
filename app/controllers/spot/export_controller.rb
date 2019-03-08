@@ -5,11 +5,13 @@ module Spot
 
     before_action :load_and_authorize_resource
 
+    # rubocop:disable Style/AndOr
     def show
       # Hyrax::DownloadsController is already equipped to handle downloading
       # file_sets, so just forward those requests there (note: I'm not expecting
       # that to happen, but you never know)
-      redirect_to hyrax.download_path(work) && return if wants_file_set?
+      #
+      redirect_to hyrax.download_path(work, locale: nil) and return if wants_file_set?
 
       # for some reason, we need to reset the Fedora connection before
       # we can run an export of the members + metadata. my best guess is
@@ -18,8 +20,16 @@ module Spot
       # but this at least lets us get an export happening.
       ActiveFedora::Fedora.reset!
 
-      send_file(exported_work, filename: "#{work.id}.zip")
+      respond_to do |format|
+        format.zip do
+          send_data(File.open(exported_work),
+                    filename: "#{work.id}.zip",
+                    type: 'application/zip',
+                    disposition: 'attachment')
+        end
+      end
     end
+    # rubocop:enable Style/AndOr
 
     private
 

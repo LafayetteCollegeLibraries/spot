@@ -54,7 +54,7 @@ module Spot
 
         # @return [RDF::Graph]
         def graph
-          Hyrax::GraphExporter.new(SolrDocument.find(work.id), request).fetch
+          @graph ||= Hyrax::GraphExporter.new(SolrDocument.find(work.id), request).fetch
         end
     end
   end
