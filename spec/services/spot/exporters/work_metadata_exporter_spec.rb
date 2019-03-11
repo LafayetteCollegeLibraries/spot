@@ -2,8 +2,7 @@
 require 'fileutils'
 
 RSpec.describe Spot::Exporters::WorkMetadataExporter do
-  let(:exporter) { described_class.new(work, ability, request) }
-
+  let(:exporter) { described_class.new(solr_doc, request) }
   let(:work) { create(:publication, title: ['cool beans']) }
   let(:ability) { Ability.new(nil) }
   let(:request) { instance_double(ActionDispatch::Request, host: 'localhost') }

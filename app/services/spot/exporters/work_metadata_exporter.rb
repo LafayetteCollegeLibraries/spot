@@ -2,14 +2,13 @@
 module Spot
   module Exporters
     class WorkMetadataExporter
-      attr_reader :work, :ability, :request
+      attr_reader :solr_document, :request
 
       # @param [SolrDocument]
       # @param [Ability, nil]
       # @param [#host]
-      def initialize(work, ability = nil, request = nil)
-        @work = work
-        @ability = ability
+      def initialize(solr_document, request = nil)
+        @solr_document = solr_document
         @request = request
       end
 
@@ -29,7 +28,7 @@ module Spot
           metadata = export_for_format(f)
           next if metadata.nil? # unsupported format
 
-          out_path = File.join(destination, "#{work.id}.#{f}")
+          out_path = File.join(destination, "#{solr_document.id}.#{f}")
 
           File.open(out_path, 'w') { |io| io.write metadata }
         end
@@ -54,7 +53,7 @@ module Spot
 
         # @return [RDF::Graph]
         def graph
-          @graph ||= Hyrax::GraphExporter.new(SolrDocument.find(work.id), request).fetch
+          @graph ||= Hyrax::GraphExporter.new(solr_document, request).fetch
         end
     end
   end

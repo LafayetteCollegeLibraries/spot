@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 #
-# Exporter that writes all of a work's associated files to a destination.
+# This name _might_ be misleading, I'm not 100% sure. For now, we're only
+# exporting a work's FileSets with this. Our parity release doesn't nest works,
+# but works can have multiple FileSets.
 module Spot
   module Exporters
     class WorkMembersExporter
-      attr_reader :work
+      attr_reader :solr_document
 
-      # @param [ActiveFedora::Base] work
-      def initialize(work)
-        @work = work
+      # @param [SolrDocument] solr_document
+      def initialize(solr_document)
+        @solr_document = solr_document
       end
 
       # Writes each Hydra::PCDM::File of a work to the provided destination
@@ -23,9 +25,18 @@ module Spot
         end
       end
 
+      # @todo How do we export members that are themselves works?
+      # @return [Array<FileSet>]
+      def file_sets
+        @file_sets ||= ActiveFedora::Base.find(solr_document.file_set_ids)
+                                         .select { |fs| fs.is_a? FileSet }
+      end
+
+      # Selects all items that the current user can download.
+      #
       # @return [Array<Hydra::PCDM::File>]
       def files
-        work.file_sets.map(&:original_file)
+        file_sets.map(&:original_file)
       end
     end
   end

@@ -32,6 +32,7 @@ module Spot
       attribute :description,            ::Blacklight::Types::Array, 'description_tesim'
       attribute :division,               ::Blacklight::Types::Array, 'division_tesim'
       attribute :editor,                 ::Blacklight::Types::Array, 'editor_tesim'
+      attribute :file_set_ids,           ::Blacklight::Types::Array, 'file_set_ids_ssim'
       attribute :file_size,              ::Blacklight::Types::String, 'file_size_lts'
       attribute :identifier,             ::Blacklight::Types::Array, 'identifier_ssim'
       attribute :keyword,                ::Blacklight::Types::Array, 'keyword_tesim'

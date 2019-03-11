@@ -5,20 +5,18 @@ require 'fileutils'
 module Spot
   module Exporters
     class ZippedWorkExporter
-      attr_reader :work, :ability, :request
+      attr_reader :solr_document, :request
 
-      # @param [ActiveFedora::Base]
-      # @param [Ability]
+      # @param [SolrDocument]
       # @param [ActionDispatch::Request]
-      def initialize(work, ability, request)
-        @work = work
-        @ability = ability
+      def initialize(solr_document, request)
+        @solr_document = solr_document
         @request = request
       end
 
       # @param [Pathname, String] :destination
-      # @param [Symbol] :metadata_formats The formats we're looking to export.
-      #   See {Spot::Exporters::WorkMetadataExporter#export!}
+      # @param [Symbol] :metadata_formats
+      #   The formats we're looking to export. See {Spot::Exporters::WorkMetadataExporter#export!}
       def export!(destination:, metadata_formats: :all)
         @metadata_formats = metadata_formats
 
@@ -42,7 +40,8 @@ module Spot
           members_exporter.export!(destination: files_path)
         end
 
-        # @param [Symbol] :format what format we want our exports to be
+        # @param [Symbol] :format
+        #   what format we want our exports to be
         # @return [void]
         def export_metadata!(format)
           metadata_exporter.export!(destination: tmpdir, format: format)
@@ -67,22 +66,16 @@ module Spot
 
         # @return [Spot::Exporters::WorkMembersExporter]
         def members_exporter
-          WorkMembersExporter.new(work)
+          WorkMembersExporter.new(solr_document)
         end
 
         # @return [Spot::Exporters::WorkMetadataExporter]
         def metadata_exporter
-          WorkMetadataExporter.new(solr_document, ability, request)
-        end
-
-        # @return [SolrDocument]
-        def solr_document
-          @solr_document ||= SolrDocument.find(work.id)
+          WorkMetadataExporter.new(solr_document, request)
         end
 
         def zip_export_to(destination)
-          ::ZipService.new(src_path: tmpdir)
-                      .zip!(dest_path: destination)
+          ::ZipService.new(src_path: tmpdir).zip!(dest_path: destination)
         end
     end
   end
