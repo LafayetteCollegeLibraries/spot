@@ -25,14 +25,13 @@ module Spot
       # about it, but this at least lets us get an export happening.
       ActiveFedora::Fedora.reset!
 
-      respond_to do |format|
-        format.zip do
-          send_file(export_work_to_cache!,
-                    filename: "#{solr_document.id}.zip",
-                    type: 'application/zip',
-                    disposition: 'attachment')
-        end
-      end
+      send_file(export_work_to_cache!,
+                filename: "#{solr_document.id}.zip",
+                type: 'application/zip',
+                disposition: 'attachment')
+
+      # this helps our specs, but does it have any negative effects?
+      head :ok, content_type: 'application/zip'
     end
     # rubocop:enable Style/AndOr
 
@@ -61,7 +60,7 @@ module Spot
 
       # @return [Spot::Exporters::ZippedWorkExporter]
       def exporter
-        Spot::Exporters::ZippedWorkExporter.new(solr_document, current_ability, request)
+        Spot::Exporters::ZippedWorkExporter.new(solr_document, request)
       end
 
       # Sets the @solr_document attribute from a single-item solr query.

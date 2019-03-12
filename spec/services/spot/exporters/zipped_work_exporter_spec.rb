@@ -2,7 +2,7 @@
 require 'fileutils'
 
 RSpec.describe Spot::Exporters::ZippedWorkExporter do
-  let(:exporter) { described_class.new(work, ability, request) }
+  let(:exporter) { described_class.new(work, request) }
   let(:path_to_file) { Rails.root.join('spec', 'fixtures', 'image.png') }
   let(:ability) { Ability.new(nil) }
   let(:request) { instance_double(ActionDispatch::Request, host: 'localhost') }
