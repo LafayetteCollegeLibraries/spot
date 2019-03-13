@@ -3,17 +3,15 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
   subject(:perform_job!) { described_class.perform_now(job_opts) }
 
   let(:service_double) { instance_double(Hyrax::FileSetFixityCheckService) }
-  let(:fs) { FileSet.create! }
+  let(:fs) { instance_double(FileSet, id: 'abc123') }
   let(:job_opts) { {} }
 
   before do
     allow(Hyrax::FileSetFixityCheckService).to receive(:new).and_return(service_double)
     allow(service_double).to receive(:fixity_check)
-    fs
+    allow(FileSet).to receive(:find_each).and_yield(fs)
     perform_job!
   end
-
-  after { FileSet.destroy_all }
 
   context 'default implementation' do
     let(:opts) { { async_jobs: false } }
