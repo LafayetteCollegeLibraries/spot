@@ -9,6 +9,12 @@ RSpec.describe Hyrax::PublicationPresenter do
 
   it_behaves_like 'it renders an attribute to HTML'
 
+  describe '#export_formats' do
+    subject { presenter.export_formats }
+
+    it { is_expected.to include :csv, :ttl, :nt, :jsonld }
+  end
+
   describe '#public?' do
     subject { presenter.public? }
 

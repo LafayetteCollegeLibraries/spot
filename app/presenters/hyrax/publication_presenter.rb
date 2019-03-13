@@ -11,6 +11,13 @@ module Hyrax
              :subtitle, :title_alternative,
              to: :solr_document
 
+    # Metadata formats we're able to export as.
+    #
+    # @return [Array<Symbol>]
+    def export_formats
+      %i[csv ttl nt jsonld]
+    end
+
     # Is the document's visibility public?
     #
     # @return [true, false]
