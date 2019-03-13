@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::PublicationsController do
-  context 'when visiting a known publication' do
-    let(:doc) { create(:publication, :public) }
+  let(:doc) { create(:publication, :public) }
 
+  context 'when visiting a known publication' do
     before do
       get :show, params: { id: doc.id }
     end
@@ -29,6 +29,20 @@ RSpec.describe Hyrax::PublicationsController do
     it 'redirects to the login page' do
       expect(response.status).to eq 302
       expect(response.headers['Location']).to include '/users/sign_in'
+    end
+  end
+
+  context 'when requesting the metadata as csv' do
+    let(:disposition)  { response.header.fetch('Content-Disposition') }
+    let(:content_type) { response.header.fetch('Content-Type') }
+
+    it 'downloads the file' do
+      get :show, params: { id: doc.id, format: 'csv' }
+
+      expect(response).to be_successful
+      expect(disposition).to include 'attachment'
+      expect(content_type).to eq 'text/csv'
+      expect(response.body).to start_with('id,title')
     end
   end
 end

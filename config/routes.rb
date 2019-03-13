@@ -54,6 +54,8 @@ Rails.application.routes.draw do
         resource :featured_collection, only: [:create, :destroy]
       end
     end
+
+    resources :export, only: :show
   end
 
   get '/handle/*id', to: 'identifier#handle', as: 'handle'

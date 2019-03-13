@@ -33,6 +33,6 @@ SSHKit.config.command_map[:solr] = '/opt/solr/bin/solr'
 
 # shared things
 append :linked_dirs, 'log'
-append :linked_dirs, 'tmp/cache', 'tmp/derivatives', 'tmp/ingest', 'tmp/pids', 'tmp/sockets'
+append :linked_dirs, 'tmp/cache', 'tmp/derivatives', 'tmp/export', 'tmp/ingest', 'tmp/pids', 'tmp/sockets'
 append :linked_dirs, 'vendor/bundle'
 append :linked_dirs, 'public/assets', 'public/branding', 'public/system', 'public/uploads'

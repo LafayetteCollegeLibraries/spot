@@ -51,3 +51,19 @@ en:
     masthead:
       advanced_search: Advanced Search
       search_placeholder: Begin your search here
+
+    work:
+      export:
+        additional_options: Additional options
+        all_files: Download all files
+        primary_file: Download primary file
+        download_work: Download as .zip
+        dropdown:
+          file_header: Files
+          metadata_header: Metadata
+        metadata:
+          csv: View metadata as CSV
+          default: View metadata as .%{format}
+          jsonld: View metadata as JSON-LD
+          nt: View metadata as NTriples
+          ttl: View metadata as TTL
