@@ -64,7 +64,7 @@ RSpec.describe Spot::ExportController do
     end
 
     context 'when requesting a work' do
-      before { allow(controller).to receive(:send_file) }
+      before { allow(controller).to receive(:send_file) { controller.head :ok } }
 
       let(:item_id) { work.id }
       let(:solr_document) do

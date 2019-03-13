@@ -25,13 +25,7 @@ module Spot
       # about it, but this at least lets us get an export happening.
       ActiveFedora::Fedora.reset!
 
-      send_file(export_work_to_cache!,
-                filename: "#{solr_document.id}.zip",
-                type: 'application/zip',
-                disposition: 'attachment')
-
-      # this helps our specs, but does it have any negative effects?
-      head :ok, content_type: 'application/zip'
+      send_file(export_work_to_cache!, filename: "#{solr_document.id}.zip")
     end
     # rubocop:enable Style/AndOr
 
