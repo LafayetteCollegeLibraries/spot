@@ -20,6 +20,7 @@ module Spot
       #     - :nt (ntriples)
       #     - :ttl (turtle)
       #     - :jsonld (json linked-data)
+      #     - :csv (comma-separated values)
       # @return [void]
       def export!(destination:, format: :all)
         format = all_formats if format == :all
@@ -38,7 +39,7 @@ module Spot
 
         # @return [Array<Symbol>]
         def all_formats
-          %i[nt ttl jsonld]
+          %i[nt ttl jsonld csv]
         end
 
         # @param [Symbol] format
@@ -48,7 +49,13 @@ module Spot
           when :nt then graph.dump(:ntriples)
           when :ttl then graph.dump(:ttl)
           when :jsonld then graph.dump(:jsonld, standard_prefixes: true)
+          when :csv then generate_csv_content
           end
+        end
+
+        # @return [String]
+        def generate_csv_content
+          Spot::WorkCSVService.new(solr_document).csv
         end
 
         # @return [RDF::Graph]

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require 'tmpdir'
 
-# rubocop:disable RSpec/ExampleLength
 RSpec.describe Spot::WorkCSVService do
   let(:service) { described_class.new(work, terms: terms) }
   let(:work) { build(:publication, id: 'abc123', title: ['one title', 'two titles']) }
@@ -53,4 +52,3 @@ RSpec.describe Spot::WorkCSVService do
     end
   end
 end
-# rubocop:enable RSpec/ExampleLength

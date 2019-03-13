@@ -28,7 +28,7 @@ RSpec.describe Spot::Exporters::ZippedWorkExporter do
 
     # the default
     let(:formats) { :all }
-    let(:metadata_files) { %w[nt ttl jsonld].map { |ext| "#{work.id}.#{ext}" } }
+    let(:metadata_files) { %w[nt ttl jsonld csv].map { |ext| "#{work.id}.#{ext}" } }
     let(:expected_entries) { metadata_files + ['files', 'files/image.png'] }
     let(:output_file) { File.join(destination, "#{work.id}.zip") }
     let(:unzipped_location) { File.join(destination, 'unzipped') }

@@ -64,6 +64,10 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
 
       let(:format) { :jsonld }
 
+      it 'saves the file as <id>.jsonld' do
+        expect(File.exist?(expected_output_file)).to be true
+      end
+
       it 'contains @id' do
         expect(parsed['@id']).to eq object_url
       end
@@ -73,12 +77,33 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
       end
     end
 
+    context 'when requesting csv' do
+      let(:content) { CSV.parse(File.open(expected_output_file)) }
+      let(:format) { :csv }
+
+      it 'saves as <id>.csv' do
+        expect(File.exist?(expected_output_file)).to be true
+      end
+
+      it 'only writes two rows' do
+        expect(content.size).to eq 2
+      end
+
+      it 'outputs the headers' do
+        expect(content.first.join(',')).to start_with 'id,title'
+      end
+
+      it 'outputs the content' do
+        expect(content.last.first).to eq work.id
+      end
+    end
+
     context 'when requesting all formats' do
       subject { Dir["#{destination}/*"].map { |f| File.basename(f) } }
 
       let(:format) { :all }
       let(:id) { work.id }
-      let(:files) { %w[nt ttl jsonld].map { |ext| "#{id}.#{ext}" } }
+      let(:files) { %w[nt ttl jsonld csv].map { |ext| "#{id}.#{ext}" } }
 
       it { is_expected.to include(*files) }
     end
