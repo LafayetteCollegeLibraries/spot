@@ -2,18 +2,21 @@
 require 'fileutils'
 
 RSpec.describe Spot::Exporters::WorkMetadataExporter do
-  let(:exporter) { described_class.new(solr_doc, request) }
-  let(:work) { create(:publication, title: ['cool beans']) }
+  let(:exporter) { described_class.new(solr_document, request) }
+  let(:work_id) { 'spot-work_metadata_exporter_spec-obj' }
   let(:ability) { Ability.new(nil) }
   let(:request) { instance_double(ActionDispatch::Request, host: 'localhost') }
-  let(:destination) { '/tmp/spot-work_metadata_exporter_spec' }
-  let(:attributes) { { title: ['cool beans'] } }
-  let(:solr_doc) { SolrDocument.find(work.id) }
-
-  before do
-    FileUtils.mkdir_p(destination)
-    ActiveFedora::Fedora.reset!
+  let(:destination) { "/tmp/#{work_id}" }
+  let(:solr_document) { SolrDocument.find(work.id) }
+  let(:work) do
+    begin
+      Publication.find(work_id)
+    rescue ActiveFedora::ObjectNotFoundError
+      Publication.create(id: work_id, title: ['ok cool'])
+    end
   end
+
+  before { FileUtils.mkdir_p(destination) }
   after { FileUtils.rm_r(destination) }
 
   describe '#export!' do
@@ -27,9 +30,6 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
     before { exporter.export!(destination: destination, format: format) }
 
     let(:expected_output_file) { File.join(destination, "#{work.id}.#{format}") }
-    let(:graph) { Hyrax::GraphExporter.new(solr_doc, request).fetch }
-    let(:output) { graph.dump(format, *args) }
-    let(:args) { {} }
     let(:object_url) { "http://localhost/concern/publications/#{work.id}" }
 
     context 'when requesting ttl' do
