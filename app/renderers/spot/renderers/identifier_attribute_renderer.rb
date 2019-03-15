@@ -10,21 +10,15 @@ module Spot
           identifier = Spot::Identifier.from_string(identifier) if identifier.is_a? String
 
           [].tap do |html|
-            html << prefix_tag(identifier.prefix) unless identifier.prefix.nil?
+            html << prefix_tag(identifier.prefix_label) unless identifier.prefix.nil?
             html << identifier.value
           end.join(' ')
         end
 
-        # @param prefix [String]
+        # @param label [String]
         # @return [String]
-        def prefix_tag(prefix)
-          %(<span class="label label-default">#{label_for(prefix)}</span>)
-        end
-
-        # @param prefix [String]
-        # @return [String]
-        def label_for(prefix)
-          Spot::Identifier.prefix_label(prefix)
+        def prefix_tag(label)
+          %(<span class="label label-default">#{label}</span>)
         end
     end
   end

@@ -8,7 +8,7 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
 
     let(:expected) { Nokogiri::HTML(html_result) }
 
-    context 'when we support a prefix' do
+    context 'when a prefix is present' do
       let(:value) { Spot::Identifier.from_string('isbn:978-1467715478') }
 
       let(:html_result) do
@@ -21,12 +21,12 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
       it { is_expected.to be_equivalent_to expected }
     end
 
-    context 'when a prefix is used that we don\'t support' do
-      let(:value) { Spot::Identifier.from_string('interscope:B0023882-01') }
+    context 'when a prefix is not present' do
+      let(:value) { Spot::Identifier.from_string('B0023882-01') }
 
       let(:html_result) do
         '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-identifier">interscope:B0023882-01</td></tr>'
+        '<td class="attribute attribute-identifier">B0023882-01</td></tr>'
       end
 
       it { is_expected.to be_equivalent_to expected }
