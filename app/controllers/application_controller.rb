@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
   private
 
     # Bypasses CAS authentication (development only)
+    # :nocov:
     #
     # @return [void]
     def log_in_as_dev_user!

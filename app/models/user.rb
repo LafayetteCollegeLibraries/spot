@@ -33,11 +33,10 @@ class User < ApplicationRecord
   # @return [void]
   def cas_extra_attributes=(attributes)
     self.username = attributes['uid']
-    self.member_of = attrs['memberOf']
 
-    self.display_name = attributes['givenName']
-    self.display_name += " #{attributes['sn']}" if attributes['sn']
+    self.display_name = "#{attributes['givenName']} #{attributes['sn']}".strip
 
+    # self.member_of = attributes['memberOf']
     # self.affiliation = attributes['affiliation'] if attributes['affiliation']
     # self.department = attributes['department'] if attributes['department']
   end
