@@ -6,17 +6,7 @@ class ModifyUsers < ActiveRecord::Migration[5.1]
       t.remove :reset_password_token,
                :reset_password_sent_at,
                :current_sign_in_ip,
-               :last_sign_in_ip,
-               :facebook_handle,
-               :twitter_handle,
-               :googleplus_handle,
-               :address,
-               :admin_area,
-               :title,
-               :office,
-               :chat_id,
-               :website,
-               :telephone
+               :last_sign_in_ip
 
       t.string :username
       t.index :username, unique: true
