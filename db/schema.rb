@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190220133607) do
+ActiveRecord::Schema.define(version: 20190315143022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -525,30 +525,16 @@ ActiveRecord::Schema.define(version: 20190220133607) do
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "guest", default: false
-    t.string "facebook_handle"
-    t.string "twitter_handle"
-    t.string "googleplus_handle"
     t.string "display_name"
-    t.string "address"
-    t.string "admin_area"
     t.string "department"
-    t.string "title"
-    t.string "office"
-    t.string "chat_id"
-    t.string "website"
     t.string "affiliation"
-    t.string "telephone"
     t.string "avatar_file_name"
     t.string "avatar_content_type"
     t.integer "avatar_file_size"
@@ -560,8 +546,9 @@ ActiveRecord::Schema.define(version: 20190220133607) do
     t.binary "zotero_token"
     t.string "zotero_userid"
     t.string "preferred_locale"
+    t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   create_table "version_committers", force: :cascade do |t|
