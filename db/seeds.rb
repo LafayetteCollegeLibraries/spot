@@ -6,8 +6,5 @@ Rake::Task['hyrax:default_collection_types:create'].invoke
 
 # create a depositor user
 deposibot = User.find_or_create_by(email: 'dss@lafayette.edu') do |bot|
-  require 'securerandom'
-
   bot.display_name = 'DeposiBot'
-  bot.password = SecureRandom.base64
 end
