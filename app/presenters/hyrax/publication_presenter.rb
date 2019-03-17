@@ -29,7 +29,12 @@ module Hyrax
     #
     # @return [Array<Spot::Identifier>]
     def identifier
-      solr_document.identifier.map { |str| Spot::Identifier.from_string(str) }
+      @identifier ||= solr_document.identifier.map { |str| Spot::Identifier.from_string(str) }
+    end
+
+    # @return [Array<Spot::Identifier>]
+    def local_identifier
+      @local_identifier ||= identifier.select(&:local?)
     end
 
     # place values + labels zipped into tuples.
@@ -41,6 +46,11 @@ module Hyrax
     # @return [Array<Array<String>>]
     def place
       solr_document.place.zip(solr_document.place_label).reject(&:empty?)
+    end
+
+    # @return [Array<Spot::Identifier>]
+    def standard_identifier
+      @standard_identifier ||= identifier.select(&:standard?)
     end
 
     # @return [Array<Array<String>>]

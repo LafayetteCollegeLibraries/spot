@@ -73,6 +73,11 @@ module Spot
       @value = value
     end
 
+    # @return [true, false]
+    def local?
+      !standard?
+    end
+
     # @return [String]
     def prefix_label
       self.class.prefix_label(prefix, default: prefix.titleize)

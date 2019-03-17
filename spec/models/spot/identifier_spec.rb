@@ -89,6 +89,24 @@ RSpec.describe Spot::Identifier do
     end
   end
 
+  describe '#local?' do
+    subject { identifier.local? }
+
+    let(:identifier) { described_class.from_string(id) }
+
+    context 'when a standard prefix' do
+      let(:id) { 'isbn:9783908247692' }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when non-standard' do
+      let(:id) { 'lafayette_magazine:123' }
+
+      it { is_expected.to be true }
+    end
+  end
+
   describe '#to_s' do
     subject { described_class.new(prefix, value).to_s }
 

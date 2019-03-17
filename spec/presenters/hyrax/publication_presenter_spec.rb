@@ -31,13 +31,32 @@ RSpec.describe Hyrax::PublicationPresenter do
     end
   end
 
-  describe '#identifier' do
-    subject(:ids) { presenter.identifier }
+  context 'identifier handling' do
+    let(:raw_ids) { ['issn:1234-5678', 'abc:123'] }
+    let(:object) { build(:publication, identifier: raw_ids) }
 
-    let(:object) { build(:publication, identifier: ['abc:123', 'hdl:111/222']) }
+    describe '#identifier' do
+      subject(:ids) { presenter.identifier }
 
-    it 'maps identifiers to Spot::Identifier objects' do
-      expect(ids.all? { |id| id.is_a? Spot::Identifier }).to be true
+      it 'maps identifiers to Spot::Identifier objects' do
+        expect(ids.all? { |id| id.is_a? Spot::Identifier }).to be true
+      end
+    end
+
+    describe '#local_identifier' do
+      subject(:ids) { presenter.local_identifier }
+
+      it 'returns only the identifiers that return true to #local?' do
+        expect(ids.map(&:to_s)).to eq ['abc:123']
+      end
+    end
+
+    describe '#standard_identifier' do
+      subject(:ids) { presenter.standard_identifier }
+
+      it 'returns only the identifiers that return true to #standard?' do
+        expect(ids.map(&:to_s)).to eq ['issn:1234-5678']
+      end
     end
   end
 
