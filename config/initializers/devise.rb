@@ -70,7 +70,7 @@ Devise.setup do |config|
   config.sign_out_via = :get
 
   # ==> Configuration for :cas_authenticatable
-  config.cas_base_url = 'https://cas.lafayette.edu/cas'
+  config.cas_base_url = ENV.fetch('CAS_BASE_URL')
 
   # you can override these if you need to, but cas_base_url is usually enough
   # config.cas_login_url = "https://cas.myorganization.com/login"
