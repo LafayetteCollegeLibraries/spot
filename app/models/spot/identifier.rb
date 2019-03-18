@@ -2,9 +2,14 @@
 #
 # A utility class to handle identifiers in a uniform way.
 # We're considering a "standard" identifier to be one that
-# belongs to an external service. For now, adding to the
-# list of standardized identifiers requires adding the prefix
-# to the +.standard_prefixes+ array. This may change in the future.
+# belongs to an external service. But really, any prefix
+# that is passed to {.register_prefix} is considered "standard".
+#
+# @example Registering a prefix
+#
+#   Spot::Identifier.register_prefix('hdl')
+#   Spot::Identifier.from_string('hdl:1234/5678').standard?
+#   # => true
 #
 # @example Parsing a "standard" identifier from a string
 #
@@ -33,15 +38,12 @@
 #
 module Spot
   class Identifier
+    class_attribute :prefix_registry
+    self.prefix_registry = Set.new
+
     attr_reader :prefix, :value
 
     SEPARATOR = ':'
-
-    DOI = 'doi'
-    HANDLE = 'hdl'
-    ISBN = 'isbn'
-    ISSN = 'issn'
-    OCLC = 'oclc'
 
     class << self
       # @param [String] string_value
@@ -60,9 +62,18 @@ module Spot
         I18n.t("spot.identifiers.labels.#{prefix}", default: default) unless prefix.nil?
       end
 
+      # @param [String] prefix
+      # @return [void]
+      def register_prefix(prefix)
+        prefix_registry << prefix.to_s
+      end
+
+      # Legacy method used in the UI that might be worth keeping around.
+      # Returns all of the registered prefixes
+      #
       # @return [Array<String>]
       def standard_prefixes
-        [DOI, HANDLE, ISBN, ISSN, OCLC]
+        prefix_registry.to_a
       end
     end
 
@@ -85,7 +96,7 @@ module Spot
 
     # @return [true, false]
     def standard?
-      self.class.standard_prefixes.include?(prefix)
+      prefix_registry.include?(prefix)
     end
 
     # @return [String]

@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 RSpec.describe Spot::Identifier do
+  before do
+    %w[hdl isbn].each { |p| described_class.register_prefix(p) }
+  end
+
   describe '.from_string' do
     subject(:id) { described_class.from_string(raw_string) }
 
@@ -27,7 +31,7 @@ RSpec.describe Spot::Identifier do
   describe '.prefixes' do
     subject { described_class.standard_prefixes }
 
-    it { is_expected.to include 'doi', 'issn', 'isbn', 'hdl', 'oclc' }
+    it { is_expected.to eq described_class.prefix_registry.to_a }
   end
 
   describe '.prefix_label' do

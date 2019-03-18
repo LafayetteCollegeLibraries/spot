@@ -26,7 +26,7 @@ class IdentifierController < ApplicationController
 
   # redirecting route for items with a Handle identifier.
   def handle
-    search_and_redirect_with_prefix(Spot::Identifier::HANDLE)
+    search_and_redirect_with_prefix('hdl')
   end
 
   private
