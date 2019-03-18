@@ -21,6 +21,8 @@ class Publication < ActiveFedora::Base
 
   validates :title, presence: { message: 'Your work must have a title.' }
 
+  before_save :ensure_noid_in_identifier
+
   # title is included with ::ActiveFedora::Base
   property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
     index.as :stored_searchable
@@ -128,4 +130,14 @@ class Publication < ActiveFedora::Base
 
   id_blank = proc { |attributes| attributes[:id].blank? }
   accepts_nested_attributes_for :place, reject_if: id_blank, allow_destroy: true
+
+  private
+
+    # @return [void]
+    def ensure_noid_in_identifier
+      noid_id = "noid:#{id}"
+      return if new_record? || identifier.include?(noid_id)
+
+      self.identifier += [noid_id]
+    end
 end
