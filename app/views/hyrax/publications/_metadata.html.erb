@@ -26,7 +26,7 @@
                                       render_as: :external_authority,
                                       search_field: :place_label_ssim) %>
       <%= presenter.attribute_to_html(:bibliographic_citation) %>
-      <%= presenter.attribute_to_html(:identifier, render_as: :identifier) %>
+      <%= presenter.attribute_to_html(:standard_identifier, render_as: :identifier) %>
       <%= presenter.attribute_to_html(:related_resource) %>
 
       <%= render 'shared/metadata/rights_statement', presenter: presenter %>

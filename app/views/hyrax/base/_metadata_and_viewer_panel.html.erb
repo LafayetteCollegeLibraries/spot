@@ -22,7 +22,7 @@
         <%= render 'items_table', presenter: presenter %>
 
         <% if current_user && current_user.admin? %>
-          <%= render 'shared/metadata/repository_metadata', presenter: presenter %>
+          <%= render 'repository_metadata', presenter: presenter %>
         <% end %>
       </div>
     </div>

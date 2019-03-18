@@ -77,7 +77,7 @@ class IdentifierInputGroupInput < MultiValueInput
 
     # @return [Array<String>] curated prefixes
     def prefixes
-      Spot::Identifier.prefixes
+      Spot::Identifier.standard_prefixes
     end
 
     # Grabs the prefix label from {Spot::Identifier}

@@ -41,4 +41,30 @@ describe Publication do
   it { is_expected.to have_editable_property(:license).with_predicate(dc.license) }
   it { is_expected.to have_editable_property(:rights_statement).with_predicate(edm.rights) }
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
+
+  # note: this takes a bit
+  # rubocop:disable RSpec/ExampleLength
+  describe '#ensure_noid_in_identifier callback' do
+    it 'inserts "noid:<id>" before save when an ID is present' do
+      pub = described_class.new(title: ['ok cool'])
+      pub.save
+
+      noid_id = "noid:#{pub.id}"
+
+      # it's a new record
+      expect(pub.identifier).not_to include noid_id
+
+      pub.identifier = ['abc:123']
+      pub.save
+
+      # adds the noid:<id>
+      expect(pub.identifier).to contain_exactly 'abc:123', noid_id
+
+      pub.identifier = []
+      pub.save
+
+      expect(pub.identifier).to contain_exactly noid_id
+      pub.destroy!
+    end
+  end
 end

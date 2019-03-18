@@ -4,6 +4,7 @@
 RSpec.feature 'Show Publication page', js: false do
   let(:user) { create(:user) }
   let(:pub) { create(:publication, user: user, file: file, language: language) }
+  let(:prez) { Hyrax::PublicationPresenter.new(pub, Ability.new(user)) }
   let(:item_base_url) { "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}" }
   let(:language) { ['en'] }
 
@@ -77,13 +78,13 @@ RSpec.feature 'Show Publication page', js: false do
 
     # @todo there's _got_ to be a better way!!
 
-    page_identifiers = page.all('.attribute-identifier').map do |value|
+    standard_identifiers = page.all('.attribute-standard_identifier').map do |value|
       value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
     end
+    prez.standard_identifier.map(&:to_s).each { |id| expect(standard_identifiers).to include id }
 
-    pub.identifier.each do |id|
-      expect(page_identifiers).to include id
-    end
+    local_identifiers = page.all('.attribute-local_identifier').map(&:text)
+    expect(local_identifiers).to be_empty # user we're testing as isn't able to see the repository info partial
 
     # TODO: revisit Rights Statement when we actually display it on the show page
     # expect(page.all('.attribute-rights_statement').map(&:uri))

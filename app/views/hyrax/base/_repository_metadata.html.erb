@@ -9,7 +9,7 @@
       <%= presenter.attribute_to_html(:date_created) %>
       <%= presenter.attribute_to_html(:date_uploaded) %>
       <%= presenter.attribute_to_html(:date_modified) %>
-      <%= presenter.attribute_to_html(:local_identifier) %>
+      <%= presenter.attribute_to_html(:local_identifier, render_as: :identifier, local: true) %>
       <tr>
         <th>Workflow status</th>
         <td><%= presenter.workflow.badge %></td>
