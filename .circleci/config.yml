@@ -67,6 +67,7 @@ jobs:
       SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       COVERALLS_PARALLEL: true
       CI: true
+      CAS_BASE_URL: http://localhost
 
     steps:
       - attach_workspace:
