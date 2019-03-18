@@ -43,9 +43,10 @@ describe Publication do
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
 
   # note: this takes a bit
+  # rubocop:disable RSpec/ExampleLength
   describe '#ensure_noid_in_identifier callback' do
     it 'inserts "noid:<id>" before save when an ID is present' do
-      pub = Publication.new(title: ['ok cool'])
+      pub = described_class.new(title: ['ok cool'])
       pub.save
 
       noid_id = "noid:#{pub.id}"
