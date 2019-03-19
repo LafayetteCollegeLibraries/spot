@@ -15,12 +15,17 @@ RSpec.describe User do
       {
         'uid' => 'wishmand',
         'givenName' => 'Doris',
-        'sn' => 'Wishman'
+        'sn' => 'Wishman',
+        'mail' => 'wishmand@lafayette.edu'
       }
     end
 
     it 'stores "uid" as :username' do
       expect(user.username).to eq attrs['uid']
+    end
+
+    it 'stores the email' do
+      expect(user.email).to eq attrs['mail']
     end
 
     it 'constructs :display_name from "sn" + "givenName"' do

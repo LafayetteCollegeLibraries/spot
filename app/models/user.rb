@@ -33,6 +33,7 @@ class User < ApplicationRecord
   # @return [void]
   def cas_extra_attributes=(attributes)
     self.username = attributes['uid']
+    self.email = attributes['mail']
 
     self.display_name = "#{attributes['givenName']} #{attributes['sn']}".strip
 
