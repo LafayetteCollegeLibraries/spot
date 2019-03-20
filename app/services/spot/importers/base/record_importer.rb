@@ -77,7 +77,7 @@ module Spot::Importers::Base
       # @param [Hash] attributes
       # @return [String] an error message
       def empty_file_warning(attributes)
-        "[WARN] no files found for #{Array.wrap(attributes[:title]).first}"
+        "[WARN] no files found for #{Array.wrap(attributes[:title]).first}\n"
       end
   end
 end
