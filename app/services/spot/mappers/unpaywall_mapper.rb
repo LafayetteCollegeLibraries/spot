@@ -30,30 +30,22 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def identifier
-      Array.wrap(metadata['journal_issns']).map { |v| "issn:#{v}" } + ["doi:#{metadata['doi']}"]
+      Array.wrap(metadata['journal_issns'])
+           .map { |v| "issn:#{v}" }
+           .push("doi:#{metadata['doi']}")
     end
 
     # @return [String, nil]
     def license
-      best_oa_location && Array.wrap(best_oa_location['license'])
+      Array.wrap(metadata.dig('best_oa_location', 'license'))
     end
 
     # @return [Array<String>]
     def representative_file
-      url_for_pdf || []
-    end
-
-    # @return [String, nil]
-    def source
-      Array.wrap(metadata['publisher'])
+      Array.wrap(metadata.dig('best_oa_location', 'url_for_pdf'))
     end
 
     private
-
-      # @return [Hash<String => String>, nil]
-      def best_oa_location
-        metadata['best_oa_location']
-      end
 
       # Wraps the original response in an array, since all of those fields are multi-valued
       #
@@ -61,11 +53,6 @@ module Spot::Mappers
       # @return [Array<any>]
       def map_field(name)
         Array.wrap(super(name))
-      end
-
-      # @return [String, nil]
-      def url_for_pdf
-        best_oa_location && Array.wrap(best_oa_location['url_for_pdf'])
       end
   end
 end

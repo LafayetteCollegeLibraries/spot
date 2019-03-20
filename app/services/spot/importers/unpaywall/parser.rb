@@ -15,7 +15,7 @@ module Spot::Importers::Unpaywall
     class_attribute :unpaywall_email
     self.unpaywall_email = 'dss@lafayette.edu'
 
-    def initialize(doi:, mapper:)
+    def initialize(doi:, mapper: ::Spot::Mappers::UnpaywallMapper.new)
       @doi = doi
       @mapper = mapper
 

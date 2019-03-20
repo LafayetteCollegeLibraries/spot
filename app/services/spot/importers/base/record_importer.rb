@@ -1,7 +1,17 @@
 # frozen_string_literal: true
-
+#
+# A common-denominator descendent of +Darlingtonia::RecordImporter+ that
+# should work for most of our importing use-cases.
+#
+# @example Using our StreamLogger class for info/error logging
+#
+#   info_stream = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
+#   error_stream = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
+#   record_importer = Spot::Importers::Base::RecordImporter.new(work_class,
+#                                                               info_stream: info_stream,
+#                                                               error_stream: error_stream)
 module Spot::Importers::Base
-  class RecordImporter < Darlingtonia::RecordImporter
+  class RecordImporter < ::Darlingtonia::RecordImporter
     class_attribute :default_depositor_email
     self.default_depositor_email = 'dss@lafayette.edu'
 
