@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spot::Importers::Bag
+module Spot::Importers::Base
   class RecordImporter < Darlingtonia::RecordImporter
     class_attribute :default_depositor_email
     self.default_depositor_email = 'dss@lafayette.edu'
@@ -57,7 +57,7 @@ module Spot::Importers::Bag
 
       # @return [Array<Hash<Symbol => String>>]
       def create_remote_files_list(record)
-        (record.representative_file || []).map do |filename|
+        Array.wrap(record.representative_file).map do |filename|
           url = filename.match?(%r{^https?://}) ? filename : "file://#{filename}"
 
           { url: url, name: File.basename(filename) }

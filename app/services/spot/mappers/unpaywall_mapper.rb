@@ -35,17 +35,17 @@ module Spot::Mappers
 
     # @return [String, nil]
     def license
-      best_oa_location && best_oa_location['license']
+      best_oa_location && Array.wrap(best_oa_location['license'])
     end
 
-    def representative_files
-      return [] if best_oa_location.nil? || url_for_pdf.nil?
-      [url_for_pdf]
+    # @return [Array<String>]
+    def representative_file
+      url_for_pdf || []
     end
 
     # @return [String, nil]
     def source
-      metadata['publisher']
+      Array.wrap(metadata['publisher'])
     end
 
     private
@@ -55,9 +55,17 @@ module Spot::Mappers
         metadata['best_oa_location']
       end
 
+      # Wraps the original response in an array, since all of those fields are multi-valued
+      #
+      # @param [String, Symbol] name The field name
+      # @return [Array<any>]
+      def map_field(name)
+        Array.wrap(super(name))
+      end
+
       # @return [String, nil]
       def url_for_pdf
-        metadata['url_for_pdf']
+        best_oa_location && Array.wrap(best_oa_location['url_for_pdf'])
       end
   end
 end

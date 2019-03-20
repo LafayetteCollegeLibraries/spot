@@ -9,7 +9,7 @@ module Spot::Importers::Unpaywall
   class DOINotFound < StandardError; end
 
   class Parser < ::Darlingtonia::Parser
-    API_BASE_URL = 'https://api.unpaywall.org/v2'
+    API_BASE_URL = 'https://api.unpaywall.org'
     DEFAULT_VALIDATORS = [].freeze
 
     class_attribute :unpaywall_email
@@ -18,6 +18,10 @@ module Spot::Importers::Unpaywall
     def initialize(doi:, mapper:)
       @doi = doi
       @mapper = mapper
+
+      # need to copy these over from Darlingtonia::Parser in order for validation to work
+      @errors = []
+      @validators = self.class::DEFAULT_VALIDATORS
     end
 
     # @yield [Array<Darlingtonia::InputRecord>]
@@ -41,12 +45,12 @@ module Spot::Importers::Unpaywall
       # @raise [Spot::Importers::Unpaywall::DOINotFound] when DOI not found
       # @return [Hash<String => String,Number,Boolean>]
       def raw_metadata
-        response = connection.get("/#{@doi}")
+        response = connection.get("/v2/#{@doi}")
         parsed = JSON.parse(response.body)
 
         raise DOINotFound, parsed['message'] if parsed['error']
 
-        parsed['results'].first
+        parsed
       end
 
       # @return [Faraday::Connection]
