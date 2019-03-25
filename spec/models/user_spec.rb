@@ -42,7 +42,7 @@ RSpec.describe User do
   end
 
   describe '#ensure_username (before_save callback)' do
-    let(:user) { User.new(email: 'cool_beans@lafayette.edu') }
+    let(:user) { described_class.new(email: 'cool_beans@lafayette.edu') }
 
     it 'creates a username where missing' do
       expect(user.username).to be nil
