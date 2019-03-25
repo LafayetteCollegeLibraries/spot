@@ -2,12 +2,14 @@
 RSpec.shared_examples 'a RecordImporter' do |params|
   subject(:importer) do
     described_class.new(work_class: work_class,
+                        admin_set_id: admin_set_id,
                         info_stream: info_stream,
                         error_stream: error_stream)
   end
 
   let(:work_class) { class_double('ActiveFedora::Base') }
   let(:dev_null) { File.open(File::NULL, 'w') }
+  let(:admin_set_id) { 'an_admin_set' }
   let(:info_stream) { dev_null }
   let(:error_stream) { dev_null }
 
@@ -45,7 +47,8 @@ RSpec.shared_examples 'a RecordImporter' do |params|
         author: metadata['dc:author'],
         keyword: metadata['dc:keyword'],
         visibility: mapper.class.default_visibility,
-        remote_files: [{ url: 'file://image.png', name: 'image.png' }]
+        remote_files: [{ url: 'file://image.png', name: 'image.png' }],
+        admin_set_id: admin_set_id
       }
     end
 

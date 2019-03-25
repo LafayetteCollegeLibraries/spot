@@ -12,19 +12,22 @@
 #                                                               error_stream: error_stream)
 module Spot::Importers::Base
   class RecordImporter < ::Darlingtonia::RecordImporter
-    class_attribute :default_depositor_email
+    class_attribute :default_depositor_email, :default_admin_set_id
     self.default_depositor_email = 'dss@lafayette.edu'
+    self.default_admin_set_id = AdminSet::DEFAULT_ID
 
-    attr_reader :work_class
+    attr_reader :work_class, :admin_set_id
 
-    # Adds a +work_class:+ option to the RecordImporter initializer
+    # Adds +work_class:+ and +admin_set_id:+ options to the RecordImporter initializer
     #
     # @param [ActiveFedora::Base] work_class
+    # @param [AdminSet] admin_set
     # @param [#<<] info_stream
     # @param [#<<] error_stream
-    def initialize(work_class:, info_stream: STDOUT, error_stream: STDOUT)
+    def initialize(work_class:, admin_set_id: default_admin_set_id, info_stream: STDOUT, error_stream: STDOUT)
       super(info_stream: info_stream, error_stream: error_stream)
       @work_class = work_class
+      @admin_set_id = admin_set_id
     end
 
     private
@@ -34,6 +37,7 @@ module Spot::Importers::Base
       def create_for(record:)
         attributes = record.attributes
         attributes[:remote_files] = create_remote_files_list(record)
+        attributes[:admin_set_id] ||= admin_set_id
 
         error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
