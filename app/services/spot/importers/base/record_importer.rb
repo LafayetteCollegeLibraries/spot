@@ -35,9 +35,7 @@ module Spot::Importers::Base
       # called from +#import+, which is inherited from
       # +Darlingtonia::RecordImporter+, but this does most of the work
       def create_for(record:)
-        attributes = record.attributes
-        attributes[:remote_files] = create_remote_files_list(record)
-        attributes[:admin_set_id] ||= admin_set_id
+        attributes = attributes_from_record(record)
 
         error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
@@ -53,6 +51,14 @@ module Spot::Importers::Base
         error_stream << "Ldp::Gone => [#{work.id}]\n"
       rescue => e
         error_stream << "#{e.message}\n"
+      end
+
+      # @return [Hash<Symbol => Array<*>]
+      def attributes_from_record(record)
+        record.attributes.tap do |attributes|
+          attributes[:remote_files] = create_remote_files_list(record)
+          attributes[:admin_set_id] ||= admin_set_id
+        end
       end
 
       # determines the ability for an item based on the depositor's account.
