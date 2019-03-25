@@ -19,13 +19,9 @@ module Spot
                                                  record_importer: record_importer)
       end
 
-      # @return [Spot::Mappers::UnpaywallMapper]
-      def mapper
-        @mapper ||= ::Spot::Mappers::UnpaywallMapper.new
-      end
-
+      # @return [Spot::Importers::Unpaywall::Parser]
       def parser
-        @parser ||= ::Spot::Importers::Unpaywall::Parser.new(doi: @doi, mapper: mapper)
+        @parser ||= ::Spot::Importers::Unpaywall::Parser.new(doi: @doi)
       end
 
       # @return [Spot::Importers::Bag::RecordImporter]
@@ -41,7 +37,7 @@ module Spot
 
       # Is the work_class provided one of our curation_concerns?
       #
-      # @return [TrueClass, FalseClass]
+      # @return [true, false]
       def work_class_valid?
         ::Hyrax.config.curation_concerns.include?(@work_class)
       end
