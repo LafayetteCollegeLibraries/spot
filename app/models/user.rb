@@ -27,18 +27,15 @@ class User < ApplicationRecord
     email
   end
 
-  # Sets up attributes returned from CAS
+  # Sets up attributes returned from CAS. No need to save the object: that's done
+  # via devise_cas_authenticatable.
   #
   # @param [Hash<String => String>] attributes
   # @return [void]
+  # @todo when/if released, capture: memberOf, affiliation, department
   def cas_extra_attributes=(attributes)
     self.username = attributes['uid']
-    self.email = attributes['mail']
-
-    self.display_name = "#{attributes['givenName']} #{attributes['sn']}".strip
-
-    # self.member_of = attributes['memberOf']
-    # self.affiliation = attributes['affiliation'] if attributes['affiliation']
-    # self.department = attributes['department'] if attributes['department']
+    self.email = attributes['email']
+    self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
   end
 end
