@@ -2,7 +2,7 @@ version: 2.1
 executors:
   ruby:
     docker:
-      - image: circleci/ruby:2.4.2
+      - image: circleci/ruby:2.4.3-stretch-node-browsers
     working_directory: ~/spot
     environment:
       BUNDLE_PATH: vendor/bundle
@@ -40,7 +40,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/ruby:2.4.2-node-browsers
+      - image: circleci/ruby:2.4.3-stretch-node-browsers
       - image: circleci/redis:4
       - image: postgres:9.4-alpine
         environment:
