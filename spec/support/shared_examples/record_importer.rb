@@ -13,16 +13,6 @@ RSpec.shared_examples 'a RecordImporter' do |params|
   let(:info_stream) { dev_null }
   let(:error_stream) { dev_null }
 
-  describe '.default_depositor_email' do
-    let(:new_email) { 'cool@example.org' }
-
-    it 'is settable' do
-      expect { described_class.default_depositor_email = new_email }
-        .to change { described_class.default_depositor_email }
-        .to new_email
-    end
-  end
-
   describe '#import' do
     subject(:import_record!) { importer.import(record: record) }
 
