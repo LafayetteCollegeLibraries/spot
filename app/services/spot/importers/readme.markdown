@@ -110,114 +110,20 @@ end
 ## Mappers
 
 `Mapper`s are responsible for taking the parsed raw metadata and mapping it to
-Samvera/Hydra model attributes. The `Darlingtonia::MetadataMapper` is abstract
-on-purpose. We've added some behavior with `Spot::Mappers::BaseMapper`:
+Samvera/Hydra model attributes. Within our codebase, these are found at
+`app/services/spot/mappers/<name>_mapper.rb`. See the
+[readme document](mapper-readme) for more details.
 
-- A class attribute Hash `.fields_map` allows a one-to-one mapping of
-  model attribute to source-metadata key.
-- A class attribute string `.default_visibility` used to apply to each item.
-  The `BaseMapper` uses a metadata heading of `'visibility'`, which needs to
-  correspond to the hydra-access-control visibility settings. To change this
-  behavior, create a `#visibility` method on your mapper.
-- A `#representative_file` method, aliased as `#representative_files` in the
-  event that you have multiple. This maps to a metadata heading of `'representative_files'`.
-  To change this behavior, create a `#representative_files` method on your mapper.
+## Validators
 
-The `BaseMapper` creates a hash of attributes by calling the `#fields` method
-to get an array of methods to call on the mapper. These methods should correspond
-to model attribute names. This allows us to use both the `.fields_map` hash for
-simple mappings and methods to do more involved work.
-
-```ruby
-module Spot::Mappers
-  class SomeKindOfNewMapper
-    self.fields_map = {
-      creator: 'dc:author',
-      subject: 'dc:subject'
-    }
-
-    # Your `#fields` method should call `super`
-    # and add an array of attributes (that are methods)
-    # to call in addition.
-    def fields
-      super + [:title]
-    end
-
-    def title
-      return metadata['dc:title'].first unless metadata['dc:alternative'].present?
-      "#{metadata['dc:title'].first} (#{metadata['dc:alternative'].first})"
-    end
-  end
-end
-```
-
-This will convert a metadata hash from:
-
-```ruby
-{
-  'dc:title' => ['Free Jazz'],
-  'dc:alternative' => ['A collective improvisation'],
-  'dc:creator' => ['Ornette Coleman Double Quartet'],
-  'dc:subject' => ['Jazz', 'Free Jazz']
-}
-```
-
-to
-
-```ruby
-{
-  title: 'Free Jazz (A collective improvisation)',
-  creator: ['Ornette Coleman Double Quartet'],
-  subject: ['Jazz', 'Free Jazz']
-}
-```
-
-The way this works is by a `#map_field` method, which is called when
-a method on the `Mapper` is missing. In our implementation, it uses the
-method name and looks for a matching key in the `.fields_map`.
-
-Within our codebase, these are found at `app/services/spot/mappers/<name>_mapper.rb`.
-
-## Validator
-
-`Validator`s are used to ensure the incoming object is up to snuff.
-
+`Validator`s are used to ensure the incoming object meets certain criteria.
 Within our codebase, these are found at `app/services/spot/validators/<name>_validator.rb`.
-
-To create a validator, inherit from `Darlingtonia::Validator` and define a `#run_validation`
-private method which takes a `parser:` as an argument. This method needs to return an array
-of error messages if any come up. An empty array will represent a valid item.
-
-```ruby
-module Spot::Validators
-  class HasFileValidator < ::Darlingtonia::Validator
-    private
-
-      def run_validation(parser:)
-        parser.records.each_with_object([]) do |record, errors|
-          files = record.representative_files
-          errors << "No file found for #{record.title.first}" if Array.wrap(files).empty?
-        end
-      end
-  end
-end
-```
-
-To add validations to your parser, instantiate new `Validators` in the parser's
-`DEFAULT_VALIDATIONS` array.
-
-```ruby
-module Spot::Importers::NewType
-  class Parser < Darlingtonia::Parser
-    DEFAULT_VALIDATIONS = [Spot::Validators::HasFileValidator.new].freeze
-
-    # ...
-  end
-end
-```
+See the [readme document](validator-readme) for more details.
 
 
 [Darlingtonia]: https://github.com/curationexperts/darlingtonia
 [`Spot::Importers::Base::RecordImporter`]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/importers/base/record_importer.rb
 [Spot::Importers::Bag::Parser]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/importers/bag/parser.rb
 [`Spot::StreamLogger`]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/stream_logger.rb
+[mapper-readme]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/mappers/readme.markdown
+[validator-readme]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/validators/readme.markdown
