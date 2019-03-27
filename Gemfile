@@ -128,7 +128,6 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3.12.0'
   gem 'capybara-screenshot', '~> 1.0.22'
-  gem 'chromedriver-helper', '~> 2.1.0'
   gem 'coveralls', '~> 0.8', require: false
   gem 'database_cleaner', '~> 1.7.0'
   gem 'equivalent-xml', '~> 0.6.0', require: false
@@ -146,5 +145,6 @@ group :development, :test do
   gem 'simplecov', '~> 0.16.1', require: false
   gem 'solr_wrapper', '~> 2.0.0'
   gem 'stub_env', '~> 1.0.4'
+  gem 'webdrivers', '~> 3.7.1'
   gem 'webmock', '~> 3.4.2'
 end
