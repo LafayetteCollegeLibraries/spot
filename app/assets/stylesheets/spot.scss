@@ -18,7 +18,7 @@
 }
 
 [role="main"] {
-  margin-top: 1rem;
+  padding-bottom: 10rem;
 }
 
 .dashboard > [role="main"] {
@@ -32,4 +32,8 @@
 
 .ldr-logo img {
   height: 50px;
+}
+
+.site-footer {
+  height: 20rem;
 }
