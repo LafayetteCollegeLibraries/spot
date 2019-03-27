@@ -35,7 +35,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '2.5.0'
+gem 'hyrax', '3.0.0.pre.beta2'
 
 # modularize our javascripts
 gem 'almond-rails', '0.1.0'
