@@ -48,17 +48,37 @@ class CatalogController < ApplicationController
     #   The ordering of the field names is the order of the display
 
     # config.add_facet_field 'human_readable_type_sim', label: "Type", limit: 5
-    config.add_facet_field 'member_of_collections_ssim', limit: 5
-    config.add_facet_field 'resource_type_ssim', limit: 5
-    config.add_facet_field 'creator_ssim', limit: 5
-    config.add_facet_field 'contributor_sim', limit: 5
-    config.add_facet_field 'keyword_sim', limit: 5
-    config.add_facet_field 'subject_sim', limit: 5
-    config.add_facet_field 'academic_department_sim', limit: 5
-    # config.add_facet_field solr_name("language", :facetable), limit: 5
-    # config.add_facet_field solr_name("place_label", :facetable), limit: 5
-    config.add_facet_field 'publisher_sim', limit: 5
-    config.add_facet_field 'years_encompassed_iim', range: true, include_in_advanced_search: false
+    config.add_facet_field 'member_of_collections_ssim',
+                           label: I18n.t('blacklight.search.fields.member_of_collection'),
+                           limit: 5
+    config.add_facet_field 'resource_type_ssim',
+                           label: I18n.t('blacklight.search.fields.resource_type'),
+                           limit: 5
+    config.add_facet_field 'creator_ssim',
+                           label: I18n.t('blacklight.search.fields.creator'),
+                           limit: 5
+    config.add_facet_field 'contributor_sim',
+                           label: I18n.t('blacklight.search.fields.contributor'),
+                           limit: 5
+    config.add_facet_field 'keyword_sim',
+                           label: I18n.t('blacklight.search.fields.keyword'),
+                           limit: 5
+    config.add_facet_field 'subject_sim',
+                           label: I18n.t('blacklight.search.fields.subject'),
+                           limit: 5
+    config.add_facet_field 'academic_department_sim',
+                           label: I18n.t('blacklight.search.fields.academic_department'),
+                           limit: 5
+    config.add_facet_field 'place_label_ssim',
+                           label: I18n.t('blacklight.search.fields.place'),
+                           limit: 5
+    config.add_facet_field 'publisher_sim',
+                           label: I18n.t('blacklight.search.fields.publisher'),
+                           limit: 5
+    config.add_facet_field 'years_encompassed_iim',
+                           include_in_advanced_search: false,
+                           label: I18n.t('blacklight.search.fields.years_encompassed'),
+                           range: true
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
@@ -76,44 +96,57 @@ class CatalogController < ApplicationController
                            if: false
     config.add_index_field 'resource_type_ssim',
                            itemprop: 'resourceType',
+                           label: I18n.t('blacklight.search.fields.resource_type'),
                            link_to_search: 'resource_type_ssim'
     config.add_index_field 'academic_department_ssim',
                            itemprop: 'department',
+                           label: I18n.t('blacklight.search.fields.academic_department'),
                            link_to_search: 'department_sim'
     config.add_index_field 'keyword_tesim',
                            itemprop: 'keywords',
+                           label: I18n.t('blacklight.search.fields.keyword'),
                            link_to_search: 'keyword_sim'
     config.add_index_field 'subject_tesim',
                            itemprop: 'about',
+                           label: I18n.t('blacklight.search.fields.subject'),
                            link_to_search: 'subject_sim'
     config.add_index_field 'creator_tesim',
                            itemprop: 'creator',
+                           label: I18n.t('blacklight.search.fields.creator'),
                            link_to_search: 'creator_sim'
     config.add_index_field 'contributor_tesim',
                            itemprop: 'contributor',
+                           label: I18n.t('blacklight.search.fields.contributor'),
                            link_to_search: 'contributor_sim'
     # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
     config.add_index_field 'depositor_tesim',
-                           helper_method: :link_to_profile
+                           helper_method: :link_to_profile,
+                           label: I18n.t('blacklight.search.fields.depositor')
     config.add_index_field 'publisher_tesim',
                            itemprop: 'publisher',
+                           label: I18n.t('blacklight.search.fields.publisher'),
                            link_to_search: 'publisher_sim'
     # config.add_index_field solr_name("place_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("place_label", :facetable)
-    config.add_index_field 'language_tesim',
+    config.add_index_field 'language_label_ssim',
                            itemprop: 'inLanguage',
+                           label: I18n.t('blacklight.search.fields.language'),
                            link_to_search: 'language_sim'
     config.add_index_field 'date_modified_dtsi',
                            itemprop: 'dateModified',
+                           label: I18n.t('blacklight.search.fields.date_modified'),
                            helper_method: :human_readable_date
     # config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
     config.add_index_field 'rights_statement_tesim',
-                           helper_method: :rights_statement_links
+                           helper_method: :rights_statement_links,
+                           label: I18n.t('blacklight.search.fields.rights_statement')
     config.add_index_field 'license_tesim',
-                           helper_method: :license_links
+                           helper_method: :license_links,
+                           label: I18n.t('blacklight.search.fields.license')
     # config.add_index_field solr_name("file_format", :stored_searchable), link_to_search: solr_name("file_format", :facetable)
     config.add_index_field 'identifier_tesim',
                            helper_method: :index_field_link,
-                           field_name: 'identifier'
+                           field_name: 'identifier',
+                           label: I18n.t('blacklight.search.fields.identifier')
     config.add_index_field 'embargo_release_date_dtsi',
                            label: 'Embargo release date',
                            helper_method: :human_readable_date
@@ -124,7 +157,7 @@ class CatalogController < ApplicationController
     #
     # search field configuration
     #
-    config.add_search_field('all_fields', label: 'All fields') do |field|
+    config.add_search_field('all_fields', label: I18n.t('blacklight.search.fields.all_fields')) do |field|
       fields = %w[
         all_fields_search_timv
         english_language_date_teim
@@ -138,7 +171,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('title', label: 'Title') do |field|
+    config.add_search_field('title', label: I18n.t('blacklight.search.fields.title')) do |field|
       fields = %w[
         title_tesim^2
         subtitle_tesim
@@ -151,7 +184,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author', label: 'Author') do |field|
+    config.add_search_field('author', label: I18n.t('blacklight.search.fields.author')) do |field|
       fields = %w[
         creator_tesim
         contributor_tesim
@@ -164,7 +197,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('subject', label: 'Subject') do |field|
+    config.add_search_field('subject', label: I18n.t('blacklight.search.fields.subject')) do |field|
       field.solr_parameters = {
         qf: 'subject_tesim',
         pf: ''

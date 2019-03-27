@@ -3,13 +3,14 @@ en:
     search:
       fields:
         academic_department: Academic Department
+        all_fields: All fields
+        author: Author
         contributor: Contributor
         creator: Creator
         date_created: Date Created
-        date_modified_dtsi: Date Modified
+        date_modified: Date Modified
         date_uploaded: Date Uploaded
         depositor: Deposited by
-        depositor_tesim: Deposited by
         description: Description
         file_format: File Format
         file_size: File Size
@@ -22,13 +23,9 @@ en:
         original_checksum: Original Checksum (MD5)
         page_count: Page Count
         place: Location
-        place_label_ssim: Location
         publisher: Publisher
-        publisher_sim: Publisher
-        publisher_tesim: Publisher
         resource_type: Type
-        resource_type_ssim: Type
         rights_statement: Rights Statement
         subject: Subject
         title: Title
-        years_encompassed_iim: Year
+        years_encompassed: Year
