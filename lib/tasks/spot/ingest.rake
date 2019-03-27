@@ -6,6 +6,7 @@ namespace :spot do
     source = ENV['source']
     path = ENV['path']
     work_class = ENV['work_class']
+    collection_ids = ENV['collection_ids'].to_s.split(',')
     working_path = ENV.fetch('working_path') { Rails.root.join('tmp', 'ingest').to_s }
 
     error_message = if    !source       then 'No `source` provided!'
@@ -27,8 +28,11 @@ namespace :spot do
     paths = File.directory?(path) ? Dir[File.join(path, '*.zip')] : [path]
 
     paths.each do |entry|
-      Spot::IngestZippedBagJob.perform_later(zip_path: entry, source: source,
-                                             work_class: work_class, working_path: working_path)
+      Spot::IngestZippedBagJob.perform_later(zip_path: entry,
+                                             source: source,
+                                             collection_ids: collection_ids,
+                                             work_class: work_class,
+                                             working_path: working_path)
     end
   end
 end

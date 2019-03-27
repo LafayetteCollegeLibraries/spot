@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 module Spot
   class IngestDOIJob < ::ApplicationJob
-    def perform(doi:, work_class:)
+    def perform(doi:, work_class:, collection_ids: [])
       @doi = doi
       @work_class = work_class.constantize
+      @collection_ids = collection_ids
 
       raise ArgumentError, "Unknown work_class: #{@work_class}" unless work_class_valid?
 
@@ -30,6 +31,7 @@ module Spot
           info = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
           error = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
           Spot::Importers::Unpaywall::RecordImporter.new(work_class: @work_class,
+                                                         collection_ids: @collection_ids,
                                                          info_stream: info,
                                                          error_stream: error)
         end
