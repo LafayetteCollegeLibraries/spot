@@ -6,6 +6,7 @@ RSpec.describe Spot::IngestZippedBagJob do
     described_class.perform_now(zip_path: zip_path,
                                 work_class: work_class,
                                 source: source,
+                                collection_ids: collection_ids,
                                 working_path: working_path)
   end
 
@@ -14,6 +15,7 @@ RSpec.describe Spot::IngestZippedBagJob do
   let(:work_class) { 'Publication' }
   let(:source) { 'ldr' }
   let(:zip_service_double) { instance_double(ZipService, unzip!: true) }
+  let(:collection_ids) { ['abc123def'] }
 
   describe '#perform' do
     before do
@@ -27,7 +29,8 @@ RSpec.describe Spot::IngestZippedBagJob do
 
       expect(Spot::IngestBagJob)
         .to have_received(:perform_now)
-        .with(bag_path: working_path.join('bag').to_s, source: source, work_class: work_class)
+        .with(bag_path: working_path.join('bag').to_s, source: source,
+              work_class: work_class, collection_ids: collection_ids)
     end
 
     context 'when working path isn\'t a directory' do
