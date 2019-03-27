@@ -86,7 +86,7 @@ Hyrax.config do |config|
   config.fits_path = ENV.fetch('FITS_PATH') { 'fits.sh' }
 
   # Path to the file derivatives creation tool
-  # config.libreoffice_path = "soffice"
+  config.libreoffice_path = ENV.fetch('SOFFICE_PATH') { 'soffice' }
 
   # Option to enable/disable full text extraction from PDFs
   # Default is true, set to false to disable full text extraction
