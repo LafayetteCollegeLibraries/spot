@@ -16,7 +16,7 @@ module Spot::Importers::Base
     self.default_depositor_email = 'dss@lafayette.edu'
     self.default_admin_set_id = AdminSet::DEFAULT_ID
 
-    attr_reader :work_class, :admin_set_id
+    attr_reader :work_class, :admin_set_id, :collection_ids
 
     # Adds +work_class:+ and +admin_set_id:+ options to the RecordImporter initializer
     #
@@ -24,10 +24,15 @@ module Spot::Importers::Base
     # @param [AdminSet] admin_set
     # @param [#<<] info_stream
     # @param [#<<] error_stream
-    def initialize(work_class:, admin_set_id: default_admin_set_id, info_stream: STDOUT, error_stream: STDOUT)
+    def initialize(work_class:,
+                   admin_set_id: default_admin_set_id,
+                   collection_ids: [],
+                   info_stream: STDOUT,
+                   error_stream: STDOUT)
       super(info_stream: info_stream, error_stream: error_stream)
       @work_class = work_class
       @admin_set_id = admin_set_id
+      @collection_ids = collection_ids
     end
 
     private
@@ -58,6 +63,7 @@ module Spot::Importers::Base
         record.attributes.tap do |attributes|
           attributes[:remote_files] = create_remote_files_list(record)
           attributes[:admin_set_id] ||= admin_set_id
+          attributes[:member_of_collections_attributes] = collection_attributes unless collection_ids.empty?
         end
       end
 
@@ -73,6 +79,13 @@ module Spot::Importers::Base
         depositor.save(validate: false) if depositor.new_record?
 
         Ability.new(depositor)
+      end
+
+      # @return [Hash<String => Hash<String => String>>]
+      def collection_attributes
+        collection_ids.each_with_object({}).with_index do |(id, obj), idx|
+          obj[idx.to_s] = { 'id' => id }
+        end
       end
 
       # @return [Array<Hash<Symbol => String>>]

@@ -3,6 +3,7 @@ RSpec.shared_examples 'a RecordImporter' do |params|
   subject(:importer) do
     described_class.new(work_class: work_class,
                         admin_set_id: admin_set_id,
+                        collection_ids: [collection_id],
                         info_stream: info_stream,
                         error_stream: error_stream)
   end
@@ -12,6 +13,7 @@ RSpec.shared_examples 'a RecordImporter' do |params|
   let(:admin_set_id) { 'an_admin_set' }
   let(:info_stream) { dev_null }
   let(:error_stream) { dev_null }
+  let(:collection_id) { 'collection123' }
 
   describe '#import' do
     subject(:import_record!) { importer.import(record: record) }
@@ -38,7 +40,10 @@ RSpec.shared_examples 'a RecordImporter' do |params|
         keyword: metadata['dc:keyword'],
         visibility: mapper.class.default_visibility,
         remote_files: [{ url: 'file://image.png', name: 'image.png' }],
-        admin_set_id: admin_set_id
+        admin_set_id: admin_set_id,
+        member_of_collections_attributes: {
+          '0' => { 'id' => collection_id }
+        }
       }
     end
 

@@ -22,10 +22,11 @@ module Spot
     # @raise [ArgumentError] if +work_class:+ not a valid Work type
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
-    def perform(bag_path:, source:, work_class:)
+    def perform(bag_path:, source:, work_class:, collection_ids: [])
       @bag_path = bag_path
       @source = source
       @work_class = work_class.constantize
+      @collection_ids = collection_ids
 
       raise ArgumentError, "Unknown source: #{source}." unless source_available?
       raise ArgumentError, "Unknown work_class: #{work_class}" unless work_class_valid?
@@ -71,6 +72,7 @@ module Spot
           info = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
           error = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
           Spot::Importers::Bag::RecordImporter.new(work_class: @work_class,
+                                                   collection_ids: @collection_ids,
                                                    info_stream: info,
                                                    error_stream: error)
         end
