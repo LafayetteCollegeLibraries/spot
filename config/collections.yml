@@ -1,25 +1,66 @@
-- title: Lafayette Magazine archive
+# This file is used by +Spot::CollectionFromConfig+ to generate pre-existing
+# collections. The only _required_ field is 'title', but options are available:
+#
+#   title
+#     - Type: String
+#     - Name of the collection. This is used in the look-up, so if the name
+#       changes, the next time the collection-from-config service is invoked
+#       a new collection will be created.
+#
+#   visibility
+#     - Type: String
+#     - One of:
+#       'public' - open to all
+#       'authenticated' - lafayette login required
+#       'private' - closed to all but the depositor
+#     - Default: 'private'
+#
+#   metadata
+#     - Type: Hash (or whatever yaml calls them)
+#     - Default: {}
+#     - This provides metadata to the Collection object being created.
+#       The keys must match the properties defined for the Collection,
+#       others will just fall through the cracks.
+#     - Note: 'abstract' is used as a short-description on previews.
+#
+#   collection_type
+#     - Type: String
+#     - Default: user_collection
+#     - The 'machine_id' of a valid collection type (the service will raise
+#       an error otherwise).
+---
+-
+  title: Bytes and Books
+  visibility: public
+-
+  title: Faculty Publications
+  visibility: public
+-
+  title: Gazette of the American Friends of Lafayette
+  visibility: public
+-
+  title: Lafayette Magazine archive
   visibility: public
   metadata:
-    description: >
+    abstract: >
       Digitized archive of Lafayette publications:
       Lafayette Alumnus, Lafayette Alumni Quarterly,
       Lafayette Magazine, as well as the Football
       News Letter and Leopard Letter.
-- title: Lafayette Newspaper archive
+-
+  title: Lafayette Newspaper archive
   visibility: public
   metadata:
-    description: >
+    abstract: >
       Digitized archive of The Lafayette, the oldest
       college newspaper in Pennsylvania.
-- title: Shakespeare Bulletin Archive
+-
+  title: Shakespeare Bulletin Archive
   visibility: public
   metadata:
-    description: >
+    abstract: >
       Digitized Shakespeare Bulletin Archive containing
       complete runs of Shakespeare Bulletin (1983-2003),
       the preceding Bulletin of the New York Shakespeare
       Society (1982-1983), and the incorporated Shakespeare
       on Film Newsletter (1976-1992).
-- title: Faculty Publications
-  visibility: public
