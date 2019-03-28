@@ -8,4 +8,5 @@
 :concurrency: <%= ENV.fetch('SIDEKIQ_CONCURRENCY') { 2 } %>
 :queues:
   - default
+  - ingest
   - low_priority

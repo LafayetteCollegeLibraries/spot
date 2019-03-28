@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Spot
   class IngestDOIJob < ::ApplicationJob
+    queue_as :ingest
+
     def perform(doi:, work_class:, collection_ids: [])
       @doi = doi
       @work_class = work_class.constantize
