@@ -49,6 +49,17 @@ en:
         issn: ISSN
         isbn: ISBN
 
+    links:
+      department:
+        name: Digital Scholarship Services
+        url: https://dss.lafayette.edu
+      lafayette:
+        name: Lafayette College
+        url: https://www.lafayette.edu
+      library:
+        name: Skillman Library
+        url: https://library.lafayette.edu
+
     masthead:
       advanced_search: Advanced Search
       search_placeholder: Begin your search here
