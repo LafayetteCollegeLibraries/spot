@@ -12,6 +12,8 @@ require 'fileutils'
 
 module Spot
   class IngestZippedBagJob < ApplicationJob
+    queue_as :ingest
+
     # @param [String] zip_path Path to the zip file
     # @param [String] source Source collection / which mapper to use
     # @param [String] work_class Work Type to use for new object

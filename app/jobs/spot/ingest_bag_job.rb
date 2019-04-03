@@ -12,6 +12,8 @@
 #       (see: https://github.com/rails/rails/issues/25993)
 module Spot
   class IngestBagJob < ::ApplicationJob
+    queue_as :ingest
+
     # Validates the Bag and imports if it's okay.
     #
     # @param [String, Pathname] bag_path Path to the Bag directory

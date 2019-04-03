@@ -6,6 +6,8 @@
 # item (see https://github.com/LafayetteCollegeLibraries/spot/issues/175).
 module Spot
   class SendFixityStatusJob < ApplicationJob
+    queue_as :low_priority
+
     # @param [Number] :item_count
     # @param [Number] :job_time
     # @return [void]
