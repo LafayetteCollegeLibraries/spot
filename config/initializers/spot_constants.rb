@@ -30,3 +30,10 @@ LAST_DEPLOYED =
   else
     'Not in deployed environment'
   end
+
+# unsure of this vs creating a Spot::VERSION constant?
+SPOT_VERSION = begin
+  version = `git describe --tags 2> /dev/null`.chomp.sub('v', '')
+  version = '0.0.0' if version.blank?
+  version
+end

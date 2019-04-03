@@ -10,6 +10,8 @@ en:
     browse_the_catalog: Browse the catalog
     search_the_catalog: Search the catalog
 
+    log_in: Library staff log-in
+
     dashboard:
       fixity:
         frequency: Checks are run every Monday at midnight.
