@@ -7,7 +7,6 @@
 # case is necessary, we'll put the file into +app/overrides+ and load
 # all of them here, after initialization.
 Rails.application.config.after_initialize do
-
   # Load all of our overrides/class_evals
   # (adapted from https://github.com/sciencehistory/chf-sufia/blob/d1c7d58/config/application.rb#L43-L48)
   Dir.glob(Rails.root.join('app', 'overrides', '**', '*.rb')) do |c|
