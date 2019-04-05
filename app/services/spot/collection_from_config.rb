@@ -54,11 +54,20 @@ module Spot
       existing = Collection.where(title: [title])&.first
       return existing unless existing.nil?
 
-      Collection.create(title: [title]) do |col|
+      collection = Collection.create!(title: [title]) do |col|
         col.attributes = { title: [title] }.merge(metadata)
         col.collection_type = collection_type
         col.visibility = visibility
+        col.depositor = deposit_user
       end
+
+      # add permissions to the collection
+      Hyrax::Collections::PermissionsCreateService.create_default(
+        collection: collection,
+        creating_user: deposit_user
+      )
+
+      collection
     end
 
     private
@@ -70,7 +79,9 @@ module Spot
       # @return [Hash<Symbol => Array>]
       private_class_method def self.wrap_metadata(metadata)
         metadata.each_with_object({}) do |(key, val), obj|
-          obj[key.to_sym] = Array(val)
+          # we want to get rid of whitespace that may creep in
+          # as a side effect of using yaml
+          obj[key.to_sym] = Array.wrap(val.strip).reject(&:blank?)
         end
       end
 
@@ -79,6 +90,11 @@ module Spot
       # @return [String]
       def default_collection_type
         Hyrax::CollectionType::USER_COLLECTION_MACHINE_ID
+      end
+
+      # @return [User]
+      def deposit_user
+        @deposit_user ||= User.find_by_email('dss@lafayette.edu')
       end
 
       # Finds a CollectionType by a provided +machine_id+ String.
