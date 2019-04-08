@@ -58,7 +58,7 @@ module Spot
         col.attributes = { title: [title] }.merge(metadata)
         col.collection_type = collection_type
         col.visibility = visibility
-        col.apply_depositor_metadata(deposit_user.user_key)
+        col.apply_depositor_metadata(deposit_user&.user_key) if deposit_user
       end
 
       # add permissions to the collection
@@ -93,6 +93,7 @@ module Spot
       end
 
       # @return [User]
+      # @todo Use a configuration variable (or class_attribute) to set this
       def deposit_user
         @deposit_user ||= User.find_by_email('dss@lafayette.edu')
       end
