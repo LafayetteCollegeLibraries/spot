@@ -54,11 +54,11 @@ module Spot
       existing = Collection.where(title: [title])&.first
       return existing unless existing.nil?
 
-      collection = Collection.create!(title: [title]) do |col|
+      collection = Collection.create! do |col|
         col.attributes = { title: [title] }.merge(metadata)
         col.collection_type = collection_type
         col.visibility = visibility
-        col.depositor = deposit_user
+        col.apply_depositor_metadata(deposit_user.user_key)
       end
 
       # add permissions to the collection

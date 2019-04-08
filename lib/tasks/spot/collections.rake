@@ -7,7 +7,7 @@ namespace :spot do
       config_path = ENV.fetch('config') { Rails.root.join('config', 'collections.yml') }
 
       YAML.safe_load(File.open(config_path)).each do |config|
-        Rails.logger.info "Creating collection: #{config['title']}"
+        puts "Creating collection: #{config['title']}"
         Spot::CollectionFromConfig.from_yaml(config).create
       end
     end
