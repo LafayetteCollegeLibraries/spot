@@ -7,4 +7,4 @@
 <hr />
 
 <%= render 'featured_collections', presenter: @presenter %>
-<%= render 'recent_items', presenter: @presenter %>
+<%= render 'recent_items', presenter: @presenter unless @presenter.recent_items.empty? %>

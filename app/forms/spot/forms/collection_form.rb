@@ -1,4 +1,22 @@
 # frozen_string_literal: true
+#
+# Creating our own form field while inheriting most of the behavior
+# from Hyrax. There's a little finessing that needs to be done, as
+# Hyrax requires certain fields to be singular + included on the
+# form for its widgets:
+#
+#   - +visibility+
+#   - +representative_id+
+#   - +collection_type_gid+
+#   - +thumbnail_id+
+#
+# As we've seen with https://github.com/LafayetteCollegeLibraries/spot/issues/203,
+# having these be re-hydrated as arrays in {.model_attributes} results
+# in their falling into the cracks + not being updated.
+#
+# @todo centralize the Hyrax attributes as a class_attribute? so that
+#       we don't have to spell out each field every time they need
+#       to be accounted for.
 module Spot
   module Forms
     class CollectionForm < Hyrax::Forms::CollectionForm
@@ -8,7 +26,17 @@ module Spot
       transforms_nested_fields_for :language
 
       class_attribute :singular_fields
-      self.singular_fields = [:title, :abstract, :description]
+      self.singular_fields = [
+        :title,
+        :abstract,
+        :description,
+
+        # the hyrax form-fields are also singular!
+        :visibility,
+        :representative_id,
+        :collection_type_gid,
+        :thumbnail_id
+      ]
 
       self.required_fields = [:title]
       self.terms = [
@@ -47,7 +75,14 @@ module Spot
         # @return [ActionController::Parameters]
         def model_attributes(form_params)
           super.tap do |params|
-            singular_fields.each do |field|
+            fields = singular_fields - [
+              :visibility,
+              :representative_id,
+              :collection_type_gid,
+              :thumbnail_id
+            ]
+
+            fields.each do |field|
               field = field.to_s
               params[field] = Array(params[field]) if params[field]
             end

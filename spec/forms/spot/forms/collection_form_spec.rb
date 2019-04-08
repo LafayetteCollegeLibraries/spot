@@ -3,6 +3,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   subject(:form) { described_class.new(Collection.new, Ability.new(user), nil) }
 
   let(:user) { build(:admin_user) }
+  let(:hyrax_fields) { %i[visibility representative_id collection_type_gid thumbnail_id] }
 
   shared_context 'required fields' do
     it 'contains required fields' do
@@ -30,10 +31,7 @@ RSpec.describe Spot::Forms::CollectionForm do
     it { is_expected.to include :sponsor }
 
     # hyrax jawns
-    it { is_expected.to include :visibility }
-    it { is_expected.to include :representative_id }
-    it { is_expected.to include :collection_type_gid }
-    it { is_expected.to include :thumbnail_id }
+    it { is_expected.to include(*hyrax_fields) }
   end
 
   describe '.singular_fields' do
@@ -41,7 +39,7 @@ RSpec.describe Spot::Forms::CollectionForm do
 
     let(:fields) { %i[title abstract description] }
 
-    it { is_expected.to contain_exactly(*fields) }
+    it { is_expected.to contain_exactly(*(fields + hyrax_fields)) }
   end
 
   describe '.multiple?' do

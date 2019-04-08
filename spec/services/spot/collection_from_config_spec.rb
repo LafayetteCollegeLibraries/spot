@@ -81,6 +81,11 @@ RSpec.describe Spot::CollectionFromConfig do
 
     it { is_expected.to be_a Collection }
 
+    it 'creates a default permission_template' do
+      expect(created.permission_template).not_to be nil
+      expect(created.permission_template.access_grants).not_to be_empty
+    end
+
     context 'when metadata is provided' do
       let(:title) { 'a new collection' }
       let(:metadata) { { description: ['A very nice collction'] } }
