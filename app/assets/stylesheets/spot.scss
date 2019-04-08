@@ -21,6 +21,10 @@
   margin-top: 1rem;
 }
 
+.dashboard > [role="main"] {
+  margin-top: 0;
+}
+
 .thumbnail.file-set {
   margin: auto;
   max-width: 250px;
