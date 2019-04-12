@@ -18,6 +18,7 @@
 }
 
 [role="main"] {
+  margin-top: 1rem;
   padding-bottom: 10rem;
 }
 
@@ -37,4 +38,13 @@
 .site-footer {
   background-color: $tan-light;
   height: 20rem;
+}
+
+// duplicating styles from #facet-panel-collapse
+// otherwise the panel will not display
+#admin-facet-panel-collapse {
+  display: block !important;
+  height: auto !important;
+  padding-bottom: 0;
+  overflow: visible !important;
 }

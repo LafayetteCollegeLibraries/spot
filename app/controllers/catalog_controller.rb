@@ -8,6 +8,10 @@ class CatalogController < ApplicationController
   # This filter applies the hydra access controls
   before_action :enforce_show_permissions, only: :show
 
+  user_is_admin = proc do |context, _field_config, _facet|
+    context.current_user && context.current_user.admin?
+  end
+
   def self.uploaded_field
     # solr_name('system_create', :stored_sortable, type: :date)
     'system_create_dtsi'
@@ -79,6 +83,23 @@ class CatalogController < ApplicationController
                            include_in_advanced_search: false,
                            label: I18n.t('blacklight.search.fields.years_encompassed'),
                            range: true
+
+    #
+    # admin facets
+    #
+    config.add_facet_field 'depositor_ssim',
+                           label: I18n.t('blacklight.search.fields.depositor'),
+                           limit: 5,
+                           admin: true
+    config.add_facet_field 'proxy_depositor_ssim',
+                           label: I18n.t('blacklight.search.fields.proxy_depositor'),
+                           limit: 5,
+                           admin: true
+    config.add_facet_field 'admin_set_sim',
+                           label: I18n.t('blacklight.search.fields.admin_set'),
+                           limit: 5,
+                           admin: true
+
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
