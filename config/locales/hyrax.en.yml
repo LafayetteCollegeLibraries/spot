@@ -1,19 +1,34 @@
+---
 en:
   activefedora:
     models:
       publication: 'Publication'
   hyrax:
-    product_name: Lafayette Digital Repository
+    account_name:           "My Institution Account Id"
+
+    collection_type:
+      admin_set_title: Administrative Set
+      default_title: User Collection
+
+    dashboard:
+      my:
+        heading:
+          collection_type: Collection Type
+          visibility: Visibility
+
+    directory:
+      suffix:               "@example.org"
+
+    institution_name:       "Lafayette College"
+    institution_name_full:  "Lafayette College"
+
     product_description: |
       %{name} is an online archive designed to preserve and make accessible materials from
       Lafayette College, including administrative publications and the scholarly work of
       Lafayette faculty.
+    product_name: Lafayette Digital Repository
     product_twitter_handle: "@LafLib"
-    institution_name:       "Lafayette College"
-    institution_name_full:  "Lafayette College"
-    account_name:           "My Institution Account Id"
-    directory:
-      suffix:               "@example.org"
+
     footer:
       copyright_html: "<strong>Copyright &copy; 2017 Samvera</strong> Licensed under the Apache License, Version 2.0"
       service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
