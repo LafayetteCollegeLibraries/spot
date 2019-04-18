@@ -8,6 +8,11 @@ Rails.application.routes.draw do
   # need to call `root` before mounting our engines
   root 'spot/homepage#index'
 
+  # putting these routes before the engines so that
+  # we can beat Hyrax to defining these instead
+  get '/about', to: 'spot/page#about', as: 'about'
+  get '/help', to: 'spot/page#help', as: 'help'
+
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
   mount Hydra::RoleManagement::Engine => '/admin'

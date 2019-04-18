@@ -1,14 +1,42 @@
-<footer class="navbar navbar-inverse site-footer">
+<footer class="site-footer">
   <div class="container-fluid">
-    <div class="navbar-text text-left">
-      <p><%= t('hyrax.product_name') %> v<%= Hyrax::VERSION %></p>
-      <% unless current_user %>
-      <p><%= link_to 'Library staff log-in', main_app.new_user_session_path %></p>
-      <% end %>
-    </div>
-    <div class="navbar-right">
-      <div class="navbar-text text-right">
-        <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'] %>
+    <div class="row">
+      <div class="col-sm-3">
+        <h4><%= t('hyrax.product_name') %></h4>
+        <p>Version: <%= SPOT_VERSION %>, last updated: <%= LAST_DEPLOYED %></p>
+        <% unless current_user %>
+        <p>
+          <%= link_to main_app.new_user_session_path, class: 'btn btn-info' do %>
+            <span class="glyphicon glyphicon-log-in"></span>
+            <%= t('spot.log_in') %>
+          <% end %>
+        </p>
+        <% end %>
+      </div>
+
+      <div class="col-sm-3">
+        <p>
+          <ul>
+            <li><%= link_to 'Learn more about the repostory', about_path %></li>
+            <li><%= link_to 'Get help using the repository', help_path %></li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="col-sm-3">
+        <p>
+          <ul>
+            <li><%= link_to t('spot.links.department.name'), t('spot.links.department.url') %></li>
+            <li><%= link_to t('spot.links.library.name'), t('spot.links.library.url') %></li>
+            <li><%= link_to t('spot.links.lafayette.name'), t('spot.links.lafayette.url') %></li>
+          </ul>
+        </p>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="navbar-text text-right">
+          <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'] %>
+        </div>
       </div>
     </div>
   </div>

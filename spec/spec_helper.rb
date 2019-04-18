@@ -110,9 +110,18 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FactoryBot::Syntax::Methods
   config.include StubEnv::Helpers
+  config.include ControllerHelpers, type: :helper
 
   config.use_transactional_fixtures = false
   config.render_views = true
+
+  # Borrowed from
+  # https://github.com/samvera/hyrax/blob/4abc41f675ba990364ba9f02d4d06dbde986a75c/spec/spec_helper.rb#L193-L196
+  #
+  # Adds our controller helpers to the base helper
+  config.before type: :helper do
+    initialize_controller_helpers(helper)
+  end
 
   config.before :suite do
     DatabaseCleaner.clean_with(:truncation)

@@ -19,6 +19,7 @@
 
 [role="main"] {
   margin-top: 1rem;
+  padding-bottom: 10rem;
 }
 
 .dashboard > [role="main"] {
@@ -32,4 +33,18 @@
 
 .ldr-logo img {
   height: 50px;
+}
+
+.site-footer {
+  background-color: $tan-light;
+  height: 20rem;
+}
+
+// duplicating styles from #facet-panel-collapse
+// otherwise the panel will not display
+#admin-facet-panel-collapse {
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding-bottom: 0;
 }

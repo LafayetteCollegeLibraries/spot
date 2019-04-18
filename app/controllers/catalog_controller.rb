@@ -80,6 +80,22 @@ class CatalogController < ApplicationController
                            label: I18n.t('blacklight.search.fields.years_encompassed'),
                            range: true
 
+    #
+    # admin facets
+    #
+    config.add_facet_field 'depositor_ssim',
+                           label: I18n.t('blacklight.search.fields.depositor'),
+                           limit: 5,
+                           admin: true
+    config.add_facet_field 'proxy_depositor_ssim',
+                           label: I18n.t('blacklight.search.fields.proxy_depositor'),
+                           limit: 5,
+                           admin: true
+    config.add_facet_field 'admin_set_sim',
+                           label: I18n.t('blacklight.search.fields.admin_set'),
+                           limit: 5,
+                           admin: true
+
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
     config.add_facet_field 'generic_type_sim', if: false
@@ -118,15 +134,10 @@ class CatalogController < ApplicationController
                            itemprop: 'contributor',
                            label: I18n.t('blacklight.search.fields.contributor'),
                            link_to_search: 'contributor_sim'
-    # config.add_index_field solr_name("proxy_depositor", :symbol), label: "Depositor", helper_method: :link_to_profile
-    config.add_index_field 'depositor_tesim',
-                           helper_method: :link_to_profile,
-                           label: I18n.t('blacklight.search.fields.depositor')
     config.add_index_field 'publisher_tesim',
                            itemprop: 'publisher',
                            label: I18n.t('blacklight.search.fields.publisher'),
                            link_to_search: 'publisher_sim'
-    # config.add_index_field solr_name("place_label", :stored_searchable), itemprop: 'contentLocation', link_to_search: solr_name("place_label", :facetable)
     config.add_index_field 'language_label_ssim',
                            itemprop: 'inLanguage',
                            label: I18n.t('blacklight.search.fields.language'),
@@ -135,18 +146,12 @@ class CatalogController < ApplicationController
                            itemprop: 'dateModified',
                            label: I18n.t('blacklight.search.fields.date_modified'),
                            helper_method: :human_readable_date
-    # config.add_index_field solr_name("date_created", :stored_searchable), itemprop: 'dateCreated'
     config.add_index_field 'rights_statement_tesim',
                            helper_method: :rights_statement_links,
                            label: I18n.t('blacklight.search.fields.rights_statement')
     config.add_index_field 'license_tesim',
                            helper_method: :license_links,
                            label: I18n.t('blacklight.search.fields.license')
-    # config.add_index_field solr_name("file_format", :stored_searchable), link_to_search: solr_name("file_format", :facetable)
-    config.add_index_field 'identifier_tesim',
-                           helper_method: :index_field_link,
-                           field_name: 'identifier',
-                           label: I18n.t('blacklight.search.fields.identifier')
     config.add_index_field 'embargo_release_date_dtsi',
                            label: 'Embargo release date',
                            helper_method: :human_readable_date
