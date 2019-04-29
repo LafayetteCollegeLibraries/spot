@@ -1,6 +1,9 @@
 en:
   blacklight:
     search:
+      facets:
+        admin:
+          title: Admin Facets
       fields:
         academic_department: Academic Department
         all_fields: All fields
