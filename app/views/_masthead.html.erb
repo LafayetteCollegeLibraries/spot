@@ -23,6 +23,8 @@
           <% fields = search_state.params_for_search.except(*params_to_skip) %>
           <%= render_hash_as_hidden_fields fields %>
 
+          <input type="hidden" name="search_field" value="all_fields" />
+
           <div class="input-group">
             <%= text_field_tag :q,
                                current_search_parameters,
@@ -30,10 +32,10 @@
                                id: 'search-field-header',
                                placeholder: t('spot.masthead.search_placeholder') %>
             <span class="input-group-btn">
-              <%= button_tag 'Search', type: 'Submit', class: 'btn btn-default' do %>
+              <button type="submit" class="btn btn-default">
                 <span class="glyphicon glyphicon-search"></span>
                 Go
-              <% end %>
+              </button>
             </span>
           </div>
         <% end %>

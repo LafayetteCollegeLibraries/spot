@@ -3,8 +3,8 @@
 # Adds the ability to index dates in various English forms.
 #
 # Currently adds:
-#   - full month (ex. 'February 8 2019')
-#   - abbreviated month (ex. 'Feb 8 2019')
+#   - full month (ex. 'February 2019')
+#   - abbreviated month (ex. 'Feb 2019')
 #   - season (ex. 'Winter 2019')
 #
 # By default, it uses the +:date_issued+ property of the object
@@ -43,16 +43,14 @@ module IndexesEnglishLanguageDates
     # @return [void]
     def add_english_language_dates(solr_doc)
       solr_doc[english_language_date_field] = dates.map do |date|
-        include_day = true
         begin
           parsed = Date.parse(date)
         rescue ArgumentError
           next unless date.match?(/^\d{4}-\d{2}/)
           parsed = Date.new(*date.split('-').map(&:to_i))
-          include_day = false
         end
 
-        season_names_for_date(parsed) + spelled_out_for_date(parsed, include_day: include_day)
+        season_names_for_date(parsed) + spelled_out_for_date(parsed)
       end.flatten.reject(&:blank?)
     end
 
@@ -83,10 +81,8 @@ module IndexesEnglishLanguageDates
     #
     # @param date [#strftime]
     # @return [Array<String>]
-    def spelled_out_for_date(date, include_day: true)
-      %w[%B %b].map do |month|
-        date.strftime("#{month}#{include_day ? ' %-d' : ''} %Y")
-      end
+    def spelled_out_for_date(date)
+      %w[%B %b].map { |month| date.strftime("#{month} %Y") }
     end
 
     # Saves us the hassle of having to type out that long attribute

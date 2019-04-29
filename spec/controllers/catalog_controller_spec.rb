@@ -113,5 +113,26 @@ RSpec.describe CatalogController, clean: true do
         expect(assigns(:document_list).map(&:id)).to contain_exactly(*expected_ids)
       end
     end
+
+    context 'all_fields with english language dates' do
+      let(:objects) { [obj1, obj2] }
+
+      let(:obj1) do
+        { id: 'all_field_obj_1', has_model_ssim: ['Publication'],
+          english_language_date_teim: ['Spring 2019'],
+          read_access_group_ssim: ['public'] }
+      end
+
+      let(:obj2) do
+        { id: 'all_field_obj_2', has_model_ssim: ['Publication'],
+          english_language_date_teim: ['Autumn 2019', 'Fall 2019'],
+          read_access_group_ssim: ['public'] }
+      end
+
+      it 'returns seasonal items' do
+        get :index, params: { q: 'spring', search_field: 'all_fields' }
+        expect(assigns(:document_list).map(&:id)).to contain_exactly(obj1[:id])
+      end
+    end
   end
 end

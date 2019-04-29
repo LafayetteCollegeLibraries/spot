@@ -10,7 +10,8 @@
                                                                          :search_field,
                                                                          :qt,
                                                                          :page,
-                                                                       :utf8)) %>
+                                                                         :utf8)) %>
+  <input type="hidden" name="search_field" value="all_fields" />
   <div class="input-group col-sm-12">
     <%= text_field_tag :q, current_search_parameters , class: "q form-control", id: "search-field-header", placeholder: t("hyrax.search.form.q.placeholder") %>
 
