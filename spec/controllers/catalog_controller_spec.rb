@@ -129,7 +129,7 @@ RSpec.describe CatalogController, clean: true do
           read_access_group_ssim: ['public'] }
       end
 
-      it 'should return seasonal items' do
+      it 'returns seasonal items' do
         get :index, params: { q: 'spring', search_field: 'all_fields' }
         expect(assigns(:document_list).map(&:id)).to contain_exactly(obj1[:id])
       end
