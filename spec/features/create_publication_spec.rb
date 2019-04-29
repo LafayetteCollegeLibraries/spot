@@ -105,8 +105,29 @@ RSpec.feature 'Create a Publication', :clean, :js do
         # add files
         ##
 
-        click_link 'Files'
+        # not entirely sure _why_ this is happening, but upgrading chrome
+        # from 73 -> 74 was raising the error:
+        #
+        #   Failure/Error: click_link 'Files'
+        #
+        #     Selenium::WebDriver::Error::WebDriverError:
+        #       element click intercepted: Element <a href="#files" aria-controls="files" role="tab" data-toggle="tab">...</a>
+        #       is not clickable at point (423, 21). Other element would receive the click:
+        #       <input type="text" name="q" id="search-field-header" class="form-control" placeholder="Begin your search here">
+        #         (Session info: headless chrome=74.0.3729.108)
+        #         (Driver info: chromedriver=74.0.3729.6 (255758eccf3d244491b8a1317aa76e1ce10d57e9-refs/branch-heads/3729@{#29}),platform=Mac OS X 10.12.6 x86_64)
+        #
+        # from the best that I can tell, what's happening is that we're far-enough down
+        # the screen that the +a[href="#files"]+ tab is out of view and not clickable?
+        # in a byebug console, trying +click_link 'Files'+ once will raise the error,
+        # but then repeating the +click_link+ call will succeed, leading me to believe
+        # that the page is scrolling up as a reset?
+        #
+        # again, no idea _why_ it's happening, but scrolling to the top of the page
+        # seems to stop the problem. so we'll go with it for now.
+        page.execute_script('window.scrollTo(0,0)')
 
+        click_link 'Files'
         expect(page).to have_content 'Add files'
 
         within('span#addfiles') do
