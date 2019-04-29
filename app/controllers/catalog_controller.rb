@@ -114,10 +114,10 @@ class CatalogController < ApplicationController
                            itemprop: 'resourceType',
                            label: I18n.t('blacklight.search.fields.resource_type'),
                            link_to_search: 'resource_type_ssim'
-    config.add_index_field 'academic_department_ssim',
+    config.add_index_field 'academic_department_tesim',
                            itemprop: 'department',
                            label: I18n.t('blacklight.search.fields.academic_department'),
-                           link_to_search: 'department_sim'
+                           link_to_search: 'academic_department_sim'
     config.add_index_field 'keyword_tesim',
                            itemprop: 'keywords',
                            label: I18n.t('blacklight.search.fields.keyword'),
@@ -142,10 +142,8 @@ class CatalogController < ApplicationController
                            itemprop: 'inLanguage',
                            label: I18n.t('blacklight.search.fields.language'),
                            link_to_search: 'language_sim'
-    config.add_index_field 'date_modified_dtsi',
-                           itemprop: 'dateModified',
-                           label: I18n.t('blacklight.search.fields.date_modified'),
-                           helper_method: :human_readable_date
+    config.add_index_field 'date_issued_ssim',
+                           label: I18n.t('blacklight.search.fields.date_issued')
     config.add_index_field 'rights_statement_tesim',
                            helper_method: :rights_statement_links,
                            label: I18n.t('blacklight.search.fields.rights_statement')
