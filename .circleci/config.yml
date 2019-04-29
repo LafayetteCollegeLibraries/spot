@@ -100,7 +100,7 @@ jobs:
           name: Run RSpec tests
           command: |
             mkdir /tmp/test-results
-            CIRCLE_BUILD_NUM=$CIRCLE_WORKFLOW_ID bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            CIRCLE_BUILD_NUM=$CIRCLE_WORKFLOW_ID bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split)
 
       - store_test_results:
           path: /tmp/test-results
