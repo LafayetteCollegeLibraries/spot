@@ -36,7 +36,7 @@ module Hyrax
       :language,
       :subject,
       :keyword,
-      :place,
+      :location,
       :bibliographic_citation,
       :identifier,
       :related_resource,

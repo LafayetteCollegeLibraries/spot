@@ -24,7 +24,7 @@ module Spot::Mappers
         date_available
         date_issued
         description
-        place_attributes
+        location_attributes
         resource_type
         rights_statement
         title
@@ -57,7 +57,7 @@ module Spot::Mappers
     end
 
     # @return [Array<RDF::URI,String>]
-    def place_attributes
+    def location_attributes
       nested_attributes_hash_for('dc:coverage') do |place|
         case place
         when 'United States, Pennsylvania, Northampton County, Easton'

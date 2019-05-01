@@ -139,8 +139,8 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     end
   end
 
-  describe '#place_attributes' do
-    subject { mapper.place_attributes }
+  describe '#location_attributes' do
+    subject { mapper.location_attributes }
 
     let(:metadata) do
       {

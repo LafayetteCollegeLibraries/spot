@@ -46,15 +46,15 @@ module Hyrax
       @local_identifier ||= identifier.select(&:local?)
     end
 
-    # place values + labels zipped into tuples.
+    # location values + labels zipped into tuples.
     #
     # @example
-    #   presenter.place_merged
+    #   presenter.location
     #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
     #
     # @return [Array<Array<String>>]
-    def place
-      solr_document.place.zip(solr_document.place_label).reject(&:empty?)
+    def location
+      solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
     # @return [Array<Spot::Identifier>]

@@ -5,8 +5,8 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#place_attributes' do
-    subject(:place_attributes) { mapper.place_attributes }
+  describe '#location_attributes' do
+    subject(:location_attributes) { mapper.location_attributes }
 
     let(:metadata) { { 'OriginInfoPlaceTerm' => [location] } }
     let(:location) { 'Easton, PA' }

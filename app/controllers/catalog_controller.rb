@@ -69,8 +69,8 @@ class CatalogController < ApplicationController
     config.add_facet_field 'academic_department_sim',
                            label: I18n.t('blacklight.search.fields.academic_department'),
                            limit: 5
-    config.add_facet_field 'place_label_ssim',
-                           label: I18n.t('blacklight.search.fields.place'),
+    config.add_facet_field 'location_label_ssim',
+                           label: I18n.t('blacklight.search.fields.location'),
                            limit: 5
     config.add_facet_field 'publisher_sim',
                            label: I18n.t('blacklight.search.fields.publisher'),

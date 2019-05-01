@@ -22,7 +22,7 @@ module Spot::Mappers
         date_issued
         editor
         identifier
-        place_attributes
+        location_attributes
         resource_type
         subtitle
         title
@@ -64,7 +64,7 @@ module Spot::Mappers
     # locations, so we'll hard-code their geonames URIs.
     #
     # @return [Array<Hash>]
-    def place_attributes
+    def location_attributes
       nested_attributes_hash_for('originInfo_place_placeTerm') do |place|
         case place
         when 'Burlington, VT'

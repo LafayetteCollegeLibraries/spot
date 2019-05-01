@@ -15,8 +15,8 @@ FactoryBot.define do
     identifier { ['hdl:123/456', 'doi:00.000/00000'] }
     keyword { ['test', 'item', 'topic'] }
     language { ['en'] }
+    location { [] }
     organization { ['Lafayette College'] }
-    place { [] }
     publisher { ['Prestigious Press', 'Lafayette College'] }
     resource_type { ['Article'] }
     rights_statement { [] }
