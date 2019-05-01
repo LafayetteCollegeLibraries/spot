@@ -9,7 +9,7 @@ it:
           generic_type_sim: Tipo
           keyword_sim: Parola chiave
           language_sim: Lingua
-          place_label_sim: luogo
+          location_label_sim: luogo
           publisher_sim: Editore
           subject_sim: Soggetto
         index:
@@ -24,7 +24,7 @@ it:
           keyword_tesim: Parola chiave
           language_tesim: Lingua
           license_tesim: Licenza
-          place_tesim: luogo
+          location_tesim: luogo
           publisher_tesim: Editore
           rights_statement_tesim: Diritti
           subject_tesim: Soggetto
@@ -40,7 +40,7 @@ it:
           keyword_tesim: Parola chiave
           language_tesim: Lingua
           license_tesim: Licenza
-          place_tesim: luogo
+          location_tesim: luogo
           publisher_tesim: Editore
           rights_statement_tesim: Diritti
           subject_tesim: Soggetto

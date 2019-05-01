@@ -14,10 +14,11 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       language: ['en'],
       contributor: ['contributor1'],
       description: ['description1'],
+      note: ['a note'],
       license: ['license1'],
       subject: ['subject1'],
       identifier: ['id1'],
-      place: ['place1'],
+      location: ['location1'],
       related_resource: ['related_resource1']
     )
   end
@@ -38,10 +39,11 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       resource_type: ['bar'],
       contributor: ['contributor2'],
       description: ['description2'],
+      note: ['a note'],
       license: ['license2'],
       subject: ['subject2'],
       identifier: ['id2'],
-      place: ['place2'],
+      location: ['location2'],
       related_resource: ['related_resource2']
     )
   end
@@ -58,6 +60,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       is_expected.to eq [:creator,
                          :contributor,
                          :description,
+                         :note,
                          :keyword,
                          :resource_type,
                          :license,
@@ -65,7 +68,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
                          :subject,
                          :language,
                          :identifier,
-                         :place,
+                         :location,
                          :related_resource]
     end
   end
@@ -82,7 +85,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       expect(form.model.subject).to match_array ['subject1', 'subject2']
       expect(form.model.language).to match_array ['en']
       expect(form.model.identifier).to match_array ['id1', 'id2']
-      expect(form.model.place).to match_array ['place1', 'place2']
+      expect(form.model.location).to match_array ['location1', 'location2']
       expect(form.model.related_resource).to match_array ['related_resource1', 'related_resource2']
     end
   end
@@ -94,6 +97,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       is_expected.to eq [{ creator: [] },
                          { contributor: [] },
                          { description: [] },
+                         { note: [] },
                          { keyword: [] },
                          { resource_type: [] },
                          { license: [] },
@@ -101,7 +105,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
                          { subject: [] },
                          { language: [] },
                          { identifier: [] },
-                         { place: [] },
+                         { location: [] },
                          { related_resource: [] },
                          { permissions_attributes: [:type, :name, :access, :id, :_destroy] },
                          :on_behalf_of,
@@ -114,7 +118,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
                          :lease_expiration_date,
                          :visibility_after_lease,
                          :visibility,
-                         { place_attributes: [:id, :_destroy] }]
+                         { location_attributes: [:id, :_destroy] }]
     end
   end
 end

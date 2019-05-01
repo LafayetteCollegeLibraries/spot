@@ -5,8 +5,8 @@ RSpec.describe Spot::Mappers::MagazineMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#place_attributes' do
-    subject(:place_attributes) { mapper.place_attributes }
+  describe '#location_attributes' do
+    subject(:location_attributes) { mapper.location_attributes }
 
     let(:metadata) { { 'OriginInfoPlaceTerm' => [location] } }
     let(:location) { 'Easton, PA' }
@@ -44,13 +44,12 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     it { is_expected.to eq value }
   end
 
-  describe '#description' do
-    subject { mapper.description }
+  describe '#note' do
+    subject { mapper.note }
 
     let(:metadata) { { 'Note' => ['some information'] } }
-    let(:value) { [RDF::Literal('some information', language: :en)] }
 
-    it { is_expected.to eq value }
+    it { is_expected.to eq ['some information'] }
   end
 
   describe '#identifier' do

@@ -9,7 +9,7 @@ de:
           generic_type_sim: Art
           keyword_sim: Stichwort
           language_sim: Sprache
-          place_label_sim: Ort
+          location_label_sim: Ort
           publisher_sim: Herausgeber
           subject_sim: Fach
         index:
@@ -24,7 +24,7 @@ de:
           keyword_tesim: Stichwort
           language_tesim: Sprache
           license_tesim: Lizenz
-          place_tesim: Ort
+          location_tesim: Ort
           publisher_tesim: Herausgeber
           rights_statement_tesim: Rechte
           subject_tesim: Fach
@@ -40,7 +40,7 @@ de:
           keyword_tesim: Stichwort
           language_tesim: Sprache
           license_tesim: Lizenz
-          place_tesim: Ort
+          location_tesim: Ort
           publisher_tesim: Herausgeber
           rights_statement_tesim: Rechte
           subject_tesim: Fach

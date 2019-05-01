@@ -15,8 +15,8 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
 
   before { mapper.metadata = metadata }
 
-  describe '#place_attributes' do
-    subject(:place_attributes) { mapper.place_attributes }
+  describe '#location_attributes' do
+    subject(:location_attributes) { mapper.location_attributes }
 
     let(:expected_value) do
       { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }

@@ -9,7 +9,7 @@ zh:
           generic_type_sim: 类型
           keyword_sim: 关键词
           language_sim: 语言
-          place_label_sim: 位置
+          location_label_sim: 位置
           publisher_sim: 出版者
           subject_sim: 学科
         index:
@@ -24,7 +24,7 @@ zh:
           keyword_tesim: 关键词
           language_tesim: 语言
           license_tesim: 执照
-          place_tesim: 位置
+          location_tesim: 位置
           publisher_tesim: 出版者
           rights_statement_tesim: 权
           subject_tesim: 学科
@@ -40,7 +40,7 @@ zh:
           keyword_tesim: 关键词
           language_tesim: 语言
           license_tesim: 执照
-          place_tesim: 位置
+          location_tesim: 位置
           publisher_tesim: 出版者
           rights_statement_tesim: 权
           subject_tesim: 学科

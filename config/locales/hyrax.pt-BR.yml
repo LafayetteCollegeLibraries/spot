@@ -9,7 +9,7 @@ pt-BR:
           generic_type_sim: Tipo
           keyword_sim: Palavra-chave
           language_sim: Língua
-          place_label_sim: Localização
+          location_label_sim: Localização
           publisher_sim: Editor
           subject_sim: Sujeito
         index:
@@ -24,7 +24,7 @@ pt-BR:
           keyword_tesim: Palavra-chave
           language_tesim: Língua
           license_tesim: Licença
-          place_tesim: Localização
+          location_tesim: Localização
           publisher_tesim: Editor
           rights_statement_tesim: Direitos
           subject_tesim: Sujeito
@@ -40,7 +40,7 @@ pt-BR:
           keyword_tesim: Palavra-chave
           language_tesim: Língua
           license_tesim: Licença
-          place_tesim: Localização
+          location_tesim: Localização
           publisher_tesim: Editor
           rights_statement_tesim: Direitos
           subject_tesim: Sujeito

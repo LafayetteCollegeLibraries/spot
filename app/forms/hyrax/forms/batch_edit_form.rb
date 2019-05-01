@@ -6,15 +6,16 @@
 # to keep track of the customizations here.
 #
 # - remove :date_created
-# - change :based_near => :place
+# - change :based_near => :location
 # - change :related_url => :related_resource
+# - add :note
 module Hyrax
   module Forms
     class BatchEditForm < Hyrax::Forms::WorkForm
       # Used for drawing the fields that appear on the page
-      self.terms = [:creator, :contributor, :description,
+      self.terms = [:creator, :contributor, :description, :note,
                     :keyword, :resource_type, :license, :publisher,
-                    :subject, :language, :identifier, :place,
+                    :subject, :language, :identifier, :location,
                     :related_resource]
       self.required_fields = []
       self.model_class = Hyrax.primary_work_type
@@ -40,6 +41,7 @@ module Hyrax
         [{ creator: [] },
          { contributor: [] },
          { description: [] },
+         { note: [] },
          { keyword: [] },
          { resource_type: [] },
          { license: [] },
@@ -47,7 +49,7 @@ module Hyrax
          { subject: [] },
          { language: [] },
          { identifier: [] },
-         { place: [] },
+         { location: [] },
          { related_resource: [] },
          { permissions_attributes: [:type, :name, :access, :id, :_destroy] },
          :on_behalf_of,
@@ -60,7 +62,7 @@ module Hyrax
          :lease_expiration_date,
          :visibility_after_lease,
          :visibility,
-         { place_attributes: [:id, :_destroy] }]
+         { location_attributes: [:id, :_destroy] }]
       end
       # rubocop:enable Metrics/MethodLength
 

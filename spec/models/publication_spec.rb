@@ -8,6 +8,7 @@ describe Publication do
   let(:rdfs) { RDF::RDFS }
   let(:schema) { RDF::Vocab::SCHEMA }
   let(:edm) { RDF::Vocab::EDM }
+  let(:skos) { RDF::Vocab::SKOS }
   let(:subtitle_uri) { 'http://purl.org/spar/doco/Subtitle' }
   let(:dept_uri) { 'http://vivoweb.org/ontology/core#AcademicDepartment' }
   let(:division_uri) { 'http://vivoweb.org/ontology/core#Division' }
@@ -24,6 +25,7 @@ describe Publication do
   it { is_expected.to have_editable_property(:language).with_predicate(dc11.language) }
   it { is_expected.to have_editable_property(:abstract).with_predicate(dc.abstract) }
   it { is_expected.to have_editable_property(:description).with_predicate(dc11.description) }
+  it { is_expected.to have_editable_property(:note).with_predicate(skos.note) }
   it { is_expected.to have_editable_property(:identifier).with_predicate(dc.identifier) }
   it { is_expected.to have_editable_property(:bibliographic_citation).with_predicate(dc.bibliographicCitation) }
   it { is_expected.to have_editable_property(:date_issued).with_predicate(dc.issued) }
@@ -37,7 +39,7 @@ describe Publication do
   it { is_expected.to have_editable_property(:related_resource).with_predicate(rdfs.seeAlso) }
   it { is_expected.to have_editable_property(:subject).with_predicate(dc11.subject) }
   it { is_expected.to have_editable_property(:keyword).with_predicate(schema.keywords) }
-  it { is_expected.to have_editable_property(:place).with_predicate(dc.spatial) }
+  it { is_expected.to have_editable_property(:location).with_predicate(dc.spatial) }
   it { is_expected.to have_editable_property(:license).with_predicate(dc.license) }
   it { is_expected.to have_editable_property(:rights_statement).with_predicate(edm.rights) }
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }

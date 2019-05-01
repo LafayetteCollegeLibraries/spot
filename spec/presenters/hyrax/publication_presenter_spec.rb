@@ -60,15 +60,15 @@ RSpec.describe Hyrax::PublicationPresenter do
     end
   end
 
-  describe '#place' do
-    subject { presenter.place }
+  describe '#location' do
+    subject { presenter.location }
 
     let(:uri) { 'http://sws.geonames.org/5188140/' }
     let(:label) { 'United States, Pennsylvania, Northampton County, Easton' }
     let(:solr_data) do
       {
-        'place_ssim' => [uri],
-        'place_label_ssim' => [label]
+        'location_ssim' => [uri],
+        'location_label_ssim' => [label]
       }
     end
 

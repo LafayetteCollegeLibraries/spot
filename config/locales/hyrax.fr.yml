@@ -9,7 +9,7 @@ fr:
           generic_type_sim: Type
           keyword_sim: Mot-clé
           language_sim: La langue
-          place_label_sim: Emplacement
+          location_label_sim: Emplacement
           publisher_sim: Éditeur
           subject_sim: Assujettir
         index:
@@ -25,7 +25,7 @@ fr:
           language_tesim: La langue
           license_statement_tesim: Licence
           license_tesim: Licence
-          place_tesim: Emplacement
+          location_tesim: Emplacement
           publisher_tesim: Éditeur
           rights_statement_tesim: Déclaration des droits
           rights_tesim: Droits
@@ -43,7 +43,7 @@ fr:
           language_tesim: La langue
           license_statement_tesim: Licence
           license_tesim: Licence
-          place_tesim: Emplacement
+          location_tesim: Emplacement
           publisher_tesim: Éditeur
           rights_statement_tesim: Déclaration des droits
           rights_tesim: Droits

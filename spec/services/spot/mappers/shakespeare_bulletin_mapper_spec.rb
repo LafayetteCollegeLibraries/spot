@@ -59,6 +59,14 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     it { is_expected.to eq value }
   end
 
+  describe '#note' do
+    subject { mapper.note }
+
+    let(:metadata) { { 'note' => ['a note about the item'] } }
+
+    it { is_expected.to eq ['a note about the item'] }
+  end
+
   describe '#publisher' do
     subject { mapper.publisher }
 
@@ -139,8 +147,8 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
     end
   end
 
-  describe '#place_attributes' do
-    subject { mapper.place_attributes }
+  describe '#location_attributes' do
+    subject { mapper.location_attributes }
 
     let(:metadata) do
       {

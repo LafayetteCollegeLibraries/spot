@@ -9,6 +9,7 @@ module Spot::Mappers
 
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
+      note: 'Note',
       publisher: 'OriginInfoPublisher',
       rights_statement: 'dc:rights',
       source: 'RelatedItemHost_1_TitleInfoTitle'
@@ -22,7 +23,7 @@ module Spot::Mappers
         date_issued
         description
         identifier
-        place_attributes
+        location_attributes
         related_resource
         resource_type
         subtitle
@@ -42,15 +43,6 @@ module Spot::Mappers
       end
     end
 
-    # Maps magazine notes to English-tagged RDF literals
-    #
-    # @return [Array<RDF::Literal>]
-    def description
-      metadata['Note'].reject(&:blank?).map do |desc|
-        RDF::Literal(desc, language: :en)
-      end
-    end
-
     # Creates a local identifier using the 'Publication Sequence' number
     #
     # @return [Array<String>]
@@ -59,7 +51,7 @@ module Spot::Mappers
     end
 
     # @return [Array<String>]
-    def place_attributes
+    def location_attributes
       nested_attributes_hash_for('OriginInfoPlaceTerm') do |original_value|
         # downcasing to save us from ourselves: 'Easton, Pa' vs 'Easton, PA'
         case original_value.downcase

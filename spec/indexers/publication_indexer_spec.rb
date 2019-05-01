@@ -57,6 +57,12 @@ RSpec.describe PublicationIndexer do
     it_behaves_like 'simple model indexing'
   end
 
+  describe 'note' do
+    # :stored_searchable
+    let(:fields) { %w[note_tesim] }
+    it_behaves_like 'simple model indexing'
+  end
+
   describe 'identifier' do
     let(:fields) { %w[identifier_ssim] }
     it_behaves_like 'simple model indexing'
@@ -138,21 +144,21 @@ RSpec.describe PublicationIndexer do
     it { is_expected.to include 'rights_statement_label_ssim' }
   end
 
-  describe 'place' do
+  describe 'location' do
     let(:label) { 'Easton, PA' }
     let(:uri) { 'http://sws.geonames.org/5188140/' }
-    let(:work) { build(:publication, place: [RDF::URI(uri)]) }
+    let(:work) { build(:publication, location: [RDF::URI(uri)]) }
 
     before do
       RdfLabel.first_or_create(uri: uri, value: label)
     end
 
     it 'stores the uri' do
-      expect(solr_doc['place_ssim']).to eq [uri]
+      expect(solr_doc['location_ssim']).to eq [uri]
     end
 
     it 'stores the label' do
-      expect(solr_doc['place_label_ssim']).to eq [label]
+      expect(solr_doc['location_label_ssim']).to eq [label]
     end
   end
 

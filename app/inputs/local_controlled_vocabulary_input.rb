@@ -13,7 +13,7 @@
 #     setup(element, fieldName, url) {
 #       // ...
 #       case 'new_field_name':
-#       case 'place':
+#       case 'location':
 #         new LinkedData(element, url)
 #     }
 #   }

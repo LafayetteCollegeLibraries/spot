@@ -29,6 +29,7 @@ module Hyrax
       # description
       :abstract,
       :description,
+      :note,
       :date_issued,
       :date_available,
       :resource_type,
@@ -36,7 +37,7 @@ module Hyrax
       :language,
       :subject,
       :keyword,
-      :place,
+      :location,
       :bibliographic_citation,
       :identifier,
       :related_resource,

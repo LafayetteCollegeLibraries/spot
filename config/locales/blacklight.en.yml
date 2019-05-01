@@ -23,10 +23,10 @@ en:
         keyword_sim: Keyword
         language: Language
         license: License
+        location: Location
         member_of_collections: Collections
         original_checksum: Original Checksum (MD5)
         page_count: Page Count
-        place: Location
         proxy_depositor: Proxy Depositor
         publisher: Publisher
         resource_type: Type
