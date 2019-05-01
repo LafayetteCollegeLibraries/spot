@@ -8,11 +8,12 @@
 # - remove :date_created
 # - change :based_near => :location
 # - change :related_url => :related_resource
+# - add :note
 module Hyrax
   module Forms
     class BatchEditForm < Hyrax::Forms::WorkForm
       # Used for drawing the fields that appear on the page
-      self.terms = [:creator, :contributor, :description,
+      self.terms = [:creator, :contributor, :description, :note,
                     :keyword, :resource_type, :license, :publisher,
                     :subject, :language, :identifier, :location,
                     :related_resource]
@@ -40,6 +41,7 @@ module Hyrax
         [{ creator: [] },
          { contributor: [] },
          { description: [] },
+         { note: [] },
          { keyword: [] },
          { resource_type: [] },
          { license: [] },

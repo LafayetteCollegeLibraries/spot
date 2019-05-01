@@ -8,6 +8,7 @@ describe Publication do
   let(:rdfs) { RDF::RDFS }
   let(:schema) { RDF::Vocab::SCHEMA }
   let(:edm) { RDF::Vocab::EDM }
+  let(:skos) { RDF::Vocab::SKOS }
   let(:subtitle_uri) { 'http://purl.org/spar/doco/Subtitle' }
   let(:dept_uri) { 'http://vivoweb.org/ontology/core#AcademicDepartment' }
   let(:division_uri) { 'http://vivoweb.org/ontology/core#Division' }
@@ -24,6 +25,7 @@ describe Publication do
   it { is_expected.to have_editable_property(:language).with_predicate(dc11.language) }
   it { is_expected.to have_editable_property(:abstract).with_predicate(dc.abstract) }
   it { is_expected.to have_editable_property(:description).with_predicate(dc11.description) }
+  it { is_expected.to have_editable_property(:note).with_predicate(skos.note) }
   it { is_expected.to have_editable_property(:identifier).with_predicate(dc.identifier) }
   it { is_expected.to have_editable_property(:bibliographic_citation).with_predicate(dc.bibliographicCitation) }
   it { is_expected.to have_editable_property(:date_issued).with_predicate(dc.issued) }

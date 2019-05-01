@@ -29,6 +29,7 @@ module Hyrax
       # description
       :abstract,
       :description,
+      :note,
       :date_issued,
       :date_available,
       :resource_type,

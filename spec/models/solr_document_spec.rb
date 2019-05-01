@@ -35,6 +35,7 @@ RSpec.describe SolrDocument do
     license: { type: Array, suffix: 'ssim' },
     location: { type: Array, suffix: 'ssim' },
     location_label: { type: Array, suffix: 'ssim' },
+    note: { type: Array, suffix: 'tesim' },
     organization: { type: Array, suffix: 'tesim' },
     original_checksum: { type: String, suffix: 'tesim' },
     physical_medium: { type: Array, suffix: 'tesim' },

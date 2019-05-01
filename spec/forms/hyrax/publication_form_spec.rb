@@ -25,6 +25,7 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :resource_type }
       it { is_expected.to include :abstract }
       it { is_expected.to include :description }
+      it { is_expected.to include :note }
       it { is_expected.to include :identifier }
       it { is_expected.to include :bibliographic_citation }
       it { is_expected.to include :date_issued }

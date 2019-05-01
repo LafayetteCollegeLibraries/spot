@@ -57,6 +57,12 @@ RSpec.describe PublicationIndexer do
     it_behaves_like 'simple model indexing'
   end
 
+  describe 'note' do
+    # :stored_searchable
+    let(:fields) { %w[note_tesim] }
+    it_behaves_like 'simple model indexing'
+  end
+
   describe 'identifier' do
     let(:fields) { %w[identifier_ssim] }
     it_behaves_like 'simple model indexing'

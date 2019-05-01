@@ -16,6 +16,7 @@ FactoryBot.define do
     keyword { ['test', 'item', 'topic'] }
     language { ['en'] }
     location { [] }
+    note { ['a note about the thing'] }
     organization { ['Lafayette College'] }
     publisher { ['Prestigious Press', 'Lafayette College'] }
     resource_type { ['Article'] }

@@ -59,6 +59,10 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :note, predicate: ::RDF::Vocab::SKOS.note do |index|
+    index.as :stored_searchable
+  end
+
   property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
     index.as :symbol
   end
