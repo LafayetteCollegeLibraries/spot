@@ -9,6 +9,7 @@ module Spot::Mappers
 
     self.fields_map = {
       creator: 'NamePart_DisplayForm_PersonalAuthor',
+      note: 'Note',
       publisher: 'OriginInfoPublisher',
       rights_statement: 'dc:rights',
       source: 'RelatedItemHost_1_TitleInfoTitle'
@@ -39,15 +40,6 @@ module Spot::Mappers
     def date_issued
       metadata['PartDate_ISO8601'].map do |raw|
         short_date_to_iso(raw, century_threshold: 30)
-      end
-    end
-
-    # Maps magazine notes to English-tagged RDF literals
-    #
-    # @return [Array<RDF::Literal>]
-    def description
-      metadata['Note'].reject(&:blank?).map do |desc|
-        RDF::Literal(desc, language: :en)
       end
     end
 

@@ -8,6 +8,7 @@ module Spot::Mappers
     include NestedAttributes
 
     self.fields_map = {
+      note: 'note',
       publisher: 'originInfo_Publisher',
       rights_statement: 'dc:rights',
       source: 'relatedItem_typeHost_titleInfo_title'

@@ -44,13 +44,12 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     it { is_expected.to eq value }
   end
 
-  describe '#description' do
-    subject { mapper.description }
+  describe '#note' do
+    subject { mapper.note }
 
     let(:metadata) { { 'Note' => ['some information'] } }
-    let(:value) { [RDF::Literal('some information', language: :en)] }
 
-    it { is_expected.to eq value }
+    it { is_expected.to eq ['some information'] }
   end
 
   describe '#identifier' do
