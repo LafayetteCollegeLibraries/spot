@@ -51,7 +51,6 @@ module Spot
         RdfLabel.where(uri: rdf_subject.to_s).first_or_create(&block)
       end
 
-
       # Does this value have a label or is it just an URI?
       #
       # @return [TrueClass,FalseClass]
