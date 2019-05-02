@@ -31,7 +31,7 @@ module Spot::ControlledVocabularies
       #
       # @return [String]
       def pick_preferred_label
-        RdfLabel.first_or_create(uri: rdf_subject.to_s) do |label|
+        find_or_create_from_cache do |label|
           label.value = authority_class.label.call(fetch_geonames_data)
         end.value
       end

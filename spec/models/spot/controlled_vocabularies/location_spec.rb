@@ -63,5 +63,21 @@ RSpec.describe Spot::ControlledVocabularies::Location do
         expect(WebMock).not_to have_requested(:get, api_base)
       end
     end
+
+    context 'when one exists but not what we want' do
+      let(:existing_uri) { 'http://sws.geonames.org/0123456/' }
+      let(:existing_label) { 'Mokhdān' }
+
+      before do
+        RdfLabel.delete_all
+        RdfLabel.create!(uri: existing_uri, value: existing_label)
+      end
+
+      it 'adds a new label' do
+        preferred_label
+
+        expect(RdfLabel.count).to be > 1
+      end
+    end
   end
 end
