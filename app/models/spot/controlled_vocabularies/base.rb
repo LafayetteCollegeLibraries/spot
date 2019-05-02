@@ -29,9 +29,7 @@ module Spot
         tries = 3
         begin
           super(*args).tap do
-            RdfLabel.first_or_create(uri: rdf_subject.to_s) do |label|
-              label.value = pick_preferred_label
-            end
+            find_or_create_from_cache { |label| label.value = pick_preferred_label }
             @preferred_label = nil
           end
         rescue StandardError => e
@@ -40,6 +38,17 @@ module Spot
           sleep(5)
           retry
         end
+      end
+
+      # Fetches a label for +#rdf_subject+ from the RdfLabel cache if it exists,
+      # otherwise passes a block to +.first_or_create+. We're calling +.where+
+      # _before_ +.first_or_create+, as just calling +.first_or_create+ will
+      # return the first RdfLabel it finds and ignores the :uri parameter.
+      #
+      # @yield [RdfLabel] newly created label
+      # @return [RdfLabel]
+      def find_or_create_from_cache(&block)
+        RdfLabel.where(uri: rdf_subject.to_s).first_or_create(&block)
       end
 
       # Does this value have a label or is it just an URI?

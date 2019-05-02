@@ -22,7 +22,7 @@ RSpec.describe Spot::ControlledVocabularies::Base do
 
     context 'retrying #fetch when it initially fails' do
       before do
-        stub_request(:any, uri.to_s).and_return(status: [500, 'Internal Server Error'])
+        stub_request(:any, uri).and_return(status: [500, 'Internal Server Error'])
         allow(resource).to receive(:sleep).and_return(true)
       end
 
@@ -36,6 +36,22 @@ RSpec.describe Spot::ControlledVocabularies::Base do
       end
 
       it_behaves_like 'it logs a warning'
+    end
+
+    context 'when a label has not been cached but others exist' do
+      before do
+        RdfLabel.destroy_all
+        RdfLabel.create!(uri: 'http://cool.org/example', value: 'a previous example')
+
+        stub_request(:any, uri)
+        allow(resource).to receive(:pick_preferred_label).and_return(label_en)
+      end
+
+      it 'adds another entry to the cache' do
+        fetch
+
+        expect(RdfLabel.count).to be > 1
+      end
     end
   end
 
@@ -51,7 +67,7 @@ RSpec.describe Spot::ControlledVocabularies::Base do
 
       after { cache.delete }
 
-      let(:cache) { RdfLabel.first_or_create(uri: uri, value: new_label) }
+      let(:cache) { RdfLabel.create!(uri: uri, value: new_label) }
       let(:new_label) { 'Cool stuff' }
 
       it { is_expected.to eq cache.value }
