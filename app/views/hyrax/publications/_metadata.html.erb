@@ -1,6 +1,6 @@
 <%# overriding the metadata display for Publications %>
 <div class="panel panel-default">
-  <table class="table table-bordered work-show <%= dom_class(presenter) %>">
+  <table class="table table-bordered work-show <%= dom_class(presenter) %> metadata-table">
     <tbody>
       <%= presenter.attribute_to_html(:title) %>
       <%= presenter.attribute_to_html(:subtitle, show_help_text: true) %>

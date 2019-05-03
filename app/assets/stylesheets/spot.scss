@@ -35,6 +35,15 @@
   height: 50px;
 }
 
+// bootstrap is very specific in targeting table cells,
+// so we also need to be that specific to override
+.metadata-table > tbody > tr {
+  > td,
+  > th {
+    vertical-align: middle;
+  }
+}
+
 .site-footer {
   background-color: $tan-light;
   height: 20rem;
