@@ -64,8 +64,6 @@ jobs:
       PSQL_USER: spot_dev_user
       PSQL_PASSWORD: ''
       PSQL_DATABASE: spot_test
-      SPEC_OPTS: --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
-      COVERALLS_PARALLEL: true
       CI: true
       CAS_BASE_URL: http://localhost
 
@@ -93,14 +91,33 @@ jobs:
             curl -H "Content-type: application/json" http://localhost:8985/api/collections/ -d "{create: {name: hydra-test, config: spot, numShards: 1}}"
 
       - run:
-          name: Run db migrations
-          command: bundle exec rails db:migrate
+          name: Install Code Climate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
 
       - run:
           name: Run RSpec tests
           command: |
+            bundle exec rails db:migrate
             mkdir /tmp/test-results
-            CIRCLE_BUILD_NUM=$CIRCLE_WORKFLOW_ID bundle exec rspec $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            ./cc-test-reporter before-build
+            bundle exec rspec \
+              --format RspecJunitFormatter \
+              --out /tmp/test-results/rspec.xml \
+              --format progress\
+              -- \
+              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+      - run:
+          name: Code Climate test coverate
+          command: |
+            ./cc-test-reporter format-coverage -t simplecov -o "coverage/codeclimate.$CIRCLE_NODE_INDEX.json"
+
+      - persist_to_workspace:
+          root: coverage
+          paths:
+            - codeclimate.*.json
 
       - store_test_results:
           path: /tmp/test-results
@@ -109,10 +126,22 @@ jobs:
           path: /tmp/test-results
           destination: test-results
 
-  notify-on-finish:
-    executor: ruby
+  upload-coverage:
+    docker:
+      - image: circleci/ruby:2.4.3-stretch-node-browsers
+    working_directory: ~/spot
+
     steps:
-      - run: curl -k https://coveralls.io/webhook?repo_token=$COVERALLS_REPO_TOKEN -d "payload[build_num]=$CIRCLE_WORKFLOW_ID&payload[status]=done"
+      - attach_workspace:
+          at: ~/spot
+      - run:
+          name: Install Code Climate Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
+          command: |
+            ./cc-test-reporter sum-coverage --output - codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
 
 workflows:
   version: 2
@@ -125,6 +154,6 @@ workflows:
     - test:
         requires:
           - lint
-    - notify-on-finish:
+    - upload-coverage:
         requires:
           - test

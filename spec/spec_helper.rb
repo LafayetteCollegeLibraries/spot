@@ -3,8 +3,6 @@ ENV['RAILS_ENV'] = 'test'
 
 if ENV['COVERAGE'] || ENV['CI']
   require 'simplecov'
-  require 'coveralls'
-  SimpleCov.formatter = Coveralls::SimpleCov::Formatter if ENV['CI']
   SimpleCov.start 'rails'
 end
 
