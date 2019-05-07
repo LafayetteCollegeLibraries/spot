@@ -8,16 +8,6 @@ class CatalogController < ApplicationController
   # This filter applies the hydra access controls
   before_action :enforce_show_permissions, only: :show
 
-  def self.uploaded_field
-    # solr_name('system_create', :stored_sortable, type: :date)
-    'system_create_dtsi'
-  end
-
-  def self.modified_field
-    # solr_name('system_modified', :stored_sortable, type: :date)
-    'system_modified_dtsi'
-  end
-
   configure_blacklight do |config|
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
@@ -212,11 +202,11 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     # label is key, solr field is value
-    config.add_sort_field "score desc, #{uploaded_field} desc", label: "relevance"
-    config.add_sort_field "#{uploaded_field} desc", label: "date uploaded \u25BC"
-    config.add_sort_field "#{uploaded_field} asc", label: "date uploaded \u25B2"
-    config.add_sort_field "#{modified_field} desc", label: "date modified \u25BC"
-    config.add_sort_field "#{modified_field} asc", label: "date modified \u25B2"
+    config.add_sort_field 'score desc, system_create_dtsi desc', label: I18n.t('blacklight.sort.fields.relevance')
+    config.add_sort_field 'date_issued_sort_dtsi asc', label: I18n.t('blacklight.sort.fields.date_issued.asc')
+    config.add_sort_field 'date_issued_sort_dtsi desc', label: I18n.t('blacklight.sort.fields.date_issued.desc')
+    config.add_sort_field 'system_create_dtsi asc', label: I18n.t('blacklight.sort.fields.date_added.asc')
+    config.add_sort_field 'system_create_dtsi desc', label: I18n.t('blacklight.sort.fields.date_added.desc')
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.

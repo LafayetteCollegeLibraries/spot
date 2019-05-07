@@ -34,3 +34,12 @@ en:
         subject: Subject
         title: Title
         years_encompassed: Year
+    sort:
+      fields:
+        date_added:
+          asc: "Date Added \u25B2"
+          desc: "Date Added \u25BC"
+        date_issued:
+          asc: "Issue Date \u25B2"
+          desc: "Issue Date \u25BC"
+        relevance: Relevance
