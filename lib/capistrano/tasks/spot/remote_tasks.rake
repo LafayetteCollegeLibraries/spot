@@ -37,5 +37,11 @@ namespace :spot do
       end
     end
   end
+
+  task :status do
+    on roles(:app) do
+      execute :bundle, :exec, 'spot:status'
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
