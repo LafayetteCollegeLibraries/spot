@@ -40,7 +40,11 @@ namespace :spot do
 
   task :status do
     on roles(:app) do
-      execute :bundle, :exec, 'spot:status'
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute(:bundle, :exec, :rails, 'spot:status')
+        end
+      end
     end
   end
 end
