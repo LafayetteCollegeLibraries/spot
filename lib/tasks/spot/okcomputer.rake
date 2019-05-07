@@ -11,7 +11,10 @@ namespace :spot do
     checks.run
 
     checks.collection.each_value do |check|
-      printf "%-25s %-6s %s\n", check.registrant_name, check.success?? 'OK' : 'FAIL', check.message
+      printf "%-25s %-6s %s\n",
+             check.registrant_name,
+             check.success? ? 'OK' : 'FAIL',
+             check.message
     end
   end
 end
