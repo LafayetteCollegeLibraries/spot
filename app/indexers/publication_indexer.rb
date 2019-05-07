@@ -3,6 +3,7 @@ class PublicationIndexer < Hyrax::WorkIndexer
   include IndexesRightsStatements
   include IndexesEnglishLanguageDates
   include IndexesLanguageAndLabel
+  include IndexesSortableDate
 
   # Overriding the default +Hyrax::DeepIndexingService+ for our own, which
   # doesn't require +Hyrax::BasicMetadata+
