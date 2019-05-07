@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe IdentifierController do
-  describe '#handle' do
-    subject { get :handle, params: { id: handle } }
+RSpec.describe HandleController do
+  describe '#show' do
+    subject { get :show, params: { id: handle } }
 
     context 'when a handle exists for an item' do
       let(:handle) { '1234/5678' }
@@ -14,7 +14,7 @@ RSpec.describe IdentifierController do
     end
 
     context 'when a handle does not exist for an item' do
-      let(:handle) { 'not/here' }
+      let(:handle) { '1234/nothere' }
 
       it { is_expected.to have_http_status :not_found }
     end
