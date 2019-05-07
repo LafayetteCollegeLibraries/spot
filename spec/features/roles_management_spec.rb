@@ -44,4 +44,21 @@ RSpec.feature 'Role management' do
       expect(page).not_to have_css 'table#users'
     end
   end
+
+  describe 'adding a non-existing user to a role' do
+    let(:role) { Role.find_or_create_by(name: role_name) }
+    let(:new_user_email) { 'new-user@lafayette.edu' }
+
+    scenario do
+      visit "/admin/roles/#{role.id}/edit"
+
+      fill_in 'user_key', with: new_user_email
+      click_button 'Add User'
+
+      expect(User.find_by(email: new_user_email)).not_to be_nil
+
+      expect(page).to have_css 'div.alert.alert-info'
+      expect(page.find('table#users')).to have_content new_user_email
+    end
+  end
 end

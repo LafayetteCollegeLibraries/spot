@@ -21,16 +21,18 @@ en:
       cancel: Cancel
       page_title: 'Viewing %{name} // Roles // %{app_name}'
     edit:
-      title: 'Editing role: %{name}'
-      field_name: Role name
-      update: Update Role
       accounts: Accounts
+      add: Add User
+      add_user_label: Add an account to this role
+      cancel: Cancel
       delete: Delete Role
       delete_warning: Deleting this role could have unexpected consequences. Please be sure you want to do this!
-      remove: Remove User
-      add_user_label: Add an account to this role
-      user: User
-      user_placeholder: name@lafayette.edu
-      add: Add User
-      cancel: Cancel
+      field_name: Role name
       page_title: 'Editing %{name} // Roles // %{app_name}'
+      remove: Remove User
+      title: 'Editing role: %{name}'
+      update: Update Role
+      user: User
+      user_added_to_role: 'User <strong>%{user}</strong> was assigned <strong>%{role}</strong> status'
+      user_created_added_to_role: 'User <strong>%{user}</strong> was created and assigned <strong>%{role}</strong> status'
+      user_placeholder: name@lafayette.edu

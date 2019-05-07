@@ -16,12 +16,29 @@ end %>
   </div>
 </div>
 
+
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
       <%= t('.accounts') %>
     </h3>
   </div>
+
+  <% if flash[:user] %>
+    <div class="panel-body">
+      <div class="alert alert-info alert-dismissable user-alert" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+        <%= flash[:user].html_safe %>
+      </div>
+    </div>
+
+    <script>
+      $('.user-alert').on('close.bs.alert', function () { $(this).parent().remove() })
+    </script>
+  <%- end -%>
 
   <% unless @role.users.empty? %>
   <table id="users" class="table table-bordered">
