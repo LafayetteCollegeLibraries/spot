@@ -3,7 +3,8 @@
   <div class="col-sm-12 featured-collection"
        style="background-image: url(<%= image_path(collection.banner_file) %>)">
   <% else %>
-  <div class="col-sm-12 featured-collection">
+  <div class="col-sm-12 featured-collection"
+       style="background-image: url(<%= image_path('default-collection-background.jpg') %>)">
   <% end %>
     <div class="collection-info">
       <h3 class="collection-title"><%= collection.title.first %></h3>

@@ -6,7 +6,7 @@
       <% unless @presenter.banner_file.blank? %>
           <header class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
       <% else %>
-          <header class="hyc-generic">
+          <header class="hyc-banner" style="background-image:url(<%= image_path('default-collection-background.jpg') %>)">
       <% end %>
 
       <div class="hyc-title">

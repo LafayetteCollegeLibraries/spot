@@ -3,7 +3,7 @@
 # The Hyrax::CollectionPresenter with support for FeaturedCollections
 module Spot
   class CollectionPresenter < Hyrax::CollectionPresenter
-    include ActionView::Helpers::UrlHelper
+    include ActionView::Helpers::AssetUrlHelper
 
     delegate :abstract, :related_resource, to: :solr_document
 
