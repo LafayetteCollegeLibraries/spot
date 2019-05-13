@@ -36,3 +36,17 @@ append :linked_dirs, 'log'
 append :linked_dirs, 'tmp/cache', 'tmp/derivatives', 'tmp/export', 'tmp/ingest', 'tmp/pids', 'tmp/sockets'
 append :linked_dirs, 'vendor/bundle'
 append :linked_dirs, 'public/assets', 'public/branding', 'public/system', 'public/uploads'
+
+# hotfix (for the moment)
+# we need to keep public/universalviewer intact between deploys
+# until the improved universal viewer work in hyrax is release
+# (see: https://github.com/samvera/hyrax/commit/0e02c4adf26e74f2d892f575c93789bc166e53ad)
+#
+# until then, this directory should contain a git clone of the
+# universalviewer repository, checked out to 'v2.0.1':
+#
+#   git clone https://github.com/universalviewer/universalviewer $SPOT_ROOT/public/universalviewer
+#   cd $SPOT_ROOT/public/universalviewer
+#   git checkout v2.0.1
+#
+append :linked_dirs, 'public/universalviewer'
