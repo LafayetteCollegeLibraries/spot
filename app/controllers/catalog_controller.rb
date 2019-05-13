@@ -44,7 +44,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'resource_type_ssim',
                            label: I18n.t('blacklight.search.fields.resource_type'),
                            limit: 5
-    config.add_facet_field 'creator_ssim',
+    config.add_facet_field 'creator_sim',
                            label: I18n.t('blacklight.search.fields.creator'),
                            limit: 5
     config.add_facet_field 'publisher_sim',
