@@ -47,23 +47,29 @@ class CatalogController < ApplicationController
     config.add_facet_field 'creator_ssim',
                            label: I18n.t('blacklight.search.fields.creator'),
                            limit: 5
-    config.add_facet_field 'contributor_sim',
-                           label: I18n.t('blacklight.search.fields.contributor'),
+    config.add_facet_field 'publisher_sim',
+                           label: I18n.t('blacklight.search.fields.publisher'),
                            limit: 5
-    config.add_facet_field 'keyword_sim',
-                           label: I18n.t('blacklight.search.fields.keyword'),
+    config.add_facet_field 'organization_sim',
+                           label: I18n.t('blacklight.search.fields.organization'),
                            limit: 5
-    config.add_facet_field 'subject_sim',
-                           label: I18n.t('blacklight.search.fields.subject'),
+    config.add_facet_field 'division_sim',
+                           label: I18n.t('blacklight.search.fields.division'),
                            limit: 5
     config.add_facet_field 'academic_department_sim',
                            label: I18n.t('blacklight.search.fields.academic_department'),
                            limit: 5
+    config.add_facet_field 'subject_sim',
+                           label: I18n.t('blacklight.search.fields.subject'),
+                           limit: 5
+    config.add_facet_field 'keyword_sim',
+                           label: I18n.t('blacklight.search.fields.keyword'),
+                           limit: 5
+    config.add_facet_field 'language_label_ssim',
+                           label: I18n.t('blacklight.search.fields.language'),
+                           limit: 5
     config.add_facet_field 'location_label_ssim',
                            label: I18n.t('blacklight.search.fields.location'),
-                           limit: 5
-    config.add_facet_field 'publisher_sim',
-                           label: I18n.t('blacklight.search.fields.publisher'),
                            limit: 5
     config.add_facet_field 'years_encompassed_iim',
                            include_in_advanced_search: false,

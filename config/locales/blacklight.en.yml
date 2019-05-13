@@ -16,6 +16,7 @@ en:
         date_uploaded: Date Uploaded
         depositor: Deposited by
         description: Description
+        division: Division
         file_format: File Format
         file_size: File Size
         identifier: Standard Identifier
@@ -25,6 +26,7 @@ en:
         license: License
         location: Location
         member_of_collections: Collections
+        organization: Organization
         original_checksum: Original Checksum (MD5)
         page_count: Page Count
         proxy_depositor: Proxy Depositor
