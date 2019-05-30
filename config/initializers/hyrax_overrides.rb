@@ -35,6 +35,8 @@ load_overrides = lambda do
 
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
 
+  Hyrax::DerivativeService.services = [Hyrax::FileSetDerivativesService, Spot::FileSetAccessMasterService]
+
   # We've dropped the navbar + banner image that come with Hyrax, and the
   # 'homepage' layout that the PagesController calls defines content for
   # this block. By switching to the 'hyrax' layout (which we're using for
