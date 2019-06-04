@@ -8,8 +8,10 @@ en:
         academic_department: Academic Department
         all_fields: All fields
         author: Author
+        bibliographic_citation: Bibliographic Citation
         contributor: Contributor
         creator: Creator
+        date_available: Date Available
         date_created: Date Created
         date_issued: Date Issued
         date_modified: Date Modified
@@ -23,6 +25,7 @@ en:
         keyword: Keyword
         keyword_sim: Keyword
         language: Language
+        language_label: Language
         license: License
         location: Location
         member_of_collections: Collections
@@ -33,6 +36,7 @@ en:
         publisher: Publisher
         resource_type: Type
         rights_statement: Rights Statement
+        standard_identifier: Standard Identifier
         subject: Subject
         title: Title
         years_encompassed: Year
