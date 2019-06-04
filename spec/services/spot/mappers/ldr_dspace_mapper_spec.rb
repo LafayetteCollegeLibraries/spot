@@ -221,7 +221,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#publisher' do
     subject { mapper.publisher }
 
-    let(:metadata) { { 'type' => type, 'publisher' => ['Some journal'] } }
+    let(:metadata) { { 'type' => [type], 'publisher' => ['Some journal'] } }
 
     context 'when an item is a Book chapter' do
       let(:type) { 'Book chapter' }
@@ -245,7 +245,7 @@ RSpec.describe Spot::Mappers::LdrDspaceMapper do
   describe '#source' do
     subject { mapper.source }
 
-    let(:metadata) { { 'type' => type, 'publisher' => ['Some journal'] } }
+    let(:metadata) { { 'type' => [type], 'publisher' => ['Some journal'] } }
 
     context 'when an item is a Book chapter' do
       let(:type) { 'Book chapter' }
