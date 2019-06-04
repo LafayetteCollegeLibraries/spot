@@ -24,11 +24,16 @@ module Spot
     # @raise [ArgumentError] if +work_class:+ not a valid Work type
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
-    def perform(bag_path:, source:, work_class:, collection_ids: [])
+    def perform(bag_path:,
+                source:,
+                work_class:,
+                collection_ids: [],
+                multi_value_character: ';')
       @bag_path = bag_path
       @source = source
       @work_class = work_class.constantize
       @collection_ids = collection_ids
+      @multi_value_character = multi_value_character
 
       raise ArgumentError, "Unknown source: #{source}." unless source_available?
       raise ArgumentError, "Unknown work_class: #{work_class}" unless work_class_valid?
@@ -65,7 +70,8 @@ module Spot
       # @return [Spot::Importers::Bag::Parser]
       def parser
         @parser ||= Spot::Importers::Bag::Parser.new(directory: bag_path,
-                                                     mapper: mapper)
+                                                     mapper: mapper,
+                                                     multi_value_character: @multi_value_character)
       end
 
       # @return [Spot::Importers::Bag::RecordImporter]
