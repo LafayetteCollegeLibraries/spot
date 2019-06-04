@@ -40,7 +40,10 @@ en:
         browse_catalog: Browse the catalog
         browse_collections: View collections
         intro_text: Welcome to the %{name}
-        tagline: Some good stuff for you to peruse
+        tagline: >-
+          The Lafayette Digital Repository is a digital archive designed
+          to store and provide access to digital scholarly, administrative,
+          and archival resources on behalf of the Lafayette College community.
 
     identifiers:
       labels:
