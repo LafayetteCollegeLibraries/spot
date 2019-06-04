@@ -140,7 +140,7 @@ module Spot::Mappers
       #
       # @return [true, false]
       def chapter_or_book?
-        ['Book chapter', 'Part of Book'].include? metadata['type']
+        ['Book chapter', 'Part of Book'].include? metadata['type'].first
       end
 
       # Gathers identifiers for DOI, ISBN, ISSN, and Handle.net urls
