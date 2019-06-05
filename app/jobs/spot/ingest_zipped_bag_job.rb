@@ -7,7 +7,9 @@
 # before the job has a chance to perform)
 #
 # @todo clean up working directory after ingest (via callback?)
-
+# @todo fix rubocop warning; is this _too_ configurable?
+#
+# rubocop:disable Metrics/ParameterLists
 require 'fileutils'
 
 module Spot
@@ -18,14 +20,18 @@ module Spot
     # @param [String] source Source collection / which mapper to use
     # @param [String] work_class Work Type to use for new object
     # @param [String] working_path Directory to unzip the object
+    # @param [Array<String>] collection_ids Array of collection ids to add this item to
+    # @param [String] multi_value_character The character used in the metadata to indicate multiple values
     # @return [void]
-    # @raose [ArgumentError] if +working_path:+ is not a directory
+    #
+    # @raise [ArgumentError] if +working_path:+ is not a directory
     # @raise [ArgumentError] if +source:+ is not defined in {Spot::Mappers.available_mappers}
     #   (from Spot::IngestBagJob)
     # @raise [ArgumentError] if +work_class:+ not a valid Work type
     #   (from Spot::IngestBagJob)
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
+    #
     def perform(zip_path:,
                 source:,
                 work_class:,
@@ -47,3 +53,4 @@ module Spot
     end
   end
 end
+# rubocop:enable Metrics/ParameterLists
