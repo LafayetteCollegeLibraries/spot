@@ -7,6 +7,7 @@ RSpec.describe Spot::IngestZippedBagJob do
                                 work_class: work_class,
                                 source: source,
                                 collection_ids: collection_ids,
+                                multi_value_character: '|',
                                 working_path: working_path)
   end
 
@@ -30,7 +31,7 @@ RSpec.describe Spot::IngestZippedBagJob do
       expect(Spot::IngestBagJob)
         .to have_received(:perform_now)
         .with(bag_path: working_path.join('bag').to_s, source: source,
-              work_class: work_class, collection_ids: collection_ids)
+              work_class: work_class, collection_ids: collection_ids, multi_value_character: '|')
     end
 
     context 'when working path isn\'t a directory' do
