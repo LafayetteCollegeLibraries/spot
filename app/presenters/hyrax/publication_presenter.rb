@@ -23,7 +23,7 @@ module Hyrax
     #
     # @return [String]
     def page_title
-      "#{title.first} || #{I18n.t('hyrax.product_name')}"
+      "#{title.first} // #{I18n.t('hyrax.product_name')}"
     end
 
     # For now, overriding the ability to feature individual works
