@@ -7,7 +7,8 @@ namespace :spot do
     path = ENV['path']
     work_class = ENV['work_class']
     collection_ids = ENV['collection_ids'].to_s.split(',')
-    working_path = ENV.fetch('working_path') { Rails.root.join('tmp', 'ingest').to_s }
+    multi_value_character = ENV.fetch('multi_value_character', ';')
+    working_path = ENV.fetch('working_path', Rails.root.join('tmp', 'ingest').to_s)
 
     error_message = if    !source       then 'No `source` provided!'
                     elsif !path         then 'No `path` provided!'
@@ -31,6 +32,7 @@ namespace :spot do
       Spot::IngestZippedBagJob.perform_later(zip_path: entry,
                                              source: source,
                                              collection_ids: collection_ids,
+                                             multi_value_character: multi_value_character,
                                              work_class: work_class,
                                              working_path: working_path)
     end

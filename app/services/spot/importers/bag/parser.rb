@@ -25,8 +25,6 @@ module Spot::Importers::Bag
       Spot::Validators::BagMetadataValidator.new
     ].freeze
 
-    MULTI_VALUE_CHARACTER = ';'
-
     # +Darlingtonia::Parser+'s initializer uses the +file+ kwarg
     # for the object, but because we're dealing with directories,
     # we're redefining that attribute here and aliasing the +file+
@@ -36,9 +34,10 @@ module Spot::Importers::Bag
     #
     # @param [String, Pathname] directory
     # @param [Darlingtonia::MetadataMapper] mapper
-    def initialize(directory:, mapper:)
+    def initialize(directory:, mapper:, multi_value_character: ';')
       super(file: directory)
       @mapper = mapper
+      @multi_value_character = multi_value_character
     end
 
     alias directory file
@@ -114,13 +113,13 @@ module Spot::Importers::Bag
       end
 
       # Parses the +metadata.csv+ file into a +CSV::Table+ and splits values
-      # on the {MULTI_VALUE_CHARACTER} constant.
+      # on the {@multi_value_character} instance variable.
       #
       # @return [CSV::Table]
       def read_csv
         CSV.read(metadata_path,
                  headers: true,
-                 converters: ->(v) { v.split(MULTI_VALUE_CHARACTER) })
+                 converters: ->(v) { v.split(@multi_value_character) })
       end
   end
 end
