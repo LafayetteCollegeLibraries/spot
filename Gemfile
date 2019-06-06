@@ -100,6 +100,10 @@ gem 'slack-ruby-client', '0.14.1'
 # using it in other instances, we should require it just in case.
 gem 'kaminari', '1.1.1'
 
+# a bunch of samvera gems rely on Faraday already, but we'll
+# require it as we're explicitly using it.
+gem 'faraday', '0.15.4'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
