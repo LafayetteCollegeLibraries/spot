@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="1.4.1" timestamp="6/6/19 6:03 PM">
+  <filestatus>
+    <well-formed toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">true</well-formed>
+    <valid toolname="Jhove" toolversion="1.20.1" status="SINGLE_RESULT">true</valid>
+  </filestatus>
+  <metadata>
+    <image>
+      <imageWidth toolname="Jhove" toolversion="1.20.1">731</imageWidth>
+      <imageHeight toolname="Jhove" toolversion="1.20.1">731</imageHeight>
+    </image>
+  </metadata>
+  <statistics fitsExecutionTime="1805"></statistics>
+</fits>

@@ -25,7 +25,7 @@ module Spot
     #
     # @return [void]
     def characterize
-      raise 'No FITS_SERVLET_HOST provided!' if fits_servlet_host.nil?
+      raise StandardError, 'No FITS_SERVLET_HOST provided!' if fits_servlet_host.nil?
 
       terms = parse_metadata(extract_metadata)
       store_metadata(terms)
