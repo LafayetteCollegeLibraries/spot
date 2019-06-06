@@ -20,10 +20,14 @@ module Spot
     # the thumbnail. We just want to create an access_master for
     # an image server to be able to retrieve.
     #
-    # @param [String,Pathname] filename
+    # @param [String,Pathname] filename the src path of the file
     # @return [void]
     def create_derivatives(filename)
-      Hydra::Derivatives::ImageDerivatives.create(filename, outputs: access_master_outputs)
+      MiniMagick::Tool::Magick.new do |magick|
+        magick << filename
+        magick.merge! %w[-define tiff:tile-geometry=128x128]
+        magick << "ptif:#{derivative_url('access.tif')}"
+      end
     end
 
     # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
@@ -32,11 +36,9 @@ module Spot
     # @param [String] destination_name
     # @return [String]
     def derivative_url(destination_name)
-      path = derivative_path_factory.derivative_path_for_reference(file_set, destination_name)
-
-      # +#derivative_path_for_reference+ will duplicate the destination name by default,
-      # resulting in "/path/to/derivatives/ab/cd/ef/gh/i-access.jpg.access.jpg"
-      URI("file://#{path}").to_s.gsub(%r{\.#{destination_name}$}, '')
+      derivative_path_factory
+        .derivative_path_for_reference(file_set, destination_name)
+        .to_s.gsub(%r{\.#{destination_name}$}, '')
     end
 
     # @return [true, false]
@@ -50,8 +52,8 @@ module Spot
       def access_master_outputs
         [{
           label: :access,
-          format: 'jpg',
-          url: derivative_url('access.jpg'),
+          format: 'tif',
+          url: derivative_url('access.tif'),
           layer: 0
         }]
       end
