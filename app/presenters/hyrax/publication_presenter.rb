@@ -18,6 +18,14 @@ module Hyrax
       %i[csv ttl nt jsonld]
     end
 
+    # Overrides {Hyrax::WorkShowPresenter#page_title} by only using
+    # the work's title + our product name.
+    #
+    # @return [String]
+    def page_title
+      "#{title.first} || #{I18n.t('hyrax.product_name')}"
+    end
+
     # For now, overriding the ability to feature individual works
     # on the homepage. This should prevent the 'Feature'/'Unfeature'
     # button from rendering on the work edit page.
