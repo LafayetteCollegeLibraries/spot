@@ -10,17 +10,17 @@ RSpec.describe Spot::RemoteCharacterizationService do
       .with(file_path, 'application/octet/stream')
       .and_return(:payload)
 
-      # webmock's suggested stubbing
-      stub_request(:post, "http://fits.server/fits/examine")
-        .with(
-           body: {"datafile"=>"payload"},
-           headers: {
-            'Accept'=>'*/*',
-            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-            'Content-Type'=>'application/x-www-form-urlencoded',
-            'User-Agent'=>'Faraday v0.15.4'
-        })
-        .to_return(body: fits_response)
+    # webmock's suggested stubbing
+    stub_request(:post, "http://fits.server/fits/examine")
+      .with(
+        body: { 'datafile' => 'payload' },
+        headers: {
+          'Accept' => '*/*',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'User-Agent' => 'Faraday v0.15.4'
+        }
+      ).to_return(body: fits_response)
   end
 
   let(:file_path) { '/path/to/file' }
