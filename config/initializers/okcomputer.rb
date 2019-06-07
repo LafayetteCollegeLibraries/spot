@@ -27,3 +27,8 @@ OkComputer::Registry.register 'fedora', OkComputer::HttpCheck.new(fcrepo_uri)
 sidekiq_config[:queues].each do |queue|
   OkComputer::Registry.register "sidekiq :#{queue}", OkComputer::SidekiqLatencyCheck.new(queue.to_sym)
 end
+
+if ENV['FITS_SERVLET_HOST'].present?
+  fits_url = "#{ENV['FITS_SERVLET_HOST']}/fits/version"
+  OkComputer::Registry.register 'fits (servlet)', OkComputer::HttpCheck.new(fits_url)
+end
