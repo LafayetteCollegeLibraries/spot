@@ -32,7 +32,7 @@ RSpec.feature 'Show Publication page', js: false do
 
   scenario 'metadata fields are present' do
     expect(page).to have_content pub.title.first
-    expect(page.title).to eq "#{pub.title.first} || Lafayette Digital Repository"
+    expect(page.title).to eq "#{pub.title.first} // Lafayette Digital Repository"
 
     # descriptions are treated differently
     # expect(page.all('.work_description').map(&:text))
