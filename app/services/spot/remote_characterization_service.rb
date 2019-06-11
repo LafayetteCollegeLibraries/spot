@@ -5,7 +5,7 @@
 # Saves us the overhead of spinning up the FITS application every time
 # we want to characterize an item.
 #
-# Relies on the ENV variable 'FITS_SERVLET_HOST' being defined
+# Relies on the ENV variable 'FITS_SERVLET_URL' being defined
 # with the hostname (or ip address) + port of the Tomcat server
 # providing the service.
 #
@@ -17,6 +17,8 @@
 #   fs.update_index
 #   fs.parent&.in_collections&.each(&:update_index)
 #
+require 'uri'
+
 module Spot
   class RemoteCharacterizationService < ::Hydra::Works::CharacterizationService
     # Essentially the same process as Hydra::Works::CharacterizationService
@@ -25,7 +27,7 @@ module Spot
     #
     # @return [void]
     def characterize
-      raise StandardError, 'No FITS_SERVLET_HOST provided!' if fits_servlet_host.nil?
+      raise StandardError, 'No FITS_SERVLET_URL provided!' if fits_servlet_url.nil?
 
       terms = parse_metadata(extract_metadata)
       store_metadata(terms)
@@ -42,13 +44,13 @@ module Spot
       end
 
       # @return [String]
-      def fits_servlet_host
-        ENV['FITS_SERVLET_HOST']
+      def fits_servlet_url
+        ENV.fetch('FITS_SERVLET_URL') { nil }
       end
 
       # @return [Faraday::Connection]
       def remote_connection
-        ::Faraday.new(fits_servlet_host) do |f|
+        ::Faraday.new(URI(fits_servlet_url)) do |f|
           f.request :multipart
           f.request :url_encoded
           f.adapter :net_http

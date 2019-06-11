@@ -3,7 +3,7 @@ RSpec.describe Spot::RemoteCharacterizationService do
   subject(:service) { described_class.run(file_set, file_path) }
 
   before do
-    stub_env('FITS_SERVLET_HOST', 'http://fits.server')
+    stub_env('FITS_SERVLET_URL', 'http://fits.server/fits/examine')
 
     allow(Faraday::UploadIO)
       .to receive(:new)
@@ -28,10 +28,10 @@ RSpec.describe Spot::RemoteCharacterizationService do
   end
 
   context 'when the servlet host is not provided' do
-    before { stub_env('FITS_SERVLET_HOST', nil) }
+    before { stub_env('FITS_SERVLET_URL', nil) }
 
     it 'raises an error' do
-      expect { service }.to raise_error(StandardError, 'No FITS_SERVLET_HOST provided!')
+      expect { service }.to raise_error(StandardError, 'No FITS_SERVLET_URL provided!')
     end
   end
 end
