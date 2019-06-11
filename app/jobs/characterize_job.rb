@@ -40,6 +40,6 @@ class CharacterizeJob < ApplicationJob
 
     # @return [true, false]
     def use_remote_service?
-      @use_remote && ENV.include?('FITS_SERVLET_HOST')
+      @use_remote && ENV.include?('FITS_SERVLET_URL')
     end
 end
