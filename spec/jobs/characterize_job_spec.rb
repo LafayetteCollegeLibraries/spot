@@ -28,13 +28,13 @@ RSpec.describe CharacterizeJob do
     allow(CreateDerivativesJob).to receive(:perform_later).with(file_set, file.id, filename)
   end
 
-  context 'when FITS_SERVLET_HOST is defined' do
+  context 'when FITS_SERVLET_URL is defined' do
     before do
       allow(Spot::RemoteCharacterizationService).to receive(:run).with(file, filename)
 
       # some ~gross~ stubbing
       allow(ENV).to receive(:include?).and_call_original
-      allow(ENV).to receive(:include?).with('FITS_SERVLET_HOST').and_return true
+      allow(ENV).to receive(:include?).with('FITS_SERVLET_URL').and_return true
 
       described_class.perform_now(file_set, file.id, filename)
     end
