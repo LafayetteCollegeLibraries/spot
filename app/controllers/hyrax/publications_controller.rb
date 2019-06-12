@@ -5,6 +5,8 @@ module Hyrax
     include Hyrax::WorksControllerBehavior
     include Hyrax::BreadcrumbsForWorks
     include Spot::AdditionalFormatsForController
+    include Spot::CachedManifestBehavior
+
     self.curation_concern_type = ::Publication
 
     # Use this line if you want to use a custom presenter
