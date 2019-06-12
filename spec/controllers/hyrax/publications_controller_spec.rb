@@ -61,8 +61,8 @@ RSpec.describe Hyrax::PublicationsController do
     let(:doc) { instance_double(ActiveFedora::Base, id: 'abc123def') }
     let(:manifest_factory) { instance_double(IIIFManifest::ManifestBuilder, to_h: { test: 'manifest' }) }
     let(:presenter) { instance_double(Hyrax::WorkShowPresenter, id: doc.id, solr_document: solr_document) }
-    let(:solr_document) { {'_version_' => 12345678 } }
-    let(:cache_key) { "#{doc.id}/12345678" }
+    let(:solr_document) { { '_version_' => 123 } }
+    let(:cache_key) { "#{doc.id}/123" }
 
     it 'adds the doc to the cache' do
       expect(Rails.cache.exist?(cache_key)).to be false
