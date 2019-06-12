@@ -39,7 +39,7 @@ module Spot
       def extract_metadata
         payload = { datafile: ::Faraday::UploadIO.new(source, 'application/octet/stream') }
 
-        response = remote_connection.post('/fits/examine', payload)
+        response = remote_connection.post(parsed_uri.path, payload)
         response.body.to_s
       end
 
@@ -48,9 +48,18 @@ module Spot
         ENV.fetch('FITS_SERVLET_URL') { nil }
       end
 
+      # When creating a connection, Faraday will only use the scheme/host/port
+      # portion of the URI. We need to access the path to make the POST
+      # connection, so we'll cache the parsed URI here.
+      #
+      # @return [URI]
+      def parsed_uri
+        @parsed_url ||= URI(fits_servlet_url)
+      end
+
       # @return [Faraday::Connection]
       def remote_connection
-        ::Faraday.new(URI(fits_servlet_url)) do |f|
+        ::Faraday.new(parsed_uri) do |f|
           f.request :multipart
           f.request :url_encoded
           f.adapter :net_http
