@@ -952,6 +952,7 @@ DEPENDENCIES
   jquery-rails (= 4.3.3)
   kaminari (= 1.1.1)
   listen (>= 3.0.5, < 3.2)
+  mini_magick (= 4.9.3)
   okcomputer (= 1.17.3)
   pg (= 1.1.4)
   puma (= 3.12.0)
