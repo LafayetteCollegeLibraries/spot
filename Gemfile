@@ -112,6 +112,9 @@ gem 'faraday', '0.12.2'
 # calling it explicitly, we should require it.
 gem 'mini_magick', '4.9.5'
 
+# using s3 to house our access master derivatives
+gem 'aws-sdk-s3', '1.42.0'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do

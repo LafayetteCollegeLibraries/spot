@@ -922,6 +922,7 @@ PLATFORMS
 
 DEPENDENCIES
   almond-rails (= 0.1.0)
+  aws-sdk-s3 (= 1.42.0)
   bagit (= 0.4.3)
   bixby (~> 2.0.0.pre.beta1)
   blacklight_advanced_search (= 6.4.1)
