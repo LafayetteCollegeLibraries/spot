@@ -14,10 +14,7 @@ module Spot
     def cleanup_derivatives
       return nil unless aws_credentials_present?
 
-      client.delete_object({
-        bucket: bucket,
-        key: access_master_filename
-      })
+      client.delete_object(bucket: bucket, key: access_master_filename)
     end
 
     # @param [String, Pathname] filename
@@ -89,12 +86,12 @@ module Spot
       def upload_object_to_s3(pathname)
         io = File.open(pathname, 'rb')
 
-        client.put_object({
+        client.put_object(
           body: io,
           bucket: bucket,
           content_md5: calculate_md5(io),
           key: access_master_filename
-        })
+        )
       end
   end
 end
