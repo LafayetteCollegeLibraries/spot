@@ -3,6 +3,18 @@
     will remove duplicates within 'secondary_terms' (which contains the
     values of `f.object.terms` without the hyrax internal fields (for
     embargo, files, etc) %>
+        <div class="import-from-unpaywall">
+          Import metadata and assets from Unpaywall (where applicable)
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control" name="unpaywall_doi" placeholder="Enter DOI" />
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-info">Search</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="base-terms">
           <% f.object.primary_terms.each do |field| %>
             <%= render_edit_field_partial(field, f: f) %>

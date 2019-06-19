@@ -63,5 +63,12 @@ Rails.application.routes.draw do
     resources :export, only: :show
   end
 
+  class OnlyAjaxRequest
+    def matches?(request)
+      request.xhr?
+    end
+  end
+
+  get '/unpaywall_search', to: 'spot/unpaywall_search#search', constraints: OnlyAjaxRequest.new
   get '/handle/*id', to: 'identifier#handle', as: 'handle'
 end
