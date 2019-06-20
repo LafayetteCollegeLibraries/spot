@@ -16,7 +16,7 @@ RSpec.describe Collection do
   it { is_expected.to have_editable_property(:subject).with_predicate(dc.subject) }
   it { is_expected.to have_editable_property(:identifier).with_predicate(dc.identifier) }
   it { is_expected.to have_editable_property(:related_resource).with_predicate(rdfs.seeAlso) }
-  it { is_expected.to have_editable_property(:place).with_predicate(dc.spatial) }
+  it { is_expected.to have_editable_property(:location).with_predicate(dc.spatial) }
   it { is_expected.to have_editable_property(:sponsor).with_predicate(schema.sponsor) }
 
   describe 'validates OnlyUrlsValidator for :related_resource' do

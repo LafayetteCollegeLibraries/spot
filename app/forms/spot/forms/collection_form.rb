@@ -48,7 +48,7 @@ module Spot
 
         # skipping subject until we get a controlled vocabulary set up for it
         # :subject,
-        :place,
+        :location,
         :sponsor,
         :related_resource,
 
@@ -64,7 +64,7 @@ module Spot
         def build_permitted_params
           super + [
             :thumbnail_id,
-            { place_attributes: [:id, :_destroy] }
+            { location_attributes: [:id, :_destroy] }
           ]
         end
 

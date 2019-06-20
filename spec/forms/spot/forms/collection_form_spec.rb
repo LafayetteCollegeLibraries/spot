@@ -26,7 +26,7 @@ RSpec.describe Spot::Forms::CollectionForm do
     it { is_expected.to include :description }
     it { is_expected.to include :identifier }
     it { is_expected.to include :language }
-    it { is_expected.to include :place }
+    it { is_expected.to include :location }
     it { is_expected.to include :related_resource }
     it { is_expected.to include :sponsor }
 
@@ -53,7 +53,7 @@ RSpec.describe Spot::Forms::CollectionForm do
 
     it { is_expected.to be_an Array }
     it { is_expected.to include :thumbnail_id }
-    it { is_expected.to include(place_attributes: [:id, :_destroy]) }
+    it { is_expected.to include(location_attributes: [:id, :_destroy]) }
   end
 
   describe '.model_attributes' do
@@ -93,7 +93,7 @@ RSpec.describe Spot::Forms::CollectionForm do
     subject { form.initialize_field(field) }
 
     context 'when a controlled property' do
-      let(:field) { :place }
+      let(:field) { :location }
 
       it { is_expected.to include Spot::ControlledVocabularies::Location }
     end

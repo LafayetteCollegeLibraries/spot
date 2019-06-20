@@ -33,7 +33,7 @@ class Collection < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :place, predicate: ::RDF::Vocab::DC.spatial,
+  property :location, predicate: ::RDF::Vocab::DC.spatial,
                    class_name: Spot::ControlledVocabularies::Location do |index|
     index.as :symbol
   end
@@ -43,5 +43,5 @@ class Collection < ActiveFedora::Base
   end
 
   id_blank = proc { |attributes| attributes[:id].blank? }
-  accepts_nested_attributes_for :place, reject_if: id_blank, allow_destroy: true
+  accepts_nested_attributes_for :location, reject_if: id_blank, allow_destroy: true
 end
