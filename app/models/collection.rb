@@ -34,7 +34,7 @@ class Collection < ActiveFedora::Base
   end
 
   property :location, predicate: ::RDF::Vocab::DC.spatial,
-                   class_name: Spot::ControlledVocabularies::Location do |index|
+                      class_name: Spot::ControlledVocabularies::Location do |index|
     index.as :symbol
   end
 
