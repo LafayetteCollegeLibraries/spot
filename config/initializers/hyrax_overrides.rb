@@ -32,10 +32,17 @@
 load_overrides = lambda do
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
-
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
 
-  Hyrax::DerivativeService.services = [Hyrax::FileSetDerivativesService, Spot::FileSetAccessMasterService]
+  Hyrax::DerivativeService.services = [Hyrax::FileSetDerivativesService]
+
+  Hyrax::DerivativeService.services << begin
+    if %w[AWS_ACCESS_KEY_ID AWS_ACCESS_MASTER_BUCKET AWS_REGION AWS_SECRET_ACCESS_KEY].all? { |k| ENV[k].present? }
+      Spot::AwsAccessMasterService
+    else
+      Spot::FileSetAccessMasterService
+    end
+  end
 
   # We've dropped the navbar + banner image that come with Hyrax, and the
   # 'homepage' layout that the PagesController calls defines content for
