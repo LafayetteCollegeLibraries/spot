@@ -10,13 +10,10 @@ set :deploy_to, '/var/www/spot'
 set :keep_releases, 3
 set :repo_url, 'https://github.com/LafayetteCollegeLibraries/spot.git'
 
-# only apply deploy tasks to the app/db servers
-# (this shouldn't block tasks run independently)
-set :filter, roles: %w[app db]
-
 # capistrano-bundler
 set :bundle_env_variables, nokogiri_use_system_libraries: 1
 set :bundle_flags, '--deployment'
+set :bundle_roles, %i[app]
 
 # capistrano-rails
 set :log_level, :debug
