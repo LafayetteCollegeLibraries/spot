@@ -6,8 +6,10 @@
 # lets us mount it manually (and at a different endpoint) in config/routes.rb
 OkComputer.mount_at = false
 
+redis_config = { url: ENV['REDIS_URL'] }
+redis_config = Rails.application.config_for(:redis) if redis_config[:url].nil?
+
 solr_config = Rails.application.config_for(:solr)
-redis_config = Rails.application.config_for(:redis)
 fcrepo_config = Rails.application.config_for(:fedora)
 
 # rubocop:disable Security/YAMLLoad
