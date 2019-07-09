@@ -16,3 +16,13 @@ Sidekiq.configure_server do |config|
     end
   end
 end
+
+Sidekiq.configure_client do |config|
+  # tell Sidekiq about our redis customizations
+  if ENV['REDIS_URL'] || ENV['REDIS_PASSWORD']
+    config.redis = {}.tap do |redis|
+      redis[:url] = ENV['REDIS_URL'] if ENV['REDIS_URL']
+      redis[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD']
+    end
+  end
+end
