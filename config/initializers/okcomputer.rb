@@ -6,12 +6,9 @@
 # lets us mount it manually (and at a different endpoint) in config/routes.rb
 OkComputer.mount_at = false
 
-redis_config = { url: ENV['REDIS_URL'] }
-redis_config = Rails.application.config_for(:redis) if redis_config[:url].nil?
-redis_config[:password] = ENV['REDIS_PASSWORD'] unless ENV['REDIS_PASSWORD'].nil?
-
 solr_config = Rails.application.config_for(:solr)
 fcrepo_config = Rails.application.config_for(:fedora)
+redis_config = Rails.application.config_for(:redis)
 
 # rubocop:disable Security/YAMLLoad
 sidekiq_config = YAML.load(ERB.new(IO.read(Rails.root.join('config', 'sidekiq.yml'))).result)
