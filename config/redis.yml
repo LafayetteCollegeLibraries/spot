@@ -5,6 +5,5 @@ test:
   host: localhost
   port: 6379
 production:
-  host: localhost
-  port: 6379
   password: <%= ENV['REDIS_PASSWORD'] %>
+  url: <%= ENV['REDIS_URL'] %>
