@@ -102,11 +102,11 @@ gem 'kaminari', '1.1.1'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '0.15.4'
+gem 'faraday', '0.12.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '4.9.3'
+gem 'mini_magick', '4.9.5'
 
 # development dependencies (not as necessary to
 # lock down versions here)
