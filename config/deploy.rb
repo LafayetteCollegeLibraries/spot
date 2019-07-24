@@ -13,10 +13,12 @@ set :repo_url, 'https://github.com/LafayetteCollegeLibraries/spot.git'
 # capistrano-bundler
 set :bundle_env_variables, nokogiri_use_system_libraries: 1
 set :bundle_flags, '--deployment'
+set :bundle_roles, %i[app]
 
 # capistrano-rails
 set :log_level, :debug
 set :rails_env, 'production'
+set :assets_roles, :app
 
 # capistrano-sidekiq
 set :sidekiq_config, release_path.join('config', 'sidekiq.yml')
