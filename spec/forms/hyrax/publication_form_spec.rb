@@ -154,4 +154,14 @@ RSpec.describe Hyrax::PublicationForm do
       end
     end
   end
+
+  describe 'identifier field' do
+    subject { form.identifier }
+
+    let(:form) { described_class.new(pub, nil, nil) }
+    let(:pub) { Publication.new(identifier: ['noid:abc123def', 'issn:1234-5678']) }
+
+    it { is_expected.not_to include 'noid:abc123def' }
+    it { is_expected.to include 'issn:1234-5678' }
+  end
 end

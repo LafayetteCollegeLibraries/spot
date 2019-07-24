@@ -75,6 +75,13 @@ RSpec.describe Hyrax::PublicationPresenter do
     it { is_expected.to eq [[uri, label]] }
   end
 
+  describe '#page_title' do
+    subject { presenter.page_title }
+
+    it { is_expected.to include presenter.title.first }
+    it { is_expected.to include 'Lafayette Digital Repository' }
+  end
+
   describe '#rights_statement_merged' do
     subject { presenter.rights_statement_merged }
 

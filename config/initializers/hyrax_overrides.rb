@@ -51,6 +51,9 @@ load_overrides = lambda do
         action_name == 'show' ? 'hyrax' : 'hyrax/dashboard'
       end
   end
+
+  # see above
+  Hyrax::ContactFormController.class_eval { layout 'hyrax' }
 end
 
 Rails.application.config.after_initialize do
