@@ -39,6 +39,14 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     it 'chooses the older date for date_issued' do
       expect(mapper.date_issued).to eq ['1986-02-11']
     end
+
+    context 'when only one dc:date value is present' do
+      let(:metadata) { { 'dc:date' => ['1986-02-11T00:00:00Z'] } }
+
+      it 'uses that date' do
+        expect(mapper.date_issued).to eq ['1986-02-11']
+      end
+    end
   end
 
   describe '#date_uploaded' do
