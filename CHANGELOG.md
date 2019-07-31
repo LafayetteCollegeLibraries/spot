@@ -5,6 +5,7 @@
 - update a work's `document.title` to resemble '{work title} // Lafayette Digital Repository'
 - add text content to the About page
 - add link to the Contact page in site footer
+- bugfix: don't skip single `dc:date` values when mapping to `date_issued` for magazines
 
 
 ## [2019.1-pre.1] - 2019-07-24
