@@ -1,6 +1,9 @@
 # frozen_string_literal: true
-#
-# Stage mirrors Production pretty closely (if not exactly).
+
+# we're releasing off of `master`, so anything going on to
+# the stage application will most likely be from our `develop` branch
+set :branch, ENV.fetch('BRANCH') { 'develop' }
+
 server 'nostromo0-0.stage.lafayette.edu',
        user: 'deploy',
        roles: %w[app db web]
