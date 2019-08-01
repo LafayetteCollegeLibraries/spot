@@ -9,6 +9,7 @@
 - use the `:ingest` queue for Hyrax's "ingest-like jobs"
 - add 'spot:collections:list' task
 - bugfix: don't skip single `dc:date` values when mapping to `date_issued` for magazines
+- bugfix: add `tmp/uploads` to capistrano's shared directories
 
 ## [2019.1-pre.1] - 2019-07-24
 
