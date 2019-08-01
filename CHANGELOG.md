@@ -7,6 +7,7 @@
 - add link to the Contact page in site footer
 - specify Sidekiq concurrency via capistrano-sidekiq configuration
 - use the `:ingest` queue for Hyrax's "ingest-like jobs"
+- add 'spot:collections:list' task
 - bugfix: don't skip single `dc:date` values when mapping to `date_issued` for magazines
 
 ## [2019.1-pre.1] - 2019-07-24
