@@ -28,7 +28,7 @@ namespace :spot do
       role = ENV.fetch('role')
       user = ENV.fetch('user')
 
-      on roles(:app) do
+      on roles(:web) do
         within current_path do
           with rails_env: fetch(:rails_env) do
             execute(:rails, 'spot:roles:add_user_to_role', "user=#{user}", "role=#{role}")
