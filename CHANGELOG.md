@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+
+## [2019.1-pre.2] - 2019-08-05
+
 - update a work's `document.title` to resemble '{work title} // Lafayette Digital Repository'
 - add text content to the About page
 - add link to the Contact page in site footer
@@ -16,4 +19,5 @@
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.1-pre.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.2
 [2019.1-pre.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.1
