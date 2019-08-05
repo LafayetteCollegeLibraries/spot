@@ -98,6 +98,14 @@ module Hyrax
       self['date_issued'].first
     end
 
+    # Prevents noids (and other identifiers we don't want
+    # to be able to edit) from appearing in the form.
+    #
+    # @return [String]
+    def identifier
+      self['identifier'].reject { |id| id =~ /^noid\:/ }
+    end
+
     # @return [String, RDF::Literal]
     def title
       self['title'].first

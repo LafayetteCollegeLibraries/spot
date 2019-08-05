@@ -46,7 +46,8 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def date_issued
-      clean_dates[0...-1].map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
+      dates = clean_dates.size > 1 ? clean_dates[0...-1] : clean_dates
+      dates.map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
     end
 
     # @return [Array<RDF::Literal>]

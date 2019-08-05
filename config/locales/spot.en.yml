@@ -12,6 +12,10 @@ en:
 
     log_in: Library staff log-in
 
+    catalog:
+      index:
+        page_title: 'Search Results // %{name}'
+
     dashboard:
       fixity:
         frequency: Checks are run every Monday at midnight.

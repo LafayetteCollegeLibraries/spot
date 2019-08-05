@@ -21,9 +21,14 @@ set :rails_env, 'production'
 set :assets_roles, :app
 
 # capistrano-sidekiq
+#
+# note: it's probably best to specify concurrency per-environment.
+# the default we're using here is the minimum working amount that
+# worked on our single-server development instance.
 set :sidekiq_config, release_path.join('config', 'sidekiq.yml')
 set :sidekiq_env, fetch(:rails_env)
 set :sidekiq_processes, 1
+set :sidekiq_concurrency, 4
 set :sidekiq_role, :jobs
 
 # remapping commands
@@ -35,7 +40,7 @@ SSHKit.config.command_map[:solr] = '/opt/solr/bin/solr'
 
 # shared things
 append :linked_dirs, 'log'
-append :linked_dirs, 'tmp/cache', 'tmp/derivatives', 'tmp/export', 'tmp/ingest', 'tmp/pids', 'tmp/sockets'
+append :linked_dirs, 'tmp/cache', 'tmp/derivatives', 'tmp/export', 'tmp/ingest', 'tmp/pids', 'tmp/sockets', 'tmp/uploads'
 append :linked_dirs, 'vendor/bundle'
 append :linked_dirs, 'public/assets', 'public/branding', 'public/system', 'public/uploads'
 

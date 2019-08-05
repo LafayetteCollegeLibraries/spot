@@ -1,11 +1,11 @@
 # Config file for Sidekiq
 #
-# NOTE: this config is run through ERB when being read, so feel free
-# to do some dynamic stuff where necessary.
+# See the capistrano-sidekiq section of `config/deploy.rb`
+# for more detailed configuration (eg concurrency, # of processes).
+# This lets us vary the settings per environment.
 ---
 :verbose: false
 :timeout: 30
-:concurrency: <%= ENV.fetch('SIDEKIQ_CONCURRENCY') { 2 } %>
 :queues:
   - default
   - ingest

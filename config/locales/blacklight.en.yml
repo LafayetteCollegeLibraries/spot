@@ -40,6 +40,10 @@ en:
         subject: Subject
         title: Title
         years_encompassed: Year
+
+        facet:
+          resource_type_sim: Type
+          source_sim: Source
     sort:
       fields:
         date_added:

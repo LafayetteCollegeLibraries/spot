@@ -173,7 +173,7 @@ Hyrax.config do |config|
 
   # Location on local file system where derivatives will be stored
   # If you use a multi-server architecture, this MUST be a shared volume
-  # config.derivatives_path = Rails.root.join('tmp', 'derivatives')
+  config.derivatives_path = ENV.fetch('DERIVATIVES_PATH') { Rails.root.join('tmp', 'derivatives') }
 
   # Should schema.org microdata be displayed?
   # config.display_microdata = true
@@ -210,7 +210,7 @@ Hyrax.config do |config|
   # config.fits_message_length = 5
 
   # ActiveJob queue to handle ingest-like jobs
-  config.ingest_queue_name = :default
+  config.ingest_queue_name = :ingest
 
   ## Attributes for the lock manager which ensures a single process/thread is mutating a ore:Aggregation at once.
   # How many times to retry to acquire the lock before raising UnableToAcquireLockError
