@@ -11,7 +11,7 @@ namespace :spot do
       next if tag == ''
 
       within release_path do
-        execute(:echo, %(#{tag}), '>', 'VERSION')
+        execute(:echo, %("#{tag}"), '>', 'VERSION')
       end
     end
   end

@@ -43,10 +43,10 @@ SPOT_VERSION = begin
 
   if File.exist?(file_path)
     File.read(file_path).chomp
-  elsif gittag = `git describe --tags 2> /dev/null`.chomp
+  elsif (gittag = `git describe --tags 2> /dev/null`.chomp)
     gittag
   else
     require 'datetime'
-    "#{DateTime.now.year}-dev"
+    "#{DateTime.current.year}-dev"
   end
 end
