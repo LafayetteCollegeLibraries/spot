@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- add mounted storage to the whitelisted ingest directories
 
 ## [2019.1-pre.2] - 2019-08-05
 

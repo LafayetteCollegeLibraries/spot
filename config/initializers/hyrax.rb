@@ -260,7 +260,8 @@ Hyrax.config do |config|
   # mount point.
   #
   config.whitelisted_ingest_dirs = [
-    Rails.root.join('tmp', 'ingest').to_s
+    Rails.root.join('tmp', 'ingest').to_s,
+    '/mnt/share/ingest-tmp'
   ]
 end
 
