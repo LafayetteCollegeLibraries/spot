@@ -9,7 +9,6 @@ module Spot::Mappers
     include NestedAttributes
 
     self.fields_map = {
-      identifier: 'dc:identifier',
       keyword: 'dc:subject',
       physical_medium: 'dc:source',
       publisher: 'dc:publisher',
@@ -24,6 +23,7 @@ module Spot::Mappers
         date_available
         date_issued
         description
+        identifier
         location_attributes
         resource_type
         rights_statement
@@ -31,23 +31,14 @@ module Spot::Mappers
       ]
     end
 
-    # Some of our Newspaper dc:date values include multiple values.
-    # We've set a business rule that the newest of those dates is
-    # the date in which the item was uploaded to the original repository.
-    #
-    # @return [String] The original date uploaded (when present)
-    def date_uploaded
-      return if clean_dates.size <= 1
-      clean_dates.last
-    end
-
-    # See {#date_uploaded} for details. All but the newest of
-    # our dc:date values, mapped to YYYY-MM-DD format
-    #
     # @return [Array<String>]
     def date_issued
-      dates = clean_dates.size > 1 ? clean_dates[0...-1] : clean_dates
-      dates.map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
+      metadata['date_issued'].map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
+    end
+
+    # @return [String, nil]
+    def date_uploaded
+      metadata['date_uploaded'].present? ? metadata['date_uploaded'] : nil
     end
 
     # @return [Array<RDF::Literal>]
@@ -55,6 +46,16 @@ module Spot::Mappers
       metadata['dc:description'].reject(&:blank?).map do |desc|
         RDF::Literal(desc, language: :en)
       end
+    end
+
+    # Maps legacy CDM URLs to have a "url:" prefix
+    # and adds a (prefixed) digital.lafayette.edu URL
+    #
+    # @return [Array<String>]
+    def identifier
+      metadata['dc:identifier']
+        .map { |id| id.include?('cdm.lafayette.edu') ? "url:#{id}" : id }
+        .push("url:#{metadata['url'].first}")
     end
 
     # @return [Array<RDF::URI,String>]
@@ -77,17 +78,10 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def title
-      metadata['dc:title'].map { |title| RDF::Literal(title, language: :en) }
+      metadata['dc:title']
+        .zip(date_issued)
+        .map { |(title, date)| "#{title} - #{Date.edtf(date).humanize}" }
+        .map { |title| RDF::Literal(title, language: :en) }
     end
-
-    private
-
-      # Cleans up the dc:date value, which sometimes contains duplicate
-      # values, or unordered ones, and caches it in an instance variable.
-      #
-      # @return [Array<String>]
-      def clean_dates
-        @clean_dates ||= metadata['dc:date'].uniq.sort
-      end
   end
 end
