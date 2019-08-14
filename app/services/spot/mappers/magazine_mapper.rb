@@ -47,7 +47,9 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def identifier
-      metadata['PublicationSequence'].map { |num| "lafayette_magazine:#{num}" }
+      metadata['PublicationSequence']
+        .map { |num| "lafayette_magazine:#{num}" }
+        .concat(legacy_url_identifiers)
     end
 
     # @return [Array<String>]
@@ -109,6 +111,14 @@ module Spot::Mappers
     end
 
     private
+
+      # @return [Array<String>]
+      def legacy_url_identifiers
+        representative_files.map do |file|
+          key = File.basename(file, '.pdf').gsub(/_/, '-')
+          "url:http://digital.lafayette.edu/collections/magazine/#{key}"
+        end
+      end
 
       # The display title is a combination of the `TitleInfoNonSort`,
       # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
