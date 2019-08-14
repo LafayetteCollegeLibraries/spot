@@ -115,7 +115,7 @@ module Spot::Mappers
       # @return [Array<String>]
       def legacy_url_identifiers
         representative_files.map do |file|
-          key = File.basename(file, '.pdf').gsub(/_/, '-')
+          key = File.basename(file, '.pdf').tr('_', '-')
           "url:http://digital.lafayette.edu/collections/magazine/#{key}"
         end
       end
