@@ -7,7 +7,7 @@ namespace :spot do
     path = ENV['path']
     work_class = ENV['work_class']
     collection_ids = ENV['collection_ids'].to_s.split(',')
-    multi_value_character = ENV.fetch('multi_value_character', ';')
+    multi_value_character = ENV.fetch('multi_value_character', '|')
     working_path = ENV.fetch('working_path', Rails.root.join('tmp', 'ingest').to_s)
 
     error_message = if    !source       then 'No `source` provided!'

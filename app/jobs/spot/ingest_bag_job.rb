@@ -28,7 +28,7 @@ module Spot
                 source:,
                 work_class:,
                 collection_ids: [],
-                multi_value_character: ';')
+                multi_value_character: '|')
       @bag_path = bag_path
       @source = source
       @work_class = work_class.constantize
