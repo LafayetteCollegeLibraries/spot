@@ -53,10 +53,17 @@ RSpec.describe Spot::Mappers::ShakespeareBulletinMapper do
   describe '#identifier' do
     subject { mapper.identifier }
 
-    let(:value) { ['issn:1234-5678'] }
-    let(:metadata) { { 'relatedItem_identifier_typeISSN' => ['1234-5678'] } }
+    let(:metadata) do
+      {
+        'File' => ['SFNL_17-0'],
+        'relatedItem_identifier_typeISSN' => ['1234-5678'],
+        'url' => ['http://digital.lafayette.edu/collections/sfnl/19930401a']
+      }
+    end
 
-    it { is_expected.to eq value }
+    it { is_expected.to include 'issn:1234-5678' }
+    it { is_expected.to include 'lafayette:SFNL_17-0' }
+    it { is_expected.to include 'url:http://digital.lafayette.edu/collections/sfnl/19930401a' }
   end
 
   describe '#note' do
