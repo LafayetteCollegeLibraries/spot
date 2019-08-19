@@ -48,6 +48,7 @@ namespace :spot do
   namespace :ingest do
     desc 'Ingest Publication items from zipped BagIt files'
     task publication: :environment do
+      ENV['work_class'] = 'Publication'
       check_for_errors! && enqueue_jobs(job_args_from_env.merge(work_class: 'Publication'))
     end
   end
