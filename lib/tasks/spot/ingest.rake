@@ -16,12 +16,7 @@ namespace :spot do
   def check_for_errors!
     return true unless (msg = check_env)
 
-    common_envs = 'source=<source> work_class=<work class>'
-
-    puts msg
-    puts "Use `bundle exec rails #{t} #{common_envs} path=</path/to/bag_file.zip>"
-    puts " or `bundle exec rails #{t} #{common_envs} path=</path/to/directory_of_bags"
-    exit
+    puts msg and exit
   end
 
   def job_args_from_env
