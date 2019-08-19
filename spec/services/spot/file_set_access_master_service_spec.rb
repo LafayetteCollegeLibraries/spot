@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'hyrax/specs/shared_specs'
-
 RSpec.describe Spot::FileSetAccessMasterService do
   subject(:service) { described_class.new(valid_file_set) }
   before do

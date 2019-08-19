@@ -43,6 +43,18 @@ module Spot
 
     delegate :uri, :mime_type, to: :file_set
 
+    # Are all the credentials we need present?
+    #
+    # @return [true, false]
+    def self.credentials_present?
+      %w[
+        AWS_ACCESS_KEY_ID
+        AWS_ACCESS_MASTER_BUCKET
+        AWS_REGION
+        AWS_SECRET_ACCESS_KEY
+      ].all? { |k| ENV[k].present? }
+    end
+
     # @param [FileSet] file_set
     def initialize(file_set)
       @file_set = file_set
@@ -50,7 +62,7 @@ module Spot
 
     # @return [void]
     def cleanup_derivatives
-      return nil unless aws_credentials_present?
+      return nil unless self.class.credentials_present?
 
       client.delete_object(bucket: bucket, key: access_master_filename)
     end
@@ -58,9 +70,19 @@ module Spot
     # @param [String, Pathname] filename
     # @return [void]
     def create_derivatives(filename)
-      return nil unless aws_credentials_present?
+      return nil unless self.class.credentials_present?
 
       create_access_master(src: filename) { |path| upload_object_to_s3(path) }
+    end
+
+    def derivative_url(_destination = nil)
+      s3 = Aws::S3::Resource.new(
+        region: ENV['AWS_REGION'],
+        access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+      )
+
+      s3.bucket(bucket).object(access_master_filename).public_url
     end
 
     # @return [true, false]
@@ -75,17 +97,6 @@ module Spot
         "#{file_set.id}-access_master.tif"
       end
 
-      # Are all the credentials we need present?
-      #
-      # @return [true, false]
-      def aws_credentials_present?
-        %w[
-          AWS_ACCESS_KEY_ID
-          AWS_ACCESS_MASTER_BUCKET
-          AWS_REGION
-          AWS_SECRET_ACCESS_KEY
-        ].all? { |k| ENV[k].present? }
-      end
 
       # @return [String]
       def bucket
