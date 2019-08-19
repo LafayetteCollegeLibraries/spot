@@ -16,7 +16,7 @@ namespace :spot do
   def check_for_errors!
     return true unless (msg = check_env)
 
-    puts msg and exit
+    puts msg && exit
   end
 
   def job_args_from_env
