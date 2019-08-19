@@ -30,7 +30,7 @@ namespace :spot do
       multi_value_character: ENV.fetch('multi_value_character', '|'),
       source: ENV['source'],
       work_class: ENV['work_class'],
-      working_path: ENV.fetch('working_path', Rails.root.join('tmp', 'ingest').to_s),
+      working_path: ENV.fetch('working_path', Rails.root.join('tmp', 'ingest').to_s)
     }
   end
 
@@ -48,7 +48,7 @@ namespace :spot do
   namespace :ingest do
     desc 'Ingest Publication items from zipped BagIt files'
     task publication: :environment do
-      check_for_errors! && enqueue_jobs(job_args_from_env.merge(work_class: 'Publication')
+      check_for_errors! && enqueue_jobs(job_args_from_env.merge(work_class: 'Publication'))
     end
   end
 end

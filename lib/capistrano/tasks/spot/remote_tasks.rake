@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 #
 # capistrano wrappings around spot tasks that we might want to do remotely
-# rubocop:disable Metrics/BlockLength
 namespace :spot do
   namespace :roles do
     task :add_user_to_role do
@@ -28,4 +27,3 @@ namespace :spot do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
