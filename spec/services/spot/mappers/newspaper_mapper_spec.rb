@@ -69,7 +69,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
       }
     end
 
-    it { is_expected.to include 'islandora:37462' }
+    it { is_expected.to include 'lafayette:islandora:37462' }
     it { is_expected.to include 'url:http://cdm.lafayette.edu/u?/newspaper,30151' }
     it { is_expected.to include 'url:http://digital.lafayette.edu/collections/newspaper/18700901' }
   end

@@ -48,13 +48,14 @@ module Spot::Mappers
       end
     end
 
-    # Maps legacy CDM URLs to have a "url:" prefix
-    # and adds a (prefixed) digital.lafayette.edu URL
+    # URLs (from legacy ContentDM and current digital.lafayette.edu)
+    # have an "url:" prefix appended; the other identifiers (internal
+    # Fedora 3 PIDs) are given a "lafayette:" prefix.
     #
     # @return [Array<String>]
     def identifier
       metadata['dc:identifier']
-        .map { |id| id.include?('cdm.lafayette.edu') ? "url:#{id}" : id }
+        .map { |id| id.include?('cdm.lafayette.edu') ? "url:#{id}" : "lafayette:#{id}" }
         .push("url:#{metadata['url'].first}")
     end
 
