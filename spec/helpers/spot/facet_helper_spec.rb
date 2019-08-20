@@ -50,4 +50,12 @@ RSpec.describe Spot::FacetHelper, type: :helper do
         .with(helper.admin_facet_names)
     end
   end
+
+  describe '.render_catalog_visibility_facet' do
+    subject { helper.render_catalog_visibility_facet(visibility) }
+
+    let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+
+    it { is_expected.to eq '<span class="label label-success">Public</span>' }
+  end
 end

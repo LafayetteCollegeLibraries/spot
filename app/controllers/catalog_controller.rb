@@ -79,6 +79,11 @@ class CatalogController < ApplicationController
     #
     # admin facets
     #
+    config.add_facet_field 'visibility_ssi',
+                           label: I18n.t('blacklight.search.fields.visbility'),
+                           limit: 5,
+                           admin: true,
+                           helper_method: :render_catalog_visibility_facet
     config.add_facet_field 'depositor_ssim',
                            label: I18n.t('blacklight.search.fields.depositor'),
                            limit: 5,
