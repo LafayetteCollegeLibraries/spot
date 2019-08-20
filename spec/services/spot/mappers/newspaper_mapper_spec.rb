@@ -5,9 +5,7 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   let(:mapper) { described_class.new }
   let(:metadata) do
     {
-      'dc:title' => ['A modern masterpiece'],
       'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton'],
-      'dc:date' => %w[2018-09-01T00:00:00Z 1986-02-11T00:00:00Z],
       'dc:description' => ['Some informative words'],
       'dc:rights' => ['https://creativecommons.org/publicdomain/mark/1.0/']
     }
@@ -36,36 +34,20 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#date_issued' do
     subject { mapper.date_issued }
 
-    it 'chooses the older date for date_issued' do
-      expect(mapper.date_issued).to eq ['1986-02-11']
-    end
+    let(:metadata) { { 'date_issued' => ['1986-02-11T00:00:00Z'] } }
 
-    context 'when only one dc:date value is present' do
-      let(:metadata) { { 'dc:date' => ['1986-02-11T00:00:00Z'] } }
-
-      it 'uses that date' do
-        expect(mapper.date_issued).to eq ['1986-02-11']
-      end
-    end
+    it { is_expected.to eq ['1986-02-11'] }
   end
 
   describe '#date_uploaded' do
     subject(:date_uploaded) { mapper.date_uploaded }
 
-    it 'chooses the newer date of dc:date for date_uploaded' do
-      expect(date_uploaded).to eq '2018-09-01T00:00:00Z'
-    end
+    it { is_expected.to be_nil }
 
-    context 'when only one date is present' do
-      let(:metadata) { { 'dc:date' => ['2019-01-08T00:00:00Z'] } }
+    context 'when a value is provided' do
+      let(:metadata) { { 'date_uploaded' => '2019-08-14T00:00:00Z' } }
 
-      it { is_expected.to be nil }
-    end
-
-    context 'when there are duplicate dates' do
-      let(:metadata) { { 'dc:date' => %w[2019-02-08T00:00:00Z 2019-02-08T00:00:00Z] } }
-
-      it { is_expected.to be nil }
+      it { is_expected.to eq '2019-08-14T00:00:00Z' }
     end
   end
 
@@ -80,9 +62,16 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#identifier' do
     subject { mapper.identifier }
 
-    let(:field) { 'dc:identifier' }
+    let(:metadata) do
+      {
+        'dc:identifier' => ['islandora:37462', 'http://cdm.lafayette.edu/u?/newspaper,30151'],
+        'url' => ['http://digital.lafayette.edu/collections/newspaper/18700901']
+      }
+    end
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to include 'lafayette:islandora:37462' }
+    it { is_expected.to include 'url:http://cdm.lafayette.edu/u?/newspaper,30151' }
+    it { is_expected.to include 'url:http://digital.lafayette.edu/collections/newspaper/18700901' }
   end
 
   describe '#keyword' do
@@ -124,8 +113,15 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#title' do
     subject { mapper.title }
 
+    let(:metadata) do
+      {
+        'dc:title' => ['The Lafayette'],
+        'date_issued' => ['2019-08-14']
+      }
+    end
+
     let(:value) { [RDF::Literal('A modern masterpiece', language: :en)] }
 
-    it { is_expected.to eq value }
+    it { is_expected.to eq [RDF::Literal('The Lafayette - August 14, 2019', language: :en)] }
   end
 end
