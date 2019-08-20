@@ -55,10 +55,15 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   describe '#identifier' do
     subject { mapper.identifier }
 
-    let(:metadata) { { 'PublicationSequence' => ['10'] } }
-    let(:value) { ['lafayette_magazine:10'] }
+    let(:metadata) do
+      {
+        'PublicationSequence' => ['10'],
+        'representative_files' => ['/path/to/the/bag/data/files/lafalummag_20190800.pdf']
+      }
+    end
 
-    it { is_expected.to eq value }
+    it { is_expected.to include 'lafayette_magazine:10' }
+    it { is_expected.to include 'url:http://digital.lafayette.edu/collections/magazine/lafalummag-20190800' }
   end
 
   describe '#publisher' do

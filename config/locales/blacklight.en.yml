@@ -44,6 +44,7 @@ en:
         facet:
           resource_type_sim: Type
           source_sim: Source
+          visibility_ssi: Visibility
     sort:
       fields:
         date_added:

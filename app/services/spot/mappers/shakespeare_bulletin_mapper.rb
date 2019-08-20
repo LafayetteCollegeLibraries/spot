@@ -52,13 +52,17 @@ module Spot::Mappers
       names_with_role('editor')
     end
 
-    # the Shakespeare Bulletin contains ISSNs as the sole identifier
+    # Adds identifiers for ISSN, legacy URLs, and internal IDs for scan batches
     #
     # @return [Array<String>]
     def identifier
-      Array(metadata['relatedItem_identifier_typeISSN']).reject(&:blank?).map do |value|
-        "issn:#{value}"
-      end
+      issns = Array.wrap(metadata['relatedItem_identifier_typeISSN'])
+                   .reject(&:blank?)
+                   .map { |v| "issn:#{v}" }
+      url = "url:#{metadata['url'].first}" unless metadata['url'].empty?
+      internal_id = "lafayette:#{metadata['File'].first}" unless metadata['File'].empty?
+
+      issns.push(url).push(internal_id).reject(&:blank?)
     end
 
     # Looking at the metadata, we should only have these three options for

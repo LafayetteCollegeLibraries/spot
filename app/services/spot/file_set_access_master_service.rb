@@ -53,7 +53,7 @@ module Spot
         magick << filename
         # note: we need to use an array for each piece of this command;
         # using a string will cause an error
-        magick.merge! %w[-define tiff:tile-geometry=128x128]
+        magick.merge! %w[-define tiff:tile-geometry=128x128 -compress jpeg]
         magick << "ptif:#{derivative_url('access.tif')}"
       end
     end

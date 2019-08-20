@@ -31,9 +31,22 @@ LAST_DEPLOYED =
     'Not in deployed environment'
   end
 
-# unsure of this vs creating a Spot::VERSION constant?
+# since capistrano deploys using just the files and
+# not the actual repository, we can't use git (at the
+# application root) to determine the version. instead,
+# there's now a capistrano task (`spot:write_version_file`)
+# that will generate a VERSION file at the release root
+# and we'll read from that. otherwise, assume we're
+# local + run the git command.
 SPOT_VERSION = begin
-  version = `git describe --tags 2> /dev/null`.chomp.sub('v', '')
-  version = '0.0.0' if version.blank?
-  version
+  file_path = Rails.root.join('VERSION')
+
+  if File.exist?(file_path)
+    File.read(file_path).chomp
+  elsif (gittag = `git describe --tags 2> /dev/null`.chomp)
+    gittag
+  else
+    require 'datetime'
+    "#{DateTime.current.year}-dev"
+  end
 end

@@ -32,12 +32,8 @@ module Spot
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
     #
-    def perform(zip_path:,
-                source:,
-                work_class:,
-                working_path:,
-                collection_ids: [],
-                multi_value_character: ';')
+    def perform(zip_path:, source:, work_class:, working_path:,
+                collection_ids: [], multi_value_character: '|')
       raise ArgumentError, "#{working_path} is not a directory" unless File.directory?(working_path)
 
       destination = File.join(working_path, File.basename(zip_path, '.zip'))

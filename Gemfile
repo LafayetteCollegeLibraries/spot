@@ -61,6 +61,10 @@ gem 'devise_cas_authenticatable', '1.10.3'
 # we're using .env files to manage our secrets
 gem 'dotenv-rails', '2.7.0'
 
+# extended date formats
+gem 'edtf', '3.0.4'
+gem 'edtf-humanize', '0.0.7'
+
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0'
 
