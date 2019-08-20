@@ -2,7 +2,19 @@
 
 ## Unreleased
 
+## [2019.1-pre.3] - 2019-08-20
+
 - add mounted storage to the whitelisted ingest directories
+- update how the SPOT_VERSION constant is defined in deployed environments (#248)
+- use bar (`|`) as the default multi_value_character for ingest jobs (#250)
+- remove capistrano ingest task (never used)
+- add separate ingest task for publications (#251)
+- use different favicons for the different deployment environments (#252)
+- add an admin facet for `visibility_ssi` (#253)
+- update newspaper, magazine, and shakespeare mappers to ingest present digital.lafayette.edu URLs (#249)
+- add jpeg compression to access_master creation (#254)
+- fix nokogiri vulnerability by bumping to v1.10.4 (#255)
+- bugfix: use UV 2.0.1, as Hyrax is expecting to find those files
 
 ## [2019.1-pre.2] - 2019-08-05
 
@@ -20,5 +32,6 @@
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.1-pre.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.3
 [2019.1-pre.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.2
 [2019.1-pre.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.1
