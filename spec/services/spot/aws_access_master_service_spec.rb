@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable RSpec/AnyInstance
 RSpec.describe Spot::AwsAccessMasterService do
   def set_env!
     stub_env('AWS_ACCESS_KEY_ID', 'abc123')
@@ -8,7 +9,7 @@ RSpec.describe Spot::AwsAccessMasterService do
   end
 
   def clear_env!
-    %w(AWS_ACCESS_KEY_ID AWS_ACCESS_MASTER_BUCKET AWS_REGION AWS_SECRET_ACCESS_KEY).each do |env|
+    %w[AWS_ACCESS_KEY_ID AWS_ACCESS_MASTER_BUCKET AWS_REGION AWS_SECRET_ACCESS_KEY].each do |env|
       stub_env(env, nil)
     end
   end
@@ -16,20 +17,14 @@ RSpec.describe Spot::AwsAccessMasterService do
   subject(:service) { described_class.new(valid_file_set) }
 
   let(:valid_file_set) { FileSet.new(id: 'fs-abc123') }
-  let(:aws_client) { instance_double(Aws::S3::Client) }
-  let(:aws_config) do
-    {
-      region: ENV['AWS_REGION'],
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    }
-  end
 
   before do
     set_env!
 
     allow(valid_file_set).to receive(:mime_type).and_return('image/jpeg')
-    allow(service).to receive(:client).and_return(aws_client)
+
+    allow_any_instance_of(Aws::S3::Client).to receive(:delete_object)
+    allow_any_instance_of(Aws::S3::Client).to receive(:put_object)
   end
 
   it_behaves_like 'a Hyrax::DerivativeService'
@@ -53,14 +48,12 @@ RSpec.describe Spot::AwsAccessMasterService do
   describe '#cleanup_derivatives' do
     subject { service.cleanup_derivatives }
 
-    before do
-      allow(aws_client).to receive(:delete_object)
-    end
+    let(:client) { service.send(:client) }
 
     it 'calls aws_client#delete_object' do
       service.cleanup_derivatives
 
-      expect(aws_client)
+      expect(client)
         .to have_received(:delete_object)
         .with(bucket: ENV['AWS_ACCESS_MASTER_BUCKET'], key: 'fs-abc123-access_master.tif')
     end
@@ -73,15 +66,50 @@ RSpec.describe Spot::AwsAccessMasterService do
   end
 
   describe '#create_derivatives' do
-    subject { service.create_derivatives(filename) }
-
+    let(:client) { service.send(:client) }
+    let(:mocked_io) { StringIO.new('chunk') }
+    let(:tmpdir_path) { '/tmpdir' }
     let(:filename) { '/path/to/tmp/file' }
+    let(:magick_commands) do
+      [].tap do |arr|
+        arr.define_singleton_method(:merge!) do |args|
+          args.each { |arg| self << arg }
+        end
+      end
+    end
+    let(:expected_magick_commands) do
+      [
+        filename,
+        '-define',
+        'tiff:tile-geometry=128x128',
+        'ptif:/tmpdir/fs-abc123-access_master.tif'
+      ]
+    end
 
-    skip 'creates derivatives' do
-      # need to do _a lot_ of stubbing, i think
+    before do
+      allow(MiniMagick::Tool::Magick).to receive(:new).and_yield(magick_commands)
+      allow(Dir).to receive(:mktmpdir).and_yield(tmpdir_path)
+      allow(File)
+        .to receive(:open)
+        .with('/tmpdir/fs-abc123-access_master.tif', 'rb')
+        .and_return(mocked_io)
+    end
+
+    it 'creates derivatives' do
+      service.create_derivatives(filename)
+
+      expect(magick_commands).to eq(expected_magick_commands)
+      expect(client)
+        .to have_received(:put_object)
+        .with(
+          body: mocked_io, bucket: 'ldss-access-master-storage',
+          content_md5: 'Wo9Poq6rVDGIjuihjOO86g==', key: 'fs-abc123-access_master.tif'
+        )
     end
 
     context 'when ENV values are not set' do
+      subject { service.create_derivatives(filename) }
+
       before { clear_env! }
 
       it { is_expected.to be_nil }
@@ -96,3 +124,4 @@ RSpec.describe Spot::AwsAccessMasterService do
     it { is_expected.to eq url }
   end
 end
+# rubocop:enable RSpec/AnyInstance

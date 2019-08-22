@@ -97,7 +97,6 @@ module Spot
         "#{file_set.id}-access_master.tif"
       end
 
-
       # @return [String]
       def bucket
         ENV['AWS_ACCESS_MASTER_BUCKET']
