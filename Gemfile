@@ -136,7 +136,7 @@ end
 # things used for development + testing (again, not as
 # necessary to lock down versions)
 group :development, :test do
-  gem 'bixby', '~> 1.0.0'
+  gem 'bixby', '~> 2.0.0.pre.beta1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.22'
@@ -150,7 +150,8 @@ group :development, :test do
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 3.6'
   gem 'rspec_junit_formatter', '~> 0.4.1'
-  gem 'rubocop', '~> 0.52.1'
+  gem 'rubocop', '~> 0.63'
+  gem 'rubocop-rspec', '~> 1.3'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.17', require: false
   gem 'solr_wrapper', '~> 2.1'

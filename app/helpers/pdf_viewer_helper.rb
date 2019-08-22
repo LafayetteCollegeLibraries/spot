@@ -21,7 +21,7 @@ module PdfViewerHelper
 
     # @return [String]
     def search_query
-      search && search.respond_to?(:query_params) && search.query_params[:q]
+      search&.query_params && search.query_params[:q]
     end
 
     def search
