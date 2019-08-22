@@ -1,17 +1,10 @@
 # frozen_string_literal: true
-# rubocop:disable RSpec/AnyInstance
 RSpec.describe Spot::AwsAccessMasterService do
   def set_env!
     stub_env('AWS_ACCESS_KEY_ID', 'abc123')
     stub_env('AWS_ACCESS_MASTER_BUCKET', 'ldss-access-master-storage')
     stub_env('AWS_REGION', 'us-west-2')
     stub_env('AWS_SECRET_ACCESS_KEY', 'shh')
-  end
-
-  def clear_env!
-    %w[AWS_ACCESS_KEY_ID AWS_ACCESS_MASTER_BUCKET AWS_REGION AWS_SECRET_ACCESS_KEY].each do |env|
-      stub_env(env, nil)
-    end
   end
 
   subject(:service) { described_class.new(valid_file_set) }
@@ -23,8 +16,10 @@ RSpec.describe Spot::AwsAccessMasterService do
 
     allow(valid_file_set).to receive(:mime_type).and_return('image/jpeg')
 
+    # rubocop:disable RSpec/AnyInstance
     allow_any_instance_of(Aws::S3::Client).to receive(:delete_object)
     allow_any_instance_of(Aws::S3::Client).to receive(:put_object)
+    # rubocop:enable RSpec/AnyInstance
   end
 
   it_behaves_like 'a Hyrax::DerivativeService'
@@ -58,8 +53,10 @@ RSpec.describe Spot::AwsAccessMasterService do
         .with(bucket: ENV['AWS_ACCESS_MASTER_BUCKET'], key: 'fs-abc123-access_master.tif')
     end
 
-    context 'when ENV values are not set' do
-      before { clear_env! }
+    context 'when not all ENV values are set' do
+      before do
+        allow(ENV).to receive(:[]).with('AWS_REGION').and_return(nil)
+      end
 
       it { is_expected.to be_nil }
     end
@@ -108,10 +105,12 @@ RSpec.describe Spot::AwsAccessMasterService do
       expect(client).to have_received(:put_object).with(expected_payload)
     end
 
-    context 'when ENV values are not set' do
+    context 'when not all ENV values are set' do
       subject { service.create_derivatives(filename) }
 
-      before { clear_env! }
+      before do
+        allow(ENV).to receive(:[]).with('AWS_REGION').and_return(nil)
+      end
 
       it { is_expected.to be_nil }
     end
@@ -125,4 +124,3 @@ RSpec.describe Spot::AwsAccessMasterService do
     it { is_expected.to eq url }
   end
 end
-# rubocop:enable RSpec/AnyInstance

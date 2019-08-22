@@ -119,11 +119,22 @@ module Spot
         end.base64digest
       end
 
+      # We'll manually pass these options to the S3 client, rather
+      # than have it attempt to find them, as this (I believe) was
+      # causing problems on the CI build.
+      #
       # @return [Aws::S3::Client]
       def client
-        @client ||= Aws::S3::Client.new
+        @client ||= Aws::S3::Client.new(
+          access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+          secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+          region: ENV['AWS_REGION']
+        )
       end
 
+      # @param options [Hash]
+      # @option src [String] Path to the original file
+      # @return [void]
       def create_access_master(src:)
         Dir.mktmpdir do |tmpdir|
           out_path = File.join(tmpdir, access_master_filename)
