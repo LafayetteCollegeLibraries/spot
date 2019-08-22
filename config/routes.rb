@@ -69,6 +69,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/unpaywall_search', to: 'spot/unpaywall_search#search', constraints: OnlyAjaxRequest.new
+  get '/unpaywall_search', to: 'spot/unpaywall#search', constraints: OnlyAjaxRequest.new
   get '/handle/*id', to: 'identifier#handle', as: 'handle'
 end
