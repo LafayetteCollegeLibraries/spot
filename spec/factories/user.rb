@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :user do
-    email { FFaker::Internet.unique.email }
-    display_name { "#{FFaker::Name.last_name}, #{FFaker::Name.first_name}" }
+    sequence(:email) { |n| "person-#{n}@lafayette.edu" }
+    sequence(:display_name) { |n| "Lastname, First (##{n})" }
     guest { false }
     roles { [] }
 

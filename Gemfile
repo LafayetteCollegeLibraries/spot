@@ -138,24 +138,23 @@ end
 group :development, :test do
   gem 'bixby', '~> 1.0.0'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara', '~> 3.12.0'
+  gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.22'
   gem 'database_cleaner', '~> 1.7.0'
   gem 'equivalent-xml', '~> 0.6.0', require: false
-  gem 'factory_bot_rails', '~> 4.0', require: false
+  gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
-  gem 'ffaker', '~> 2.10.0'
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.4'
+  gem 'rspec', '~> 3.8'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 3.6'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rubocop', '~> 0.52.1'
-  gem 'selenium-webdriver', '~> 3.141'
-  gem 'shoulda-matchers', '~> 3.1'
-  gem 'simplecov', '~> 0.16.1', require: false
-  gem 'solr_wrapper', '~> 2.0.0'
+  gem 'shoulda-matchers', '~> 4'
+  gem 'simplecov', '~> 0.17', require: false
+  gem 'solr_wrapper', '~> 2.1'
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 3.7.1'
-  gem 'webmock', '~> 3.4.2'
+  gem 'webdrivers', '~> 4'
+  gem 'webmock', '~> 3.6'
 end
