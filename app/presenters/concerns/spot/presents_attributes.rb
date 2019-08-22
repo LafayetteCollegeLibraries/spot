@@ -58,11 +58,13 @@ module Spot
         renderer = nil
         ['Renderer', 'AttributeRenderer'].each do |suffix|
           const_name = "#{name.to_s.camelize}#{suffix}".to_sym
-          renderer = begin
-            Renderers.const_get(const_name)
-          rescue NameError
-            nil
-          end
+          renderer =
+            begin
+              Renderers.const_get(const_name)
+            rescue NameError
+              nil
+            end
+
           break unless renderer.nil?
         end
 
