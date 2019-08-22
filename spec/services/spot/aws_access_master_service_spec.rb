@@ -85,6 +85,12 @@ RSpec.describe Spot::AwsAccessMasterService do
         'ptif:/tmpdir/fs-abc123-access_master.tif'
       ]
     end
+    let(:expected_payload) do
+      {
+        body: mocked_io, bucket: 'ldss-access-master-storage',
+        content_md5: 'Wo9Poq6rVDGIjuihjOO86g==', key: 'fs-abc123-access_master.tif'
+      }
+    end
 
     before do
       allow(MiniMagick::Tool::Magick).to receive(:new).and_yield(magick_commands)
@@ -99,12 +105,7 @@ RSpec.describe Spot::AwsAccessMasterService do
       service.create_derivatives(filename)
 
       expect(magick_commands).to eq(expected_magick_commands)
-      expect(client)
-        .to have_received(:put_object)
-        .with(
-          body: mocked_io, bucket: 'ldss-access-master-storage',
-          content_md5: 'Wo9Poq6rVDGIjuihjOO86g==', key: 'fs-abc123-access_master.tif'
-        )
+      expect(client).to have_received(:put_object).with(expected_payload)
     end
 
     context 'when ENV values are not set' do

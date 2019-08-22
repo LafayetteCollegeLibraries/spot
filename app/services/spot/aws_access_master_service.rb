@@ -37,7 +37,6 @@ module Spot
   #   service = Spot::AwsAccessMasterService.new(fs)
   #   service.create_derivatives(working_dir)
   class AwsAccessMasterService
-
     # @!attribute [r]
     # @return [FileSet]
     attr_reader :file_set
