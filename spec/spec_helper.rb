@@ -14,7 +14,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'webdrivers'
 require 'rspec/rails'
 require 'factory_bot_rails'
-require 'ffaker'
 require 'active_fedora/cleaner'
 require 'capybara/rspec'
 require 'capybara/rails'
