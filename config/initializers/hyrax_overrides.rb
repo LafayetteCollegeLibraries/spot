@@ -37,7 +37,7 @@ load_overrides = lambda do
   Hyrax::DerivativeService.services = [Hyrax::FileSetDerivativesService]
 
   Hyrax::DerivativeService.services << begin
-    if %w[AWS_ACCESS_KEY_ID AWS_ACCESS_MASTER_BUCKET AWS_REGION AWS_SECRET_ACCESS_KEY].all? { |k| ENV[k].present? }
+    if Spot::AwsAccessMasterService.credentials_present?
       Spot::AwsAccessMasterService
     else
       Spot::FileSetAccessMasterService
