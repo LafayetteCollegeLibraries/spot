@@ -3,21 +3,33 @@ class Ability
   include Hydra::Ability
   include Hyrax::Ability
 
-  # @todo restrict this when we have more than one user in here
-  self.ability_logic += [:everyone_can_create_curation_concerns]
+  self.ability_logic += [:depositor_abilities, :admin_abilities]
 
   # Define any customized permissions here.
   #
   # @return [void]
-  def custom_permissions
-    # put permissions here that can go to users other than admins
-    return unless current_user.admin?
-
-    can(role_abilities, Role)
-    can([:create, :delete, :manage], FeaturedCollection)
-  end
+  def custom_permissions; end
 
   private
+
+    # Delegates abilities for users that have the 'admin' role
+    #
+    # @return [void]
+    def admin_abilities
+      return unless current_user.admin?
+
+      can([:create, :delete, :manage], FeaturedCollection)
+      can(role_abilities, Role)
+    end
+
+    # Delegates abilities for users that have the 'depositor' role
+    #
+    # @return [void]
+    def depositor_abilities
+      return unless current_user.depositor?
+
+      can(:create, curation_concerns_models)
+    end
 
     # save some space by defining the Role abilities here
     #

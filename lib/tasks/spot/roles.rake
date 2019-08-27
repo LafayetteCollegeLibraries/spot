@@ -43,7 +43,10 @@ namespace :spot do
 
     desc "creates default roles"
     task default: [:environment] do
-      roles = %i[admin]
+      roles = [
+        Ability.admin_group_name,
+        'depositor'
+      ]
 
       create_roles(roles)
     end
