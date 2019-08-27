@@ -27,7 +27,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
 
   describe '#create_derivatives' do
     before do
-      allow(MiniMagick::Tool::Magick).to receive(:new).and_yield(magick_commands)
+      allow(MiniMagick::Tool::Convert).to receive(:new).and_yield(magick_commands)
     end
 
     let(:magick_commands) do

@@ -20,7 +20,7 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        MiniMagick::Tool::Magick.new do |magick|
+        MiniMagick::Tool::Convert.new do |magick|
           magick << filename
           # note: we need to use an array for each piece of this command;
           # using a string will cause an error
