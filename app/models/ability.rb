@@ -23,12 +23,17 @@ class Ability
     end
 
     # Delegates abilities for users that have the 'depositor' role
+    # (includes admins)
     #
     # @return [void]
     def depositor_abilities
       return unless current_user.depositor?
 
+      # folks can create new items
       can(:create, curation_concerns_models)
+
+      # can view the user dashboard
+      can(:read, :dashboard)
     end
 
     # save some space by defining the Role abilities here
