@@ -13,8 +13,10 @@ RSpec.describe Spot::CollectionPresenter do
     }
   end
   let(:admin_user) { create(:admin_user) }
-  let(:plain_user) { create(:user) }
-  let(:user) { plain_user }
+  let(:public_user) { create(:public_user) }
+  let(:depositor_user) { create(:depositor_user) }
+
+  let(:user) { public_user }
 
   describe '#collection_featurable?' do
     subject { presenter.collection_featurable? }
@@ -26,8 +28,14 @@ RSpec.describe Spot::CollectionPresenter do
         it { is_expected.to be true }
       end
 
+      context 'when a user is a depositor' do
+        let(:user) { depositor_user }
+
+        it { is_expected.to be false }
+      end
+
       context 'when a regular user' do
-        let(:user) { plain_user }
+        let(:user) { public_user }
 
         it { is_expected.to be false }
       end
@@ -54,7 +62,7 @@ RSpec.describe Spot::CollectionPresenter do
     end
 
     context 'when a collection can\'t be featured' do
-      let(:user) { plain_user }
+      let(:user) { public_user }
 
       it { is_expected.to be false }
     end
