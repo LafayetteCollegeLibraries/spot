@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## [2019.1-pre.4] - 2019-08-28
+
+- updates dependencies
+- updates to permission handling
+  - adds a depositor role
+  - limits creation to depositor and admin roles only
+  - hides the dashboard from users who aren't able to deposit
+- rewrite Image derivative processing
+- add rake task for generating derivatives
+
 ## [2019.1-pre.3] - 2019-08-20
 
 - add mounted storage to the whitelisted ingest directories
@@ -32,6 +42,7 @@
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.1-pre.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.4
 [2019.1-pre.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.3
 [2019.1-pre.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.2
 [2019.1-pre.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.1

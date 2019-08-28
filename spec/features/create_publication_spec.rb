@@ -12,8 +12,8 @@ RSpec.feature 'Create a Publication', :clean, :js do
   let(:i18n_term) { I18n.t(:'activefedora.models.publication') }
   let(:app_name) { I18n.t('hyrax.product_name') }
 
-  context 'a logged in (regular) user' do
-    let(:user) { create(:user) }
+  context 'a logged in admin user' do
+    let(:user) { create(:admin_user) }
     let(:attrs) { attributes_for(:publication) }
     let(:identifier) { Spot::Identifier.from_string(attrs[:identifier].first) }
 

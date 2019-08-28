@@ -152,18 +152,18 @@ module Hyrax
 
       private
 
-      # We've chosen to enforce single fields at the form level,
-      # rather than at the model. This appears to be more flexible
-      # than updating a model property and possibly encountering
-      # ActiveFedora errors when older works are out of sync.
-      #
-      # @param [ActiveController::Parameters, Hash<String => *>]
-      # @return [void]
-      def pluralize_singular_fields!(params)
-        singular_terms.each do |term|
-          params[term] = Array(params[term]) if params[term]
+        # We've chosen to enforce single fields at the form level,
+        # rather than at the model. This appears to be more flexible
+        # than updating a model property and possibly encountering
+        # ActiveFedora errors when older works are out of sync.
+        #
+        # @param [ActiveController::Parameters, Hash<String => *>]
+        # @return [void]
+        def pluralize_singular_fields!(params)
+          singular_terms.each do |term|
+            params[term] = Array(params[term]) if params[term]
+          end
         end
-      end
     end
   end
 end

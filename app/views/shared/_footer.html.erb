@@ -4,14 +4,6 @@
       <div class="col-sm-3">
         <h4><%= t('hyrax.product_name') %></h4>
         <p>Version: <%= SPOT_VERSION %>, last updated: <%= LAST_DEPLOYED %></p>
-        <% unless current_user %>
-        <p>
-          <%= link_to main_app.new_user_session_path, class: 'btn btn-info' do %>
-            <span class="glyphicon glyphicon-log-in"></span>
-            <%= t('spot.log_in') %>
-          <% end %>
-        </p>
-        <% end %>
       </div>
 
       <div class="col-sm-3">
@@ -36,7 +28,7 @@
 
       <div class="col-sm-3">
         <div class="navbar-text text-right">
-          <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'] %>
+          <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'].present? %>
         </div>
       </div>
     </div>

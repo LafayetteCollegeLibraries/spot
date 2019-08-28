@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :user do
-    email { FFaker::Internet.unique.email }
-    display_name { "#{FFaker::Name.last_name}, #{FFaker::Name.first_name}" }
+    sequence(:email) { |n| "person-#{n}@lafayette.edu" }
+    sequence(:display_name) { |n| "Lastname, First (##{n})" }
     guest { false }
     roles { [] }
 
@@ -17,13 +17,27 @@ FactoryBot.define do
 
     factory :admin_user do
       admin { true }
-      groups { ['admin'] }
+      groups { ['admin', 'registered', 'public'] }
+      roles { [create(:admin_role), create(:depositor_role)] }
     end
 
-    # from: https://github.com/samvera/hyrax/blob/v2.4.1/spec/factories/users.rb
-    after(:build) do |user, evaluator|
-      create(:admin_role, users: [user]) if evaluator.admin
+    factory :depositor_user do
+      groups { ['depositor', 'registered', 'public'] }
+      roles { [create(:depositor_role)] }
+    end
 
+    factory :registered_user do
+      groups { ['registered', 'public'] }
+    end
+
+    factory :public_user do
+      groups { ['public'] }
+      guest { true }
+    end
+
+    after(:build) do |user, evaluator|
+      # from: https://github.com/samvera/hyrax/blob/v2.4.1/spec/factories/users.rb
+      #
       # In case we have the instance but it has not been persisted
       ::RSpec::Mocks.allow_message(user, :groups).and_return(Array.wrap(evaluator.groups))
       # Given that we are stubbing the class, we need to allow for the original to be called

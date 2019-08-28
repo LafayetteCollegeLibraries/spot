@@ -48,18 +48,18 @@ gem 'blacklight_advanced_search', '6.4.1'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '1.4.0'
+gem 'bootsnap', '1.4.4'
 
 # record importer pattern from curationexperts
 gem 'darlingtonia', '3.0.3'
 
 # user management
-gem 'devise', '4.6.1'
-gem 'devise-guests', '0.6.1'
-gem 'devise_cas_authenticatable', '1.10.3'
+gem 'devise', '4.7.0'
+gem 'devise-guests', '0.7.0'
+gem 'devise_cas_authenticatable', '1.10.4'
 
 # we're using .env files to manage our secrets
-gem 'dotenv-rails', '2.7.0'
+gem 'dotenv-rails', '2.7.5'
 
 # extended date formats
 gem 'edtf', '3.0.4'
@@ -72,33 +72,33 @@ gem 'hydra-role-management', '1.0'
 gem 'iso-639', '0.2.8'
 
 # install jquery with rails (no longer the default)
-gem 'jquery-rails', '4.3.3'
+gem 'jquery-rails', '4.3.5'
 
 # system monitoring
-gem 'okcomputer', '1.17.3'
+gem 'okcomputer', '1.17.4'
 
 # we're using postgres as our database within rails
 gem 'pg', '1.1.4'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '3.0.4'
+gem 'rdf-vocab', '3.0.8'
 
 # a iiif server for ruby from curationexperts
-gem 'riiif', '2.0.0'
+gem 'riiif', '2.1.0'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '2.2.1'
 
 # used in conjunction with our importers to zip/unzip files
-gem 'rubyzip', '1.2.2'
+gem 'rubyzip', '1.2.3'
 
 # our jobs server
-gem 'sidekiq', '5.2.5'
+gem 'sidekiq', '5.2.7'
 gem 'sidekiq-cron', '1.1.0'
 
 # using Slack for some of our messaging
-gem 'slack-ruby-client', '0.14.1'
+gem 'slack-ruby-client', '0.14.4'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
@@ -136,26 +136,26 @@ end
 # things used for development + testing (again, not as
 # necessary to lock down versions)
 group :development, :test do
-  gem 'bixby', '~> 1.0.0'
+  gem 'bixby', '~> 2.0.0.pre.beta1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara', '~> 3.12.0'
+  gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.22'
   gem 'database_cleaner', '~> 1.7.0'
   gem 'equivalent-xml', '~> 0.6.0', require: false
-  gem 'factory_bot_rails', '~> 4.0', require: false
+  gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
-  gem 'ffaker', '~> 2.10.0'
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.4'
+  gem 'rspec', '~> 3.8'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 3.6'
   gem 'rspec_junit_formatter', '~> 0.4.1'
-  gem 'rubocop', '~> 0.52.1'
-  gem 'selenium-webdriver', '~> 3.141'
-  gem 'shoulda-matchers', '~> 3.1'
-  gem 'simplecov', '~> 0.16.1', require: false
-  gem 'solr_wrapper', '~> 2.0.0'
+  gem 'rubocop', '~> 0.63'
+  gem 'rubocop-rspec', '~> 1.3'
+  gem 'shoulda-matchers', '~> 4'
+  gem 'simplecov', '~> 0.17', require: false
+  gem 'solr_wrapper', '~> 2.1'
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 3.7.1'
-  gem 'webmock', '~> 3.4.2'
+  gem 'webdrivers', '~> 4'
+  gem 'webmock', '~> 3.6'
 end
