@@ -29,5 +29,12 @@
         <li><%= link_to t("hyrax.toolbar.profile.logout"), main_app.destroy_user_session_path %></li>
       </ul>
     </li><!-- /.btn-group -->
+  <% else %>
+    <li>
+      <%= link_to main_app.new_user_session_path do %>
+        <span class="glyphicon glyphicon-log-in"></span>
+        <%= t('spot.log_in') %>
+      <% end %>
+    </li>
   <% end %>
 </ul>
