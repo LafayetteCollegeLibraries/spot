@@ -20,6 +20,13 @@ class User < ApplicationRecord
 
   before_save :ensure_username
 
+  # Can this user deposit items?
+  #
+  # @return [true, false]
+  def depositor?
+    roles.where(name: [Ability.admin_group_name, 'depositor']).exists?
+  end
+
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
   # the account.
