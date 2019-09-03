@@ -54,10 +54,12 @@ class Image < ActiveFedora::Base
   property :date, predicate: ::RDF::Vocab::DC.date
 
   # @todo
-  # property :about_the_date
+  # about the date
+  # property :date_scope_note
 
   # @todo
-  # property :associated_date
+  # associated date
+  # property :date_associated
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
     index.as :stored_searchable, :facetable
