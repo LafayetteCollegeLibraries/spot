@@ -15,9 +15,11 @@
           <dd><%= doc_presenter.field_value field %></dd>
       <% end %>
     <% end %>
-    <% if doc_presenter.permalink %>
-      <dt><%= render_index_field_label document, field: :permalink %></dt>
-      <dd><%= doc_presenter.permalink %></dd>
+    <%# there's probably a better way to do this, but we want to ensure that
+        the permalink is always at the bottom when it exists %>
+    <% if document.permalink.present? %>
+      <dt><%= t 'blacklight.search.fields.permalink' %></dt>
+      <dd><%= document.permalink %></dd>
     <% end %>
     </dl>
   </div>
