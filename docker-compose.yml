@@ -1,0 +1,60 @@
+version: '3.7'
+volumes:
+  db:
+  fedora:
+  solr:
+  redis:
+services:
+  spot:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0'"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - "RAILS_ENV=development"
+      - "DATABASE_URL=postgres://spot_dev_user:@db/spot_dev"
+      - "SOLR_URL=http://solr_img:8983/solr/spot-development"
+      - "FEDORA_URL=http://fedora_img:8984/fedora/rest"
+      - "CAS_BASE_URL=''"
+    depends_on:
+      - db
+      - redis
+      - fedora_img
+      - solr_img
+  db:
+    image: postgres:alpine
+    volumes:
+      - db:/data
+    environment:
+      - "PGDATA=/data"
+      - "POSTGRES_DATABASE=spot_dev"
+      - "POSTGRES_USER=spot_dev_user"
+    ports:
+      - 5432:5432
+    restart: always
+  fedora_img:
+    image: nulib/fcrepo4
+    volumes:
+      - fedora:/data
+    ports:
+      - 8984:8080
+    restart: always
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis:/data
+    ports:
+      - 6380:6379
+    restart: always
+  solr_img:
+    image: solr:7.5-alpine
+    volumes:
+      - ./solr/config:/spot-config
+      - solr:/opt/solr/server/solr/mycores
+    ports:
+      - 8983:8983
+      - 9985:9983
+    command: solr-create -c spot-development -d /spot-config
+    restart: always
