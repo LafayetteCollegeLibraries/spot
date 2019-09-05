@@ -6,6 +6,7 @@
 # identifier, and prefers those that contain
 # an object's NOID.
 module IndexesPermalink
+  # @todo: move the handle prefix to a configuration file
   HANDLE_PREFIX = '10385'
   PERMALINK_SOLR_FIELD = 'permalink_ss'
 

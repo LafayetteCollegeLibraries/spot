@@ -15,6 +15,10 @@
           <dd><%= doc_presenter.field_value field %></dd>
       <% end %>
     <% end %>
+    <% if doc_presenter.permalink %>
+      <dt><%= render_index_field_label document, field: :permalink %></dt>
+      <dd><%= doc_presenter.permalink %></dd>
+    <% end %>
     </dl>
   </div>
 </div>

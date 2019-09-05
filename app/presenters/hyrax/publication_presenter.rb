@@ -7,8 +7,8 @@ module Hyrax
     delegate :abstract, :academic_department, :bibliographic_citation,
              :contributor, :creator, :date_issued, :date_available,
              :division, :editor, :keyword, :language, :language_label,
-             :organization, :publisher, :resource_type, :source, :subject,
-             :subtitle, :title_alternative,
+             :organization, :permalink, :publisher, :resource_type,
+             :source, :subject, :subtitle, :title_alternative,
              to: :solr_document
 
     # Metadata formats we're able to export as.
