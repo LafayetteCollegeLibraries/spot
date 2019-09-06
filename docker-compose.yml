@@ -15,7 +15,7 @@ services:
     environment:
       CAS_BASE_URL: ''
       DATABASE_URL: postgres://spot_dev_user:@db:5432/spot_dev
-      FEDORA_URL: http://fedora:8080/fedora/rest
+      FEDORA_URL: http://fedora:8080/rest
       FITS_SERVLET_URL: http://fitsservlet:8080/fits/examine
       RAILS_ENV: development
       REDIS_URL: redis://redis:6379
@@ -32,11 +32,11 @@ services:
       - db:/data
     environment:
       PGDATA: /data
-      POSTGRES_DATABASE: spot_dev
+      POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
     restart: always
   fedora:
-    image: nulib/fcrepo4
+    image: samvera/fcrepo4:4.7.5
     volumes:
       - fedora:/data
     restart: always
