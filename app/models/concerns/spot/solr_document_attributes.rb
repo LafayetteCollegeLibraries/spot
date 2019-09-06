@@ -45,6 +45,7 @@ module Spot
       attribute :organization,           ::Blacklight::Types::Array, 'organization_tesim'
       attribute :original_checksum,      ::Blacklight::Types::String, 'original_checksum_tesim'
       attribute :page_count,             ::Blacklight::Types::String, 'page_count_tesim'
+      attribute :permalink,              ::Blacklight::Types::String, 'permalink_ss'
       attribute :physical_medium,        ::Blacklight::Types::Array, 'physical_medium_tesim'
       attribute :related_resource,       ::Blacklight::Types::Array, 'related_resource_ssim'
       attribute :resource_type,          ::Blacklight::Types::Array, 'resource_type_tesim'

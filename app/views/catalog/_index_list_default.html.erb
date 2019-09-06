@@ -15,6 +15,12 @@
           <dd><%= doc_presenter.field_value field %></dd>
       <% end %>
     <% end %>
+    <%# there's probably a better way to do this, but we want to ensure that
+        the permalink is always at the bottom when it exists %>
+    <% if document.permalink.present? %>
+      <dt><%= t 'blacklight.search.fields.permalink' %></dt>
+      <dd><%= document.permalink %></dd>
+    <% end %>
     </dl>
   </div>
 </div>

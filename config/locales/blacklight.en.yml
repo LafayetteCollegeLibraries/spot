@@ -32,6 +32,7 @@ en:
         organization: Organization
         original_checksum: Original Checksum (MD5)
         page_count: Page Count
+        permalink: Permalink
         proxy_depositor: Proxy Depositor
         publisher: Publisher
         resource_type: Type
