@@ -5,9 +5,14 @@
 class Image < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 
+  class_attribute :controlled_properties
+  self.controlled_properties = [:location]
+
   self.indexer = ImageIndexer
+
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
+
   validates :title, presence: { message: 'Your work must have a title.' }
 
   # title is included with ::ActiveFedora::Base
@@ -23,8 +28,9 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  # @todo
-  # property :repository
+  property :repository, predicate: ::RDF::URI.new('http://ns.nature.com/terms/#repository') do |index|
+    index.as :facetable
+  end
 
   property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
     index.as :stored_searchable, :facetable
@@ -34,8 +40,8 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  # @todo
-  # property :original_item_extent
+  # @todo: stored, not searchable?
+  property :original_item_extent, predicate: ::RDF::Vocab::DC.extent
 
   # see {IndexesLanguageAndLabel} mixin for indexing
   property :language, predicate: ::RDF::Vocab::DC11.language
@@ -44,22 +50,23 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # @todo
-  # property :ethnic_group
+  # @todo: indexing
+  property :ethnic_group, predicate: ::RDF::URI.new('http://sparql.cwrc.ca/ontologies/cwrc#hasEthnicity')
 
-  # @todo
-  # property :inscription
+  property :inscription, predicate: ::RDF::URI.new('http://dbpedia.org/ontology/inscription') do |index|
+    index.as :stored_searchable
+  end
 
   # @todo indexing
   property :date, predicate: ::RDF::Vocab::DC.date
 
-  # @todo
   # about the date
-  # property :date_scope_note
+  # @todo: ok if just stored?
+  property :date_scope_note, predicate: ::RDF::Vocab::SKOS.scopeNote
 
-  # @todo
-  # associated date
-  # property :date_associated
+  # associated dates
+  # @todo Indexing (might need a mixin)
+  property :date_associated, predicate: ::RDF::URI.new('https://d-nb.info/standards/elementset/gnd#associatedDate')
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
     index.as :stored_searchable, :facetable
@@ -77,8 +84,10 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  # @todo ??
-  # property :subject_ocm
+  # @note The URI provided is the landing page for the OCM, as a predicate doesn't exist
+  property :subject_ocm, predicate: ::RDF::URI('https://hraf.yale.edu/resources/reference/outline-of-cultural-materials') do |index|
+    index.as :symbol
+  end
 
   property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
     index.as :stored_searchable, :facetable
@@ -97,15 +106,32 @@ class Image < ActiveFedora::Base
     index.as :symbol
   end
 
-  # @todo
-  # property :requested_by
+  property :requested_by, predicate: ::RDF::URI.new('http://rdf.myexperiment.org/ontologies/base/has-requester') do |index|
+    index.as :symbol
+  end
 
   # @todo
-  # property :research_assistance
+  property :research_assistance, predicate: ::RDF::URI.new('http://www.rdaregistry.info/Elements/a/#P50265') do |index|
+    index.as :symbol
+  end
 
-  # @todo
-  # property :donor
+  # @todo Should this be indexed as searchable (are we using statements?
+  #       ex. "Donated by Soand So") or as a symbol (are we using a name value?)
+  property :donor, predicate: ::RDF::Vocab::DC.provenance
 
-  # @todo
-  # property :note
+  property :note, predicate: ::RDF::Vocab::SKOS.note do |index|
+    index.as :stored_searchable
+  end
+
+  # accepts_nested_attributes_for needs to be defined at the end of the model.
+  # see note from Hyrax::BasicMetadata mixin:
+  #
+  #   This must be mixed after all other properties are defined because no other
+  #   properties will be defined once accepts_nested_attributes_for is called
+
+  id_blank = proc { |attributes| attributes[:id].blank? }
+
+  controlled_properties.each do |property|
+    accepts_nested_attributes_for property, reject_if: id_blank, allow_destroy: true
+  end
 end
