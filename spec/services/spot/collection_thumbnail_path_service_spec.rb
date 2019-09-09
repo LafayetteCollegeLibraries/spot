@@ -4,7 +4,7 @@ RSpec.describe Spot::CollectionThumbnailPathService do
     subject { described_class.call(collection) }
 
     let(:collection) { instance_double(Collection, id: 'colabc123') }
-    let(:file_path) { Rails.root.join('spec/fixtures/work.png').to_s }
+    let(:file_path) { Rails.root.join('spec', 'fixtures', 'work.png').to_s }
 
     after do
       CollectionBrandingInfo.where(collection_id: collection.id)&.delete_all

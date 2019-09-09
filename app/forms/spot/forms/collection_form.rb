@@ -34,7 +34,7 @@ module Spot
         # the hyrax form-fields are also singular!
         :visibility,
         :representative_id,
-        :collection_type_gid,
+        :collection_type_gid
       ]
 
       self.required_fields = [:title]
@@ -55,7 +55,7 @@ module Spot
         # hyrax-required terms
         :visibility,
         :representative_id,
-        :collection_type_gid,
+        :collection_type_gid
       ]
 
       class << self
