@@ -35,7 +35,6 @@ module Spot
         :visibility,
         :representative_id,
         :collection_type_gid,
-        :thumbnail_id
       ]
 
       self.required_fields = [:title]
@@ -57,14 +56,12 @@ module Spot
         :visibility,
         :representative_id,
         :collection_type_gid,
-        :thumbnail_id
       ]
 
       class << self
         # @return [Array<String, Hash>]
         def build_permitted_params
           super + [
-            :thumbnail_id,
             { location_attributes: [:id, :_destroy] }
           ]
         end
@@ -79,8 +76,7 @@ module Spot
             fields = singular_fields - [
               :visibility,
               :representative_id,
-              :collection_type_gid,
-              :thumbnail_id
+              :collection_type_gid
             ]
 
             fields.each do |field|
@@ -139,8 +135,7 @@ module Spot
         terms - [
           :visibility,
           :representative_id,
-          :collection_type_gid,
-          :thumbnail_id
+          :collection_type_gid
         ]
       end
 

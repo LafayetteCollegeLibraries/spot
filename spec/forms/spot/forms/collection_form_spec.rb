@@ -3,7 +3,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   subject(:form) { described_class.new(Collection.new, Ability.new(user), nil) }
 
   let(:user) { build(:admin_user) }
-  let(:hyrax_fields) { %i[visibility representative_id collection_type_gid thumbnail_id] }
+  let(:hyrax_fields) { %i[visibility representative_id collection_type_gid] }
 
   it_behaves_like 'it handles identifier form fields'
 
@@ -55,7 +55,6 @@ RSpec.describe Spot::Forms::CollectionForm do
     subject { described_class.build_permitted_params }
 
     it { is_expected.to be_an Array }
-    it { is_expected.to include :thumbnail_id }
     it { is_expected.to include(location_attributes: [:id, :_destroy]) }
   end
 
@@ -127,7 +126,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   describe '#primary_terms' do
     subject { form.primary_terms }
 
-    let(:fields) { %i[visibility thumbnail_id representative_id collection_type_gid] }
+    let(:fields) { %i[visibility representative_id collection_type_gid] }
 
     it { is_expected.not_to include(*fields) }
   end
