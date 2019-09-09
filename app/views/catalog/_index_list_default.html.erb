@@ -27,12 +27,15 @@
 <% if document.collection? %>
 <% collection_presenter = Hyrax::CollectionPresenter.new(document, current_ability) %>
 <div class="col-md-4">
-  <div class="collection-counts-wrapper">
+  <div class="collection-counts-wrapper pull-right">
+    <% col_count = collection_presenter.total_viewable_collections %>
+    <% unless col_count.zero? %>
     <div class="collection-counts-item">
-      <span><%= collection_presenter.total_viewable_collections %></span>Collections
+      <span><%= col_count %></span>Collections
     </div>
+    <% end %>
     <div class="collection-counts-item">
-      <span><%= collection_presenter.total_viewable_works %></span>Works
+      <span><%= collection_presenter.total_viewable_works %></span>Objects
     </div>
   </div>
 </div>
