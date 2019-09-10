@@ -34,6 +34,7 @@ load_overrides = lambda do
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
 
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
+  Hyrax::CollectionsController.include Spot::CollectionSlugsBehavior
 
   Hyrax::DerivativeService.services = [
     ::Spot::ImageDerivativesService,

@@ -6,6 +6,7 @@ class Collection < ActiveFedora::Base
   self.controlled_properties = [:place]
 
   validates_with ::Spot::OnlyUrlsValidator, fields: [:related_resource]
+  validates_with ::Spot::SlugValidator, fields: [:identifier]
 
   # title is included with +Hyrax::CoreMetadata+, which is included
   # with +Hyrax::CollectionBehavior+

@@ -38,4 +38,38 @@ RSpec.describe Collection do
       it { is_expected.not_to be_empty }
     end
   end
+
+  describe 'validates SlugValidator for :identifier' do
+    subject { collection.errors }
+
+    before { collection.validate }
+
+    context 'when no identifiers present' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'when one slug is present' do
+      let(:params) { base_params.merge(identifier: ['slug:example-collection']) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when identifiers are present, but no slugs' do
+      let(:params) { base_params.merge(identifier: ['issn:1234-5678']) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when multiple slugs are present' do
+      let(:params) { base_params.merge(identifier: ['slug:example-collection', 'slug:another-one']) }
+
+      it { is_expected.not_to be_empty }
+    end
+
+    context 'when a slug has invalid characters' do
+      let(:params) { base_params.merge(identifier: ['slug:inv@a!d_slug']) }
+
+      it { is_expected.not_to be_empty }
+    end
+  end
 end
