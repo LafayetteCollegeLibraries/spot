@@ -14,7 +14,7 @@ FactoryBot.define do
     end
 
     after(:create) do |file, evaluator|
-      Hydra::Works::UploadFileToFileSet.call(file, evaluator.content) unless evaluator.content.nil?
+      Hydra::Works::UploadFileToFileSet.call(file, evaluator.content) if evaluator.content.present?
     end
 
     trait :public do
