@@ -2,6 +2,6 @@
 
 RSpec.describe Hyrax::ImagePresenter do
   skip 'wait for image factory' do
-    it_behaves_like 'a spot presenter'
+    it_behaves_like 'a Spot presenter'
   end
 end

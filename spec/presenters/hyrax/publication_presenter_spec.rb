@@ -7,7 +7,7 @@ RSpec.describe Hyrax::PublicationPresenter do
   let(:object) { build(:publication) }
   let(:ability) { Ability.new(build(:user)) }
 
-  it_behaves_like 'a spot presenter'
+  it_behaves_like 'a Spot presenter'
 
   context 'identifier handling' do
     let(:raw_ids) { ['issn:1234-5678', 'abc:123'] }
