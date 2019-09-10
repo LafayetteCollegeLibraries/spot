@@ -17,7 +17,6 @@ RSpec.describe Spot::CollectionFromConfig do
   let(:visibility) { 'private' }
 
   before do
-    Collection.destroy_all
     Hyrax::CollectionTypes::CreateService.create_admin_set_type
     Hyrax::CollectionTypes::CreateService.create_user_collection_type
   end
