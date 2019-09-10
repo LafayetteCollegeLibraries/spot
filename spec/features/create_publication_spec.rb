@@ -22,13 +22,16 @@ RSpec.feature 'Create a Publication', :clean, :js do
     # TODO: until we have more than one option for (non admin/trustee) users
     # to choose from, when 'Add new work' is clicked, it'll just lead to the
     # Publication form.
-    describe 'should be taken directly to the new Publication form' do
+    describe 'can fill out and submit a new Publication' do
       scenario do
         visit '/dashboard'
         click_link 'Works'
         click_link 'Add new work'
 
-        sleep 2
+        sleep 1
+
+        choose 'Publication'
+        click_button 'Create work'
 
         expect(page).to have_content "Add New #{i18n_term}"
 
