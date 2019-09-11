@@ -6,7 +6,7 @@ module Spot
   class CollectionTypeDoesNotExistError < StandardError; end
 
   class CollectionFromConfig
-    attr_reader :title, :metadata, :collection_type, :visibility
+    attr_reader :title, :metadata, :collection_type, :visibility, :slug
 
     # Initialize from a parsed YAML configuration file
     # (here to make our lives easier within a Rake task).
@@ -28,19 +28,22 @@ module Spot
       )
     end
 
-    # @param :title [String] Title of the collection (required)
-    # @param :metadata [Hash] Collection metadata attributes
-    # @param :collection_type [String] the +machine_id+ of a Hyrax::CollectionType
-    # @param :visibility [String] one of: 'public', 'authenticated', 'private'
+    # @param options [Hash]
+    # @option title [String] Title of the collection (required)
+    # @option metadata [Hash] Collection metadata attributes
+    # @option collection_type [String] the +machine_id+ of a Hyrax::CollectionType
+    # @option visibility [String] one of: 'public', 'authenticated', 'private'
+    # @option slug [String] URL slug for the collection
     # @raise [CollectionTypeDoesNotExistError] see {#parse_collection_type}
     def initialize(title:,
                    metadata: {},
                    collection_type: default_collection_type,
-                   visibility: default_visibility)
+                   visibility: default_visibility, slug: nil)
       @title = title
       @metadata = metadata
       @collection_type = parse_collection_type(collection_type)
       @visibility = parse_visibility(visibility)
+      @slug = slug
     end
 
     # Our own homespun version of +ActiveRecord::Base.find_or_create_by_title+.
@@ -59,6 +62,7 @@ module Spot
         col.collection_type = collection_type
         col.visibility = visibility
         col.apply_depositor_metadata(deposit_user&.user_key) if deposit_user
+        col.identifier = ["slug:#{slug}"] if slug.present?
       end
 
       # add permissions to the collection

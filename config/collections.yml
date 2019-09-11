@@ -32,15 +32,19 @@
 -
   title: Bytes and Books
   visibility: public
+  slug: bytes-and-books
 -
   title: Faculty Publications
   visibility: public
+  slug: faculty-publications
 -
   title: Gazette of the American Friends of Lafayette
   visibility: public
+  slug: gazette-american-friends-lafayette
 -
   title: Lafayette Magazine archive
   visibility: public
+  slug: lafayette-magazine-archive
   metadata:
     abstract: >
       Digitized archive of Lafayette publications:
@@ -50,6 +54,7 @@
 -
   title: Lafayette Newspaper archive
   visibility: public
+  slug: lafayette-newspaper-archive
   metadata:
     abstract: >
       Digitized archive of The Lafayette, the oldest
@@ -57,6 +62,7 @@
 -
   title: Shakespeare Bulletin Archive
   visibility: public
+  slug: lafayette-bulletin-archive
   metadata:
     abstract: >
       Digitized Shakespeare Bulletin Archive containing

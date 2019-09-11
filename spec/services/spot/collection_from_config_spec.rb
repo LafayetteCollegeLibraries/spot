@@ -2,7 +2,7 @@
 RSpec.describe Spot::CollectionFromConfig do
   subject(:collection) { described_class.new(attributes) }
 
-  let(:attributes) do
+  let(:base_attributes) do
     {
       title: title,
       metadata: metadata,
@@ -10,6 +10,7 @@ RSpec.describe Spot::CollectionFromConfig do
       visibility: visibility
     }
   end
+  let(:attributes) { base_attributes }
 
   let(:title) { 'My cool collection' }
   let(:metadata) { { description: ['Some good words'] } }
@@ -72,6 +73,20 @@ RSpec.describe Spot::CollectionFromConfig do
       let(:visibility) { 'i dunno?' }
 
       it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    end
+  end
+
+  describe 'slug' do
+    subject(:created) { collection.create.identifier }
+
+    context 'when present' do
+      let(:attributes) { base_attributes.merge(slug: 'a-cool-collection') }
+
+      it { is_expected.to eq ['slug:a-cool-collection'] }
+    end
+
+    context 'when not present' do
+      it { is_expected.to eq [] }
     end
   end
 
