@@ -43,7 +43,8 @@ module Spot
         :title,
         :abstract,
         :description,
-        :identifier,
+        :standard_identifier,
+        :local_identifier,
         :language,
 
         # skipping subject until we get a controlled vocabulary set up for it

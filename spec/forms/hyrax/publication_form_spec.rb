@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::PublicationForm do
+  it_behaves_like 'it handles identifier form fields'
+
   shared_context 'required fields' do
     it 'contains required fields' do
       expect(terms).to include :title
@@ -26,7 +28,8 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :abstract }
       it { is_expected.to include :description }
       it { is_expected.to include :note }
-      it { is_expected.to include :identifier }
+      it { is_expected.to include :standard_identifier }
+      it { is_expected.to include :local_identifier }
       it { is_expected.to include :bibliographic_citation }
       it { is_expected.to include :date_issued }
       it { is_expected.to include :date_available }
@@ -78,32 +81,6 @@ RSpec.describe Hyrax::PublicationForm do
 
     let(:raw_params) { ActionController::Parameters.new(params) }
 
-    context 'when passed identifier_prefix and identifier_value' do
-      let(:params) do
-        {
-          'identifier_prefix' => ['hdl'],
-          'identifier_value' => ['abc/123']
-        }
-      end
-
-      it 'parses out identifiers' do
-        expect(attributes[:identifier]).to eq ['hdl:abc/123']
-      end
-
-      context 'when no identifiers are present' do
-        let(:params) do
-          {
-            'identifier_prefix' => [],
-            'identifier_value' => []
-          }
-        end
-
-        it 'returns nil' do
-          expect(attributes[:identifier]).to be_empty
-        end
-      end
-    end
-
     context 'handles nested attributes' do
       describe 'language' do
         let(:field) { 'language' }
@@ -153,15 +130,5 @@ RSpec.describe Hyrax::PublicationForm do
         it { is_expected.not_to be_nil, "Hint missing for Publication##{term}" }
       end
     end
-  end
-
-  describe 'identifier field' do
-    subject { form.identifier }
-
-    let(:form) { described_class.new(pub, nil, nil) }
-    let(:pub) { Publication.new(identifier: ['noid:abc123def', 'issn:1234-5678']) }
-
-    it { is_expected.not_to include 'noid:abc123def' }
-    it { is_expected.to include 'issn:1234-5678' }
   end
 end
