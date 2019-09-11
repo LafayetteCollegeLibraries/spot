@@ -19,6 +19,21 @@ RSpec.describe Collection do
   it { is_expected.to have_editable_property(:location).with_predicate(dc.spatial) }
   it { is_expected.to have_editable_property(:sponsor).with_predicate(schema.sponsor) }
 
+  describe '#to_param' do
+    subject { collection.to_param }
+
+    context 'when a slug identifier is present' do
+      let(:params) { base_params.merge(identifier: ["slug:#{slug}"]) }
+      let(:slug) { 'a-good-collection' }
+
+      it { is_expected.to eq slug }
+    end
+
+    context 'when a slug identifier is not present' do
+      it { is_expected.to eq collection.id }
+    end
+  end
+
   describe 'validates OnlyUrlsValidator for :related_resource' do
     subject { collection.errors }
 

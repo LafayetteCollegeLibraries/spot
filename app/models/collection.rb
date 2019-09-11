@@ -11,6 +11,8 @@ class Collection < ActiveFedora::Base
   # title is included with +Hyrax::CoreMetadata+, which is included
   # with +Hyrax::CollectionBehavior+
 
+  self.indexer = Spot::CollectionIndexer
+
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
   end
@@ -45,4 +47,11 @@ class Collection < ActiveFedora::Base
 
   id_blank = proc { |attributes| attributes[:id].blank? }
   accepts_nested_attributes_for :location, reject_if: id_blank, allow_destroy: true
+
+  def to_param
+    slug = identifier.find { |id| id.start_with? 'slug:' }
+    return super unless slug.present?
+
+    Spot::Identifier.from_string(slug).value
+  end
 end
