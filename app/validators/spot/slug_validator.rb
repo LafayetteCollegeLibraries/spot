@@ -22,7 +22,7 @@ module Spot
 
       # @return [true, false]
       def slug_valid?(slug)
-        slug.match? /^slug\:[a-z0-9\-]+$/
+        slug.match?(/^slug\:[a-z0-9\-]+$/)
       end
 
       # @return [String]

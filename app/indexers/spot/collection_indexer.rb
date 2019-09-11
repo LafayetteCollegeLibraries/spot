@@ -7,7 +7,7 @@ module Spot
 
     def generate_solr_document
       super.tap do |doc|
-        if slug_id = object.identifier.find { |id| id.start_with? 'slug:' }
+        if (slug_id = object.identifier.find { |id| id.start_with? 'slug:' })
           doc['collection_slug_ssi'] = Spot::Identifier.from_string(slug_id).value
         end
       end

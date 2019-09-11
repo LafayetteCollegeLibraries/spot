@@ -48,6 +48,22 @@ class Collection < ActiveFedora::Base
   id_blank = proc { |attributes| attributes[:id].blank? }
   accepts_nested_attributes_for :location, reject_if: id_blank, allow_destroy: true
 
+  # Overrides the default +.find+ behavior by first searching for a slug
+  # and then falling back to the expected behavior (searching by ID).
+  #
+  # @param [String] slug_or_id
+  # @return [Collection]
+  def self.find(slug_or_id)
+    from_slug = ActiveFedora::Base.where(collection_slug_ssi: slug_or_id)&.first
+    return from_slug unless from_slug.nil?
+
+    super
+  end
+
+  # Override for URL/path helpers to use the slug first, if present, and then
+  # fallback to the default (which uses IDs).
+  #
+  # @return [String]
   def to_param
     slug = identifier.find { |id| id.start_with? 'slug:' }
     return super unless slug.present?
