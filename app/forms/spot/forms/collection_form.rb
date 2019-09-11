@@ -27,6 +27,7 @@ module Spot
 
       class_attribute :singular_fields
       self.singular_fields = [
+        :slug,
         :title,
         :abstract,
         :description,
@@ -39,6 +40,8 @@ module Spot
 
       self.required_fields = [:title]
       self.terms = [
+        :slug,
+
         :title,
         :abstract,
         :description,
@@ -62,7 +65,8 @@ module Spot
         # @return [Array<String, Hash>]
         def build_permitted_params
           super + [
-            { location_attributes: [:id, :_destroy] }
+            { location_attributes: [:id, :_destroy] },
+            :slug
           ]
         end
 
@@ -73,15 +77,16 @@ module Spot
         # @return [ActionController::Parameters]
         def model_attributes(form_params)
           super.tap do |params|
-            fields = singular_fields - [
-              :visibility,
-              :representative_id,
-              :collection_type_gid
-            ]
+            fields = singular_fields - %i[visibility representative_id collection_type_gid]
 
             fields.each do |field|
               field = field.to_s
               params[field] = Array(params[field]) if params[field]
+            end
+
+            if (slug = params.delete('slug'))
+              params['identifier'] ||= []
+              params['identifier'] << "slug:#{slug}"
             end
           end
         end
@@ -123,6 +128,14 @@ module Spot
         self[key] += [class_name.new]
       end
 
+      # Since we're sussing them out with {#slug}, we need to remove
+      # slugs from local identifiers.
+      #
+      # @return [Array<String>]
+      def local_identifier
+        super.reject { |id| id.start_with? 'slug:' }
+      end
+
       # Delegates to the class {.multiple?} method
       #
       # @return [true, false]
@@ -145,6 +158,16 @@ module Spot
       # @return [Array]
       def secondary_terms
         []
+      end
+
+      # Slugs are stored as identifiers
+      #
+      # @return [String]
+      def slug
+        @slug ||= begin
+          raw = self['identifier'].find { |id| id.start_with?('slug:') }
+          raw ? Spot::Identifier.from_string(raw).value : nil
+        end
       end
 
       # Limiting to one title via the form
