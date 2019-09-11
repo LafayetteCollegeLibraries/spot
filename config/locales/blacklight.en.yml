@@ -21,12 +21,12 @@ en:
         division: Division
         file_format: File Format
         file_size: File Size
-        identifier: Standard Identifier
         keyword: Keyword
         keyword_sim: Keyword
         language: Language
         language_label: Language
         license: License
+        local_identifier: Local Identifier
         location: Location
         member_of_collections: Collections
         organization: Organization

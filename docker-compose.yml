@@ -20,6 +20,7 @@ services:
       RAILS_ENV: development
       REDIS_URL: redis://redis:6379
       SOLR_URL: http://solr:8983/solr/spot-development
+      DEV_USER: dss@lafayette.edu
     restart: always
     depends_on:
       - db

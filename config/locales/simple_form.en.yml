@@ -18,11 +18,11 @@ en:
         description: A free-text account of the resource.
         division: A major unit or section within a larger organization.
         editor: A person having managerial and sometimes policy-making responsibility for the editorial part of a publishing firm or of a newspaper, magazine, or other publication.
-        identifier: An unambiguous reference to the resource. Recommended best practice is to identify the resource by means of a string conforming to a formal identification system.
         keyword: Words or phrases you select to describe what the work is about. These are used to search for content.
         language: The language of the work's content.
         license: Licensing and distribution information governing access to the work. Select from the provided drop-down list.
-        location: A place name related to the work, such as its site of publication, or the city, state, or country the work contents are about. Calls upon the <a href='http://www.geonames.org'>GeoNames web service</a>.
+        local_identifier: A reference to the work from an internal authority. These are free-text but need to have an identifying prefix followed by a colon (ex. "lafayette:magazine_113")
+        location: A place name related to the work, such as its site of publication, or the city, state, or country the work contents are about. Calls upon the <a href="http://www.geonames.org" target="_blank">GeoNames web service</a>.
         note: Information important to internal maintenance of records or relevant to the original items, such as administrative, digitization, or decision documentation.
         organization: The organization associated with the resource.
         physical_medium: A physical material or carrier.  Examples include paper, canvas, or DVD.
@@ -33,6 +33,7 @@ en:
         rights_statement: Rights statements express the copyright status of a Digital Object, as well as information about how users can access and re-use the objects.
         source: A related resource from which the described resource is derived.
         sponsor: A person or organization that supports a thing through a pledge, promise, or financial contribution.
+        standard_identifier: "A reference to the work from an outside authority. Currently, we support: <strong>DOI, Handle, ISSN, ISBN</strong>"
         subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary.
         subtitle: An explanatory or alternative title of a publication.
         title: A name to aid in identifying a work.

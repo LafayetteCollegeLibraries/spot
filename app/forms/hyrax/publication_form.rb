@@ -39,7 +39,8 @@ module Hyrax
       :keyword,
       :location,
       :bibliographic_citation,
-      :identifier,
+      :standard_identifier,
+      :local_identifier,
       :related_resource,
       :rights_statement,
 
@@ -70,8 +71,8 @@ module Hyrax
       self.class.multiple?(term)
     end
 
-    # an array to iterate through when building our custom portion
-    # of the Publication form. Excluded are the
+    # An array to iterate through when building our custom portion
+    # of the Publication form. The Hyrax-specific fields are excluded.
     # @return [Array<Symbol>]
     def primary_terms
       terms - [
@@ -96,14 +97,6 @@ module Hyrax
     # @return [String]
     def date_issued
       self['date_issued'].first
-    end
-
-    # Prevents noids (and other identifiers we don't want
-    # to be able to edit) from appearing in the form.
-    #
-    # @return [String]
-    def identifier
-      self['identifier'].reject { |id| id =~ /^noid\:/ }
     end
 
     # @return [String, RDF::Literal]

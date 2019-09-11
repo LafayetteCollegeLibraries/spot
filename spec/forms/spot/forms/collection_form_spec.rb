@@ -5,6 +5,8 @@ RSpec.describe Spot::Forms::CollectionForm do
   let(:user) { build(:admin_user) }
   let(:hyrax_fields) { %i[visibility representative_id collection_type_gid thumbnail_id] }
 
+  it_behaves_like 'it handles identifier form fields'
+
   shared_context 'required fields' do
     it 'contains required fields' do
       expect(terms).to include :title
@@ -24,7 +26,8 @@ RSpec.describe Spot::Forms::CollectionForm do
 
     it { is_expected.to include :abstract }
     it { is_expected.to include :description }
-    it { is_expected.to include :identifier }
+    it { is_expected.to include :standard_identifier }
+    it { is_expected.to include :local_identifier }
     it { is_expected.to include :language }
     it { is_expected.to include :location }
     it { is_expected.to include :related_resource }
@@ -99,7 +102,7 @@ RSpec.describe Spot::Forms::CollectionForm do
     end
 
     context 'when a multiple property' do
-      let(:field) { :identifier }
+      let(:field) { :sponsor }
 
       it { is_expected.to eq [''] }
     end
