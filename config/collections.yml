@@ -51,6 +51,8 @@
       Lafayette Alumnus, Lafayette Alumni Quarterly,
       Lafayette Magazine, as well as the Football
       News Letter and Leopard Letter.
+    related_resource:
+      - https://dss.lafayette.edu/projects/lafayette-magazine
 -
   title: Lafayette Newspaper archive
   visibility: public
@@ -59,6 +61,8 @@
     abstract: >
       Digitized archive of The Lafayette, the oldest
       college newspaper in Pennsylvania.
+    related_resource:
+      - https://dss.lafayette.edu/projects/lafayette-newspaper-collection
 -
   title: Shakespeare Bulletin Archive
   visibility: public
@@ -70,3 +74,5 @@
       the preceding Bulletin of the New York Shakespeare
       Society (1982-1983), and the incorporated Shakespeare
       on Film Newsletter (1976-1992).
+    related_resource:
+      - https://dss.lafayette.edu/collections/shakespeare-bulletin-archive

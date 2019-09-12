@@ -7,6 +7,19 @@ module Spot
 
     delegate :abstract, :related_resource, to: :solr_document
 
+    # Presenter fields displayed on the #show sidebar (on the right).
+    # Modify this to change what's displayed + the order.
+    #
+    # @return [Array<Symbol>]
+    def self.terms
+      [
+        :total_items,
+        :related_resource,
+        :location,
+        :sponsor
+      ]
+    end
+
     # @return [true,false]
     def collection_featurable?
       user_can_feature_collections? && solr_document.public?
