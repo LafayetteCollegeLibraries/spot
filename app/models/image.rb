@@ -28,7 +28,11 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :repository, predicate: ::RDF::URI.new('http://ns.nature.com/terms/#repository') do |index|
+  property :repository_location, predicate: ::RDF::URI.new('http://purl.org/vra/placeOfRepository') do |index|
+    index.as :facetable
+  end
+
+  property :source, predicate: ::RDF::Vocab::DC.source do |index|
     index.as :facetable
   end
 
@@ -61,8 +65,9 @@ class Image < ActiveFedora::Base
   property :date, predicate: ::RDF::Vocab::DC.date
 
   # about the date
-  # @todo: ok if just stored?
-  property :date_scope_note, predicate: ::RDF::Vocab::SKOS.scopeNote
+  property :date_scope_note, predicate: ::RDF::Vocab::SKOS.scopeNote do |index|
+    index.as :stored_searchable
+  end
 
   # associated dates
   # @todo Indexing (might need a mixin)
