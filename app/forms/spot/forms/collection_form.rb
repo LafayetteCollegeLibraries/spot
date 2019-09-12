@@ -6,7 +6,6 @@
 # form for its widgets:
 #
 #   - +visibility+
-#   - +representative_id+
 #   - +collection_type_gid+
 #   - +thumbnail_id+
 #

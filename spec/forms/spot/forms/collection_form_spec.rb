@@ -4,7 +4,7 @@ RSpec.describe Spot::Forms::CollectionForm do
 
   let(:collection) { Collection.new }
   let(:user) { build(:admin_user) }
-  let(:hyrax_fields) { %i[visibility representative_id collection_type_gid] }
+  let(:hyrax_fields) { %i[visibility collection_type_gid] }
 
   it_behaves_like 'it handles identifier form fields'
 
