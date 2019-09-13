@@ -16,7 +16,8 @@ module Spot
         :total_items,
         :related_resource,
         :location,
-        :sponsor
+        :sponsor,
+        :modified_date
       ]
     end
 
@@ -41,9 +42,12 @@ module Spot
       @featured
     end
 
-    # @todo this is a no-op at the moment. we'll need to update the metadata to provide
-    #       a URL that provides more information about the collection
-    def learn_more_url; end
+    # Is the document's visibility public?
+    #
+    # @return [true, false]
+    def public?
+      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
 
     # @return [true,false]
     def user_can_feature_collections?

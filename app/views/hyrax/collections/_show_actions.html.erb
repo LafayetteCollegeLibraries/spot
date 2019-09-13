@@ -1,17 +1,13 @@
-<%#
-  TODO: in Hyrax v3 'Feature' and 'Unfeature' are available as translations
-        at 'hyrax.base.show_actions.{feature,unfeature}'
-%>
 <div class="col-md-12" style="margin-top: 1rem;">
-  <%= link_to 'Edit', dashboard_collection_path(presenter), class: 'btn btn-default' %>
+  <%= link_to 'Edit', edit_dashboard_collection_path(presenter), class: 'btn btn-default' %>
 
   <% if presenter.collection_featurable? %>
-  <%= link_to 'Feature',
+  <%= link_to t('hyrax.base.show_actions.feature'),
               main_app.featured_collection_path(presenter, format: :json),
               data: { behavior: 'feature' },
               class: presenter.display_unfeature_link? ? 'btn btn-default collapse' : 'btn btn-default' %>
 
-  <%= link_to 'Unfeature',
+  <%= link_to t('hyrax.base.show_actions.unfeature'),
               main_app.featured_collection_path(presenter, format: :json),
               data: { behavior: 'unfeature' },
               class: presenter.display_feature_link? ? 'btn btn-default collapse' : 'btn btn-default' %>
