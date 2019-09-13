@@ -55,17 +55,17 @@ module Spot
         col.attributes = { title: [title] }.merge(metadata)
         col.collection_type = collection_type
         col.visibility = visibility
-        col.apply_depositor_metadata(deposit_user&.user_key) if deposit_user
+        col.apply_depositor_metadata(deposit_user.user_key) if deposit_user
         col.identifier = ["slug:#{slug}"] if slug.present?
       end
 
+      # need to grab this before saving, but we can't call the PermissionsCreateService
+      # until after the Collection is persisted
+      is_new_record = collection.new_record?
+
       collection.save!
 
-      # add permissions to the collection
-      Hyrax::Collections::PermissionsCreateService.create_default(
-        collection: collection,
-        creating_user: deposit_user
-      )
+      create_permissions(collection) if is_new_record
 
       collection
     end
@@ -83,6 +83,15 @@ module Spot
           # as a side effect of using yaml
           obj[key.to_sym] = Array.wrap(val).map(&:strip).reject(&:blank?)
         end
+      end
+
+      # @param [Collection]
+      # @return [void]
+      def create_permissions(collection)
+        Hyrax::Collections::PermissionsCreateService.create_default(
+          collection: collection,
+          creating_user: deposit_user
+        )
       end
 
       # If no collection_type is provided, we'll use +user_collection+

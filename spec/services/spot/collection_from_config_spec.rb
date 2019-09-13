@@ -109,6 +109,20 @@ RSpec.describe Spot::CollectionFromConfig do
         expect(created.description).to eq metadata[:description]
       end
     end
+
+    context 'when a collection already exists' do
+      before { described_class.new(attributes).create_or_update! }
+
+      let(:title) { 'A collection updated' }
+      let(:metadata) { { description: ['An initial description'] } }
+      let(:updated_attributes) { base_attributes.merge(metadata: { description: ['A different description'] }) }
+
+      it 'updates the collection' do
+        collection = described_class.new(updated_attributes).create_or_update!
+        expect(collection.title).to include(title)
+        expect(collection.description).to eq ['A different description']
+      end
+    end
   end
 
   describe '.from_yaml' do
