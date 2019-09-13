@@ -5,6 +5,7 @@ en:
         description: Description
       collection:
         abstract: Brief Description
+        modified_date: Last updated
         related_resource: Related URL
     hints:
       defaults:

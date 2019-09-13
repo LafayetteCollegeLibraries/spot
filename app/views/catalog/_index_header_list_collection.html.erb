@@ -1,0 +1,7 @@
+<div class="search-results-title-row">
+  <h4 class="search-result-title">
+    <%= link_to document.title_or_label, hyrax.collection_path(document) %>
+  </h4>
+  <%# hiding the collection-type badge for the moment, as we're only using one type %>
+  <%# Hyrax::CollectionPresenter.new(document, current_ability).collection_type_badge %>
+</div>
