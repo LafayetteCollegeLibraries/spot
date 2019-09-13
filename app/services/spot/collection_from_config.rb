@@ -24,7 +24,8 @@ module Spot
         title: config['title'],
         metadata: wrap_metadata(config['metadata'] || {}),
         collection_type: config['collection_type'],
-        visibility: config['visibility']
+        visibility: config['visibility'],
+        slug: config['slug']
       )
     end
 
@@ -35,8 +36,7 @@ module Spot
     # @option visibility [String] one of: 'public', 'authenticated', 'private'
     # @option slug [String] URL slug for the collection
     # @raise [CollectionTypeDoesNotExistError] see {#parse_collection_type}
-    def initialize(title:,
-                   metadata: {},
+    def initialize(title:, metadata: {},
                    collection_type: default_collection_type,
                    visibility: default_visibility, slug: nil)
       @title = title
@@ -85,7 +85,7 @@ module Spot
         metadata.each_with_object({}) do |(key, val), obj|
           # we want to get rid of whitespace that may creep in
           # as a side effect of using yaml
-          obj[key.to_sym] = Array.wrap(val.strip).reject(&:blank?)
+          obj[key.to_sym] = Array.wrap(val).map(&:strip).reject(&:blank?)
         end
       end
 

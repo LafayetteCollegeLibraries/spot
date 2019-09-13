@@ -123,13 +123,23 @@ RSpec.describe Spot::CollectionFromConfig do
         'metadata' => {
           'description' => description,
           'creator' => creator
-        }
+        },
+        'visibility' => 'authenticated',
+        'slug' => 'cool-collection'
       }
     end
 
     it 'wraps the metadata values in an array' do
       expect(created.metadata[:description]).to be_an Array
       expect(created.metadata[:creator]).to be_an Array
+    end
+
+    it 'passes slug values on' do
+      expect(created.slug).to eq 'cool-collection'
+    end
+
+    it 'passes visibility values' do
+      expect(created.visibility).to eq 'authenticated'
     end
 
     it 'converts metadata keys to symbols' do

@@ -52,7 +52,7 @@
       Lafayette Magazine, as well as the Football
       News Letter and Leopard Letter.
     related_resource:
-      - https://dss.lafayette.edu/projects/lafayette-magazine
+      - https://dss.lafayette.edu/collections/lafayette-magazine
 -
   title: Lafayette Newspaper archive
   visibility: public
@@ -62,11 +62,11 @@
       Digitized archive of The Lafayette, the oldest
       college newspaper in Pennsylvania.
     related_resource:
-      - https://dss.lafayette.edu/projects/lafayette-newspaper-collection
+      - https://dss.lafayette.edu/collections/lafayette-newspaper-collection
 -
   title: Shakespeare Bulletin Archive
   visibility: public
-  slug: lafayette-bulletin-archive
+  slug: shakespeare-bulletin-archive
   metadata:
     abstract: >
       Digitized Shakespeare Bulletin Archive containing
