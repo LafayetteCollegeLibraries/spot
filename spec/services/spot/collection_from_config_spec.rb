@@ -77,7 +77,7 @@ RSpec.describe Spot::CollectionFromConfig do
   end
 
   describe 'slug' do
-    subject(:created) { collection.create.identifier }
+    subject(:created) { collection.create_or_update!.identifier }
 
     context 'when present' do
       let(:attributes) { base_attributes.merge(slug: 'a-cool-collection') }
@@ -90,8 +90,8 @@ RSpec.describe Spot::CollectionFromConfig do
     end
   end
 
-  describe '#create' do
-    subject(:created) { collection.create }
+  describe '#create_or_update!' do
+    subject(:created) { collection.create_or_update! }
 
     it { is_expected.to be_a Collection }
 
@@ -112,7 +112,7 @@ RSpec.describe Spot::CollectionFromConfig do
   end
 
   describe '.from_yaml' do
-    subject(:created) { described_class.from_yaml(yaml) }
+    subject(:from_yaml) { described_class.from_yaml(yaml) }
 
     let(:description) { 'a nice description' }
     let(:creator) { 'dss@lafayette.edu' }
@@ -130,23 +130,23 @@ RSpec.describe Spot::CollectionFromConfig do
     end
 
     it 'wraps the metadata values in an array' do
-      expect(created.metadata[:description]).to be_an Array
-      expect(created.metadata[:creator]).to be_an Array
+      expect(from_yaml.metadata[:description]).to be_an Array
+      expect(from_yaml.metadata[:creator]).to be_an Array
     end
 
     it 'passes slug values on' do
-      expect(created.slug).to eq 'cool-collection'
+      expect(from_yaml.slug).to eq 'cool-collection'
     end
 
     it 'passes visibility values' do
-      expect(created.visibility).to eq 'authenticated'
+      expect(from_yaml.visibility).to eq 'authenticated'
     end
 
     it 'converts metadata keys to symbols' do
-      expect(created.metadata).to include :description
-      expect(created.metadata).not_to include 'description'
-      expect(created.metadata).to include :creator
-      expect(created.metadata).not_to include 'creator'
+      expect(from_yaml.metadata).to include :description
+      expect(from_yaml.metadata).not_to include 'description'
+      expect(from_yaml.metadata).to include :creator
+      expect(from_yaml.metadata).not_to include 'creator'
     end
   end
 end

@@ -46,24 +46,20 @@ module Spot
       @slug = slug
     end
 
-    # Our own homespun version of +ActiveRecord::Base.find_or_create_by_title+.
-    # We'll check to see if a Collection of the same name
-    # exists and return that if so. Otherwise, we'll create a new one.
+    # Applies the configuration to a new (or existing) collection,
+    # using the title as the unique key.
     #
     # @return [Collection]
-    def create
-      # since ActiveFedora::Base doesn't have a '.find_or_create_by'
-      # method, we'll reproduce that behavior
-      existing = Collection.where(title: [title])&.first
-      return existing unless existing.nil?
-
-      collection = Collection.create! do |col|
+    def create_or_update!
+      collection = find_or_initialize_by_title.tap do |col|
         col.attributes = { title: [title] }.merge(metadata)
         col.collection_type = collection_type
         col.visibility = visibility
         col.apply_depositor_metadata(deposit_user&.user_key) if deposit_user
         col.identifier = ["slug:#{slug}"] if slug.present?
       end
+
+      collection.save!
 
       # add permissions to the collection
       Hyrax::Collections::PermissionsCreateService.create_default(
@@ -100,6 +96,13 @@ module Spot
       # @todo Use a configuration variable (or class_attribute) to set this
       def deposit_user
         @deposit_user ||= User.find_by_email('dss@lafayette.edu')
+      end
+
+      # Need to implement this behavior on our own, as ActiveFedora doesn't.
+      #
+      # @return [Collection]
+      def find_or_initialize_by_title
+        Collection.where(title: [title])&.first || Collection.new
       end
 
       # Finds a CollectionType by a provided +machine_id+ String.
