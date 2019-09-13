@@ -5,7 +5,7 @@ volumes:
   solr:
   redis:
 services:
-  spot: &spot
+  app: &app
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0'"
     volumes:
@@ -28,6 +28,8 @@ services:
       - fitsservlet
       - redis
       - solr
+    stdin_open: true
+    tty: true
   db:
     image: postgres:alpine
     volumes:
@@ -59,7 +61,7 @@ services:
     command: solr-create -c spot-development -d /spot-config
     restart: always
   sidekiq:
-    <<: *spot
+    <<: *app
     command: bundle exec sidekiq
     volumes:
       - .:/app
