@@ -6,7 +6,7 @@ module Spot
   class CollectionTypeDoesNotExistError < StandardError; end
 
   class CollectionFromConfig
-    attr_reader :title, :metadata, :collection_type, :visibility
+    attr_reader :title, :metadata, :collection_type, :visibility, :slug
 
     # Initialize from a parsed YAML configuration file
     # (here to make our lives easier within a Rake task).
@@ -24,48 +24,48 @@ module Spot
         title: config['title'],
         metadata: wrap_metadata(config['metadata'] || {}),
         collection_type: config['collection_type'],
-        visibility: config['visibility']
+        visibility: config['visibility'],
+        slug: config['slug']
       )
     end
 
-    # @param :title [String] Title of the collection (required)
-    # @param :metadata [Hash] Collection metadata attributes
-    # @param :collection_type [String] the +machine_id+ of a Hyrax::CollectionType
-    # @param :visibility [String] one of: 'public', 'authenticated', 'private'
+    # @param options [Hash]
+    # @option title [String] Title of the collection (required)
+    # @option metadata [Hash] Collection metadata attributes
+    # @option collection_type [String] the +machine_id+ of a Hyrax::CollectionType
+    # @option visibility [String] one of: 'public', 'authenticated', 'private'
+    # @option slug [String] URL slug for the collection
     # @raise [CollectionTypeDoesNotExistError] see {#parse_collection_type}
-    def initialize(title:,
-                   metadata: {},
+    def initialize(title:, metadata: {},
                    collection_type: default_collection_type,
-                   visibility: default_visibility)
+                   visibility: default_visibility, slug: nil)
       @title = title
       @metadata = metadata
       @collection_type = parse_collection_type(collection_type)
       @visibility = parse_visibility(visibility)
+      @slug = slug
     end
 
-    # Our own homespun version of +ActiveRecord::Base.find_or_create_by_title+.
-    # We'll check to see if a Collection of the same name
-    # exists and return that if so. Otherwise, we'll create a new one.
+    # Applies the configuration to a new (or existing) collection,
+    # using the title as the unique key.
     #
     # @return [Collection]
-    def create
-      # since ActiveFedora::Base doesn't have a '.find_or_create_by'
-      # method, we'll reproduce that behavior
-      existing = Collection.where(title: [title])&.first
-      return existing unless existing.nil?
-
-      collection = Collection.create! do |col|
+    def create_or_update!
+      collection = find_or_initialize_by_title.tap do |col|
         col.attributes = { title: [title] }.merge(metadata)
         col.collection_type = collection_type
         col.visibility = visibility
-        col.apply_depositor_metadata(deposit_user&.user_key) if deposit_user
+        col.apply_depositor_metadata(deposit_user.user_key) if deposit_user
+        col.identifier = ["slug:#{slug}"] if slug.present?
       end
 
-      # add permissions to the collection
-      Hyrax::Collections::PermissionsCreateService.create_default(
-        collection: collection,
-        creating_user: deposit_user
-      )
+      # need to grab this before saving, but we can't call the PermissionsCreateService
+      # until after the Collection is persisted
+      is_new_record = collection.new_record?
+
+      collection.save!
+
+      create_permissions(collection) if is_new_record
 
       collection
     end
@@ -81,8 +81,17 @@ module Spot
         metadata.each_with_object({}) do |(key, val), obj|
           # we want to get rid of whitespace that may creep in
           # as a side effect of using yaml
-          obj[key.to_sym] = Array.wrap(val.strip).reject(&:blank?)
+          obj[key.to_sym] = Array.wrap(val).map(&:strip).reject(&:blank?)
         end
+      end
+
+      # @param [Collection]
+      # @return [void]
+      def create_permissions(collection)
+        Hyrax::Collections::PermissionsCreateService.create_default(
+          collection: collection,
+          creating_user: deposit_user
+        )
       end
 
       # If no collection_type is provided, we'll use +user_collection+
@@ -96,6 +105,13 @@ module Spot
       # @todo Use a configuration variable (or class_attribute) to set this
       def deposit_user
         @deposit_user ||= User.find_by_email('dss@lafayette.edu')
+      end
+
+      # Need to implement this behavior on our own, as ActiveFedora doesn't.
+      #
+      # @return [Collection]
+      def find_or_initialize_by_title
+        Collection.where(title: [title])&.first || Collection.new
       end
 
       # Finds a CollectionType by a provided +machine_id+ String.

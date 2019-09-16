@@ -19,6 +19,53 @@ RSpec.describe Collection do
   it { is_expected.to have_editable_property(:location).with_predicate(dc.spatial) }
   it { is_expected.to have_editable_property(:sponsor).with_predicate(schema.sponsor) }
 
+  describe '.find' do
+    before { collection.save }
+    after { collection.destroy }
+
+    context 'when a slug' do
+      let(:param) { 'cool-collection' }
+
+      context 'when a collection with that slug exists' do
+        subject { described_class.find(param) }
+
+        let(:params) { base_params.merge(identifier: ["slug:#{param}"]) }
+
+        it { is_expected.to eq collection }
+      end
+
+      context 'when the collection does not exist' do
+        it 'raises an ObjectNotFoundError' do
+          expect { described_class.find(param) }
+            .to raise_error(ActiveFedora::ObjectNotFoundError, %r{'id'=#{param}$})
+        end
+      end
+
+      context 'when the param is an id' do
+        subject { described_class.find(param) }
+
+        let(:param) { collection.id }
+
+        it { is_expected.to eq collection }
+      end
+    end
+  end
+
+  describe '#to_param' do
+    subject { collection.to_param }
+
+    context 'when a slug identifier is present' do
+      let(:params) { base_params.merge(identifier: ["slug:#{slug}"]) }
+      let(:slug) { 'a-good-collection' }
+
+      it { is_expected.to eq slug }
+    end
+
+    context 'when a slug identifier is not present' do
+      it { is_expected.to eq collection.id }
+    end
+  end
+
   describe 'validates OnlyUrlsValidator for :related_resource' do
     subject { collection.errors }
 
@@ -34,6 +81,40 @@ RSpec.describe Collection do
 
     context 'when passed something else' do
       let(:params) { base_params.merge(related_resource: ['lolol', url]) }
+
+      it { is_expected.not_to be_empty }
+    end
+  end
+
+  describe 'validates SlugValidator for :identifier' do
+    subject { collection.errors }
+
+    before { collection.validate }
+
+    context 'when no identifiers present' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'when one slug is present' do
+      let(:params) { base_params.merge(identifier: ['slug:example-collection']) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when identifiers are present, but no slugs' do
+      let(:params) { base_params.merge(identifier: ['issn:1234-5678']) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when multiple slugs are present' do
+      let(:params) { base_params.merge(identifier: ['slug:example-collection', 'slug:another-one']) }
+
+      it { is_expected.not_to be_empty }
+    end
+
+    context 'when a slug has invalid characters' do
+      let(:params) { base_params.merge(identifier: ['slug:inv@a!d_slug']) }
 
       it { is_expected.not_to be_empty }
     end

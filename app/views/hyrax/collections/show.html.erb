@@ -11,8 +11,7 @@
 
       <div class="hyc-title">
         <h1><%= @presenter.title.first %></h1>
-        <%= @presenter.collection_type_badge %>
-        <%= @presenter.permission_badge %>
+        <%= @presenter.permission_badge unless @presenter.public? %>
       </div>
 
       <% unless @presenter.logo_record.blank? %>
@@ -26,23 +25,6 @@
                       <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
                     </a>
                 <% end %>
-
-            <% end %>
-          </div>
-      <% end %>
-
-      <% unless @presenter.total_viewable_items.blank? %>
-          <div class="hyc-bugs">
-            <div class="hyc-item-count">
-              <b><%= @presenter.total_viewable_items %></b>
-              <%= 'Item'.pluralize(@presenter.total_viewable_items) %></div>
-
-            <% unless @presenter.creator.blank? %>
-                <div class="hyc-created-by">Created by: <%= @presenter.creator.first %></div>
-            <% end %>
-
-            <% unless @presenter.modified_date.blank? %>
-                <div class="hyc-last-updated">Last Updated: <%= @presenter.modified_date %></div>
             <% end %>
           </div>
       <% end %>

@@ -32,31 +32,41 @@
 -
   title: Bytes and Books
   visibility: public
+  slug: bytes-and-books
 -
   title: Faculty Publications
   visibility: public
+  slug: faculty-publications
 -
   title: Gazette of the American Friends of Lafayette
   visibility: public
+  slug: gazette-american-friends-lafayette
 -
   title: Lafayette Magazine archive
   visibility: public
+  slug: lafayette-magazine-archive
   metadata:
     abstract: >
       Digitized archive of Lafayette publications:
       Lafayette Alumnus, Lafayette Alumni Quarterly,
       Lafayette Magazine, as well as the Football
       News Letter and Leopard Letter.
+    related_resource:
+      - https://dss.lafayette.edu/collections/lafayette-magazine
 -
   title: Lafayette Newspaper archive
   visibility: public
+  slug: lafayette-newspaper-archive
   metadata:
     abstract: >
       Digitized archive of The Lafayette, the oldest
       college newspaper in Pennsylvania.
+    related_resource:
+      - https://dss.lafayette.edu/collections/lafayette-newspaper-collection
 -
   title: Shakespeare Bulletin Archive
   visibility: public
+  slug: shakespeare-bulletin-archive
   metadata:
     abstract: >
       Digitized Shakespeare Bulletin Archive containing
@@ -64,3 +74,5 @@
       the preceding Bulletin of the New York Shakespeare
       Society (1982-1983), and the incorporated Shakespeare
       on Film Newsletter (1976-1992).
+    related_resource:
+      - https://dss.lafayette.edu/collections/shakespeare-bulletin-archive
