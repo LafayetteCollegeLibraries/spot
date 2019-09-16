@@ -65,7 +65,7 @@ Rails.application.routes.draw do
   end
 
   get '/handle/*id', to: 'identifier#handle', as: 'handle'
-  get '/redirect', to: 'spot/redirect#show', constraints: ->(request) {
+  get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
     qs = Rack::Utils.parse_nested_query(request.query_string)
     qs['url'] && qs['url'].match?(URI.regexp)
   }
