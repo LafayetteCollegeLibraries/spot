@@ -18,6 +18,8 @@ RSpec.describe Spot::CollectionFromConfig do
   let(:visibility) { 'private' }
 
   before do
+    User.create(email: 'dss@lafayette.edu')
+
     Hyrax::CollectionTypes::CreateService.create_admin_set_type
     Hyrax::CollectionTypes::CreateService.create_user_collection_type
   end
