@@ -2,7 +2,7 @@
 RSpec.describe Spot::CollectionFromConfig do
   subject(:collection) { described_class.new(attributes) }
 
-  let(:attributes) do
+  let(:base_attributes) do
     {
       title: title,
       metadata: metadata,
@@ -10,6 +10,7 @@ RSpec.describe Spot::CollectionFromConfig do
       visibility: visibility
     }
   end
+  let(:attributes) { base_attributes }
 
   let(:title) { 'My cool collection' }
   let(:metadata) { { description: ['Some good words'] } }
@@ -17,7 +18,6 @@ RSpec.describe Spot::CollectionFromConfig do
   let(:visibility) { 'private' }
 
   before do
-    Collection.destroy_all
     Hyrax::CollectionTypes::CreateService.create_admin_set_type
     Hyrax::CollectionTypes::CreateService.create_user_collection_type
   end
@@ -76,8 +76,22 @@ RSpec.describe Spot::CollectionFromConfig do
     end
   end
 
-  describe '#create' do
-    subject(:created) { collection.create }
+  describe 'slug' do
+    subject(:created) { collection.create_or_update!.identifier }
+
+    context 'when present' do
+      let(:attributes) { base_attributes.merge(slug: 'a-cool-collection') }
+
+      it { is_expected.to eq ['slug:a-cool-collection'] }
+    end
+
+    context 'when not present' do
+      it { is_expected.to eq [] }
+    end
+  end
+
+  describe '#create_or_update!' do
+    subject(:created) { collection.create_or_update! }
 
     it { is_expected.to be_a Collection }
 
@@ -95,10 +109,24 @@ RSpec.describe Spot::CollectionFromConfig do
         expect(created.description).to eq metadata[:description]
       end
     end
+
+    context 'when a collection already exists' do
+      before { described_class.new(attributes).create_or_update! }
+
+      let(:title) { 'A collection updated' }
+      let(:metadata) { { description: ['An initial description'] } }
+      let(:updated_attributes) { base_attributes.merge(metadata: { description: ['A different description'] }) }
+
+      it 'updates the collection' do
+        collection = described_class.new(updated_attributes).create_or_update!
+        expect(collection.title).to include(title)
+        expect(collection.description).to eq ['A different description']
+      end
+    end
   end
 
   describe '.from_yaml' do
-    subject(:created) { described_class.from_yaml(yaml) }
+    subject(:from_yaml) { described_class.from_yaml(yaml) }
 
     let(:description) { 'a nice description' }
     let(:creator) { 'dss@lafayette.edu' }
@@ -109,20 +137,30 @@ RSpec.describe Spot::CollectionFromConfig do
         'metadata' => {
           'description' => description,
           'creator' => creator
-        }
+        },
+        'visibility' => 'authenticated',
+        'slug' => 'cool-collection'
       }
     end
 
     it 'wraps the metadata values in an array' do
-      expect(created.metadata[:description]).to be_an Array
-      expect(created.metadata[:creator]).to be_an Array
+      expect(from_yaml.metadata[:description]).to be_an Array
+      expect(from_yaml.metadata[:creator]).to be_an Array
+    end
+
+    it 'passes slug values on' do
+      expect(from_yaml.slug).to eq 'cool-collection'
+    end
+
+    it 'passes visibility values' do
+      expect(from_yaml.visibility).to eq 'authenticated'
     end
 
     it 'converts metadata keys to symbols' do
-      expect(created.metadata).to include :description
-      expect(created.metadata).not_to include 'description'
-      expect(created.metadata).to include :creator
-      expect(created.metadata).not_to include 'creator'
+      expect(from_yaml.metadata).to include :description
+      expect(from_yaml.metadata).not_to include 'description'
+      expect(from_yaml.metadata).to include :creator
+      expect(from_yaml.metadata).not_to include 'creator'
     end
   end
 end

@@ -54,7 +54,7 @@ gem 'bootsnap', '1.4.4'
 gem 'darlingtonia', '3.0.3'
 
 # user management
-gem 'devise', '4.7.0'
+gem 'devise', '4.7.1'
 gem 'devise-guests', '0.7.0'
 gem 'devise_cas_authenticatable', '1.10.4'
 

@@ -1,10 +1,6 @@
 # frozen_string_literal: true
-#
-# rubocop:disable RSpec/AnyInstance
 RSpec.feature 'Show Publication page', js: false do
-  let(:user) { create(:user) }
-  let(:pub) { create(:publication, user: user, file: file, language: language) }
-  let(:prez) { Hyrax::PublicationPresenter.new(pub, Ability.new(user)) }
+  let(:pub) { create(:publication_with_file_set, content: file, language: language) }
   let(:item_base_url) { "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}" }
   let(:language) { ['en'] }
 
@@ -13,7 +9,7 @@ RSpec.feature 'Show Publication page', js: false do
   # to be defined, and why not use PDFs when they're expected to be the
   # bulk of this work type
   let(:presenter_check_method) { :pdf? }
-  let(:file) { create(:uploaded_pdf) }
+  let(:file) { File.open(Rails.root.join('spec', 'fixtures', 'document.pdf')) }
 
   # Only enqueue the ingest job, not charactarization.
   # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
@@ -22,8 +18,9 @@ RSpec.feature 'Show Publication page', js: false do
 
     # Since we're not passing our objects through charactarization,
     # we need to pretend we did and mock a `:presenter_check_method`
-    # to return true in order to
-    allow_any_instance_of(Hyrax::FileSetPresenter)
+    # to return true in order to get the appropriate viewer to display
+    #
+    allow_any_instance_of(Hyrax::FileSetPresenter) # rubocop:disable RSpec/AnyInstance
       .to receive(presenter_check_method)
       .and_return true
 
@@ -82,7 +79,11 @@ RSpec.feature 'Show Publication page', js: false do
     standard_identifiers = page.all('.attribute-standard_identifier').map do |value|
       value.text.downcase.sub(' ', ':').sub('handle', 'hdl')
     end
-    prez.standard_identifier.map(&:to_s).each { |id| expect(standard_identifiers).to include id }
+
+    pub.identifier
+       .map { |id| Spot::Identifier.from_string(id) }
+       .select(&:standard?)
+       .each { |id| expect(standard_identifiers).to include id.to_s }
 
     local_identifiers = page.all('.attribute-local_identifier').map(&:text)
     expect(local_identifiers).to be_empty # user we're testing as isn't able to see the repository info partial
@@ -101,7 +102,7 @@ RSpec.feature 'Show Publication page', js: false do
   end
 
   context 'when Publication is an image' do
-    let(:file) { create(:uploaded_image) }
+    let(:file) { File.open(Rails.root.join('spec', 'fixtures', 'image.png')) }
     let(:presenter_check_method) { :image? }
 
     scenario 'the UniversalViewer is displayed' do
@@ -111,4 +112,3 @@ RSpec.feature 'Show Publication page', js: false do
     end
   end
 end
-# rubocop:enable RSpec/AnyInstance

@@ -1,6 +1,7 @@
 development:
   host: localhost
   port: 6379
+  url: <%= ENV['REDIS_URL'] %>
 test:
   host: localhost
   port: 6379

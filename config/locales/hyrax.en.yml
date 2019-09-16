@@ -6,6 +6,11 @@ en:
   hyrax:
     account_name:           "My Institution Account Id"
 
+    base:
+      show_actions:
+        feature: Feature
+        unfeature: Unfeature
+
     collection_type:
       admin_set_title: Administrative Set
       default_title: User Collection

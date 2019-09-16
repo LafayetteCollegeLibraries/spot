@@ -21,17 +21,18 @@ en:
         division: Division
         file_format: File Format
         file_size: File Size
-        identifier: Standard Identifier
         keyword: Keyword
         keyword_sim: Keyword
         language: Language
         language_label: Language
         license: License
+        local_identifier: Local Identifier
         location: Location
         member_of_collections: Collections
         organization: Organization
         original_checksum: Original Checksum (MD5)
         page_count: Page Count
+        permalink: Permalink
         proxy_depositor: Proxy Depositor
         publisher: Publisher
         resource_type: Type

@@ -7,12 +7,12 @@
 # a way to simplify the input process.
 #
 # @example
-#   <%# app/views/records/edit_fields/_identifier.html.erb %>
-#   <%= f.input :identifier, as: :identifier_input_group %>
+#   <%# app/views/records/edit_fields/_standard_identifier.html.erb %>
+#   <%= f.input :identifier, as: :standard_identifier_input_group %>
 #
 # @todo abstract out the input 'name' field, so that a differently named
 #       property can perform similarly.
-class IdentifierInputGroupInput < MultiValueInput
+class StandardIdentifierInputGroupInput < MultiValueInput
   # We want to preserve the look + feel of multi-value input, so we'll
   # stuff this value (which is added as a class name to the wrapper element)
   #
@@ -23,7 +23,7 @@ class IdentifierInputGroupInput < MultiValueInput
 
   private
 
-    # Called from {MultiValueInput#input} to build out the HTML of the input.
+    # Called from +MultiValueInput#input+ to build out the HTML of the input.
     #
     # @param [String] raw_value
     # @param [Integer] index
@@ -51,7 +51,7 @@ class IdentifierInputGroupInput < MultiValueInput
     # @return [String] HTML for the dropdown
     def build_input_dropdown(selected = nil)
       <<-HTML
-      <select class="custom-select form-control" name="#{object_name}[identifier_prefix][]" autocomplete="off">
+      <select class="custom-select form-control" name="#{object_name}[standard_identifier_prefix][]" autocomplete="off">
         <option value="">Select type</option>
         #{prefixes.each_with_object([]) do |prefix, output|
           output << %(
@@ -72,7 +72,7 @@ class IdentifierInputGroupInput < MultiValueInput
     # @param [Integer] _index (not used)
     # @return [String] HTML output for the +<input>+ element
     def build_input(value, _index)
-      %(<input type="text" name="#{object_name}[identifier_value][]" class="form-control" value="#{value}"/>)
+      %(<input type="text" name="#{object_name}[standard_identifier_value][]" class="form-control" value="#{value}"/>)
     end
 
     # @return [Array<String>] curated prefixes
@@ -85,6 +85,6 @@ class IdentifierInputGroupInput < MultiValueInput
     # @param [String] prefix
     # @return [String]
     def label_for(prefix)
-      Spot::Identifier.new(prefix, nil).prefix_label
+      Spot::Identifier.prefix_label(prefix)
     end
 end

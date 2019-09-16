@@ -6,7 +6,6 @@
 # form for its widgets:
 #
 #   - +visibility+
-#   - +representative_id+
 #   - +collection_type_gid+
 #   - +thumbnail_id+
 #
@@ -27,23 +26,24 @@ module Spot
 
       class_attribute :singular_fields
       self.singular_fields = [
+        :slug,
         :title,
         :abstract,
         :description,
 
         # the hyrax form-fields are also singular!
         :visibility,
-        :representative_id,
-        :collection_type_gid,
-        :thumbnail_id
+        :collection_type_gid
       ]
 
       self.required_fields = [:title]
       self.terms = [
+        :slug,
         :title,
         :abstract,
         :description,
-        :identifier,
+        :standard_identifier,
+        :local_identifier,
         :language,
 
         # skipping subject until we get a controlled vocabulary set up for it
@@ -54,50 +54,8 @@ module Spot
 
         # hyrax-required terms
         :visibility,
-        :representative_id,
-        :collection_type_gid,
-        :thumbnail_id
+        :collection_type_gid
       ]
-
-      class << self
-        # @return [Array<String, Hash>]
-        def build_permitted_params
-          super + [
-            :thumbnail_id,
-            { location_attributes: [:id, :_destroy] }
-          ]
-        end
-
-        # Pluralizes form_params that are displayed as singular fields,
-        # saving us from setting +multiple: false+ in the model.
-        #
-        # @param [ActionController::Parameters, Hash] form_params
-        # @return [ActionController::Parameters]
-        def model_attributes(form_params)
-          super.tap do |params|
-            fields = singular_fields - [
-              :visibility,
-              :representative_id,
-              :collection_type_gid,
-              :thumbnail_id
-            ]
-
-            fields.each do |field|
-              field = field.to_s
-              params[field] = Array(params[field]) if params[field]
-            end
-          end
-        end
-
-        # Should we display an "add another value" option
-        # in the form?
-        #
-        # @param field [String, Symbol]
-        # @return [true, false]
-        def multiple?(field)
-          !singular_fields.include? field.to_sym
-        end
-      end
 
       # Limiting to one abstract via the form
       #
@@ -126,6 +84,14 @@ module Spot
         self[key] += [class_name.new]
       end
 
+      # Since we're sussing them out with {#slug}, we need to remove
+      # slugs from local identifiers.
+      #
+      # @return [Array<String>]
+      def local_identifier
+        super.reject { |id| id.start_with? 'slug:' }
+      end
+
       # Delegates to the class {.multiple?} method
       #
       # @return [true, false]
@@ -135,12 +101,7 @@ module Spot
 
       # Terms that we want to display form options for.
       def primary_terms
-        terms - [
-          :visibility,
-          :representative_id,
-          :collection_type_gid,
-          :thumbnail_id
-        ]
+        terms - [:visibility, :collection_type_gid]
       end
 
       # This is used to determine what lies below the fold of the form.
@@ -151,11 +112,59 @@ module Spot
         []
       end
 
+      # Slugs are stored as identifiers
+      #
+      # @return [String]
+      def slug
+        @slug ||= begin
+          raw = self['identifier'].find { |id| id.start_with?('slug:') }
+          raw ? Spot::Identifier.from_string(raw).value : nil
+        end
+      end
+
       # Limiting to one title via the form
       #
       # @return [String]
       def title
         self['title'].first
+      end
+
+      class << self
+        # @return [Array<String, Hash>]
+        def build_permitted_params
+          super + [
+            { location_attributes: [:id, :_destroy] },
+            :slug
+          ]
+        end
+
+        # Pluralizes form_params that are displayed as singular fields,
+        # saving us from setting +multiple: false+ in the model.
+        #
+        # @param [ActionController::Parameters, Hash] form_params
+        # @return [ActionController::Parameters]
+        def model_attributes(form_params)
+          super.tap do |params|
+            fields = singular_fields - %i[visibility collection_type_gid slug]
+
+            fields.each do |field|
+              params[field] = Array(params[field]) if params[field]
+            end
+
+            if (slug = params.delete('slug'))
+              params[:identifier] ||= []
+              params[:identifier] << "slug:#{slug}"
+            end
+          end
+        end
+
+        # Should we display an "add another value" option in the form?
+        #
+        # @param field [String, Symbol]
+        # @return [true, false]
+        def multiple?(field)
+          !singular_fields.include?(field.to_sym)
+        end
       end
     end
   end

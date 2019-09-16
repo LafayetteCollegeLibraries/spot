@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+## [2019.1-pre.5] - 2019-09-16
+
+- adds docker configuration for local development
+- indexes and displays (when present) handle.net permalinks
+  on both the catalog + work-show views
+- splits up standard and local identifiers in the work form
+  (merged behind the scenes into the single :identifier property)
+- adds patch for devise vulnerability (CVE-2019-16109)
+- uses `CollectionBrandingInfo (role="logo")`, where applicable,
+  for collection thumbnails
+- adds implements slugs for collections, but does not require them.
+  both `CollectionsController` and `Hyrax::Dashboard::CollectionsController`
+  should now be able to account for both slugs and ids.
+- adds fields to Collection#show views; removes badges
+- changes `Spot::CollectionFromConfig#create` to `#create_or_update!` which
+  will update metadata to match that in config/collections.yml on each invocation.
+
 ## [2019.1-pre.4] - 2019-08-28
 
 - updates dependencies
@@ -42,6 +59,7 @@
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.1-pre.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.5
 [2019.1-pre.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.4
 [2019.1-pre.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.3
 [2019.1-pre.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.2

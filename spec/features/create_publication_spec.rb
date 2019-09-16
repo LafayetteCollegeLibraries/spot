@@ -14,7 +14,9 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
   context 'a logged in admin user' do
     let(:user) { create(:admin_user) }
-    let(:attrs) { attributes_for(:publication) }
+    let(:attrs) { attributes_for(:publication, identifier: [id_local.to_s, id_standard.to_s]) }
+    let(:id_local) { Spot::Identifier.new('local', 'abc123') }
+    let(:id_standard) { Spot::Identifier.new('issn', '1234-5678') }
     let(:identifier) { Spot::Identifier.from_string(attrs[:identifier].first) }
 
     # TODO: until we have more than one option for (non admin/trustee) users
@@ -60,8 +62,10 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Description', with: attrs[:description].first
         expect(page).to have_css '.publication_description .controls-add-text'
 
-        select identifier.prefix_label, from: 'publication[identifier_prefix][]'
-        fill_in 'publication[identifier_value][]', with: identifier.value
+        select id_standard.prefix_label, from: 'publication[standard_identifier_prefix][]'
+        fill_in 'publication[standard_identifier_value][]', with: id_standard.value
+
+        fill_in 'publication[local_identifier][]', with: id_local.to_s
 
         fill_in 'Bibliographic citation', with: attrs[:bibliographic_citation].first
         expect(page).to have_css '.publication_bibliographic_citation .controls-add-text'

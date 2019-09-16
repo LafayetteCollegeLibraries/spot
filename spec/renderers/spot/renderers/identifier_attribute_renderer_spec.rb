@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
-  let(:field) { :identifier }
+  let(:field) { :standard_identifier }
   let(:renderer) { described_class.new(field, value, opts) }
   let(:opts) { {} }
   let(:standard_value) { Spot::Identifier.from_string('isbn:978-1467715478') }
@@ -15,7 +15,7 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
     context 'when a prefix is present' do
       let(:html_result) do
         '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-identifier">' \
+        '<td class="attribute attribute-standard_identifier">' \
         '<span class="label label-default">ISBN</span> ' \
         '978-1467715478</td></tr>'
       end
@@ -27,7 +27,7 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
       let(:value) { local_value }
       let(:html_result) do
         '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-identifier">B0023882-01</td></tr>'
+        '<td class="attribute attribute-standard_identifier">B0023882-01</td></tr>'
       end
 
       it { is_expected.to be_equivalent_to expected }
@@ -39,7 +39,7 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
 
       let(:html_result) do
         '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-identifier">' \
+        '<td class="attribute attribute-standard_identifier">' \
         '<code>isbn:978-1467715478</code></td></tr>'
       end
 

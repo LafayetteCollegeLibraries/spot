@@ -1,0 +1,20 @@
+<% collection_presenter = Spot::CollectionPresenter.new(document, current_ability) %>
+<% col_count = collection_presenter.total_viewable_collections %>
+<div class="col-md-<%= col_count.zero? ? '8' : '6' %>">
+  <% collection_presenter.abstract.each do |abstract| %>
+  <p><%= abstract %></p>
+  <% end %>
+</div>
+
+<div class="col-md-<%= col_count.zero? ? '2' : '4' %>">
+  <div class="collection-counts-wrapper pull-right">
+    <% unless col_count.zero? %>
+    <div class="collection-counts-item">
+      <span><%= col_count %></span>Sub-Collections
+    </div>
+    <% end %>
+    <div class="collection-counts-item">
+      <span><%= collection_presenter.total_viewable_works %></span>Items
+    </div>
+  </div>
+</div>

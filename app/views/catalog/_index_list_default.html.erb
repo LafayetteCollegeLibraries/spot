@@ -1,11 +1,4 @@
-<%#
-  Hyrax has the metadata row being a 'col-md-6' across the board,
-  allowing collections to take over the last 4/12 but leaving it
-  empty for works. The problem is that when there's a lot of
-  metadata for an entry (like a long list of creators) that
-  4/12 space is super noticeable.
-%>
-<div class="col-md-<%= document.collection? ? '6' : '10' %>">
+<div class="col-md-10">
   <div class="metadata">
     <dl class="dl-horizontal">
     <% doc_presenter = index_presenter(document) %>
@@ -15,19 +8,12 @@
           <dd><%= doc_presenter.field_value field %></dd>
       <% end %>
     <% end %>
+    <%# there's probably a better way to do this, but we want to ensure that
+        the permalink is always at the bottom when it exists %>
+    <% if document.permalink.present? %>
+      <dt><%= t 'blacklight.search.fields.permalink' %></dt>
+      <dd><%= document.permalink %></dd>
+    <% end %>
     </dl>
   </div>
 </div>
-<% if document.collection? %>
-<% collection_presenter = Hyrax::CollectionPresenter.new(document, current_ability) %>
-<div class="col-md-4">
-  <div class="collection-counts-wrapper">
-    <div class="collection-counts-item">
-      <span><%= collection_presenter.total_viewable_collections %></span>Collections
-    </div>
-    <div class="collection-counts-item">
-      <span><%= collection_presenter.total_viewable_works %></span>Works
-    </div>
-  </div>
-</div>
-<% end %>

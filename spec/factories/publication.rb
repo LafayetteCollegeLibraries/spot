@@ -43,36 +43,28 @@ FactoryBot.define do
     end
 
     transient do
-      file { nil }
-      file_set_params { nil }
-      ingest_file { false }
-
-      # Hyrax Works always need a depositor, otherwise the
-      # filter_suppressed_with_roles search builder raises:
-      #
-      #      NoMethodError:
-      #        undefined method `first' for nil:NilClass
-      #
-      # https://github.com/samvera/hyrax/commit/2daec42842497057741ec95162074ea9397318fa#diff-c34834626a3b0ac8c846cda6457fe38aR34
       user { create(:user) }
+      content { nil }
+      label { 'publication.pdf' }
     end
 
-    after(:build) do |work, evaluator|
-      work.apply_depositor_metadata(evaluator.user.user_key) if evaluator.user
+    factory :publication_with_file_set do
+      before(:create) do |pub, evaluator|
+        fs_opts = {
+          user: evaluator.user,
+          title: ['Publication FileSet'],
+          label: evaluator.label
+        }
 
-      # TODO: add ability to attach multiple files
-      unless evaluator.file.nil?
-        fs = FileSet.create
-        actor = Hyrax::Actors::FileSetActor.new(fs, evaluator.user)
-        actor.create_metadata(evaluator.file_set_params || {})
-        actor.create_content(evaluator.file)
-        actor.attach_to_work(work)
+        fs_opts[:content] = evaluator.content if evaluator.content
 
-        if evaluator.ingest_file
-          change_filename = ->(file_set) { file_set.original_file.file_name = File.basename(evaluator.file.path) }
-          Hydra::Works::UploadFileToFileSet.call(fs, evaluator.file, additional_services: [change_filename])
-        end
+        pub.ordered_members << create(:file_set, :public, fs_opts)
+        pub.representative_id = pub.members[0].id
       end
+    end
+
+    before(:create) do |work, evaluator|
+      work.apply_depositor_metadata(evaluator.user.user_key)
     end
   end
 end

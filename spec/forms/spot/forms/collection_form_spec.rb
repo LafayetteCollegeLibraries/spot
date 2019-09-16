@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 RSpec.describe Spot::Forms::CollectionForm do
-  subject(:form) { described_class.new(Collection.new, Ability.new(user), nil) }
+  subject(:form) { described_class.new(collection, Ability.new(user), nil) }
 
+  let(:collection) { Collection.new }
   let(:user) { build(:admin_user) }
-  let(:hyrax_fields) { %i[visibility representative_id collection_type_gid thumbnail_id] }
+  let(:hyrax_fields) { %i[visibility collection_type_gid] }
+
+  it_behaves_like 'it handles identifier form fields'
 
   shared_context 'required fields' do
     it 'contains required fields' do
@@ -24,10 +27,12 @@ RSpec.describe Spot::Forms::CollectionForm do
 
     it { is_expected.to include :abstract }
     it { is_expected.to include :description }
-    it { is_expected.to include :identifier }
+    it { is_expected.to include :standard_identifier }
+    it { is_expected.to include :local_identifier }
     it { is_expected.to include :language }
     it { is_expected.to include :location }
     it { is_expected.to include :related_resource }
+    it { is_expected.to include :slug }
     it { is_expected.to include :sponsor }
 
     # hyrax jawns
@@ -37,7 +42,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   describe '.singular_fields' do
     subject { described_class.singular_fields }
 
-    let(:fields) { %i[title abstract description] }
+    let(:fields) { %i[title abstract description slug] }
 
     it { is_expected.to contain_exactly(*(fields + hyrax_fields)) }
   end
@@ -52,8 +57,8 @@ RSpec.describe Spot::Forms::CollectionForm do
     subject { described_class.build_permitted_params }
 
     it { is_expected.to be_an Array }
-    it { is_expected.to include :thumbnail_id }
     it { is_expected.to include(location_attributes: [:id, :_destroy]) }
+    it { is_expected.to include :slug }
   end
 
   describe '.model_attributes' do
@@ -99,7 +104,7 @@ RSpec.describe Spot::Forms::CollectionForm do
     end
 
     context 'when a multiple property' do
-      let(:field) { :identifier }
+      let(:field) { :sponsor }
 
       it { is_expected.to eq [''] }
     end
@@ -109,6 +114,14 @@ RSpec.describe Spot::Forms::CollectionForm do
 
       it { is_expected.to eq '' }
     end
+  end
+
+  describe '#local_identifier' do
+    subject { form.local_identifier }
+
+    let(:collection) { Collection.new(identifier: ['local:abc123', 'slug:a-cool-collection']) }
+
+    it { is_expected.not_to include 'slug:a-cool-collection' }
   end
 
   describe 'singular form fields' do
@@ -124,7 +137,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   describe '#primary_terms' do
     subject { form.primary_terms }
 
-    let(:fields) { %i[visibility thumbnail_id representative_id collection_type_gid] }
+    let(:fields) { %i[visibility representative_id collection_type_gid] }
 
     it { is_expected.not_to include(*fields) }
   end

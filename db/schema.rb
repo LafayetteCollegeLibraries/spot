@@ -532,9 +532,19 @@ ActiveRecord::Schema.define(version: 20190327194742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "guest", default: false
+    t.string "facebook_handle"
+    t.string "twitter_handle"
+    t.string "googleplus_handle"
     t.string "display_name"
+    t.string "address"
+    t.string "admin_area"
     t.string "department"
+    t.string "title"
+    t.string "office"
+    t.string "chat_id"
+    t.string "website"
     t.string "affiliation"
+    t.string "telephone"
     t.string "avatar_file_name"
     t.string "avatar_content_type"
     t.integer "avatar_file_size"

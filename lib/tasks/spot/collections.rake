@@ -8,7 +8,7 @@ namespace :spot do
 
       YAML.safe_load(File.open(config_path)).each do |config|
         puts "Creating collection: #{config['title']}"
-        Spot::CollectionFromConfig.from_yaml(config).create
+        Spot::CollectionFromConfig.from_yaml(config).create_or_update!
       end
     end
 
