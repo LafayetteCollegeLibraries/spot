@@ -8,8 +8,9 @@ module Spot
   # a +url:+ prefix. Redirect rules should be implemented on legacy services
   # to send the entire URL as a parameter value.
   #
-  # @example Apache redirect rules
-  #   RewriteRule ^/collections/.*$ https://ldr.lafayette.edu/redirect?url=http://%{HTTP_HOST}%{REQUEST_URI} [L,QSA]
+  # @example httpd rewrite rules
+  #   RewriteEngine on
+  #   RewriteRule ^collections\/[a-z0-9\-]+/[a-z0-9\-]+ https://ldr.lafayette.edu/redirect?url=http://digital.lafayette.edu%{REQUEST_URI} [L,QSA]
   #
   # @todo This should be abstracted out, as the {IdentifierController}
   #       (soon to be HandleController) follows (almost) the same  logic.
