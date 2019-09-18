@@ -28,4 +28,13 @@ class SolrDocument
 
   # Do content negotiation for AF models.
   use_extension(Hydra::ContentNegotiation)
+
+  # Overrides +Hyrax::SolrDocumentBehavior#to_param+ by preferring collection slugs
+  # (where present).
+  #
+  # @return [String]
+  def to_param
+    return super unless collection? && (slug = identifier.find { |id| id.start_with? 'slug:' })
+    Spot::Identifier.from_string(slug).value
+  end
 end
