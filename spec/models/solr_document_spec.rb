@@ -67,4 +67,30 @@ RSpec.describe SolrDocument do
       it { is_expected.to eq expected }
     end
   end
+
+  describe '#to_param' do
+    subject { document.to_param }
+
+    context 'when the item is a collection' do
+      let(:base_metadata) { { 'id' => 'abc123', 'has_model_ssim' => 'Collection' } }
+
+      context 'when the collection has a slug' do
+        let(:metadata) { base_metadata.merge('identifier_ssim' => ['slug:a-cool-collection']) }
+
+        it { is_expected.to eq 'a-cool-collection' }
+      end
+
+      context 'when the collection does not have a slug' do
+        let(:metadata) { base_metadata }
+
+        it { is_expected.to eq 'abc123' }
+      end
+    end
+
+    context 'default behavior' do
+      let(:metadata) { { 'id' => 'abc123', 'has_model_ssim' => 'Publication' } }
+
+      it { is_expected.to eq 'abc123' }
+    end
+  end
 end
