@@ -4,6 +4,15 @@
   <% collection_presenter.abstract.each do |abstract| %>
   <p><%= abstract %></p>
   <% end %>
+
+  <% if collection_presenter.permalink.present? %>
+  <div class="metadata">
+    <dl class="dl-horizontal">
+      <dd><%= t('blacklight.search.terms.permalink') %></dd>
+      <dt><%= collection_presenter.permalink %></dt>
+    </dl>
+  </div>
+  <% end %>
 </div>
 
 <div class="col-md-<%= col_count.zero? ? '2' : '4' %>">

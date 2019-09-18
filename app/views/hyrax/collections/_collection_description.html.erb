@@ -1,6 +1,6 @@
 <% if presenter.description.empty? %>
   <% presenter.abstract.each do |abstract| %>
-    <%= simple_format(auto_link(abstract)) %>
+    <%= simple_format(auto_link(abstract), class: 'lead') %>
   <% end %>
 <% else %>
   <% presenter.description.each do |description| %>
