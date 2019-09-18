@@ -16,6 +16,9 @@ en:
       default_title: User Collection
 
     dashboard:
+      collections:
+        show:
+          metadata_header: Details
       my:
         heading:
           collection_type: Collection Type

@@ -4,8 +4,9 @@
 module Spot
   class CollectionPresenter < Hyrax::CollectionPresenter
     include ActionView::Helpers::AssetUrlHelper
+    include PresentsAttributes
 
-    delegate :abstract, :related_resource, to: :solr_document
+    delegate :abstract, :permalink, :related_resource, to: :solr_document
 
     # Presenter fields displayed on the #show sidebar (on the right).
     # Modify this to change what's displayed + the order.
@@ -17,7 +18,8 @@ module Spot
         :related_resource,
         :location,
         :sponsor,
-        :modified_date
+        :modified_date,
+        :permalink
       ]
     end
 

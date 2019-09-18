@@ -1,0 +1,10 @@
+<h2><%= t('hyrax.dashboard.collections.show.metadata_header') %></h2>
+<div class="panel panel-default">
+  <table class="table table-condensed collection-show metadata-table">
+    <tbody>
+      <% presenter.terms_with_values.each do |term| %>
+        <%= presenter.attribute_to_html(term.to_sym) %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

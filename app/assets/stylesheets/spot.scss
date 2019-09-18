@@ -44,6 +44,24 @@
   }
 }
 
+// collection overrides
+.hyc-banner {
+  min-height: 200px;
+
+  .hyc-title {
+    background-color: $red-light;
+    border-bottom-left-radius: inherit;
+    border-top-right-radius: inherit;
+    bottom: 0;
+    position: absolute;
+  }
+}
+
+// give some breathing room to collection items w/ thumbnails in search results
+.search-result-wrapper {
+  padding-bottom: 1rem;
+}
+
 .site-footer {
   background-color: $tan-light;
   height: 20rem;
