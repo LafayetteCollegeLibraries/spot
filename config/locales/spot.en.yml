@@ -16,6 +16,11 @@ en:
       index:
         page_title: 'Search Results // %{name}'
 
+    collection:
+      show:
+        related_resource_single: "To learn more about this collection, visit %{link_html}."
+        related_resource_multiple: "To learn more about this collection, visit the following: %{link_html}."
+
     controls:
       advanced_search: Advanced Search
 
