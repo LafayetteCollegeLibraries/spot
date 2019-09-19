@@ -15,7 +15,6 @@ module Spot
     def self.terms
       [
         :total_items,
-        :related_resource,
         :location,
         :sponsor,
         :modified_date,
