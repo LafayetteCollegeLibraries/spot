@@ -6,7 +6,6 @@ en:
           title: Admin Facets
       fields:
         academic_department: Academic Department
-        all_fields: All fields
         author: Author
         bibliographic_citation: Bibliographic Citation
         contributor: Contributor
@@ -19,12 +18,13 @@ en:
         depositor: Deposited by
         description: Description
         division: Division
+        embargo_release_date: Embargo Release Date
         file_format: File Format
         file_size: File Size
         keyword: Keyword
-        keyword_sim: Keyword
         language: Language
         language_label: Language
+        lease_expiration_date: Lease Expiration Date
         license: License
         local_identifier: Local Identifier
         location: Location
@@ -37,21 +37,21 @@ en:
         publisher: Publisher
         resource_type: Type
         rights_statement: Rights Statement
+        source: Source
         standard_identifier: Standard Identifier
         subject: Subject
         title: Title
+        visibility: Visibility
         years_encompassed: Year
 
-        facet:
-          resource_type_sim: Type
-          source_sim: Source
-          visibility_ssi: Visibility
-    sort:
-      fields:
-        date_added:
-          asc: "Date Added \u25B2"
-          desc: "Date Added \u25BC"
-        date_issued:
-          asc: "Issue Date \u25B2"
-          desc: "Issue Date \u25BC"
-        relevance: Relevance
+        search:
+          all_fields: All fields
+
+        sort:
+          date_added:
+            asc: "Date Added \u25B2"
+            desc: "Date Added \u25BC"
+          date_issued:
+            asc: "Issue Date \u25B2"
+            desc: "Issue Date \u25BC"
+          relevance: Relevance
