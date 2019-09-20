@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+#
+# Provides the configuration for our searches within Solr (via Blacklight).
+#
+# @see https://github.com/projectblacklight/blacklight/wiki/Blacklight-configuration
 class CatalogController < ApplicationController
   include BlacklightRangeLimit::ControllerOverride
   include BlacklightAdvancedSearch::Controller
@@ -36,64 +40,75 @@ class CatalogController < ApplicationController
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
+    #
+    # @note: when defining a field (facet, index, show, search), define the
+    #        +:label+ option as a Symbol that refers to the field _without_
+    #        the "solr jargon" (ex. "_tesim", "_ssim", etc) suffix. it _needs_
+    #        to be a Symbol in order for +I18n.translate+ to use it as
+    #        a fall-back when the lookup with the "solr jargon" ultimately fails.
+    #        this will save us from having to provide multiple locale definitions
+    #        for each attribute.
+    #
+    #        @example
+    #          config.add_index_field('keyword_ssim', label: :'blacklight.search.fields.keyword')
 
     # config.add_facet_field 'human_readable_type_sim', label: "Type", limit: 5
     config.add_facet_field 'member_of_collections_ssim',
-                           label: I18n.t('blacklight.search.fields.member_of_collection'),
+                           label: :'blacklight.search.fields.member_of_collection',
                            limit: 5
     config.add_facet_field 'resource_type_sim',
-                           label: I18n.t('blacklight.search.fields.resource_type'),
+                           label: :'blacklight.search.fields.resource_type',
                            limit: 5
     config.add_facet_field 'creator_sim',
-                           label: I18n.t('blacklight.search.fields.creator'),
+                           label: :'blacklight.search.fields.creator',
                            limit: 5
     config.add_facet_field 'publisher_sim',
-                           label: I18n.t('blacklight.search.fields.publisher'),
+                           label: :'blacklight.search.fields.publisher',
                            limit: 5
     config.add_facet_field 'organization_sim',
-                           label: I18n.t('blacklight.search.fields.organization'),
+                           label: :'blacklight.search.fields.organization',
                            limit: 5
     config.add_facet_field 'division_sim',
-                           label: I18n.t('blacklight.search.fields.division'),
+                           label: :'blacklight.search.fields.division',
                            limit: 5
     config.add_facet_field 'academic_department_sim',
-                           label: I18n.t('blacklight.search.fields.academic_department'),
+                           label: :'blacklight.search.fields.academic_department',
                            limit: 5
     config.add_facet_field 'subject_sim',
-                           label: I18n.t('blacklight.search.fields.subject'),
+                           label: :'blacklight.search.fields.subject',
                            limit: 5
     config.add_facet_field 'keyword_sim',
-                           label: I18n.t('blacklight.search.fields.keyword'),
+                           label: :'blacklight.search.fields.keyword',
                            limit: 5
     config.add_facet_field 'language_label_ssim',
-                           label: I18n.t('blacklight.search.fields.language'),
+                           label: :'blacklight.search.fields.language',
                            limit: 5
     config.add_facet_field 'location_label_ssim',
-                           label: I18n.t('blacklight.search.fields.location'),
+                           label: :'blacklight.search.fields.location',
                            limit: 5
     config.add_facet_field 'years_encompassed_iim',
                            include_in_advanced_search: false,
-                           label: I18n.t('blacklight.search.fields.years_encompassed'),
+                           label: :'blacklight.search.fields.years_encompassed',
                            range: true
 
     #
     # admin facets
     #
     config.add_facet_field 'visibility_ssi',
-                           label: I18n.t('blacklight.search.fields.visbility'),
+                           label: :'blacklight.search.fields.visibility',
                            limit: 5,
                            admin: true,
                            helper_method: :render_catalog_visibility_facet
     config.add_facet_field 'depositor_ssim',
-                           label: I18n.t('blacklight.search.fields.depositor'),
+                           label: :'blacklight.search.fields.depositor',
                            limit: 5,
                            admin: true
     config.add_facet_field 'proxy_depositor_ssim',
-                           label: I18n.t('blacklight.search.fields.proxy_depositor'),
+                           label: :'blacklight.search.fields.proxy_depositor',
                            limit: 5,
                            admin: true
     config.add_facet_field 'admin_set_sim',
-                           label: I18n.t('blacklight.search.fields.admin_set'),
+                           label: :'blacklight.search.fields.admin_set',
                            limit: 5,
                            admin: true
 
@@ -113,55 +128,55 @@ class CatalogController < ApplicationController
                            if: false
     config.add_index_field 'resource_type_ssim',
                            itemprop: 'resourceType',
-                           label: I18n.t('blacklight.search.fields.resource_type'),
+                           label: :'blacklight.search.fields.resource_type',
                            link_to_search: 'resource_type_ssim'
     config.add_index_field 'academic_department_tesim',
                            itemprop: 'department',
-                           label: I18n.t('blacklight.search.fields.academic_department'),
+                           label: :'blacklight.search.fields.academic_department',
                            link_to_search: 'academic_department_sim'
     config.add_index_field 'keyword_tesim',
                            itemprop: 'keywords',
-                           label: I18n.t('blacklight.search.fields.keyword'),
+                           label: :'blacklight.search.fields.keyword',
                            link_to_search: 'keyword_sim'
     config.add_index_field 'subject_tesim',
                            itemprop: 'about',
-                           label: I18n.t('blacklight.search.fields.subject'),
+                           label: :'blacklight.search.fields.subject',
                            link_to_search: 'subject_sim'
     config.add_index_field 'creator_tesim',
                            itemprop: 'creator',
-                           label: I18n.t('blacklight.search.fields.creator'),
+                           label: :'blacklight.search.fields.creator',
                            link_to_search: 'creator_sim'
     config.add_index_field 'contributor_tesim',
                            itemprop: 'contributor',
-                           label: I18n.t('blacklight.search.fields.contributor'),
+                           label: :'blacklight.search.fields.contributor',
                            link_to_search: 'contributor_sim'
     config.add_index_field 'publisher_tesim',
                            itemprop: 'publisher',
-                           label: I18n.t('blacklight.search.fields.publisher'),
+                           label: :'blacklight.search.fields.publisher',
                            link_to_search: 'publisher_sim'
     config.add_index_field 'language_label_ssim',
                            itemprop: 'inLanguage',
-                           label: I18n.t('blacklight.search.fields.language'),
+                           label: :'blacklight.search.fields.language',
                            link_to_search: 'language_sim'
     config.add_index_field 'date_issued_ssim',
-                           label: I18n.t('blacklight.search.fields.date_issued')
+                           label: :'blacklight.search.fields.date_issued'
     config.add_index_field 'rights_statement_tesim',
                            helper_method: :rights_statement_links,
-                           label: I18n.t('blacklight.search.fields.rights_statement')
+                           label: :'blacklight.search.fields.rights_statement'
     config.add_index_field 'license_tesim',
                            helper_method: :license_links,
-                           label: I18n.t('blacklight.search.fields.license')
+                           label: :'blacklight.search.fields.license'
     config.add_index_field 'embargo_release_date_dtsi',
-                           label: 'Embargo release date',
+                           label: :'blacklight.search.fields.embargo_release_date',
                            helper_method: :human_readable_date
     config.add_index_field 'lease_expiration_date_dtsi',
-                           label: 'Lease expiration date',
+                           label: :'blacklight.search.fields.lease_expiration_date',
                            helper_method: :human_readable_date
 
     #
     # search field configuration
     #
-    config.add_search_field('all_fields', label: I18n.t('blacklight.search.fields.all_fields')) do |field|
+    config.add_search_field('all_fields', label: :'blacklight.search.fields.all_fields') do |field|
       fields = %w[
         all_fields_search_timv
         english_language_date_teim
@@ -175,7 +190,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('title', label: I18n.t('blacklight.search.fields.title')) do |field|
+    config.add_search_field('title', label: :'blacklight.search.fields.title') do |field|
       fields = %w[
         title_tesim^2
         subtitle_tesim
@@ -188,7 +203,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author', label: I18n.t('blacklight.search.fields.author')) do |field|
+    config.add_search_field('author', label: :'blacklight.search.fields.author') do |field|
       fields = %w[
         creator_tesim
         contributor_tesim
@@ -201,7 +216,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('subject', label: I18n.t('blacklight.search.fields.subject')) do |field|
+    config.add_search_field('subject', label: :'blacklight.search.fields.subject') do |field|
       field.solr_parameters = {
         qf: 'subject_tesim',
         pf: ''
@@ -213,11 +228,11 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     # label is key, solr field is value
-    config.add_sort_field 'score desc, system_create_dtsi desc', label: I18n.t('blacklight.sort.fields.relevance')
-    config.add_sort_field 'date_issued_sort_dtsi asc', label: I18n.t('blacklight.sort.fields.date_issued.asc')
-    config.add_sort_field 'date_issued_sort_dtsi desc', label: I18n.t('blacklight.sort.fields.date_issued.desc')
-    config.add_sort_field 'system_create_dtsi asc', label: I18n.t('blacklight.sort.fields.date_added.asc')
-    config.add_sort_field 'system_create_dtsi desc', label: I18n.t('blacklight.sort.fields.date_added.desc')
+    config.add_sort_field 'score desc, system_create_dtsi desc', label: :'blacklight.search.fields.sort.relevance'
+    config.add_sort_field 'date_issued_sort_dtsi asc', label: :'blacklight.search.fields.sort.date_issued.asc'
+    config.add_sort_field 'date_issued_sort_dtsi desc', label: :'blacklight.search.fields.sort.date_issued.desc'
+    config.add_sort_field 'system_create_dtsi asc', label: :'blacklight.search.fields.sort.date_added.asc'
+    config.add_sort_field 'system_create_dtsi desc', label: :'blacklight.search.fields.sort.date_added.desc'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
