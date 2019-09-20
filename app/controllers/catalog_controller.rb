@@ -6,6 +6,7 @@
 class CatalogController < ApplicationController
   include BlacklightRangeLimit::ControllerOverride
   include BlacklightAdvancedSearch::Controller
+  include BlacklightOaiProvider::Controller
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
@@ -39,6 +40,10 @@ class CatalogController < ApplicationController
       'hl.method': 'fastVector',
       'hl.snippets': 5
     }
+
+    # OAI-PMH provider params
+    # (see: https://github.com/projectblacklight/blacklight_oai_provider#configuration)
+    # config.oai = {}
 
     # solr field configuration for document/show views
     config.index.title_field = 'title_tesim'
