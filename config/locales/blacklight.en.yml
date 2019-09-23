@@ -44,8 +44,8 @@ en:
         visibility: Visibility
         years_encompassed: Year
 
-        search:
-          all_fields: All fields
+        all_fields: All fields
+        full_text: Full text
 
         sort:
           date_added:

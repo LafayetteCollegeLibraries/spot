@@ -216,10 +216,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('subject', label: :'blacklight.search.fields.subject') do |field|
+    config.add_search_field('full_text', label: :'blacklight.search.fields.full_text') do |field|
       field.solr_parameters = {
-        qf: 'subject_tesim',
-        pf: ''
+        qf: 'all_text_timv',
+        pf: 'all_text_timv'
       }
     end
 
