@@ -8,6 +8,8 @@
           <%= link_to t(:'hyrax.controls.help'), hyrax.help_path, aria: current_page?(hyrax.help_path) ? {current: 'page'} : nil %></li>
         <li <%= 'class="active"' if current_page?(hyrax.contact_path) %>>
           <%= link_to t(:'hyrax.controls.contact'), hyrax.contact_path, aria: current_page?(hyrax.contact_path) ? {current: 'page'} : nil %></li>
+        <li <%= 'class="active"' if current_page?(advanced_search_path) %>>
+          <%= link_to t(:'spot.controls.advanced_search'), advanced_search_path, aria: current_page?(advanced_search_path) ? {current: 'page'} : nil %></li>
       </ul><!-- /.nav -->
 
       <div class="searchbar-right navbar-right col-sm-7">

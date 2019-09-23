@@ -16,12 +16,16 @@ en:
       index:
         page_title: 'Search Results // %{name}'
 
+    controls:
+      advanced_search: Advanced Search
+
     dashboard:
       fixity:
         frequency: Checks are run every Monday at midnight.
         heading: The most recent round of fixity checks found %{errors}.
         sidebar: Fixity Checks
         title: Fixity Checks
+
       status:
         sidebar: System Status
         title: System Status
