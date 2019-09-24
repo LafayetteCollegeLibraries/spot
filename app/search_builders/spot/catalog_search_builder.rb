@@ -23,7 +23,7 @@ module Spot
     # @return [void]
     def add_advanced_search_to_solr(solr_parameters)
       return unless is_advanced_search?
-      parsed = BlacklightAdvancedSearch::QueryParser.new(blacklight_params, self.blacklight_config).to_solr
+      parsed = BlacklightAdvancedSearch::QueryParser.new(blacklight_params, blacklight_config).to_solr
 
       solr_parameters[:q] = [solr_parameters[:q], parsed[:q]].reject(&:blank?).join(' ')
       solr_parameters[:fq] ||= []

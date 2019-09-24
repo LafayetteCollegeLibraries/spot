@@ -42,7 +42,7 @@ RSpec.describe Spot::CatalogSearchBuilder do
     end
 
     context 'when another query already exists' do
-      let(:solr_parameters) { { q: '_query_:"{!dismax title_tesim}first-search"'} }
+      let(:solr_parameters) { { q: '_query_:"{!dismax title_tesim}first-search"' } }
 
       it 'appends another _query_ value' do
         expect(solr_parameters[:q].scan(/_query_/).size).to eq 2
