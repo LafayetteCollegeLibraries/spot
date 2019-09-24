@@ -5,7 +5,7 @@ module Spot
     include BlacklightRangeLimit::RangeLimitBuilder
 
     class_attribute :join_fields
-    self.join_fields = %w[all_fields full_text]
+    self.join_fields = %w[all_fields full_text advanced]
     self.default_processor_chain += [:add_advanced_search_to_solr]
 
     # Rewrites +BlacklightAdvancedSearch::AdvancedSearch#add_advanced_search_to_solr+
@@ -32,8 +32,7 @@ module Spot
     def show_works_or_works_that_contain_files(solr_parameters)
       return if blacklight_params[:q].blank? || !join_fields.include?(blacklight_params[:search_field])
 
-      # if there's already a :user_query in place, don't overwrite it
-      solr_parameters[:user_query] ||= blacklight_params[:q]
+      solr_parameters[:user_query] = blacklight_params[:q]
       solr_parameters[:q] = [solr_parameters[:q], new_query].reject(&:blank?).join(' ')
       solr_parameters[:defType] = 'lucene'
     end
