@@ -6,7 +6,14 @@ module Spot
 
     class_attribute :join_fields
     self.join_fields = %w[all_fields full_text advanced]
-    self.default_processor_chain += [:add_advanced_search_to_solr]
+    self.default_processor_chain += [:add_advanced_parse_q_to_solr, :add_advanced_search_to_solr]
+
+    def add_advanced_parse_q_to_solr(solr_parameters)
+      super(adv_params = {})
+
+      solr_parameters[:q] = [solr_parameters[:q], adv_params[:q]].reject(&:blank?).join(' ')
+      solr_parameters[:defType] = adv_params[:defType]
+    end
 
     # Rewrites +BlacklightAdvancedSearch::AdvancedSearch#add_advanced_search_to_solr+
     # so that a pre-existing +solr_parameters[:q]+ value isn't truncated by the

@@ -7,6 +7,29 @@ RSpec.describe Spot::CatalogSearchBuilder do
   let(:params) { { search_field: 'advanced' } }
   let(:solr_parameters) { {} }
 
+  describe '#add_advanced_parse_q_to_solr' do
+    before { builder.add_advanced_parse_q_to_solr(solr_parameters) }
+
+    # note: the spaces after !dismax are expected
+    let(:parsed_q) { '_query_:"{!dismax }+q +me" AND NOT _query_:"{!dismax }you"' }
+    let(:blacklight_params) { { q: 'q AND me NOT you', search_field: 'title' } }
+
+    context 'when the only query to exist' do
+      it 'adds the parsed query to solr_parameters[:q]' do
+        expect(solr_parameters[:q]).to eq parsed_q
+      end
+    end
+
+    context 'when not the only query' do
+      let(:solr_parameters) { { q: 'a previous example' } }
+
+      it 'appends the value (rather than truncates)' do
+        expect(solr_parameters[:q]).to include parsed_q
+        expect(solr_parameters[:q]).to include 'a previous example'
+      end
+    end
+  end
+
   describe '#add_advanced_search_to_solr' do
     before { builder.add_advanced_search_to_solr(solr_parameters) }
 
@@ -27,7 +50,7 @@ RSpec.describe Spot::CatalogSearchBuilder do
     end
   end
 
-  describe 'show_works_or_works_that_contain_files' do
+  describe '#show_works_or_works_that_contain_files' do
     before { builder.show_works_or_works_that_contain_files(solr_parameters) }
 
     let(:blacklight_params) { params.merge(q: 'a good search') }
