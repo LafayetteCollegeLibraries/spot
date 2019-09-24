@@ -1,5 +1,3 @@
-<% provide(:page_title) do %>
-  Help // <%= t('hyrax.product_name') %>
-<% end %>
+<% provide(:page_title) { t('.page_title', name: application_name) } %>
 
-<h1>Help using <%= t('hyrax.product_name') %></h1>
+<h1><%= t('.header', name: application_name) %></h1>

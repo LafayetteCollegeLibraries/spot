@@ -71,6 +71,14 @@ en:
       advanced_search: Advanced Search
       search_placeholder: Begin your search here
 
+    page:
+      about:
+        header: About %{name}
+        page_title: About // %{name}
+      help:
+        header: Help using %{name}
+        page_title: Help // %{name}
+
     work:
       export:
         additional_options: Additional options
