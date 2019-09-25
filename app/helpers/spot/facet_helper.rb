@@ -46,7 +46,7 @@ module Spot
 
     # @return [true, false]
     def admin_facets?
-      return false unless current_user.admin?
+      return false unless current_user&.admin?
       return false if admin_facet_names.empty?
 
       facets_from_request(admin_facet_names).any? { |facet| should_render_facet?(facet) }
