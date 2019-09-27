@@ -62,7 +62,7 @@ services:
     image: solr:7.5-alpine
     volumes:
       - ./solr/config:/spot-config
-      - solr:/opt/solr/server/solr/mycores
+      - solr:/opt/solr/server/solr
     command: solr-create -c spot-development -d /spot-config
     restart: always
 
