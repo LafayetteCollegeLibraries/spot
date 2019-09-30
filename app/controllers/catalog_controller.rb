@@ -228,11 +228,16 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
     # label is key, solr field is value
-    config.add_sort_field 'score desc, system_create_dtsi desc', label: :'blacklight.search.fields.sort.relevance'
-    config.add_sort_field 'date_issued_sort_dtsi asc', label: :'blacklight.search.fields.sort.date_issued.asc'
-    config.add_sort_field 'date_issued_sort_dtsi desc', label: :'blacklight.search.fields.sort.date_issued.desc'
-    config.add_sort_field 'system_create_dtsi asc', label: :'blacklight.search.fields.sort.date_added.asc'
-    config.add_sort_field 'system_create_dtsi desc', label: :'blacklight.search.fields.sort.date_added.desc'
+    #
+    # @note: not optimal, but we're using the label text here, rather than locales
+    # because the sort dropdown that appears on collection#show views doesn't run
+    # the labels through +I18n.t+ first, displaying only the symbolized translation
+    # keys we're sending here.
+    config.add_sort_field 'score desc, system_create_dtsi desc', label: "Relevance"
+    config.add_sort_field 'date_issued_sort_dtsi asc', label: "Date Added \u25B2"
+    config.add_sort_field 'date_issued_sort_dtsi desc', label: "Date Added \u25BC"
+    config.add_sort_field 'system_create_dtsi asc', label: "Issue Date \u25B2"
+    config.add_sort_field 'system_create_dtsi desc', label: "Issue Date \u25BC"
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.

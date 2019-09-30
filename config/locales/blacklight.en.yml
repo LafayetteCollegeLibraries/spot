@@ -44,14 +44,4 @@ en:
         visibility: Visibility
         years_encompassed: Year
 
-        search:
-          all_fields: All fields
-
-        sort:
-          date_added:
-            asc: "Date Added \u25B2"
-            desc: "Date Added \u25BC"
-          date_issued:
-            asc: "Issue Date \u25B2"
-            desc: "Issue Date \u25BC"
-          relevance: Relevance
+        all_fields: All fields
