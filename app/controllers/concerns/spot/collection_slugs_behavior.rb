@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 module Spot
-  # Mixin to add support for preferring slugs to IDs for Collections
+  # Mixin to add support for preferring slugs to IDs for Collections.
+  # Conducts a search for a collection using a stored-string field in solr,
+  # and, upon success, rewrites the +params[:id]+ value to the correct
+  # ID. This needs to be performed as early as possible (using +:prepend_before_action+)
+  # so that the +params[:id]+ can be reset to a NOID for things like
+  # permissions checking.
   module CollectionSlugsBehavior
-    # Overrides the default behavior by first trying the ID as a stored slug.
-    # If it doesn't exist, we'll rely on default behavior to find it by ID.
-    def show
-      @curation_concern =
-        ActiveFedora::Base.where(collection_slug_ssi: params[:id]).first
+    extend ActiveSupport::Concern
 
-      # This goes against the grain for me, but the permission document
-      # is searched using +params[:id]+, which it expects to be an ID
-      # (rather than a slug), so we'll need to reset that param with
-      # our collection's ID, if we found a match.
+    included do
+      prepend_before_action :load_collection, only: [:show]
+    end
+
+    # @return [void]
+    def load_collection
+      @curation_concern = Collection.where(collection_slug_ssi: params[:id]).first
       params[:id] = @curation_concern.id unless @curation_concern.nil?
-
-      super
     end
   end
 end
