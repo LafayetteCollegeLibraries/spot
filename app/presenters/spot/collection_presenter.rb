@@ -39,7 +39,7 @@ module Spot
 
     # @return [true,false]
     def featured?
-      @featured = FeaturedCollection.where(collection_id: solr_document.id).exists? if @featured.nil?
+      @featured = FeaturedCollection.where(collection_id: solr_document.to_param).exists? if @featured.nil?
       @featured
     end
 
