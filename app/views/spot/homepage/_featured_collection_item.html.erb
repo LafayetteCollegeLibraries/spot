@@ -12,17 +12,6 @@
       <p><%= collection.abstract.first %></p>
       <% end %>
       <%= link_to t('.collection.view'), [hyrax, collection], class: 'btn btn-primary' %>
-
-      <%#
-        TODO: this is a no-op at the moment. we may want to include a metadata property
-              that provides a URL to learn more about the collection
-      %>
-      <% if collection.related_resource.present? %>
-        <%= link_to t('.collection.learn_more'),
-                    collection.related_resource.first,
-                    class: 'btn btn-info',
-                    target: '_blank' %>
-      <% end %>
     </div>
   </div>
 </div>
