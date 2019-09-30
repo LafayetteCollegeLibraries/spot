@@ -75,7 +75,7 @@ RSpec.describe SolrDocument do
       let(:base_metadata) { { 'id' => 'abc123', 'has_model_ssim' => 'Collection' } }
 
       context 'when the collection has a slug' do
-        let(:metadata) { base_metadata.merge('identifier_ssim' => ['slug:a-cool-collection']) }
+        let(:metadata) { base_metadata.merge('collection_slug_ssi' => 'a-cool-collection') }
 
         it { is_expected.to eq 'a-cool-collection' }
       end

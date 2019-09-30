@@ -34,7 +34,7 @@ class SolrDocument
   #
   # @return [String]
   def to_param
-    return super unless collection? && collection_slug.present?
-    collection_slug
+    return collection_slug if collection? && collection_slug.present?
+    super
   end
 end
