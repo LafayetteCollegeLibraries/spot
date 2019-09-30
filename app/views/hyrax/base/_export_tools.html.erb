@@ -1,10 +1,8 @@
 <div class="work-export-tools btn-toolbar" style="margin-bottom:1rem;">
   <div class="btn-group">
-    <%= link_to main_app.export_path(presenter),
-                class: 'btn btn-success',
-                data: { turbolinks: false } do %>
+    <%= link_to presenter.download_url, class: 'btn btn-success', data: { turbolinks: false } do %>
       <span class="fa fa-download"></span>
-      <%= t('spot.work.export.download_work') %>
+      <%= t('spot.work.export.primary_file') %>
     <% end %>
   </div>
 
@@ -19,14 +17,17 @@
     </button>
     <ul class="dropdown-menu">
       <li class="dropdown-header">
-        <%= t('spot.work.export.dropdown.file_header') %>
+        <%= t('spot.work.export.dropdown.export_header') %>
       </li>
       <li>
-        <%= link_to t('spot.work.export.primary_file'),
-                    presenter.download_url,
-                    data: { turbolinks: false } %>
+      <%= link_to presenter.export_all_text,
+                  main_app.export_path(presenter),
+                  data: { turbolinks: false } %>
       </li>
-      <% if presenter.list_of_item_ids_to_display.count > 1 %>
+      <% if presenter.has_multiple_members? %>
+        <li class="dropdown-header">
+          <%= t('spot.work.export.dropdown.files_header') %>
+        </li>
         <li>
           <%= link_to t('spot.work.export.all_files'),
                       main_app.export_path(presenter, export_type: :files),

@@ -11,6 +11,11 @@ module Hyrax
              :source, :subject, :subtitle, :title_alternative,
              to: :solr_document
 
+    # @return [String]
+    def export_all_text
+      I18n.t("spot.work.export.download_work_and_metadata_#{has_multiple_members? ? 'multiple' : 'single'}")
+    end
+
     # Metadata formats we're able to export as.
     #
     # @return [Array<Symbol>]
@@ -18,28 +23,9 @@ module Hyrax
       %i[csv ttl nt jsonld]
     end
 
-    # Overrides {Hyrax::WorkShowPresenter#page_title} by only using
-    # the work's title + our product name.
-    #
-    # @return [String]
-    def page_title
-      "#{title.first} // #{I18n.t('hyrax.product_name')}"
-    end
-
-    # For now, overriding the ability to feature individual works
-    # on the homepage. This should prevent the 'Feature'/'Unfeature'
-    # button from rendering on the work edit page.
-    #
-    # @return [false]
-    def work_featurable?
-      false
-    end
-
-    # Is the document's visibility public?
-    #
     # @return [true, false]
-    def public?
-      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    def has_multiple_members?
+      list_of_item_ids_to_display.count > 1
     end
 
     # Our document's identifiers mapped to Spot::Identifier objects
@@ -65,14 +51,38 @@ module Hyrax
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
-    # @return [Array<Spot::Identifier>]
-    def standard_identifier
-      @standard_identifier ||= identifier.select(&:standard?)
+    # Overrides {Hyrax::WorkShowPresenter#page_title} by only using
+    # the work's title + our product name.
+    #
+    # @return [String]
+    def page_title
+      "#{title.first} // #{I18n.t('hyrax.product_name')}"
+    end
+
+    # Is the document's visibility public?
+    #
+    # @return [true, false]
+    def public?
+      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
     # @return [Array<Array<String>>]
     def rights_statement_merged
       solr_document.rights_statement.zip(solr_document.rights_statement_label)
+    end
+
+    # @return [Array<Spot::Identifier>]
+    def standard_identifier
+      @standard_identifier ||= identifier.select(&:standard?)
+    end
+
+    # For now, overriding the ability to feature individual works
+    # on the homepage. This should prevent the 'Feature'/'Unfeature'
+    # button from rendering on the work edit page.
+    #
+    # @return [false]
+    def work_featurable?
+      false
     end
   end
 end
