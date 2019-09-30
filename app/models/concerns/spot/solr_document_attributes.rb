@@ -23,6 +23,7 @@ module Spot
       attribute :academic_department,    ::Blacklight::Types::Array, 'academic_department_tesim'
       attribute :admin_set,              ::Blacklight::Types::String, 'admin_set_tesim'
       attribute :bibliographic_citation, ::Blacklight::Types::Array, 'bibliographic_citation_tesim'
+      attribute :collection_slug,        ::Blacklight::Types::String, 'collection_slug_ssi'
       attribute :contributor,            ::Blacklight::Types::Array, 'contributor_tesim'
       attribute :date_available,         ::Blacklight::Types::Array, 'date_available_ssim'
       attribute :date_modified,          ::Blacklight::Types::Date, 'date_modified_dtsi'

@@ -34,7 +34,7 @@ class SolrDocument
   #
   # @return [String]
   def to_param
-    return super unless collection? && (slug = identifier.find { |id| id.start_with? 'slug:' })
-    Spot::Identifier.from_string(slug).value
+    return super unless collection? && collection_slug.present?
+    collection_slug
   end
 end
