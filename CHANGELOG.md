@@ -1,6 +1,20 @@
 # changelog
 
-## Unreleased
+## [2019.1-pre.6] - 2019-10-01
+
+- add `/redirect?url=<digital.laf url>` routing for legacy URLs (#277)
+- the hyrax 2nd navbar has returned (#278)
+- improvements in collection-slug behavior (`SolrDocument#to_param` now checks if the item is a collection) (#278)
+- Collection views now display related_resource URLs below the abstract + description blocks
+- changes the download button on a work's show page to be for the primary object download (`/downloads/<work id>`) and moves the zip-export to the dropdown (#291)
+- adds several subcollections from dspace content (#292)
+
+fixes:
+
+- use the file_watcher in development that will work with docker
+- (collections_from_config) only update when a collection has changed (#276)
+- labels in catalog_controller.rb are now symbols, rather than calls to I18n.translate which were encountering issues with engine locales not being loaded when called (#285)
+
 
 ## [2019.1-pre.5] - 2019-09-16
 
