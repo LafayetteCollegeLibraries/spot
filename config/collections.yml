@@ -93,3 +93,7 @@
       on Film Newsletter (1976-1992).
     related_resource:
       - https://dss.lafayette.edu/collections/shakespeare-bulletin-archive
+-
+  title: Student Publications
+  visibility: public
+  slug: student-publications
