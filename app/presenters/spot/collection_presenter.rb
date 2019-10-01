@@ -4,8 +4,9 @@
 module Spot
   class CollectionPresenter < Hyrax::CollectionPresenter
     include ActionView::Helpers::AssetUrlHelper
+    include PresentsAttributes
 
-    delegate :abstract, :related_resource, to: :solr_document
+    delegate :abstract, :permalink, :related_resource, to: :solr_document
 
     # Presenter fields displayed on the #show sidebar (on the right).
     # Modify this to change what's displayed + the order.
@@ -14,10 +15,10 @@ module Spot
     def self.terms
       [
         :total_items,
-        :related_resource,
         :location,
         :sponsor,
-        :modified_date
+        :modified_date,
+        :permalink
       ]
     end
 
@@ -38,8 +39,7 @@ module Spot
 
     # @return [true,false]
     def featured?
-      @featured = FeaturedCollection.where(collection_id: solr_document.id).exists? if @featured.nil?
-      @featured
+      FeaturedCollection.where(collection_id: solr_document.to_param).exists?
     end
 
     # Is the document's visibility public?

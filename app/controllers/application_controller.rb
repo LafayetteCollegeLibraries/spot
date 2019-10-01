@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   include Hyrax::Controller
   include Hyrax::ThemedLayoutController
 
-  layout 'hyrax'
+  with_themed_layout '1_column'
 
   before_action :log_in_as_dev_user!
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
+require 'rack'
 
 Rails.application.routes.draw do
   devise_for :users
@@ -64,4 +65,8 @@ Rails.application.routes.draw do
   end
 
   get '/handle/*id', to: 'identifier#handle', as: 'handle'
+  get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
+    qs = Rack::Utils.parse_nested_query(request.query_string)
+    qs['url'] && qs['url'].match?(URI.regexp)
+  }
 end

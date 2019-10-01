@@ -16,10 +16,17 @@ en:
       default_title: User Collection
 
     dashboard:
+      collections:
+        show:
+          metadata_header: Details
       my:
         heading:
           collection_type: Collection Type
           visibility: Visibility
+
+    footer:
+      copyright_html: "<strong>Copyright &copy; 2017 Samvera</strong> Licensed under the Apache License, Version 2.0"
+      service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
 
     directory:
       suffix:               "@example.org"
@@ -34,6 +41,7 @@ en:
     product_name: Lafayette Digital Repository
     product_twitter_handle: "@LafLib"
 
-    footer:
-      copyright_html: "<strong>Copyright &copy; 2017 Samvera</strong> Licensed under the Apache License, Version 2.0"
-      service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
+    search:
+      form:
+        q:
+          label: Search LDR

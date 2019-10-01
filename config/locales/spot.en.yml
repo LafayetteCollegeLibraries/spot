@@ -16,12 +16,21 @@ en:
       index:
         page_title: 'Search Results // %{name}'
 
+    collection:
+      show:
+        related_resource_single: "To learn more about this collection, visit %{link_html}."
+        related_resource_multiple: "To learn more about this collection, visit the following: %{link_html}."
+
+    controls:
+      advanced_search: Advanced Search
+
     dashboard:
       fixity:
         frequency: Checks are run every Monday at midnight.
         heading: The most recent round of fixity checks found %{errors}.
         sidebar: Fixity Checks
         title: Fixity Checks
+
       status:
         sidebar: System Status
         title: System Status
@@ -75,10 +84,12 @@ en:
       export:
         additional_options: Additional options
         all_files: Download all files
-        primary_file: Download primary file
-        download_work: Download as .zip
+        primary_file: Download this item
+        download_work_and_metadata_single: Download file and all metadata formats (as .zip)
+        download_work_and_metadata_multiple: Download files and all metadata formats (as .zip)
         dropdown:
-          file_header: Files
+          export_header: Export
+          files_header: Files
           metadata_header: Metadata
         metadata:
           csv: View metadata as CSV

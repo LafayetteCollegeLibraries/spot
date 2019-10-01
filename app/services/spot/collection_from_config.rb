@@ -52,18 +52,15 @@ module Spot
     # @return [Collection]
     def create_or_update!
       collection = find_or_initialize_by_title.tap do |col|
-        col.attributes = { title: [title] }.merge(metadata)
-        col.collection_type = collection_type
-        col.visibility = visibility
-        col.apply_depositor_metadata(deposit_user.user_key) if deposit_user
-        col.identifier = ["slug:#{slug}"] if slug.present?
+        col.assign_attributes(attributes_for_collection)
+        col.apply_depositor_metadata(deposit_user.user_key)
       end
 
       # need to grab this before saving, but we can't call the PermissionsCreateService
       # until after the Collection is persisted
       is_new_record = collection.new_record?
 
-      collection.save!
+      collection.save! if collection.changed?
 
       create_permissions(collection) if is_new_record
 
@@ -82,6 +79,20 @@ module Spot
           # we want to get rid of whitespace that may creep in
           # as a side effect of using yaml
           obj[key.to_sym] = Array.wrap(val).map(&:strip).reject(&:blank?)
+        end
+      end
+
+      # @return [Hash<Symbol => *>]
+      def attributes_for_collection
+        {
+          attributes: { title: [title] }.merge(metadata),
+          collection_type: collection_type,
+          visibility: visibility
+        }.tap do |attr|
+          if slug.present?
+            attr[:attributes][:identifier] ||= []
+            attr[:attributes][:identifier] += ["slug:#{slug}"]
+          end
         end
       end
 

@@ -3,31 +3,16 @@
   <div class="row hyc-header">
     <div class="col-md-12">
 
-      <% unless @presenter.banner_file.blank? %>
-          <header class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
-      <% else %>
-          <header class="hyc-banner" style="background-image:url(<%= image_path('default-collection-background.jpg') %>)">
-      <% end %>
+    <% unless @presenter.banner_file.blank? %>
+      <header class="hyc-banner" style="background-image:url(<%= @presenter.banner_file %>)">
+    <% else %>
+      <header class="hyc-banner" style="background-image:url(<%= image_path('default-collection-background.jpg') %>)">
+    <% end %>
 
-      <div class="hyc-title">
-        <h1><%= @presenter.title.first %></h1>
-        <%= @presenter.permission_badge unless @presenter.public? %>
-      </div>
-
-      <% unless @presenter.logo_record.blank? %>
-          <div class="hyc-logos">
-            <% @presenter.logo_record.each_with_index  do |lr, i| %>
-
-                <% if lr[:linkurl].blank? %>
-                    <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
-                <% else %>
-                    <a href="<%= lr[:linkurl] %>">
-                      <img alt="<%= lr[:alttext] %>" src="<%= lr[:file_location] %>" />
-                    </a>
-                <% end %>
-            <% end %>
-          </div>
-      <% end %>
+        <div class="hyc-title">
+          <h1><%= @presenter.title.first %></h1>
+          <%= @presenter.permission_badge unless @presenter.public? %>
+        </div>
       </header>
     </div>
 
@@ -37,7 +22,7 @@
   </div>
 
   <div class="row hyc-body">
-    <div class="col-md-8 hyc-description">
+    <div class="col-md-10 hyc-description">
       <%= render 'collection_description', presenter: @presenter %>
 
       <% if @presenter.collection_type_is_nestable? && @presenter.total_parent_collections > 0 %>
@@ -51,13 +36,24 @@
           </div>
       <% end %>
 
-    </div>
-    <div class="col-md-4 hyc-metadata">
       <% unless has_collection_search_parameters? %>
-          <h2><%= t('hyrax.dashboard.collections.show.metadata_header') %></h2>
-          <%= render 'show_descriptions' %>
+        <div class="collection-metadata">
+          <%= render 'show_descriptions', presenter: @presenter %>
+        </div>
       <% end %>
     </div>
+
+    <% unless @presenter.logo_record.blank? %>
+    <div class="col-md-2">
+      <% logo = @presenter.logo_record.first %>
+      <% image_html = image_tag(logo[:file_location], class: 'img-responsive', alt: logo[:alttext]) %>
+      <% if logo[:linkurl].present? %>
+        <%= link_to(logo[:linkurl]) { image_html } %>
+      <% else %>
+        <%= image_html %>
+      <% end %>
+      </div>
+    <% end %>
   </div>
 
   <!-- Search results label -->

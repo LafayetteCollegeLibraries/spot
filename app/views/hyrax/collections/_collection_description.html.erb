@@ -1,9 +1,11 @@
-<% if presenter.description.empty? %>
-  <% presenter.abstract.each do |abstract| %>
-    <%= simple_format(auto_link(abstract)) %>
-  <% end %>
-<% else %>
-  <% presenter.description.each do |description| %>
-    <%= simple_format(auto_link(description)) %>
-  <% end %>
+<% presenter.abstract.each do |abstract| %>
+  <%= simple_format(auto_link(abstract), class: 'lead') %>
+<% end %>
+
+<% presenter.description.each do |description| %>
+  <%= simple_format(auto_link(description)) %>
+<% end %>
+
+<% unless presenter.related_resource.empty? %>
+  <p><%= render_related_resource_language(presenter) %></p>
 <% end %>

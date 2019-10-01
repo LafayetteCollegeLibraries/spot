@@ -1,1 +1,8 @@
 .git
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+/coverage
+.byebug_history
+fits.log

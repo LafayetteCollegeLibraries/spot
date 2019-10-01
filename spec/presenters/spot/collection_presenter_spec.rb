@@ -9,7 +9,8 @@ RSpec.describe Spot::CollectionPresenter do
     {
       id: 'abc123',
       title_tesim: ['Cool Collection'],
-      read_access_group_ssim: ['public']
+      read_access_group_ssim: ['public'],
+      has_model_ssim: 'Collection'
     }
   end
   let(:admin_user) { create(:admin_user) }
