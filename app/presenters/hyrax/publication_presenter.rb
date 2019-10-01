@@ -13,7 +13,7 @@ module Hyrax
 
     # @return [String]
     def export_all_text
-      I18n.t("spot.work.export.download_work_and_metadata_#{has_multiple_members? ? 'multiple' : 'single'}")
+      I18n.t("spot.work.export.download_work_and_metadata_#{multiple_members? ? 'multiple' : 'single'}")
     end
 
     # Metadata formats we're able to export as.
@@ -21,11 +21,6 @@ module Hyrax
     # @return [Array<Symbol>]
     def export_formats
       %i[csv ttl nt jsonld]
-    end
-
-    # @return [true, false]
-    def has_multiple_members?
-      list_of_item_ids_to_display.count > 1
     end
 
     # Our document's identifiers mapped to Spot::Identifier objects
@@ -49,6 +44,11 @@ module Hyrax
     # @return [Array<Array<String>>]
     def location
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
+    end
+
+    # @return [true, false]
+    def multiple_members?
+      list_of_item_ids_to_display.count > 1
     end
 
     # Overrides {Hyrax::WorkShowPresenter#page_title} by only using

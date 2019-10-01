@@ -24,7 +24,7 @@
                   main_app.export_path(presenter),
                   data: { turbolinks: false } %>
       </li>
-      <% if presenter.has_multiple_members? %>
+      <% if presenter.multiple_members? %>
         <li class="dropdown-header">
           <%= t('spot.work.export.dropdown.files_header') %>
         </li>
