@@ -15,6 +15,11 @@
 #       'private' - closed to all but the depositor
 #     - Default: 'private'
 #
+#   slug
+#     - Type: String
+#     - Easier to remember URL path for a collection. Should be lower-cased
+#       and separated by hyphens (ex. "lafayette-newspaper-archive")
+#
 #   metadata
 #     - Type: Hash (or whatever yaml calls them)
 #     - Default: {}
@@ -33,6 +38,14 @@
   title: Bytes and Books
   visibility: public
   slug: bytes-and-books
+-
+  title: College Administration
+  visibility: public
+  slug: college-administration
+-
+  title: Course Catalogs
+  visibility: public
+  slug: course-catalogs
 -
   title: Faculty Publications
   visibility: public
@@ -63,6 +76,10 @@
       college newspaper in Pennsylvania.
     related_resource:
       - https://dss.lafayette.edu/collections/lafayette-newspaper-collection
+-
+  title: Public Safety
+  visibility: public
+  slug: public-safety
 -
   title: Shakespeare Bulletin Archive
   visibility: public
