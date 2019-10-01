@@ -84,10 +84,12 @@ en:
       export:
         additional_options: Additional options
         all_files: Download all files
-        primary_file: Download primary file
-        download_work: Download as .zip
+        primary_file: Download this item
+        download_work_and_metadata_single: Download file and all metadata formats (as .zip)
+        download_work_and_metadata_multiple: Download files and all metadata formats (as .zip)
         dropdown:
-          file_header: Files
+          export_header: Export
+          files_header: Files
           metadata_header: Metadata
         metadata:
           csv: View metadata as CSV
