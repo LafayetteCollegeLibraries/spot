@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190327194742) do
+ActiveRecord::Schema.define(version: 20191002150048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,13 @@ ActiveRecord::Schema.define(version: 20190327194742) do
     t.boolean "passed"
     t.index ["checked_uri"], name: "index_checksum_audit_logs_on_checked_uri"
     t.index ["file_set_id", "file_id"], name: "by_file_set_id_and_file_id"
+  end
+
+  create_table "checksum_audit_logs_fixity_check_batches", id: false, force: :cascade do |t|
+    t.bigint "checksum_audit_log_id", null: false
+    t.bigint "fixity_check_batch_id", null: false
+    t.index ["checksum_audit_log_id"], name: "index_audits_checksum_audit_log_id"
+    t.index ["fixity_check_batch_id"], name: "index_audits_fixity_check_batch_id"
   end
 
   create_table "collection_branding_infos", force: :cascade do |t|
@@ -129,6 +136,13 @@ ActiveRecord::Schema.define(version: 20190327194742) do
     t.integer "user_id"
     t.index ["file_id"], name: "index_file_view_stats_on_file_id"
     t.index ["user_id"], name: "index_file_view_stats_on_user_id"
+  end
+
+  create_table "fixity_check_batches", force: :cascade do |t|
+    t.json "summary"
+    t.boolean "completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hyrax_collection_types", force: :cascade do |t|

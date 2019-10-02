@@ -8,15 +8,14 @@ module Spot
   class SendFixityStatusJob < ApplicationJob
     queue_as :low_priority
 
-    # @param [Number] :item_count
-    # @param [Number] :job_time
+    # @param [FixityCheckBatch] batch
     # @return [void]
-    def perform(item_count:, job_time:)
+    def perform(batch)
       return unless slack_ok?
 
-      @item_count = item_count
-      @job_time = job_time
-      @errors = ChecksumAuditLog.latest_checks.where(passed: false).count
+      @item_count = batch.checksum_audit_logs.count
+      @job_time = batch.total_time
+      @errors = batch.failed
 
       send_message_to_slack
     end
