@@ -30,7 +30,7 @@
       <%= render 'show_actions', presenter: @presenter if @presenter.editor? %>
       <%= render 'show_details' %>
 
-      <% if current_user.admin? %>
+      <% if current_user&.admin? %>
         <%= render 'fixity_information', presenter: @presenter %>
         <%= render 'activity_log', events: @presenter.events %>
       <% end %>
