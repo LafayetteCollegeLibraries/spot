@@ -2,9 +2,6 @@
 module Hyrax
   # Changing the Hyrax behavior slightly to _not_ display a dashboard
   # if a user has not been assigned to the 'depositor' role.
-  #
-  # NOTE: when migrating to Hyrax@3, be sure to uncomment the definition
-  # of the +:sidebar_partials+ class attribute below!
   class DashboardController < ApplicationController
     include Blacklight::Base
     include Hyrax::Breadcrumbs
@@ -18,8 +15,8 @@ module Hyrax
     #
     # @example Add a custom partial to the tasks sidebar block
     #   Hyrax::DashboardController.sidebar_partials[:tasks] << "hyrax/dashboard/sidebar/custom_task"
-    # class_attribute :sidebar_partials
-    # self.sidebar_partials = { activity: [], configuration: [], repository_content: [], tasks: [] }
+    class_attribute :sidebar_partials
+    self.sidebar_partials = { activity: [], configuration: [], repository_content: [], tasks: [] }
 
     def show
       if can? :read, :admin_dashboard
