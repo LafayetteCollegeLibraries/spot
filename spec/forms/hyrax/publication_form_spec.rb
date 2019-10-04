@@ -121,13 +121,12 @@ RSpec.describe Hyrax::PublicationForm do
   end
 
   describe '.primary_terms form hints' do
-    described_class.new(Publication.new, nil, nil).primary_terms.each do |term|
-      describe "for #{term}" do
-        subject do
-          I18n.t("simple_form.hints.defaults.#{term}", locale: :en, default: nil)
-        end
+    let(:primary_terms) { described_class(build(:publication)).primary_terms }
 
-        it { is_expected.not_to be_nil, "Hint missing for Publication##{term}" }
+    it 'includes form hints for each primary_term' do
+      primary_terms.each do |term|
+        expect(I18n.t("simple_form.hints.defaults.#{term}"), locale: :en, default: nil)
+          .not_to be_nil
       end
     end
   end
