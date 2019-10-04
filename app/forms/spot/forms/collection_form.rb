@@ -57,6 +57,17 @@ module Spot
         :collection_type_gid
       ]
 
+      # This acts to undo behavior introduced in hyrax#3554
+      # which pushes all titles but the first into an 'alt_title'
+      # field. Since we don't use 'alt_title', this annoyingly raises
+      # a +*** NoMethodError Exception: undefined method `empty?' for nil:NilClass+
+      #
+      # @see https://github.com/samvera/hyrax/commit/c2bc31326d016aefbe8dbf88e6b6989c0804e149
+      def [](key)
+        return @attributes['title'] if key == :title
+        super
+      end
+
       # Limiting to one abstract via the form
       #
       # @return [String]

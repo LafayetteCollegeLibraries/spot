@@ -56,6 +56,17 @@ module Hyrax
       :member_of_collection_ids, :admin_set_id
     ]
 
+    # This acts to undo behavior introduced in hyrax#3554
+    # which pushes all titles but the first into an 'alt_title'
+    # field. Since we don't use 'alt_title', this annoyingly raises
+    # a +*** NoMethodError Exception: undefined method `empty?' for nil:NilClass+
+    #
+    # @see https://github.com/samvera/hyrax/commit/c2bc31326d016aefbe8dbf88e6b6989c0804e149
+    def [](key)
+      return @attributes['title'] if key == :title
+      super
+    end
+
     # samvera/hydra-editor uses both the class method (new form) and
     # instance method (edit form) versions of this method, so we need
     # to provide both (otherwise we're head-first down a rabbit hole

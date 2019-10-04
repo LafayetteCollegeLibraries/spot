@@ -149,7 +149,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   end
 
   describe '.primary_terms form hints' do
-    let(:primary_terms) { described_class(build(:publication)).primary_terms }
+    let(:primary_terms) { described_class(build(:publication), nil, nil).primary_terms }
 
     it 'includes form hints for each primary_term' do
       primary_terms.each do |term|
