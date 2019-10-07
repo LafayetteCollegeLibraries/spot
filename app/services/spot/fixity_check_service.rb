@@ -21,6 +21,7 @@ module Spot
       end
 
       summarize_and_save_batch!
+      @batch
     end
 
     private
@@ -50,7 +51,6 @@ module Spot
         }
 
         @batch.update!(summary: summary, completed: true)
-        @batch
       end
   end
 end

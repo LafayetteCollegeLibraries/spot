@@ -1,15 +1,22 @@
 # frozen_string_literal: true
 class FixityCheckBatch < ApplicationRecord
+  # Class used for serializing fixity check summary info.
   class Summary
     attr_reader :success, :failed, :failed_item_ids, :total_time
 
-    def initialize(success:, failed:, failed_item_ids:, total_time:)
+    # @param [Hash] options
+    # @option [Integer] success
+    # @option [Integer] failed
+    # @option [Array<String>] failed_item_ids
+    # @option [Float] total_time
+    def initialize(success: -1, failed: -1, failed_item_ids: [], total_time: 0.0)
       @success = success
       @failed = failed
       @failed_item_ids = failed_item_ids
       @total_time = total_time
     end
 
+    # @return [Hash<Symbol => Integer, Array>]
     def to_h
       { success: success, failed: failed,
         failed_item_ids: failed_item_ids, total_time: total_time }
@@ -21,7 +28,7 @@ class FixityCheckBatch < ApplicationRecord
     # @return [FixityCheckBatch::Summary]
     def self.load(json)
       return nil if json.blank?
-      parsed = JSON.parse(json).with_indifferent_access
+      parsed = JSON.parse(json).symbolize_keys
 
       new(parsed)
     end
@@ -38,9 +45,9 @@ class FixityCheckBatch < ApplicationRecord
       when self
         JSON.dump(obj.to_h)
       when Hash
-        JSON.dump(new(obj).to_h)
+        JSON.dump(new(obj.symbolize_keys).to_h)
       else
-        raise StandardException, "Expected #{self} or Hash, got #{obj.class}"
+        raise StandardError, "Expected #{self} or Hash, got #{obj.class}"
       end
     end
   end

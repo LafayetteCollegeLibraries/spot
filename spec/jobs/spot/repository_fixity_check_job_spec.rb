@@ -1,40 +1,23 @@
 # frozen_string_literal: true
 RSpec.describe Spot::RepositoryFixityCheckJob do
-  subject(:perform_job!) { described_class.perform_now(job_opts) }
-
-  let(:service_double) { instance_double(Hyrax::FileSetFixityCheckService) }
-  let(:fs) { instance_double(FileSet, id: 'abc123') }
-  let(:job_opts) { {} }
+  let(:batch) { instance_double(FixityCheckBatch) }
 
   before do
-    allow(Hyrax::FileSetFixityCheckService).to receive(:new).and_return(service_double)
-    allow(service_double).to receive(:fixity_check)
-    allow(FileSet).to receive(:find_each).and_yield(fs)
-    perform_job!
+    allow(Spot::FixityCheckService).to receive(:perform).and_return(batch)
+    allow(Spot::SendFixityStatusJob).to receive(:perform_now)
   end
 
-  context 'default implementation' do
-    let(:opts) { { async_jobs: false } }
+  it 'calls the fixity service + enqueues without async_jobs' do
+    described_class.perform_now(force: false)
 
-    it 'calls the Hyrax::FileSetFixityCheckService without async_jobs' do
-      expect(Hyrax::FileSetFixityCheckService)
-        .to have_received(:new)
-        .with(fs, opts)
-
-      expect(service_double).to have_received(:fixity_check).at_least(1).times
-    end
+    expect(Spot::FixityCheckService).to have_received(:perform).with(force: false)
+    expect(Spot::SendFixityStatusJob).to have_received(:perform_now).with(batch)
   end
 
   context 'with force: true' do
-    let(:opts) { { async_jobs: false, max_days_between_fixity_checks: -1 } }
-    let(:job_opts) { { force: true } }
-
     it do
-      expect(Hyrax::FileSetFixityCheckService)
-        .to have_received(:new)
-        .with(fs, opts)
-
-      expect(service_double).to have_received(:fixity_check).at_least(1).times
+      described_class.perform_now(force: true)
+      expect(Spot::FixityCheckService).to have_received(:perform).with(force: true)
     end
   end
 end
