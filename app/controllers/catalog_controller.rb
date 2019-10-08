@@ -30,7 +30,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: 'search',
       rows: 10,
-      qf: 'title_tesim description_tesim creator_tesim keyword_tesim all_text_timv'
+      qf: 'title_tesim description_tesim creator_tesim keyword_tesim extracted_text_tsimv'
     }
 
     # solr field configuration for document/show views
@@ -181,12 +181,12 @@ class CatalogController < ApplicationController
         all_fields_search_timv
         english_language_date_teim
         file_format_tesim
-        all_text_timv
+        extracted_text_tsimv
       ]
 
       field.solr_parameters = {
         qf: fields.join(' '),
-        pf: 'all_text_timv'
+        pf: 'extracted_text_tsimv'
       }
     end
 
@@ -216,10 +216,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('subject', label: :'blacklight.search.fields.subject') do |field|
+    config.add_search_field('full_text', label: :'blacklight.search.fields.subject') do |field|
       field.solr_parameters = {
-        qf: 'subject_tesim',
-        pf: ''
+        qf: 'extracted_text_tsimv',
+        pf: 'extracted_text_tsimv'
       }
     end
 
