@@ -30,13 +30,17 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: 'search',
       rows: 10,
-      qf: 'title_tesim description_tesim creator_tesim keyword_tesim extracted_text_tsimv'
+      qf: 'title_tesim description_tesim creator_tesim keyword_tesim extracted_text_tsimv',
+      'hl.snippets': 5,
+      'hl.simple.pre': '<strong>',
+      'hl.simple.post': '</strong>'
     }
 
     # solr field configuration for document/show views
     config.index.title_field = 'title_tesim'
     config.index.display_type_field = 'has_model_ssim'
     config.index.thumbnail_field = 'thumbnail_path_ss'
+    config.index.partials = [:index_header, :thumbnail, :index_with_highlighting]
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
@@ -172,6 +176,15 @@ class CatalogController < ApplicationController
     config.add_index_field 'lease_expiration_date_dtsi',
                            label: :'blacklight.search.fields.lease_expiration_date',
                            helper_method: :human_readable_date
+
+    # set-up the full-text field so that it gets returned with the search results
+    # but doesn't display by default. that'll get handled with the
+    # +catalog/_index_highlighting_default.html.erb+ partial
+    config.add_index_field 'extracted_text_tsimv', label: 'Full Text', highlight: true, if: false
+
+    # call this to enable hit-highlighting (otherwise, the solr `hl`
+    # configuration isn't passed along)
+    config.add_field_configuration_to_solr_request!
 
     #
     # search field configuration

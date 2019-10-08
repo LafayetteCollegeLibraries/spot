@@ -1,0 +1,10 @@
+<div class="col-md-10">
+  <%= render 'index_default', document: document %>
+
+  <% highlight_values = extracted_text_highlight_values_for(document) %>
+  <% if highlight_values.length > 0 -%>
+    <blockquote class="full-text-excerpt text-muted">
+      <p><%= highlight_values.join(' ... ').html_safe %></p>
+    </blockquote>
+  <% end -%>
+</div>
