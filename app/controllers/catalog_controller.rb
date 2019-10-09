@@ -191,9 +191,11 @@ class CatalogController < ApplicationController
     #
     config.add_search_field('all_fields', label: :'blacklight.search.fields.all_fields') do |field|
       fields = %w[
-        all_fields_search_timv
-        english_language_date_teim
-        file_format_tesim
+        title_tesim subtitle_tesim title_alternative_tesim
+        creator_tesim contributor_tesim publisher_tesim editor_tesim
+        source_tesim abstract_tesim description_tesim note_tesim
+        subject_label_tesim identifier_ssim bibliographic_citation_tesim
+        english_language_date_teim file_format_tesim
         extracted_text_tsimv
       ]
 
