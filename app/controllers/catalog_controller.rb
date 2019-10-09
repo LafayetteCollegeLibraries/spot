@@ -31,9 +31,13 @@ class CatalogController < ApplicationController
       qt: 'search',
       rows: 10,
       qf: 'title_tesim description_tesim creator_tesim keyword_tesim extracted_text_tsimv',
-      'hl.snippets': 5,
+
       'hl.simple.pre': '<strong>',
-      'hl.simple.post': '</strong>'
+      'hl.tag.pre': '<strong>',
+      'hl.simple.post': '</strong>',
+      'hl.tag.post': '</strong>',
+      'hl.method': 'fastVector',
+      'hl.snippets': 5
     }
 
     # solr field configuration for document/show views
@@ -231,7 +235,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('full_text', label: :'blacklight.search.fields.subject') do |field|
+    config.add_search_field('full_text', label: :'blacklight.search.fields.full_text') do |field|
       field.solr_parameters = {
         qf: 'extracted_text_tsimv',
         pf: 'extracted_text_tsimv'
