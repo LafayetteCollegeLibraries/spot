@@ -12,6 +12,9 @@ en:
 
     log_in: Log in
 
+    advanced_search:
+      page_title: 'Advanced Search // %{name}'
+
     catalog:
       index:
         page_title: 'Search Results // %{name}'
