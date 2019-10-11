@@ -12,4 +12,4 @@ production:
   user: <%= ENV.fetch('FEDORA_USER') { 'fedoraAdmin' } %>
   password: <%= ENV['FEDORA_PASSWORD'] %>
   url: <%= ENV['FEDORA_URL'] %>
-  base_path: /ldr
+  base_path: /prod
