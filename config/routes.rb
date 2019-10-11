@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   # we can beat Hyrax to defining these instead
   get '/about', to: 'spot/page#about', as: 'about'
   get '/help', to: 'spot/page#help', as: 'help'
+  get '/terms-of-use', to: 'spot/page#terms_of_use', as: 'terms_of_use'
 
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
