@@ -35,6 +35,10 @@ en:
         sidebar: System Status
         title: System Status
 
+    errors:
+      500:
+        page_title: 'Something went wrong! // %{name}'
+
     homepage:
       index:
         page_title: Welcome to the %{name}
