@@ -1,5 +1,11 @@
-<% content_for(:page_title) { t('spot.errors.500.page_title', name: application_name) } %>
+<% provide(:page_title) { t('spot.error.500.page_title', name: application_name) } %>
 
 <%= image_tag('500-splash.jpg', class: 'img-responsive') %>
 
-Something went wrong! :(
+<div class="page-header">
+  <h1>Something went wrong!</h1>
+</div>
+
+<p class="lead">
+  Well this is embarrassing!  We've encountered an error with your request.
+</p>

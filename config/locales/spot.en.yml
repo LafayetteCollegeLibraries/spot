@@ -35,7 +35,9 @@ en:
         sidebar: System Status
         title: System Status
 
-    errors:
+    error:
+      404:
+        page_title: 'Page not found // %{name}'
       500:
         page_title: 'Something went wrong! // %{name}'
 
