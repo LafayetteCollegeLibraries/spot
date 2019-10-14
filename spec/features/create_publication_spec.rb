@@ -28,7 +28,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         click_link 'Works'
         click_link 'Add new work'
 
-        sleep 1
+        sleep 2
 
         expect(page).to have_content "Add New #{i18n_term}"
 
