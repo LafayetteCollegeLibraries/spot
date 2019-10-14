@@ -15,8 +15,7 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports.
-  # config.consider_all_requests_local = true
-  config.consider_all_requests_local = false
+  config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
@@ -57,8 +56,4 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::FileUpdateChecker
-
-  # use our error_controller to render error pages
-  # (see: https://stackoverflow.com/a/24239490)
-  config.exceptions_app = ->(env) { ErrorController.action(:show).call(env) }
 end
