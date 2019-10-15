@@ -184,7 +184,10 @@ class CatalogController < ApplicationController
     # set-up the full-text field so that it gets returned with the search results
     # but doesn't display by default. that'll get handled with the
     # +catalog/_index_highlighting_default.html.erb+ partial
-    config.add_index_field 'extracted_text_tsimv', label: 'Full Text', highlight: true, if: false
+    config.add_index_field 'extracted_text_tsimv',
+                           label: :'blacklight.search.fields.full_text',
+                           highlight: true,
+                           if: false
 
     # call this to enable hit-highlighting (otherwise, the solr `hl`
     # configuration isn't passed along)
@@ -193,7 +196,7 @@ class CatalogController < ApplicationController
     #
     # search field configuration
     #
-    config.add_search_field('all_fields', label: :'blacklight.search.fields.all_fields') do |field|
+    config.add_search_field('all_fields', label: 'All Fields') do |field|
       fields = %w[
         title_tesim subtitle_tesim title_alternative_tesim
         creator_tesim contributor_tesim publisher_tesim editor_tesim
@@ -209,7 +212,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('title', label: :'blacklight.search.fields.title') do |field|
+    config.add_search_field('title', label: 'Title') do |field|
       fields = %w[
         title_tesim^2
         subtitle_tesim
@@ -222,7 +225,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author', label: :'blacklight.search.fields.author') do |field|
+    config.add_search_field('author', label: 'Author') do |field|
       fields = %w[
         creator_tesim
         contributor_tesim
@@ -235,7 +238,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('full_text', label: :'blacklight.search.fields.full_text') do |field|
+    config.add_search_field('full_text', label: 'Full Text') do |field|
       field.solr_parameters = {
         qf: 'extracted_text_tsimv',
         pf: 'extracted_text_tsimv'
