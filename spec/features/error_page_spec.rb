@@ -13,8 +13,11 @@ RSpec.describe 'error page rendering', type: :request do
 
   describe '500 (catch-all)' do
     before do
-      allow_any_instance_of(Spot::HomepageController).to receive(:index).and_raise('oops nope')
+      allow(Spot::HomepageController).to receive(:new).and_return(mock_homepage)
+      allow(mock_homepage).to receive(:index).and_raise('oops nope')
     end
+
+    let(:mock_homepage) { instance_double(Spot::HomepageController) }
 
     it 'falls-back to the 500 error page' do
       without_detailed_exceptions do
