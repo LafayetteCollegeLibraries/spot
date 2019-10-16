@@ -124,6 +124,11 @@ class CatalogController < ApplicationController
     # It's used to give a label to the filter that comes from the user profile
     config.add_facet_field 'generic_type_sim', if: false
 
+    # see also: has_model_ssim for the 'View collections' link
+    config.add_facet_field 'has_model_ssim',
+                           label: :'blacklight.search.fields.has_model',
+                           if: false
+
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
     # handler defaults, or have no facets.

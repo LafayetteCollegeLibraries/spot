@@ -3,8 +3,8 @@ module ApplicationHelper
   delegate :advanced_search_path, to: :blacklight_advanced_search_engine
 
   # @return [String]
-  def browse_collections_url
-    'https://dss.lafayette.edu/collections'
+  def browse_collections_path
+    search_catalog_path(f: { has_model_ssim: ['Collection'] })
   end
 
   # @param [SolrDocument] document
