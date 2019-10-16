@@ -1,35 +1,27 @@
 <footer class="site-footer">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-3">
+      <div class="col-sm-4">
         <h4><%= t('hyrax.product_name') %></h4>
         <p>Version: <%= SPOT_VERSION %>, last updated: <%= LAST_DEPLOYED %></p>
+        <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'].present? %>
       </div>
 
-      <div class="col-sm-3">
-        <p>
+      <div class="col-sm-5 col-sm-offset-3">
+        <div class="col-sm-6">
           <ul>
             <li><%= link_to 'Learn more about the repostory', main_app.about_path %></li>
             <li><%= link_to 'Get help using the repository', main_app.help_path %></li>
             <li><%= link_to 'Contact us', hyrax.contact_path %></li>
             <li><%= link_to 'Terms of Use', main_app.terms_of_use_path %></li>
           </ul>
-        </p>
-      </div>
-
-      <div class="col-sm-3">
-        <p>
+        </div>
+        <div class="col-sm-6">
           <ul>
             <li><%= link_to t('spot.links.department.name'), t('spot.links.department.url') %></li>
             <li><%= link_to t('spot.links.library.name'), t('spot.links.library.url') %></li>
             <li><%= link_to t('spot.links.lafayette.name'), t('spot.links.lafayette.url') %></li>
           </ul>
-        </p>
-      </div>
-
-      <div class="col-sm-3">
-        <div class="navbar-text text-right">
-          <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'].present? %>
         </div>
       </div>
     </div>
