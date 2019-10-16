@@ -181,18 +181,6 @@ class CatalogController < ApplicationController
                            label: :'blacklight.search.fields.lease_expiration_date',
                            helper_method: :human_readable_date
 
-    # set-up the full-text field so that it gets returned with the search results
-    # but doesn't display by default. that'll get handled with the
-    # +catalog/_index_highlighting_default.html.erb+ partial
-    config.add_index_field 'extracted_text_tsimv',
-                           label: :'blacklight.search.fields.full_text',
-                           highlight: true,
-                           if: false
-
-    # call this to enable hit-highlighting (otherwise, the solr `hl`
-    # configuration isn't passed along)
-    config.add_field_configuration_to_solr_request!
-
     #
     # search field configuration
     #
