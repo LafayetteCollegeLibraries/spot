@@ -15,7 +15,7 @@ RSpec.describe CatalogController, clean: true do
     end
 
     context 'all_fields search field' do
-      let(:objects) { [all_1, all_2, all_3, all_4, all_5] }
+      let(:objects) { [all_1, all_2, all_3, all_4] }
 
       let(:all_1) do
         { id: 'all_1', has_model_ssim: ['Publication'],
@@ -29,25 +29,19 @@ RSpec.describe CatalogController, clean: true do
 
       let(:all_3) do
         { id: 'all_3', has_model_ssim: ['Publication'],
-          subject_label_tesim: ['Cool Systems'], read_access_group_ssim: ['public'] }
+          abstract_tesim: ['A report about cooling systems'], read_access_group_ssim: ['public'] }
       end
 
       let(:all_4) do
         { id: 'all_4', has_model_ssim: ['Publication'],
-          title_tesim: ['were it not for the file set'], file_set_ids_ssim: ['all_5'],
-          read_access_group_ssim: ['public'] }
-      end
-
-      let(:all_5) do
-        { id: 'all_5', has_model_ssim: ['FileSet'],
-          all_text_timv: ['this is a pretty cool captured phrase'],
+          extracted_text_tsimv: ['this is a pretty cool captured phrase'],
           read_access_group_ssim: ['public'] }
       end
 
       let(:expected_ids) { [all_1[:id], all_2[:id], all_3[:id], all_4[:id]] }
 
       it 'finds objects with "cool" somewhere in a *_tesim field' do
-        get :index, params: { q: 'cool%2A', search_field: 'all_fields' }
+        get :index, params: { q: 'cool*', search_field: 'all_fields' }
         expect(assigns(:document_list).map(&:id)).to contain_exactly(*expected_ids)
       end
     end
@@ -132,6 +126,26 @@ RSpec.describe CatalogController, clean: true do
       it 'returns seasonal items' do
         get :index, params: { q: 'spring', search_field: 'all_fields' }
         expect(assigns(:document_list).map(&:id)).to contain_exactly(obj1[:id])
+      end
+    end
+
+    context 'full-text search' do
+      let(:objects) { [ft_1, ft_2] }
+
+      let(:ft_1) do
+        { id: 'full_text_1', has_model_ssim: ['Publication'],
+          title_tesim: ['no not here'], read_access_group_ssim: ['public'] }
+      end
+
+      let(:ft_2) do
+        { id: 'full_text_2', has_model_ssim: ['Publication'],
+          title_tesim: ['ok!'], extracted_text_tsimv: ['Now see here, this oughta show up!'],
+          read_access_group_ssim: ['public'] }
+      end
+
+      it 'only searches the extracted_text_tsimv field' do
+        get :index, params: { q: 'here', search_field: 'full_text' }
+        expect(assigns(:document_list).map(&:id)).to contain_exactly(ft_2[:id])
       end
     end
   end

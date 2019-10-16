@@ -6,4 +6,11 @@ module ApplicationHelper
   def browse_collections_url
     'https://dss.lafayette.edu/collections'
   end
+
+  # @param [SolrDocument] document
+  # @return [Array<String>]
+  def extracted_text_highlight_values_for(document)
+    return [] unless document.has_highlight_field? 'extracted_text_tsimv'
+    document.highlight_field('extracted_text_tsimv').reject(&:blank?)
+  end
 end

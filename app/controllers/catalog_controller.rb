@@ -30,13 +30,21 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       qt: 'search',
       rows: 10,
-      qf: 'title_tesim description_tesim creator_tesim keyword_tesim all_text_timv'
+      qf: 'title_tesim description_tesim creator_tesim keyword_tesim extracted_text_tsimv',
+
+      'hl.simple.pre': '<strong>',
+      'hl.tag.pre': '<strong>',
+      'hl.simple.post': '</strong>',
+      'hl.tag.post': '</strong>',
+      'hl.method': 'fastVector',
+      'hl.snippets': 5
     }
 
     # solr field configuration for document/show views
     config.index.title_field = 'title_tesim'
     config.index.display_type_field = 'has_model_ssim'
     config.index.thumbnail_field = 'thumbnail_path_ss'
+    config.index.partials = [:index_header, :thumbnail, :index_with_highlighting]
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
@@ -176,21 +184,23 @@ class CatalogController < ApplicationController
     #
     # search field configuration
     #
-    config.add_search_field('all_fields', label: :'blacklight.search.fields.all_fields') do |field|
+    config.add_search_field('all_fields', label: 'All Fields') do |field|
       fields = %w[
-        all_fields_search_timv
-        english_language_date_teim
-        file_format_tesim
-        all_text_timv
+        title_tesim subtitle_tesim title_alternative_tesim
+        creator_tesim contributor_tesim publisher_tesim editor_tesim
+        source_tesim abstract_tesim description_tesim note_tesim
+        subject_label_tesim identifier_ssim bibliographic_citation_tesim
+        english_language_date_teim file_format_tesim
+        extracted_text_tsimv
       ]
 
       field.solr_parameters = {
         qf: fields.join(' '),
-        pf: 'all_text_timv'
+        pf: 'extracted_text_tsimv'
       }
     end
 
-    config.add_search_field('title', label: :'blacklight.search.fields.title') do |field|
+    config.add_search_field('title', label: 'Title') do |field|
       fields = %w[
         title_tesim^2
         subtitle_tesim
@@ -203,7 +213,7 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('author', label: :'blacklight.search.fields.author') do |field|
+    config.add_search_field('author', label: 'Author') do |field|
       fields = %w[
         creator_tesim
         contributor_tesim
@@ -216,10 +226,10 @@ class CatalogController < ApplicationController
       }
     end
 
-    config.add_search_field('subject', label: :'blacklight.search.fields.subject') do |field|
+    config.add_search_field('full_text', label: 'Full Text') do |field|
       field.solr_parameters = {
-        qf: 'subject_tesim',
-        pf: ''
+        qf: 'extracted_text_tsimv',
+        pf: 'extracted_text_tsimv'
       }
     end
 
