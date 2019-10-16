@@ -28,7 +28,10 @@
 
 <div class="panel panel-default">
   <div class="panel-body text-center">
-    <%= image_tag(image_path('help/work-download-button.jpg'), class: 'img-responsive') %>
+    <%= image_tag(image_path('help/work-download-button.jpg'),
+                  alt: "Screen-capture of an item's show view with the download button highlighted",
+                  class: 'img-responsive',
+                  style: 'margin: auto') %>
   </div>
 </div>
 
@@ -36,8 +39,11 @@
 <p>To download the item and all available metadata formats, click on the <strong>Additional Options</strong> button at the bottom-left of the viewer on the item page to open the drop-down menu and select <strong>Download file and all metadata formats (as .zip)</strong>.  From this drop-down menu, you can also choose to download the item metadata record as a CSV, Turtle, N-Triples, or JSON-LD file. </p>
 
 <div class="panel panel-default">
-  <div class="panel-body text-center">
-    <%= image_tag(image_path('help/work-download-options.jpg'), class: 'img-responsive') %>
+  <div class="panel-body text-center" styl>
+    <%= image_tag(image_path('help/work-download-options.jpg'),
+                  alt: "Screen-capture of an item's show view with the download options dropdown highlighted",
+                  class: 'img-responsive',
+                  style: 'margin: auto') %>
   </div>
 </div>
 
