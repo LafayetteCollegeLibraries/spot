@@ -24,7 +24,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
     # Publication form.
     describe 'should be taken directly to the new Publication form' do
       scenario do
-        visit '/dashboard?locale=en'
+        visit '/dashboard'
         click_link 'Works'
         click_link 'Add new work'
 
