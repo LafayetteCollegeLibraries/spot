@@ -10,7 +10,7 @@ module Spot
 
     def help
       add_breadcrumb t('hyrax.controls.home'), root_path
-      add_breadcrumb t('spot.page.help.header'), help_path
+      add_breadcrumb t('spot.page.help.header', name: t('hyrax.product_name')), help_path
     end
 
     def terms_of_use
