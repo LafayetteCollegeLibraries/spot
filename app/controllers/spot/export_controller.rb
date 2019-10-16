@@ -13,10 +13,10 @@ module Spot
 
     # rubocop:disable Style/AndOr
     def show
-      redirect_to hyrax.download_path(solr_document.id, locale: nil) and return if wants_file_set?
+      redirect_to hyrax.download_path(solr_document.id) and return if wants_file_set?
 
       file_sets = solr_document.file_set_ids
-      redirect_to hyrax.download_path(file_sets.first, locale: nil) and return if wants_only_file_set?
+      redirect_to hyrax.download_path(file_sets.first) and return if wants_only_file_set?
 
       # for some reason, we need to reset the Fedora connection before
       # we can run an export of the members + metadata. my best guess is

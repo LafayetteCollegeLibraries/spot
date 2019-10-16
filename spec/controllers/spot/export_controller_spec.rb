@@ -8,7 +8,7 @@ RSpec.describe Spot::ExportController do
     allow(controller).to receive(:send_file)
     allow(controller.hyrax)
       .to receive(:download_path)
-      .with(file_set.id, locale: nil)
+      .with(file_set.id)
       .and_return("/downloads/#{file_set.id}")
   end
 
@@ -59,7 +59,7 @@ RSpec.describe Spot::ExportController do
 
       it 'redirects to login' do
         expect(response)
-          .to redirect_to(Rails.application.routes.url_helpers.new_user_session_path(locale: :en))
+          .to redirect_to(Rails.application.routes.url_helpers.new_user_session_path)
       end
     end
 
