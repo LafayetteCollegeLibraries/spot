@@ -22,10 +22,10 @@ Hyrax.config do |config|
   # config.admin_set_predicate = ::RDF::DC.isPartOf
 
   # Email recipient of messages sent via the contact form
-  # config.contact_email = "repo-admin@example.org"
+  config.contact_email = "dss@lafayette.edu"
 
   # Text prefacing the subject entered in the contact form
-  # config.subject_prefix = "Contact form:"
+  config.subject_prefix = "LDR Contact form:"
 
   # How many notifications should be displayed on the dashboard
   # config.max_notifications_for_dashboard = 5
