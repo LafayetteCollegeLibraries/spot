@@ -24,11 +24,11 @@ RSpec.feature 'Create a Publication', :clean, :js do
     # Publication form.
     describe 'should be taken directly to the new Publication form' do
       scenario do
-        visit '/dashboard?locale=en'
+        visit '/dashboard'
         click_link 'Works'
         click_link 'Add new work'
 
-        sleep 1
+        sleep 2
 
         expect(page).to have_content "Add New #{i18n_term}"
 

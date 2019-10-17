@@ -18,6 +18,16 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  # As we're not really supporting locales other than English at the moment,
+  # this will override the Hyrax strategy of including the locale in the
+  # URL parameters.
+  #
+  # @return [Hash]
+  # @todo remove this when supporting multiple locales
+  def default_url_options
+    super.reject { |k, _v| k == :locale }
+  end
+
   private
 
     # Modified from its source in +Hyrax::Controller+ in that we're

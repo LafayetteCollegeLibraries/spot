@@ -40,6 +40,11 @@ module Spot
     end
 
     # @return [true, false]
+    def any_facets?
+      general_facets? || admin_facets?
+    end
+
+    # @return [true, false]
     def general_facets?
       has_facet_values?(general_facet_names)
     end

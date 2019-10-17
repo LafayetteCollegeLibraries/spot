@@ -12,6 +12,9 @@ en:
 
     log_in: Log in
 
+    advanced_search:
+      page_title: 'Advanced Search // %{name}'
+
     catalog:
       index:
         page_title: 'Search Results // %{name}'
@@ -34,6 +37,12 @@ en:
       status:
         sidebar: System Status
         title: System Status
+
+    error:
+      404:
+        page_title: 'Page not found // %{name}'
+      500:
+        page_title: 'Something went wrong! // %{name}'
 
     homepage:
       index:
@@ -79,6 +88,17 @@ en:
     masthead:
       advanced_search: Advanced Search
       search_placeholder: Begin your search here
+
+    page:
+      about:
+        header: About %{name}
+        page_title: About // %{name}
+      help:
+        header: Help using %{name}
+        page_title: Help // %{name}
+      terms_of_use:
+        header: Terms of Use
+        page_title: Terms of Use // %{name}
 
     work:
       export:

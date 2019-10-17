@@ -22,10 +22,10 @@ Hyrax.config do |config|
   # config.admin_set_predicate = ::RDF::DC.isPartOf
 
   # Email recipient of messages sent via the contact form
-  # config.contact_email = "repo-admin@example.org"
+  config.contact_email = "dss@lafayette.edu"
 
   # Text prefacing the subject entered in the contact form
-  # config.subject_prefix = "Contact form:"
+  config.subject_prefix = "LDR Contact form:"
 
   # How many notifications should be displayed on the dashboard
   # config.max_notifications_for_dashboard = 5
@@ -46,7 +46,7 @@ Hyrax.config do |config|
   # config.analytics = false
 
   # Google Analytics tracking ID to gather usage statistics
-  # config.google_analytics_id = 'UA-99999999-1'
+  config.google_analytics_id = ENV.fetch('GOOGLE_ANALYTICS_ID', nil)
 
   # Date you wish to start collecting Google Analytic statistics for
   # Leaving it blank will set the start date to when ever the file was uploaded by

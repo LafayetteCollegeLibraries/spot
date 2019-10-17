@@ -47,7 +47,7 @@ RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
 
       # See works under review in the dashboard
       login_as admin_user
-      visit '/admin/workflows?locale=en#under-review'
+      visit '/admin/workflows#under-review'
       expect(page).to have_content(publication.title.first)
 
       # The admin user marks the publication as approved

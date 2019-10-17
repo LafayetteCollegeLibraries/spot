@@ -1,5 +1,55 @@
-<% provide(:page_title) do %>
-  Help // <%= t('hyrax.product_name') %>
-<% end %>
+<% provide(:page_title) { t('.page_title', name: application_name) } %>
 
-<h1>Help using <%= t('hyrax.product_name') %></h1>
+<div class="page-header">
+  <h1><%= t('.header', name: application_name) %></h1>
+</div>
+
+<h2>Search and Access</h2>
+
+<h3>How to Search</h3>
+
+<p>The search box is located in the upper left part of the repository home page.  To see Advanced Search options, follow the <%= link_to 'Advanced Search', advanced_search_path %> link directly to the right of the main search box.</p>
+
+<p>Default search in the LDR is by full-text keyword, so the search engine will look for the terms across metadata (Title, Author, Description, etc.) and in the full text of resources in the LDR.</p>
+
+<p>Search results are sorted by Relevance by default. To sort by Issue Date or Data Added, click on the <strong>Sort by…</strong> dropdown menu in the upper right part of the search results page and make your selection.</p>
+
+<h3>Search Tips</h3>
+<ul>
+  <li>To search for a phrase, use quotation marks. For example, <code>"Civil Rights"</code> will search for the complete phrase "Civil Rights" rather than "Civil" AND "Rights".</li>
+  <li>Truncation and wildcard searching ("?" or "*") are not currently supported.</li>
+  <li>Use <code>"+"</code> before a term to make it required; Otherwise results matching only some of your terms may be included.</li>
+  <li>Use <code>"-"</code> before a word or phrase to exclude.</li>
+  <li>Refine search results by clicking on the facets at the left side of the results page.  For example, to view only results in a specific Language or of a given Resource Type.</li>
+</ul>
+
+<h3>Downloading an item</h3>
+<p>To download the primary file for an item, click on the green <strong>Download this item</strong> button at the bottom-left of the viewer on the item page.</p>
+
+<div class="panel panel-default">
+  <div class="panel-body text-center">
+    <%= image_tag(image_path('help/work-download-button.jpg'),
+                  alt: "Screen-capture of an item's show view with the download button highlighted",
+                  class: 'img-responsive',
+                  style: 'margin: auto') %>
+  </div>
+</div>
+
+<h3>Other Download Options</h3>
+<p>To download the item and all available metadata formats, click on the <strong>Additional Options</strong> button at the bottom-left of the viewer on the item page to open the drop-down menu and select <strong>Download file and all metadata formats (as .zip)</strong>.  From this drop-down menu, you can also choose to download the item metadata record as a CSV, Turtle, N-Triples, or JSON-LD file. </p>
+
+<div class="panel panel-default">
+  <div class="panel-body text-center" styl>
+    <%= image_tag(image_path('help/work-download-options.jpg'),
+                  alt: "Screen-capture of an item's show view with the download options dropdown highlighted",
+                  class: 'img-responsive',
+                  style: 'margin: auto') %>
+  </div>
+</div>
+
+<h2>Getting Help</h2>
+<p>Contact the Digital Repository Librarian if you have questions about repository content or features, or wish to set up a training or general consultation: <%= repository_librarian_mailto_link %>.</p>
+
+<p>Found an issue in the LDR? Please submit a <%= link_to('Problem Report form', 'https://forms.gle/t1KG8cgGvLFrXNp1A') %>.</p>
+
+<p>To propose a new digital project, request digitization services, or consult on digital methods for research and pedagogy, reach out to Digital Scholarship Services at dss@lafayette.edu or complete the <%= link_to('DSS Request Form', 'https://docs.google.com/forms/d/e/1FAIpQLSdzgY5JgoIrPUO_QxRfkWaEXsp4scLIBDk6i9h5kcS9LdlbFw/viewform') %> </p>

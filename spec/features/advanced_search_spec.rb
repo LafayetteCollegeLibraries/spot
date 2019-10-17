@@ -13,6 +13,6 @@ RSpec.feature 'Advanced search form', :clean, :js do
     expect(page).to have_css 'input[name="all_fields"]'
     expect(page).to have_css 'input[name="title"]'
     expect(page).to have_css 'input[name="author"]'
-    expect(page).to have_css 'input[name="subject"]'
+    expect(page).to have_css 'input[name="full_text"]'
   end
 end

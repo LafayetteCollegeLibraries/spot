@@ -4,12 +4,14 @@
   </div>
   <table class="table table-bordered">
     <tbody>
+      <% if current_user&.admin? %>
       <tr>
         <th><%= t 'blacklight.search.fields.depositor' %></th>
         <td itemprop="accountablePerson" itemscope itemtype="http://schema.org/Person">
           <span itemprop="name"><%= link_to_profile @presenter.depositor %></span>
         </td>
       </tr>
+      <% end %>
 
       <tr>
         <th><%= t 'blacklight.search.fields.date_uploaded' %></th>
@@ -38,10 +40,12 @@
       </tr>
       <% end %>
 
+      <% if current_user&.admin? %>
       <tr>
         <th><%= t 'blacklight.search.fields.original_checksum' %></th>
         <td><code><%= @presenter.original_checksum %></code></td>
       </tr>
+      <% end %>
     </tbody>
   </table>
 </div>

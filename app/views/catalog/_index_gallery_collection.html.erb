@@ -1,0 +1,9 @@
+<% collection_presenter = Spot::CollectionPresenter.new(document, current_ability) %>
+<% col_count = collection_presenter.total_viewable_collections %>
+
+<p class="text-justify"><%= collection_presenter.abstract.first %></p>
+<% unless col_count.zero? %>
+<p><strong><%= col_count %></strong> Sub-Collections</p>
+<% end %>
+
+<p><strong><%= collection_presenter.total_viewable_works %></strong> Items</p>

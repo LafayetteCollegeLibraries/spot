@@ -19,10 +19,18 @@ class PublicationIndexer < Hyrax::WorkIndexer
     super.tap do |solr_doc|
       store_license(solr_doc)
       store_years_encompassed(solr_doc)
+      store_full_text_content(solr_doc)
     end
   end
 
   private
+
+    # Store the full text content of all the contained file-sets
+    def store_full_text_content(doc)
+      doc['extracted_text_tsimv'] = object.file_sets.map do |fs|
+        fs.extracted_text.present? ? fs.extracted_text.content.strip : ''
+      end
+    end
 
     # we're storing licenses but not indexing them
     #

@@ -21,6 +21,7 @@ en:
         embargo_release_date: Embargo Release Date
         file_format: File Format
         file_size: File Size
+        has_model: LDR Type
         keyword: Keyword
         language: Language
         language_label: Language
@@ -45,3 +46,4 @@ en:
         years_encompassed: Year
 
         all_fields: All fields
+        full_text: Full Text

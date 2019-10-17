@@ -1,5 +1,18 @@
 # changelog
 
+## [2019.1-pre.7] - 2019-10-17
+
+- adds deployment configuration for production (#261)
+- uses /ldr base for fedora (#261)
+- moves fixity/deposit info on file_sets to an admin-only view (#295)
+- stops seeding collections in production environments
+- adds terms of use page (#287)
+- adds bare-bones 404 and 500 error pages (#301)
+- use env variable to provide google analytics id (#302)
+- index (+ store) extracted-text content at the work level instead of the file_set (#298)
+- adds content for the help page (#304)
+
+
 ## [2019.1-pre.6] - 2019-10-01
 
 - add `/redirect?url=<digital.laf url>` routing for legacy URLs (#277)
@@ -73,6 +86,8 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.1-pre.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.7
+[2019.1-pre.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.6
 [2019.1-pre.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.5
 [2019.1-pre.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.4
 [2019.1-pre.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.3
