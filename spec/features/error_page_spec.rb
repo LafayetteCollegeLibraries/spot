@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe 'error page rendering', type: :request do
+  before { allow(Honeybadger).to receive(:notify) }
+
   describe '404' do
     it 'renders the 404 page' do
       without_detailed_exceptions do

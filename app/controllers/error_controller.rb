@@ -7,11 +7,23 @@ class ErrorController < ApplicationController
   def show
     render @status.to_s, status: @status.to_i
   rescue
+    send_honeybadger_notification!
+
     # fallback for statuses that we haven't created a view for
     render '500', status: 500
   end
 
   private
+
+    def send_honeybadger_notification!
+      Honeybadger.notify(
+        'An error occurred causing a 500 page to render',
+        backtrace: @exception.full_trace,
+        controller: self.class.name.to_s,
+        action: action_name,
+        parameters: params
+      )
+    end
 
     def set_status
       backtrace_cleaner = request.env['action_dispatch.backtrace_cleaner']
