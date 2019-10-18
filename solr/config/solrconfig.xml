@@ -145,7 +145,7 @@
         subject_tesim
       </str>
       <str name="pf">
-        all_text_timv
+        extracted_text_tsimv
       </str>
       <!--
         what fields should be returned in our response?
@@ -318,7 +318,7 @@
       <str name="name">mySuggester</str>
       <str name="lookupImpl">FuzzyLookupFactory</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="field">suggest</str>
     </lst>
   </searchComponent>
