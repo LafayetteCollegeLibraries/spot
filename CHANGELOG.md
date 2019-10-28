@@ -1,5 +1,13 @@
 # changelog
 
+## [2019.1] - 2019-10-28
+
+- adds Honeybadger integration for 500 error pages (#303)
+- disables solr's suggestion `buildOnCommit` setting to prevent sluggish writes
+  and decrease ingest time
+- whitelist the root capistrano directory for ingest files
+- update readme
+
 ## [2019.1-pre.7] - 2019-10-17
 
 - adds deployment configuration for production (#261)
@@ -86,6 +94,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1
 [2019.1-pre.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.7
 [2019.1-pre.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.6
 [2019.1-pre.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.5
