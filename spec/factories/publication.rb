@@ -48,8 +48,12 @@ FactoryBot.define do
       label { 'publication.pdf' }
     end
 
+    before(:create) do |work, evaluator|
+      work.apply_depositor_metadata(evaluator.user.user_key)
+    end
+
     factory :publication_with_file_set do
-      before(:create) do |pub, evaluator|
+      after(:create) do |pub, evaluator|
         fs_opts = {
           user: evaluator.user,
           title: ['Publication FileSet'],
@@ -57,14 +61,12 @@ FactoryBot.define do
         }
 
         fs_opts[:content] = evaluator.content if evaluator.content
+        fs = create(:file_set, :public, **fs_opts)
 
-        pub.ordered_members << create(:file_set, :public, fs_opts)
-        pub.representative_id = pub.members[0].id
+        pub.ordered_members << fs
+        pub.representative_id = fs.id
+        pub.save
       end
-    end
-
-    before(:create) do |work, evaluator|
-      work.apply_depositor_metadata(evaluator.user.user_key)
     end
   end
 end
