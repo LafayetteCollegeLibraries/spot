@@ -54,9 +54,15 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def identifier
-      metadata['dc:identifier']
-        .map { |id| id.include?('cdm.lafayette.edu') ? "url:#{id}" : "lafayette:#{id}" }
-        .push("url:#{metadata['url'].first}")
+      return [] unless metadata['dc:identifier'] || metadata['url']
+
+      ids = metadata.fetch('dc:identifier', []).map do |id|
+        id.include?('cdm.lafayette.edu') ? "url:#{id}" : "lafayette:#{id}"
+      end
+
+      return ids unless metadata['url'].present?
+
+      ids.push("url:#{metadata['url'].first}")
     end
 
     # @return [Array<RDF::URI,String>]

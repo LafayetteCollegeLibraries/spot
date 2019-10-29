@@ -72,6 +72,24 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     it { is_expected.to include 'lafayette:islandora:37462' }
     it { is_expected.to include 'url:http://cdm.lafayette.edu/u?/newspaper,30151' }
     it { is_expected.to include 'url:http://digital.lafayette.edu/collections/newspaper/18700901' }
+
+    context 'when only dc:identifier is present' do
+      let(:metadata) { { 'dc:identifier' => ['islandora:37462'] } }
+
+      it { is_expected.to eq ['lafayette:islandora:37462'] }
+    end
+
+    context 'when only url is present' do
+      let(:metadata) { { 'url' => ['http://digital.lafayette.edu/collections/newspaper/18700901'] } }
+
+      it { is_expected.to eq ['url:http://digital.lafayette.edu/collections/newspaper/18700901'] }
+    end
+
+    context 'when no identifiers are present' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 
   describe '#keyword' do
