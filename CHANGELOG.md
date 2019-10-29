@@ -1,5 +1,12 @@
 # changelog
 
+## [2019.2] - 2019-10-29
+
+Addresses two vulnerabilities (thanks GitHub!): [CVE-2019-16892](https://nvd.nist.gov/vuln/detail/CVE-2019-16892) and [CVE-2019-16676](https://nvd.nist.gov/vuln/detail/CVE-2019-16676)
+
+- updates rubyzip to 1.3.0 (#310)
+- updates hyrax to 2.6.0 (#311), which in turn updates simpleform (source of CVE-2019-16676)
+
 ## [2019.1] - 2019-10-28
 
 - adds Honeybadger integration for 500 error pages (#303)
@@ -94,6 +101,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.2
 [2019.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1
 [2019.1-pre.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.7
 [2019.1-pre.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.6

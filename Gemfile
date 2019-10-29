@@ -35,7 +35,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '2.5.1'
+gem 'hyrax', '~> 2.6.0'
 
 # modularize our javascripts
 gem 'almond-rails', '0.1.0'
@@ -94,7 +94,7 @@ gem 'riiif', '2.1.0'
 gem 'rsolr', '2.2.1'
 
 # used in conjunction with our importers to zip/unzip files
-gem 'rubyzip', '1.2.3'
+gem 'rubyzip', '1.3.0'
 
 # our jobs server
 gem 'sidekiq', '5.2.7'
