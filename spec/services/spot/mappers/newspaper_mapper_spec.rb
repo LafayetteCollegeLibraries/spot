@@ -6,7 +6,6 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   let(:metadata) do
     {
       'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton'],
-      'dc:description' => ['Some informative words'],
       'dc:rights' => ['https://creativecommons.org/publicdomain/mark/1.0/']
     }
   end
@@ -37,6 +36,12 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     let(:metadata) { { 'date_issued' => ['1986-02-11T00:00:00Z'] } }
 
     it { is_expected.to eq ['1986-02-11'] }
+
+    context 'when no date_issued present' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 
   describe '#date_uploaded' do
@@ -54,9 +59,16 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#description' do
     subject { mapper.description }
 
+    let(:metadata) { { 'dc:description' => ['Some informative words'] } }
     let(:value) { [RDF::Literal('Some informative words', language: :en)] }
 
     it { is_expected.to eq value }
+
+    context 'when no description is present' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 
   describe '#identifier' do
@@ -141,5 +153,12 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
     let(:value) { [RDF::Literal('A modern masterpiece', language: :en)] }
 
     it { is_expected.to eq [RDF::Literal('The Lafayette - August 14, 2019', language: :en)] }
+
+    # is this ideal?
+    context 'when no title is present' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 end

@@ -33,7 +33,7 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def date_issued
-      metadata['date_issued'].map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
+      metadata.fetch('date_issued', []).map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
     end
 
     # @return [String, nil]
@@ -43,7 +43,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def description
-      metadata['dc:description'].reject(&:blank?).map do |desc|
+      metadata.fetch('dc:description', []).reject(&:blank?).map do |desc|
         RDF::Literal(desc, language: :en)
       end
     end
@@ -85,10 +85,10 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def title
-      metadata['dc:title']
-        .zip(date_issued)
-        .map { |(title, date)| "#{title} - #{Date.edtf(date).humanize}" }
-        .map { |title| RDF::Literal(title, language: :en) }
+      metadata.fetch('dc:title', [])
+              .zip(date_issued)
+              .map { |(title, date)| "#{title} - #{Date.edtf(date).humanize}" }
+              .map { |title| RDF::Literal(title, language: :en) }
     end
   end
 end
