@@ -1,4 +1,15 @@
 # frozen_string_literal: true
+
+# Ensures that our Fits XML contains valid UTF-8 characters, otherwise
+# we'll get complaints from +xml.present?+
+Hydra::Works::CharacterizationService.class_eval do
+  def extract_metadata(content)
+    Hydra::FileCharacterization.characterize(content, file_name, tools) do |cfg|
+      cfg[:fits] = Hydra::Derivatives.fits_path
+    end.encode('UTF-8', invalid: :replace)
+  end
+end
+
 module Spot
   # A local version of the tasks found within Hyrax's +CharacterizeJob+,
   # but split out into a local service so that we can:
@@ -54,10 +65,8 @@ module Spot
       #
       # @return [Hydra::Works::CharacterizationService]
       def characterization_service
-        @characterization_service = begin
-          tool = fits_url_present? ? :fits_servlet : :fits
-          Hydra::Works::CharacterizationService.new(proxy, @filepath, ch12n_tool: tool)
-        end
+        tool = fits_url_present? ? :fits_servlet : :fits
+        Hydra::Works::CharacterizationService.new(proxy, @filepath, ch12n_tool: tool)
       end
 
       # Loops through known-problematic fields and removes invalid UTF-8 characters
@@ -81,7 +90,7 @@ module Spot
 
       # @return [true, false]
       def fits_url_present?
-        !!ENV.fetch('FITS_SERVLET_URL', false)
+        ENV['FITS_SERVLET_URL'].present?
       end
 
       # @return [Hydra::PCDM::File]
