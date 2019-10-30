@@ -15,11 +15,19 @@ RSpec.describe Spot::Mappers::NewspaperMapper do
   describe '#location_attributes' do
     subject(:location_attributes) { mapper.location_attributes }
 
+    let(:metadata) { { 'dc:coverage' => ['United States, Pennsylvania, Northampton County, Easton'] } }
+
     let(:expected_value) do
       { '0' => { 'id' => 'http://sws.geonames.org/5188140/' } }
     end
 
     it { is_expected.to eq expected_value }
+
+    context 'when "Easton, PA"' do
+      let(:metadata) { { 'dc:coverage' => ['Easton, PA'] } }
+
+      it { is_expected.to eq expected_value }
+    end
 
     context 'when location is not in our internal mapping' do
       let(:metadata) { { 'dc:coverage' => ['Coolsville, Daddy-O'] } }

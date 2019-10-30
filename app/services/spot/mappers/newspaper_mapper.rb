@@ -69,7 +69,7 @@ module Spot::Mappers
     def location_attributes
       nested_attributes_hash_for('dc:coverage') do |place|
         case place
-        when 'United States, Pennsylvania, Northampton County, Easton'
+        when 'United States, Pennsylvania, Northampton County, Easton', 'Easton, PA'
           'http://sws.geonames.org/5188140/'
         else
           Rails.logger.warn("No URI provided for #{place}; skipping")
