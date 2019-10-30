@@ -42,6 +42,12 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     end
 
     it { is_expected.to eq value }
+
+    context 'when key is not present' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 
   describe '#note' do
@@ -53,8 +59,15 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   end
 
   describe '#identifier' do
+    before do
+      stub_request(:head, url)
+      stub_request(:head, 'http://digital.lafayette.edu/collections/magazine/none-such-magazine')
+        .to_return(status: 404)
+    end
+
     subject { mapper.identifier }
 
+    let(:url) { 'http://digital.lafayette.edu/collections/magazine/lafalummag-20190800' }
     let(:metadata) do
       {
         'PublicationSequence' => ['10'],
@@ -63,7 +76,19 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     end
 
     it { is_expected.to include 'lafayette_magazine:10' }
-    it { is_expected.to include 'url:http://digital.lafayette.edu/collections/magazine/lafalummag-20190800' }
+    it { is_expected.to include "url:#{url}" }
+
+    context 'when no PublicationSequence metadata present' do
+      let(:metadata) { { 'representative_files' => ['/path/to/the/bag/data/files/lafalummag_20190800.pdf'] } }
+
+      it { is_expected.to eq ["url:#{url}"] }
+    end
+
+    context 'when a file is present that does not translate to a valid URL' do
+      let(:metadata) { { 'representative_files' => ['/path/to/data/files/none-such-magazine.pdf'] } }
+
+      it { is_expected.to eq [] }
+    end
   end
 
   describe '#publisher' do
@@ -128,6 +153,12 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     let(:value) { [RDF::Literal('A prestigious publication', language: :en)] }
 
     it { is_expected.to eq value }
+
+    context 'when subtitle is not present in metadata' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 
   describe '#title' do
@@ -218,5 +249,11 @@ RSpec.describe Spot::Mappers::MagazineMapper do
     let(:metadata) { { 'TitleInfoPartNumber' => [alt_title] } }
 
     it { is_expected.to eq value }
+
+    context 'when metadata is not available' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq [] }
+    end
   end
 end
