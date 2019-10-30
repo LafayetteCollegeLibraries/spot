@@ -5,7 +5,7 @@ require 'hydra/file_characterization/characterizers/fits_servlet'
 RSpec.describe Spot::CharacterizationService do
   subject(:perform_service) { described_class.perform(file_set, pcdm_file.id) }
 
-  before(:each) do
+  before do
     allow(Hydra::FileCharacterization::Characterizers::Fits)
       .to receive(:new)
       .and_return(fits_mock)
@@ -25,7 +25,7 @@ RSpec.describe Spot::CharacterizationService do
     perform_service
   end
 
-  after(:each) do
+  after do
     pcdm_file.delete
   end
 
