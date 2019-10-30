@@ -59,13 +59,13 @@ RSpec.describe Spot::Mappers::MagazineMapper do
   end
 
   describe '#identifier' do
+    subject { mapper.identifier }
+
     before do
       stub_request(:head, url)
       stub_request(:head, 'http://digital.lafayette.edu/collections/magazine/none-such-magazine')
         .to_return(status: 404)
     end
-
-    subject { mapper.identifier }
 
     let(:url) { 'http://digital.lafayette.edu/collections/magazine/lafalummag-20190800' }
     let(:metadata) do

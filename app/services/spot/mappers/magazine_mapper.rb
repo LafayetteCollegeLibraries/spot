@@ -126,11 +126,9 @@ module Spot::Mappers
       # @param [String]
       # @return [true, false]
       def url_valid?(url)
-        begin
-          Faraday::Connection.new.head(url) { |req| req.options.timeout = 5 }.success?
-        rescue
-          false
-        end
+        Faraday::Connection.new.head(url) { |req| req.options.timeout = 5 }.success?
+      rescue
+        false
       end
 
       # The display title is a combination of the `TitleInfoNonSort`,
