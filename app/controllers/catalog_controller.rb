@@ -248,10 +248,10 @@ class CatalogController < ApplicationController
     # the labels through +I18n.t+ first, displaying only the symbolized translation
     # keys we're sending here.
     config.add_sort_field 'score desc, system_create_dtsi desc', label: "Relevance"
-    config.add_sort_field 'date_issued_sort_dtsi asc', label: "Date Added \u25B2"
-    config.add_sort_field 'date_issued_sort_dtsi desc', label: "Date Added \u25BC"
-    config.add_sort_field 'system_create_dtsi asc', label: "Issue Date \u25B2"
-    config.add_sort_field 'system_create_dtsi desc', label: "Issue Date \u25BC"
+    config.add_sort_field 'date_issued_sort_dtsi asc', label: "Issue Date \u25B2"
+    config.add_sort_field 'date_issued_sort_dtsi desc', label: "Issue Date \u25BC"
+    config.add_sort_field 'system_create_dtsi asc', label: "Date Added \u25B2"
+    config.add_sort_field 'system_create_dtsi desc', label: "Date Added \u25BC"
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
