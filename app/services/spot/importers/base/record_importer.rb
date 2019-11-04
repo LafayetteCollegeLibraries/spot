@@ -72,9 +72,8 @@ module Spot::Importers::Base
       #
       # @param [String] depositor_email
       # @return [Ability]
-      def ability_for(depositor_email)
-        email = depositor_email ||= default_depositor_email
-        Ability.new(find_or_create_depositor(email: email))
+      def ability_for(depositor_email = default_depositor_email)
+        Ability.new(find_or_create_depositor(email: depositor_email))
       end
 
       # @return [Hash<String => Hash<String => String>>]
