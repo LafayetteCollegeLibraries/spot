@@ -1,5 +1,21 @@
 # changelog
 
+## [2019.3] - 2019-11-04
+
+### features
+
+- updates newspaper + magazine mappers (#315)
+  - better handling of missing values
+  - add newspaper mapper handling of 'Easton, PA' for location value (as in accruals)
+- removes Spot::RemoteCharacterizationService in favor of using the samvera-based fits-servlet tools (#317)
+  - also encodes FITS output into UTF-8 to prevent invalid character errors (see #314)
+
+### bug fixes 🐞
+
+- date_issued and system_create sort field labels were on the wrong field (see #319)
+- if an ingest user wasn't already an admin (or the default user), works would not be added to collections
+  - by default, users do not have the ability to deposit to collections
+
 ## [2019.2] - 2019-10-29
 
 Addresses two vulnerabilities (thanks GitHub!): [CVE-2019-16892](https://nvd.nist.gov/vuln/detail/CVE-2019-16892) and [CVE-2019-16676](https://nvd.nist.gov/vuln/detail/CVE-2019-16676)
@@ -101,6 +117,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.3
 [2019.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.2
 [2019.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1
 [2019.1-pre.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1-pre.7
