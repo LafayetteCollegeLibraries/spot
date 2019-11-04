@@ -45,6 +45,7 @@ module Spot::Importers::Base
         error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
         work = work_class.new
+
         actor_env = Hyrax::Actors::Environment.new(work,
                                                    ability_for(attributes.delete(:depositor)),
                                                    attributes)
@@ -72,7 +73,8 @@ module Spot::Importers::Base
       #
       # @param [String] depositor_email
       # @return [Ability]
-      def ability_for(depositor_email = default_depositor_email)
+      def ability_for(depositor_email)
+        depositor_email ||= default_depositor_email
         Ability.new(find_or_create_depositor(email: depositor_email))
       end
 
@@ -100,15 +102,19 @@ module Spot::Importers::Base
 
       # @param [String] email
       # @return [User]
-      def find_or_create_depositor(email)
-        depositor = User.find_or_initialize_by(email: email)
+      def find_or_create_depositor(email:)
+        user = User.find_or_initialize_by(email: email)
 
-        if depositor.new_record?
-          depositor.roles << Role.find_by(name: 'depositor')
-          depositor.save(validate: false)
+        # add 'depositor' role to user if:
+        # - new record
+        # - not already a depositor
+        # - not an admin (can already deposit)
+        if user.new_record? || (!user.depositor? && !user.admin?)
+          user.roles << Role.find_by(name: 'depositor')
+          user.save(validate: false)
         end
 
-        depositor
+        user
       end
   end
 end
