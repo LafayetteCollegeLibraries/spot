@@ -45,6 +45,7 @@ module Spot::Importers::Base
         error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
         work = work_class.new
+
         actor_env = Hyrax::Actors::Environment.new(work,
                                                    ability_for(attributes.delete(:depositor)),
                                                    attributes)
@@ -74,11 +75,7 @@ module Spot::Importers::Base
       # @return [Ability]
       def ability_for(depositor_email)
         depositor_email ||= default_depositor_email
-
-        depositor = User.find_or_initialize_by(email: depositor_email)
-        depositor.save(validate: false) if depositor.new_record?
-
-        Ability.new(depositor)
+        Ability.new(find_or_create_depositor(email: depositor_email))
       end
 
       # @return [Hash<String => Hash<String => String>>]
@@ -101,6 +98,23 @@ module Spot::Importers::Base
       # @return [String] an error message
       def empty_file_warning(attributes)
         "[WARN] no files found for #{Array.wrap(attributes[:title]).first}\n"
+      end
+
+      # @param [String] email
+      # @return [User]
+      def find_or_create_depositor(email:)
+        user = User.find_or_initialize_by(email: email)
+
+        # add 'depositor' role to user if:
+        # - new record
+        # - not already a depositor
+        # - not an admin (can already deposit)
+        if user.new_record? || (!user.depositor? && !user.admin?)
+          user.roles << Role.find_by(name: 'depositor')
+          user.save(validate: false)
+        end
+
+        user
       end
   end
 end
