@@ -34,6 +34,9 @@ class Ability
 
       # can view the user dashboard
       can(:read, :dashboard)
+
+      # can add items to collections
+      can(:deposit, Collection)
     end
 
     # save some space by defining the Role abilities here

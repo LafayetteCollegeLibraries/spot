@@ -15,6 +15,10 @@ RSpec.shared_examples 'a RecordImporter' do |params|
   let(:error_stream) { dev_null }
   let(:collection_id) { 'collection123' }
 
+  # ensure that the role exists
+  before(:all) { Role.find_or_create_by(name: 'depositor') }
+  after(:all) { Role.find_by(name: 'depositor')&.destroy! }
+
   describe '#import' do
     subject(:import_record!) { importer.import(record: record) }
 

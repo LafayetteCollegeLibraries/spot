@@ -33,7 +33,7 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def date_issued
-      metadata['date_issued'].map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
+      metadata.fetch('date_issued', []).map { |raw| Date.parse(raw).strftime('%Y-%m-%d') }
     end
 
     # @return [String, nil]
@@ -43,7 +43,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def description
-      metadata['dc:description'].reject(&:blank?).map do |desc|
+      metadata.fetch('dc:description', []).reject(&:blank?).map do |desc|
         RDF::Literal(desc, language: :en)
       end
     end
@@ -54,16 +54,22 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def identifier
-      metadata['dc:identifier']
-        .map { |id| id.include?('cdm.lafayette.edu') ? "url:#{id}" : "lafayette:#{id}" }
-        .push("url:#{metadata['url'].first}")
+      return [] unless metadata['dc:identifier'] || metadata['url']
+
+      ids = metadata.fetch('dc:identifier', []).map do |id|
+        id.include?('cdm.lafayette.edu') ? "url:#{id}" : "lafayette:#{id}"
+      end
+
+      return ids unless metadata['url'].present?
+
+      ids.push("url:#{metadata['url'].first}")
     end
 
     # @return [Array<RDF::URI,String>]
     def location_attributes
       nested_attributes_hash_for('dc:coverage') do |place|
         case place
-        when 'United States, Pennsylvania, Northampton County, Easton'
+        when 'United States, Pennsylvania, Northampton County, Easton', 'Easton, PA'
           'http://sws.geonames.org/5188140/'
         else
           Rails.logger.warn("No URI provided for #{place}; skipping")
@@ -79,10 +85,10 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def title
-      metadata['dc:title']
-        .zip(date_issued)
-        .map { |(title, date)| "#{title} - #{Date.edtf(date).humanize}" }
-        .map { |title| RDF::Literal(title, language: :en) }
+      metadata.fetch('dc:title', [])
+              .zip(date_issued)
+              .map { |(title, date)| "#{title} - #{Date.edtf(date).humanize}" }
+              .map { |title| RDF::Literal(title, language: :en) }
     end
   end
 end

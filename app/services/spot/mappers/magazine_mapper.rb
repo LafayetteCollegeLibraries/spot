@@ -38,7 +38,7 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def date_issued
-      metadata['PartDate_ISO8601'].map do |raw|
+      metadata.fetch('PartDate_ISO8601', []).map do |raw|
         short_date_to_iso(raw, century_threshold: 30)
       end
     end
@@ -47,9 +47,9 @@ module Spot::Mappers
     #
     # @return [Array<String>]
     def identifier
-      metadata['PublicationSequence']
-        .map { |num| "lafayette_magazine:#{num}" }
-        .concat(legacy_url_identifiers)
+      metadata.fetch('PublicationSequence', [])
+              .map { |num| "lafayette_magazine:#{num}" }
+              .concat(legacy_url_identifiers)
     end
 
     # @return [Array<String>]
@@ -89,7 +89,7 @@ module Spot::Mappers
     #
     # @return [Array<RDF::Literal>]
     def subtitle
-      metadata['TitleInfoSubtitle'].reject(&:blank?).map do |subtitle|
+      metadata.fetch('TitleInfoSubtitle', []).reject(&:blank?).map do |subtitle|
         RDF::Literal(subtitle, language: :en)
       end
     end
@@ -105,7 +105,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def title_alternative
-      metadata['TitleInfoPartNumber'].reject(&:blank?).map do |alt|
+      metadata.fetch('TitleInfoPartNumber', []).reject(&:blank?).map do |alt|
         RDF::Literal(alt, language: :en)
       end
     end
@@ -116,8 +116,19 @@ module Spot::Mappers
       def legacy_url_identifiers
         representative_files.map do |file|
           key = File.basename(file, '.pdf').tr('_', '-')
-          "url:http://digital.lafayette.edu/collections/magazine/#{key}"
-        end
+          url = "http://digital.lafayette.edu/collections/magazine/#{key}"
+          "url:#{url}" if url_valid?(url)
+        end.compact
+      end
+
+      # We should probably be checking that the URLs we're adding are valid.
+      #
+      # @param [String]
+      # @return [true, false]
+      def url_valid?(url)
+        Faraday::Connection.new.head(url) { |req| req.options.timeout = 5 }.success?
+      rescue
+        false
       end
 
       # The display title is a combination of the `TitleInfoNonSort`,
