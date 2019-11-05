@@ -4,7 +4,6 @@ require 'sidekiq/cron/web'
 require 'rack'
 
 Rails.application.routes.draw do
-
   devise_for :users
 
   # need to call `root` before mounting our engines
@@ -36,8 +35,8 @@ Rails.application.routes.draw do
     concerns :range_searchable
   end
 
-
   curation_concerns_basic_routes
+
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable
   end
