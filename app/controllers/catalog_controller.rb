@@ -41,10 +41,6 @@ class CatalogController < ApplicationController
       'hl.snippets': 5
     }
 
-    # OAI-PMH provider params
-    # (see: https://github.com/projectblacklight/blacklight_oai_provider#configuration)
-    # config.oai = {}
-
     # solr field configuration for document/show views
     config.index.title_field = 'title_tesim'
     config.index.display_type_field = 'has_model_ssim'
@@ -264,6 +260,8 @@ class CatalogController < ApplicationController
     # mean") suggestion is offered.
     config.spell_max = 5
 
+    # OAI-PMH provider params
+    # (see: https://github.com/projectblacklight/blacklight_oai_provider#configuration)
     config.oai = {
       provider: {
         repository_name: 'Lafayette Digital Repository',
