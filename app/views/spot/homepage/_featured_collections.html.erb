@@ -1,6 +1,7 @@
 <% if presenter.featured_collections.present? %>
 <div id="featured-collections" class="container-fluid">
-  <h2><%= t('.title') %></h2>
+  <h2><%= t(".title_#{presenter.featured_collections.size > 1 ? 'plural' : 'singular'}") %></h2>
+  <p class="lead"><%= t('.browse_html', url: browse_collections_path).html_safe %></p>
   <% presenter.featured_collections.each do |collection| %>
     <%= render 'featured_collection_item', collection: collection %>
   <% end %>
