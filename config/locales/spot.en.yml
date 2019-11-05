@@ -50,7 +50,6 @@ en:
 
       featured_collections:
         title: Featured Collections
-        browse_html: '<a href="https://dss.lafayette.edu/collections" target="_blank">Click here</a> to browse all collections'
         collection:
           view: View Collection
           learn_more: Learn More
