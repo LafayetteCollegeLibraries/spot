@@ -31,6 +31,26 @@ class SolrDocument
   # Do content negotiation for AF models.
   use_extension(Hydra::ContentNegotiation)
 
+  # A mapping hash of DC fields (keys) to their Solr document counterparts (values).
+  # Values can be strings or arrays of strings (for concatenating multiple fields).
+  #
+  # @return [Hash<Symbol => String, Array<String>>]
+  # @todo add the following: coverage, format, identifier, relation, subject
+  def self.field_semantics
+    {
+      contributor: 'contributor_tesim',
+      creator: 'creator_tesim',
+      date: 'date_issued_ssim',
+      description: 'description_tesim',
+      language: 'language_label_ssim',
+      publisher: 'publisher_tesim',
+      source: 'source_tesim',
+      rights: 'rights_statement_label_ssim',
+      title: 'title_tesim',
+      type: 'resource_type_tesim'
+    }
+  end
+
   # Overrides +Hyrax::SolrDocumentBehavior#to_param+ by preferring collection slugs
   # (where present).
   #

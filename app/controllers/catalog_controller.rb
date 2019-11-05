@@ -263,6 +263,15 @@ class CatalogController < ApplicationController
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+
+    config.oai = {
+      provider: {
+        repository_name: 'Lafayette Digital Repository',
+        repository_url: 'https://ldr.lafayette.edu',
+        record_prefix: 'oai:ldr',
+        admin_email: 'dss@lafayette.edu'
+      }
+    }
   end
 
   # disable the bookmark control from displaying in gallery view
