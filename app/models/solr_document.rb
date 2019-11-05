@@ -45,7 +45,7 @@ class SolrDocument
       language: 'language_label_ssim',
       publisher: 'publisher_tesim',
       source: 'source_tesim',
-      rights: 'rights_statement_label_ssim',
+      rights: 'rights_statement_ssim',
       title: 'title_tesim',
       type: 'resource_type_tesim'
     }
