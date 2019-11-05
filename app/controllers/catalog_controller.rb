@@ -268,6 +268,12 @@ class CatalogController < ApplicationController
         repository_url: 'https://ldr.lafayette.edu',
         record_prefix: 'oai:ldr',
         admin_email: 'dss@lafayette.edu'
+      },
+
+      document: {
+        set_fields: [
+          { label: 'collection', solr_field: 'member_of_collections_ssim' }
+        ]
       }
     }
   end
