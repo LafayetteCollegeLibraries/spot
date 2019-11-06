@@ -9,7 +9,7 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
   after do
     obj_query = objects.map { |o| "id:#{o[:id]}" }.join(' OR ')
     ActiveFedora::SolrService.instance.conn.tap do |conn|
-      conn.delete_by_query("(#{obj_query})", params: { 'softCommit' => true})
+      conn.delete_by_query("(#{obj_query})", params: { 'softCommit' => true })
     end
   end
 
@@ -53,7 +53,6 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
     let(:date) { ['2019-11-05'] }
     let(:description) { ['Describing the thing'] }
     let(:dc_uri) { 'http://purl.org/dc/elements/1.1/' }
-
 
     it 'translates solr values to dc terms' do
       visit oai_catalog_path(verb: 'GetRecord', metadataPrefix: 'oai_dc', identifier: 'oai:ldr:item_3')
