@@ -9,7 +9,13 @@ RSpec.describe Spot::CollectionIndexer do
   # shared example requires that variable.
   let(:work) { Collection.new(metadata) }
   let(:indexer) { described_class.new(work) }
-  let(:metadata) { {} }
+  let(:metadata) { { title: ['A Great Collection'] } }
 
   it_behaves_like 'it indexes ISO language and label'
+
+  describe 'title sort' do
+    it 'indexes the first title, downcased' do
+      expect(solr_doc['title_sort_si']).to eq work.title.first.to_s.downcase
+    end
+  end
 end

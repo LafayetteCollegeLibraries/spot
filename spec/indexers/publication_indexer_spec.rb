@@ -190,4 +190,10 @@ RSpec.describe PublicationIndexer do
       expect(solr_doc['extracted_text_tsimv']).to eq expected_results
     end
   end
+
+  describe 'title sort' do
+    it 'indexes the first title, downcased' do
+      expect(solr_doc['title_sort_si']).to eq work.title.first.to_s.downcase
+    end
+  end
 end
