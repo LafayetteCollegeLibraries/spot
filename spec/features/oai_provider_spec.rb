@@ -49,24 +49,37 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
         read_access_group_ssim: ['public'] }.merge(metadata)
     end
     let(:metadata) do
-      { title_tesim: title, creator_tesim: creator, contributor_tesim: contributor,
-        date_issued_ssim: date, description_tesim: description }
+      { contributor_tesim: contributor, creator_tesim: creator, date_issued_ssim: date,
+        description_tesim: description, language_label_ssim: language, location_label_ssim: location,
+        publisher_tesim: publisher, resource_type_tesim: type, rights_statement_ssim: rights,
+        source_tesim: source, title_tesim: title }
     end
-    let(:title) { ['Item 3'] }
-    let(:creator) { ['Creator 1', 'Creator 2'] }
     let(:contributor) { ['Contributor 1', 'Contributor 2'] }
+    let(:creator) { ['Creator 1', 'Creator 2'] }
     let(:date) { ['2019-11-05'] }
     let(:description) { ['Describing the thing'] }
+    let(:language) { ['English'] }
+    let(:location) { ['Easton, Pennsylvania, United States'] }
+    let(:publisher) { ['Some Good Publisher'] }
+    let(:rights) { ['http://ok-go-ahead-and-use-it.org'] }
+    let(:source) { ['The Source'] }
+    let(:title) { ['Item 3'] }
+    let(:type) { ['Periodical'] }
     let(:dc_uri) { 'http://purl.org/dc/elements/1.1/' }
 
     it 'translates solr values to dc terms' do
       visit oai_catalog_path(verb: 'GetRecord', metadataPrefix: 'oai_dc', identifier: 'oai:ldr:item_3')
 
-      expect(xml.xpath('//dc:title', dc: dc_uri).map(&:text)).to eq title
-      expect(xml.xpath('//dc:creator', dc: dc_uri).map(&:text)).to eq creator
       expect(xml.xpath('//dc:contributor', dc: dc_uri).map(&:text)).to eq contributor
+      expect(xml.xpath('//dc:coverage', dc: dc_uri).map(&:text)).to eq location
+      expect(xml.xpath('//dc:creator', dc: dc_uri).map(&:text)).to eq creator
       expect(xml.xpath('//dc:date', dc: dc_uri).map(&:text)).to eq date
       expect(xml.xpath('//dc:description', dc: dc_uri).map(&:text)).to eq description
+      expect(xml.xpath('//dc:publisher', dc: dc_uri).map(&:text)).to eq publisher
+      expect(xml.xpath('//dc:rights', dc: dc_uri).map(&:text)).to eq rights
+      expect(xml.xpath('//dc:source', dc: dc_uri).map(&:text)).to eq source
+      expect(xml.xpath('//dc:title', dc: dc_uri).map(&:text)).to eq title
+      expect(xml.xpath('//dc:type', dc: dc_uri).map(&:text)).to eq type
     end
   end
 

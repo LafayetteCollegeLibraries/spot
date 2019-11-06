@@ -35,10 +35,11 @@ class SolrDocument
   # Values can be strings or arrays of strings (for concatenating multiple fields).
   #
   # @return [Hash<Symbol => String, Array<String>>]
-  # @todo add the following: coverage, format, identifier, relation, subject
+  # @todo add the following: format, identifier, relation, subject
   def self.field_semantics
     {
       contributor: 'contributor_tesim',
+      coverage: 'location_label_ssim',
       creator: 'creator_tesim',
       date: 'date_issued_ssim',
       description: 'description_tesim',
