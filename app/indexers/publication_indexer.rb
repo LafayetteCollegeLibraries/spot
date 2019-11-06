@@ -17,6 +17,8 @@ class PublicationIndexer < Hyrax::WorkIndexer
   # @return [Hash]
   def generate_solr_document
     super.tap do |solr_doc|
+      solr_doc['title_sort_si'] = object.title.first.to_s.downcase
+
       store_license(solr_doc)
       store_years_encompassed(solr_doc)
       store_full_text_content(solr_doc)
