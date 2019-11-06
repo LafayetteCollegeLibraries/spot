@@ -1,14 +1,19 @@
 # frozen_string_literal: true
 RSpec.feature 'OAI-PMH provider (via Blacklight)' do
   before do
+    ActiveFedora::SolrService.instance.conn.tap do |conn|
+      query = Hyrax.config.curation_concerns.map { |m| "has_model_ssim:#{m}" }.join(' OR ')
+      conn.delete_by_query("(#{query})", params: { 'softCommit' => true })
+    end
+
     objects.each { |obj| ActiveFedora::SolrService.add(obj) }
     ActiveFedora::SolrService.commit
   end
 
   # clear out the objects
   after do
-    obj_query = objects.map { |o| "id:#{o[:id]}" }.join(' OR ')
     ActiveFedora::SolrService.instance.conn.tap do |conn|
+      obj_query = objects.map { |o| "id:#{o[:id]}" }.join(' OR ')
       conn.delete_by_query("(#{obj_query})", params: { 'softCommit' => true })
     end
   end
