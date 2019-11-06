@@ -23,12 +23,25 @@ class PublicationIndexer < Hyrax::WorkIndexer
       store_license(solr_doc)
       store_years_encompassed(solr_doc)
       store_full_text_content(solr_doc)
+      store_file_format(solr_doc)
     end
   end
 
   private
 
+    # We want to display the mime types of the contained file_sets in our
+    # OAI response.
+    #
+    # @param [SolrDocument] doc
+    # @return [void]
+    def store_file_format(doc)
+      doc['file_format_ssim'] = object.file_sets.map(&:mime_type).reject(&:blank?)
+    end
+
     # Store the full text content of all the contained file-sets
+    #
+    # @param [SolrDocument] doc
+    # @return [void]
     def store_full_text_content(doc)
       doc['extracted_text_tsimv'] = object.file_sets.map do |fs|
         fs.extracted_text.present? ? fs.extracted_text.content.strip : ''

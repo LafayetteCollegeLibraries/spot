@@ -49,15 +49,18 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
         read_access_group_ssim: ['public'] }.merge(metadata)
     end
     let(:metadata) do
-      { contributor_tesim: contributor, creator_tesim: creator, date_issued_ssim: date,
-        description_tesim: description, language_label_ssim: language, location_label_ssim: location,
-        publisher_tesim: publisher, resource_type_tesim: type, rights_statement_ssim: rights,
+      { contributor_tesim: contributor, creator_tesim: creator,
+        date_issued_ssim: date, description_tesim: description,
+        file_format_ssim: format, language_label_ssim: language,
+        location_label_ssim: location, publisher_tesim: publisher,
+        resource_type_tesim: type, rights_statement_ssim: rights,
         source_tesim: source, title_tesim: title }
     end
     let(:contributor) { ['Contributor 1', 'Contributor 2'] }
     let(:creator) { ['Creator 1', 'Creator 2'] }
     let(:date) { ['2019-11-05'] }
     let(:description) { ['Describing the thing'] }
+    let(:format) { ['application/pdf'] }
     let(:language) { ['English'] }
     let(:location) { ['Easton, Pennsylvania, United States'] }
     let(:publisher) { ['Some Good Publisher'] }
