@@ -49,8 +49,9 @@ en:
         page_title: Welcome to the %{name}
 
       featured_collections:
-        title: Featured Collections
-        browse_html: '<a href="https://dss.lafayette.edu/collections" target="_blank">Click here</a> to browse all collections'
+        title_singular: Featured Collection
+        title_plural: Featured Collections
+        browse_html: '<a href="%{url}">Click here</a> to browse all collections'
         collection:
           view: View Collection
           learn_more: Learn More
