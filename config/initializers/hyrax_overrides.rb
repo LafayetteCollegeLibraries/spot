@@ -14,7 +14,7 @@ Rails.application.config.to_prepare do
   ]
 
   # see above
-  Hyrax::ContactFormController.class_eval { layout 'hyrax' }
+  Hyrax::ContactFormController.class_eval { layout 'hyrax/1_column' }
 
   # the dashboard/my/collections (+ thus, dashboard/collections) controller defines
   # blacklight facets + uses I18n.t to provide a label. as we've found from past experience,

@@ -1,5 +1,21 @@
 # changelog
 
+## [2019.4] - 2019-11-10
+
+### features
+
+- adds title_sort_si field to Publication and Collection Solr documents and adds the sort option to the catalog_controller.rb (#328)
+
+### bug fixes 🐞
+
+- use the browse_collections_link in featured collection portion of the homepage (#325)
+- use the correct hyrax layout in the contact form (previously was displaying w/o navbar) (#324)
+- update the resource_type local authority to match what's listed on the metadata application profile (#326)
+
+### notes 🗒
+
+because of the added solr field, this will require a reindexing.
+
 ## [2019.3] - 2019-11-04
 
 ### features
@@ -117,6 +133,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.4
 [2019.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.3
 [2019.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.2
 [2019.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.1
