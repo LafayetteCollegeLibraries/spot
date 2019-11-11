@@ -64,7 +64,7 @@ RSpec.describe Hyrax::PublicationForm do
 
   describe '.multiple?' do
     it 'marks singular fields as false' do
-      %w[resource_type abstract issued available date_created title].each do |f|
+      %w[abstract issued available date_created title].each do |f|
         expect(described_class.multiple?(f)).to be false
       end
     end
