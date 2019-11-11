@@ -1,5 +1,12 @@
 # changelog
 
+## [2019.5] - 2019-11-11
+
+## bug fixes 🐞
+
+- update `Hyrax::PublicationForm` to allow `{0,n}` values (#333)
+- have `ErrorController` handle `txt` and `json` formats in a really basic manner (#335)
+
 ## [2019.4] - 2019-11-10
 
 ### features
@@ -133,6 +140,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.5
 [2019.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.4
 [2019.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.3
 [2019.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.2
