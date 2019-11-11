@@ -75,3 +75,7 @@
   overflow: visible !important;
   padding-bottom: 0;
 }
+
+select[multiple] {
+  min-height: 15rem;
+}
