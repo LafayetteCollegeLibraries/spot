@@ -5,7 +5,11 @@ class ErrorController < ApplicationController
   respond_to :html
 
   def show
-    render @status.to_s, status: @status.to_i
+    respond_to do |format|
+      format.html { render @status.to_s, status: @status.to_i }
+      format.json { render json: json_response, status: @status.to_i }
+      format.text { render plain: plain_text_response, status: @status.to_i }
+    end
   rescue
     send_honeybadger_notification!
 
@@ -14,6 +18,18 @@ class ErrorController < ApplicationController
   end
 
   private
+
+    def json_response
+      %({"error": true, "status": #{@status.to_i}, "message": "#{status_message}"})
+    end
+
+    def plain_text_response
+      "#{@status} #{status_message}"
+    end
+
+    def status_message
+      Rack::Utils::HTTP_STATUS_CODES.fetch(@status, '')
+    end
 
     def send_honeybadger_notification!
       Honeybadger.notify(

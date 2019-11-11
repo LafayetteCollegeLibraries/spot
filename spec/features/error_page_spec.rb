@@ -11,6 +11,32 @@ RSpec.describe 'error page rendering', type: :request do
       expect(response).to have_http_status(:not_found)
       expect(response.body).to include 'The page you requested could not be found.'
     end
+
+    context '.txt' do
+      it 'renders the error in plain text' do
+        without_detailed_exceptions do
+          get '/this/does/not/exist.txt'
+        end
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to eq '404 Not Found'
+      end
+    end
+
+    context '.json' do
+      let(:json_response) do
+        %({"error": true, "status": 404, "message": "Not Found"})
+      end
+
+      it 'renders the error as json' do
+        without_detailed_exceptions do
+          get '/this/does/not/exist.json'
+        end
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to eq json_response
+      end
+    end
   end
 
   describe '500 (catch-all)' do
