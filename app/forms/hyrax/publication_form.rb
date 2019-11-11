@@ -127,7 +127,6 @@ module Hyrax
           abstract
           date_issued
           date_available
-          resource_type
           title
         ]
       end
