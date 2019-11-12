@@ -105,6 +105,12 @@ module Hyrax
     end
 
     class << self
+      def build_permitted_params
+        super.tap do |params|
+          params << { location_attributes: [:id, :_destroy] }
+        end
+      end
+
       # samvera/hydra-editor uses both the class method (new form) and
       # instance method (edit form) versions of this method, so we need
       # to provide both (otherwise we're head-first down a rabbit hole
