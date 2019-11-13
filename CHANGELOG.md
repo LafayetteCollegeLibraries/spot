@@ -1,8 +1,16 @@
 # changelog
 
+## [2019.6] - 2019-11-13
+
+### bug fixes 🐞
+
+- uses the `image-url` scss function for the hashed asset path for a spinner gif (#340)
+- updates the `lafayette_departments` local authority file to use the departments defined in the publication metadata profile (#341)
+- adds `location_attributes` to the PublicationForm's permitted parameters array (#337)
+
 ## [2019.5] - 2019-11-11
 
-## bug fixes 🐞
+### bug fixes 🐞
 
 - update `Hyrax::PublicationForm` to allow `{0,n}` values (#333)
 - have `ErrorController` handle `txt` and `json` formats in a really basic manner (#335)
@@ -140,6 +148,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.6
 [2019.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.5
 [2019.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.4
 [2019.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.3
