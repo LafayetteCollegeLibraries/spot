@@ -23,7 +23,7 @@
 //= require blacklight_range_limit
 
 .ui-autocomplete-loading {
-  background: #fff url("/assets/spinner-24.gif") right center no-repeat;
+  background: #fff image-url("spinner-24.gif") right center no-repeat;
 }
 
 .work-show dd {
