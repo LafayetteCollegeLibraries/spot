@@ -1,1 +1,5 @@
-# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+# Block the Archive-It bot from crawling (+ storing) our
+# repository items, which will be too much data for our budget.
+User-agent: archive.org_bot
+Disallow: /concern
+Disallow: /downloads
