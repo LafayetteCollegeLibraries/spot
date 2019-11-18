@@ -9,6 +9,7 @@ RSpec.describe PublicationIndexer do
   it_behaves_like 'it indexes ISO language and label'
   it_behaves_like 'it indexes a sortable date'
   it_behaves_like 'it indexes a permalink'
+  it_behaves_like 'it indexes standard and local identifiers'
 
   describe 'title' do
     # :stored_searchable
