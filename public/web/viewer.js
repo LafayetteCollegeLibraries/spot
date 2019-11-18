@@ -4372,7 +4372,7 @@ var defaultOptions = {
     kind: OptionKind.WORKER
   },
   workerSrc: {
-    value: '../build/pdf.worker.js',
+    value: '../build/pdf.worker-2.2.228.js',
     kind: OptionKind.WORKER
   }
 };
@@ -4480,7 +4480,7 @@ var pdfjsLib;
 if (typeof window !== 'undefined' && window['pdfjs-dist/build/pdf']) {
   pdfjsLib = window['pdfjs-dist/build/pdf'];
 } else {
-  pdfjsLib = require('../build/pdf.js');
+  pdfjsLib = require('../build/pdf-2.2.228.js');
 }
 
 module.exports = pdfjsLib;
