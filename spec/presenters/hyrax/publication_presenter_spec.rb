@@ -35,19 +35,15 @@ RSpec.describe Hyrax::PublicationPresenter do
     let(:raw_ids) { ['issn:1234-5678', 'abc:123'] }
     let(:object) { build(:publication, identifier: raw_ids) }
 
-    describe '#identifier' do
-      subject(:ids) { presenter.identifier }
-
-      it 'maps identifiers to Spot::Identifier objects' do
-        expect(ids.all? { |id| id.is_a? Spot::Identifier }).to be true
-      end
-    end
-
     describe '#local_identifier' do
       subject(:ids) { presenter.local_identifier }
 
       it 'returns only the identifiers that return true to #local?' do
         expect(ids.map(&:to_s)).to eq ['abc:123']
+      end
+
+      it 'maps identifiers to Spot::Identifier objects' do
+        expect(ids.all? { |id| id.is_a? Spot::Identifier }).to be true
       end
     end
 
@@ -56,6 +52,10 @@ RSpec.describe Hyrax::PublicationPresenter do
 
       it 'returns only the identifiers that return true to #standard?' do
         expect(ids.map(&:to_s)).to eq ['issn:1234-5678']
+      end
+
+      it 'maps identifiers to Spot::Identifier objects' do
+        expect(ids.all? { |id| id.is_a? Spot::Identifier }).to be true
       end
     end
   end

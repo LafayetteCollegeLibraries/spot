@@ -28,11 +28,11 @@ RSpec.describe SolrDocument do
     editor: { type: Array, suffix: 'tesim' },
     file_set_ids: { type: Array, suffix: 'ssim', value: ['abc123', 'def456'] },
     file_size: { type: String, suffix: 'lts' },
-    identifier: { type: Array, suffix: 'ssim' },
     keyword: { type: Array, suffix: 'tesim' },
     language: { type: Array, suffix: 'ssim' },
     language_label: { type: Array, suffix: 'ssim' },
     license: { type: Array, suffix: 'ssim' },
+    local_identifier: { type: Array, key: 'identifier_local_ssim' },
     location: { type: Array, suffix: 'ssim' },
     location_label: { type: Array, suffix: 'ssim' },
     note: { type: Array, suffix: 'tesim' },
@@ -47,6 +47,7 @@ RSpec.describe SolrDocument do
     rights_statement_label: { type: Array, suffix: 'ssim' },
     source: { type: Array, suffix: 'tesim' },
     sponsor: { type: Array, suffix: 'tesim' },
+    standard_identifier: { type: Array, key: 'identifier_standard_ssim' },
     subject: { type: Array, suffix: 'tesim' },
     subtitle: { type: Array, suffix: 'tesim' },
     title: { type: Array, suffix: 'tesim' },
@@ -59,9 +60,10 @@ RSpec.describe SolrDocument do
         config[:expected] || (config[:type] == Array ? Array(value) : Array(value).first)
       end
 
+      let(:doc_key) { config[:key] || "#{key}_#{config[:suffix]}" }
       let(:_value) { config[:value] || 'a test value' }
-      let(:value) { config[:suffix].ends_with?('m') ? Array(_value) : _value }
-      let(:metadata) { { "#{key}_#{config[:suffix]}" => value } }
+      let(:value) { doc_key.ends_with?('m') ? Array(_value) : _value }
+      let(:metadata) { { doc_key => value } }
 
       it { is_expected.to be_a config[:type] }
       it { is_expected.to eq expected }
