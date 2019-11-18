@@ -7,8 +7,8 @@ module Hyrax
     delegate :abstract, :academic_department, :bibliographic_citation,
              :contributor, :creator, :date_issued, :date_available,
              :division, :editor, :keyword, :language, :language_label,
-             :organization, :permalink, :publisher, :resource_type,
-             :source, :subject, :subtitle, :title_alternative,
+             :organization, :permalink, :publisher, :resource_type, :source,
+             :subject, :subtitle, :title_alternative,
              to: :solr_document
 
     # @return [String]
@@ -23,16 +23,9 @@ module Hyrax
       %i[csv ttl nt jsonld]
     end
 
-    # Our document's identifiers mapped to Spot::Identifier objects
-    #
-    # @return [Array<Spot::Identifier>]
-    def identifier
-      @identifier ||= solr_document.identifier.map { |str| Spot::Identifier.from_string(str) }
-    end
-
     # @return [Array<Spot::Identifier>]
     def local_identifier
-      @local_identifier ||= identifier.select(&:local?)
+      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
     # location values + labels zipped into tuples.
@@ -73,7 +66,7 @@ module Hyrax
 
     # @return [Array<Spot::Identifier>]
     def standard_identifier
-      @standard_identifier ||= identifier.select(&:standard?)
+      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
     # For now, overriding the ability to feature individual works
