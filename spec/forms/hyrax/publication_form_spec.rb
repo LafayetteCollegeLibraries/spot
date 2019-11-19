@@ -4,7 +4,7 @@ RSpec.describe Hyrax::PublicationForm do
 
   shared_context 'required fields' do
     it 'contains required fields' do
-      expect(terms).to include :title
+      expect(terms).to include :title, :date_issued, :resource_type, :rights_statement
     end
   end
 
@@ -24,14 +24,12 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :title_alternative }
       it { is_expected.to include :publisher }
       it { is_expected.to include :source }
-      it { is_expected.to include :resource_type }
       it { is_expected.to include :abstract }
       it { is_expected.to include :description }
       it { is_expected.to include :note }
       it { is_expected.to include :standard_identifier }
       it { is_expected.to include :local_identifier }
       it { is_expected.to include :bibliographic_citation }
-      it { is_expected.to include :date_issued }
       it { is_expected.to include :date_available }
       it { is_expected.to include :creator }
       it { is_expected.to include :contributor }
@@ -41,7 +39,6 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :organization }
       it { is_expected.to include :keyword }
       it { is_expected.to include :subject }
-      it { is_expected.to include :rights_statement }
     end
 
     describe 'includes internal_form_fields' do
