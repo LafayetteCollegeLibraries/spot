@@ -19,8 +19,15 @@ class Publication < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
 
-  validates :title, presence: { message: 'Your work must have a title.' }
+  validates :title, presence: { message: 'Your work must include a Title.' }
+  validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }
+  validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }
+
   validates_with ::Spot::DateIssuedValidator
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :resource_type, authority: 'resource_types'
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :rights_statement, authority: 'rights_statements'
 
   before_save :ensure_noid_in_identifier
 
@@ -140,8 +147,10 @@ class Publication < ActiveFedora::Base
 
     # @return [void]
     def ensure_noid_in_identifier
+      return if id.nil?
+
       noid_id = "noid:#{id}"
-      return if new_record? || identifier.include?(noid_id)
+      return if identifier.include?(noid_id)
 
       self.identifier += [noid_id]
     end

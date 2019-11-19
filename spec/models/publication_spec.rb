@@ -45,18 +45,17 @@ describe Publication do
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
 
   describe 'validations' do
-    let(:pub) { described_class.new(attributes) }
-
-    # attributes that are required + will result in a valid save
-    let(:attributes) do
-      { title: ['cool title'], date_issued: ['2019-11'] }
-    end
+    let(:pub) { build(:publication) }
 
     # rubocop:disable RSpec/ExampleLength
     describe '#ensure_noid_in_identifier callback' do
-      let(:pub) { described_class.new(attributes) }
+      let(:attributes) do
+        { title: ['a good work'], date_issued: ['2019-11'],
+          resource_type: ['Article'], rights_statement: ['http://creativecommons.org/publicdomain/mark/1.0/'] }
+      end
 
       it 'inserts "noid:<id>" before save when an ID is present' do
+        pub = described_class.new(attributes)
         pub.save
 
         noid_id = "noid:#{pub.id}"
@@ -132,6 +131,37 @@ describe Publication do
         pub.date_issued = ['2019-09']
 
         expect(pub.valid?).to be true
+      end
+    end
+
+    describe 'rights_statement' do
+      it 'must be present' do
+        pub.rights_statement = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
+
+        pub.rights_statement = ['http://creativecommons.org/publicdomain/mark/1.0/']
+        expect(pub.valid?).to be true
+      end
+    end
+
+    describe 'resource_type' do
+      it 'must be present' do
+        pub.resource_type = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:resource_type]).to include 'Your work must include a Resource Type.'
+
+        pub.resource_type = ['Article']
+        expect(pub.valid?).to be true
+      end
+
+      it 'must be included in the authority' do
+        pub.resource_type = ['A noise tape']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:resource_type]).to include '"A noise tape" is not a valid Resource Type.'
       end
     end
   end
