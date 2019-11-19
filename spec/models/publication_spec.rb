@@ -77,13 +77,12 @@ describe Publication do
       end
     end
 
-
     describe 'title' do
       it 'must be present' do
         pub.title = []
 
         expect(pub.valid?).to be false
-        expect(pub.errors[:title]).to include 'Your work must have a title.'
+        expect(pub.errors[:title]).to include 'Your work must include a Title.'
 
         pub.title = ['A cool title']
 
