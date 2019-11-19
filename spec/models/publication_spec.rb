@@ -44,29 +44,95 @@ describe Publication do
   it { is_expected.to have_editable_property(:rights_statement).with_predicate(edm.rights) }
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
 
-  # note: this takes a bit
-  # rubocop:disable RSpec/ExampleLength
-  describe '#ensure_noid_in_identifier callback' do
-    it 'inserts "noid:<id>" before save when an ID is present' do
-      pub = described_class.new(title: ['ok cool'])
-      pub.save
+  describe 'validations' do
+    let(:pub) { described_class.new(attributes) }
 
-      noid_id = "noid:#{pub.id}"
+    # attributes that are required + will result in a valid save
+    let(:attributes) do
+      { title: ['cool title'], date_issued: ['2019-11'] }
+    end
 
-      # it's a new record
-      expect(pub.identifier).not_to include noid_id
+    # rubocop:disable RSpec/ExampleLength
+    describe '#ensure_noid_in_identifier callback' do
+      let(:pub) { described_class.new(attributes) }
 
-      pub.identifier = ['abc:123']
-      pub.save
+      it 'inserts "noid:<id>" before save when an ID is present' do
+        pub.save
 
-      # adds the noid:<id>
-      expect(pub.identifier).to contain_exactly 'abc:123', noid_id
+        noid_id = "noid:#{pub.id}"
 
-      pub.identifier = []
-      pub.save
+        # it's a new record
+        expect(pub.identifier).not_to include noid_id
 
-      expect(pub.identifier).to contain_exactly noid_id
-      pub.destroy!
+        pub.identifier = ['abc:123']
+        pub.save
+
+        # adds the noid:<id>
+        expect(pub.identifier).to contain_exactly 'abc:123', noid_id
+
+        pub.identifier = []
+        pub.save
+
+        expect(pub.identifier).to contain_exactly noid_id
+        pub.destroy!
+      end
+    end
+
+
+    describe 'title' do
+      it 'must be present' do
+        pub.title = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:title]).to include 'Your work must have a title.'
+
+        pub.title = ['A cool title']
+
+        expect(pub.valid?).to be true
+      end
+    end
+
+    describe 'date_issued' do
+      it 'can not be absent' do
+        pub.title = ['cool title'] # need this to validate
+        pub.date_issued = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued may not be blank'
+      end
+
+      it 'can not be spelled out' do
+        pub.date_issued = ['September 21, 2019']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
+      end
+
+      it 'can not be YYYY' do
+        pub.date_issued = ['2019']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
+      end
+
+      it 'can not have multiple values' do
+        pub.date_issued = ['2019-09-21', '2019-11-19']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued may only contain one value'
+      end
+
+      it 'can be YYYY-MM-DD' do
+        pub.date_issued = ['2019-09-21']
+
+        expect(pub.valid?).to be true
+      end
+
+      it 'can be YYYY-MM' do
+        pub.date_issued = ['2019-09']
+
+        expect(pub.valid?).to be true
+      end
     end
   end
 end

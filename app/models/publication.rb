@@ -20,6 +20,7 @@ class Publication < ActiveFedora::Base
   # self.valid_child_concerns = []
 
   validates :title, presence: { message: 'Your work must have a title.' }
+  validates_with ::Spot::DateIssuedValidator, fields: [:date_issued]
 
   before_save :ensure_noid_in_identifier
 
