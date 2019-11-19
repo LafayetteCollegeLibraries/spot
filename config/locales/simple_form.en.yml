@@ -23,7 +23,7 @@ en:
         language: The language of the work's content.
         license: Licensing and distribution information governing access to the work. Select from the provided drop-down list.
         local_identifier: A reference to the work from an internal authority. These are free-text but need to have an identifying prefix followed by a colon (ex. "lafayette:magazine_113")
-        location: A place name related to the work, such as its site of publication, or the city, state, or country the work contents are about. Calls upon the <a href="http://www.geonames.org" target="_blank">GeoNames web service</a>.
+        location: A place name related to the work, such as its site of publication, or the city, state, or country the work contents are about. <strong>Uses the <a href="http://www.geonames.org" target="_blank">GeoNames web service</a></strong>.
         note: Information important to internal maintenance of records or relevant to the original items, such as administrative, digitization, or decision documentation.
         organization: The organization associated with the resource.
         physical_medium: A physical material or carrier.  Examples include paper, canvas, or DVD.
@@ -35,7 +35,7 @@ en:
         source: A related resource from which the described resource is derived.
         sponsor: A person or organization that supports a thing through a pledge, promise, or financial contribution.
         standard_identifier: "A reference to the work from an outside authority. Currently, we support: <strong>DOI, Handle, ISSN, ISBN</strong>"
-        subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary.
+        subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary. <strong>Uses <a href="http://fast.oclc.org/" target="_blank">OCLC's FAST subject headings</a>.</strong>
         subtitle: An explanatory or alternative title of a publication.
         title: A name to aid in identifying a work.
         title_alternative: An alternative name for the resource.
