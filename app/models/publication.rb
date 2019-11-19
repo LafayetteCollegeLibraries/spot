@@ -12,7 +12,7 @@ class Publication < ActiveFedora::Base
   # (You'll probably also need to switch on `accepts_nested_attributes` below)
 
   class_attribute :controlled_properties
-  self.controlled_properties = [:location]
+  self.controlled_properties = [:location, :subject]
 
   self.indexer = PublicationIndexer
 
@@ -115,8 +115,9 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
-    index.as :stored_searchable, :facetable
+  property :subject, predicate: ::RDF::Vocab::DC11.subject,
+                     class_name: Spot::ControlledVocabularies::Base do |index|
+    index.as :symbol
   end
 
   property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
@@ -139,9 +140,11 @@ class Publication < ActiveFedora::Base
   #
   #   This must be mixed after all other properties are defined because no other
   #   properties will be defined once accepts_nested_attributes_for is called
-
   id_blank = proc { |attributes| attributes[:id].blank? }
-  accepts_nested_attributes_for :location, reject_if: id_blank, allow_destroy: true
+
+  controlled_properties.each do |prop|
+    accepts_nested_attributes_for prop, reject_if: id_blank, allow_destroy: true
+  end
 
   private
 

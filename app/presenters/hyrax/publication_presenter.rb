@@ -69,6 +69,16 @@ module Hyrax
       @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
+    # Subject URIs and Labels in an array of tuples
+    #
+    # @example
+    #   presenter.subject
+    #   => [["http://id.worldcat.org/fast/2004076", "Little free libraries"]]
+    # @return [Array<Array<String>>]
+    def subject
+      solr_document.subject.zip(solr_document.subject_label)
+    end
+
     # For now, overriding the ability to feature individual works
     # on the homepage. This should prevent the 'Feature'/'Unfeature'
     # button from rendering on the work edit page.
