@@ -93,15 +93,15 @@ RSpec.feature 'Create a Publication', :clean, :js do
         #
         # fill_in 'Division', with: attrs[:division].first
         # expect(page).to have_css '.publication_division .controls-add-text'
+        #
+        # fill_in 'Subject', with: attrs[:subject].first
+        # expect(page).to have_css '.publication_subject .controls-add-text'
 
         fill_in 'Organization', with: attrs[:organization].first
         expect(page).to have_css '.publication_organization .controls-add-text'
 
         fill_in 'Keyword', with: attrs[:keyword].first
         expect(page).to have_css '.publication_keyword .controls-add-text'
-
-        fill_in 'Subject', with: attrs[:subject].first
-        expect(page).to have_css '.publication_subject .controls-add-text'
 
         select 'No Known Copyright', from: 'Rights statement'
 
