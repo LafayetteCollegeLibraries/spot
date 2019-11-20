@@ -55,8 +55,8 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
         location_label_ssim: location, permalink_ss: permalink,
         publisher_tesim: publisher, resource_type_tesim: type,
         rights_statement_ssim: rights, source_tesim: source,
-        subject_label_ssim: subject,
-        thumbnail_url_ss: thumbail_url, title_tesim: title }
+        subject_label_ssim: subjects, thumbnail_url_ss: thumbail_url,
+        title_tesim: title }
     end
     let(:contributor) { ['Contributor 1', 'Contributor 2'] }
     let(:creator) { ['Creator 1', 'Creator 2'] }
@@ -72,7 +72,7 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
     let(:type) { ['Periodical'] }
     let(:permalink) { 'https://ldr.lafayette.edu/path/to/object' }
     let(:thumbnail_url) { 'https://ldr.lafayette.edu/downloads/fsabc123?file=thumbnail' }
-    let(:subject) { ['Little libraries'] }
+    let(:subjects) { ['Little libraries'] }
     let(:dc_uri) { 'http://purl.org/dc/elements/1.1/' }
 
     it 'translates solr values to dc terms' do
@@ -89,7 +89,7 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
       expect(xml.xpath('//dc:publisher', dc: dc_uri).map(&:text)).to eq publisher
       expect(xml.xpath('//dc:rights', dc: dc_uri).map(&:text)).to eq rights
       expect(xml.xpath('//dc:source', dc: dc_uri).map(&:text)).to eq source
-      expect(xml.xpath('//dc:subject', dc: dc_uri).map(&:text)).to eq subject
+      expect(xml.xpath('//dc:subject', dc: dc_uri).map(&:text)).to eq subjects
       expect(xml.xpath('//dc:title', dc: dc_uri).map(&:text)).to eq title
       expect(xml.xpath('//dc:type', dc: dc_uri).map(&:text)).to eq type
     end
