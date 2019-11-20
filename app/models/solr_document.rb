@@ -35,7 +35,11 @@ class SolrDocument
   # Values can be strings or arrays of strings (for concatenating multiple fields).
   #
   # @return [Hash<Symbol => String, Array<String>>]
-  # @todo add the following: identifier, relation, subject
+  # @todo PA Digital wants identifiers, permalinks, and thumbnail links to all be
+  #       mapped to dc:identifier. Will this just work out of the box?
+  # @todo PA Digital guidelines specify ISO 639-3 for language (we're using 639-1);
+  #       will we need to revisit that?
+  # rubocop:disable Metrics/MethodLength
   def self.field_semantics
     {
       contributor: 'contributor_tesim',
@@ -44,14 +48,17 @@ class SolrDocument
       date: 'date_issued_ssim',
       description: 'description_tesim',
       format: 'file_format_ssim',
-      language: 'language_label_ssim',
+      identifier: ['identifier_standard_ssim', 'permalink_ss', 'thumbnail_url_ss'],
+      language: 'language_ssim',
       publisher: 'publisher_tesim',
       source: 'source_tesim',
+      subject: 'subject_label_ssim',
       rights: 'rights_statement_ssim',
       title: 'title_tesim',
       type: 'resource_type_tesim'
     }
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Overrides +Hyrax::SolrDocumentBehavior#to_param+ by preferring collection slugs
   # (where present).

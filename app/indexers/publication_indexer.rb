@@ -24,6 +24,7 @@ class PublicationIndexer < Hyrax::WorkIndexer
       store_years_encompassed(solr_doc)
       store_full_text_content(solr_doc)
       store_file_format(solr_doc)
+      store_thumbnail_url(solr_doc)
     end
   end
 
@@ -54,6 +55,17 @@ class PublicationIndexer < Hyrax::WorkIndexer
     # @return [void]
     def store_license(doc)
       doc['license_tsm'] = object.license
+    end
+
+    # @param [SolrDocument] doc
+    # @return [void]
+    def store_thumbnail_url(doc)
+      host = Rails.application.routes.default_url_options[:host]
+      host = "http://#{host}" unless host.start_with?('http')
+      path = Hyrax::ThumbnailPathService.call(object)
+      url = URI.join(host, path).to_s
+
+      doc['thumbnail_url_ss'] = url unless url.empty?
     end
 
     # @param [SolrDocument] doc

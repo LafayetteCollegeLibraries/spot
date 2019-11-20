@@ -2,9 +2,9 @@
 RSpec.describe PublicationIndexer do
   subject(:solr_doc) { indexer.generate_solr_document }
 
-  let(:work) { build(:publication) }
+  let(:work) { build(:publication, id: 'abc123def', thumbnail_id: file_set.id) }
   let(:indexer) { described_class.new(work) }
-  let(:file_set) { instance_double(FileSet) }
+  let(:file_set) { instance_double(FileSet, id: 'fs123def4') }
   let(:mock_file) { instance_double(Hydra::PCDM::File) }
   let(:mime_type) { 'application/pdf' }
   let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
@@ -33,6 +33,22 @@ RSpec.describe PublicationIndexer do
   describe 'storing file formats' do
     it 'stores the formats of the file_sets' do
       expect(solr_doc['file_format_ssim']).to eq [mime_type]
+    end
+  end
+
+  describe 'storing thumbnails' do
+    before do
+      # not ideal, but maybe necessary if we're not trying to actually ingest the thing
+      allow(Hyrax::ThumbnailPathService)
+        .to receive(:call)
+        .with(work)
+        .and_return expected_path
+    end
+
+    let(:expected_path) { "/downloads/#{file_set.id}?file=thumbnail" }
+
+    it 'stores the full url of a thumbnail' do
+      expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{expected_path}"
     end
   end
 
