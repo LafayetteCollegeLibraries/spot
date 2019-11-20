@@ -51,11 +51,19 @@ module IndexesPermalink
               .map { |id| Spot::Identifier.from_string(id) }
     end
 
-    # @return [String, nil]
+    # Provides the URL to the item within the application
+    # (fallback in the event that a Handle doesn't exist yet).
+    #
+    # @return [String]
+    def object_in_application_url
+      Rails.application.routes.url_helpers.polymorphic_url(object)
+    end
+
+    # @return [String]
     def permalink
       @permalink ||= begin
         id = handle_identifier
-        id ? "http://hdl.handle.net/#{id.value}" : nil
+        id ? "http://hdl.handle.net/#{id.value}" : object_in_application_url
       end
     end
 end

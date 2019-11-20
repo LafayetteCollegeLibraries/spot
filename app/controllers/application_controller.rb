@@ -18,14 +18,21 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  # As we're not really supporting locales other than English at the moment,
-  # this will override the Hyrax strategy of including the locale in the
-  # URL parameters.
+  # Provides defaults for URL generation. Currently we're:
+  # - removing locales (only using English until our locale backlog is updated)
+  #
+  # Unfortunately, this only affects requests and not calls to url_helpers
+  # from outside of the request context (ex. generating a URL for indexing).
+  # I _believe_ that's been fixed by providing default_url_options for the
+  # routing module (see the end of config/application.rb), but I'm not 100% sure.
   #
   # @return [Hash]
   # @todo remove this when supporting multiple locales
   def default_url_options
-    super.reject { |k, _v| k == :locale }
+    super.tap do |opts|
+      opts.delete(:locale)
+      opts[:host] = ENV['URL_HOST'] if ENV['URL_HOST'].present?
+    end
   end
 
   private

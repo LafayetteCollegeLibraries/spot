@@ -20,3 +20,7 @@ module Spot
     # -- all .rb files in that directory are automatically loaded.
   end
 end
+
+# This seems as good a place as any to set the default_url_options
+Rails.application.routes.default_url_options ||= {}
+Rails.application.routes.default_url_options[:host] = ENV['URL_HOST'] if ENV['URL_HOST'].present?
