@@ -27,6 +27,7 @@ export default class Autocomplete {
       case 'division':
       case 'language':
       case 'location':
+      case 'subject':
         new LinkedData(element, url)
       default:
         new Default(element, url)

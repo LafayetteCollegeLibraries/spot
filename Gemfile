@@ -115,6 +115,9 @@ gem 'faraday', '0.12.2'
 # calling it explicitly, we should require it.
 gem 'mini_magick', '4.9.5'
 
+# manually add this gem to enable questioning_authority to parse linked-data results
+gem 'linkeddata', '~> 3.0'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do

@@ -9,10 +9,15 @@ module Hyrax
     transforms_nested_fields_for :language, :academic_department, :division
 
     self.model_class = ::Publication
-    self.required_fields = [:title]
+    self.required_fields = [:title, :date_issued, :resource_type, :rights_statement]
     self.terms = [
-      # titles
+      # required_fields first
       :title,
+      :date_issued,
+      :resource_type,
+      :rights_statement,
+
+      # titles
       :subtitle,
       :title_alternative,
 
@@ -30,9 +35,7 @@ module Hyrax
       :abstract,
       :description,
       :note,
-      :date_issued,
       :date_available,
-      :resource_type,
       :physical_medium,
       :language,
       :subject,
@@ -42,7 +45,6 @@ module Hyrax
       :standard_identifier,
       :local_identifier,
       :related_resource,
-      :rights_statement,
 
       # internal fields
       # These are Hyrax-specific fields that deal with embargoes,
@@ -108,6 +110,7 @@ module Hyrax
       def build_permitted_params
         super.tap do |params|
           params << { location_attributes: [:id, :_destroy] }
+          params << { subject_attributes: [:id, :_destroy] }
         end
       end
 

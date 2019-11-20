@@ -44,29 +44,124 @@ describe Publication do
   it { is_expected.to have_editable_property(:rights_statement).with_predicate(edm.rights) }
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
 
-  # note: this takes a bit
-  # rubocop:disable RSpec/ExampleLength
-  describe '#ensure_noid_in_identifier callback' do
-    it 'inserts "noid:<id>" before save when an ID is present' do
-      pub = described_class.new(title: ['ok cool'])
-      pub.save
+  describe 'validations' do
+    let(:pub) { build(:publication) }
 
-      noid_id = "noid:#{pub.id}"
+    # rubocop:disable RSpec/ExampleLength
+    describe '#ensure_noid_in_identifier callback' do
+      let(:attributes) do
+        { title: ['a good work'], date_issued: ['2019-11'],
+          resource_type: ['Article'], rights_statement: ['http://creativecommons.org/publicdomain/mark/1.0/'] }
+      end
 
-      # it's a new record
-      expect(pub.identifier).not_to include noid_id
+      it 'inserts "noid:<id>" before save when an ID is present' do
+        pub = described_class.new(attributes)
+        pub.save
 
-      pub.identifier = ['abc:123']
-      pub.save
+        noid_id = "noid:#{pub.id}"
 
-      # adds the noid:<id>
-      expect(pub.identifier).to contain_exactly 'abc:123', noid_id
+        # it's a new record
+        expect(pub.identifier).not_to include noid_id
 
-      pub.identifier = []
-      pub.save
+        pub.identifier = ['abc:123']
+        pub.save
 
-      expect(pub.identifier).to contain_exactly noid_id
-      pub.destroy!
+        # adds the noid:<id>
+        expect(pub.identifier).to contain_exactly 'abc:123', noid_id
+
+        pub.identifier = []
+        pub.save
+
+        expect(pub.identifier).to contain_exactly noid_id
+        pub.destroy!
+      end
+    end
+
+    describe 'title' do
+      it 'must be present' do
+        pub.title = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:title]).to include 'Your work must include a Title.'
+
+        pub.title = ['A cool title']
+
+        expect(pub.valid?).to be true
+      end
+    end
+
+    describe 'date_issued' do
+      it 'can not be absent' do
+        pub.title = ['cool title'] # need this to validate
+        pub.date_issued = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued may not be blank'
+      end
+
+      it 'can not be spelled out' do
+        pub.date_issued = ['September 21, 2019']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
+      end
+
+      it 'can not be YYYY' do
+        pub.date_issued = ['2019']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
+      end
+
+      it 'can not have multiple values' do
+        pub.date_issued = ['2019-09-21', '2019-11-19']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:date_issued]).to include 'Date Issued may only contain one value'
+      end
+
+      it 'can be YYYY-MM-DD' do
+        pub.date_issued = ['2019-09-21']
+
+        expect(pub.valid?).to be true
+      end
+
+      it 'can be YYYY-MM' do
+        pub.date_issued = ['2019-09']
+
+        expect(pub.valid?).to be true
+      end
+    end
+
+    describe 'rights_statement' do
+      it 'must be present' do
+        pub.rights_statement = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
+
+        pub.rights_statement = ['http://creativecommons.org/publicdomain/mark/1.0/']
+        expect(pub.valid?).to be true
+      end
+    end
+
+    describe 'resource_type' do
+      it 'must be present' do
+        pub.resource_type = []
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:resource_type]).to include 'Your work must include a Resource Type.'
+
+        pub.resource_type = ['Article']
+        expect(pub.valid?).to be true
+      end
+
+      it 'must be included in the authority' do
+        pub.resource_type = ['A noise tape']
+
+        expect(pub.valid?).to be false
+        expect(pub.errors[:resource_type]).to include '"A noise tape" is not a valid Resource Type.'
+      end
     end
   end
 end

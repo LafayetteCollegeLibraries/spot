@@ -25,6 +25,7 @@ require 'hyrax/specs/shared_specs'
 require 'webmock/rspec'
 require 'rspec/matchers'
 require 'equivalent-xml'
+require 'equivalent-xml/rspec_matchers'
 
 # copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
 #

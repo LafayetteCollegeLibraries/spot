@@ -48,7 +48,8 @@ RSpec.describe SolrDocument do
     source: { type: Array, suffix: 'tesim' },
     sponsor: { type: Array, suffix: 'tesim' },
     standard_identifier: { type: Array, key: 'identifier_standard_ssim' },
-    subject: { type: Array, suffix: 'tesim' },
+    subject: { type: Array, suffix: 'ssim' },
+    subject_label: { type: Array, suffix: 'ssim' },
     subtitle: { type: Array, suffix: 'tesim' },
     title: { type: Array, suffix: 'tesim' },
     title_alternative: { type: Array, suffix: 'tesim' }

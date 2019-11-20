@@ -81,7 +81,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'academic_department_sim',
                            label: :'blacklight.search.fields.academic_department',
                            limit: 5
-    config.add_facet_field 'subject_sim',
+    config.add_facet_field 'subject_label_ssim',
                            label: :'blacklight.search.fields.subject',
                            limit: 5
     config.add_facet_field 'keyword_sim',

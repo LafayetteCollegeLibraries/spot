@@ -97,4 +97,19 @@ RSpec.describe Hyrax::PublicationPresenter do
 
     it { is_expected.to eq [[uri, label]] }
   end
+
+  describe '#subject' do
+    subject { presenter.subject }
+
+    let(:uri) { 'http://id.worldcat.org/fast/2004076' }
+    let(:label) { 'Little free libraries' }
+    let(:solr_data) do
+      {
+        'subject_ssim' => [uri],
+        'subject_label_ssim' => [label]
+      }
+    end
+
+    it { is_expected.to eq [[uri, label]] }
+  end
 end

@@ -12,14 +12,22 @@ class Publication < ActiveFedora::Base
   # (You'll probably also need to switch on `accepts_nested_attributes` below)
 
   class_attribute :controlled_properties
-  self.controlled_properties = [:location]
+  self.controlled_properties = [:location, :subject]
 
   self.indexer = PublicationIndexer
 
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
 
-  validates :title, presence: { message: 'Your work must have a title.' }
+  validates :title, presence: { message: 'Your work must include a Title.' }
+  validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }
+  validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }
+
+  validates_with ::Spot::DateIssuedValidator
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :resource_type, authority: 'resource_types'
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :rights_statement, authority: 'rights_statements'
 
   before_save :ensure_noid_in_identifier
 
@@ -107,8 +115,9 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
-    index.as :stored_searchable, :facetable
+  property :subject, predicate: ::RDF::Vocab::DC11.subject,
+                     class_name: Spot::ControlledVocabularies::Base do |index|
+    index.as :symbol
   end
 
   property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
@@ -131,16 +140,20 @@ class Publication < ActiveFedora::Base
   #
   #   This must be mixed after all other properties are defined because no other
   #   properties will be defined once accepts_nested_attributes_for is called
-
   id_blank = proc { |attributes| attributes[:id].blank? }
-  accepts_nested_attributes_for :location, reject_if: id_blank, allow_destroy: true
+
+  controlled_properties.each do |prop|
+    accepts_nested_attributes_for prop, reject_if: id_blank, allow_destroy: true
+  end
 
   private
 
     # @return [void]
     def ensure_noid_in_identifier
+      return if id.nil?
+
       noid_id = "noid:#{id}"
-      return if new_record? || identifier.include?(noid_id)
+      return if identifier.include?(noid_id)
 
       self.identifier += [noid_id]
     end
