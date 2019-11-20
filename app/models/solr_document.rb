@@ -48,12 +48,12 @@ class SolrDocument
       date: 'date_issued_ssim',
       description: 'description_tesim',
       format: 'file_format_ssim',
-      identifier: ['identifier_standard_ssim', 'permalink_ss', 'thumbnail_url_ss'],
+      identifier: ['id', 'permalink_ss', 'thumbnail_url_ss'],
       language: 'language_ssim',
       publisher: 'publisher_tesim',
+      rights: 'rights_statement_ssim',
       source: 'source_tesim',
       subject: 'subject_label_ssim',
-      rights: 'rights_statement_ssim',
       title: 'title_tesim',
       type: 'resource_type_tesim'
     }

@@ -51,23 +51,28 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
     let(:metadata) do
       { contributor_tesim: contributor, creator_tesim: creator,
         date_issued_ssim: date, description_tesim: description,
-        file_format_ssim: format, language_label_ssim: language,
-        location_label_ssim: location, publisher_tesim: publisher,
-        resource_type_tesim: type, rights_statement_ssim: rights,
-        source_tesim: source, title_tesim: title }
+        file_format_ssim: format, language_ssim: language,
+        location_label_ssim: location, permalink_ss: permalink,
+        publisher_tesim: publisher, resource_type_tesim: type,
+        rights_statement_ssim: rights, source_tesim: source,
+        subject_label_ssim: subject,
+        thumbnail_url_ss: thumbail_url, title_tesim: title }
     end
     let(:contributor) { ['Contributor 1', 'Contributor 2'] }
     let(:creator) { ['Creator 1', 'Creator 2'] }
     let(:date) { ['2019-11-05'] }
     let(:description) { ['Describing the thing'] }
     let(:format) { ['application/pdf'] }
-    let(:language) { ['English'] }
+    let(:language) { ['en'] }
     let(:location) { ['Easton, Pennsylvania, United States'] }
     let(:publisher) { ['Some Good Publisher'] }
     let(:rights) { ['http://ok-go-ahead-and-use-it.org'] }
     let(:source) { ['The Source'] }
     let(:title) { ['Item 3'] }
     let(:type) { ['Periodical'] }
+    let(:permalink) { 'https://ldr.lafayette.edu/path/to/object' }
+    let(:thumbnail_url) { 'https://ldr.lafayette.edu/downloads/fsabc123?file=thumbnail' }
+    let(:subject) { ['Little libraries'] }
     let(:dc_uri) { 'http://purl.org/dc/elements/1.1/' }
 
     it 'translates solr values to dc terms' do
@@ -78,9 +83,13 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
       expect(xml.xpath('//dc:creator', dc: dc_uri).map(&:text)).to eq creator
       expect(xml.xpath('//dc:date', dc: dc_uri).map(&:text)).to eq date
       expect(xml.xpath('//dc:description', dc: dc_uri).map(&:text)).to eq description
+      expect(xml.xpath('//dc:format', dc: dc_uri).map(&:text)).to eq format
+      expect(xml.xpath('//dc:identifier', dc: dc_uri).map(&:text))
+        .to include permalink, thumbnail_url, 'item_3'
       expect(xml.xpath('//dc:publisher', dc: dc_uri).map(&:text)).to eq publisher
       expect(xml.xpath('//dc:rights', dc: dc_uri).map(&:text)).to eq rights
       expect(xml.xpath('//dc:source', dc: dc_uri).map(&:text)).to eq source
+      expect(xml.xpath('//dc:subject', dc: dc_uri).map(&:text)).to eq subject
       expect(xml.xpath('//dc:title', dc: dc_uri).map(&:text)).to eq title
       expect(xml.xpath('//dc:type', dc: dc_uri).map(&:text)).to eq type
     end
