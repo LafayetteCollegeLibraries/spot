@@ -55,7 +55,7 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
         location_label_ssim: location, permalink_ss: permalink,
         publisher_tesim: publisher, resource_type_tesim: type,
         rights_statement_ssim: rights, source_tesim: source,
-        subject_label_ssim: subjects, thumbnail_url_ss: thumbail_url,
+        subject_label_ssim: subjects, thumbnail_url_ss: thumbnail_url,
         title_tesim: title }
     end
     let(:contributor) { ['Contributor 1', 'Contributor 2'] }
