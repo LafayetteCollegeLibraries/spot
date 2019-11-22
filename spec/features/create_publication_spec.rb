@@ -73,9 +73,6 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Date issued', with: attrs[:date_issued].first
         expect(page).not_to have_css '.publication_date_issued .controls-add-text'
 
-        fill_in 'Date available', with: attrs[:date_available].first
-        expect(page).not_to have_css '.publication_date_available .controls-add-text'
-
         fill_in 'Creator', with: attrs[:creator].first
         expect(page).to have_css '.publication_creator .controls-add-text'
 
