@@ -9,6 +9,7 @@ RSpec.describe PublicationIndexer do
   let(:mime_type) { 'application/pdf' }
   let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
   let(:expected_results) { ["Some extracted full text\nfrom an article!"] }
+  let(:thumbnail_path) { "/downloads/#{file_set.id}?file=thumbnail" }
 
   before do
     allow(work).to receive(:file_sets).and_return([file_set])
@@ -16,6 +17,7 @@ RSpec.describe PublicationIndexer do
     allow(file_set).to receive(:mime_type).and_return(mime_type)
     allow(mock_file).to receive(:present?).and_return true
     allow(mock_file).to receive(:content).and_return(full_text_content)
+    allow(Hyrax::ThumbnailPathService).to receive(:call).with(work).and_return(thumbnail_path)
   end
 
   it_behaves_like 'it indexes English-language dates'
@@ -37,18 +39,8 @@ RSpec.describe PublicationIndexer do
   end
 
   describe 'storing thumbnails' do
-    before do
-      # not ideal, but maybe necessary if we're not trying to actually ingest the thing
-      allow(Hyrax::ThumbnailPathService)
-        .to receive(:call)
-        .with(work)
-        .and_return expected_path
-    end
-
-    let(:expected_path) { "/downloads/#{file_set.id}?file=thumbnail" }
-
     it 'stores the full url of a thumbnail' do
-      expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{expected_path}"
+      expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{thumbnail_path}"
     end
   end
 
