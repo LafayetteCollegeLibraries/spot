@@ -7,8 +7,8 @@ module Hyrax
     delegate :abstract, :academic_department, :bibliographic_citation,
              :contributor, :creator, :date_issued, :date_available,
              :division, :editor, :keyword, :language, :language_label,
-             :organization, :permalink, :publisher, :resource_type, :source,
-             :subject, :subtitle, :title_alternative,
+             :organization, :permalink, :publisher, :resource_type,
+             :source, :subtitle, :title_alternative,
              to: :solr_document
 
     # @return [String]
@@ -23,9 +23,23 @@ module Hyrax
       %i[csv ttl nt jsonld]
     end
 
+    # Our document's identifiers mapped to Spot::Identifier objects
+    #
     # @return [Array<Spot::Identifier>]
+    # @todo remove this before reindexing the production repository, so that we can
+    #       rely on the SolrDocument to split standard/local identifiers
+    #       (see: f62ba34)
+    def identifier
+      @identifier ||= solr_document.identifier.map { |str| Spot::Identifier.from_string(str) }
+    end
+
+    # @return [Array<Spot::Identifier>]
+    # @todo change this before reindexing the production repository, so that we can
+    #       rely on the SolrDocument to split standard/local identifiers
+    #       (see: f62ba34). use the commented out code instead.
     def local_identifier
-      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
+      # @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id)
+      @local_identifier ||= identifier.select(&:local?)
     end
 
     # location values + labels zipped into tuples.
@@ -65,8 +79,12 @@ module Hyrax
     end
 
     # @return [Array<Spot::Identifier>]
+    # @todo change this before reindexing the production repository, so that we can
+    #       rely on the SolrDocument to split standard/local identifiers
+    #       (see: f62ba34). use the commented out code instead.
     def standard_identifier
-      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
+      # @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
+      @standard_identifier ||= identifier.select(&:standard?)
     end
 
     # Subject URIs and Labels in an array of tuples
