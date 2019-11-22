@@ -30,7 +30,6 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :standard_identifier }
       it { is_expected.to include :local_identifier }
       it { is_expected.to include :bibliographic_citation }
-      it { is_expected.to include :date_available }
       it { is_expected.to include :creator }
       it { is_expected.to include :contributor }
       it { is_expected.to include :editor }
@@ -143,7 +142,6 @@ RSpec.describe Hyrax::PublicationForm do
       expect(params).to include(description: [])
       expect(params).to include(note: [])
       expect(params).to include(:date_issued)
-      expect(params).to include(:date_available)
       expect(params).to include(resource_type: [])
       expect(params).to include(physical_medium: [])
       expect(params).to include(language: [])

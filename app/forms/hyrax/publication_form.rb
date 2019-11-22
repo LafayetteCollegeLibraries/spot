@@ -35,7 +35,6 @@ module Hyrax
       :abstract,
       :description,
       :note,
-      :date_available,
       :physical_medium,
       :language,
       :subject,
@@ -89,11 +88,6 @@ module Hyrax
     # @return [String, RDF::Literal]
     def abstract
       self['abstract'].first
-    end
-
-    # @return [String]
-    def date_available
-      self['date_available'].first
     end
 
     # @return [String]
