@@ -4,6 +4,11 @@
 fixity_check_everything:
   # runs at midnight every Monday
   cron: '0 0 * * 1'
-  class: 'Spot::RepositoryFixityCheckJob'
+  class: Spot::RepositoryFixityCheckJob
   # @todo create a queue for fixity/cron jobs
+  queue: default
+
+clear_expired_embargoes_and_leases:
+  cron: '0 5 * * *'
+  class: ClearExpiredEmbargoesAndLeasesJob
   queue: default
