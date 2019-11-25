@@ -56,7 +56,7 @@ module IndexesPermalink
     #
     # @return [String]
     def object_in_application_url
-      Rails.application.routes.url_helpers.polymorphic_url(object)
+      Rails.application.routes.url_helpers.polymorphic_url(object, host: ENV['URL_HOST'])
     end
 
     # @return [String]

@@ -227,7 +227,6 @@ RSpec.describe PublicationIndexer do
       allow(mock_file).to receive(:content).and_return(full_text_content)
     end
 
-    let(:file_set) { instance_double(FileSet) }
     let(:mock_file) { instance_double(Hydra::PCDM::File) }
     let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
     let(:expected_results) { ["Some extracted full text\nfrom an article!"] }

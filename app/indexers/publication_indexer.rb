@@ -60,7 +60,9 @@ class PublicationIndexer < Hyrax::WorkIndexer
     # @param [SolrDocument] doc
     # @return [void]
     def store_thumbnail_url(doc)
-      host = Rails.application.routes.default_url_options[:host]
+      return if ENV['URL_HOST'].blank?
+
+      host = ENV['URL_HOST']
       host = "http://#{host}" unless host.start_with?('http')
       path = Hyrax::ThumbnailPathService.call(object)
       url = URI.join(host, path).to_s
