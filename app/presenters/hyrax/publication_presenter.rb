@@ -8,7 +8,7 @@ module Hyrax
              :contributor, :creator, :date_issued, :date_available,
              :division, :editor, :keyword, :language, :language_label,
              :organization, :permalink, :publisher, :resource_type,
-             :source, :subject, :subtitle, :title_alternative,
+             :source, :subtitle, :title_alternative,
              to: :solr_document
 
     # @return [String]
@@ -26,12 +26,19 @@ module Hyrax
     # Our document's identifiers mapped to Spot::Identifier objects
     #
     # @return [Array<Spot::Identifier>]
+    # @todo remove this before reindexing the production repository, so that we can
+    #       rely on the SolrDocument to split standard/local identifiers
+    #       (see: f62ba34)
     def identifier
       @identifier ||= solr_document.identifier.map { |str| Spot::Identifier.from_string(str) }
     end
 
     # @return [Array<Spot::Identifier>]
+    # @todo change this before reindexing the production repository, so that we can
+    #       rely on the SolrDocument to split standard/local identifiers
+    #       (see: f62ba34). use the commented out code instead.
     def local_identifier
+      # @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id)
       @local_identifier ||= identifier.select(&:local?)
     end
 
@@ -72,8 +79,22 @@ module Hyrax
     end
 
     # @return [Array<Spot::Identifier>]
+    # @todo change this before reindexing the production repository, so that we can
+    #       rely on the SolrDocument to split standard/local identifiers
+    #       (see: f62ba34). use the commented out code instead.
     def standard_identifier
+      # @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
       @standard_identifier ||= identifier.select(&:standard?)
+    end
+
+    # Subject URIs and Labels in an array of tuples
+    #
+    # @example
+    #   presenter.subject
+    #   => [["http://id.worldcat.org/fast/2004076", "Little free libraries"]]
+    # @return [Array<Array<String>>]
+    def subject
+      solr_document.subject.zip(solr_document.subject_label)
     end
 
     # For now, overriding the ability to feature individual works

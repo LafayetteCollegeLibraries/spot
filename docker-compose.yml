@@ -16,7 +16,7 @@ services:
       CAS_BASE_URL: ''
       DATABASE_URL: postgres://spot_dev_user:@db:5432/spot_dev
       FEDORA_URL: http://fedora:8080/rest
-      FITS_SERVLET_URL: http://fitsservlet:8080/fits/examine
+      FITS_SERVLET_URL: http://fitsservlet:8080/fits
       RAILS_ENV: development
       REDIS_URL: redis://redis:6379
       SOLR_URL: http://solr:8983/solr/spot-development

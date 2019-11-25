@@ -28,9 +28,7 @@ sidekiq_config[:queues].each do |queue|
   OkComputer::Registry.register "sidekiq :#{queue}", OkComputer::SidekiqLatencyCheck.new(queue.to_sym)
 end
 
-# we need to use the /version endpoint for a healthcheck as the /examine one
-# will throw a 400 Bad Request if there's no file to examine
 if ENV['FITS_SERVLET_URL'].present?
-  fits_url = ENV['FITS_SERVLET_URL'].gsub(%r{/fits/examine$}, '/fits/version')
+  fits_url = "#{ENV['FITS_SERVLET_URL']}/version"
   OkComputer::Registry.register 'fits (servlet)', OkComputer::HttpCheck.new(fits_url)
 end

@@ -9,6 +9,7 @@ RSpec.describe PublicationIndexer do
   it_behaves_like 'it indexes ISO language and label'
   it_behaves_like 'it indexes a sortable date'
   it_behaves_like 'it indexes a permalink'
+  it_behaves_like 'it indexes standard and local identifiers'
 
   describe 'title' do
     # :stored_searchable
@@ -130,12 +131,6 @@ RSpec.describe PublicationIndexer do
     it_behaves_like 'simple model indexing'
   end
 
-  describe 'subject' do
-    # :stored_searchable, :facetable
-    let(:fields) { %w[subject_tesim subject_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
   describe 'license' do
     let(:fields) { %w[license_tsm] }
     it_behaves_like 'simple model indexing'
@@ -161,6 +156,24 @@ RSpec.describe PublicationIndexer do
 
     it 'stores the label' do
       expect(solr_doc['location_label_ssim']).to eq [label]
+    end
+  end
+
+  describe 'subject' do
+    let(:label) { 'Little free libraries' }
+    let(:uri) { 'http://id.worldcat.org/fast/2004076' }
+    let(:work) { build(:publication, subject: [RDF::URI(uri)]) }
+
+    before do
+      RdfLabel.first_or_create(uri: uri, value: label)
+    end
+
+    it 'stores the uri' do
+      expect(solr_doc['subject_ssim']).to eq [uri]
+    end
+
+    it 'stores the label' do
+      expect(solr_doc['subject_label_ssim']).to eq [label]
     end
   end
 

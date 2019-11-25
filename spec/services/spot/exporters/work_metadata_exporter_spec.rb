@@ -12,7 +12,7 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
     begin
       Publication.find(work_id)
     rescue ActiveFedora::ObjectNotFoundError
-      Publication.create(id: work_id, title: ['ok cool'])
+      create(:publication, id: work_id, title: ['ok cool'])
     end
   end
 

@@ -1,5 +1,36 @@
 # changelog
 
+## [2019.7] - 2019-11-25
+
+### features 🦃
+
+- update `robots.txt` file to block archive.org from crawling our works as we don't want to fill up our diskspace quota with access copies of materials (a657879)
+- index + store local/standard identifiers in the solr index  ~rather than relying on a presenter to split them out~ (#347)
+- display rights-statement label next to icon (6dfe8f2)
+- add enhancements to the Publication model (#350)
+  - add model validation for `date_issued`, `resource_type`, and `rights_statement`
+  - `date_issued`, `resource_type`, and `rights_statement` are now required fields on the form
+    - per metadata application profile
+  - add formatting clarification to `date_issued` help text (requires YYYY-MM or YYYY-MM-DD)
+  - use OCLC's FAST subject headings as a controlled vocabulary for `subject`
+- adds a service/job to clear expired embargoes + leases; schedules it nightly using `sidekiq-cron` (#355)
+- adds a Publication's `date_available` via the `PublicationActor`, instead of the form. takes into account embargoes when present (#356)
+
+### dependencies 👩‍👩‍👧‍👧
+
+- update PDF.js to latest stable version (2.2.228) which better renders PDFs that were previously getting garbled (#346)
+- explicitly add `linkeddata` gem to allow integration of OCLC's FAST subject heading service (#350)
+
+### bug fixes 🐞
+
+- use correct FITSServlet URL in `docker-compose.yml` and `config/initializers/okcomputer.rb` (cd75393)
+
+### deprecations ☠️
+
+- remove `Spot::CollectionFromConfig` service to prevent inadvertently changing live collections (#354)
+- remove `date_available` from `PublicationForm` (#356)
+
+
 ## [2019.6] - 2019-11-13
 
 ### bug fixes 🐞
@@ -148,6 +179,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.7
 [2019.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.6
 [2019.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.5
 [2019.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.4

@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 RSpec.feature 'Show Publication page', js: false do
-  let(:pub) { create(:publication_with_file_set, content: file, language: language) }
+  let(:pub) do
+    create(:publication_with_file_set,
+           content: file,
+           language: language,
+           subject: [RDF::URI(subject_uri)])
+  end
+
   let(:item_base_url) { "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}" }
   let(:language) { ['en'] }
+  let(:subject_uri) { 'http://id.worldcat.org/fast/2004076' }
+  let(:subject_label) { 'Little free libraries' }
 
   # these were previously defined in the 'Publication is a PDF' context
   # but if we're checking metadata outside of that scope we'll need these
@@ -15,6 +23,8 @@ RSpec.feature 'Show Publication page', js: false do
   # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
   before do
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
+
+    RdfLabel.first_or_create(uri: subject_uri, value: subject_label)
 
     # Since we're not passing our objects through charactarization,
     # we need to pretend we did and mock a `:presenter_check_method`
@@ -64,15 +74,21 @@ RSpec.feature 'Show Publication page', js: false do
       .to eq pub.resource_type.map(&:to_s)
     expect(page.all('.attribute-source').map(&:text))
       .to eq pub.source.map(&:to_s)
-    expect(page.all('.attribute-subject').map(&:text))
-      .to eq pub.subject.map(&:to_s)
     expect(page.all('.attribute-subtitle').map(&:text))
       .to eq pub.subtitle.map(&:to_s)
     expect(page.all('.attribute-title_alternative').map(&:text))
       .to eq pub.title_alternative.map(&:to_s)
-
     expect(page.all('.attribute-language_label').map(&:text))
       .to eq ['English']
+
+    # the weird space is a result of the font-awesome external-link gliph
+    # not containing any text value, but being an html node that is replaced.
+    mapped_subjects = pub.subject.map do |sub|
+      label = RdfLabel.find_by(uri: sub.id).value
+      "#{label} (view authority )"
+    end
+
+    expect(page.all('.attribute-subject').map(&:text)).to eq mapped_subjects
 
     # @todo there's _got_ to be a better way!!
 

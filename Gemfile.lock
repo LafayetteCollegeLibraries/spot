@@ -960,6 +960,7 @@ DEPENDENCIES
   jbuilder (= 2.8.0)
   jquery-rails (= 4.3.5)
   kaminari (= 1.1.1)
+  linkeddata (~> 3.0)
   listen (>= 3.0.5, < 3.2)
   mini_magick (= 4.9.5)
   okcomputer (= 1.17.4)

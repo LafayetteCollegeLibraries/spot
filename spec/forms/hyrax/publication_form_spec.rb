@@ -4,7 +4,7 @@ RSpec.describe Hyrax::PublicationForm do
 
   shared_context 'required fields' do
     it 'contains required fields' do
-      expect(terms).to include :title
+      expect(terms).to include :title, :date_issued, :resource_type, :rights_statement
     end
   end
 
@@ -24,15 +24,12 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :title_alternative }
       it { is_expected.to include :publisher }
       it { is_expected.to include :source }
-      it { is_expected.to include :resource_type }
       it { is_expected.to include :abstract }
       it { is_expected.to include :description }
       it { is_expected.to include :note }
       it { is_expected.to include :standard_identifier }
       it { is_expected.to include :local_identifier }
       it { is_expected.to include :bibliographic_citation }
-      it { is_expected.to include :date_issued }
-      it { is_expected.to include :date_available }
       it { is_expected.to include :creator }
       it { is_expected.to include :contributor }
       it { is_expected.to include :editor }
@@ -41,7 +38,6 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :organization }
       it { is_expected.to include :keyword }
       it { is_expected.to include :subject }
-      it { is_expected.to include :rights_statement }
     end
 
     describe 'includes internal_form_fields' do
@@ -146,11 +142,9 @@ RSpec.describe Hyrax::PublicationForm do
       expect(params).to include(description: [])
       expect(params).to include(note: [])
       expect(params).to include(:date_issued)
-      expect(params).to include(:date_available)
       expect(params).to include(resource_type: [])
       expect(params).to include(physical_medium: [])
       expect(params).to include(language: [])
-      expect(params).to include(subject: [])
       expect(params).to include(keyword: [])
       expect(params).to include(bibliographic_citation: [])
       expect(params).to include(standard_identifier: [])
@@ -194,6 +188,7 @@ RSpec.describe Hyrax::PublicationForm do
       expect(params).to include(academic_department_attributes: [:id, :_destroy])
       expect(params).to include(division_attributes: [:id, :_destroy])
       expect(params).to include(location_attributes: [:id, :_destroy])
+      expect(params).to include(subject_attributes: [:id, :_destroy])
     end
     # rubocop:enable RSpec/ExampleLength
   end
