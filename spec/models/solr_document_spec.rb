@@ -71,6 +71,12 @@ RSpec.describe SolrDocument do
     end
   end
 
+  describe '.field_semantics' do
+    subject { described_class.field_semantics }
+
+    it { is_expected.to be_a Hash }
+  end
+
   describe '#to_param' do
     subject { document.to_param }
 

@@ -24,10 +24,13 @@ Rails.application.routes.draw do
   mount Qa::Engine => '/authorities'
 
   concern :exportable, Blacklight::Routes::Exportable.new
+  concern :oai_provider, BlacklightOaiProvider::Routes.new
   concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new
   concern :searchable, Blacklight::Routes::Searchable.new
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+    concerns :oai_provider
+
     concerns :searchable
     concerns :range_searchable
   end

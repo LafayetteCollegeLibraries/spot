@@ -2,14 +2,47 @@
 RSpec.describe PublicationIndexer do
   subject(:solr_doc) { indexer.generate_solr_document }
 
-  let(:work) { build(:publication) }
+  let(:work) { build(:publication, id: 'abc123def', thumbnail_id: file_set.id) }
   let(:indexer) { described_class.new(work) }
+  let(:file_set) { instance_double(FileSet, id: 'fs123def4') }
+  let(:mock_file) { instance_double(Hydra::PCDM::File) }
+  let(:mime_type) { 'application/pdf' }
+  let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
+  let(:expected_results) { ["Some extracted full text\nfrom an article!"] }
+  let(:thumbnail_path) { "/downloads/#{file_set.id}?file=thumbnail" }
+
+  before do
+    allow(work).to receive(:file_sets).and_return([file_set])
+    allow(file_set).to receive(:extracted_text).and_return(mock_file)
+    allow(file_set).to receive(:mime_type).and_return(mime_type)
+    allow(mock_file).to receive(:present?).and_return true
+    allow(mock_file).to receive(:content).and_return(full_text_content)
+    allow(Hyrax::ThumbnailPathService).to receive(:call).with(work).and_return(thumbnail_path)
+  end
 
   it_behaves_like 'it indexes English-language dates'
   it_behaves_like 'it indexes ISO language and label'
   it_behaves_like 'it indexes a sortable date'
   it_behaves_like 'it indexes a permalink'
   it_behaves_like 'it indexes standard and local identifiers'
+
+  describe 'storing full-text' do
+    it "stores each file_set's full text content" do
+      expect(solr_doc['extracted_text_tsimv']).to eq expected_results
+    end
+  end
+
+  describe 'storing file formats' do
+    it 'stores the formats of the file_sets' do
+      expect(solr_doc['file_format_ssim']).to eq [mime_type]
+    end
+  end
+
+  describe 'storing thumbnails' do
+    it 'stores the full url of a thumbnail' do
+      expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{thumbnail_path}"
+    end
+  end
 
   describe 'title' do
     # :stored_searchable
@@ -194,7 +227,6 @@ RSpec.describe PublicationIndexer do
       allow(mock_file).to receive(:content).and_return(full_text_content)
     end
 
-    let(:file_set) { instance_double(FileSet) }
     let(:mock_file) { instance_double(Hydra::PCDM::File) }
     let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
     let(:expected_results) { ["Some extracted full text\nfrom an article!"] }
