@@ -106,13 +106,6 @@ describe Publication do
         expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
       end
 
-      it 'can not be YYYY' do
-        pub.date_issued = ['2019']
-
-        expect(pub.valid?).to be false
-        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
-      end
-
       it 'can not have multiple values' do
         pub.date_issued = ['2019-09-21', '2019-11-19']
 
@@ -131,6 +124,12 @@ describe Publication do
 
         expect(pub.valid?).to be true
       end
+    end
+
+    it 'can be YYYY' do
+      pub.date_issued = ['2019']
+
+      expect(pub.valid?).to be true
     end
 
     describe 'rights_statement' do
