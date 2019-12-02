@@ -103,7 +103,7 @@ describe Publication do
         pub.date_issued = ['September 21, 2019']
 
         expect(pub.valid?).to be false
-        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD or YYYY-MM format'
+        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD, YYYY-MM, or YYYY format'
       end
 
       it 'can not have multiple values' do
