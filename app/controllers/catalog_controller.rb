@@ -6,6 +6,7 @@
 class CatalogController < ApplicationController
   include BlacklightRangeLimit::ControllerOverride
   include BlacklightAdvancedSearch::Controller
+  include BlacklightOaiProvider::Controller
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
@@ -258,6 +259,23 @@ class CatalogController < ApplicationController
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
     config.spell_max = 5
+
+    # OAI-PMH provider params
+    # (see: https://github.com/projectblacklight/blacklight_oai_provider#configuration)
+    config.oai = {
+      provider: {
+        repository_name: 'Lafayette Digital Repository',
+        repository_url: 'https://ldr.lafayette.edu',
+        record_prefix: 'oai:ldr',
+        admin_email: 'dss@lafayette.edu'
+      },
+
+      document: {
+        set_fields: [
+          { label: 'collection', solr_field: 'member_of_collections_ssim' }
+        ]
+      }
+    }
   end
 
   # disable the bookmark control from displaying in gallery view

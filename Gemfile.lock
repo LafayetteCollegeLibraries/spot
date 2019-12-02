@@ -122,6 +122,10 @@ GEM
     blacklight_advanced_search (6.4.1)
       blacklight (~> 6.0, >= 6.0.1)
       parslet
+    blacklight_oai_provider (6.0.0)
+      blacklight (~> 6.0)
+      oai (~> 0.4)
+      rails (>= 4.2, < 6)
     blacklight_range_limit (6.3.3)
       blacklight (>= 6.0.2)
       jquery-rails
@@ -577,6 +581,10 @@ GEM
       mini_portile2 (~> 2.4.0)
     nokogumbo (1.5.0)
       nokogiri
+    oai (0.4.0)
+      builder (>= 3.1.0)
+      faraday
+      faraday_middleware
     oauth (0.5.4)
     oauth2 (1.4.2)
       faraday (>= 0.8, < 2.0)
@@ -928,6 +936,7 @@ DEPENDENCIES
   bagit (= 0.4.3)
   bixby (~> 2.0.0.pre.beta1)
   blacklight_advanced_search (= 6.4.1)
+  blacklight_oai_provider (= 6.0.0)
   blacklight_range_limit (= 6.3.3)
   bootsnap (= 1.4.4)
   byebug
