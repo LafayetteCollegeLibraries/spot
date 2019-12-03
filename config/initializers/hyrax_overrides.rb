@@ -30,4 +30,16 @@ Rails.application.config.to_prepare do
     end
     update_facet_labels
   end
+
+  # We're using an older version of the FITSServlet tool (1.1.3 as of 2019-12-03,
+  # anything higher throws an exception that I can't nail down) that predates
+  # a change to set the response encoding to UTF-8. So we need to do this as
+  # early as possible within the Characterization tool.
+  require 'hydra-file_characterization'
+
+  Hydra::FileCharacterization::Characterizers::FitsServlet.class_eval do
+    def output
+      super.encode('UTF-8', invalid: :replace)
+    end
+  end
 end
