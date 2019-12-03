@@ -26,6 +26,8 @@ RSpec.describe CharacterizeJob do
 
   shared_examples 'the Hyrax CharacterizeJob' do
     context 'with valid filepath param' do
+      before { allow(File).to receive(:exist?).with(filename).and_return true }
+
       it 'skips Hyrax::WorkingDirectory' do
         described_class.perform_now(file_set, file.id, filename)
 
