@@ -126,12 +126,7 @@ module Hyrax
 
       # @return [Array<Symbol>]
       def singular_terms
-        %i[
-          abstract
-          date_issued
-          date_available
-          title
-        ]
+        %i[abstract date_issued date_available title]
       end
 
       # Used to transform values from the form into those that
@@ -141,7 +136,8 @@ module Hyrax
       # @return [Hash<Symbol => Array<String>>]
       def model_attributes(form_params)
         super.tap do |params|
-          pluralize_singular_fields!(params)
+          pluralize_singular_fields(params)
+          strip_whitespace(params)
         end
       end
 
@@ -154,9 +150,21 @@ module Hyrax
         #
         # @param [ActiveController::Parameters, Hash<String => *>]
         # @return [void]
-        def pluralize_singular_fields!(params)
+        def pluralize_singular_fields(params)
           singular_terms.each do |term|
             params[term] = Array(params[term]) if params[term]
+          end
+        end
+
+        # @param [ActiveController::Parameters, Hash<String => *>]
+        # @return [void]
+        def strip_whitespace(params)
+          terms.each do |key|
+            if params[key].is_a? Array
+              params[key] = params[key].map(&:strip).reject(&:blank?)
+            elsif params[key].is_a? String
+              params[key] = params[key].strip
+            end
           end
         end
     end
