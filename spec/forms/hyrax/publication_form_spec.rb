@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::PublicationForm do
   it_behaves_like 'it handles identifier form fields'
+  it_behaves_like 'it strips whitespaces from values'
 
   shared_context 'required fields' do
     it 'contains required fields' do
