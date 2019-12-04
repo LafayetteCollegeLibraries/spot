@@ -1,64 +1,84 @@
 terms:
   # the Europeana 14
   -
-    term: Public Domain Mark (PDM)
+    term: Public Domain Mark
+    shortcode: PDM
     id: http://creativecommons.org/publicdomain/mark/1.0/
   -
-    term: No Copyright - non commercial re-use only (NoC-NC)
+    term: No Copyright - non commercial re-use only
+    shortcode: NoC-NC
     id: http://rightsstatements.org/vocab/NoC-NC/1.0/
   -
-    term: No Copyright - Other Known Legal Restriction (NoC-OKLR)
+    term: No Copyright - Other Known Legal Restriction
+    shortcode: NoC-OKLR
     id: http://rightsstatements.org/vocab/NoC-OKLR/1.0/
   -
-    term: Creative Commons CC0 1.0 Universal Public Domain Dedication (CC0)
+    term: Creative Commons CC0 1.0 Universal Public Domain Dedication
+    shortcode: CC0
     id: http://creativecommons.org/publicdomain/zero/1.0/
   -
-    term: Creative Commons - Attribution (BY)
+    term: Creative Commons - Attribution
+    shorcode: BY
     id: http://creativecommons.org/licenses/by/4.0/
   -
-    term: Creative Commons - Attribution, ShareAlike (BY-SA)
+    term: Creative Commons - Attribution, ShareAlike
+    shortcode: BY-SA
     id: http://creativecommons.org/licenses/by-sa/4.0/
   -
-    term: Creative Commons - Attribution, No Derivatives (BY-ND)
+    term: Creative Commons - Attribution, No Derivatives
+    shortcode: BY-ND
     id: http://creativecommons.org/licenses/by-nd/4.0/
   -
-    term: Creative Commons - Attribution, Non-Commercial (BY-NC)
+    term: Creative Commons - Attribution, Non-Commercial
+    shortcode: BY-NC
     id: http://creativecommons.org/licenses/by-nc/4.0/
   -
-    term: Creative Commons - Attribution, Non-Commercial, ShareAlike (BY-NC-SA)
+    term: Creative Commons - Attribution, Non-Commercial, ShareAlike
+    shortcode: BY-NC-SA
     id: http://creativecommons.org/licenses/by-nc-sa/4.0/
   -
-    term: Creative Commons - Attribution, Non-Commercial, No Derivatives (BY-NC-ND)
+    term: Creative Commons - Attribution, Non-Commercial, No Derivatives
+    shortcode: BY-NC-ND
     id:  http://creativecommons.org/licenses/by-nc-nd/4.0/
   -
-    term: In Copyright (InC)
+    term: In Copyright
+    shortcode: InC
     id: http://rightsstatements.org/vocab/InC/1.0/
   -
-    term: In Copyright - Educational Use Permitted (InC-EDU)
+    term: In Copyright - Educational Use Permitted
+    shortcode: InC-EDU
     id: http://rightsstatements.org/vocab/InC-EDU/1.0/
   -
-    term: In Copyright - EU Orphan Work (InC-EU-OW)
+    term: In Copyright - EU Orphan Work
+    shortcode: InC-EU-OW
     id: http://rightsstatements.org/vocab/InC-OW-EU/1.0/
   -
-    term: Copyright Not Evaluated (CNE)
+    term: Copyright Not Evaluated
+    shortcode: CNE
     id: http://rightsstatements.org/vocab/CNE/1.0/
 
   # our additional 6
   -
-    term: In Copyright - Non-Commercial Use Permitted (InC-NC)
+    term: In Copyright - Non-Commercial Use Permitted
+    shortcode: InC-NC
     id: http://rightsstatements.org/vocab/InC-NC/1.0/
   -
-    term: In Copyright - Rights-holder(s) Unlocatable or Unidentifiable (InC-RUU)
+    term: In Copyright - Rights-holder(s) Unlocatable or Unidentifiable
+    shortcode: InC-RUU
     id: http://rightsstatements.org/vocab/InC-RUU/1.0/
   -
-    term: No Copyright - Contractual Restrictions (NoC-CR)
+    term: No Copyright - Contractual Restrictions
+    shortcode: NoC-CR
     id: http://rightsstatements.org/vocab/NoC-CR/1.0/
   -
-    term: No Copyright - United States (NoC-US)
+    term: No Copyright - United States
+    shortcode: NoC-US
     id: http://rightsstatements.org/vocab/NoC-US/1.0/
   -
-    term: Copyright Undetermined (UND)
+    term: Copyright Undetermined
+    shortcode: UND
     id: http://rightsstatements.org/vocab/UND/1.0/
   -
-    term: No Known Copyright (NKC)
+    term: No Known Copyright
+    shortcode: NKC
     id: http://rightsstatements.org/vocab/NKC/1.0/

@@ -169,11 +169,6 @@ RSpec.describe PublicationIndexer do
     it_behaves_like 'simple model indexing'
   end
 
-  describe 'rights_statement' do
-    it { is_expected.to include 'rights_statement_ssim' }
-    it { is_expected.to include 'rights_statement_label_ssim' }
-  end
-
   describe 'location' do
     let(:label) { 'Easton, PA' }
     let(:uri) { 'http://sws.geonames.org/5188140/' }
