@@ -98,6 +98,9 @@ class CatalogController < ApplicationController
                            include_in_advanced_search: false,
                            label: :'blacklight.search.fields.years_encompassed',
                            range: true
+    config.add_facet_field 'rights_statement_shortcode_ssim',
+                           label: :'blacklight.search.fields.rights_statement',
+                           limit: 5
 
     #
     # admin facets
