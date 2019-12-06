@@ -1,0 +1,8 @@
+<%=
+  f.input :slug,
+          required: f.object.required?(key),
+          input_html: {
+            class: 'form-control',
+            readonly: f.object.send(:slug).present?
+          }
+%>
