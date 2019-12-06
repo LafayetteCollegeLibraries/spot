@@ -66,6 +66,7 @@ jobs:
       PSQL_DATABASE: spot_test
       CI: true
       CAS_BASE_URL: http://localhost
+      URL_HOST: localhost
 
     steps:
       - attach_workspace:

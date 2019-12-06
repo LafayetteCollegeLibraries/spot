@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   with_themed_layout '1_column'
 
+  before_action :store_user_location!, if: :storable_location?
   before_action :log_in_as_dev_user!
 
   # from Blacklight: 'Discarding flash messages on XHR requests is deprecated.'
@@ -18,10 +19,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  # As we're not really supporting locales other than English at the moment,
-  # this will override the Hyrax strategy of including the locale in the
-  # URL parameters.
-  #
   # @return [Hash]
   # @todo remove this when supporting multiple locales
   def default_url_options
@@ -59,5 +56,29 @@ class ApplicationController < ActionController::Base
       return unless Rails.env.development? && (current_user || ENV.key?('DEV_USER'))
       user = User.find_by(email: ENV['DEV_USER'])
       sign_in(user) unless user.nil?
+    end
+
+    # Borrowed from the Devise wiki:
+    #
+    # > Its important that the location is NOT stored if:
+    # > - The request method is not GET (non idempotent)
+    # > - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
+    # >    infinite redirect loop.
+    # > - The request is an Ajax request as this can lead to very unexpected behaviour.
+    #
+    # Also adds a check to ignore download paths (iframe requests made by an item
+    # viewer will take precedence over the user's last visited path).
+    def storable_location?
+      return false if request.path.start_with? '/downloads'
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+    end
+
+    def store_user_location!
+      # :user is the scope we are authenticating
+      store_location_for(:user, request.fullpath)
+    end
+
+    def after_sign_in_path_for(resource_or_scope)
+      stored_location_for(resource_or_scope) || super
     end
 end
