@@ -1,5 +1,34 @@
 # changelog
 
+## [2019.8] - 2019-12-06
+
+### features ☃️
+
+- add OAI-PMH support via the blacklight-oai gem (#323)
+- index an item's application url if a handle identifier isn't present (part of #323)
+- strip leading/trailing whitespace in publication form values (#365)
+- adds faceting by rights_statement (using shortcode values) (#366)
+- makes Collection slugs readonly after entry (to help prevent unintended changes) (d9af51c)
+- redirect users back to the page they were currently at after signing in (#369)
+
+### bug fixes 🐞
+
+- revert part of #350 to allow date_issued to accept YYYY formatting (03a2f9b)
+- add "International Affairs" to the department local authority (8fdd907)
+- invalid UTF-8 errors during characterization should finally be cleared (#363)
+- when releasing embargo, only set date_available if the item contains that property (7b8fdf6)
+- fix typo for Periodical resource_type (de1b540)
+
+### dependencies 👩‍👩‍👧‍👧
+
+- adds blacklight-oai gem (#323)
+- upgrades puma to 3.12.2 (#368, thanks @dependabot!)
+
+### notes 🗒
+
+- this will require a re-index to support the added fields from #323 and #366
+
+
 ## [2019.7] - 2019-11-25
 
 ### features 🦃
@@ -179,6 +208,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.8
 [2019.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.7
 [2019.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.6
 [2019.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.5
