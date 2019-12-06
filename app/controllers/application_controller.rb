@@ -65,7 +65,11 @@ class ApplicationController < ActionController::Base
     # > - The request is handled by a Devise controller such as Devise::SessionsController as that could cause an
     # >    infinite redirect loop.
     # > - The request is an Ajax request as this can lead to very unexpected behaviour.
+    #
+    # Also adds a check to ignore download paths (iframe requests made by an item
+    # viewer will take precedence over the user's last visited path).
     def storable_location?
+      return false if request.path.start_with? '/downloads'
       request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
     end
 
