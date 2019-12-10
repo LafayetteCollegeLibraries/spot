@@ -3,6 +3,8 @@ class PublicationIndexer < BaseIndexer
   include IndexesEnglishLanguageDates
   include IndexesSortableDate
 
+  self.sortable_date_property = :date_issued
+
   # @return [Hash]
   def generate_solr_document
     super.tap do |solr_doc|
