@@ -27,6 +27,17 @@ module Spot
       %i[csv ttl nt jsonld]
     end
 
+    # location values + labels zipped into tuples.
+    #
+    # @example
+    #   presenter.location
+    #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
+    #
+    # @return [Array<Array<String>>]
+    def location
+      solr_document.location.zip(solr_document.location_label).reject(&:empty?)
+    end
+
     # Overrides {Hyrax::WorkShowPresenter#page_title} by only using
     # the work's title + our product name.
     #
@@ -49,17 +60,6 @@ module Spot
     # @return [true, false]
     def public?
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-    end
-
-    # location values + labels zipped into tuples.
-    #
-    # @example
-    #   presenter.location
-    #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
-    #
-    # @return [Array<Array<String>>]
-    def location
-      solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
     # @return [Array<Array<String>>]

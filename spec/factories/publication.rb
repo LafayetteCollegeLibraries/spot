@@ -15,6 +15,7 @@ FactoryBot.define do
     identifier { ['hdl:123/456', 'doi:00.000/00000'] }
     keyword { ['test', 'item', 'topic'] }
     language { ['en'] }
+    license { ['This is some licensing text'] }
     location { [] }
     note { ['a note about the thing'] }
     organization { ['Lafayette College'] }

@@ -21,17 +21,6 @@ module Hyrax
       @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
-    # location values + labels zipped into tuples.
-    #
-    # @example
-    #   presenter.location
-    #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
-    #
-    # @return [Array<Array<String>>]
-    def location
-      solr_document.location.zip(solr_document.location_label).reject(&:empty?)
-    end
-
     # @return [true, false]
     def multiple_members?
       list_of_item_ids_to_display.count > 1
