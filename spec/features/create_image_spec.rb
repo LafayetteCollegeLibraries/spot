@@ -17,7 +17,7 @@ RSpec.feature 'Create an Image', :clean, :js do
     let(:user) { create(:admin_user) }
     let(:attrs) { attributes_for(:image) }
 
-    skip 'can fill out and submit a new Publication' do
+    skip 'can fill out and submit a new Image' do
     end
   end
 end
