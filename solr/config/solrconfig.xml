@@ -315,11 +315,25 @@
 
   <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
-      <str name="name">mySuggester</str>
+      <str name="name">keywordSuggester</str>
       <str name="lookupImpl">FuzzyLookupFactory</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">suggest</str>
+      <str name="field">keyword_suggest</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">publisherSuggester</str>
+      <str name="lookupImpl">FuzzyLookupFactory</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">publisher_suggest</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">sourceSuggester</str>
+      <str name="lookupImpl">FuzzyLookupFactory</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">source_suggest</str>
     </lst>
   </searchComponent>
 
@@ -327,7 +341,7 @@
     <lst name="defaults">
       <str name="suggest">true</str>
       <str name="suggest.count">5</str>
-      <str name="suggest.dictionary">mySuggester</str>
+      <str name="suggest.dictionary">keywordSuggester</str>
     </lst>
     <arr name="components">
       <str>suggest</str>
