@@ -113,7 +113,7 @@ module Qa::Authorities
         suggestions ||= []
 
         suggestions.map do |res|
-          { id: res['payload'], label: res['payload'], value: res['payload'] }
+          { id: res['term'], label: res['term'], value: res['term'] }
         end
       end
   end

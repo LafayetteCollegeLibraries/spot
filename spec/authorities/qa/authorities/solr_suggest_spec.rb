@@ -23,7 +23,7 @@ RSpec.describe Qa::Authorities::SolrSuggest do
     let(:expected_results) do
       [obj1, obj3]
         .map { |t| t[solr_field].first }
-        .map { |v| { id: v, value: v } }
+        .map { |v| { id: v, label: v, value: v } }
     end
 
     it { is_expected.to eq expected_results }
