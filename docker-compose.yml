@@ -63,6 +63,8 @@ services:
     volumes:
       - ./solr/config:/spot-config
       - solr:/opt/solr/server/solr
+    ports:
+      - '8983:8983'
     command: solr-create -c spot-development -d /spot-config
     restart: always
 
@@ -73,7 +75,7 @@ services:
       - .:/app
       - ./ingest:/ingest
     ports:
-      - "4000:3000"
+      - "3003:3000"
     restart: always
     depends_on:
       - app
