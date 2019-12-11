@@ -315,31 +315,31 @@
 
   <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
-      <str name="name">keywordSuggester</str>
+      <str name="name">keyword</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
       <str name="dictionaryImpl">DocumentDictionaryFactory</str>
       <str name="indexPath">suggestion_index_keyword</str>
-      <str name="highlight">false</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
       <str name="field">keyword_suggest_ssim</str>
     </lst>
     <lst name="suggester">
-      <str name="name">publisherSuggester</str>
+      <str name="name">publisher</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
       <str name="dictionaryImpl">DocumentDictionaryFactory</str>
       <str name="indexPath">suggestion_index_publisher</str>
-      <str name="highlight">false</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
       <str name="field">publisher_suggest_ssim</str>
     </lst>
     <lst name="suggester">
-      <str name="name">sourceSuggester</str>
+      <str name="name">source</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
       <str name="dictionaryImpl">DocumentDictionaryFactory</str>
       <str name="indexPath">suggestion_index_source</str>
-      <str name="highlight">false</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
       <str name="field">source_suggest_ssim</str>
@@ -350,7 +350,7 @@
     <lst name="defaults">
       <str name="suggest">true</str>
       <str name="suggest.count">5</str>
-      <str name="suggest.dictionary">keywordSuggester</str>
+      <str name="suggest.dictionary">keyword</str>
     </lst>
     <arr name="components">
       <str>suggest</str>

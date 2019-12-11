@@ -18,7 +18,7 @@ module Qa::Authorities
   #
   # @example Configuring a suggestion dictionary
   #   <lst name="suggester">
-  #     <str name="name">keywordSuggester</str>
+  #     <str name="name">keyword</str>
   #     <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
   #     <str name="dictionaryImpl">DocumentDictionaryFactory</str>
   #     <str name="indexPath">suggestion_index_keyword</str>
@@ -33,54 +33,34 @@ module Qa::Authorities
   #     <str name="field">keyword_suggest_ssim</str>
   #   </lst>
   #
-  # Finally, create a new authority which inherits from this, and
-  # provide a value (the "name" in the suggestion dictionary config)
-  # for the +suggestion_dictionary+ class_attribute.
-  #
-  # @example
-  #   module Qa::Authorities
-  #     class KeywordSuggest < BaseSolrSuggest
-  #       self.suggestion_dictionary = 'keywordSuggester'
-  #     end
-  #   end
-  #
-  class BaseSolrSuggest < Qa::Authorities::Base
-    class_attribute :suggestion_dictionary
-    self.suggestion_dictionary = nil
+  class SolrSuggest < Qa::Authorities::Base
+    BUILD_ALL_KEYWORD = :__all__
 
-    class << self
-      # Triggers a build on the suggestion dictionary. If called
-      # from this class - where suggestion_dictionary is nil -
-      # it will trigger a build for all of the suggest dictionaries
-      # (gives us a way of automating all of the builds).
-      #
-      # @return [void]
-      def build_dictionary!
-        params = { 'suggest' => true }
+    attr_reader :dictionary
 
-        if suggestion_dictionary.nil?
-          params['suggest.buildAll'] = true
-        else
-          params['suggest.dictionary'] = suggestion_dictionary
-          params['suggest.build'] = true
-        end
-
-        connection.get(suggest_path, params: params)
-      end
-
-      # @return [RSolr::Client]
-      def connection
-        ActiveFedora::SolrService.instance.conn
-      end
-
-      # @return [String]
-      def suggest_path
-        @suggest_path ||= begin
-          url = Rails.application.config_for(:solr)['url']
-          URI.join(url + '/', 'suggest').path
-        end
-      end
+    def self.build_dictionaries!
+      new(BUILD_ALL_KEYWORD).build_dictionary!
     end
+
+    def initialize(dictionary)
+      @dictionary = dictionary
+    end
+
+    # @return [void]
+    def build_dictionary!
+      params = { 'suggest' => true }
+
+      if dictionary == BUILD_ALL_KEYWORD
+        params['suggest.buildAll'] = true
+      else
+        params['suggest.dictionary'] = dictionary
+        params['suggest.build'] = true
+      end
+
+      connection.get(suggest_path, params: params)
+    end
+
+    # @return [RSolr::Client]
 
     def search(query)
       solr_suggestion_for_query(query)
@@ -94,21 +74,31 @@ module Qa::Authorities
       []
     end
 
-    # @param [String] query
-    # @return [Array<Hash<String => String>>]
-    def solr_suggestion_for_query(query)
-      raise 'No suggestion dictionary provided!' if suggestion_dictionary.nil?
-
-      params = {
-        'suggest.q' => query,
-        'suggest.dictionary' => suggestion_dictionary
-      }
-
-      raw = self.class.connection.get(self.class.suggest_path, params: params)
-      parse_raw_response(raw, query: query)
-    end
-
     private
+
+      def connection
+        ActiveFedora::SolrService.instance.conn
+      end
+
+      # @return [String]
+      def suggest_path
+        @suggest_path ||= begin
+          url = Rails.application.config_for(:solr)['url']
+          URI.join(url + '/', 'suggest').path
+        end
+      end
+
+      # @param [String] query
+      # @return [Array<Hash<String => String>>]
+      def solr_suggestion_for_query(query)
+        params = {
+          'suggest.q' => query,
+          'suggest.dictionary' => dictionary
+        }
+
+        raw = connection.get(suggest_path, params: params)
+        parse_raw_response(raw, query: query)
+      end
 
       # Takes the Solr response and transforms the results into the
       # Questioning Authority preferred format.
@@ -119,11 +109,11 @@ module Qa::Authorities
       #   The initial query, used to extract results from the returned Hash
       # @return [Array<Hash<String => String>>]
       def parse_raw_response(raw, query:)
-        suggestions = raw.dig('suggest', suggestion_dictionary, query, 'suggestions')
+        suggestions = raw.dig('suggest', dictionary, query, 'suggestions')
         suggestions ||= []
 
         suggestions.map do |res|
-          { id: res['term'], label: res['term'], value: res['term'] }
+          { id: res['payload'], label: res['payload'], value: res['payload'] }
         end
       end
   end

@@ -3,6 +3,6 @@
 # QuestioningAuthority configuration
 
 # our Solr suggestion authorities
-Qa::Authorities::Local.register_subauthority('keywords', 'KeywordSuggest')
-Qa::Authorities::Local.register_subauthority('sources', 'SourceSuggest')
-Qa::Authorities::Local.register_subauthority('publishers', 'PublisherSuggest')
+Qa::Authorities::Local.register_subauthority('keyword', 'Qa::Authorities::SolrSuggest')
+Qa::Authorities::Local.register_subauthority('source', 'Qa::Authorities::SolrSuggest')
+Qa::Authorities::Local.register_subauthority('publisher', 'Qa::Authorities::SolrSuggest')
