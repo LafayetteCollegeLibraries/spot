@@ -41,8 +41,6 @@ module Qa::Authorities
   #   end
   #
   class BaseSolrSuggest < Qa::Authorities::Base
-    include ::SolrSuggestionQuerying
-
     class_attribute :suggestion_dictionary
     self.suggestion_dictionary = nil
 
