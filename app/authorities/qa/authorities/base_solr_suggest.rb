@@ -7,18 +7,22 @@ module Qa::Authorities
   #
   # To begin, first ensure that a suggestion dictionary has been set-up + created
   # for your field. In +schemal.xml+, you'll want to ensure that a copyfield
-  # has been created as the pool to draw from.
+  # has been created as the pool to draw from. Note: this field needs to be
+  # a stored field.
   #
   # @example Configuring a copyfield for suggestions
-  #   <copyField source="keyword_sim" dest="keyword_suggest" />
+  #   <copyField source="keyword_sim" dest="keyword_suggest_ssim" />
   #
-  # In +solrconfig.xml+, you'll need to build a suggester. For now, we're
-  # just copying the defaults for a new dictionary.
+  # In +solrconfig.xml+, you'll need to build a suggester. The property
+  # +suggestAnalyzerFieldType+ should be a simple tokenizing field.
   #
   # @example Configuring a suggestion dictionary
   #   <lst name="suggester">
   #     <str name="name">keywordSuggester</str>
-  #     <str name="lookupImpl">FuzzyLookupFactory</str>
+  #     <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+  #     <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+  #     <str name="indexPath">suggestion_index_keyword</str>
+  #     <str name="highlight">false</str>
   #     <str name="suggestAnalyzerFieldType">textSuggest</str>
   #     <!--
   #       buildOnCommit can bring ingests to a crawl, so we suggest
@@ -26,7 +30,7 @@ module Qa::Authorities
   #       a cron-job or something similar
   #     -->
   #     <str name="buildOnCommit">false</str>
-  #     <str name="field">keyword_suggest</str>
+  #     <str name="field">keyword_suggest_ssim</str>
   #   </lst>
   #
   # Finally, create a new authority which inherits from this, and
@@ -43,6 +47,40 @@ module Qa::Authorities
   class BaseSolrSuggest < Qa::Authorities::Base
     class_attribute :suggestion_dictionary
     self.suggestion_dictionary = nil
+
+    class << self
+      # Triggers a build on the suggestion dictionary. If called
+      # from this class - where suggestion_dictionary is nil -
+      # it will trigger a build for all of the suggest dictionaries
+      # (gives us a way of automating all of the builds).
+      #
+      # @return [void]
+      def build_dictionary!
+        params = { 'suggest' => true }
+
+        if suggestion_dictionary.nil?
+          params['suggest.buildAll'] = true
+        else
+          params['suggest.dictionary'] = suggestion_dictionary
+          params['suggest.build'] = true
+        end
+
+        connection.get(suggest_path, params: params)
+      end
+
+      # @return [RSolr::Client]
+      def connection
+        ActiveFedora::SolrService.instance.conn
+      end
+
+      # @return [String]
+      def suggest_path
+        @suggest_path ||= begin
+          url = Rails.application.config_for(:solr)['url']
+          URI.join(url + '/', 'suggest').path
+        end
+      end
+    end
 
     def search(query)
       solr_suggestion_for_query(query)
@@ -62,12 +100,11 @@ module Qa::Authorities
       raise 'No suggestion dictionary provided!' if suggestion_dictionary.nil?
 
       params = {
-        'suggest' => true,
         'suggest.q' => query,
         'suggest.dictionary' => suggestion_dictionary
       }
 
-      raw = connection.get(suggest_path, params: params)
+      raw = self.class.connection.get(self.class.suggest_path, params: params)
       parse_raw_response(raw, query: query)
     end
 
@@ -88,19 +125,6 @@ module Qa::Authorities
         suggestions.map do |res|
           { id: res['term'], label: res['term'], value: res['term'] }
         end
-      end
-
-      # @return [String]
-      def suggest_path
-        @suggest_path ||= begin
-          url = Rails.application.config_for(:solr)['url']
-          URI.join(url + '/', 'suggest').path
-        end
-      end
-
-      # @return [RSolr::Client]
-      def connection
-        ActiveFedora::SolrService.instance.conn
       end
   end
 end
