@@ -165,16 +165,15 @@
       </analyzer>
     </fieldType>
 
-    <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
+    <fieldType name="textSuggest" class="solr.TextField">
       <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldType>
   </types>
-
 
   <fields>
     <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
@@ -330,9 +329,9 @@
   <uniqueKey>id</uniqueKey>
 
   <!-- for suggestions -->
-  <copyField source="source_sim" dest="source_suggest" />
-  <copyField source="publisher_sim" dest="publisher_suggest" />
-  <copyField source="keyword_sim" dest="keyword_suggest" />
+  <copyField source="source_sim" dest="source_suggest_ssim" />
+  <copyField source="publisher_sim" dest="publisher_suggest_ssim" />
+  <copyField source="keyword_sim" dest="keyword_suggest_ssim" />
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine

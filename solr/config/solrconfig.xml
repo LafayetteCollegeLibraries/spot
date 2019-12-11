@@ -316,24 +316,33 @@
   <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
       <str name="name">keywordSuggester</str>
-      <str name="lookupImpl">FuzzyLookupFactory</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_keyword</str>
+      <str name="highlight">false</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">keyword_suggest</str>
+      <str name="field">keyword_suggest_ssim</str>
     </lst>
     <lst name="suggester">
       <str name="name">publisherSuggester</str>
-      <str name="lookupImpl">FuzzyLookupFactory</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_publisher</str>
+      <str name="highlight">false</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">publisher_suggest</str>
+      <str name="field">publisher_suggest_ssim</str>
     </lst>
     <lst name="suggester">
       <str name="name">sourceSuggester</str>
-      <str name="lookupImpl">FuzzyLookupFactory</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_source</str>
+      <str name="highlight">false</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">source_suggest</str>
+      <str name="field">source_suggest_ssim</str>
     </lst>
   </searchComponent>
 
