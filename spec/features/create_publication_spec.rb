@@ -41,10 +41,10 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
         expect(page).to have_css '.publication_title_alternative .controls-add-text'
 
-        fill_in_autocomplete '.publication_publisher', with: attrs[:publisher].first
+        fill_in 'Publisher', with: attrs[:publisher].first
         expect(page).to have_css '.publication_publisher .controls-add-text'
 
-        fill_in_autocomplete '.publication_source', with: attrs[:source].first
+        fill_in 'Source', with: attrs[:source].first
         expect(page).to have_css '.publication_source .controls-add-text'
 
         select 'Article', from: 'Resource type'
@@ -92,7 +92,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Organization', with: attrs[:organization].first
         expect(page).to have_css '.publication_organization .controls-add-text'
 
-        fill_in_autocomplete '.publication_keyword', with: attrs[:keyword].first
+        fill_in 'Keyword', with: attrs[:keyword].first
         expect(page).to have_css '.publication_keyword .controls-add-text'
 
         select 'No Known Copyright', from: 'Rights statement'
