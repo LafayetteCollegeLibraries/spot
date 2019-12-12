@@ -19,30 +19,30 @@ RSpec.describe PublicationIndexer do
   # simple_model_indexing just means that it maps the values
   # on the object (the keys) to the solr_doc fields (the values)
   {
-    'title'                  => %w[tesim],
-    'subtitle'               => %w[tesim],
-    'title_alternative'      => %w[tesim],
-    'publisher'              => %w[tesim sim],
-    'source'                 => %w[tesim sim],
-    'resource_type'          => %w[tesim sim],
-    'abstract'               => %w[tesim],
-    'description'            => %w[tesim],
-    'note'                   => %w[tesim],
+    'title' => %w[tesim],
+    'subtitle' => %w[tesim],
+    'title_alternative' => %w[tesim],
+    'publisher' => %w[tesim sim],
+    'source' => %w[tesim sim],
+    'resource_type' => %w[tesim sim],
+    'abstract' => %w[tesim],
+    'description' => %w[tesim],
+    'note' => %w[tesim],
     'bibliographic_citation' => %w[tesim],
-    'date_issued'            => %w[ssim],
-    'date_available'         => %w[ssim],
-    'creator'                => %w[tesim sim],
-    'contributor'            => %w[tesim sim],
-    'academic_department'    => %w[tesim sim],
-    'division'               => %w[tesim sim],
-    'organization'           => %w[tesim sim],
-    'related_resource'       => %w[tesim sim],
-    'keyword'                => %w[tesim sim],
-    'license'                => %w[tsm]
+    'date_issued' => %w[ssim],
+    'date_available' => %w[ssim],
+    'creator' => %w[tesim sim],
+    'contributor' => %w[tesim sim],
+    'academic_department' => %w[tesim sim],
+    'division' => %w[tesim sim],
+    'organization' => %w[tesim sim],
+    'related_resource' => %w[tesim sim],
+    'keyword' => %w[tesim sim],
+    'license' => %w[tsm]
   }.each_pair do |method, suffixes|
     describe method do
       let(:work_method) { method.to_sym }
-      let(:solr_fields) { suffixes.map { |suffix| "#{method}_#{suffix}"} }
+      let(:solr_fields) { suffixes.map { |suffix| "#{method}_#{suffix}" } }
 
       it_behaves_like 'simple model indexing'
     end
