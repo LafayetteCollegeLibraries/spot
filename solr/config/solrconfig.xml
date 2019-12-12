@@ -322,7 +322,7 @@
       <str name="indexPath">suggestion_index_keyword</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">keyword_tesim</str>
+      <str name="field">keyword_sim</str>
     </lst>
     <lst name="suggester">
       <str name="name">name</str>
@@ -342,7 +342,7 @@
       <str name="indexPath">suggestion_index_organization</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">organization_tesim</str>
+      <str name="field">organization_sim</str>
     </lst>
     <lst name="suggester">
       <str name="name">physical_medium</str>
@@ -352,7 +352,7 @@
       <str name="indexPath">suggestion_index_physical_medium</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">physical_medium_tesim</str>
+      <str name="field">physical_medium_sim</str>
     </lst>
     <lst name="suggester">
       <str name="name">publisher</str>
@@ -362,7 +362,7 @@
       <str name="indexPath">suggestion_index_publisher</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">publisher_tesim</str>
+      <str name="field">publisher_sim</str>
     </lst>
     <lst name="suggester">
       <str name="name">source</str>
@@ -372,7 +372,7 @@
       <str name="indexPath">suggestion_index_source</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">source_tesim</str>
+      <str name="field">source_sim</str>
     </lst>
   </searchComponent>
 
