@@ -318,31 +318,61 @@
       <str name="name">keyword</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
       <str name="highlight">false</str>
-      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
       <str name="indexPath">suggestion_index_keyword</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">keyword_suggest_ssim</str>
+      <str name="field">keyword_tesim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">name</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_name</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">name_suggest_ssim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">organization</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_organization</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">organization_tesim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">physical_medium</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_physical_medium</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">physical_medium_tesim</str>
     </lst>
     <lst name="suggester">
       <str name="name">publisher</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
       <str name="highlight">false</str>
-      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
       <str name="indexPath">suggestion_index_publisher</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">publisher_suggest_ssim</str>
+      <str name="field">publisher_tesim</str>
     </lst>
     <lst name="suggester">
       <str name="name">source</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
       <str name="highlight">false</str>
-      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
       <str name="indexPath">suggestion_index_source</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">source_suggest_ssim</str>
+      <str name="field">source_tesim</str>
     </lst>
   </searchComponent>
 

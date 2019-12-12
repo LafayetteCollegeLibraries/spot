@@ -329,9 +329,9 @@
   <uniqueKey>id</uniqueKey>
 
   <!-- for suggestions -->
-  <copyField source="source_sim" dest="source_suggest_ssim" />
-  <copyField source="publisher_sim" dest="publisher_suggest_ssim" />
-  <copyField source="keyword_sim" dest="keyword_suggest_ssim" />
+  <copyField source="creator_sim" dest="name_suggest_ssim" />
+  <copyField source="contributor_sim" dest="name_suggest_ssim" />
+  <copyField source="editor_sim" dest="name_suggest_ssim" />
 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine
