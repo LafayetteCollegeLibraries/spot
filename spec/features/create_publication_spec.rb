@@ -41,19 +41,16 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
         expect(page).to have_css '.publication_title_alternative .controls-add-text'
 
-        fill_in 'Publisher', with: attrs[:publisher].first
+        fill_in_autocomplete '.publication_publisher', with: attrs[:publisher].first
         expect(page).to have_css '.publication_publisher .controls-add-text'
 
-        fill_in 'Source', with: attrs[:source].first
+        fill_in_autocomplete '.publication_source', with: attrs[:source].first
         expect(page).to have_css '.publication_source .controls-add-text'
 
         select 'Article', from: 'Resource type'
         expect(page).not_to have_css '.publication_resource_type .controls-add-text'
 
-        # skipping this for now, as it's a js form box, and checking for the css
-        # seems comprehensive enough for now (read: on a late friday afternoon).
-        #
-        # fill_in 'Language', with: attrs[:language].first
+        fill_in_autocomplete '.publication_language', with: attrs[:language].first
         expect(page).to have_css '.publication_language .controls-add-text'
 
         fill_in 'Abstract', with: attrs[:abstract].first
@@ -82,22 +79,20 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Editor', with: attrs[:editor].first
         expect(page).to have_css '.publication_editor .controls-add-text'
 
-        ## skipping local controlled vocabulary inputs for now until
-        ## i can get the javascript parts straight
-        #
-        # fill_in 'Academic department', with: attrs[:academic_department].first
-        # expect(page).to have_css '.publication_academic_department .controls-add-text'
-        #
-        # fill_in 'Division', with: attrs[:division].first
-        # expect(page).to have_css '.publication_division .controls-add-text'
-        #
-        # fill_in 'Subject', with: attrs[:subject].first
-        # expect(page).to have_css '.publication_subject .controls-add-text'
+        fill_in_autocomplete '.publication_academic_department',
+                             with: attrs[:academic_department].first
+        expect(page).to have_css '.publication_academic_department .controls-add-text'
+
+        fill_in_autocomplete '.publication_division', with: attrs[:division].first
+        expect(page).to have_css '.publication_division .controls-add-text'
+
+        fill_in_autocomplete '.publication_subject', with: attrs[:subject].first
+        expect(page).to have_css '.publication_subject .controls-add-text'
 
         fill_in 'Organization', with: attrs[:organization].first
         expect(page).to have_css '.publication_organization .controls-add-text'
 
-        fill_in 'Keyword', with: attrs[:keyword].first
+        fill_in_autocomplete '.publication_keyword', with: attrs[:keyword].first
         expect(page).to have_css '.publication_keyword .controls-add-text'
 
         select 'No Known Copyright', from: 'Rights statement'

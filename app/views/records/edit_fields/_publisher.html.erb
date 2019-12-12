@@ -1,0 +1,18 @@
+<%=
+  f.input key,
+  as: :local_controlled_vocabulary,
+  input_html: {
+    class: 'form-control',
+    data: {
+      'autocomplete-url' => '/authorities/search/local/publisher',
+      'autocomplete' => key,
+    },
+  },
+  wrapper_html: {
+    data: {
+      'autocomplete-url' => '/authorities/search/local/publisher',
+      'field-name' => key
+    }
+  },
+  required: f.object.required?(key)
+%>
