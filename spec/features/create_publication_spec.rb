@@ -41,7 +41,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
         expect(page).to have_css '.publication_title_alternative .controls-add-text'
 
-        fill_in 'Publisher', with: attrs[:publisher].first
+        fill_in 'publication_publisher', with: attrs[:publisher].first
         expect(page).to have_css '.publication_publisher .controls-add-text'
 
         fill_in 'Source', with: attrs[:source].first
