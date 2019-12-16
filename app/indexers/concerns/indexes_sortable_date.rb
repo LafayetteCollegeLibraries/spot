@@ -1,53 +1,53 @@
 # frozen_string_literal: true
 #
-# Adds a +date_issued_sort_dtsi+ field to the Solr document, allowing sorting
-# by the +date_issued+ property. If that property is missing, it falls back
-# to the object's +create_date+. If multiple dates are provided, it choses the
-# earlier date. (Note: the last choice can absolutely be altered if need be).
+# Adds a sortable date field to the Solr document using
+# a configurable class attribute. If no value is found,
+# we'll default to the object's create_date property
+# (used by Fedora).
+#
+# Note: this uses the +Date.edtf+ parser, so EDTF values
+# are valid and will round-down to the lowest value
+# ('2019-12' will become '2019-12-01T00:00:00Z'; see example).
 #
 # @example
+#   class Book < ActiveFedora::Base
+#     property :date_issued, predicate: ::RDF::Vocab::DC.issued
+#   end
 #
-#    class PostcardIndexer < Hyrax::WorkIndexer
-#      # ... the other includes
-#      include IndexesSortableDate
-#    end
+#   class BookIndexer < BaseIndexer
+#     include IndexesSortableDate
 #
-#    indexer = PostcardIndexer.new(Postcard.new(date_issued: ['1991-09-04']))
-#    solr_doc = indexer.generate_solr_document
-#    puts solr_doc['date_issued_sort_dtsi']
-#    # => '1991-09-04T00:00:00Z'
+#     self.sortable_date_property = :date_issued
+#   end
+#
+#   book = Book.find('abc123def')
+#   book.date_issued
+#   # => ['2019-12']
+#   indexer = BookIndexer.new(book)
+#   solr_doc = indexer.generate_solr_document
+#   solr_doc['date_sort_dtsi']
+#   # => '2019-12-01T00:00:00Z'
 #
 module IndexesSortableDate
+  extend ActiveSupport::Concern
+
+  included do
+    class_attribute :sortable_date_property
+    self.sortable_date_property = :date
+  end
+
   # @return [Hash<String => *>]
   def generate_solr_document
     super.tap do |doc|
-      doc['date_issued_sort_dtsi'] = parse_sortable_date if date_exist? && date_matches_pattern?
-      doc['date_issued_sort_dtsi'] ||= object.create_date
+      doc['date_sort_dtsi'] = parse_sortable_date || object.create_date
     end
   end
 
   private
 
-    # Does the +date_issued+ property have values?
-    #
-    # @return [true, false]
-    def date_exist?
-      object.date_issued.present?
-    end
-
-    # Does our date_value match the pattern of YYYY(-MM(-DD))?
-    #
-    # @return [true, false]
-    def date_matches_pattern?
-      date_value.match?(/^\d{4}(-\d{2}(-\d{2})?)?/)
-    end
-
-    # The value we're working with. Abstracted here in the event that
-    # we want to change which value gets priority.
-    #
     # @return [String, nil]
-    def date_value
-      object.date_issued.sort.first
+    def raw_date_value
+      object.send(sortable_date_property).sort.first
     end
 
     # Converts whatever our +date_value+ is to a YYYY-MM-DDT00:00:00Z
@@ -55,7 +55,14 @@ module IndexesSortableDate
     #
     # @return [String]
     def parse_sortable_date
-      date_array = date_value.gsub(/T.*$/, '').split('-').map(&:to_i)
-      Date.new(*date_array).strftime('%FT%TZ')
+      raw = object.send(sortable_date_property).sort.first
+      parsed = Date.edtf(raw)
+
+      return object.create_date.to_s if parsed.nil?
+
+      # if we've got an EDTF range we'll just use the earliest date
+      parsed = parsed.first if parsed.is_a? EDTF::Interval
+
+      parsed.strftime('%FT%TZ')
     end
 end

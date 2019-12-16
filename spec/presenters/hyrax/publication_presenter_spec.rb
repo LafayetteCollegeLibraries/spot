@@ -7,29 +7,7 @@ RSpec.describe Hyrax::PublicationPresenter do
   let(:object) { build(:publication) }
   let(:ability) { Ability.new(build(:user)) }
 
-  it_behaves_like 'it renders an attribute to HTML'
-
-  describe '#export_formats' do
-    subject { presenter.export_formats }
-
-    it { is_expected.to include :csv, :ttl, :nt, :jsonld }
-  end
-
-  describe '#public?' do
-    subject { presenter.public? }
-
-    context 'when object is public' do
-      let(:object) { build(:publication, :public) }
-
-      it { is_expected.to be true }
-    end
-
-    context 'when object is not public' do
-      let(:object) { build(:publication, :authenticated) }
-
-      it { is_expected.to be false }
-    end
-  end
+  it_behaves_like 'a Spot presenter'
 
   context 'identifier handling' do
     let(:raw_ids) { ['issn:1234-5678', 'abc:123'] }
@@ -69,29 +47,6 @@ RSpec.describe Hyrax::PublicationPresenter do
       {
         'location_ssim' => [uri],
         'location_label_ssim' => [label]
-      }
-    end
-
-    it { is_expected.to eq [[uri, label]] }
-  end
-
-  describe '#page_title' do
-    subject { presenter.page_title }
-
-    it { is_expected.to include presenter.title.first }
-    it { is_expected.to include 'Lafayette Digital Repository' }
-  end
-
-  describe '#rights_statement_merged' do
-    subject { presenter.rights_statement_merged }
-
-    let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
-    let(:label) { 'Public Domain Mark (PDM)' }
-
-    let(:solr_data) do
-      {
-        'rights_statement_ssim' => [uri],
-        'rights_statement_label_ssim' => [label]
       }
     end
 

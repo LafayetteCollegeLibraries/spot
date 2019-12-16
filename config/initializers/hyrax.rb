@@ -2,6 +2,8 @@
 Hyrax.config do |config|
   # Injected via `rails g hyrax:work Publication`
   config.register_curation_concern :publication
+  # Injected via `rails g hyrax:work Image`
+  config.register_curation_concern :image
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.

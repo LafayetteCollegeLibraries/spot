@@ -15,6 +15,7 @@ FactoryBot.define do
     identifier { ['hdl:123/456', 'doi:00.000/00000'] }
     keyword { ['test', 'item', 'topic'] }
     language { ['en'] }
+    license { ['This is some licensing text'] }
     location { [] }
     note { ['a note about the thing'] }
     organization { ['Lafayette College'] }
@@ -67,6 +68,10 @@ FactoryBot.define do
         pub.representative_id = fs.id
         pub.save
       end
+    end
+
+    before(:create) do |work, evaluator|
+      work.apply_depositor_metadata(evaluator.user.user_key)
     end
   end
 end

@@ -1,62 +1,23 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::Actors::PublicationActor do
-  subject(:actor) { pub_actor.create(env) }
-
-  let(:pub_actor) { described_class.new(Hyrax::Actors::Terminator.new) }
-  let(:work) { Publication.new }
-  let(:user) { build(:user) }
-  let(:ability) { Ability.new(user) }
-  let(:attributes) { {} }
-  let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
-
-  before { allow(work).to receive(:save) }
-
-  describe '#apply_deposit_date' do
-    before do
-      allow(Hyrax::TimeService).to receive(:time_in_utc).and_return(time_value)
-    end
-
-    let(:time_value) { DateTime.now.utc }
-    let(:date_uploaded) { '2018-01-08T00:00:00Z' }
-
-    context 'when no date_uploaded value is provided' do
-      it 'sets the date to TimeService.time_in_utc' do
-        expect { actor }
-          .to change { work.date_uploaded }
-          .from(nil)
-          .to(time_value)
-      end
-    end
-
-    context 'when a date_uploaded is provided to the attributes' do
-      let(:attributes) { { date_uploaded: date_uploaded } }
-
-      it 'sets the date_uploaded of the work to a DateTime of the value' do
-        expect { actor }
-          .to change { work.date_uploaded }
-          .from(nil)
-          .to(DateTime.parse(date_uploaded).utc)
-      end
-    end
-
-    context 'when a date_uploaded value is present on the work' do
-      let(:work) { Publication.new(date_uploaded: date_uploaded) }
-
-      it 'ensures the value is a DateTime' do
-        expect { actor }
-          .to change { work.date_uploaded }
-          .from(date_uploaded)
-          .to(DateTime.parse(date_uploaded).utc)
-      end
-    end
-  end
+  it_behaves_like 'a Spot actor'
 
   describe '#apply_date_available' do
+    subject(:actor) { actor_stack.create(env) }
+
+    let(:actor_stack) { described_class.new(Hyrax::Actors::Terminator.new) }
+    let(:work) { build(:publication, **attributes) }
+    let(:user) { create(:user) }
+    let(:ability) { Ability.new(user) }
+    let(:attributes) { { date_available: [] } }
+    let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
+
     context 'when a date_available value is present' do
       let(:attributes) { { date_available: ['2019-11-22'] } }
 
       it 'does not update the value' do
-        expect { actor }.not_to change { work.date_available }
+        actor
+        expect(work.date_available).to eq attributes[:date_available]
       end
     end
 
@@ -75,7 +36,11 @@ RSpec.describe Hyrax::Actors::PublicationActor do
     context 'when an embargo is set for the work' do
       before { allow(work).to receive(:embargo).and_return embargo }
 
-      let(:embargo) { instance_double(Hydra::AccessControls::Embargo, embargo_release_date: tomorrow_time) }
+      let(:embargo) do
+        instance_double(Hydra::AccessControls::Embargo,
+                        embargo_release_date: tomorrow_time,
+                        to_hash: {})
+      end
       let(:tomorrow_time) { Time.zone.tomorrow }
       let(:tomorrow) { tomorrow_time.strftime('%Y-%m-%d') }
 

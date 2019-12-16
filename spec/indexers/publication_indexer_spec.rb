@@ -1,172 +1,51 @@
 # frozen_string_literal: true
 RSpec.describe PublicationIndexer do
-  subject(:solr_doc) { indexer.generate_solr_document }
+  include_context 'indexing' do
+    let(:mime_type) { 'application/pdf' }
+    let(:mock_file) { instance_double(Hydra::PCDM::File) }
+    let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
+    let(:expected_results) { ["Some extracted full text\nfrom an article!"] }
 
-  let(:work) { build(:publication, id: 'abc123def', thumbnail_id: file_set.id) }
-  let(:indexer) { described_class.new(work) }
-  let(:file_set) { instance_double(FileSet, id: 'fs123def4') }
-  let(:mock_file) { instance_double(Hydra::PCDM::File) }
-  let(:mime_type) { 'application/pdf' }
-  let(:full_text_content) { "\n\n\n\nSome extracted full text\nfrom an article! \n\n" }
-  let(:expected_results) { ["Some extracted full text\nfrom an article!"] }
-  let(:thumbnail_path) { "/downloads/#{file_set.id}?file=thumbnail" }
-
-  before do
-    allow(work).to receive(:file_sets).and_return([file_set])
-    allow(file_set).to receive(:extracted_text).and_return(mock_file)
-    allow(file_set).to receive(:mime_type).and_return(mime_type)
-    allow(mock_file).to receive(:present?).and_return true
-    allow(mock_file).to receive(:content).and_return(full_text_content)
-    allow(Hyrax::ThumbnailPathService).to receive(:call).with(work).and_return(thumbnail_path)
+    before do
+      allow(file_set).to receive(:extracted_text).and_return(mock_file)
+      allow(mock_file).to receive(:present?).and_return true
+      allow(mock_file).to receive(:content).and_return(full_text_content)
+    end
   end
 
+  it_behaves_like 'a Spot indexer'
   it_behaves_like 'it indexes English-language dates'
-  it_behaves_like 'it indexes ISO language and label'
-  it_behaves_like 'it indexes a sortable date'
-  it_behaves_like 'it indexes a permalink'
-  it_behaves_like 'it indexes standard and local identifiers'
 
-  describe 'storing full-text' do
-    it "stores each file_set's full text content" do
-      expect(solr_doc['extracted_text_tsimv']).to eq expected_results
+  # simple_model_indexing just means that it maps the values
+  # on the object (the keys) to the solr_doc fields (the values)
+  {
+    'title' => %w[tesim],
+    'subtitle' => %w[tesim],
+    'title_alternative' => %w[tesim],
+    'publisher' => %w[tesim sim],
+    'source' => %w[tesim sim],
+    'resource_type' => %w[tesim sim],
+    'abstract' => %w[tesim],
+    'description' => %w[tesim],
+    'note' => %w[tesim],
+    'bibliographic_citation' => %w[tesim],
+    'date_issued' => %w[ssim],
+    'date_available' => %w[ssim],
+    'creator' => %w[tesim sim],
+    'contributor' => %w[tesim sim],
+    'academic_department' => %w[tesim sim],
+    'division' => %w[tesim sim],
+    'organization' => %w[tesim sim],
+    'related_resource' => %w[tesim sim],
+    'keyword' => %w[tesim sim],
+    'license' => %w[tsm]
+  }.each_pair do |method, suffixes|
+    describe method do
+      let(:work_method) { method.to_sym }
+      let(:solr_fields) { suffixes.map { |suffix| "#{method}_#{suffix}" } }
+
+      it_behaves_like 'simple model indexing'
     end
-  end
-
-  describe 'storing file formats' do
-    it 'stores the formats of the file_sets' do
-      expect(solr_doc['file_format_ssim']).to eq [mime_type]
-    end
-  end
-
-  describe 'storing thumbnails' do
-    it 'stores the full url of a thumbnail' do
-      expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{thumbnail_path}"
-    end
-  end
-
-  describe 'title' do
-    # :stored_searchable
-    let(:fields) { %w[title_tesim] }
-    let(:metadata) { { title: ['Title of work'] } }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'subtitle' do
-    # :stored_searchable
-    let(:fields) { %w[subtitle_tesim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'title_alternative' do
-    # :stored_searchable
-    let(:fields) { %w[title_alternative_tesim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'publisher' do
-    # :stored_searchable, :facetable
-    let(:fields) { %w[publisher_tesim publisher_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'source' do
-    # :stored_searchable, :facetable
-    let(:fields) { %w[source_tesim source_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'resource_type' do
-    # :symbol, :facetable
-    let(:fields) { %w[resource_type_tesim resource_type_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'abstract' do
-    # :stored_searchable
-    let(:fields) { %w[abstract_tesim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'description' do
-    # :stored_searchable
-    let(:fields) { %w[description_tesim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'note' do
-    # :stored_searchable
-    let(:fields) { %w[note_tesim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'identifier' do
-    let(:fields) { %w[identifier_ssim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'bibliographic_citation' do
-    # :stored_searchable
-    let(:fields) { %w[bibliographic_citation_tesim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'date_issued' do
-    # :symbol, :facetable
-    let(:fields) { %w[date_issued_ssim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'date_available' do
-    # :symbol, :facetable
-    let(:fields) { %w[date_available_ssim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'creator' do
-    # :stored_searchable, :facetable
-    let(:fields) { %w[creator_tesim creator_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'contributor' do
-    # :stored_searchable, :facetable
-    let(:fields) { %w[contributor_tesim contributor_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'academic_department' do
-    # :stored_searchable, :facetable
-    let(:fields) { %w[academic_department_tesim academic_department_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'division' do
-    # :symbol, :facetable
-    let(:fields) { %w[division_tesim division_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'organization' do
-    # :symbol, :facetable
-    let(:fields) { %w[organization_tesim organization_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'related_resource' do
-    # :symbol
-    let(:fields) { %w[related_resource_tesim related_resource_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'keyword' do
-    # :symbol, :facetable
-    let(:fields) { %w[keyword_tesim keyword_sim] }
-    it_behaves_like 'simple model indexing'
-  end
-
-  describe 'license' do
-    let(:fields) { %w[license_tsm] }
-    it_behaves_like 'simple model indexing'
   end
 
   describe 'location' do
@@ -184,6 +63,20 @@ RSpec.describe PublicationIndexer do
 
     it 'stores the label' do
       expect(solr_doc['location_label_ssim']).to eq [label]
+    end
+  end
+
+  describe 'sortable date' do
+    let(:work) { build(:publication, date_issued: ['2019-12?']) }
+
+    it 'parses a sortable date' do
+      expect(solr_doc['date_sort_dtsi']).to eq '2019-12-01T00:00:00Z'
+    end
+  end
+
+  describe 'storing full-text' do
+    it "stores each file_set's full text content" do
+      expect(solr_doc['extracted_text_tsimv']).to eq expected_results
     end
   end
 
@@ -228,12 +121,6 @@ RSpec.describe PublicationIndexer do
 
     it "stores each file_set's full text content" do
       expect(solr_doc['extracted_text_tsimv']).to eq expected_results
-    end
-  end
-
-  describe 'title sort' do
-    it 'indexes the first title, downcased' do
-      expect(solr_doc['title_sort_si']).to eq work.title.first.to_s.downcase
     end
   end
 end
