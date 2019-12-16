@@ -1,17 +1,18 @@
 # frozen_string_literal: true
-#
-# A common-denominator descendent of +Darlingtonia::RecordImporter+ that
-# should work for most of our importing use-cases.
-#
-# @example Using our StreamLogger class for info/error logging
-#
-#   info_stream = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
-#   error_stream = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
-#   record_importer = Spot::Importers::Base::RecordImporter.new(work_class,
-#                                                               info_stream: info_stream,
-#                                                               error_stream: error_stream)
 module Spot::Importers::Base
+  # A common-denominator descendent of +Darlingtonia::RecordImporter+ that
+  # should work for most of our importing use-cases.
+  #
+  # @example Using our StreamLogger class for info/error logging
+  #
+  #   info_stream = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
+  #   error_stream = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
+  #   record_importer = Spot::Importers::Base::RecordImporter.new(work_class,
+  #                                                               info_stream: info_stream,
+  #                                                               error_stream: error_stream)
   class RecordImporter < ::Darlingtonia::RecordImporter
+    BATCH_INGEST_KEY = :__part_of_batch_ingest__
+
     class_attribute :default_depositor_email, :default_admin_set_id
     self.default_depositor_email = 'dss@lafayette.edu'
     self.default_admin_set_id = AdminSet::DEFAULT_ID
@@ -62,6 +63,7 @@ module Spot::Importers::Base
       # @return [Hash<Symbol => Array<*>]
       def attributes_from_record(record)
         record.attributes.tap do |attributes|
+          attributes[BATCH_INGEST_KEY] = true
           attributes[:remote_files] = create_remote_files_list(record)
           attributes[:admin_set_id] ||= admin_set_id
           attributes[:member_of_collections_attributes] = collection_attributes unless collection_ids.empty?

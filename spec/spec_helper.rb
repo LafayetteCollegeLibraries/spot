@@ -110,6 +110,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include StubEnv::Helpers
   config.include ControllerHelpers, type: :helper
+  config.include Select2Helpers, type: :feature
 
   config.use_transactional_fixtures = false
   config.render_views = true

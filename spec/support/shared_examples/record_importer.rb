@@ -47,7 +47,8 @@ RSpec.shared_examples 'a RecordImporter' do |params|
         admin_set_id: admin_set_id,
         member_of_collections_attributes: {
           '0' => { 'id' => collection_id }
-        }
+        },
+        described_class::BATCH_INGEST_KEY => true
       }
     end
 

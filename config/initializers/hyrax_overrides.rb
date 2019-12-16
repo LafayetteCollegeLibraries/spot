@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 Rails.application.config.to_prepare do
-  ## Spot overrides Hyrax
-
+  # Spot overrides Hyrax
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
 
@@ -42,4 +41,10 @@ Rails.application.config.to_prepare do
       super.encode('UTF-8', invalid: :replace)
     end
   end
+
+  # Add our SolrSuggestActor to the front of the default actor-stack. This will
+  # trigger a build of all of the Solr suggestion dictionaries at the end of
+  # each create, update, destroy process (each method calls the next actor and _then_
+  # enqueues the job).
+  Hyrax::CurationConcern.actor_factory.unshift(SolrSuggestActor)
 end
