@@ -26,10 +26,22 @@ RSpec.describe Qa::Authorities::SolrSuggest do
         .map { |v| { id: v, label: v, value: v } }
     end
 
-    # i don't _fully_ understand the ranking algorithm, so the results may
-    # appear in a different order. covering my butt by just expecting the
-    # results to be the values we're expecting but not necessarily the order
-    it { is_expected.to include(*expected_results) }
+    [
+      ['bibliographic_citation', 'bibliographic_citation_sim'],
+      ['keyword', 'keyword_sim'],
+      ['name', 'name_suggest_ssim'],
+      ['organization', 'organization_sim'],
+      ['physical_medium', 'physical_medium_sim'],
+      ['publisher', 'publisher_sim'],
+      ['source', 'source_sim']
+    ].each do |dict, field|
+      context "dictionary: #{dict}" do
+        let(:dictionary) { dict }
+        let(:solr_field) { field }
+
+        it { is_expected.to include(*expected_results) }
+      end
+    end
   end
 
   describe '#term' do
