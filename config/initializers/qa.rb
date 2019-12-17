@@ -4,6 +4,7 @@
 
 # our Solr suggestion authorities
 solr_suggestion_authorities = %w[
+  bibliographic_citation
   keyword
   name
   organization

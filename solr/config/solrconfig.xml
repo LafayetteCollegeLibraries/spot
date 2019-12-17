@@ -315,6 +315,16 @@
 
   <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
+      <str name="name">bibliographic_citation</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_bibliographic_citation</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">bibliographic_citation_sim</str>
+    </lst>
+    <lst name="suggester">
       <str name="name">keyword</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
       <str name="highlight">false</str>
