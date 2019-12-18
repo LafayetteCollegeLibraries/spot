@@ -17,33 +17,28 @@ module Hyrax
       :resource_type,
       :rights_statement,
 
-      # titles
       :subtitle,
       :title_alternative,
-
-      # provenance
       :creator,
       :contributor,
       :editor,
       :publisher,
       :source,
-      :academic_department,
-      :division,
-      :organization,
-
-      # description
-      :abstract,
-      :description,
-      :note,
-      :physical_medium,
-      :language,
-      :subject,
-      :keyword,
-      :location,
       :bibliographic_citation,
       :standard_identifier,
       :local_identifier,
+      :abstract,
+      :description,
+      :subject,
+      :keyword,
+      :language,
+      :physical_medium,
+      :location,
+      :note,
       :related_resource,
+      :academic_department,
+      :division,
+      :organization,
 
       # internal fields
       # These are Hyrax-specific fields that deal with embargoes,
