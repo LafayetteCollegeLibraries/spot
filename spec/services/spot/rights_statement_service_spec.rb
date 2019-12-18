@@ -19,4 +19,10 @@ RSpec.describe Spot::RightsStatementService do
       it { is_expected.to eq fallback }
     end
   end
+
+  describe 'all values have a shortcode' do
+    it do
+      expect(service.select_all_options.map(&:last).all? { |rs| service.shortcode(rs) }).to be true
+    end
+  end
 end
