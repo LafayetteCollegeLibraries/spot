@@ -1,5 +1,41 @@
 # changelog
 
+## [2019.9] - 2019-12-20
+
+### features 🎉
+
+- adds suggestions from solr to the following fields (#370, #378):
+  - bibliographic_citation
+  - contributor
+  - creator
+  - editor
+  - keyword
+  - organization
+  - physical_medium
+  - publisher
+  - source
+- adds Image metadata model and creates a base indexer and presenter using shared properties (#258)
+- reorders PublicationForm fields to conform with suggestions (#375)
+
+### bugfixes 🐞
+
+- fix typo in `rights_statement.yml` authority file (#374)
+
+### dependencies 👩‍👩‍👧‍👧
+
+- updates rack to 2.0.8 (thanks @dependabot! #376)
+  - see https://github.com/advisories/GHSA-hrqr-hxpp-chr3
+
+### notes 🗒
+
+- will require updating Solr config files and reindexing for the suggestions and new date-sort field (as well as correcting the the rights_statement typo bug)
+
+### issues affected 🔧
+
+- closes #359
+- closes #373
+
+
 ## [2019.8] - 2019-12-06
 
 ### features ☃️
@@ -208,6 +244,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2019.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.9
 [2019.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.8
 [2019.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.7
 [2019.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.6
