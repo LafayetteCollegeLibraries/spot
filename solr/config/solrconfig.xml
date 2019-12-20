@@ -315,11 +315,74 @@
 
   <searchComponent name="suggest" class="solr.SuggestComponent">
     <lst name="suggester">
-      <str name="name">mySuggester</str>
-      <str name="lookupImpl">FuzzyLookupFactory</str>
+      <str name="name">bibliographic_citation</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_bibliographic_citation</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
       <str name="buildOnCommit">false</str>
-      <str name="field">suggest</str>
+      <str name="field">bibliographic_citation_sim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">keyword</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_keyword</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">keyword_sim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">name</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_name</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">name_suggest_ssim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">organization</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_organization</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">organization_sim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">physical_medium</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_physical_medium</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">physical_medium_sim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">publisher</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_publisher</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">publisher_sim</str>
+    </lst>
+    <lst name="suggester">
+      <str name="name">source</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="highlight">false</str>
+      <str name="dictionaryImpl">HighFrequencyDictionaryFactory</str>
+      <str name="indexPath">suggestion_index_source</str>
+      <str name="suggestAnalyzerFieldType">textSuggest</str>
+      <str name="buildOnCommit">false</str>
+      <str name="field">source_sim</str>
     </lst>
   </searchComponent>
 
@@ -327,7 +390,7 @@
     <lst name="defaults">
       <str name="suggest">true</str>
       <str name="suggest.count">5</str>
-      <str name="suggest.dictionary">mySuggester</str>
+      <str name="suggest.dictionary">keyword</str>
     </lst>
     <arr name="components">
       <str>suggest</str>

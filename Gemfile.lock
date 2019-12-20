@@ -616,7 +616,7 @@ GEM
       rails (~> 5.0)
       rdf
     raabro (1.1.6)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-protection (2.0.7)
       rack
     rack-test (1.1.0)

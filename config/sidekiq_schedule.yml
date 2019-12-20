@@ -12,3 +12,8 @@ clear_expired_embargoes_and_leases:
   cron: '0 5 * * *'
   class: ClearExpiredEmbargoesAndLeasesJob
   queue: default
+
+update_solr_suggest_dictionaries:
+  cron: '0 * * * *'
+  class: Spot::UpdateSolrSuggestDictionariesJob
+  queue: default

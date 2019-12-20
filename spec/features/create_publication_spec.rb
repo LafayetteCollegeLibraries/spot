@@ -19,16 +19,19 @@ RSpec.feature 'Create a Publication', :clean, :js do
     let(:id_standard) { Spot::Identifier.new('issn', '1234-5678') }
     let(:identifier) { Spot::Identifier.from_string(attrs[:identifier].first) }
 
-    # TODO: until we have more than one option for (non admin/trustee) users
-    # to choose from, when 'Add new work' is clicked, it'll just lead to the
-    # Publication form.
-    describe 'should be taken directly to the new Publication form' do
+    describe 'can fill out and submit a new Publication' do
       scenario do
         visit '/dashboard'
         click_link 'Works'
         click_link 'Add new work'
 
-        sleep 2
+        sleep 1
+
+        # @todo uncomment these next two steps when we introduce
+        # another model + register it in the hyrax initializer
+        #
+        # choose 'Publication'
+        # click_button 'Create work'
 
         expect(page).to have_content "Add New #{i18n_term}"
 
@@ -41,7 +44,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
         expect(page).to have_css '.publication_title_alternative .controls-add-text'
 
-        fill_in 'Publisher', with: attrs[:publisher].first
+        fill_in 'publication_publisher', with: attrs[:publisher].first
         expect(page).to have_css '.publication_publisher .controls-add-text'
 
         fill_in 'Source', with: attrs[:source].first
@@ -50,10 +53,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         select 'Article', from: 'Resource type'
         expect(page).not_to have_css '.publication_resource_type .controls-add-text'
 
-        # skipping this for now, as it's a js form box, and checking for the css
-        # seems comprehensive enough for now (read: on a late friday afternoon).
-        #
-        # fill_in 'Language', with: attrs[:language].first
+        fill_in_autocomplete '.publication_language', with: attrs[:language].first
         expect(page).to have_css '.publication_language .controls-add-text'
 
         fill_in 'Abstract', with: attrs[:abstract].first
@@ -82,17 +82,15 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'Editor', with: attrs[:editor].first
         expect(page).to have_css '.publication_editor .controls-add-text'
 
-        ## skipping local controlled vocabulary inputs for now until
-        ## i can get the javascript parts straight
-        #
-        # fill_in 'Academic department', with: attrs[:academic_department].first
-        # expect(page).to have_css '.publication_academic_department .controls-add-text'
-        #
-        # fill_in 'Division', with: attrs[:division].first
-        # expect(page).to have_css '.publication_division .controls-add-text'
-        #
-        # fill_in 'Subject', with: attrs[:subject].first
-        # expect(page).to have_css '.publication_subject .controls-add-text'
+        fill_in_autocomplete '.publication_academic_department',
+                             with: attrs[:academic_department].first
+        expect(page).to have_css '.publication_academic_department .controls-add-text'
+
+        fill_in_autocomplete '.publication_division', with: attrs[:division].first
+        expect(page).to have_css '.publication_division .controls-add-text'
+
+        fill_in_autocomplete '.publication_subject', with: attrs[:subject].first
+        expect(page).to have_css '.publication_subject .controls-add-text'
 
         fill_in 'Organization', with: attrs[:organization].first
         expect(page).to have_css '.publication_organization .controls-add-text'

@@ -1,20 +1,13 @@
 # frozen_string_literal: true
 module Hyrax
-  class PublicationPresenter < Hyrax::WorkShowPresenter
-    include ::Spot::PresentsAttributes
-
-    # is this excessive?
+  class PublicationPresenter < ::Spot::BasePresenter
     delegate :abstract, :academic_department, :bibliographic_citation,
              :contributor, :creator, :date_issued, :date_available,
              :division, :editor, :keyword, :language, :language_label,
-             :organization, :permalink, :publisher, :resource_type,
-             :source, :subtitle, :title_alternative,
+             :local_identifier, :organization, :permalink, :publisher,
+             :resource_type, :source, :standard_identifier, :subtitle,
+             :title_alternative,
              to: :solr_document
-
-    # @return [String]
-    def export_all_text
-      I18n.t("spot.work.export.download_work_and_metadata_#{multiple_members? ? 'multiple' : 'single'}")
-    end
 
     # Metadata formats we're able to export as.
     #
@@ -23,34 +16,9 @@ module Hyrax
       %i[csv ttl nt jsonld]
     end
 
-    # Our document's identifiers mapped to Spot::Identifier objects
-    #
     # @return [Array<Spot::Identifier>]
-    # @todo remove this before reindexing the production repository, so that we can
-    #       rely on the SolrDocument to split standard/local identifiers
-    #       (see: f62ba34)
-    def identifier
-      @identifier ||= solr_document.identifier.map { |str| Spot::Identifier.from_string(str) }
-    end
-
-    # @return [Array<Spot::Identifier>]
-    # @todo change this before reindexing the production repository, so that we can
-    #       rely on the SolrDocument to split standard/local identifiers
-    #       (see: f62ba34). use the commented out code instead.
     def local_identifier
-      # @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id)
-      @local_identifier ||= identifier.select(&:local?)
-    end
-
-    # location values + labels zipped into tuples.
-    #
-    # @example
-    #   presenter.location
-    #   => [['http://sws.geonames.org/5188140/', 'Easton, PA']]
-    #
-    # @return [Array<Array<String>>]
-    def location
-      solr_document.location.zip(solr_document.location_label).reject(&:empty?)
+      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
     # @return [true, false]
@@ -58,33 +26,9 @@ module Hyrax
       list_of_item_ids_to_display.count > 1
     end
 
-    # Overrides {Hyrax::WorkShowPresenter#page_title} by only using
-    # the work's title + our product name.
-    #
-    # @return [String]
-    def page_title
-      "#{title.first} // #{I18n.t('hyrax.product_name')}"
-    end
-
-    # Is the document's visibility public?
-    #
-    # @return [true, false]
-    def public?
-      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-    end
-
-    # @return [Array<Array<String>>]
-    def rights_statement_merged
-      solr_document.rights_statement.zip(solr_document.rights_statement_label)
-    end
-
     # @return [Array<Spot::Identifier>]
-    # @todo change this before reindexing the production repository, so that we can
-    #       rely on the SolrDocument to split standard/local identifiers
-    #       (see: f62ba34). use the commented out code instead.
     def standard_identifier
-      # @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
-      @standard_identifier ||= identifier.select(&:standard?)
+      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
     # Subject URIs and Labels in an array of tuples
@@ -95,15 +39,6 @@ module Hyrax
     # @return [Array<Array<String>>]
     def subject
       solr_document.subject.zip(solr_document.subject_label)
-    end
-
-    # For now, overriding the ability to feature individual works
-    # on the homepage. This should prevent the 'Feature'/'Unfeature'
-    # button from rendering on the work edit page.
-    #
-    # @return [false]
-    def work_featurable?
-      false
     end
   end
 end

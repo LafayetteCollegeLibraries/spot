@@ -8,17 +8,18 @@
 #     let(:indexer) { described_class.new(work) }
 #
 #     describe 'subject' do
-#       let(:fields) { %w[subject_tesim subject_sim] }
+#       let(:work_method) { :subject }
+#       let(:solr_fields) { %w[subject_tesim subject_sim] }
 #       it_behaves_like 'simple model indexing'
 #     end
 #   end
 
 RSpec.shared_examples 'simple model indexing' do
-  it { is_expected.to include(*fields) }
+  it { is_expected.to include(*solr_fields) }
+
   it 'adds the work value to each field' do
-    fields.each do |field|
-      method = field.sub(/_[a-z]+$/, '').to_sym
-      expect(solr_doc[field]).to match_array work.send(method)
+    solr_fields.each do |field|
+      expect(solr_doc[field]).to match_array work.send(work_method.to_sym)
     end
   end
 end
