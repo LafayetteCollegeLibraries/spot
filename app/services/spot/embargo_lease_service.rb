@@ -31,12 +31,16 @@ module Spot
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
           item = ActiveFedora::Base.find(presenter.id)
 
-          # set date_available now, if applicable (FileSets are also under embargo
-          # but don't have the property). we'll do this before calling the
-          # EmbargoActor because the actor calls +item.save+.
-          item.date_available = [Time.zone.now.strftime('%Y-%m-%d')] if item.respond_to?(:date_available=)
-
           ::Hyrax::Actors::EmbargoActor.new(item).destroy
+
+          if item.file_set?
+            item.visibility = item.visibility_after_embargo
+          else
+            item.date_available = [Time.zone.now.strftime('%Y-%m-%d')] if item.respond_to?(:date_available=)
+            item.copy_visibility_to_files
+          end
+
+          item.save!
         end
       end
 
