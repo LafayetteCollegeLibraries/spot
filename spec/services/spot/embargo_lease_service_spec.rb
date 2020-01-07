@@ -1,31 +1,57 @@
 # frozen_string_literal: true
 RSpec.describe Spot::EmbargoLeaseService do
   describe '.clear_expired_embargoes' do
-    let(:publication) do
-      @publication ||= begin
-        build(:publication).tap do |pub|
-          pub.embargo = embargo
-          pub.admin_set_id = AdminSet.find_or_create_default_admin_set_id
-          pub.save(validate: false)
-        end
-      end
+    let(:publication) { @publication ||= Publication.new }
+    let(:ability) { Ability.new(create(:admin_user)) }
+    let(:attributes) do
+      { title: ['example item with an embargo'], date_issued: ['2020-01'],
+        rights_statement: ['http://creativecommons.org/publicdomain/mark/1.0/'],
+        resource_type: ['Other'], embargo_release_date: release_date,
+        visibility_during_embargo: visibility_during_embargo,
+        visibility_after_embargo: visibility_after_embargo }
     end
 
     let(:visibility_during_embargo) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     let(:visibility_after_embargo) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
     let(:release_date) { Date.yesterday.to_s }
+    let(:env) { Hyrax::Actors::Environment.new(publication, ability, attributes) }
 
-    let(:embargo) do
-      Hydra::AccessControls::Embargo.create(
-        visibility_during_embargo: visibility_during_embargo,
-        visibility_after_embargo: visibility_after_embargo,
-        embargo_release_date: release_date
-      )
+    before { Hyrax::CurationConcern.actor.create(env) }
+
+    it 'clears an old embargo' do
+      expect(publication.visibility).to eq visibility_during_embargo
+
+      described_class.clear_expired_embargoes
+
+      expect(publication.visibility).to eq visibility_after_embargo
+    end
+  end
+
+  describe '.clear_expired_leases' do
+    let(:publication) { @publication ||= Publication.new }
+    let(:ability) { Ability.new(create(:admin_user)) }
+    let(:attributes) do
+      { title: ['example item with an lease'], date_issued: ['2020-01'],
+        rights_statement: ['http://creativecommons.org/publicdomain/mark/1.0/'],
+        resource_type: ['Other'], lease_release_date: release_date,
+        visibility_during_lease: visibility_during_lease,
+        visibility_after_lease: visibility_after_lease }
     end
 
-    # it do
-    #   byebug
-    # end
+    let(:visibility_during_lease) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+    let(:visibility_after_lease) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    let(:release_date) { Date.yesterday.to_s }
+    let(:env) { Hyrax::Actors::Environment.new(publication, ability, attributes) }
+
+    before { Hyrax::CurationConcern.actor.create(env) }
+
+    it 'clears an old lease' do
+      expect(publication.visibility).to eq visibility_during_lease
+
+      described_class.clear_expired_leases
+
+      expect(publication.visibility).to eq visibility_after_lease
+    end
   end
 
   # we just want to be sure that the methods are being called, so
