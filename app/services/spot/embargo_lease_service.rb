@@ -33,11 +33,11 @@ module Spot
 
           ::Hyrax::Actors::EmbargoActor.new(item).destroy
 
-          unless item.is_a? FileSet
-            item.date_available = [Time.zone.now.strftime('%Y-%m-%d')] if item.respond_to?(:date_available=)
-            item.copy_visibility_to_files
-            item.save!
-          end
+          next if item.is_a? FileSet
+
+          item.date_available = [Time.zone.now.strftime('%Y-%m-%d')] if item.respond_to?(:date_available=)
+          item.copy_visibility_to_files
+          item.save!
         end
       end
 
