@@ -1,65 +1,29 @@
 # frozen_string_literal: true
 RSpec.describe Spot::IngestBagJob do
-  subject(:job) do
-    described_class.perform_now(work_class: work_class,
-                                source: source,
-                                bag_path: bag_path)
-  end
-
   let(:source) { 'ldr' }
-  let(:work_class) { 'Publication' }
+  let(:mapper_klass) { Spot::Mappers::get(source) }
+  let(:work_klass) { 'Publication' }
   let(:fixtures_path) { Rails.root.join('spec', 'fixtures') }
   let(:bag_path) { fixtures_path.join('sample-bag') }
-  let(:importer_double) { instance_double(Darlingtonia::Importer, import: true) }
+  let(:service_double) { instance_double(Spot::BagIngestService, ingest: true) }
+  let(:service_args) do
+    { path: bag_path, work_klass: work_klass.constantize,
+      mapper_klass: mapper_klass, collection_ids: [], logger: Rails.logger }
+  end
 
   before do
-    allow(Darlingtonia::Importer)
+    allow(Spot::BagIngestService)
       .to receive(:new)
-      .and_return(importer_double)
+      .with(**service_args)
+      .and_return(service_double)
   end
 
   describe '#perform' do
-    context 'when a source is unknown' do
-      let(:source) { 'kewl_source' }
-      it 'raises an ArgumentError' do
-        expect { job }
-          .to raise_error(ArgumentError, /Unknown source: #{source}/)
-      end
-    end
+    it 'passes arguments to Spot::BagIngestService' do
+      described_class.perform_now(work_klass: work_klass, source: source, path: bag_path)
 
-    context 'when a work_class isn\'t registered' do
-      let(:work_class) { 'Spot' }
-
-      it 'raises an ArgumentError' do
-        expect { job }
-          .to raise_error(ArgumentError, /Unknown work_class: #{work_class}/)
-      end
-    end
-
-    context 'when the bag validates okay' do
-      it 'calls #import on the importer' do
-        job
-
-        expect(importer_double).to have_received(:import)
-      end
-    end
-
-    context 'when the bag does not validate' do
-      let(:parser_double) do
-        instance_double(Spot::Importers::Bag::Parser, validate!: false)
-      end
-
-      before do
-        allow(Spot::Importers::Bag::Parser)
-          .to receive(:new)
-          .and_return(parser_double)
-      end
-
-      it 'does nothing' do
-        job
-
-        expect(importer_double).not_to have_received(:import)
-      end
+      expect(Spot::BagIngestService).to have_received(:new).with(**service_args)
+      expect(service_double).to have_received(:ingest)
     end
   end
 end

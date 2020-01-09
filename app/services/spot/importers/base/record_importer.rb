@@ -46,16 +46,15 @@ module Spot::Importers::Base
         error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
         work = work_klass.new
+        ability = ability_for(attributes.delete(:depositor))
 
-        actor_env = Hyrax::Actors::Environment.new(work,
-                                                   ability_for(attributes.delete(:depositor)),
-                                                   attributes)
+        actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
 
         info_stream << "Creating record: #{attributes[:title].first}\n"
-
         stack_result = Hyrax::CurationConcern.actor.create(actor_env)
-
         info_stream << "Record created: #{work.id}\n" if stack_result
+
+        clean_errors(work).each { |error_message| error_stream << error_message }
       rescue ::Ldp::Gone
         error_stream << "Ldp::Gone => [#{work.id}]\n"
       rescue => e
@@ -80,6 +79,14 @@ module Spot::Importers::Base
       def ability_for(depositor_email)
         depositor_email ||= default_depositor_email
         Ability.new(find_or_create_depositor(email: depositor_email))
+      end
+
+      # @param [ActiveFedora::Base] work
+      # @return [Array<String>]
+      def clean_errors(work)
+        return [] unless work.errors.present?
+
+        work.errors.map { |field, message| "ERROR [#{field}]: #{message}" }
       end
 
       # @return [Hash<String => Hash<String => String>>]
