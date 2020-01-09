@@ -15,7 +15,7 @@ module Spot
     queue_as :ingest
 
     # @param [Hash] options
-    # @option [String, Pathname] bag_path
+    # @option [String, Pathname] path
     #   Path to the Bag directory
     # @option [String] source
     #   Source collection / which mapper to use
@@ -28,10 +28,11 @@ module Spot
     # @raise [ArgumentError] if +work_class:+ not a valid Work type
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
-    def perform(bag_path:, source:, work_klass:, collection_ids: [])
+    def perform(path:, source:, work_klass:, collection_ids: [])
       mapper_klass = Spot::Mappers.get(source.to_sym)
-      service = BagIngestService.new(bag_path: bag_path, mapper_klass: mapper_klass,
-                                     work_klass: work_klass.constantize, collection_ids: collection_ids)
+      service = BagIngestService.new(path: path, mapper_klass: mapper_klass,
+                                     work_klass: work_klass.constantize, collection_ids: collection_ids,
+                                     logger: logger)
       service.ingest
     end
   end
