@@ -31,6 +31,8 @@ module Spot
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
           item = ActiveFedora::Base.find(presenter.id)
 
+          next if item.under_embargo?
+
           ::Hyrax::Actors::EmbargoActor.new(item).destroy
 
           next if item.is_a? FileSet
@@ -47,6 +49,8 @@ module Spot
       def clear_expired_leases
         ::Hyrax::LeaseService.assets_with_expired_leases.each do |presenter|
           item = ActiveFedora::Base.find(presenter.id)
+
+          next if item.active_lease?
 
           ::Hyrax::Actors::LeaseActor.new(item).destroy
 
