@@ -113,6 +113,9 @@ RSpec.describe Spot::EmbargoLeaseService do
         .with(leased_presenter.id)
         .and_return(publication_double)
 
+      allow(publication_double).to receive(:under_embargo?)
+      allow(publication_double).to receive(:active_lease?)
+
       allow(Hyrax::Actors::EmbargoActor)
         .to receive(:new)
         .with(publication_double)
