@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 module Spot
   class BagIngestService
-    attr_reader :path, :mapper_klass, :work_klass, :collection_ids, :multi_value_character, :logger
+    attr_reader :path, :mapper_klass, :work_klass, :collection_ids, :logger
 
-    def initialize(path:,
-                   mapper_klass:,
-                   work_klass:,
-                   collection_ids: [],
-                   multi_value_character: '|',
-                   logger: Rails.logger)
+    def initialize(path:, mapper_klass:, work_klass:,
+                   collection_ids: [], logger: Rails.logger)
       @path = path
       @mapper_klass = mapper_klass
       @work_klass = work_klass
@@ -33,6 +29,10 @@ module Spot
       # @return [TrueClass, FalseClass]
       def work_klass_valid?
         ::Hyrax.config.curation_concerns.include?(work_klass)
+      end
+
+      def multi_value_character
+        '|'
       end
 
       # @return [Spot::Importers::Bag::Parser]

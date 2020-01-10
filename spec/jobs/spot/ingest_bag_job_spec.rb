@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::IngestBagJob do
   let(:source) { 'ldr' }
-  let(:mapper_klass) { Spot::Mappers::get(source) }
+  let(:mapper_klass) { Spot::Mappers.get(source) }
   let(:work_klass) { 'Publication' }
   let(:fixtures_path) { Rails.root.join('spec', 'fixtures') }
   let(:bag_path) { fixtures_path.join('sample-bag') }

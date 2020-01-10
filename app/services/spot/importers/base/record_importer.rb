@@ -50,9 +50,7 @@ module Spot::Importers::Base
 
         actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
 
-        info_stream << "Creating record: #{attributes[:title].first}\n"
-        stack_result = Hyrax::CurationConcern.actor.create(actor_env)
-        info_stream << "Record created: #{work.id}\n" if stack_result
+        kickoff_ingest(actor_env)
 
         clean_errors(work).each { |error_message| error_stream << error_message }
       rescue ::Ldp::Gone
@@ -126,6 +124,16 @@ module Spot::Importers::Base
         end
 
         user
+      end
+
+      # Logs + kicks off the ingest process with a given Environment
+      #
+      # @param [Hyrax::Actors::Environment]
+      # @return [void]
+      def kickoff_ingest(env)
+        info_stream << "Creating record: #{env.attributes[:title].first}\n"
+        stack_result = Hyrax::CurationConcern.actor.create(env)
+        info_stream << "Record created: #{env.curation_concern.id}\n" if stack_result
       end
   end
 end
