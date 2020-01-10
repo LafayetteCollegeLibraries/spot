@@ -125,6 +125,10 @@ module Spot::Importers::Base
         user
       end
 
+      # Logs + kicks off the ingest process with a given Environment
+      #
+      # @param [Hyrax::Actors::Environment]
+      # @return [void]
       def kickoff_ingest(env)
         info_stream << "Creating record: #{env.attributes[:title].first}\n"
         stack_result = Hyrax::CurationConcern.actor.create(env)
