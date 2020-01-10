@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+# rubocop:disable RSpec/MultipleDescribes
 RSpec.describe Hydra::AccessControls::Embargo do
   describe '#active?' do
     let(:embargo) do
       described_class.new(visibility_during_embargo: 'restricted',
                           visibility_after_embargo: 'open',
-                          embargo_release_date: Date.today.to_s)
+                          embargo_release_date: Time.zone.today)
     end
 
     it 'returns false if the release date is today' do
@@ -18,7 +19,7 @@ RSpec.describe Hydra::AccessControls::Lease do
     let(:lease) do
       described_class.new(visibility_during_lease: 'open',
                           visibility_after_lease: 'restricted',
-                          lease_expiration_date: Date.today.to_s)
+                          lease_expiration_date: Time.zone.today)
     end
 
     it 'returns false if the expiration date is today' do
@@ -26,3 +27,4 @@ RSpec.describe Hydra::AccessControls::Lease do
     end
   end
 end
+# rubocop:enable RSpec/MultipleDescribes
