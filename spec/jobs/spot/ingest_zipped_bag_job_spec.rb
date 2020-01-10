@@ -4,16 +4,15 @@ require 'tmpdir'
 RSpec.describe Spot::IngestZippedBagJob do
   subject(:job) do
     described_class.perform_now(zip_path: zip_path,
-                                work_class: work_class,
+                                work_klass: work_klass,
                                 source: source,
                                 collection_ids: collection_ids,
-                                multi_value_character: ';',
                                 working_path: working_path)
   end
 
   let(:working_path) { Rails.root.join('tmp') }
   let(:zip_path) { '/path/to/bag.zip' }
-  let(:work_class) { 'Publication' }
+  let(:work_klass) { 'Publication' }
   let(:source) { 'ldr' }
   let(:zip_service_double) { instance_double(ZipService, unzip!: true) }
   let(:collection_ids) { ['abc123def'] }
@@ -31,7 +30,7 @@ RSpec.describe Spot::IngestZippedBagJob do
       expect(Spot::IngestBagJob)
         .to have_received(:perform_now)
         .with(bag_path: working_path.join('bag').to_s, source: source,
-              work_class: work_class, collection_ids: collection_ids, multi_value_character: ';')
+              work_klass: work_klass, collection_ids: collection_ids)
     end
 
     context 'when working path isn\'t a directory' do

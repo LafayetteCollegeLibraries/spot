@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'a RecordImporter' do |params|
   subject(:importer) do
-    described_class.new(work_class: work_class,
+    described_class.new(work_klass: work_klass,
                         admin_set_id: admin_set_id,
                         collection_ids: [collection_id],
                         info_stream: info_stream,
                         error_stream: error_stream)
   end
 
-  let(:work_class) { class_double('ActiveFedora::Base') }
+  let(:work_klass) { class_double('ActiveFedora::Base') }
   let(:dev_null) { File.open(File::NULL, 'w') }
   let(:admin_set_id) { 'an_admin_set' }
   let(:info_stream) { dev_null }
@@ -52,7 +52,7 @@ RSpec.shared_examples 'a RecordImporter' do |params|
       }
     end
 
-    let(:work_double) { instance_double('ActiveFedora::Base', id: '') }
+    let(:work_double) { instance_double('ActiveFedora::Base', id: '', errors: []) }
     let(:depositor) do
       User.find_or_create_by(email: described_class.default_depositor_email)
     end
@@ -72,7 +72,7 @@ RSpec.shared_examples 'a RecordImporter' do |params|
         .with(depositor)
         .and_return(ability_double)
 
-      allow(work_class)
+      allow(work_klass)
         .to receive(:new)
         .and_return(work_double)
 
