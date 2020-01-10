@@ -18,7 +18,7 @@ module Spot
 
     # @param [String] zip_path Path to the zip file
     # @param [String] source Source collection / which mapper to use
-    # @param [String] work_class Work Type to use for new object
+    # @param [String] work_klass Work Type to use for new object
     # @param [String] working_path Directory to unzip the object
     # @param [Array<String>] collection_ids Array of collection ids to add this item to
     # @param [String] multi_value_character The character used in the metadata to indicate multiple values
@@ -27,12 +27,12 @@ module Spot
     # @raise [ArgumentError] if +working_path:+ is not a directory
     # @raise [ArgumentError] if +source:+ is not defined in {Spot::Mappers.available_mappers}
     #   (from Spot::IngestBagJob)
-    # @raise [ArgumentError] if +work_class:+ not a valid Work type
+    # @raise [ArgumentError] if +work_klass:+ not a valid Work type
     #   (from Spot::IngestBagJob)
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
     #
-    def perform(zip_path:, source:, work_class:, working_path:, collection_ids: [])
+    def perform(zip_path:, source:, work_klass:, working_path:, collection_ids: [])
       raise ArgumentError, "#{working_path} is not a directory" unless File.directory?(working_path)
 
       destination = File.join(working_path, File.basename(zip_path, '.zip'))
@@ -42,7 +42,7 @@ module Spot
 
       Spot::IngestBagJob.perform_now(bag_path: destination,
                                      source: source,
-                                     work_klass: work_class,
+                                     work_klass: work_klass,
                                      collection_ids: collection_ids)
     end
   end

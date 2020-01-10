@@ -10,14 +10,14 @@ class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
   # @param [Hyrax::Actors::Environment] env
   # @return [void]
   def update(env)
-    @part_of_batch = false
+    set_batch_flag(env)
     next_actor.update(env) && update_suggest_dictionaries(env)
   end
 
   # @param [Hyrax::Actors::Environment] env
   # @return [void]
   def destroy(env)
-    @part_of_batch = false
+    set_batch_flag(env)
     next_actor.destroy(env) && update_suggest_dictionaries(env)
   end
 
