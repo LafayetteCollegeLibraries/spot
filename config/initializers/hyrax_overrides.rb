@@ -76,7 +76,13 @@ Rails.application.config.to_prepare do
   # @see https://github.com/samvera/hydra-head/blob/v10.7.0/hydra-access-controls/app/models/hydra/access_controls/embargo.rb#L13-L15
   Hydra::AccessControls::Embargo.class_eval do
     def active?
-      (embargo_release_date.present? && DateTime.now < embargo_release_date)
+      embargo_release_date.present? && DateTime.now < embargo_release_date
+    end
+  end
+
+  Hydra::AccessControls::Lease.class_eval do
+    def active?
+      lease_expiration_date.present? && DateTime.now < lease_expiration_date
     end
   end
 end
