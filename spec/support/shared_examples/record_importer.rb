@@ -56,7 +56,7 @@ RSpec.shared_examples 'a RecordImporter' do |params|
     let(:depositor) do
       User.find_or_create_by(email: described_class.default_depositor_email)
     end
-    let(:env_double) { instance_double('Hyrax::Actors::Environment') }
+    let(:env_double) { instance_double('Hyrax::Actors::Environment', attributes: attributes) }
     let(:ability_double) { instance_double('Ability') }
     let(:actor_stack_double) { instance_double('Hyrax::Actors::AbstractActor') }
 
