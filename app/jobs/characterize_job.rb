@@ -22,8 +22,10 @@ class CharacterizeJob < ::Hyrax::ApplicationJob
     def characterize(file_set, _file_id, filepath)
       Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, ch12n_tool: tool)
       Rails.logger.debug "Ran characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
-      file_set.characterization_proxy.alpha_channels = channels(filepath) if file_set.image? && Hyrax.config.iiif_image_server?
+
+      alpha_channels(file_set) if file_set.image? && Hyrax.config.iiif_image_server?
       file_set.characterization_proxy.save!
+
       file_set.update_index
       file_set.parent&.in_collections&.each(&:update_index)
     end
@@ -34,6 +36,12 @@ class CharacterizeJob < ::Hyrax::ApplicationJob
         cmd << filepath
       end
       [ch]
+    end
+
+    def alpha_channels(file_set)
+      return unless file_set.characterization_proxy.respond_to?(:alpha_channels=)
+
+      file_set.characterization_proxy.alpha_channels = channels(filepath)
     end
 
     def tool

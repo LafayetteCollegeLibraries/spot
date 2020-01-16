@@ -32,7 +32,7 @@ module Spot
         @record_importer ||= begin
           info = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
           error = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
-          Spot::Importers::Unpaywall::RecordImporter.new(work_class: @work_class,
+          Spot::Importers::Unpaywall::RecordImporter.new(work_klass: @work_class,
                                                          collection_ids: @collection_ids,
                                                          info_stream: info,
                                                          error_stream: error)
