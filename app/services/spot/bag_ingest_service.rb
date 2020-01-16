@@ -16,8 +16,6 @@ module Spot
     def ingest
       raise ArgumentError, "Unknown work_klass: #{work_klass}" unless work_klass_valid?
 
-      parser.validate!
-
       logger.debug "Ingesting bag [#{path}] using #{mapper_klass}"
       importer.import if parser.validate!
     end
