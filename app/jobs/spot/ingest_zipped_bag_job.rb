@@ -32,7 +32,7 @@ module Spot
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
     #
-    def perform(zip_path:, source:, work_klass:, working_path:, collection_ids: [])
+    def perform(zip_path:, source:, work_klass:, working_path: Rails.root.join('tmp', 'ingest'), collection_ids: [])
       raise ArgumentError, "#{working_path} is not a directory" unless File.directory?(working_path)
 
       destination = File.join(working_path, File.basename(zip_path, '.zip'))
@@ -40,10 +40,8 @@ module Spot
 
       ZipService.new(src_path: zip_path).unzip!(dest_path: destination)
 
-      Spot::IngestBagJob.perform_now(bag_path: destination,
-                                     source: source,
-                                     work_klass: work_klass,
-                                     collection_ids: collection_ids)
+      Spot::IngestBagJob.perform_now(path: destination, source: source,
+                                     work_klass: work_klass, collection_ids: collection_ids)
     end
   end
 end

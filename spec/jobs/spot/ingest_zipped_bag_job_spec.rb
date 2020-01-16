@@ -29,7 +29,7 @@ RSpec.describe Spot::IngestZippedBagJob do
 
       expect(Spot::IngestBagJob)
         .to have_received(:perform_now)
-        .with(bag_path: working_path.join('bag').to_s, source: source,
+        .with(path: working_path.join('bag').to_s, source: source,
               work_klass: work_klass, collection_ids: collection_ids)
     end
 
