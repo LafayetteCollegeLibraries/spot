@@ -38,6 +38,9 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_title', with: attrs[:title].first
         expect(page).not_to have_css '.publication_title .controls-add-text'
 
+        fill_in 'publication_rights_holder', with: attrs[:rights_holder].first
+        expect(page).to have_css '.publication_rights_holder .controls-add-text'
+
         fill_in 'Subtitle', with: attrs[:subtitle].first
         expect(page).to have_css '.publication_subtitle .controls-add-text'
 

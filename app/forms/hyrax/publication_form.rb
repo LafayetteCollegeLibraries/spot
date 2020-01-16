@@ -17,6 +17,8 @@ module Hyrax
       :resource_type,
       :rights_statement,
 
+      # starting with rights holder since it relates to rights_statement
+      :rights_holder,
       :subtitle,
       :title_alternative,
       :creator,

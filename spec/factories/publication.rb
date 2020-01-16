@@ -21,6 +21,7 @@ FactoryBot.define do
     organization { ['Lafayette College'] }
     publisher { ['Prestigious Press', 'Lafayette College'] }
     resource_type { ['Article'] }
+    rights_holder { ['Lafayette College'] }
     rights_statement { ['http://creativecommons.org/publicdomain/mark/1.0/'] }
     related_resource { ['http://cool-resource.org'] }
     source { ['Lafayette College', '_The_ Source for Good Publications'] }
