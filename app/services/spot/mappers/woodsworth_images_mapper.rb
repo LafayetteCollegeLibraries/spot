@@ -8,7 +8,7 @@ module Spot::Mappers
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       rights_statement: 'rights.digital',
-      subject_ocm: 'subject.ocm',
+      subject_ocm: 'subject.ocm'
     }
 
     def fields

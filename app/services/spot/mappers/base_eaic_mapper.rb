@@ -15,13 +15,5 @@ module Spot::Mappers
 
         Date.edtf([start_date, end_date].reject(&:blank?).join('/')).to_s
       end
-
-      # Helper method to group the values for multiple fields into one place.
-      #
-      # @param [Array<String>] *names field names to merge
-      # @return [Array<String>]
-      def merge_fields(*names)
-        names.map { |name| metadata[name] }.flatten.compact
-      end
   end
 end
