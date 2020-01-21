@@ -1,5 +1,21 @@
 # changelog
 
+## [2020.1] - 2019-01-21
+
+### features 🏔
+- adds **Women's, Gender & Sexuality** to department authority (#382)
+- adds display of embargo/lease information to the item view page (#381)
+- adds rights_holder field to Publication form (#385)
+- refactors ingest pipeline to use `Spot::BagIngestService` rather than putting all of the work in a job (#386)
+- adds disallow rules for `/catalog`, `/catalog/*`, and `/downloads` in robots.txt (#389)
+
+### bugfixes 🐞
+- embargo/lease releasing service now changes items to their expected visibilities after the embargo/lease period is up (#381)
+
+### deprecations 💀
+- removes `development` and `localhost` capistrano environments (#390)
+
+
 ## [2019.9] - 2019-12-20
 
 ### features 🎉
@@ -244,6 +260,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.1
 [2019.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.9
 [2019.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.8
 [2019.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.7

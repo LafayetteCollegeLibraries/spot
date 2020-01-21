@@ -3,3 +3,9 @@
 User-agent: archive.org_bot
 Disallow: /concern
 Disallow: /downloads
+
+# Prevent indexers from crawling every facet/search option
+User-agent: *
+Disallow: /catalog
+Disallow: /catalog/*
+Disallow: /downloads

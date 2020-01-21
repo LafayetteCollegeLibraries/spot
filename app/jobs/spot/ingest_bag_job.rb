@@ -5,7 +5,7 @@
 #
 # @example
 #   path = '/path/to/ingestable/bag'
-#   Spot::IngestBagJob.perform_later(bag_path, source: 'newspaper', work_class: 'Publication')
+#   Spot::IngestBagJob.perform_later(bag_path, source: 'newspaper', work_klass: 'Publication')
 #
 # Note: Rails can't handle symbol arguments, so be sure to convert your
 #       source to a String! I _think_ this is fixed in Rails 6.
@@ -14,82 +14,26 @@ module Spot
   class IngestBagJob < ::ApplicationJob
     queue_as :ingest
 
-    # Validates the Bag and imports if it's okay.
-    #
-    # @param [String, Pathname] bag_path Path to the Bag directory
-    # @param [String] source Source collection / which mapper to use
-    # @param [String] work_class Work Type to use for new object
+    # @param [Hash] options
+    # @option [String, Pathname] path
+    #   Path to the Bag directory
+    # @option [String] source
+    #   Source collection / which mapper to use
+    # @option [String] work_klass
+    #   Work Type to use for new object
+    # @option [Array<String>] collection_ids
+    #   Collection IDs to add the item to
     # @return [void]
     # @raise [ArgumentError] if +source:+ is not defined in {Spot::Mappers.available_mappers}
     # @raise [ArgumentError] if +work_class:+ not a valid Work type
     # @raise [ValidationError] if the file to parse is invalid
     #   (from Darlingtonia::Parser)
-    def perform(bag_path:,
-                source:,
-                work_class:,
-                collection_ids: [],
-                multi_value_character: '|')
-      @bag_path = bag_path
-      @source = source
-      @work_class = work_class.constantize
-      @collection_ids = collection_ids
-      @multi_value_character = multi_value_character
-
-      raise ArgumentError, "Unknown source: #{source}." unless source_available?
-      raise ArgumentError, "Unknown work_class: #{work_class}" unless work_class_valid?
-
-      logger.debug "Ingesting bag [#{bag_path}] using #{source} mapper"
-      importer.import if parser.validate!
+    def perform(path:, source:, work_klass:, collection_ids: [])
+      mapper_klass = Spot::Mappers.get(source.to_sym)
+      service = BagIngestService.new(path: path, mapper_klass: mapper_klass,
+                                     work_klass: work_klass.constantize, collection_ids: collection_ids,
+                                     logger: logger)
+      service.ingest
     end
-
-    private
-
-      attr_reader :bag_path, :source
-
-      # Is the work_class provided one of our curation_concerns?
-      #
-      # @return [TrueClass, FalseClass]
-      def work_class_valid?
-        ::Hyrax.config.curation_concerns.include?(@work_class)
-      end
-
-      # Does the provided symbol have a mapper associated with it?
-      #
-      # @return [Constant, nil]
-      def source_available?
-        Spot::Mappers.available_mappers.include?(@source.to_sym)
-      end
-
-      # The mapper to use, decided by the +:source+ parameter
-      #
-      # @return [Darlingtonia::MetadataMapper]
-      def mapper
-        @mapper ||= Spot::Mappers.get(source.to_sym).new
-      end
-
-      # @return [Spot::Importers::Bag::Parser]
-      def parser
-        @parser ||= Spot::Importers::Bag::Parser.new(directory: bag_path,
-                                                     mapper: mapper,
-                                                     multi_value_character: @multi_value_character)
-      end
-
-      # @return [Spot::Importers::Bag::RecordImporter]
-      def record_importer
-        @record_importer ||= begin
-          info = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
-          error = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
-          Spot::Importers::Bag::RecordImporter.new(work_class: @work_class,
-                                                   collection_ids: @collection_ids,
-                                                   info_stream: info,
-                                                   error_stream: error)
-        end
-      end
-
-      # @return [Darlingtonia::Importer]
-      def importer
-        @importer ||= Darlingtonia::Importer.new(parser: parser,
-                                                 record_importer: record_importer)
-      end
   end
 end

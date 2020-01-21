@@ -21,6 +21,7 @@ RSpec.describe Hyrax::PublicationForm do
     include_context 'required fields'
 
     describe 'includes optional fields' do
+      it { is_expected.to include :rights_holder }
       it { is_expected.to include :subtitle }
       it { is_expected.to include :title_alternative }
       it { is_expected.to include :publisher }
@@ -129,6 +130,7 @@ RSpec.describe Hyrax::PublicationForm do
     # rubocop:disable RSpec/ExampleLength
     it 'includes permitted fields' do
       expect(params).to include(:title)
+      expect(params).to include(rights_holder: [])
       expect(params).to include(subtitle: [])
       expect(params).to include(title_alternative: [])
       expect(params).to include(creator: [])

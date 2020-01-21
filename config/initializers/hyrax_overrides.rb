@@ -61,4 +61,28 @@ Rails.application.config.to_prepare do
       @models - ['Image']
     end
   end
+
+  # By default, +Hydra::AccessControls::Embargo#active?+ compares the
+  # embargo_release_date (a DateTime) to +Date.today+ (a Date). When
+  # the release date is the same day as today, we'll get a truthy return value
+  # when it should be falsey.
+  #
+  #   Date.today < DateTime.parse(Date.today.to_s)
+  #   # => true
+  #
+  #   DateTime.parse(Date.today.to_s) < DateTime.parse(Date.today.to_s)
+  #   # => false
+  #
+  # @see https://github.com/samvera/hydra-head/blob/v10.7.0/hydra-access-controls/app/models/hydra/access_controls/embargo.rb#L13-L15
+  Hydra::AccessControls::Embargo.class_eval do
+    def active?
+      embargo_release_date.present? && DateTime.current < embargo_release_date
+    end
+  end
+
+  Hydra::AccessControls::Lease.class_eval do
+    def active?
+      lease_expiration_date.present? && DateTime.current < lease_expiration_date
+    end
+  end
 end

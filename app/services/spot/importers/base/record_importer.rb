@@ -7,7 +7,7 @@ module Spot::Importers::Base
   #
   #   info_stream = Spot::StreamLogger.new(logger, level: ::Logger::INFO)
   #   error_stream = Spot::StreamLogger.new(logger, level: ::Logger::WARN)
-  #   record_importer = Spot::Importers::Base::RecordImporter.new(work_class,
+  #   record_importer = Spot::Importers::Base::RecordImporter.new(work_klass,
   #                                                               info_stream: info_stream,
   #                                                               error_stream: error_stream)
   class RecordImporter < ::Darlingtonia::RecordImporter
@@ -17,21 +17,21 @@ module Spot::Importers::Base
     self.default_depositor_email = 'dss@lafayette.edu'
     self.default_admin_set_id = AdminSet::DEFAULT_ID
 
-    attr_reader :work_class, :admin_set_id, :collection_ids
+    attr_reader :work_klass, :admin_set_id, :collection_ids
 
-    # Adds +work_class:+ and +admin_set_id:+ options to the RecordImporter initializer
+    # Adds +work_klass:+ and +admin_set_id:+ options to the RecordImporter initializer
     #
-    # @param [ActiveFedora::Base] work_class
+    # @param [ActiveFedora::Base] work_klass
     # @param [AdminSet] admin_set
     # @param [#<<] info_stream
     # @param [#<<] error_stream
-    def initialize(work_class:,
+    def initialize(work_klass:,
                    admin_set_id: default_admin_set_id,
                    collection_ids: [],
                    info_stream: STDOUT,
                    error_stream: STDOUT)
       super(info_stream: info_stream, error_stream: error_stream)
-      @work_class = work_class
+      @work_klass = work_klass
       @admin_set_id = admin_set_id
       @collection_ids = collection_ids
     end
@@ -45,15 +45,13 @@ module Spot::Importers::Base
 
         error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
-        work = work_class.new
+        work = work_klass.new
+        ability = ability_for(attributes.delete(:depositor))
 
-        actor_env = Hyrax::Actors::Environment.new(work,
-                                                   ability_for(attributes.delete(:depositor)),
-                                                   attributes)
+        actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
+        kickoff_ingest(actor_env)
 
-        info_stream << "Creating record: #{attributes[:title].first}\n"
-        Hyrax::CurationConcern.actor.create(actor_env) &&
-          (info_stream << "Record created: #{work.id}\n")
+        clean_errors(work).each { |error_message| error_stream << error_message }
       rescue ::Ldp::Gone
         error_stream << "Ldp::Gone => [#{work.id}]\n"
       rescue => e
@@ -78,6 +76,14 @@ module Spot::Importers::Base
       def ability_for(depositor_email)
         depositor_email ||= default_depositor_email
         Ability.new(find_or_create_depositor(email: depositor_email))
+      end
+
+      # @param [ActiveFedora::Base] work
+      # @return [Array<String>]
+      def clean_errors(work)
+        return [] unless work.errors.present?
+
+        work.errors.map { |field, message| "ERROR [#{field}]: #{message}" }
       end
 
       # @return [Hash<String => Hash<String => String>>]
@@ -117,6 +123,12 @@ module Spot::Importers::Base
         end
 
         user
+      end
+
+      def kickoff_ingest(env)
+        info_stream << "Creating record: #{env.attributes[:title].first}\n"
+        stack_result = Hyrax::CurationConcern.actor.create(env)
+        info_stream << "Record created: #{env.curation_concern.id}\n" if stack_result
       end
   end
 end
