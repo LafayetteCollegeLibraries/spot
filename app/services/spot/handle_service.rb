@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 module Spot
-  # Service used to create + update Handle identifiers and attach them to a work.
-  # Uses the local Handle server's API to PUT CREATE/MODIFY
+  # Service used to create or update Handle identifiers and attach them to a work.
   class HandleService
     attr_reader :work
 
@@ -9,30 +8,49 @@ module Spot
       @work = work
     end
 
-    def mint_or_update
-      work_has_handle? ? update : mint
-    end
-
     def mint
-      # no-op for now
-      # send_payload_for(action: :mint)
-    end
+      res = send_payload
 
-    def update
-      # no-op for now
-      # send_payload_for(action: :update)
+      raise("Received error code minting handle [#{handle_id}]: #{res['responseCode']}") unless res['responseCode'] == 1
+      return res['handle'] if work_has_handle?
+
+      work.identifier += [Spot::Identifier.new('hdl', res['handle']).to_s]
+      work.save!
+
+      res['handle']
     end
 
     private
 
       # @return [Faraday::Client]
       def client
-        @client ||= Faraday.new(url: handle_server_url)
+        @client ||= Faraday::Connection.new(handle_server_url, ssl: {
+          client_cert: handle_certificate,
+          client_key: handle_key,
+          verify: false
+        })
+      end
+
+      def find_handle_id
+        stored = work.identifier.find { |id| id.start_with? 'hdl:' }
+        return "#{prefix}/#{work.id}" unless stored
+
+        Spot::Identifier.from_string(stored).value
+      end
+
+      def handle_certificate
+        raise 'No HANDLE_CLIENT_CERT ENV value provided' unless ENV.include?('HANDLE_CLIENT_CERT')
+        File.read(ENV['HANDLE_CLIENT_CERT'])
       end
 
       # @return [String]
       def handle_id
-        "#{prefix}/#{work.id}"
+        @handle_id ||= find_handle_id
+      end
+
+      def handle_key
+        raise 'No HANDLE_CLIENT_KEY ENV value provided' unless ENV.include?('HANDLE_CLIENT_KEY')
+        File.read(ENV['HANDLE_CLIENT_KEY'])
       end
 
       # @return [String]
@@ -40,21 +58,17 @@ module Spot
         ENV['HANDLE_SERVER_URL']
       end
 
-      # @return [Array<String>]
-      def payload(action:)
-        verb = case action
-               when :mint   then 'CREATE'
-               when :update then 'MODIFY'
-               else raise "Unknown Handle action: #{action.inspect}"
-               end
-
-        [
-          # CREATE/MODIFY prefix/id
-          "#{verb} #{handle_id}",
-
-          # idx, type, ttl, permission, encoding, value
-          "100 URL 86400 1110 UTF8 #{permalink_url}"
-        ]
+      # @return [String]
+      def payload
+        {
+          index: 100,
+          type: 'URL',
+          permissions: '1110',
+          data: {
+            format: 'string',
+            value: permalink_url
+          }
+        }
       end
 
       # @return [String]
@@ -67,16 +81,16 @@ module Spot
         ENV['HANDLE_PREFIX']
       end
 
+      # @param [Hash] options
+      # @option [Boolean] update_only
       # @return [void]
-      # @todo authentication?
       # @todo update the record afterwards
-      def send_payload_for(action:)
-        body_content = payload(action: action)
-
+      def send_payload
         response = client.put do |req|
           req.url "/api/handles/#{handle_id}"
           req.headers['Content-Type'] = 'application/json'
-          req.body = JSON.dump(body_content)
+          req.headers['Authorization'] = 'Handle clientCert=true'
+          req.body = JSON.dump(payload)
         end
 
         # this isn't where we want to stop we still need to
@@ -87,7 +101,7 @@ module Spot
 
       # @return [true, false]
       def work_has_handle?
-        work.respond_to?(:identifiers) && work.identifiers.include?("hdl:#{handle_id}")
+        work.respond_to?(:identifiers) && work.identifiers.any? { |id| id.start_with? 'hdl:' }
       end
   end
 end
