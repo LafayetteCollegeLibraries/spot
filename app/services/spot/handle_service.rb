@@ -5,7 +5,7 @@ module Spot
     attr_reader :work
 
     # @return [true, false]
-    def self.handle_env_values_defined?
+    def self.env_values_defined?
       (ENV['HANDLE_SERVER_URL'].present? && ENV['HANDLE_PREFIX'].present? &&
         ENV['HANDLE_CLIENT_CERT'].present? && ENV['HANDLE_CLIENT_KEY'].present?)
     end
@@ -18,7 +18,7 @@ module Spot
     #   returns nil if the env values aren't defined, otherwise the handle id is returned
     def mint
       # no-op if we can't mint handles
-      return unless self.class.handle_env_values_defined?
+      return unless self.class.env_values_defined?
 
       res = send_payload
 
@@ -114,13 +114,13 @@ module Spot
       end
 
       def validate_env_auth_values!(key)
-        raise "No #{key} ENV value provided" unless ENV.include?(key)
+        raise "No #{key} ENV value provided" unless ENV[key].present?
         raise "#{key} path does not exist" unless File.exist?(ENV[key])
       end
 
       # @return [true, false]
       def work_has_handle?
-        work.respond_to?(:identifiers) && work.identifiers.any? { |id| id.start_with? 'hdl:' }
+        work.respond_to?(:identifier) && work.identifier.any? { |id| id.start_with? 'hdl:' }
       end
   end
 end
