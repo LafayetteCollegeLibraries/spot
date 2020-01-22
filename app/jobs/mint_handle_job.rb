@@ -4,6 +4,6 @@
 # to do the heavy-lifting.
 class MintHandleJob
   def perform(work)
-    HandleService.new(work).mint_or_update
+    HandleService.new(work).mint
   end
 end

@@ -4,11 +4,20 @@ module Spot
   class HandleService
     attr_reader :work
 
+    # @return [true, false]
+    def self.handle_env_values_defined?
+      ENV['HANDLE_SERVER_URL'].present? && ENV['HANDLE_PREFIX'].present? &&
+        ENV['HANDLE_CLIENT_CERT'].present? && ENV['HANDLE_CLIENT_KEY'].present?
+    end
+
     def initialize(work)
       @work = work
     end
 
     def mint
+      # no-op if we can't mint handles
+      return unless handle_env_values_defined?
+
       res = send_payload
 
       raise("Received error code minting handle [#{handle_id}]: #{res['responseCode']}") unless res['responseCode'] == 1
@@ -39,7 +48,8 @@ module Spot
       end
 
       def handle_certificate
-        raise 'No HANDLE_CLIENT_CERT ENV value provided' unless ENV.include?('HANDLE_CLIENT_CERT')
+        validate_env_auth_values!('HANDLE_CLIENT_CERT')
+
         File.read(ENV['HANDLE_CLIENT_CERT'])
       end
 
@@ -49,7 +59,8 @@ module Spot
       end
 
       def handle_key
-        raise 'No HANDLE_CLIENT_KEY ENV value provided' unless ENV.include?('HANDLE_CLIENT_KEY')
+        validate_env_auth_values!('HANDLE_CLIENT_KEY')
+
         File.read(ENV['HANDLE_CLIENT_KEY'])
       end
 
@@ -73,7 +84,7 @@ module Spot
 
       # @return [String]
       def permalink_url
-        Rails.application.routes.url_helpers.handle_url(handle_id)
+        Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST'])
       end
 
       # @return [String]
@@ -97,6 +108,11 @@ module Spot
         # deal with the response: did everything go ok?
         # if so, update the item
         JSON.parse(response.body)
+      end
+
+      def validate_env_auth_values!(key)
+        raise "No #{key} ENV value provided" unless ENV.include?(key)
+        raise "#{key} path does not exist" unless File.exist?(ENV[key])
       end
 
       # @return [true, false]
