@@ -35,11 +35,13 @@ module Spot
 
       # @return [Faraday::Client]
       def client
-        @client ||= Faraday::Connection.new(handle_server_url, ssl: {
-          client_cert: handle_certificate,
-          client_key: handle_key,
-          verify: false
-        })
+        @client ||=
+          Faraday::Connection.new(handle_server_url,
+                                  ssl: {
+                                    client_cert: handle_certificate,
+                                    client_key: handle_key,
+                                    verify: false
+                                  })
       end
 
       def find_handle_id

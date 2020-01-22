@@ -34,7 +34,7 @@ RSpec.describe Spot::HandleService do
     let(:key_double) { instance_double(OpenSSL::PKey::PKey) }
     let(:handle_server_url) { 'http://localhost:8000' }
     let(:handle_prefix) { '10385' }
-    let(:body_content) { { responseCode: 1, handle: "#{handle_prefix}/#{work.id}"} }
+    let(:body_content) { { responseCode: 1, handle: "#{handle_prefix}/#{work.id}" } }
     let(:handle_value) { "#{handle_prefix}/#{work.id}" }
     let(:request_object) do
       {
