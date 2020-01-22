@@ -5,8 +5,6 @@ RSpec.describe Spot::Mappers::AlsaceImagesMapper do
 
   before { mapper.metadata = metadata }
 
-  it_behaves_like 'it has language-tagged titles'
-
   describe '#date_scope_note' do
     subject { mapper.date_scope_note }
 
@@ -117,5 +115,66 @@ RSpec.describe Spot::Mappers::AlsaceImagesMapper do
     let(:field) { 'subject.ocm' }
 
     it_behaves_like 'a mapped field'
+  end
+
+  describe '#title' do
+    subject { mapper.title }
+
+    context 'when both French and German titles are available' do
+      let(:metadata) do
+        { 'title.french' => ['Alsaciens et Lorraines'],
+          'title.german' => ['Elsässer und Lothringer'] }
+      end
+
+      it { is_expected.to eq [RDF::Literal('Alsaciens et Lorraines', language: :fr)] }
+    end
+
+    context 'when just a German title is available' do
+      let(:metadata) do
+        { 'title.german' => ['Elsässer und Lothringer'],
+          'title.french' => [] }
+      end
+
+      it { is_expected.to eq [RDF::Literal('Elsässer und Lothringer', language: :de)] }
+    end
+
+    context 'when no titles are available' do
+      it { is_expected.to eq [RDF::Literal('Untitled', language: :en)] }
+    end
+  end
+
+  describe '#title_alternative' do
+    subject { mapper.title_alternative }
+
+    context 'when both French and German titles are available' do
+      let(:metadata) do
+        { 'title.french' => ['Alsaciens et Lorraines'],
+          'title.german' => ['Elsässer und Lothringer'] }
+      end
+
+      it { is_expected.to eq [RDF::Literal('Elsässer und Lothringer', language: :de)] }
+    end
+
+    context 'when just a French title is available' do
+      let(:metadata) do
+        { 'title.french' => ['Alsaciens et Lorraines'],
+          'title.german' => [] }
+      end
+
+      it { is_expected.to eq [] }
+    end
+
+    context 'when just a German title is available' do
+      let(:metadata) do
+        { 'title.german' => ['Elsässer und Lothringer'],
+          'title.french' => [] }
+      end
+
+      it { is_expected.to eq [] }
+    end
+
+    context 'when no titles are available' do
+      it { is_expected.to eq [] }
+    end
   end
 end

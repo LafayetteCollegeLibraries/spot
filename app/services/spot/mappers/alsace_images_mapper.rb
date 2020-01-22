@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Spot::Mappers
   class AlsaceImagesMapper < BaseMapper
+    # note: we're not using the public #title or #title_alternative methods
+    # but we are using the #field_to_tagged_literals helper
     include LanguageTaggedTitles
 
     self.fields_map = {
@@ -20,8 +22,6 @@ module Spot::Mappers
         :inscription,
         :location,
         :subject,
-
-        # these come from LanguageTaggedTitles
         :title,
         :title_alternative
       ]
@@ -56,6 +56,29 @@ module Spot::Mappers
     # @return [Array<RDF::URI, String>]
     def subject
       convert_uri_strings(metadata['subject'])
+    end
+
+    # Since we don't have English titles for these, we'll prioritize (in order):
+    # - French title
+    # - German title
+    # - 'Untitled'
+    #
+    # @return [Array<RDF::Literal>]
+    def title
+      return field_to_tagged_literals('title.french', :fr) unless metadata['title.french'].blank?
+      return field_to_tagged_literals('title.german', :de) unless metadata['title.german'].blank?
+
+      [RDF::Literal('Untitled', language: :en)]
+    end
+
+    # We'll only have an alternative title if both French and German titles are available.
+    # Then we'll use the German title(s) as alternative(s).
+    #
+    # @return [Array<RDF::Literal>, nil]
+    def title_alternative
+      return [] unless metadata['title.french'].present? && metadata['title.german'].present?
+
+      field_to_tagged_literals('title.german', :de)
     end
   end
 end
