@@ -23,6 +23,10 @@ class HandleController < ApplicationController
 
   private
 
+    def id_from_params
+      URI.decode(params[:id])
+    end
+
     # @return [String]
     def identifier_solr_field
       'identifier_ssim'

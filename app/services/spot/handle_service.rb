@@ -6,17 +6,19 @@ module Spot
 
     # @return [true, false]
     def self.handle_env_values_defined?
-      ENV['HANDLE_SERVER_URL'].present? && ENV['HANDLE_PREFIX'].present? &&
-        ENV['HANDLE_CLIENT_CERT'].present? && ENV['HANDLE_CLIENT_KEY'].present?
+      (ENV['HANDLE_SERVER_URL'].present? && ENV['HANDLE_PREFIX'].present? &&
+        ENV['HANDLE_CLIENT_CERT'].present? && ENV['HANDLE_CLIENT_KEY'].present?)
     end
 
     def initialize(work)
       @work = work
     end
 
+    # @return [String, nil]
+    #   returns nil if the env values aren't defined, otherwise the handle id is returned
     def mint
       # no-op if we can't mint handles
-      return unless handle_env_values_defined?
+      return unless self.class.handle_env_values_defined?
 
       res = send_payload
 
@@ -50,7 +52,7 @@ module Spot
       def handle_certificate
         validate_env_auth_values!('HANDLE_CLIENT_CERT')
 
-        File.read(ENV['HANDLE_CLIENT_CERT'])
+        OpenSSL::X509::Certificate.new(File.read(ENV['HANDLE_CLIENT_CERT']))
       end
 
       # @return [String]
@@ -61,7 +63,7 @@ module Spot
       def handle_key
         validate_env_auth_values!('HANDLE_CLIENT_KEY')
 
-        File.read(ENV['HANDLE_CLIENT_KEY'])
+        OpenSSL::PKey.read(File.read(ENV['HANDLE_CLIENT_KEY']))
       end
 
       # @return [String]
@@ -84,7 +86,8 @@ module Spot
 
       # @return [String]
       def permalink_url
-        Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST'])
+        # need to use URI.decode as the slashes in our handle_id will be encoded by +handle_url+
+        URI.decode(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
       end
 
       # @return [String]
