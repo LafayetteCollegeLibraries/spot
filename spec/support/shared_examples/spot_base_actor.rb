@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'a Spot actor' do
-  let(:actor_stack) { described_class.new(Hyrax::Actors::Terminator.new) }
+  let(:actor) { described_class.new(Hyrax::Actors::Terminator.new) }
   let(:work_klass) { described_class.name.split('::').last.gsub(/Actor$/, '').constantize }
   let(:work) { work_klass.new }
-  let(:user) { build(:user) }
+  let(:user) { create(:user) }
   let(:ability) { Ability.new(user) }
-  let(:attributes) { {} }
+  let(:attributes) { attributes_for(work_klass.to_s.downcase.to_sym) }
   let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
 
   describe '#apply_deposit_date' do
-    subject(:actor) { actor_stack.create(env) }
-
     before do
       allow(work).to receive(:save)
       allow(Hyrax::TimeService).to receive(:time_in_utc).and_return(time_value)
@@ -21,7 +19,7 @@ RSpec.shared_examples 'a Spot actor' do
 
     context 'when no date_uploaded value is provided' do
       it 'sets the date to TimeService.time_in_utc' do
-        expect { actor }
+        expect { actor.create(env) }
           .to change { work.date_uploaded }
           .from(nil)
           .to(time_value)
@@ -32,7 +30,7 @@ RSpec.shared_examples 'a Spot actor' do
       let(:attributes) { { date_uploaded: date_uploaded } }
 
       it 'sets the date_uploaded of the work to a DateTime of the value' do
-        expect { actor }
+        expect { actor.create(env) }
           .to change { work.date_uploaded }
           .from(nil)
           .to(DateTime.parse(date_uploaded).utc)
@@ -43,11 +41,21 @@ RSpec.shared_examples 'a Spot actor' do
       let(:work) { work_klass.new(date_uploaded: date_uploaded) }
 
       it 'ensures the value is a DateTime' do
-        expect { actor }
+        expect { actor.create(env) }
           .to change { work.date_uploaded }
           .from(date_uploaded)
           .to(DateTime.parse(date_uploaded).utc)
       end
+    end
+  end
+
+  describe 'enqueues MintHandleJob on #create' do
+    before { allow(MintHandleJob).to receive(:perform_later).with(work) }
+
+    it 'enqueues MintHandleJob' do
+      actor.create(env)
+
+      expect(MintHandleJob).to have_received(:perform_later).with(work)
     end
   end
 end
