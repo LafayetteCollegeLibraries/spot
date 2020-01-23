@@ -68,9 +68,10 @@ Rails.application.routes.draw do
     resources :export, only: :show
   end
 
-  get '/handle/*id', to: 'identifier#handle', as: 'handle'
   get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
     qs = Rack::Utils.parse_nested_query(request.query_string)
     qs['url'] && qs['url'].match?(URI.regexp)
   }
+
+  resources :handle, only: :show, constraints: { id: %r{[0-9]+/[a-zA-Z0-9]+} }
 end

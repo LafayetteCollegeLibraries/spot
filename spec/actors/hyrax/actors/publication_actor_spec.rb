@@ -3,9 +3,7 @@ RSpec.describe Hyrax::Actors::PublicationActor do
   it_behaves_like 'a Spot actor'
 
   describe '#apply_date_available' do
-    subject(:actor) { actor_stack.create(env) }
-
-    let(:actor_stack) { described_class.new(Hyrax::Actors::Terminator.new) }
+    let(:actor) { described_class.new(Hyrax::Actors::Terminator.new) }
     let(:work) { build(:publication, **attributes) }
     let(:user) { create(:user) }
     let(:ability) { Ability.new(user) }
@@ -16,7 +14,7 @@ RSpec.describe Hyrax::Actors::PublicationActor do
       let(:attributes) { { date_available: ['2019-11-22'] } }
 
       it 'does not update the value' do
-        actor
+        actor.create(env)
         expect(work.date_available).to eq attributes[:date_available]
       end
     end
@@ -28,7 +26,7 @@ RSpec.describe Hyrax::Actors::PublicationActor do
       # failing for this, but explicitly checking works?
       it 'updates the value to today\'s date' do
         expect(work.date_available).to eq []
-        actor
+        actor.create(env)
         expect(work.date_available).to eq [todays_date]
       end
     end
@@ -46,7 +44,7 @@ RSpec.describe Hyrax::Actors::PublicationActor do
 
       it 'updates the value to match the embargo' do
         expect(work.date_available).to eq []
-        actor
+        actor.create(env)
         expect(work.date_available).to eq [tomorrow]
       end
     end
