@@ -22,6 +22,8 @@ module Spot::Mappers
         :identifier,
         :inscription,
         :location,
+        :rights_statement,
+        :subject,
 
         :title,
         :title_alternative
@@ -52,6 +54,10 @@ module Spot::Mappers
 
     def rights_statement
       convert_uri_strings(metadata.fetch('rights.statement', []))
+    end
+
+    def subject
+      convert_uri_strings(metadata.fetch('subject', []))
     end
   end
 end

@@ -124,6 +124,14 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
     it { is_expected.to eq [RDF::URI('http://rightsstatements.org/vocab/InC-EDU/1.0/')] }
   end
 
+  describe '#subject' do
+    subject { mapper.subject }
+
+    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1142133'] } }
+
+    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1142133')] }
+  end
+
   describe '#subject_ocm' do
     subject { mapper.subject_ocm }
 
