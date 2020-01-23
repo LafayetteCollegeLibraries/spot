@@ -80,5 +80,14 @@ RSpec.describe Spot::HandleService do
       expect(work).to have_received(:identifier=).with(["hdl:#{handle_value}"])
       expect(work).to have_received(:save!)
     end
+
+    context 'when a responseCode != 1 is returned' do
+      let(:body_content) { { responseCode: 202, handle: "#{handle_prefix}/#{work.id}" } }
+
+      it 'throws an error' do
+        expect { service.mint }
+          .to raise_error(StandardError, 'Received error code minting handle [10385/abc123def]: 202')
+      end
+    end
   end
 end
