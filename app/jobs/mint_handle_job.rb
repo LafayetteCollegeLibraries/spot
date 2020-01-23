@@ -2,8 +2,8 @@
 #
 # Tiny job wrapper that calls our HandleMintingService
 # to do the heavy-lifting.
-class MintHandleJob
+class MintHandleJob < ApplicationJob
   def perform(work)
-    HandleService.new(work).mint
+    Spot::HandleService.new(work).mint
   end
 end
