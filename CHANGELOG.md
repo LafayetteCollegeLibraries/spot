@@ -1,6 +1,13 @@
 # changelog
 
-## [2020.1] - 2019-01-21
+## [2020.2] - 2020-01-23
+
+### features ❄️
+- adds Handle minting service and mints new identifiers during the create cycle (#269)
+- adds `rights_holder` to work metadata view (#391)
+
+
+## [2020.1] - 2020-01-21
 
 ### features 🏔
 - adds **Women's, Gender & Sexuality** to department authority (#382)
@@ -260,6 +267,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.2
 [2020.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.1
 [2019.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.9
 [2019.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.8
