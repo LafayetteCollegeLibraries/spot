@@ -12,6 +12,7 @@ module Spot
   #
   class BaseActor < ::Hyrax::Actors::BaseActor
     include ::DeserializesRdfLiterals
+    include ::CreateHandleIdentifiers
 
     private
 
