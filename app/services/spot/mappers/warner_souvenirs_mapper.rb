@@ -5,7 +5,7 @@ module Spot::Mappers
       date_scope_note: 'description.indicia',
       language: 'language',
       physical_medium: 'format.medium',
-      publisher: 'creator.company',
+      publisher: 'creator.company'
     }
 
     # @return [Array<Symbol>]
@@ -39,11 +39,6 @@ module Spot::Mappers
     # @return [Array<RDF::Literal>]
     def description
       field_to_tagged_literals('description.critical', :en)
-    end
-
-    # @return [Array<String>]
-    def identifier
-      [eaic_id_from_title].reject(&:nil?)
     end
 
     # @return [Array<RDF::URI>]

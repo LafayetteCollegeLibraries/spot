@@ -15,6 +15,7 @@ module Spot::Mappers
       super + [
         :date,
         :date_associated,
+        :identifier,
         :inscription,
         :location,
         :resource_type,

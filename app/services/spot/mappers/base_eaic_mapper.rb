@@ -4,6 +4,10 @@ module Spot::Mappers
   class BaseEaicMapper < BaseMapper
     include LanguageTaggedTitles
 
+    def identifier
+      [eaic_id_from_title]
+    end
+
     private
 
       def eaic_id_from_title(field = 'title.english')
