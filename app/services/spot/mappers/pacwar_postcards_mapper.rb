@@ -18,7 +18,7 @@ module Spot::Mappers
         :inscription,
         :location,
         :rights_statement,
-        :subject
+        :subject,
 
         # field methods provided by the BaseEaicMapper
         :identifier,
