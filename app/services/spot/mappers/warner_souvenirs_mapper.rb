@@ -5,7 +5,8 @@ module Spot::Mappers
       date_scope_note: 'description.indicia',
       language: 'language',
       physical_medium: 'format.medium',
-      publisher: 'creator.company'
+      publisher: 'creator.company',
+      subject_ocm: 'subject.ocm'
     }
 
     # @return [Array<Symbol>]
@@ -18,7 +19,6 @@ module Spot::Mappers
         :location,
         :rights_statement,
         :subject,
-        :subject_ocm,
 
         # from LanguageTaggedLiterals mixin
         :title,

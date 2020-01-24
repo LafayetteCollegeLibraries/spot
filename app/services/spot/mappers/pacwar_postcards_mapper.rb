@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 module Spot::Mappers
-  # @todo no `date` field exists to pull updated date_uploaded value from?
-  # @todo format.extant values have pipes in the metadata, is this supposed to be split?
-  # or is that how the metadata is expected to be formatted?
-  class CpwNofukoMapper < BaseEaicMapper
+  class PacwarPostcardsMapper < BaseEaicMapper
     self.fields_map = {
       creator: 'creator.maker',
-      original_item_extent: 'format.extant',
+      date_scope_note: 'description.indicia',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       related_resource: 'description.citation',
       research_assistance: 'contributor',
-      resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
     }
 
@@ -19,20 +15,24 @@ module Spot::Mappers
       super + [
         :date,
         :description,
-        :identifier,
         :inscription,
         :location,
         :rights_statement,
-        :subject,
+        :subject
 
+        # field methods provided by the BaseEaicMapper
+        :identifier,
         :title,
         :title_alternative
       ]
     end
 
-    # @return [Array<String>]
     def date
       edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
+    end
+
+    def date_associated
+      edtf_ranges_for('date.image.lower', 'date.image.upper')
     end
 
     def description
@@ -45,7 +45,7 @@ module Spot::Mappers
         ['description.inscription.japanese', :ja],
         ['description.text.english', :en],
         ['description.text.japanese', :ja]
-      ].inject([]) { |pool, (field, lang)| pool + field_to_tagged_literals(field, lang) }
+      ].inject([]) { |pool, (field, language)| pool + field_to_tagged_literals(field, language) }
     end
 
     def subject

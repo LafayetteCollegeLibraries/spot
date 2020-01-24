@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::CpwNofukoMapper do
+RSpec.describe Spot::Mappers::PacwarPostcardsMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
@@ -20,12 +20,28 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
 
     let(:metadata) do
       {
-        'date.artifact.lower' => ['1930'],
-        'date.artifact.upper' => ['1950']
+        'date.artifact.lower' => ['2016-05'],
+        'date.artifact.upper' => ['2020-01']
       }
     end
 
-    it { is_expected.to eq ['1930/1950'] }
+    it { is_expected.to eq ['2016-05/2020-01'] }
+  end
+
+  describe '#date_associated' do
+    subject { mapper.date_associated }
+
+    let(:metadata) { { 'date.image.lower' => [], 'date.image.upper' => ['1999'] } }
+
+    it { is_expected.to eq ['1999'] }
+  end
+
+  describe '#date_scope_note' do
+    subject { mapper.date_scope_note }
+
+    let(:field) { 'description.indicia' }
+
+    it_behaves_like 'a mapped field'
   end
 
   describe '#description' do
@@ -60,14 +76,6 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
     it { is_expected.to eq expected_values }
   end
 
-  describe '#original_item_extent' do
-    subject { mapper.original_item_extent }
-
-    let(:field) { 'format.extant' }
-
-    it_behaves_like 'a mapped field'
-  end
-
   describe '#physical_medium' do
     subject { mapper.physical_medium }
 
@@ -100,20 +108,12 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#resource_type' do
-    subject { mapper.resource_type }
-
-    let(:field) { 'resource.type' }
-
-    it_behaves_like 'a mapped field'
-  end
-
   describe '#subject' do
     subject { mapper.subject }
 
-    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1142133'] } }
+    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1316662'] } }
 
-    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1142133')] }
+    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1316662')] }
   end
 
   describe '#subject_ocm' do

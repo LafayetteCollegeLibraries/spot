@@ -8,6 +8,14 @@ module Spot::Mappers
       [eaic_id_from_title]
     end
 
+    def location
+      convert_uri_strings(merge_fields('coverage.location', 'coverage.location.country'))
+    end
+
+    def rights_statement
+      convert_uri_strings(metadata.fetch('rights.statement', []))
+    end
+
     private
 
       def eaic_id_from_title(field = 'title.english')
@@ -27,8 +35,12 @@ module Spot::Mappers
         start_dates = metadata.fetch(start_date_field, [])
         end_dates = metadata.fetch(end_date_field, [])
 
+        # Array#zip will return an empty array if the target (start_dates) is empty
+        start_dates.fill(0, end_dates.size) { nil } if start_dates.empty?
+
         start_dates.zip(end_dates).map do |(start_date, end_date)|
-          Date.edtf([start_date, end_date].reject(&:blank?).join('/')).to_s
+          # EDTF date ranges are "#{start_date}/#{end_date}"
+          [start_date, end_date].reject(&:blank?).join('/')
         end
       end
   end

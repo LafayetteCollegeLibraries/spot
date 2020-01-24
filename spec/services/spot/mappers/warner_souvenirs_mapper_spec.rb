@@ -51,17 +51,6 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#location' do
-    subject { mapper.location }
-
-    let(:metadata) do
-      { 'coverage.location' => ['http://www.geonames.org/1816670/'],
-        'coverage.location.country' => ['https://www.geonames.org/1814991/'] }
-    end
-
-    it { is_expected.to eq [RDF::URI('http://www.geonames.org/1816670/'), RDF::URI('https://www.geonames.org/1814991/')] }
-  end
-
   describe '#physical_medium' do
     subject { mapper.physical_medium }
 
@@ -78,19 +67,19 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#rights_statement' do
-    subject { mapper.rights_statement }
-
-    let(:metadata) { { 'rights.statement' => ['http://rightsstatements.org/vocab/InC-EDU/1.0/'] } }
-
-    it { is_expected.to eq [RDF::URI('http://rightsstatements.org/vocab/InC-EDU/1.0/')] }
-  end
-
   describe '#subject' do
     subject { mapper.subject }
 
     let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1316662'] } }
 
     it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1316662')] }
+  end
+
+  describe '#subject_ocm' do
+    subject { mapper.subject_ocm }
+
+    let(:field) { 'subject.ocm' }
+
+    it_behaves_like 'a mapped field'
   end
 end
