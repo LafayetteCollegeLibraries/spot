@@ -13,30 +13,22 @@ module Spot::Mappers
 
     def fields
       super + [
-        :date,
-        :description,
         :inscription,
         :location,
         :rights_statement,
-        :subject,
 
         # field methods provided by the BaseEaicMapper
+        :date,
+        :description,
         :identifier,
+        :subject,
         :title,
         :title_alternative
       ]
     end
 
-    def date
-      edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
-    end
-
     def date_associated
       edtf_ranges_for('date.image.lower', 'date.image.upper')
-    end
-
-    def description
-      field_to_tagged_literals('description.critical', :en)
     end
 
     def inscription
@@ -46,10 +38,6 @@ module Spot::Mappers
         ['description.text.english', :en],
         ['description.text.japanese', :ja]
       ].inject([]) { |pool, (field, language)| pool + field_to_tagged_literals(field, language) }
-    end
-
-    def subject
-      convert_uri_strings(metadata.fetch('subject', []))
     end
   end
 end

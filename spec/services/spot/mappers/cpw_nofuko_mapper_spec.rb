@@ -15,27 +15,6 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#date' do
-    subject { mapper.date }
-
-    let(:metadata) do
-      {
-        'date.artifact.lower' => ['1930'],
-        'date.artifact.upper' => ['1950']
-      }
-    end
-
-    it { is_expected.to eq ['1930/1950'] }
-  end
-
-  describe '#description' do
-    subject { mapper.description }
-
-    let(:metadata) { { 'description.critical' => ['A description of the thing.'] } }
-
-    it { is_expected.to eq [RDF::Literal('A description of the thing.', language: :en)] }
-  end
-
   describe '#inscription' do
     subject { mapper.inscription }
 
@@ -87,9 +66,9 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
   describe '#related_resource' do
     subject { mapper.related_resource }
 
-    let(:field) { 'description.citation' }
+    let(:metadata) { { 'description.citation' => ['a good book, 2019'], 'relation.seealso' => ['[ww0001]'] } }
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq ['a good book, 2019', '[ww0001]'] }
   end
 
   describe '#research_assistance' do
@@ -106,14 +85,6 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
     let(:field) { 'resource.type' }
 
     it_behaves_like 'a mapped field'
-  end
-
-  describe '#subject' do
-    subject { mapper.subject }
-
-    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1142133'] } }
-
-    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1142133')] }
   end
 
   describe '#subject_ocm' do

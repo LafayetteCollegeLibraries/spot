@@ -9,7 +9,6 @@ module Spot::Mappers
       original_item_extent: 'format.extant',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
-      related_resource: 'description.citation',
       research_assistance: 'contributor',
       resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
@@ -17,26 +16,18 @@ module Spot::Mappers
 
     def fields
       super + [
+        :inscription,
+        :location,
+        :related_resource,
+        :rights_statement,
+
         :date,
         :description,
         :identifier,
-        :inscription,
-        :location,
-        :rights_statement,
         :subject,
-
         :title,
         :title_alternative
       ]
-    end
-
-    # @return [Array<String>]
-    def date
-      edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
-    end
-
-    def description
-      field_to_tagged_literals('description.critical', :en)
     end
 
     def inscription
@@ -48,8 +39,8 @@ module Spot::Mappers
       ].inject([]) { |pool, (field, lang)| pool + field_to_tagged_literals(field, lang) }
     end
 
-    def subject
-      convert_uri_strings(metadata.fetch('subject', []))
+    def related_resource
+      merge_fields('description.citation', 'relation.seealso')
     end
   end
 end

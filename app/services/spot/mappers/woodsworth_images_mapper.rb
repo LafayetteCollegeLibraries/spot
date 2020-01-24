@@ -13,19 +13,18 @@ module Spot::Mappers
 
     def fields
       super + [
-        :date,
         :date_associated,
-        :identifier,
         :inscription,
         :location,
         :resource_type,
+
+        :date,
+        :description,
+        :identifier,
+        :subject,
         :title,
         :title_alternative
       ]
-    end
-
-    def date
-      edtf_range_for('date.artifact.lower', 'date.artifact.upper')
     end
 
     def date_associated

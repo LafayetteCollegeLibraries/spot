@@ -4,6 +4,14 @@ module Spot::Mappers
   class BaseEaicMapper < BaseMapper
     include LanguageTaggedTitles
 
+    def date
+      edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
+    end
+
+    def description
+      field_to_tagged_literals('description.critical', :en)
+    end
+
     def identifier
       [eaic_id_from_title]
     end
@@ -14,6 +22,10 @@ module Spot::Mappers
 
     def rights_statement
       convert_uri_strings(metadata.fetch('rights.statement', []))
+    end
+
+    def subject
+      convert_uri_strings(metadata.fetch('subject', []))
     end
 
     private

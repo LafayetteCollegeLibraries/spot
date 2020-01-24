@@ -12,33 +12,23 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + [
-        :date,
         :date_associated,
-        :description,
-        :identifier,
         :location,
         :rights_statement,
-        :subject,
 
         # from LanguageTaggedLiterals mixin
+        :date,
+        :description,
+        :identifier,
+        :subject,
         :title,
         :title_alternative
       ]
     end
 
     # @return [Array<String>]
-    def date
-      edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
-    end
-
-    # @return [Array<String>]
     def date_associated
       edtf_ranges_for('date.image.lower', 'date.image.upper')
-    end
-
-    # @return [Array<RDF::Literal>]
-    def description
-      field_to_tagged_literals('description.critical', :en)
     end
 
     # @return [Array<RDF::URI>]
@@ -49,11 +39,6 @@ module Spot::Mappers
     # @return [Array<RDF::URI>]
     def rights_statement
       convert_uri_strings(metadata.fetch('rights.statement', []))
-    end
-
-    # @return [Array<RDF::URI>]
-    def subject
-      convert_uri_strings(metadata.fetch('subject', []))
     end
   end
 end

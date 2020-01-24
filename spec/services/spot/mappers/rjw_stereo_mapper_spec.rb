@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
+RSpec.describe Spot::Mappers::RjwStereoMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
@@ -17,18 +17,10 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     it { is_expected.to eq ['1921-01/1932-02-11'] }
   end
 
-  describe '#date_scope_note' do
-    subject { mapper.date_scope_note }
+  describe '#publisher' do
+    subject { mapper.publisher }
 
-    let(:field) { 'description.indicia' }
-
-    it_behaves_like 'a mapped field'
-  end
-
-  describe '#language' do
-    subject { mapper.language }
-
-    let(:field) { 'language' }
+    let(:field) { 'creator.company' }
 
     it_behaves_like 'a mapped field'
   end
@@ -39,22 +31,6 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     let(:field) { 'format.medium' }
 
     it_behaves_like 'a mapped field'
-  end
-
-  describe '#publisher' do
-    subject { mapper.publisher }
-
-    let(:field) { 'creator.company' }
-
-    it_behaves_like 'a mapped field'
-  end
-
-  describe '#subject' do
-    subject { mapper.subject }
-
-    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1316662'] } }
-
-    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1316662')] }
   end
 
   describe '#subject_ocm' do

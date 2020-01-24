@@ -4,6 +4,40 @@ RSpec.shared_examples 'a base EAIC mapper' do
 
   fields = described_class.new.fields
 
+  if fields.include?(:date)
+    describe '#date' do
+      subject { mapper.date }
+
+      let(:metadata) { { 'date.artifact.lower' => date_lower, 'date.artifact.upper' => date_upper } }
+      let(:date_lower) { ['1930'] }
+      let(:date_upper) { ['1952-06'] }
+
+      it { is_expected.to eq ['1930/1952-06'] }
+
+      context 'when no lower date present' do
+        let(:date_lower) { [] }
+
+        it { is_expected.to eq ['1952-06'] }
+      end
+
+      context 'when no upper date present' do
+        let(:date_upper) { [] }
+
+        it { is_expected.to eq ['1930'] }
+      end
+    end
+  end
+
+  if fields.include?(:description)
+    describe '#description' do
+      subject { mapper.description }
+
+      let(:metadata) { { 'description.critical' => ['It is an Image. A nice one.'] } }
+
+      it { is_expected.to eq [RDF::Literal('It is an Image. A nice one.', language: :en)] }
+    end
+  end
+
   if fields.include?(:identifier)
     describe '#identifier' do
       subject { mapper.identifier }
@@ -44,6 +78,16 @@ RSpec.shared_examples 'a base EAIC mapper' do
       let(:metadata) { { 'rights.statement' => ['http://rightsstatements.org/vocab/InC-EDU/1.0/'] } }
 
       it { is_expected.to eq [RDF::URI('http://rightsstatements.org/vocab/InC-EDU/1.0/')] }
+    end
+  end
+
+  if fields.include?(:subject)
+    describe '#subject' do
+      subject { mapper.subject }
+
+      let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1142133'] } }
+
+      it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1142133')] }
     end
   end
 end
