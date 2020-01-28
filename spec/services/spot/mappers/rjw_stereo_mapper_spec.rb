@@ -5,7 +5,7 @@ RSpec.describe Spot::Mappers::RjwStereoMapper do
 
   before { mapper.metadata = metadata }
 
-  it_behaves_like 'a base EAIC mapper'
+  it_behaves_like 'a base EAIC mapper', skip_fields: [:description]
 
   describe '#date_associated' do
     subject { mapper.date_associated }
@@ -15,6 +15,26 @@ RSpec.describe Spot::Mappers::RjwStereoMapper do
     end
 
     it { is_expected.to eq ['1921-01/1932-02-11'] }
+  end
+
+  describe '#description' do
+    subject { mapper.description }
+
+    let(:metadata) do
+      {
+        'description.critical' => ['It is fine but it could be better.'],
+        'description.text.english' => ['Some English text describing the object.']
+      }
+    end
+
+    let(:expected_results) do
+      [
+        RDF::Literal('It is fine but it could be better.', language: :en),
+        RDF::Literal('Some English text describing the object.', language: :en)
+      ]
+    end
+
+    it { is_expected.to eq expected_results }
   end
 
   describe '#publisher' do
@@ -29,6 +49,22 @@ RSpec.describe Spot::Mappers::RjwStereoMapper do
     subject { mapper.physical_medium }
 
     let(:field) { 'format.medium' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#related_resource' do
+    subject { mapper.related_resource }
+
+    let(:field) { 'relation.seealso' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#research_assistance' do
+    subject { mapper.research_assistance }
+
+    let(:field) { 'contributor' }
 
     it_behaves_like 'a mapped field'
   end

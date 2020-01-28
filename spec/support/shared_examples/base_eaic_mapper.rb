@@ -1,10 +1,20 @@
 # frozen_string_literal: true
-RSpec.shared_examples 'a base EAIC mapper' do
-  it_behaves_like 'it has language-tagged titles'
+#
+# Going with an options object so that we can use keyword fields to understand
+# what exactly is being passed.
+#
+# @example passing a skip_fields parameter
+#   it_behaves_like 'a base EAIC mapper', skip_fields: [:identifier]
+#
+RSpec.shared_examples 'a base EAIC mapper' do |options|
+  options ||= {}
 
   fields = described_class.new.fields
+  skip_fields = options[:skip_fields] || []
 
-  if fields.include?(:date)
+  it_behaves_like 'it has language-tagged titles'
+
+  if fields.include?(:date) && !skip_fields.include?(:date)
     describe '#date' do
       subject { mapper.date }
 
@@ -28,17 +38,17 @@ RSpec.shared_examples 'a base EAIC mapper' do
     end
   end
 
-  if fields.include?(:description)
+  if fields.include?(:description) && !skip_fields.include?(:description)
     describe '#description' do
       subject { mapper.description }
 
       let(:metadata) { { 'description.critical' => ['It is an Image. A nice one.'] } }
 
-      it { is_expected.to eq [RDF::Literal('It is an Image. A nice one.', language: :en)] }
+      it { is_expected.to include RDF::Literal('It is an Image. A nice one.', language: :en) }
     end
   end
 
-  if fields.include?(:identifier)
+  if fields.include?(:identifier) && !skip_fields.include?(:identifier)
     describe '#identifier' do
       subject { mapper.identifier }
 
@@ -52,7 +62,7 @@ RSpec.shared_examples 'a base EAIC mapper' do
     end
   end
 
-  if fields.include?(:location)
+  if fields.include?(:location) && !skip_fields.include?(:location)
     describe '#location' do
       subject { mapper.location }
 
@@ -71,7 +81,7 @@ RSpec.shared_examples 'a base EAIC mapper' do
     end
   end
 
-  if fields.include?(:rights_statement)
+  if fields.include?(:rights_statement) && !skip_fields.include?(:rights_statement)
     describe '#rights_statement' do
       subject { mapper.rights_statement }
 
@@ -81,7 +91,7 @@ RSpec.shared_examples 'a base EAIC mapper' do
     end
   end
 
-  if fields.include?(:subject)
+  if fields.include?(:subject) && !skip_fields.include?(:subject)
     describe '#subject' do
       subject { mapper.subject }
 

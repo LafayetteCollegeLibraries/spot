@@ -1,35 +1,79 @@
 # frozen_string_literal: true
-
 module Spot::Mappers
+  # A starting point for mapping collections in the East Asian Image Collection (EAIC)
+  # to the Image model. The methods defined are a common denomenator base set of
+  # mappings. Just inheriting this mapper will not do anything, you'll need to add
+  # the methods you'd like to use to your mapper's +#fields+ array.
+  #
+  # @example
+  #   module Spot::Mappers
+  #     class PostcardCollectionMapper < BaseEaicMapper
+  #       def fields
+  #         super + [:date, :description, :identifier, :title, :title_alternative]
+  #       end
+  #     end
+  #   end
+  #
   class BaseEaicMapper < BaseMapper
     include LanguageTaggedTitles
 
+    # 'date.artifact.lower' and 'date.artifact.upper' fields concatted into
+    # an EDTF date string. When both fields are available, a range object
+    # is returned (eg. '1986/2020'), otherwise just a single date will be returned.
+    #
+    # @return [Array<String>]
     def date
       edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
     end
 
+    # Returns the values of 'description.critical' as RDF::Literal objects.
+    #
+    # @return [Array<RDF::Literal>]
     def description
       field_to_tagged_literals('description.critical', :en)
     end
 
+    # Extracts an EAIC style ID from a title field (default is "title.english")
+    #
+    # @example
+    #   metadata['title.english']
+    #   # => ["[ww0032] [Ami pottery-making]"]
+    #
+    #   identifier
+    #   # => ['eaic:ww0032']
+    #
     def identifier
       [eaic_id_from_title]
     end
 
+    # Grabs and converts location values in 'coverage.location' and 'coverage.location.country'
+    # to RDF::URI objects (where applicable). Non-URIs are retained as strings.
+    #
+    # @return [Array<RDF::URI, String>]
     def location
       convert_uri_strings(merge_fields('coverage.location', 'coverage.location.country'))
     end
 
+    # Grabs and convert values in 'rights.statement' to RDF::URI objects
+    # (where applicable). Non-URIs are retained as strings.
+    #
+    # @return [Array<RDF::URI, String>]
     def rights_statement
       convert_uri_strings(metadata.fetch('rights.statement', []))
     end
 
+    # Grabs and convert values in 'subject' to RDF::URI objects
+    # (where applicable). Non-URIs are retained as strings.
+    #
+    # @return [Array<RDF::URI, String>]
     def subject
       convert_uri_strings(metadata.fetch('subject', []))
     end
 
     private
 
+      # @param [String] field
+      # @return [String, nil]
       def eaic_id_from_title(field = 'title.english')
         values = metadata.fetch(field, [])
         return if values.empty?
