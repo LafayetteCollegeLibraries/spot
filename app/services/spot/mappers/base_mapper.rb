@@ -85,5 +85,20 @@ module Spot::Mappers
       return metadata['visibility'] if metadata.include?('visibility')
       default_visibility
     end
+
+    private
+
+      # @return [Array<RDF::URI, String>]
+      def convert_uri_strings(arr)
+        arr.map { |val| val.match?(/^https?:\/\//) ? RDF::URI(val) : val }
+      end
+
+      # Helper method to group the values for multiple fields into one place.
+      #
+      # @param [Array<String>] *names field names to merge
+      # @return [Array<String>]
+      def merge_fields(*names)
+        names.map { |name| metadata[name] }.flatten.reject(&:blank?).compact
+      end
   end
 end
