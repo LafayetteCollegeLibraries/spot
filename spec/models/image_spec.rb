@@ -37,4 +37,10 @@ RSpec.describe Image do
   ].each do |(prop, uri)|
     it { is_expected.to have_editable_property(prop).with_predicate(uri) }
   end
+
+  describe 'validations' do
+    let(:work) { build(:image) }
+
+    it_behaves_like 'it ensures the existence of a NOID identifier'
+  end
 end

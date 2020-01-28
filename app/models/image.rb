@@ -4,6 +4,7 @@
 # obtained by scanning or photographing the object.
 class Image < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+  include ::Spot::NoidIdentifier
 
   class_attribute :controlled_properties
   self.controlled_properties = [:location, :subject]
@@ -64,17 +65,14 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # @todo indexing
+  # date indexing is covered in ImageIndexer
   property :date, predicate: ::RDF::Vocab::DC.date
+  property :date_associated, predicate: ::RDF::URI.new('https://d-nb.info/standards/elementset/gnd#associatedDate')
 
   # about the date
   property :date_scope_note, predicate: ::RDF::Vocab::SKOS.scopeNote do |index|
     index.as :stored_searchable
   end
-
-  # associated dates
-  # @todo Indexing (might need a mixin)
-  property :date_associated, predicate: ::RDF::URI.new('https://d-nb.info/standards/elementset/gnd#associatedDate')
 
   property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
     index.as :stored_searchable, :facetable
