@@ -6,7 +6,7 @@ class Image < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
 
   class_attribute :controlled_properties
-  self.controlled_properties = [:location]
+  self.controlled_properties = [:location, :subject]
 
   self.indexer = ImageIndexer
 
@@ -29,23 +29,24 @@ class Image < ActiveFedora::Base
   end
 
   property :repository_location, predicate: ::RDF::URI.new('http://purl.org/vra/placeOfRepository') do |index|
-    index.as :facetable
+    index.as :symbol
   end
 
   property :source, predicate: ::RDF::Vocab::DC.source do |index|
-    index.as :facetable
+    index.as :symbol
   end
 
   property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
-    index.as :stored_searchable, :facetable
+    index.as :symbol
   end
 
   property :physical_medium, predicate: ::RDF::Vocab::DC.PhysicalMedium do |index|
     index.as :stored_searchable, :facetable
   end
 
-  # @todo: stored, not searchable?
-  property :original_item_extent, predicate: ::RDF::Vocab::DC.extent
+  property :original_item_extent, predicate: ::RDF::Vocab::DC.extent do |index|
+    index.as :stored_searchable
+  end
 
   # see {IndexesLanguageAndLabel} mixin for indexing
   property :language, predicate: ::RDF::Vocab::DC11.language
@@ -54,8 +55,10 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # @todo: indexing
-  property :ethnic_group, predicate: ::RDF::URI.new('http://sparql.cwrc.ca/ontologies/cwrc#hasEthnicity')
+  # @todo are we keeping this now that we've found subjects to match this info?
+  property :ethnic_group, predicate: ::RDF::URI.new('http://sparql.cwrc.ca/ontologies/cwrc#hasEthnicity') do |index|
+    index.as :stored_searchable, :facetable
+  end
 
   property :inscription, predicate: ::RDF::URI.new('http://dbpedia.org/ontology/inscription') do |index|
     index.as :stored_searchable
@@ -85,8 +88,9 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable, :facetable
   end
 
-  property :subject, predicate: ::RDF::Vocab::DC11.subject do |index|
-    index.as :stored_searchable, :facetable
+  property :subject, predicate: ::RDF::Vocab::DC11.subject,
+                     class_name: Spot::ControlledVocabularies::Base do |index|
+    index.as :symbol
   end
 
   # @note The URI provided is the landing page for the OCM, as a predicate doesn't exist
