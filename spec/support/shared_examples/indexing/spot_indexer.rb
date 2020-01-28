@@ -78,6 +78,14 @@ RSpec.shared_examples 'a Spot indexer' do
         expect(solr_doc['rights_statement_shortcode_ssim']).to eq [nil]
       end
     end
+
+    context 'when the URI is an ActiveTriples::Resrouce' do
+      let(:uri) { ActiveTriples::Resource.new('http://rightsstatements.org/vocab/NKC/1.0/') }
+
+      it 'uses the #id value' do
+        expect(solr_doc['rights_statement_ssim']).to eq uri.id
+      end
+    end
   end
 
   describe 'sortable title' do
