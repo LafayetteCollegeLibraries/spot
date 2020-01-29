@@ -25,7 +25,7 @@ module Spot
       attribute :bibliographic_citation, ::Blacklight::Types::Array, 'bibliographic_citation_tesim'
       attribute :collection_slug,        ::Blacklight::Types::String, 'collection_slug_ssi'
       attribute :contributor,            ::Blacklight::Types::Array, 'contributor_tesim'
-      attribute :creator,                ::Blacklight::Types::Array, 'contributor_tesim'
+      attribute :creator,                ::Blacklight::Types::Array, 'creator_tesim'
       attribute :date,                   ::Blacklight::Types::Array, 'date_ssim'
       attribute :date_associated,        ::Blacklight::Types::Array, 'date_associated_ssim'
       attribute :date_available,         ::Blacklight::Types::Array, 'date_available_ssim'
