@@ -3,11 +3,9 @@ module Spot::Mappers
   class WoodsworthImagesMapper < BaseEaicMapper
     self.fields_map = {
       date_scope_note: 'description.indicia',
-      description: 'description.critical',
       language: 'language',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
-      rights_statement: 'rights.digital',
       subject_ocm: 'subject.ocm'
     }
 
@@ -15,12 +13,13 @@ module Spot::Mappers
       super + [
         :date_associated,
         :inscription,
-        :location,
         :resource_type,
 
         :date,
         :description,
         :identifier,
+        :location,
+        :rights_statement,
         :subject,
         :title,
         :title_alternative
@@ -28,7 +27,7 @@ module Spot::Mappers
     end
 
     def date_associated
-      edtf_range_for('date.image.lower', 'date.image.upper')
+      edtf_ranges_for('date.image.lower', 'date.image.upper')
     end
 
     def inscription
@@ -36,10 +35,6 @@ module Spot::Mappers
         .map { |(field, tag)| field_to_tagged_literals(field, tag) }
         .flatten
         .compact
-    end
-
-    def location
-      merge_fields('coverage.location', 'coverage.location.country')
     end
 
     def related_resource
