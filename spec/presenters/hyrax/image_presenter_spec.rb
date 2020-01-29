@@ -5,13 +5,15 @@ RSpec.describe Hyrax::ImagePresenter do
 
   let(:solr_doc) { SolrDocument.new(solr_data) }
   let(:solr_data) { object.to_solr }
-  let(:object) { build(:publication) }
+  let(:object) { build(:image) }
   let(:ability) { Ability.new(build(:user)) }
 
   it_behaves_like 'a Spot presenter'
 
   describe '#subject_ocm' do
     subject { presenter.subject_ocm }
+
+    let(:object) { build(:image, subject_ocm: values) }
 
     let(:values) do
       ['640 STATE', '340 STRUCTURES', '644 EXECUTIVE HOUSEHOLD', '344 PUBLIC STRUCTURES']

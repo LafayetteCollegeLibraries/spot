@@ -83,7 +83,7 @@ RSpec.shared_examples 'a Spot indexer' do
       let(:uri) { ActiveTriples::Resource.new('http://rightsstatements.org/vocab/NKC/1.0/') }
 
       it 'uses the #id value' do
-        expect(solr_doc['rights_statement_ssim']).to eq uri.id
+        expect(solr_doc['rights_statement_ssim']).to eq [uri.id]
       end
     end
   end
