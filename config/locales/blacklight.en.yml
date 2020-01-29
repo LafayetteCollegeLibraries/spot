@@ -10,6 +10,8 @@ en:
         bibliographic_citation: Bibliographic Citation
         contributor: Contributor
         creator: Creator
+        date: Date
+        date_alternative: Alternative Date
         date_available: Date Available
         date_created: Date Created
         date_issued: Date Issued
@@ -22,6 +24,7 @@ en:
         file_format: File Format
         file_size: File Size
         has_model: LDR Type
+        inscription: Inscription
         keyword: Keyword
         language: Language
         language_label: Language
@@ -34,6 +37,7 @@ en:
         original_checksum: Original Checksum (MD5)
         page_count: Page Count
         permalink: Permalink
+        physical_medium: Physical Medium
         proxy_depositor: Proxy Depositor
         publisher: Publisher
         resource_type: Type
@@ -41,7 +45,9 @@ en:
         source: Source
         standard_identifier: Standard Identifier
         subject: Subject
+        subject_ocm: Outline of Cultural Materials classification
         title: Title
+        title_alternative: Alternative Title
         visibility: Visibility
         years_encompassed: Year
 
