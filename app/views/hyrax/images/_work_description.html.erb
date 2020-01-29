@@ -1,0 +1,13 @@
+<% if presenter.description.present? %>
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Description</h5>
+  </div>
+  <ul class="list-group">
+    <% presenter.description.each do |description| %>
+    <li class="list-group-item"><%= description %></li>
+    <% end %>
+  </ul>
+  <% end %>
+</div>
+<% end %>
