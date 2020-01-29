@@ -27,7 +27,7 @@ FactoryBot.define do
     rights_statement { ['http://creativecommons.org/publicdomain/mark/1.0/'] }
     source { ['A grouped collection'] }
     subject { ['http://id.worldcat.org/fast/1061714'] }
-    subject_ocm { [] }
+    subject_ocm { ['000 VALUE'] }
     subtitle { ['A closer look'] }
     title { ['An archival image'] }
     title_alternative { ['An alternative title of the image'] }

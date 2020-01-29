@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+  <table class="table table-bordered work-show <%= dom_class(presenter) %> metadata-table">
+    <tbody>
+      <%= presenter.attribute_to_html(:title) %>
+      <%= presenter.attribute_to_html(:subtitle, show_help_text: true) %>
+      <%= presenter.attribute_to_html(:title_alternative) %>
+      <%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
+
+      <%= presenter.attribute_to_html(:publisher, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:source, render_as: :faceted) %>
+
+      <%= presenter.attribute_to_html(:date) %>
+
+      <%= presenter.attribute_to_html(:resource_type, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:physical_medium) %>
+      <%= presenter.attribute_to_html(:language_label,
+                                      render_as: :faceted,
+                                      search_field: :language_label_ssim) %>
+      <%= presenter.attribute_to_html(:subject,
+                                      render_as: :external_authority,
+                                      search_field: :subject_label_ssim) %>
+      <%= presenter.attribute_to_html(:subject_ocm, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:location,
+                                      render_as: :external_authority,
+                                      search_field: :location_label_ssim) %>
+      <%= presenter.attribute_to_html(:standard_identifier, render_as: :identifier) %>
+      <%= presenter.attribute_to_html(:related_resource) %>
+      <%= presenter.attribute_to_html(:permalink) %>
+
+      <%= render 'shared/metadata/rights_statement', presenter: presenter %>
+    </tbody>
+  </table>
+</div>

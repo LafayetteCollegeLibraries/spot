@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Publication < ActiveFedora::Base
   include ::Hyrax::WorkBehavior
+  include ::Spot::NoidIdentifier
 
   # The `controlled_properties` attribute is used by the Hyrax::DeepIndexingService,
   # which is used to fetch RDF labels for indexing. This is used out-of-the-box
@@ -28,8 +29,6 @@ class Publication < ActiveFedora::Base
                  field: :resource_type, authority: 'resource_types'
   validates_with ::Spot::RequiredLocalAuthorityValidator,
                  field: :rights_statement, authority: 'rights_statements'
-
-  before_save :ensure_noid_in_identifier
 
   # title is included with ::ActiveFedora::Base
   property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
@@ -145,16 +144,4 @@ class Publication < ActiveFedora::Base
   controlled_properties.each do |prop|
     accepts_nested_attributes_for prop, reject_if: id_blank, allow_destroy: true
   end
-
-  private
-
-    # @return [void]
-    def ensure_noid_in_identifier
-      return if id.nil?
-
-      noid_id = "noid:#{id}"
-      return if identifier.include?(noid_id)
-
-      self.identifier += [noid_id]
-    end
 end

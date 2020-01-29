@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 describe Publication do
-  subject(:pub) { described_class.new }
-
   let(:dc) { RDF::Vocab::DC }
   let(:dc11) { RDF::Vocab::DC11 }
   let(:bibo) { RDF::Vocab::BIBO }
@@ -45,121 +43,94 @@ describe Publication do
   it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
 
   describe 'validations' do
-    let(:pub) { build(:publication) }
+    let(:work) { build(:publication) }
+    let(:attributes) { attributes_for(:publication) }
 
-    # rubocop:disable RSpec/ExampleLength
-    describe '#ensure_noid_in_identifier callback' do
-      let(:attributes) do
-        { title: ['a good work'], date_issued: ['2019-11'],
-          resource_type: ['Article'], rights_statement: ['http://creativecommons.org/publicdomain/mark/1.0/'] }
-      end
-
-      it 'inserts "noid:<id>" before save when an ID is present' do
-        pub = described_class.new(attributes)
-        pub.save
-
-        noid_id = "noid:#{pub.id}"
-
-        # it's a new record
-        expect(pub.identifier).not_to include noid_id
-
-        pub.identifier = ['abc:123']
-        pub.save
-
-        # adds the noid:<id>
-        expect(pub.identifier).to contain_exactly 'abc:123', noid_id
-
-        pub.identifier = []
-        pub.save
-
-        expect(pub.identifier).to contain_exactly noid_id
-        pub.destroy!
-      end
-    end
+    it_behaves_like 'it ensures the existence of a NOID identifier'
 
     describe 'title' do
       it 'must be present' do
-        pub.title = []
+        work.title = []
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:title]).to include 'Your work must include a Title.'
+        expect(work.valid?).to be false
+        expect(work.errors[:title]).to include 'Your work must include a Title.'
 
-        pub.title = ['A cool title']
+        work.title = ['A cool title']
 
-        expect(pub.valid?).to be true
+        expect(work.valid?).to be true
       end
     end
 
     describe 'date_issued' do
       it 'can not be absent' do
-        pub.title = ['cool title'] # need this to validate
-        pub.date_issued = []
+        work.title = ['cool title'] # need this to validate
+        work.date_issued = []
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:date_issued]).to include 'Date Issued may not be blank'
+        expect(work.valid?).to be false
+        expect(work.errors[:date_issued]).to include 'Date Issued may not be blank'
       end
 
       it 'can not be spelled out' do
-        pub.date_issued = ['September 21, 2019']
+        work.date_issued = ['September 21, 2019']
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD, YYYY-MM, or YYYY format'
+        expect(work.valid?).to be false
+        expect(work.errors[:date_issued]).to include 'Date Issued must be in YYYY-MM-DD, YYYY-MM, or YYYY format'
       end
 
       it 'can not have multiple values' do
-        pub.date_issued = ['2019-09-21', '2019-11-19']
+        work.date_issued = ['2019-09-21', '2019-11-19']
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:date_issued]).to include 'Date Issued may only contain one value'
+        expect(work.valid?).to be false
+        expect(work.errors[:date_issued]).to include 'Date Issued may only contain one value'
       end
 
       it 'can be YYYY-MM-DD' do
-        pub.date_issued = ['2019-09-21']
+        work.date_issued = ['2019-09-21']
 
-        expect(pub.valid?).to be true
+        expect(work.valid?).to be true
       end
 
       it 'can be YYYY-MM' do
-        pub.date_issued = ['2019-09']
+        work.date_issued = ['2019-09']
 
-        expect(pub.valid?).to be true
+        expect(work.valid?).to be true
       end
     end
 
     it 'can be YYYY' do
-      pub.date_issued = ['2019']
+      work.date_issued = ['2019']
 
-      expect(pub.valid?).to be true
+      expect(work.valid?).to be true
     end
 
     describe 'rights_statement' do
       it 'must be present' do
-        pub.rights_statement = []
+        work.rights_statement = []
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
+        expect(work.valid?).to be false
+        expect(work.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
 
-        pub.rights_statement = ['http://creativecommons.org/publicdomain/mark/1.0/']
-        expect(pub.valid?).to be true
+        work.rights_statement = ['http://creativecommons.org/publicdomain/mark/1.0/']
+        expect(work.valid?).to be true
       end
     end
 
     describe 'resource_type' do
       it 'must be present' do
-        pub.resource_type = []
+        work.resource_type = []
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:resource_type]).to include 'Your work must include a Resource Type.'
+        expect(work.valid?).to be false
+        expect(work.errors[:resource_type]).to include 'Your work must include a Resource Type.'
 
-        pub.resource_type = ['Article']
-        expect(pub.valid?).to be true
+        work.resource_type = ['Article']
+        expect(work.valid?).to be true
       end
 
       it 'must be included in the authority' do
-        pub.resource_type = ['A noise tape']
+        work.resource_type = ['A noise tape']
 
-        expect(pub.valid?).to be false
-        expect(pub.errors[:resource_type]).to include '"A noise tape" is not a valid Resource Type.'
+        expect(work.valid?).to be false
+        expect(work.errors[:resource_type]).to include '"A noise tape" is not a valid Resource Type.'
       end
     end
   end
