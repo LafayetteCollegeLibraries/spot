@@ -44,6 +44,7 @@ describe Publication do
 
   describe 'validations' do
     let(:work) { build(:publication) }
+    let(:attributes) { attributes_for(:publication) }
 
     it_behaves_like 'it ensures the existence of a NOID identifier'
 

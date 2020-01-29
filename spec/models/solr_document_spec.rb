@@ -7,7 +7,7 @@ RSpec.describe SolrDocument do
     academic_department: { type: Array, suffix: 'tesim' },
     admin_set: { type: String, suffix: 'tesim' },
     bibliographic_citation: { type: Array, suffix: 'tesim' },
-    collection_slug: { type: Array, suffix: 'ssi' },
+    collection_slug: { type: String, suffix: 'ssi' },
     contributor: { type: Array, suffix: 'tesim' },
     date: { type: Array, suffix: 'ssim' },
     date_available: { type: Array, suffix: 'ssim' },

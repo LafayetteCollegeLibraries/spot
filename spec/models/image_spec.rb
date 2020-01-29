@@ -40,6 +40,7 @@ RSpec.describe Image do
 
   describe 'validations' do
     let(:work) { build(:image) }
+    let(:attributes) { attributes_for(:image) }
 
     it_behaves_like 'it ensures the existence of a NOID identifier'
   end
