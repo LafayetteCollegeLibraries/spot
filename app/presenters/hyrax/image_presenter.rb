@@ -10,5 +10,9 @@ module Hyrax
              :rights_statement, :standard_identifier,
              :subject_ocm, :subtitle, :title_alternative,
              to: :solr_document
+
+    def subject_ocm
+      solr_document.subject_ocm.sort
+    end
   end
 end
