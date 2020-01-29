@@ -2,6 +2,7 @@ en:
   blacklight:
     search:
       facets:
+        subject_ocm: OCM Classification
         admin:
           title: Admin Facets
       fields:
