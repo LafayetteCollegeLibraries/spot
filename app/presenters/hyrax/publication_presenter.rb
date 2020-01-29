@@ -21,11 +21,6 @@ module Hyrax
       @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
-    # @return [true, false]
-    def multiple_members?
-      list_of_item_ids_to_display.count > 1
-    end
-
     # @return [Array<Spot::Identifier>]
     def standard_identifier
       @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }

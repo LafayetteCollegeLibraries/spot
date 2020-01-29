@@ -38,6 +38,11 @@ module Spot
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
+    # @return [true, false]
+    def multiple_members?
+      list_of_item_ids_to_display.count > 1
+    end
+
     # Overrides {Hyrax::WorkShowPresenter#page_title} by only using
     # the work's title + our product name.
     #
