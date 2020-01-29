@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 describe Publication do
-  subject(:pub) { described_class.new }
-
   let(:dc) { RDF::Vocab::DC }
   let(:dc11) { RDF::Vocab::DC11 }
   let(:bibo) { RDF::Vocab::BIBO }
@@ -111,7 +109,7 @@ describe Publication do
         expect(work.valid?).to be false
         expect(work.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
 
-        work.rights_statement = ['http://creativecommons.org/worklicdomain/mark/1.0/']
+        work.rights_statement = ['http://creativecommons.org/publicdomain/mark/1.0/']
         expect(work.valid?).to be true
       end
     end
