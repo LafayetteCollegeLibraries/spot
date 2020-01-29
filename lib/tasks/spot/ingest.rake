@@ -22,7 +22,6 @@ namespace :spot do
   def job_args_from_env
     {
       collection_ids: ENV.fetch('collection_ids', '').split(','),
-      multi_value_character: ENV.fetch('multi_value_character', '|'),
       source: ENV['source'],
       work_klass: ENV['work_klass'],
       working_path: ENV.fetch('working_path', Rails.root.join('tmp', 'ingest').to_s)
@@ -44,6 +43,11 @@ namespace :spot do
     desc 'Ingest Publication items from zipped BagIt files'
     task publication: :environment do
       check_for_errors! && enqueue_jobs(job_args_from_env.merge(work_klass: 'Publication'))
+    end
+
+    desc 'Ingest Image items from zipped BagIt files'
+    task image: :environment do
+      check_for_errors! && enqueue_jobs(job_args_from_env.merge(work_klass: 'Image'))
     end
   end
 end
