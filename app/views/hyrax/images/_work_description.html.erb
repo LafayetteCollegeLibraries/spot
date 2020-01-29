@@ -8,6 +8,18 @@
     <li class="list-group-item"><%= description %></li>
     <% end %>
   </ul>
-  <% end %>
+</div>
+<% end %>
+
+<% if presenter.inscription.present? %>
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Inscription</h5>
+  </div>
+  <ul class="list-group">
+    <% presenter.inscription.each do |inscription| %>
+    <li class="list-group-item"><%= inscription %></li>
+    <% end %>
+  </ul>
 </div>
 <% end %>
