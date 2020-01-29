@@ -22,7 +22,7 @@ class ImageIndexer < BaseIndexer
       years = raw_values.reduce([]) do |dates, date|
         parsed = Date.edtf(date)
         next (dates + [parsed.year]) if parsed.is_a? Date
-        next dates if (parsed.nil? || !parsed.respond_to?(:map))
+        next dates if parsed.nil? || !parsed.respond_to?(:map)
 
         dates + parsed.map(&:year)
       end
