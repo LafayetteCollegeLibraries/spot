@@ -51,6 +51,10 @@ module Spot
       "#{title.first} // #{I18n.t('hyrax.product_name')}"
     end
 
+    def subject
+      solr_document.subject.zip(solr_document.subject_label)
+    end
+
     # For now, overriding the ability to feature individual works
     # on the homepage. This should prevent the 'Feature'/'Unfeature'
     # button from rendering on the work edit page.
