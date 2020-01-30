@@ -31,7 +31,7 @@ RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
     let(:metadata) do
       {
         'description.inscription.english' => ['Hello!'],
-        'description.inscription.japanese' => ['こんにちは！'],
+        'description.inscription.japanese' => ['こんにちは！']
       }
     end
 
