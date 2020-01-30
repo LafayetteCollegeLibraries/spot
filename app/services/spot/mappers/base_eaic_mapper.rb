@@ -54,6 +54,20 @@ module Spot::Mappers
       convert_uri_strings(merge_fields('coverage.location', 'coverage.location.country'))
     end
 
+    # Need to modify how we handle multiple files for EAIC content. When an item has
+    # multiple files, it is very likely that it consists of two scans of a postcard:
+    # the front and the back. Scans of the back are suffixed with '-back'. My understanding
+    # is that the first file listed is added as the representative file_set for a work,
+    # so we want to ensure that the front scan is always the first entry.
+    #
+    # @return [Array<String>]
+    def representative_files
+      # fun fact:
+      #   ['filename.tif', 'filename-back.tif'].sort
+      #   # => ['filename-back.tif', 'filename.tif']
+      super.sort.reverse
+    end
+
     # Grabs and convert values in 'rights.statement' to RDF::URI objects
     # (where applicable). Non-URIs are retained as strings.
     #
