@@ -32,18 +32,11 @@ RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
       {
         'description.inscription.english' => ['Hello!'],
         'description.inscription.japanese' => ['こんにちは！'],
-        'description.text.english' => ['A nice thing'],
-        'description.text.japanese' => ['すてきなこと']
       }
     end
 
     let(:expected_values) do
-      [
-        RDF::Literal('Hello!', language: :en),
-        RDF::Literal('こんにちは！', language: :ja),
-        RDF::Literal('A nice thing', language: :en),
-        RDF::Literal('すてきなこと', language: :ja)
-      ]
+      [RDF::Literal('Hello!', language: :en), RDF::Literal('こんにちは！', language: :ja)]
     end
 
     it { is_expected.to eq expected_values }
