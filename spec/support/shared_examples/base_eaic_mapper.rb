@@ -14,6 +14,28 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
 
   it_behaves_like 'it has language-tagged titles'
 
+  describe '#representative_file' do
+    subject { mapper.representative_file }
+
+    let(:metadata) { { 'representative_files' => files } }
+
+    context 'with backs designated with "b"' do
+      let(:files) do
+        ['lc-spcol-pacwar-postcards-0009b.tif', 'lc-spcol-pacwar-postcards-0009.tif']
+      end
+
+      it { is_expected.to eq ['lc-spcol-pacwar-postcards-0009.tif', 'lc-spcol-pacwar-postcards-0009b.tif'] }
+    end
+
+    context 'with backs designated with "-back"' do
+      let(:files) do
+        ['lc-spcol-woodsworth-images-0043-back.tif', 'lc-spcol-woodsworth-images-0043.tif']
+      end
+
+      it { is_expected.to eq ['lc-spcol-woodsworth-images-0043.tif', 'lc-spcol-woodsworth-images-0043-back.tif'] }
+    end
+  end
+
   if fields.include?(:date) && !skip_fields.include?(:date)
     describe '#date' do
       subject { mapper.date }
