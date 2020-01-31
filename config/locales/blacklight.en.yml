@@ -12,7 +12,7 @@ en:
         contributor: Contributor
         creator: Creator
         date: Date
-        date_alternative: Alternative Date
+        date_associated: Associated Date(s)
         date_available: Date Available
         date_created: Date Created
         date_issued: Date Issued
