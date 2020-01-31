@@ -23,6 +23,10 @@ module Spot
         def li_value(value)
           uri, label = value
 
+          # for locations without URI sources, we index the label as the uri.
+          # in those cases, we'll just render a link to a faceted search.
+          return super(label) if uri == label
+
           %(#{super(label)} (#{external_authority_link(uri)}))
         end
 

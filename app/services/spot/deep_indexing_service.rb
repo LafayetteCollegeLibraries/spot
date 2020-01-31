@@ -32,7 +32,7 @@ module Spot
     def append_to_solr_doc(solr_doc, solr_field_key, field_info, value)
       return super unless object.controlled_properties.include?(solr_field_key.to_sym)
 
-      val = value.respond_to?(:solrize) ? value.solrize : Array(value)
+      val = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
 
       # first, add the value to the default solr key
       self.class.create_and_insert_terms(solr_field_key,
