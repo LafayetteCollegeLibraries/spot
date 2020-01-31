@@ -66,8 +66,13 @@ class Image < ActiveFedora::Base
   end
 
   # date indexing is covered in ImageIndexer
-  property :date, predicate: ::RDF::Vocab::DC.date
-  property :date_associated, predicate: ::RDF::URI.new('https://d-nb.info/standards/elementset/gnd#associatedDate')
+  property :date, predicate: ::RDF::Vocab::DC.date do |index|
+    index.as :symbol
+  end
+
+  property :date_associated, predicate: ::RDF::URI.new('https://d-nb.info/standards/elementset/gnd#associatedDate') do |index|
+    index.as :symbol
+  end
 
   # about the date
   property :date_scope_note, predicate: ::RDF::Vocab::SKOS.scopeNote do |index|
