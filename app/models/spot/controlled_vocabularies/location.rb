@@ -32,7 +32,7 @@ module Spot::ControlledVocabularies
       # @return [String]
       def pick_preferred_label
         find_or_create_from_cache do |label|
-          label.value = authority_class.label.call(fetch_geonames_data)
+          label.value = label_for(fetch_geonames_data)
         end.value
       end
 
@@ -48,6 +48,18 @@ module Spot::ControlledVocabularies
       # @return [String]
       def geonames_id
         URI.parse(rdf_subject.to_s).path.gsub(/\//, '')
+      end
+
+      # Replacement for QA::Authorities::Geonames.label method that removes duplicate
+      # and empty values. Generates a label from the search results.
+      #
+      # @param [Hash<String => *>] data
+      # @return [String]
+      def label_for(data)
+        [data['name'], data['adminName1'], data['countryName']]
+          .reject(&:blank?)
+          .uniq
+          .join(', ')
       end
 
       # @return [Class]

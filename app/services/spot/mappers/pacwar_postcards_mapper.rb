@@ -13,14 +13,15 @@ module Spot::Mappers
 
     def fields
       super + [
+        :date_associated,
         :inscription,
-        :location,
-        :rights_statement,
 
         # field methods provided by the BaseEaicMapper
         :date,
         :description,
         :identifier,
+        :location,
+        :rights_statement,
         :subject,
         :title,
         :title_alternative

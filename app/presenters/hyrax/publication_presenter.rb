@@ -21,6 +21,13 @@ module Hyrax
       @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
+    def manifest_metadata_fields
+      %i[
+        title subtitle title_alternative creator contributor abstract description
+        subject keyword date_issued standard_identifier rights_statement
+      ]
+    end
+
     # @return [Array<Spot::Identifier>]
     def standard_identifier
       @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }

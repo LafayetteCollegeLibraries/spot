@@ -54,6 +54,18 @@ module Spot::Mappers
       convert_uri_strings(merge_fields('coverage.location', 'coverage.location.country'))
     end
 
+    # The backs of postcards will always have a suffix after the initial filename
+    # (ex. 'lc-spcol-pacwar-postcards-0009.tif' and 'lc-spcol-pacwar-postcards-0009b.tif',
+    # or 'lc-spcol-woodsworth-images-0043.tif' and 'lc-spcol-woodsworth-images-0043-back.tif').
+    # To ensure that both forms sort properly (the character code for '-' (45) is lower than
+    # that of '.'(46)), we'll sort based on the filenames without extensions.
+    #
+    # @return [Array<String>]
+    def representative_files
+      super.sort { |a, b| File.basename(a, '.*') <=> File.basename(b, '.*') }
+    end
+    alias representative_file representative_files
+
     # Grabs and convert values in 'rights.statement' to RDF::URI objects
     # (where applicable). Non-URIs are retained as strings.
     #

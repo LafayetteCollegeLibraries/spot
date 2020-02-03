@@ -11,6 +11,7 @@
       <%= presenter.attribute_to_html(:source, render_as: :faceted) %>
 
       <%= presenter.attribute_to_html(:date) %>
+      <%= presenter.attribute_to_html(:date_associated) %>
 
       <%= presenter.attribute_to_html(:resource_type, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:physical_medium) %>
@@ -20,7 +21,9 @@
       <%= presenter.attribute_to_html(:subject,
                                       render_as: :external_authority,
                                       search_field: :subject_label_ssim) %>
-      <%= presenter.attribute_to_html(:subject_ocm, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:subject_ocm,
+                                      render_as: :faceted,
+                                      search_field: :subject_ocm_ssim) %>
       <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:location,
                                       render_as: :external_authority,

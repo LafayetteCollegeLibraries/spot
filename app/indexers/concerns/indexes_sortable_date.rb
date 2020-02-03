@@ -58,7 +58,7 @@ module IndexesSortableDate
       raw = object.send(sortable_date_property).sort.first
       parsed = Date.edtf(raw)
 
-      return object.create_date.to_s if parsed.nil?
+      return Date.parse(object.create_date.to_s).strftime('%FT%TZ') if parsed.nil?
 
       # if we've got an EDTF range we'll just use the earliest date
       parsed = parsed.first if parsed.is_a? EDTF::Interval

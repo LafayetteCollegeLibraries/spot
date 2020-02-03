@@ -55,6 +55,7 @@ module Spot
 
     def manifest
       headers['Access-Control-Allow-Origin'] = '*'
+      headers['Content-Type'] = 'application/json'
 
       # this is the only thing we're doing differently than Hyrax w/ this method
       json = Rails.cache.fetch(manifest_cache_key, expires_in: manifest_cache_duration) do
