@@ -3,6 +3,7 @@ module Spot::Mappers
   class WarnerSouvenirsMapper < BaseEaicMapper
     self.fields_map = {
       date_scope_note: 'description.indicia',
+      keyword: 'relation.ispartof',
       language: 'language',
       physical_medium: 'format.medium',
       publisher: 'creator.company',

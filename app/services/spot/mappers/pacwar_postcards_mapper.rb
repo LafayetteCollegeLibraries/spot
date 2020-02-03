@@ -4,6 +4,7 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'creator.maker',
       date_scope_note: 'description.indicia',
+      keyword: 'relation.ispartof',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       related_resource: 'description.citation',

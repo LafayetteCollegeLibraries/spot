@@ -63,6 +63,14 @@ RSpec.describe Spot::Mappers::PacwarPostcardsMapper do
     it { is_expected.to eq expected_values }
   end
 
+  describe '#keyword' do
+    subject { mapper.keyword }
+
+    let(:field) { 'relation.ispartof' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#physical_medium' do
     subject { mapper.physical_medium }
 

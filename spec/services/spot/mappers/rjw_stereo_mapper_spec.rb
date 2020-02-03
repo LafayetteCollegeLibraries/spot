@@ -37,6 +37,14 @@ RSpec.describe Spot::Mappers::RjwStereoMapper do
     it { is_expected.to eq expected_results }
   end
 
+  describe '#keyword' do
+    subject { mapper.keyword }
+
+    let(:field) { 'relation.ispartof' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#publisher' do
     subject { mapper.publisher }
 
