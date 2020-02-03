@@ -2,6 +2,7 @@
 module Spot::Mappers
   class RjwStereoMapper < BaseEaicMapper
     self.fields_map = {
+      keyword: 'relation.ispartof',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       related_resource: 'relation.seealso',

@@ -25,6 +25,14 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#keyword' do
+    subject { mapper.keyword }
+
+    let(:field) { 'relation.ispartof' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#language' do
     subject { mapper.language }
 

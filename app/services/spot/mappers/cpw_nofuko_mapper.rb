@@ -6,6 +6,7 @@ module Spot::Mappers
   class CpwNofukoMapper < BaseEaicMapper
     self.fields_map = {
       creator: 'creator.maker',
+      keyword: 'relation.ispartof',
       original_item_extent: 'format.extant',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
