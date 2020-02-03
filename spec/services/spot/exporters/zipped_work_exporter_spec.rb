@@ -8,7 +8,7 @@ RSpec.describe Spot::Exporters::ZippedWorkExporter do
   let(:request) { instance_double(ActionDispatch::Request, host: 'localhost') }
   let(:destination) { '/tmp/spot-zipped_work_exporter_spec' }
   let(:work) do
-    create(:publication_with_file_set, content: File.open(path_to_file), label: 'image.png')
+    @work ||= create(:publication_with_file_set, content: File.open(path_to_file), label: 'image.png')
   end
 
   before do
