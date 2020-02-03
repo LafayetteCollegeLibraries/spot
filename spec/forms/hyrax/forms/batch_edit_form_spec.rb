@@ -7,21 +7,21 @@
 RSpec.describe Hyrax::Forms::BatchEditForm do
   let(:model) { Publication.new }
   let(:work1) do
-    create(:publication,
-           title: ['title 1'],
-           keyword: ['abc'],
-           creator: ['Wilma'],
-           language: ['en'],
-           contributor: ['contributor1'],
-           description: ['description1'],
-           note: ['a note'],
-           license: ['license1'],
-           subject: ['subject1'],
-           identifier: ['id1'],
-           location: ['location1'],
-           related_resource: ['related_resource1'],
-           resource_type: ['Article'],
-           publisher: [])
+    @work1 ||= create(:publication,
+                      title: ['title 1'],
+                      keyword: ['abc'],
+                      creator: ['Wilma'],
+                      language: ['en'],
+                      contributor: ['contributor1'],
+                      description: ['description1'],
+                      note: ['a note'],
+                      license: ['license1'],
+                      subject: ['subject1'],
+                      identifier: ['id1'],
+                      location: ['location1'],
+                      related_resource: ['related_resource1'],
+                      resource_type: ['Article'],
+                      publisher: [])
   end
 
   # TODO: update this when we add another work type. This is supposed
@@ -31,21 +31,21 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
   #       > Using a different work type in order to show that the form supports
   #       > batches containing multiple types of works
   let(:work2) do
-    create(:publication,
-           title: ['title 2'],
-           keyword: ['123'],
-           creator: ['Fred'],
-           publisher: ['Rand McNally'],
-           language: ['en'],
-           resource_type: ['Article'],
-           contributor: ['contributor2'],
-           description: ['description2'],
-           note: ['a note'],
-           license: ['license2'],
-           subject: ['subject2'],
-           identifier: ['id2'],
-           location: ['location2'],
-           related_resource: ['related_resource2'])
+    @work2 ||= create(:publication,
+                      title: ['title 2'],
+                      keyword: ['123'],
+                      creator: ['Fred'],
+                      publisher: ['Rand McNally'],
+                      language: ['en'],
+                      resource_type: ['Article'],
+                      contributor: ['contributor2'],
+                      description: ['description2'],
+                      note: ['a note'],
+                      license: ['license2'],
+                      subject: ['subject2'],
+                      identifier: ['id2'],
+                      location: ['location2'],
+                      related_resource: ['related_resource2'])
   end
 
   let(:batch) { [work1.id, work2.id] }
