@@ -11,8 +11,11 @@ module Hyrax
              to: :solr_document
 
     def manifest_metadata_fields
-      %i[title subtitle title_alternative creator contributor date
-         description inscription keyword subject subject_ocm]
+      %i[
+        title subtitle title_alternative creator contributor date
+        description inscription keyword language_label subject subject_ocm
+        standard_identifier rights_statement
+      ]
     end
 
     def subject_ocm

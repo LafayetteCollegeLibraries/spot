@@ -38,11 +38,12 @@ module Spot
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
+    # @return [Array<Hash<String => *>>]
     def manifest_metadata
       return super unless respond_to?(:manifest_metadata_fields)
 
       manifest_metadata_fields.inject([]) do |metadata, field|
-        values = send(field)
+        values = send(field.to_sym)
         next metadata if values.blank?
 
         # our presenter logic for controlled fields is to return an array
