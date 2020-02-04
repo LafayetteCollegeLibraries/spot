@@ -37,9 +37,11 @@ module IndexesRightsStatements
       doc[shortcode_key] ||= []
 
       object.rights_statement.each do |original_value|
-        doc[value_key] << original_value
-        doc[label_key] << get_label_value(original_value)
-        doc[shortcode_key] << get_shortcode(original_value)
+        value = original_value.is_a?(ActiveTriples::Resource) ? original_value.id : original_value
+
+        doc[value_key] << value
+        doc[label_key] << get_label_value(value)
+        doc[shortcode_key] << get_shortcode(value)
       end
     end
 

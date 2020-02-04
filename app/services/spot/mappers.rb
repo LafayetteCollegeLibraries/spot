@@ -8,10 +8,16 @@ module Spot
     # @return [Hash<Symbol => Constant>]
     def self.available_mappers
       {
+        alsace: AlsaceImagesMapper,
+        cpw_nofuko: CpwNofukoMapper,
         ldr: LdrDspaceMapper,
         magazine: MagazineMapper,
         newspaper: NewspaperMapper,
-        shakespeare: ShakespeareBulletinMapper
+        pacwar: PacwarPostcardsMapper,
+        rjw_stereo: RjwStereoMapper,
+        shakespeare: ShakespeareBulletinMapper,
+        warner_souvenirs: WarnerSouvenirsMapper,
+        woodsworth: WoodsworthImagesMapper
       }
     end
 

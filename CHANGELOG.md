@@ -1,5 +1,28 @@
 # changelog
 
+## [2020.3] - 2020-02-04
+
+### features ⛱
+
+- creates mappers for the first batch of Image collections to be migrated (#387, #398, #401)
+  - alsace-images
+  - cpw-nofuko
+  - pacwar-postcards
+  - rjw-stereo
+  - warner-souvenirs
+  - woodsworth-images
+- uses the locally-generated access derivatives for serving images via RIIIF (#393)
+- update Collections#show view form to search `/catalog` instead of showing the results in Collections#show (#400)
+- adds metadata fields to display on IIIF manifest (#398)
+
+### bug fixes 🐞
+
+- adds a migration to revert single_use_keys column headers from their hyrax@3 snake_casing to hyrax@2's camelCasing (#395)
+- use the correct search_field for publication's location display field (7988b26)
+- moves departments that were incorrectly classified as Divisions to the Academic Departments authority (#399)
+- sort `representative_files` by their basenames to ensure fronts of postcards are used as the primary image to display (#398)
+
+
 ## [2020.2] - 2020-01-23
 
 ### features ❄️
@@ -16,7 +39,7 @@
 - refactors ingest pipeline to use `Spot::BagIngestService` rather than putting all of the work in a job (#386)
 - adds disallow rules for `/catalog`, `/catalog/*`, and `/downloads` in robots.txt (#389)
 
-### bugfixes 🐞
+### bug fixes 🐞
 - embargo/lease releasing service now changes items to their expected visibilities after the embargo/lease period is up (#381)
 
 ### deprecations 💀
@@ -40,7 +63,7 @@
 - adds Image metadata model and creates a base indexer and presenter using shared properties (#258)
 - reorders PublicationForm fields to conform with suggestions (#375)
 
-### bugfixes 🐞
+### bug fixes 🐞
 
 - fix typo in `rights_statement.yml` authority file (#374)
 
@@ -267,6 +290,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.3
 [2020.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.2
 [2020.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.1
 [2019.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2019.9

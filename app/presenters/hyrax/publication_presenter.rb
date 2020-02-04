@@ -21,9 +21,11 @@ module Hyrax
       @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
-    # @return [true, false]
-    def multiple_members?
-      list_of_item_ids_to_display.count > 1
+    def manifest_metadata_fields
+      %i[
+        title subtitle title_alternative creator contributor abstract description
+        subject keyword date_issued standard_identifier rights_statement
+      ]
     end
 
     # @return [Array<Spot::Identifier>]

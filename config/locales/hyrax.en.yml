@@ -15,6 +15,10 @@ en:
       admin_set_title: Administrative Set
       default_title: User Collection
 
+    collections:
+      search_form:
+        placeholder: Search within %{collection_name}
+
     dashboard:
       collections:
         show:
