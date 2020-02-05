@@ -139,7 +139,7 @@ RSpec.describe Spot::Mappers::AlsaceImagesMapper do
     end
 
     context 'when no titles are available' do
-      it { is_expected.to eq [RDF::Literal('Untitled', language: :en)] }
+      it { is_expected.to eq [RDF::Literal('[Untitled]', language: :en)] }
     end
   end
 
