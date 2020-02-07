@@ -15,14 +15,6 @@ RSpec.describe Spot::Mappers::PacwarPostcardsMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#date_associated' do
-    subject { mapper.date_associated }
-
-    let(:metadata) { { 'date.image.lower' => [], 'date.image.upper' => ['1999'] } }
-
-    it { is_expected.to eq ['1999'] }
-  end
-
   describe '#date_scope_note' do
     subject { mapper.date_scope_note }
 

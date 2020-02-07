@@ -13,11 +13,11 @@ module Spot::Mappers
 
     def fields
       super + [
-        :date_associated,
         :description,
 
         # BaseEaicMapper fields
         :date,
+        :date_associated,
         :identifier,
         :location,
         :rights_statement,
@@ -25,10 +25,6 @@ module Spot::Mappers
         :title,
         :title_alternative
       ]
-    end
-
-    def date_associated
-      edtf_ranges_for('date.image.lower', 'date.image.upper')
     end
 
     # Combining values from 'description.critical' and 'description.text.english'

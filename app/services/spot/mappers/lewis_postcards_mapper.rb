@@ -15,10 +15,10 @@ module Spot::Mappers
 
     def fields
       super + [
-        :date_associated,
         :inscription,
 
         # inherited methods
+        :date_associated,
         :description,
         :identifier,
         :location,
@@ -27,10 +27,6 @@ module Spot::Mappers
         :title,
         :title_alternative
       ]
-    end
-
-    def date_associated
-      edtf_ranges_for('date.image.lower', 'date.image.upper')
     end
 
     def inscription
