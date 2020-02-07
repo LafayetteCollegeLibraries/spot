@@ -82,9 +82,14 @@ RSpec.describe Spot::Mappers::LewisPostcardsMapper do
   describe '#related_resource' do
     subject { mapper.related_resource }
 
-    let(:field) { 'relation.seealso' }
+    let(:metadata) do
+      {
+        'description.citation' => ['Found this in a book'],
+        'relation.seealso' => ['[ww0002]']
+      }
+    end
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq ['Found this in a book', '[ww0002]'] }
   end
 
   describe '#research_assistance' do

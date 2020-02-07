@@ -8,7 +8,6 @@ module Spot::Mappers
       original_item_extent: 'format.extant',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
-      related_resource: 'relation.seealso',
       research_assistance: 'contributor',
       subject_ocm: 'subject.ocm'
     }
@@ -16,6 +15,7 @@ module Spot::Mappers
     def fields
       super + [
         :inscription,
+        :related_resource,
 
         # inherited methods
         :date_associated,
@@ -36,6 +36,10 @@ module Spot::Mappers
         ['description.text.english', :en],
         ['description.text.japanese', :ja]
       ].inject([]) { |pool, (field, lang)| pool + field_to_tagged_literals(field, lang) }
+    end
+
+    def related_resource
+      merge_fields('description.citation', 'relation.seealso')
     end
   end
 end
