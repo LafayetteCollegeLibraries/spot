@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::PublicationForm do
-  it_behaves_like 'it handles identifier form fields'
-  it_behaves_like 'it strips whitespaces from values'
+  it_behaves_like 'a Spot work form'
 
   shared_context 'required fields' do
     it 'contains required fields' do
@@ -41,28 +40,11 @@ RSpec.describe Hyrax::PublicationForm do
       it { is_expected.to include :keyword }
       it { is_expected.to include :subject }
     end
-
-    describe 'includes internal_form_fields' do
-      it { is_expected.to include :representative_id }
-      it { is_expected.to include :thumbnail_id }
-      it { is_expected.to include :files }
-      it { is_expected.to include :visibility_during_embargo }
-      it { is_expected.to include :visibility_after_embargo }
-      it { is_expected.to include :embargo_release_date }
-      it { is_expected.to include :visibility_during_lease }
-      it { is_expected.to include :visibility_after_lease }
-      it { is_expected.to include :lease_expiration_date }
-      it { is_expected.to include :visibility }
-      it { is_expected.to include :ordered_member_ids }
-      it { is_expected.to include :in_works_ids }
-      it { is_expected.to include :member_of_collection_ids }
-      it { is_expected.to include :admin_set_id }
-    end
   end
 
   describe '.multiple?' do
     it 'marks singular fields as false' do
-      %w[abstract issued available date_created title].each do |f|
+      %w[abstract date_issued date_available date_created title].each do |f|
         expect(described_class.multiple?(f)).to be false
       end
     end
