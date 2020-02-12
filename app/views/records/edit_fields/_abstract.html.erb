@@ -1,5 +1,9 @@
-<% if f.object.multiple? key %>
-  <%= f.input key, as: :multi_value, input_html: { rows: '8', type: 'textarea'}, required: f.object.required?(key) %>
-<% else %>
-  <%= f.input key, as: :text, input_html: { rows: '8' }, required: f.object.required?(key) %>
-<% end %>
+<%=
+  f.input :abstract,
+          as: :language_tagged_input_group,
+          input_html: {
+            rows: '10',
+            type: :textarea,
+          },
+          required: f.object.required?(:abstract)
+%>
