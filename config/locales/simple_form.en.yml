@@ -14,6 +14,7 @@ en:
         bibliographic_citation: A bibliographic reference for the resource.
         contributor: A person or group you want to recognize for playing a role in the creation of the work, but not the primary role.
         creator: The person or group responsible for the work. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;.
+        date_associated: The date range of of the event documented in the photographic image, and later reproduced in an album or postcard.
         date_available: Date that the resource became or will become available.
         date_issued: Date of formal issuance (e.g., publication) of the resource. Use YYYY-MM-DD or YYYY-MM format.
         description: A free-text account of the resource.
@@ -36,6 +37,7 @@ en:
         sponsor: A person or organization that supports a thing through a pledge, promise, or financial contribution.
         standard_identifier: "A reference to the work from an outside authority. Currently, we support: <strong>DOI, Handle, ISSN, ISBN</strong>"
         subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary. <strong>Uses <a href="http://fast.oclc.org/" target="_blank">OCLC's FAST subject headings</a>.</strong>
+        subject_ocm: Yale Human Relations Area Files ethnographic subject classification index system. Visit the <strong><a href="https://hraf.yale.edu/resources/reference/outline-of-cultural-materials" target="_blank">Yale guide</a></strong> to learn more.
         subtitle: An explanatory or alternative title of a publication.
         title: A name to aid in identifying a work.
         title_alternative: An alternative name for the resource.
