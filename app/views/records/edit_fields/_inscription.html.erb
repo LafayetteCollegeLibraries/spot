@@ -1,0 +1,9 @@
+<%=
+  f.input :inscription,
+          as: :language_tagged_multi_input_group,
+          input_html: {
+            rows: '10',
+            type: :textarea
+          },
+          required: f.object.required?(:inscription)
+%>

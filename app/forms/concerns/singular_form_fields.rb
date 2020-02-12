@@ -19,10 +19,10 @@ module SingularFormFields
     def singular_form_fields(*fields)
       fields = fields.flatten.map(&:to_sym)
 
-      define_singleton_method(:_singular_form_fields) { fields }
+      define_method(:_singular_form_fields) { fields }
 
       fields.each do |field|
-        define_singleton_method(field.to_sym) { self[field.to_s].first }
+        define_method(field.to_sym) { self[field.to_s].first }
       end
     end
 
@@ -41,6 +41,7 @@ module SingularFormFields
     # @param [#to_sym] field
     # @return [true, false]
     def multiple?(field)
+      return super unless respond_to?(:_singular_form_fields)
       return false if _singular_form_fields.include?(field.to_sym)
       super
     end

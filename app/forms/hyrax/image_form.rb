@@ -3,6 +3,7 @@ module Hyrax
   class ImageForm < ::Spot::Forms::WorkForm
     transforms_language_tags_for :title, :title_alternative, :subtitle, :description, :inscription
     transforms_nested_fields_for :subject_ocm
+    singular_form_fields :title
 
     self.model_class = ::Image
     self.required_fields = [:title, :resource_type, :date, :rights_statement]
@@ -39,5 +40,12 @@ module Hyrax
       :ethnic_group,
       :note
     ].concat(hyrax_form_fields)
+
+    # An array to iterate through when building our custom portion
+    # of the form. The Hyrax-specific fields are excluded.
+    # @return [Array<Symbol>]
+    def primary_terms
+      terms - self.class.hyrax_form_fields
+    end
   end
 end
