@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+#
+# Class attribute updates + monkey-patching required to get Hyrax/etc
+# acting like we'd like them to. Try to leave some comments to help
+# yourself out. Sincerely, you from the future.
 Rails.application.config.to_prepare do
   # Spot overrides Hyrax
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
@@ -83,6 +87,15 @@ Rails.application.config.to_prepare do
   Hydra::AccessControls::Lease.class_eval do
     def active?
       lease_expiration_date.present? && DateTime.current < lease_expiration_date
+    end
+  end
+
+  # Updating how SimpleForm generates labels so that we can use the same locales
+  # for the form as those for the metadata display.
+  SimpleForm::Inputs::Base.class_eval do
+    protected def raw_label_text
+      options[:label] ||
+        I18n.t("blacklight.search.fields.#{attribute_name}", default: label_translation)
     end
   end
 end
