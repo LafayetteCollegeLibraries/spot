@@ -94,8 +94,7 @@ Rails.application.config.to_prepare do
   # for the form as those for the metadata display.
   SimpleForm::Inputs::Base.class_eval do
     protected def raw_label_text
-      options[:label] ||
-        I18n.t("blacklight.search.fields.#{attribute_name}", default: label_translation)
+      options[:label] || I18n.t("blacklight.search.fields.#{attribute_name}", default: label_translation)
     end
   end
 end
