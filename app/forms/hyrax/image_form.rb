@@ -36,6 +36,7 @@ module Hyrax
       :research_assistance,
       :donor,
       :related_resource,
+      :local_identifier,
       :subject_ocm,
       :ethnic_group,
       :note
@@ -46,6 +47,15 @@ module Hyrax
     # @return [Array<Symbol>]
     def primary_terms
       terms - self.class.hyrax_form_fields
+    end
+
+    class << self
+      def build_permitted_params
+        super.tap do |params|
+          params << { location_attributes: [:id, :_destroy] }
+          params << { subject_attributes: [:id, :_destroy] }
+        end
+      end
     end
   end
 end
