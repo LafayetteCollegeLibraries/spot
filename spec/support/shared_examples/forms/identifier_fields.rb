@@ -15,33 +15,30 @@ RSpec.shared_examples 'it handles identifier form fields' do
 
     let(:params) { ActionController::Parameters.new(raw_params) }
 
-    context 'when the params include standard_identifier values' do
-      let(:raw_params) do
-        {
-          standard_identifier_prefix: ['hdl'],
-          standard_identifier_value: ['10385/abc123def']
-        }
-      end
+    if described_class.terms.include?(:standard_identifier)
+      context 'when the params include standard_identifier values' do
+        let(:raw_params) do
+          {
+            standard_identifier_prefix: ['hdl'],
+            standard_identifier_value: ['10385/abc123def']
+          }
+        end
 
-      it 'parses + inserts the values into :identifier' do
-        expect(attributes[:identifier]).to include 'hdl:10385/abc123def'
+        it 'parses + inserts the values into :identifier' do
+          expect(attributes[:identifier]).to include 'hdl:10385/abc123def'
+        end
       end
     end
 
-    context 'when the params include local_identifier values' do
-      let(:raw_params) do
-        {
-          standard_identifier_prefix: ['hdl', 'issn'],
-          standard_identifier_value: ['10385/abc123def', '1234-5678'],
-          local_identifier: ['noid:abcdef123', 'local:some-identifier']
-        }
-      end
+    if described_class.terms.include?(:local_identifier)
+      context 'when the params include local_identifier values' do
+        let(:raw_params) do
+          { local_identifier: ['noid:abcdef123', 'local:some-identifier'] }
+        end
 
-      it 'parses + combines standard + local identifiers' do
-        expect(attributes[:identifier]).to include(
-          'hdl:10385/abc123def', 'issn:1234-5678',
-          'noid:abcdef123', 'local:some-identifier'
-        )
+        it 'parses + combines standard + local identifiers' do
+          expect(attributes[:identifier]).to include('noid:abcdef123', 'local:some-identifier')
+        end
       end
     end
   end
