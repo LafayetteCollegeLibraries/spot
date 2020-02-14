@@ -19,7 +19,7 @@ module SingularFormFields
     def singular_form_fields(*fields)
       fields = fields.flatten.map(&:to_sym)
 
-      define_method(:_singular_form_fields) { fields }
+      define_singleton_method(:_singular_form_fields) { fields }
 
       fields.each do |field|
         define_method(field.to_sym) { self[field.to_s].first }
