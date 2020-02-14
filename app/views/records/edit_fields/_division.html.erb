@@ -1,18 +1,18 @@
 <%=
-  f.input key,
-  as: :local_controlled_vocabulary,
-  input_html: {
-    class: 'form-control',
-    data: {
-      'autocomplete-url' => '/authorities/search/local/lafayette_divisions',
-      'autocomplete' => key,
-    },
-  },
-  wrapper_html: {
-    data: {
-      'autocomplete-url' => '/authorities/search/local/lafayette_divisions',
-      'field-name' => key
-    }
-  },
-  required: f.object.required?(key)
+  f.input :division,
+          as: :local_controlled_vocabulary,
+          input_html: {
+            class: 'form-control',
+            data: {
+              'autocomplete-url' => '/authorities/search/local/lafayette_divisions',
+              'autocomplete' => 'division'
+            },
+          },
+          wrapper_html: {
+            data: {
+              'autocomplete-url' => '/authorities/search/local/lafayette_divisions',
+              'field-name' => 'division'
+            }
+          },
+          required: f.object.required?(:division)
 %>
