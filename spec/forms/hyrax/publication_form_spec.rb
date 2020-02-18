@@ -125,13 +125,11 @@ RSpec.describe Hyrax::PublicationForm do
     it { is_expected.to include(:representative_id, :thumbnail_id) }
     it { is_expected.to include(rendering_ids: []) }
     it { is_expected.to include(files: []) }
-    it { is_expected.to include(:visibility_during_embargo,
-                                :embargo_release_date,
-                                :visibility_after_embargo,
-                                :visibility_during_lease,
-                                :lease_expiration_date,
-                                :visibility_after_lease,
-                                :visibility) }
+    it {
+      is_expected.to include(:visibility_during_embargo, :embargo_release_date,
+                             :visibility_after_embargo, :visibility_during_lease,
+                             :lease_expiration_date, :visibility_after_lease, :visibility)
+    }
     it { is_expected.to include(ordered_member_ids: []) }
     it { is_expected.to include(in_works_ids: []) }
     it { is_expected.to include(member_of_collection_ids: []) }
@@ -140,15 +138,16 @@ RSpec.describe Hyrax::PublicationForm do
     it { is_expected.to include(:on_behalf_of) }
     it { is_expected.to include(:version) }
     it { is_expected.to include(:add_works_to_collection) }
-    it { is_expected.to include(based_near_attributes: [:id, :_destroy],
-                                member_of_collections_attributes: [:id, :_destroy],
-                                work_members_attributes: [:id, :_destroy]) }
+    it {
+      is_expected.to include(based_near_attributes: [:id, :_destroy],
+                             member_of_collections_attributes: [:id, :_destroy],
+                             work_members_attributes: [:id, :_destroy])
+    }
     it { is_expected.to include(standard_identifier_prefix: [], standard_identifier_value: []) }
-    it { is_expected.to include(local_identifier: []) }
     it { is_expected.to include(:title_value, :title_language) }
     it { is_expected.to include(title_alternative_value: [], title_alternative_language: []) }
     it { is_expected.to include(subtitle_value: [], subtitle_language: []) }
-    it { is_expected.to include(:abstract_value,:abstract_language) }
+    it { is_expected.to include(:abstract_value, :abstract_language) }
     it { is_expected.to include(description_value: [], description_language: []) }
     it { is_expected.to include(language_attributes: [:id, :_destroy]) }
     it { is_expected.to include(academic_department_attributes: [:id, :_destroy]) }
