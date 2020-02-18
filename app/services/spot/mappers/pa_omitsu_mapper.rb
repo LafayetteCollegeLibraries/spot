@@ -19,10 +19,12 @@ module Spot::Mappers
         :date,
         :date_associated,
         :description,
+        :identifier,
         :location,
         :rights_statement,
+        :subject,
         :title,
-        :title_associated
+        :title_alternative
       ]
     end
 

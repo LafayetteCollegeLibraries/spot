@@ -2,7 +2,7 @@
 module Spot::Mappers
   # @todo no `date` field exists to pull updated date_uploaded value from?
   # @todo format.extant values have pipes in the metadata, is this supposed to be split?
-  # or is that how the metadata is expected to be formatted?
+  #       or is that how the metadata is expected to be formatted?
   class CpwNofukoMapper < BaseEaicMapper
     self.fields_map = {
       creator: 'creator.maker',
