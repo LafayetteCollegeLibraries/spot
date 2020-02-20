@@ -130,9 +130,12 @@ class Publication < ActiveFedora::Base
 
   property :license, predicate: ::RDF::Vocab::DC.license
 
-  # rights_statements are stored as URIs
+  # rights_statements are stored as URIs. indexing is done via {IndexesRightsStatements} mixin
   property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
-  property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder
+
+  property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder do |index|
+    index.as :stored_searchable, :facetable
+  end
 
   # accepts_nested_attributes_for needs to be defined at the end of the model.
   # see note from Hyrax::BasicMetadata mixin:
