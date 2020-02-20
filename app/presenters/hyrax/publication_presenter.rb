@@ -5,8 +5,8 @@ module Hyrax
              :contributor, :creator, :date_issued, :date_available,
              :division, :editor, :keyword, :language, :language_label,
              :local_identifier, :organization, :permalink, :publisher,
-             :resource_type, :source, :standard_identifier, :subtitle,
-             :title_alternative,
+             :resource_type, :rights_holder, :source, :standard_identifier,
+             :subtitle, :title_alternative,
              to: :solr_document
 
     # Metadata formats we're able to export as.
@@ -24,7 +24,7 @@ module Hyrax
     def manifest_metadata_fields
       %i[
         title subtitle title_alternative creator contributor abstract description
-        subject keyword date_issued standard_identifier rights_statement
+        subject keyword date_issued standard_identifier rights_holder rights_statement
       ]
     end
 
