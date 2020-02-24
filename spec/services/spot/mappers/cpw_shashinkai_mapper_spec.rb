@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
+RSpec.describe Spot::Mappers::CpwShashinkaiMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
@@ -7,10 +7,10 @@ RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
 
   it_behaves_like 'a base EAIC mapper'
 
-  describe '#date_scope_note' do
-    subject { mapper.date_scope_note }
+  describe '#creator' do
+    subject { mapper.creator }
 
-    let(:field) { 'description.indicia' }
+    let(:field) { 'creator.maker' }
 
     it_behaves_like 'a mapped field'
   end
@@ -21,12 +21,19 @@ RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
     let(:metadata) do
       {
         'description.inscription.english' => ['Hello!'],
-        'description.inscription.japanese' => ['こんにちは！']
+        'description.inscription.japanese' => ['こんにちは！'],
+        'description.text.english' => ['A nice thing'],
+        'description.text.japanese' => ['すてきなこと']
       }
     end
 
     let(:expected_values) do
-      [RDF::Literal('Hello!', language: :en), RDF::Literal('こんにちは！', language: :ja)]
+      [
+        RDF::Literal('Hello!', language: :en),
+        RDF::Literal('こんにちは！', language: :ja),
+        RDF::Literal('A nice thing', language: :en),
+        RDF::Literal('すてきなこと', language: :ja)
+      ]
     end
 
     it { is_expected.to eq expected_values }
@@ -40,10 +47,10 @@ RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#language' do
-    subject { mapper.language }
+  describe '#original_item_extent' do
+    subject { mapper.original_item_extent }
 
-    let(:field) { 'language' }
+    let(:field) { 'format.extant' }
 
     it_behaves_like 'a mapped field'
   end
@@ -64,18 +71,20 @@ RSpec.describe Spot::Mappers::WoodsworthImagesMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#resource_type' do
-    subject { mapper.resource_type }
+  describe '#related_resource' do
+    subject { mapper.related_resource }
 
-    context 'when a value is present' do
-      let(:metadata) { { 'resource.type' => ['Postcard'] } }
+    let(:metadata) { { 'description.citation' => ['a good book, 2019'], 'relation.seealso' => ['[ww0001]'] } }
 
-      it { is_expected.to eq ['Postcard'] }
-    end
+    it { is_expected.to eq ['a good book, 2019', '[ww0001]'] }
+  end
 
-    context 'when no value is present' do
-      it { is_expected.to eq ['Image'] }
-    end
+  describe '#research_assistance' do
+    subject { mapper.research_assistance }
+
+    let(:field) { 'contributor' }
+
+    it_behaves_like 'a mapped field'
   end
 
   describe '#subject_ocm' do

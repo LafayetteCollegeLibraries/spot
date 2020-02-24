@@ -1,19 +1,11 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
+RSpec.describe Spot::Mappers::GcIrohaMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
   before { mapper.metadata = metadata }
 
   it_behaves_like 'a base EAIC mapper'
-
-  describe '#date_scope_note' do
-    subject { mapper.date_scope_note }
-
-    let(:field) { 'description.indicia' }
-
-    it_behaves_like 'a mapped field'
-  end
 
   describe '#keyword' do
     subject { mapper.keyword }
@@ -23,12 +15,21 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#language' do
-    subject { mapper.language }
+  describe '#inscription' do
+    subject { mapper.inscription }
 
-    let(:field) { 'language' }
+    let(:metadata) do
+      {
+        'description.inscription.japanese' => ['こんにちは！'],
+        'description.text.japanese' => ['すてきなこと']
+      }
+    end
 
-    it_behaves_like 'a mapped field'
+    let(:expected_values) do
+      [RDF::Literal('こんにちは！', language: :ja), RDF::Literal('すてきなこと', language: :ja)]
+    end
+
+    it { is_expected.to eq expected_values }
   end
 
   describe '#physical_medium' do
@@ -47,12 +48,18 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
     it_behaves_like 'a mapped field'
   end
 
-  describe '#subject' do
-    subject { mapper.subject }
+  describe '#research_assistance' do
+    subject { mapper.research_assistance }
 
-    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1316662'] } }
+    let(:field) { 'contributor' }
 
-    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1316662')] }
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    it { is_expected.to eq ['Image'] }
   end
 
   describe '#subject_ocm' do

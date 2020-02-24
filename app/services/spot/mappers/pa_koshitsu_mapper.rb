@@ -1,40 +1,35 @@
 # frozen_string_literal: true
 module Spot::Mappers
-  class WarnerSouvenirsMapper < BaseEaicMapper
+  class PaKoshitsuMapper < BaseEaicMapper
     self.fields_map = {
+      creator: 'creator.maker',
       date_scope_note: 'description.indicia',
       keyword: 'relation.ispartof',
-      language: 'language',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
+      related_resource: 'description.citation',
+      research_assistance: 'contributor',
       subject_ocm: 'subject.ocm'
     }
 
-    # @return [Array<Symbol>]
     def fields
       super + [
-        :location,
-        :rights_statement,
+        :inscription,
 
-        # from LanguageTaggedLiterals mixin
         :date,
         :date_associated,
         :description,
         :identifier,
+        :location,
+        :rights_statement,
         :subject,
         :title,
         :title_alternative
       ]
     end
 
-    # @return [Array<RDF::URI>]
-    def location
-      convert_uri_strings(merge_fields('coverage.location', 'coverage.location.country'))
-    end
-
-    # @return [Array<RDF::URI>]
-    def rights_statement
-      convert_uri_strings(metadata.fetch('rights.statement', []))
+    def inscription
+      field_to_tagged_literals('description.text.japanese', :ja)
     end
   end
 end
