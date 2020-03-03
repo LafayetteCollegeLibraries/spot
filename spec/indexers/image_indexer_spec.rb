@@ -15,7 +15,6 @@ RSpec.describe ImageIndexer do
     physical_medium: %w[tesim sim],
     original_item_extent: %w[tesim],
     description: %w[tesim],
-    ethnic_group: %w[tesim sim],
     inscription: %w[tesim],
     date_scope_note: %w[tesim],
     creator: %w[tesim sim],

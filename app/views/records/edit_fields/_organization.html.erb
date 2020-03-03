@@ -1,12 +1,12 @@
 <%=
-  f.input key,
-  as: :multi_value,
-  input_html: {
-    class: 'form-control',
-    data: {
-      'autocomplete-url' => '/authorities/search/local/organization',
-      'autocomplete' => key,
-    },
-  },
-  required: f.object.required?(key)
+  f.input :organization,
+          as: :multi_value,
+          input_html: {
+            class: 'form-control',
+            data: {
+              'autocomplete-url' => '/authorities/search/local/organization',
+              'autocomplete' => 'organization'
+            },
+          },
+          required: f.object.required?(:organization)
 %>

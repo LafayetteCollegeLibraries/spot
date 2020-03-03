@@ -8,7 +8,6 @@ FactoryBot.define do
     date_scope_note { ['Printed information on the backs of postcards that provides information relevent to dating the postcard itself (not the image).'] }
     description { ['An account of the resource'] }
     donor { ['Alumnus, Anne Esteemed'] }
-    ethnic_group { [] }
     identifier { ['hdl:10385/abc123'] }
     inscription { ['hey look over here'] }
     keyword { ['photo'] }

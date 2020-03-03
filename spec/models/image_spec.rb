@@ -15,7 +15,6 @@ RSpec.describe Image do
     [:original_item_extent, RDF::Vocab::DC.extent],
     [:language, RDF::Vocab::DC11.language],
     [:description, RDF::Vocab::DC11.description],
-    [:ethnic_group, 'http://sparql.cwrc.ca/ontologies/cwrc#hasEthnicity'],
     [:inscription, 'http://dbpedia.org/ontology/inscription'],
     [:date, RDF::Vocab::DC.date],
     [:date_scope_note, RDF::Vocab::SKOS.scopeNote],

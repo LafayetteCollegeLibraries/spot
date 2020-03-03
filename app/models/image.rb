@@ -56,11 +56,6 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # @todo are we keeping this now that we've found subjects to match this info?
-  property :ethnic_group, predicate: ::RDF::URI.new('http://sparql.cwrc.ca/ontologies/cwrc#hasEthnicity') do |index|
-    index.as :stored_searchable, :facetable
-  end
-
   property :inscription, predicate: ::RDF::URI.new('http://dbpedia.org/ontology/inscription') do |index|
     index.as :stored_searchable
   end
