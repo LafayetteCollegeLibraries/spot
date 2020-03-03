@@ -114,7 +114,7 @@ gem 'faraday', '0.12.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '4.9.5'
+gem 'mini_magick', '4.10.1'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
