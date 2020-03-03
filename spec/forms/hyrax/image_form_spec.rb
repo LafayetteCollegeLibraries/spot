@@ -46,7 +46,6 @@ RSpec.describe Hyrax::ImageForm do
       it { is_expected.to include :donor }
       it { is_expected.to include :related_resource }
       it { is_expected.to include :subject_ocm }
-      it { is_expected.to include :ethnic_group }
       it { is_expected.to include :note }
     end
   end
@@ -82,7 +81,6 @@ RSpec.describe Hyrax::ImageForm do
     it { is_expected.to include(related_resource: []) }
     it { is_expected.to include(local_identifier: []) }
     it { is_expected.to include(subject_ocm: []) }
-    it { is_expected.to include(ethnic_group: []) }
     it { is_expected.to include(note: []) }
     it { is_expected.to include(:representative_id, :thumbnail_id) }
     it { is_expected.to include(rendering_ids: []) }

@@ -38,7 +38,6 @@ module Hyrax
       :related_resource,
       :local_identifier,
       :subject_ocm,
-      :ethnic_group,
       :note
     ].concat(hyrax_form_fields)
 
