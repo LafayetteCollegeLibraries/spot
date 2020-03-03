@@ -12,7 +12,7 @@ end
 gem 'rails', '5.1.6.2'
 
 # use Puma as the app server (dev only, we're using passenger in production)
-gem 'puma', '3.12.3'
+gem 'puma', '3.12.4'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '5.0.7'
