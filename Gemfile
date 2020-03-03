@@ -164,5 +164,5 @@ group :development, :test do
   gem 'solr_wrapper', '~> 2.1'
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 4'
-  gem 'webmock', '~> 3.6'
+  gem 'webmock', '~> 3.8'
 end
