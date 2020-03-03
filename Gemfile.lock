@@ -342,7 +342,7 @@ GEM
       tilt
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
-    hashdiff (1.0.0)
+    hashdiff (1.0.1)
     hashie (3.6.0)
     hiredis (0.6.3)
     honeybadger (4.5.2)
@@ -607,7 +607,7 @@ GEM
     posix-spawn (0.3.13)
     power_converter (0.1.2)
     powerpack (0.1.2)
-    public_suffix (4.0.1)
+    public_suffix (4.0.3)
     pul_uv_rails (2.0.1)
     puma (3.12.4)
     qa (2.2.0)
@@ -917,7 +917,7 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (~> 1.0)
       selenium-webdriver (>= 3.0, < 4.0)
-    webmock (3.7.6)
+    webmock (3.8.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -1004,7 +1004,7 @@ DEPENDENCIES
   uglifier (= 4.1.20)
   web-console (>= 3.3.0)
   webdrivers (~> 4)
-  webmock (~> 3.6)
+  webmock (~> 3.8)
   xray-rails (~> 0.3.1)
 
 BUNDLED WITH
