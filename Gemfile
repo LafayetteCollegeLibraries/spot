@@ -92,7 +92,7 @@ gem 'rdf-vocab', '3.0.8'
 gem 'riiif', '2.1.0'
 
 # solr client for interacting with rails (installed w/ hyrax)
-gem 'rsolr', '2.2.1'
+gem 'rsolr', '2.3.0'
 
 # used in conjunction with our importers to zip/unzip files
 gem 'rubyzip', '1.3.0'
