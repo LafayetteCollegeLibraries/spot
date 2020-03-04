@@ -607,7 +607,7 @@ GEM
     powerpack (0.1.2)
     public_suffix (4.0.1)
     pul_uv_rails (2.0.1)
-    puma (3.12.2)
+    puma (3.12.4)
     qa (2.2.0)
       activerecord-import
       deprecation
@@ -974,7 +974,7 @@ DEPENDENCIES
   mini_magick (= 4.9.5)
   okcomputer (= 1.17.4)
   pg (= 1.1.4)
-  puma (= 3.12.2)
+  puma (= 3.12.4)
   rails (= 5.1.6.2)
   rails-controller-testing (~> 1.0.4)
   rdf-vocab (= 3.0.8)
