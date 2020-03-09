@@ -86,7 +86,7 @@ gem 'pg', '1.1.4'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '3.0.8'
+gem 'rdf-vocab', '3.1.2'
 
 # a iiif server for ruby from curationexperts
 gem 'riiif', '2.1.0'
