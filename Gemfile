@@ -160,7 +160,7 @@ group :development, :test do
   gem 'rubocop', '~> 0.63'
   gem 'rubocop-rspec', '~> 1.3'
   gem 'shoulda-matchers', '~> 4'
-  gem 'simplecov', '~> 0.17', require: false
+  gem 'simplecov', '~> 0.18', require: false
   gem 'solr_wrapper', '~> 2.1'
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 4'
