@@ -12,7 +12,7 @@ end
 gem 'rails', '5.1.6.2'
 
 # use Puma as the app server (dev only, we're using passenger in production)
-gem 'puma', '3.12.2'
+gem 'puma', '3.12.4'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '5.0.7'
@@ -24,10 +24,10 @@ gem 'uglifier', '4.1.20'
 gem 'coffee-rails', '4.2.2'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '5.2.0'
+gem 'turbolinks', '5.2.1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '2.8.0'
+gem 'jbuilder', '2.10.0'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -35,7 +35,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 2.6.0'
+gem 'hyrax', '~> 2.7.0'
 
 # modularize our javascripts
 gem 'almond-rails', '0.1.0'
@@ -70,7 +70,7 @@ gem 'edtf-humanize', '0.0.7'
 gem 'honeybadger', '4.5.2'
 
 # allows us to create admin (and more!) roles for users
-gem 'hydra-role-management', '1.0'
+gem 'hydra-role-management', '1.0.2'
 
 # an authorative source for our two-character language codes
 gem 'iso-639', '0.2.8'
@@ -82,17 +82,17 @@ gem 'jquery-rails', '4.3.5'
 gem 'okcomputer', '1.17.4'
 
 # we're using postgres as our database within rails
-gem 'pg', '1.1.4'
+gem 'pg', '1.2.2'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '3.0.8'
+gem 'rdf-vocab', '3.1.2'
 
 # a iiif server for ruby from curationexperts
 gem 'riiif', '2.1.0'
 
 # solr client for interacting with rails (installed w/ hyrax)
-gem 'rsolr', '2.2.1'
+gem 'rsolr', '2.3.0'
 
 # used in conjunction with our importers to zip/unzip files
 gem 'rubyzip', '1.3.0'
@@ -114,7 +114,7 @@ gem 'faraday', '0.12.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '4.9.5'
+gem 'mini_magick', '4.10.1'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
@@ -126,7 +126,7 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring', '~> 2.0.2'
+  gem 'spring', '~> 2.1.0'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Use Capistrano for deployment
@@ -147,7 +147,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.22'
-  gem 'database_cleaner', '~> 1.7.0'
+  gem 'database_cleaner', '~> 1.8.3'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
@@ -164,5 +164,5 @@ group :development, :test do
   gem 'solr_wrapper', '~> 2.1'
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 4'
-  gem 'webmock', '~> 3.6'
+  gem 'webmock', '~> 3.8'
 end

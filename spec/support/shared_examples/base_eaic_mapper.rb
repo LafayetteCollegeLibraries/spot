@@ -60,6 +60,18 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
     end
   end
 
+  if fields.include?(:date_associated) && !skip_fields.include?(:date_associated)
+    describe '#date_associated' do
+      subject { mapper.date_associated }
+
+      let(:metadata) do
+        { 'date.image.lower' => ['1921-01'], 'date.image.upper' => ['1932-02-11'] }
+      end
+
+      it { is_expected.to eq ['1921-01/1932-02-11'] }
+    end
+  end
+
   if fields.include?(:description) && !skip_fields.include?(:description)
     describe '#description' do
       subject { mapper.description }

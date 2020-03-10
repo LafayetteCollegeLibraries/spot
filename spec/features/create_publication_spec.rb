@@ -41,7 +41,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_rights_holder', with: attrs[:rights_holder].first
         expect(page).to have_css '.publication_rights_holder .controls-add-text'
 
-        fill_in 'Subtitle', with: attrs[:subtitle].first
+        fill_in 'publication_subtitle', with: attrs[:subtitle].first
         expect(page).to have_css '.publication_subtitle .controls-add-text'
 
         fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
@@ -50,19 +50,19 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in 'publication_publisher', with: attrs[:publisher].first
         expect(page).to have_css '.publication_publisher .controls-add-text'
 
-        fill_in 'Source', with: attrs[:source].first
+        fill_in 'publication_source', with: attrs[:source].first
         expect(page).to have_css '.publication_source .controls-add-text'
 
-        select 'Article', from: 'Resource type'
+        select 'Article', from: 'publication_resource_type'
         expect(page).not_to have_css '.publication_resource_type .controls-add-text'
 
         fill_in_autocomplete '.publication_language', with: attrs[:language].first
         expect(page).to have_css '.publication_language .controls-add-text'
 
-        fill_in 'Abstract', with: attrs[:abstract].first
+        fill_in 'publication_abstract', with: attrs[:abstract].first
         expect(page).not_to have_css '.publication_abstract .controls-add-text'
 
-        fill_in 'Description', with: attrs[:description].first
+        fill_in 'publication_description', with: attrs[:description].first
         expect(page).to have_css '.publication_description .controls-add-text'
 
         select id_standard.prefix_label, from: 'publication[standard_identifier_prefix][]'
@@ -70,19 +70,19 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         fill_in 'publication[local_identifier][]', with: id_local.to_s
 
-        fill_in 'Bibliographic citation', with: attrs[:bibliographic_citation].first
+        fill_in 'publication_bibliographic_citation', with: attrs[:bibliographic_citation].first
         expect(page).to have_css '.publication_bibliographic_citation .controls-add-text'
 
-        fill_in 'Date issued', with: attrs[:date_issued].first
+        fill_in 'publication_date_issued', with: attrs[:date_issued].first
         expect(page).not_to have_css '.publication_date_issued .controls-add-text'
 
-        fill_in 'Creator', with: attrs[:creator].first
+        fill_in 'publication_creator', with: attrs[:creator].first
         expect(page).to have_css '.publication_creator .controls-add-text'
 
-        fill_in 'Contributor', with: attrs[:contributor].first
+        fill_in 'publication_contributor', with: attrs[:contributor].first
         expect(page).to have_css '.publication_contributor .controls-add-text'
 
-        fill_in 'Editor', with: attrs[:editor].first
+        fill_in 'publication_editor', with: attrs[:editor].first
         expect(page).to have_css '.publication_editor .controls-add-text'
 
         fill_in_autocomplete '.publication_academic_department',
@@ -95,13 +95,13 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in_autocomplete '.publication_subject', with: attrs[:subject].first
         expect(page).to have_css '.publication_subject .controls-add-text'
 
-        fill_in 'Organization', with: attrs[:organization].first
+        fill_in 'publication_organization', with: attrs[:organization].first
         expect(page).to have_css '.publication_organization .controls-add-text'
 
-        fill_in 'Keyword', with: attrs[:keyword].first
+        fill_in 'publication_keyword', with: attrs[:keyword].first
         expect(page).to have_css '.publication_keyword .controls-add-text'
 
-        select 'No Known Copyright', from: 'Rights statement'
+        select 'No Known Copyright', from: 'publication_rights_statement'
 
         ##
         # add files

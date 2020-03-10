@@ -1,18 +1,18 @@
 <%=
-  f.input key,
-  as: :local_controlled_vocabulary,
-  input_html: {
-    class: 'form-control',
-    data: {
-      'autocomplete-url' => '/authorities/search/language',
-      'autocomplete' => key,
-    },
-  },
-  wrapper_html: {
-    data: {
-      'autocomplete-url' => '/authorities/search/language',
-      'field-name' => key
-    }
-  },
-  required: f.object.required?(key)
+  f.input :language,
+          as: :local_controlled_vocabulary,
+          input_html: {
+            class: 'form-control',
+            data: {
+              'autocomplete-url' => '/authorities/search/language',
+              'autocomplete' => 'language'
+            },
+          },
+          wrapper_html: {
+            data: {
+              'autocomplete-url' => '/authorities/search/language',
+              'field-name' => 'language'
+            }
+          },
+          required: f.object.required?(:language)
 %>

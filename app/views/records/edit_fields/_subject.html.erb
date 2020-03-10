@@ -1,12 +1,13 @@
 <%=
   f.input :subject,
           as: :controlled_vocabulary,
+          placeholder: 'Search for a Subject',
           input_html: {
             class: 'form-control',
             data: {
               'autocomplete-url' => '/authorities/search/linked_data/oclc_fast',
-              'autocomplete' => key
+              'autocomplete' => 'subject'
             }
           },
-          required: f.object.required?(key)
+          required: f.object.required?(:subject)
 %>

@@ -1,0 +1,12 @@
+<%=
+  f.input :subject_ocm,
+          as: :multi_value,
+          input_html: {
+            class: 'form-control',
+            data: {
+              'autocomplete-url' => '/authorities/search/local/subject_ocm',
+              'autocomplete' => 'subject_ocm'
+            },
+          },
+          required: f.object.required?(:subject_ocm)
+%>

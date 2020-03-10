@@ -7,16 +7,6 @@ RSpec.describe Spot::Mappers::WarnerSouvenirsMapper do
 
   it_behaves_like 'a base EAIC mapper'
 
-  describe '#date_associated' do
-    subject { mapper.date_associated }
-
-    let(:metadata) do
-      { 'date.image.lower' => ['1921-01'], 'date.image.upper' => ['1932-02-11'] }
-    end
-
-    it { is_expected.to eq ['1921-01/1932-02-11'] }
-  end
-
   describe '#date_scope_note' do
     subject { mapper.date_scope_note }
 

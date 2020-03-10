@@ -26,6 +26,10 @@ module Spot::Mappers
       edtf_ranges_for('date.artifact.lower', 'date.artifact.upper')
     end
 
+    def date_associated
+      image_date_ranges
+    end
+
     # Returns the values of 'description.critical' as RDF::Literal objects.
     #
     # @return [Array<RDF::Literal>]
@@ -83,6 +87,11 @@ module Spot::Mappers
     end
 
     private
+
+      # @return [Array<String>]
+      def image_date_ranges
+        edtf_ranges_for('date.image.lower', 'date.image.upper')
+      end
 
       # @param [String] field
       # @return [String, nil]

@@ -40,6 +40,13 @@ module Spot
         end
       end
 
+      # @return [Array<String>]
+      def rdf_label
+        cached = RdfLabel.find_by(uri: rdf_subject.to_s)
+        return super unless cached
+        [cached.value]
+      end
+
       # Fetches a label for +#rdf_subject+ from the RdfLabel cache if it exists,
       # otherwise passes a block to +.first_or_create+. We're calling +.where+
       # _before_ +.first_or_create+, as just calling +.first_or_create+ will

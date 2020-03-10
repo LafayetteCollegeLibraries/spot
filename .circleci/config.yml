@@ -45,7 +45,7 @@ jobs:
       - image: postgres:9.4-alpine
         environment:
           POSTGRES_USER: spot_dev_user
-          POSTGRES_PASSWORD: ''
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: spot_test
       - image: ualbertalib/docker-fcrepo4:4.7
         environment:
@@ -62,7 +62,7 @@ jobs:
       FCREPO_TEST_PORT: 8080/fcrepo
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       PSQL_USER: spot_dev_user
-      PSQL_PASSWORD: ''
+      PSQL_PASSWORD: password
       PSQL_DATABASE: spot_test
       CI: true
       CAS_BASE_URL: http://localhost

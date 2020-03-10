@@ -14,11 +14,16 @@ en:
         bibliographic_citation: A bibliographic reference for the resource.
         contributor: A person or group you want to recognize for playing a role in the creation of the work, but not the primary role.
         creator: The person or group responsible for the work. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;.
+        date: A point or period of time associated with an event in the lifecycle of the resource.
+        date_associated: The date range of of the event documented in the photographic image, and later reproduced in an album or postcard.
         date_available: Date that the resource became or will become available.
         date_issued: Date of formal issuance (e.g., publication) of the resource. Use YYYY-MM-DD or YYYY-MM format.
+        date_scope_note: Commentary as to how the date was derived.
         description: A free-text account of the resource.
         division: A major unit or section within a larger organization.
+        donor: A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.
         editor: A person having managerial and sometimes policy-making responsibility for the editorial part of a publishing firm or of a newspaper, magazine, or other publication.
+        inscription: Text of an inscription on the object.
         keyword: Words or phrases you select to describe what the work is about. These are used to search for content.
         language: The language of the work's content.
         license: Licensing and distribution information governing access to the work. Select from the provided drop-down list.
@@ -26,9 +31,13 @@ en:
         location: A place name related to the work, such as its site of publication, or the city, state, or country the work contents are about. <strong>Uses the <a href="http://www.geonames.org" target="_blank">GeoNames web service</a></strong>.
         note: Information important to internal maintenance of records or relevant to the original items, such as administrative, digitization, or decision documentation.
         organization: The organization associated with the resource.
+        original_item_extent: The size or duration of the physical resource.
         physical_medium: A physical material or carrier.  Examples include paper, canvas, or DVD.
         publisher: The person or group making the work available. Generally this is the institution.
         related_resource: Further information about the subject resource.
+        repository_location: Location of the physical resource within the archives.
+        requested_by: Person(s) responsible for initiating the digitization of the resource.
+        research_assistance: Person(s) responsible for assisting with metadata creation.
         resource_type: Pre-defined categories to describe the type of content being uploaded, such as &quot;article&quot; or &quot;dataset.&quot;  More than one type may be selected.
         rights_holder: A person or organization owning or managing rights over the resource.
         rights_statement: Rights statements express the copyright status of a Digital Object, as well as information about how users can access and re-use the objects.
@@ -36,6 +45,7 @@ en:
         sponsor: A person or organization that supports a thing through a pledge, promise, or financial contribution.
         standard_identifier: "A reference to the work from an outside authority. Currently, we support: <strong>DOI, Handle, ISSN, ISBN</strong>"
         subject: Headings or index terms describing what the work is about; these do need to conform to an existing vocabulary. <strong>Uses <a href="http://fast.oclc.org/" target="_blank">OCLC's FAST subject headings</a>.</strong>
+        subject_ocm: Yale Human Relations Area Files ethnographic subject classification index system. Visit the <strong><a href="https://hraf.yale.edu/resources/reference/outline-of-cultural-materials" target="_blank">Yale guide</a></strong> to learn more.
         subtitle: An explanatory or alternative title of a publication.
         title: A name to aid in identifying a work.
         title_alternative: An alternative name for the resource.

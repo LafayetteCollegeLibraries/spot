@@ -2,7 +2,7 @@
   <table class="table table-bordered work-show <%= dom_class(presenter) %> metadata-table">
     <tbody>
       <%= presenter.attribute_to_html(:title) %>
-      <%= presenter.attribute_to_html(:subtitle, show_help_text: true) %>
+      <%= presenter.attribute_to_html(:subtitle) %>
       <%= presenter.attribute_to_html(:title_alternative) %>
       <%= presenter.attribute_to_html(:creator, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:contributor, render_as: :faceted) %>
@@ -23,7 +23,8 @@
                                       search_field: :subject_label_ssim) %>
       <%= presenter.attribute_to_html(:subject_ocm,
                                       render_as: :faceted,
-                                      search_field: :subject_ocm_ssim) %>
+                                      search_field: :subject_ocm_ssim,
+                                      show_help_text: true) %>
       <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:location,
                                       render_as: :external_authority,

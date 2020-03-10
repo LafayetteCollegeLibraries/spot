@@ -68,7 +68,7 @@ module Spot::Mappers
       return field_to_tagged_literals('title.french', :fr) unless metadata['title.french'].blank?
       return field_to_tagged_literals('title.german', :de) unless metadata['title.german'].blank?
 
-      [RDF::Literal('Untitled', language: :en)]
+      [RDF::Literal('[Untitled]', language: :en)]
     end
 
     # We'll only have an alternative title if both French and German titles are available.

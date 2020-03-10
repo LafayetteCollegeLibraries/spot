@@ -6,13 +6,19 @@
 module Spot
   module Mappers
     # @return [Hash<Symbol => Constant>]
+    # rubocop:disable Metrics/MethodLength
     def self.available_mappers
       {
         alsace: AlsaceImagesMapper,
         cpw_nofuko: CpwNofukoMapper,
+        cpw_shashinkai: CpwShashinkaiMapper,
+        gc_iroha: GcIrohaMapper,
+        lewis: LewisPostcardsMapper,
         ldr: LdrDspaceMapper,
         magazine: MagazineMapper,
         newspaper: NewspaperMapper,
+        pa_koshitsu: PaKoshitsuMapper,
+        pa_omitsu: PaOmitsuMapper,
         pacwar: PacwarPostcardsMapper,
         rjw_stereo: RjwStereoMapper,
         shakespeare: ShakespeareBulletinMapper,
@@ -20,6 +26,7 @@ module Spot
         woodsworth: WoodsworthImagesMapper
       }
     end
+    # rubocop:enable Metrics/MethodLength
 
     # @param [String,Symbol] key
     # @return [Constant] mapper class for key

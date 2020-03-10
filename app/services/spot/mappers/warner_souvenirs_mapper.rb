@@ -13,23 +13,18 @@ module Spot::Mappers
     # @return [Array<Symbol>]
     def fields
       super + [
-        :date_associated,
         :location,
         :rights_statement,
 
         # from LanguageTaggedLiterals mixin
         :date,
+        :date_associated,
         :description,
         :identifier,
         :subject,
         :title,
         :title_alternative
       ]
-    end
-
-    # @return [Array<String>]
-    def date_associated
-      edtf_ranges_for('date.image.lower', 'date.image.upper')
     end
 
     # @return [Array<RDF::URI>]

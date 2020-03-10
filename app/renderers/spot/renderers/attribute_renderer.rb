@@ -56,7 +56,7 @@ module Spot
                     default: [
                       :"blacklight.search.fields.show.#{field}",
                       :"blacklight.search.fields.#{field}",
-                      options.fetch(:label, field.to_s.humanize)
+                      options.fetch(:label, field.to_s.titleize)
                     ])
         end
 

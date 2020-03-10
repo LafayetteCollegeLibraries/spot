@@ -1,18 +1,19 @@
 <%=
-  f.input key,
-  as: :local_controlled_vocabulary,
-  input_html: {
-    class: 'form-control',
-    data: {
-      'autocomplete-url' => '/authorities/search/local/lafayette_departments',
-      'autocomplete' => key,
-    },
-  },
-  wrapper_html: {
-    data: {
-      'autocomplete-url' => '/authorities/search/local/lafayette_departments',
-      'field-name' => key
-    }
-  },
-  required: f.object.required?(key)
+  f.input :academic_department,
+          as: :local_controlled_vocabulary,
+          placeholder: 'Search for an Academic Department',
+          input_html: {
+            class: 'form-control',
+            data: {
+              'autocomplete-url' => '/authorities/search/local/lafayette_departments',
+              'autocomplete' => 'academic_department'
+            },
+          },
+          wrapper_html: {
+            data: {
+              'autocomplete-url' => '/authorities/search/local/lafayette_departments',
+              'field-name' => 'academic_department'
+            }
+          },
+          required: f.object.required?(:academic_department)
 %>
