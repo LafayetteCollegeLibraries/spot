@@ -1,5 +1,42 @@
 # changelog
 
+## [2020.4] - 2020-03-10
+
+### features 🔬
+- adds a `ReindexJob` and includes a rake task (`spot:reindex`) (#410)
+- adds mappers for Image batch 2 collections (#405)
+  - lewis-postcards
+  - gc-iroha01
+  - pa-koshitsu
+  - pa-omitsu01
+  - pa-omitsu02
+  - pa-omitsu03
+  - cpw-shashinkai
+- adds a form for Image objects (blocked by #415 for items with "Manchuria" as a location value) (#407)
+
+### bug fixes 🐞
+- fixes a typo in the footer (614e197)
+- uses brackets when titling an item 'Untitled' (affects the alsace-images mapper) (13ae9cf)
+- updates circle-ci config to use password for posgres image (previously blank one now breaks the image) (#408)
+- adds indexing for the `rights_holder` property on Publications (#411)
+
+### dependency updates 👩‍👧‍👧
+- **hyrax to 2.7.0** (#425)
+- capybara to 3.31.0 (#427)
+- database_cleaner to 1.8.3 (#428)
+- hydra-role-management to 1.0.2 (#417)
+- jbuilder to 2.10.0 (#431)
+- mini_magick to 4.10.1 (#419)
+- nokogiri to 1.10.8 (#412)
+- pg to 1.2.2 (#429)
+- puma to 3.12.4 (#413, #422)
+- rdf-vocab to 3.1.2 (#426)
+- rsolr to 2.3.0 (#418)
+- spring to 2.1.0 (#424)
+- turbolinks to 5.2.1 (#433)
+- webmock to 3.8.2 (#416)
+
+
 ## [2020.3] - 2020-02-04
 
 ### features ⛱
@@ -290,6 +327,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.4
 [2020.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.3
 [2020.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.2
 [2020.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.1
