@@ -52,7 +52,7 @@ gem 'blacklight_range_limit', '6.3.3'
 gem 'bootsnap', '1.4.4'
 
 # record importer pattern from curationexperts
-gem 'darlingtonia', '3.0.3'
+gem 'darlingtonia', '3.2.2'
 
 # user management
 gem 'devise', '4.7.1'
