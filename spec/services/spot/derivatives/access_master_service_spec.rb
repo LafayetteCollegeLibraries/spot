@@ -40,7 +40,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
 
     let(:expected_commands) do
       [
-        '/path/to/file',
+        '/path/to/file.jpg[0]',
         '-define', 'tiff:tile-geometry=128x128',
         '-compress', 'jpeg',
         'ptif:/path/to/a/fs-access.tif'
@@ -48,7 +48,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
     end
 
     it 'sends imagemagick commands to MiniMagick' do
-      service.create_derivatives('/path/to/file')
+      service.create_derivatives('/path/to/file.jpg')
 
       expect(magick_commands).to eq(expected_commands)
     end
