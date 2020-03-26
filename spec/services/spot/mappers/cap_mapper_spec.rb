@@ -66,8 +66,4 @@ RSpec.describe Spot::Mappers::CapMapper do
 
     it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1898429')] }
   end
-
-  describe '#title' do
-
-  end
 end
