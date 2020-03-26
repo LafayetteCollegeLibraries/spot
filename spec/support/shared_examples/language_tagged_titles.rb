@@ -15,7 +15,7 @@ RSpec.shared_examples 'it has language-tagged titles' do |options|
       subject { mapper.title }
 
       let(:primary_title_key) { described_class.primary_title_map.keys.first }
-      let(:metadata) { { primary_title_key => 'The Beyond' } }
+      let(:metadata) { { primary_title_key => ['The Beyond'] } }
 
       it { is_expected.to eq [RDF::Literal('The Beyond', language: :en)] }
     end
