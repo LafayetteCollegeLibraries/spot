@@ -20,21 +20,16 @@ module Spot
   module Forms
     class CollectionForm < Hyrax::Forms::CollectionForm
       include ::IdentifierFormFields
+      include ::LanguageTaggedFormFields
       include ::NestedFormFields
+      include ::SingularFormFields
 
+      transforms_language_tags_for :title, :abstract, :description
       transforms_nested_fields_for :language
 
-      class_attribute :singular_fields
-      self.singular_fields = [
-        :slug,
-        :title,
-        :abstract,
-        :description,
-
-        # the hyrax form-fields are also singular!
-        :visibility,
-        :collection_type_gid
-      ]
+      # note: we can't use :slug here, as it's _technically_ not a property
+      # but rather a glorified identifier
+      singular_form_fields :title, :abstract, :description
 
       self.required_fields = [:title]
       self.terms = [
@@ -57,20 +52,6 @@ module Spot
         :collection_type_gid
       ]
 
-      # Limiting to one abstract via the form
-      #
-      # @return [String]
-      def abstract
-        self['abstract'].first
-      end
-
-      # Limiting to one description via the form
-      #
-      # @return [String]
-      def description
-        self['description'].first
-      end
-
       # Copied from +Hyrax::Forms::WorkForm+. We need to initialize
       # controlled vocabulary fields differently from the rest. Otherwise
       # we'll get the field's hint text but no input field.
@@ -92,7 +73,7 @@ module Spot
         super.reject { |id| id.start_with? 'slug:' }
       end
 
-      # Delegates to the class {.multiple?} method
+      # Call the .multiple? class method introduced
       #
       # @return [true, false]
       def multiple?(field)
@@ -118,15 +99,8 @@ module Spot
       def slug
         @slug ||= begin
           raw = self['identifier'].find { |id| id.start_with?('slug:') }
-          raw ? Spot::Identifier.from_string(raw).value : nil
+          Spot::Identifier.from_string(raw).value unless raw.nil?
         end
-      end
-
-      # Limiting to one title via the form
-      #
-      # @return [String]
-      def title
-        self['title'].first
       end
 
       class << self
@@ -145,12 +119,6 @@ module Spot
         # @return [ActionController::Parameters]
         def model_attributes(form_params)
           super.tap do |params|
-            fields = singular_fields - %i[visibility collection_type_gid slug]
-
-            fields.each do |field|
-              params[field] = Array(params[field]) if params[field]
-            end
-
             if (slug = params.delete('slug'))
               params[:identifier] ||= []
               params[:identifier] << "slug:#{slug}"
@@ -158,13 +126,24 @@ module Spot
           end
         end
 
-        # Should we display an "add another value" option in the form?
-        #
-        # @param field [String, Symbol]
-        # @return [true, false]
-        def multiple?(field)
-          !singular_fields.include?(field.to_sym)
-        end
+        private
+
+          # overriding this method from +LanguageTaggedFormFields+ mixin
+          # to return RDF::Literals instead of strings (Collections aren't
+          # put through the actor stack + don't need to pass around the values)
+          #
+          # @param tuples [Array<Array<String>>]
+          # @retrun [Array<RDF::Literal>]
+          def map_rdf_strings(tuples)
+            tuples.map do |(value, language)|
+              # need to skip blank entries here, otherwise we get a blank literal
+              # (""@"") which LDP doesn't like
+              next unless value.present?
+
+              language = language.present? ? language.to_sym : nil
+              RDF::Literal(value, language: language)
+            end.reject(&:blank?)
+          end
       end
     end
   end
