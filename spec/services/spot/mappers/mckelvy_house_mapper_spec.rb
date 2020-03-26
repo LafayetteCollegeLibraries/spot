@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::CapMapper do
+RSpec.describe Spot::Mappers::McKelvyHouseMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
@@ -10,7 +10,7 @@ RSpec.describe Spot::Mappers::CapMapper do
   describe '#creator' do
     subject { mapper.creator }
 
-    let(:field) { 'creator.photographer' }
+    let(:field) { 'creator.maker' }
 
     it_behaves_like 'a mapped field'
   end
@@ -18,7 +18,7 @@ RSpec.describe Spot::Mappers::CapMapper do
   describe '#date' do
     subject { mapper.date }
 
-    let(:field) { 'date.range' }
+    let(:field) { 'date.original.search' }
 
     it_behaves_like 'a mapped field'
   end
@@ -27,26 +27,27 @@ RSpec.describe Spot::Mappers::CapMapper do
     subject { mapper.description }
 
     let(:metadata) do
-      { 'description.critical' => ['A photograph of life on campus in 1964.'] }
+      { 'description' => ['A house on campus.'] }
     end
 
-    it { is_expected.to eq [RDF::Literal('A photograph of life on campus in 1964.', language: :en)] }
+    it { is_expected.to eq [RDF::Literal('A house on campus.', language: :en)] }
   end
 
   describe '#keyword' do
     subject { mapper.keyword }
 
     let(:metadata) do
-      { 'keyword' => ['Academic Life'], 'relation.ispartof' => ['Historical Photograph Collection'] }
+      { 'keyword' => ['Campus life'],
+        'relation.ispartof' => ['McKelvy House Photographs'] }
     end
 
-    it { is_expected.to eq ['Academic Life', 'Historical Photograph Collection'] }
+    it { is_expected.to eq ['Campus life', 'McKelvy House Photographs'] }
   end
 
   describe '#original_item_extent' do
     subject { mapper.original_item_extent }
 
-    let(:field) { 'format.size' }
+    let(:field) { 'description.size' }
 
     it_behaves_like 'a mapped field'
   end
@@ -59,6 +60,14 @@ RSpec.describe Spot::Mappers::CapMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#repository_location' do
+    subject { mapper.repository_location }
+
+    let(:field) { 'source' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#rights_statement' do
     subject { mapper.rights_statement }
 
@@ -67,6 +76,14 @@ RSpec.describe Spot::Mappers::CapMapper do
     end
 
     it { is_expected.to eq [RDF::URI('http://rightsstatements.org/vocab/InC-EDU/1.0/')] }
+  end
+
+  describe '#source' do
+    subject { mapper.source }
+
+    let(:field) { 'description.note' }
+
+    it_behaves_like 'a mapped field'
   end
 
   describe '#subject' do

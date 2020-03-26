@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 module Spot::Mappers
-  class CapMapper < BaseMapper
+  class MckelvyHouseMapper < BaseMapper
     include LanguageTaggedTitles
 
     self.primary_title_map = { 'english' => :en }
     self.fields_map = {
-      creator: 'creator.photographer',
-      date: 'date.range',
-      original_item_extent: 'format.size',
+      creator: 'creator.maker',
+      date: 'date.original.search',
+      original_item_extent: 'description.size',
       physical_medium: 'format.medium',
-      resource_type: 'resource.type'
+      repository_location: 'source',
+      source: 'description.note'
     }
 
     def fields
@@ -19,14 +20,14 @@ module Spot::Mappers
         :rights_statement,
         :subject,
 
-        # included with LanguageTaggedTitles mixin
+        # from LanguageTaggedTitles
         :title
       ]
     end
 
     # @return [Array<RDF::Literal>]
     def description
-      field_to_tagged_literals('description.critical', :en)
+      field_to_tagged_literals('description', :en)
     end
 
     # @return [Array<String>]
