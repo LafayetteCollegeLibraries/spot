@@ -63,8 +63,8 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
-    almond-rails (0.1.0)
-      rails (>= 4.2, < 6)
+    almond-rails (0.3.0)
+      rails (>= 4.2)
     arel (8.0.0)
     ast (2.4.0)
     autoprefixer-rails (9.7.4)
@@ -940,7 +940,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  almond-rails (= 0.1.0)
+  almond-rails (= 0.3.0)
   bagit (= 0.4.3)
   bixby (~> 2.0.0.pre.beta1)
   blacklight_advanced_search (= 6.4.1)

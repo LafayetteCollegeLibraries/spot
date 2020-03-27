@@ -38,7 +38,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'hyrax', '~> 2.7.0'
 
 # modularize our javascripts
-gem 'almond-rails', '0.1.0'
+gem 'almond-rails', '0.3.0'
 
 # parse + build bagit-compliant files
 gem 'bagit', '0.4.3'
