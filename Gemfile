@@ -79,7 +79,7 @@ gem 'iso-639', '0.2.8'
 gem 'jquery-rails', '4.3.5'
 
 # system monitoring
-gem 'okcomputer', '1.17.4'
+gem 'okcomputer', '1.18.1'
 
 # we're using postgres as our database within rails
 gem 'pg', '1.2.2'
