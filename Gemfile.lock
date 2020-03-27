@@ -155,7 +155,7 @@ GEM
       thor (~> 0.19)
       typhoeus
     builder (3.2.4)
-    byebug (11.0.1)
+    byebug (11.1.1)
     cancancan (1.17.0)
     capistrano (3.11.2)
       airbrussh (>= 1.0.0)
