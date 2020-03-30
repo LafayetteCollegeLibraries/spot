@@ -19,6 +19,7 @@ module Spot::Mappers
     def fields
       super + [
         :date,
+        :identifier,
         :inscription,
         :location,
         :subject,

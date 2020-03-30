@@ -5,6 +5,8 @@ RSpec.describe Spot::Mappers::AlsaceImagesMapper do
 
   before { mapper.metadata = metadata }
 
+  it_behaves_like 'it maps Islandora URLs to identifiers'
+
   describe '#date_scope_note' do
     subject { mapper.date_scope_note }
 
