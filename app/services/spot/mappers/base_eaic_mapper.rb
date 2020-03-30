@@ -99,8 +99,8 @@ module Spot::Mappers
         values = metadata.fetch(field, [])
         return [] if values.empty?
 
-        values.map do |id|
-          match_data = values.first.match(/^\[(\w+\d+)\]/)
+        values.map do |value|
+          match_data = value.match(/^\[(\w+\d+)\]/)
           next if match_data.nil?
 
           Spot::Identifier.new('eaic', match_data[1]).to_s
