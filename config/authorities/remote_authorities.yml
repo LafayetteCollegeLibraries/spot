@@ -1,0 +1,7 @@
+terms:
+  - id: fast
+    label: FAST
+    search: /authorities/search/linked_data/oclc_fast
+  - id: geonames
+    label: GeoNames
+    search: /authorities/search/geonames
