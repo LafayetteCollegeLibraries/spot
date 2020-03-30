@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::McKelvyHouseMapper do
+RSpec.describe Spot::Mappers::MckelvyHouseMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
