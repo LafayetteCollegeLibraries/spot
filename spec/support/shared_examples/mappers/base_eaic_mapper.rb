@@ -83,6 +83,8 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
   end
 
   if fields.include?(:identifier) && !skip_fields.include?(:identifier)
+    it_behaves_like 'it maps Islandora URLs to identifiers'
+
     describe '#identifier' do
       subject { mapper.identifier }
 

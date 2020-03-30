@@ -47,7 +47,7 @@ module Spot::Mappers
     #   # => ['eaic:ww0032']
     #
     def identifier
-      [eaic_id_from_title]
+      eaic_ids_from_title + islandora_url_identifiers
     end
 
     # Grabs and converts location values in 'coverage.location' and 'coverage.location.country'
@@ -94,15 +94,17 @@ module Spot::Mappers
       end
 
       # @param [String] field
-      # @return [String, nil]
-      def eaic_id_from_title(field = 'title.english')
+      # @return [Array<String>]
+      def eaic_ids_from_title(field = 'title.english')
         values = metadata.fetch(field, [])
-        return if values.empty?
+        return [] if values.empty?
 
-        match_data = values.first.match(/^\[(\w+\d+)\]/)
-        return if match_data.nil?
+        values.map do |id|
+          match_data = values.first.match(/^\[(\w+\d+)\]/)
+          next if match_data.nil?
 
-        Spot::Identifier.new('eaic', match_data[1]).to_s
+          Spot::Identifier.new('eaic', match_data[1]).to_s
+        end.reject(&:blank?)
       end
 
       # @param [String] start_date_field

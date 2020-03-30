@@ -32,6 +32,11 @@ module Spot::Mappers
       merge_fields('date.postmark', 'date.image')
     end
 
+    # @return [Array<String>]
+    def identifier
+      islandora_url_identifiers
+    end
+
     # From Image Remediation Plan:
     #
     #   Map from <description.text.french> AND <description.text.german> in alsace-images.
