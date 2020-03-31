@@ -96,13 +96,8 @@ module Spot::Mappers
       # @return [Array<String>]
       def islandora_url_identifiers
         metadata.fetch('islandora_url', []).map do |url|
-          parsed = URI.parse(url)
-
-          args = URI::Generic.component.each_with_object({}) do |component, obj|
-            obj[component.to_sym] = parsed.send(component)
-          end
-
-          http_uri = URI::HTTP.build(args).to_s
+          # force the uri into HTTP
+          http_uri = URI.parse(url).tap { |uri| url.scheme = 'http' }.to_s
 
           Spot::Identifier.new('url', http_uri).to_s
         end
