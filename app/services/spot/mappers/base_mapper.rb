@@ -95,7 +95,12 @@ module Spot::Mappers
 
       # @return [Array<String>]
       def islandora_url_identifiers
-        metadata.fetch('islandora_url', []).map { |url| Spot::Identifier.new('url', url).to_s }
+        metadata.fetch('islandora_url', []).map do |value|
+          # force the uri into HTTP
+          http_uri = URI.parse(value).tap { |uri| uri.scheme = 'http' }.to_s
+
+          Spot::Identifier.new('url', http_uri).to_s
+        end
       end
 
       # Helper method to group the values for multiple fields into one place.
