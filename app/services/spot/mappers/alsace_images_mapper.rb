@@ -19,6 +19,7 @@ module Spot::Mappers
     def fields
       super + [
         :date,
+        :identifier,
         :inscription,
         :location,
         :subject,
@@ -30,6 +31,11 @@ module Spot::Mappers
     # @return [Array<String>]
     def date
       merge_fields('date.postmark', 'date.image')
+    end
+
+    # @return [Array<String>]
+    def identifier
+      islandora_url_identifiers
     end
 
     # From Image Remediation Plan:

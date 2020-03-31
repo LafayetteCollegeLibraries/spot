@@ -93,6 +93,11 @@ module Spot::Mappers
         arr.map { |val| val.match?(/^https?:\/\//) ? RDF::URI(val) : val }
       end
 
+      # @return [Array<String>]
+      def islandora_url_identifiers
+        metadata.fetch('islandora_url', []).map { |url| Spot::Identifier.new('url', url).to_s }
+      end
+
       # Helper method to group the values for multiple fields into one place.
       #
       # @param [Array<String>] *names field names to merge
