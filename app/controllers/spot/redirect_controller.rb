@@ -32,24 +32,14 @@ module Spot
 
     private
 
-      # Converts the passed URI into an HTTP URI
+      # Ensures that the URL we're searching for is http (and not https)
+      #
       # @return [String]
       def http_uri
-        URI::HTTP.build(parse_uri_into_args).to_s
+        URI.parse(params[:url]).tap { |url| url.scheme = 'http' }.to_s
       end
 
-      # Breaks a URI string into a Hash of URI component parts
-      #
-      # @param [String] uri_string Any kind of URI that works with +URI.parse+
-      # @return [Hash<Symbol => String, nil>]
-      def parse_uri_into_args
-        parsed = URI.parse(params[:url])
-
-        URI::Generic.component.each_with_object({}) do |component, obj|
-          obj[component.to_sym] = parsed.send(component)
-        end
-      end
-
+      # @return [Hash<Symbol => String>]
       def solr_query_for_identifier
         { defType: 'lucene', q: "{!terms f=identifier_ssim}url:#{http_uri}" }
       end
