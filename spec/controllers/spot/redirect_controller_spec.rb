@@ -14,6 +14,15 @@ RSpec.describe Spot::RedirectController do
       it { is_expected.to redirect_to hyrax_publication_path(obj.id) }
     end
 
+    context 'when an https URL is passed' do
+      let(:url) { 'https://digital.lafayette.edu' }
+      let(:obj) { build(:publication, identifier: ['url:http://digital.lafayette.edu']) }
+
+      before { obj.save! }
+
+      it { is_expected.to redirect_to hyrax_publication_path(obj.id) }
+    end
+
     context 'when a matching url does not exist' do
       let(:url) { 'http://nope.example.com/this/doesnt/exist' }
 
