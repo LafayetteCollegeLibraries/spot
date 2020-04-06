@@ -15,7 +15,7 @@ jobs:
       - restore_cache:
           name: Restore cached bundle
           key: spot-gems-{{ checksum "Gemfile.lock" }}
-      - use_specified_bundler_version:
+      - run:
           name: Use Bundler version specified in Gemfile.lock
           command: gem uninstall bundler -aIx && gem install bundler -v`(tail -n1 Gemfile.lock | xargs)`
       - run:
