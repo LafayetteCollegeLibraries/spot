@@ -18,6 +18,7 @@ jobs:
       - run:
           name: Use Bundler version specified in Gemfile.lock
           command: |
+            sudo gem update --system
             sudo gem uninstall -i /usr/local/lib/ruby/gems/2.4.0 -aIx bundler
             sudo gem install -i /usr/local/lib/ruby/gems/2.4.0 bundler -v`(tail -n1 Gemfile.lock | xargs)`
       - run:
