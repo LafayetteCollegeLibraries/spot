@@ -38,7 +38,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'hyrax', '~> 2.7.0'
 
 # modularize our javascripts
-gem 'almond-rails', '0.1.0'
+gem 'almond-rails', '0.3.0'
 
 # parse + build bagit-compliant files
 gem 'bagit', '0.4.3'
@@ -52,7 +52,7 @@ gem 'blacklight_range_limit', '6.3.3'
 gem 'bootsnap', '1.4.4'
 
 # record importer pattern from curationexperts
-gem 'darlingtonia', '3.0.3'
+gem 'darlingtonia', '3.2.2'
 
 # user management
 gem 'devise', '4.7.1'
@@ -67,7 +67,7 @@ gem 'edtf', '3.0.4'
 gem 'edtf-humanize', '0.0.7'
 
 # error trackijng
-gem 'honeybadger', '4.5.2'
+gem 'honeybadger', '4.5.6'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0.2'
@@ -79,7 +79,7 @@ gem 'iso-639', '0.2.8'
 gem 'jquery-rails', '4.3.5'
 
 # system monitoring
-gem 'okcomputer', '1.17.4'
+gem 'okcomputer', '1.18.1'
 
 # we're using postgres as our database within rails
 gem 'pg', '1.2.2'
@@ -135,7 +135,7 @@ group :development do
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rails', '~> 1.3', require: false
-  gem 'capistrano-sidekiq', '~> 0.20.0'
+  gem 'capistrano-sidekiq', '~> 1.0.3'
 
   gem 'xray-rails', '~> 0.3.1'
 end
@@ -146,7 +146,7 @@ group :development, :test do
   gem 'bixby', '~> 2.0.0.pre.beta1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
-  gem 'capybara-screenshot', '~> 1.0.22'
+  gem 'capybara-screenshot', '~> 1.0.24'
   gem 'database_cleaner', '~> 1.8.3'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false

@@ -39,17 +39,11 @@ RSpec.describe Spot::Forms::CollectionForm do
     it { is_expected.to include(*hyrax_fields) }
   end
 
-  describe '.singular_fields' do
-    subject { described_class.singular_fields }
-
-    let(:fields) { %i[title abstract description slug] }
-
-    it { is_expected.to contain_exactly(*(fields + hyrax_fields)) }
-  end
-
   describe '.multiple?' do
+    let(:singular_fields) { [:title, :abstract, :description] }
+
     it 'marks singular fields as false' do
-      expect(described_class.singular_fields.all? { |f| !described_class.multiple?(f) }).to be true
+      expect(singular_fields.all? { |f| !described_class.multiple?(f) }).to be true
     end
   end
 
@@ -66,30 +60,36 @@ RSpec.describe Spot::Forms::CollectionForm do
 
     let(:raw_params) { ActionController::Parameters.new(params) }
 
-    describe 'pluralizes singular fields' do
+    describe 'pluralizes + literalizes language-tagged fields' do
       subject { attributes[field] }
-
-      let(:params) { { field => value } }
 
       context 'title' do
         let(:field) { :title }
-        let(:value) { 'a cool title' }
+        let(:params) do
+          { 'title_value' => 'A Collection', 'title_language' => 'en' }
+        end
 
-        it { is_expected.to eq [value] }
+        it { is_expected.to eq [RDF::Literal('A Collection', language: :en)] }
       end
 
       context 'abstract' do
         let(:field) { :abstract }
-        let(:value) { 'a short description of the collection' }
+        let(:params) do
+          { 'abstract_value' => 'A shorter description of a collection',
+            'abstract_language' => 'en' }
+        end
 
-        it { is_expected.to eq [value] }
+        it { is_expected.to eq [RDF::Literal('A shorter description of a collection', language: :en)] }
       end
 
       context 'description' do
         let(:field) { :description }
-        let(:value) { 'a longer description of the collection with more information' }
+        let(:params) do
+          { 'description_value' => 'A lengthier explanation of a collection',
+            'description_language' => 'en' }
+        end
 
-        it { is_expected.to eq [value] }
+        it { is_expected.to eq [RDF::Literal('A lengthier explanation of a collection', language: :en)] }
       end
     end
   end
@@ -124,16 +124,6 @@ RSpec.describe Spot::Forms::CollectionForm do
     it { is_expected.not_to include 'slug:a-cool-collection' }
   end
 
-  describe 'singular form fields' do
-    described_class.singular_fields.each do |field|
-      context field.to_s do
-        subject { form.send(field) }
-
-        it { is_expected.not_to be_an Array }
-      end
-    end
-  end
-
   describe '#primary_terms' do
     subject { form.primary_terms }
 
@@ -146,6 +136,24 @@ RSpec.describe Spot::Forms::CollectionForm do
     subject { form.secondary_terms }
 
     it { is_expected.to be_empty }
+  end
+
+  describe '#slug' do
+    subject { form.slug }
+
+    let(:collection) { Collection.new(metadata) }
+
+    context 'when no slug: identifier exists' do
+      let(:metadata) { {} }
+
+      it { is_expected.to be nil }
+    end
+
+    context 'when a slug: identifier exists' do
+      let(:metadata) { { identifier: ['slug:cool-collection'] } }
+
+      it { is_expected.to eq 'cool-collection' }
+    end
   end
 
   describe '.primary_terms form hints' do
