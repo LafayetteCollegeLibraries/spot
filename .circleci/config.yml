@@ -17,7 +17,9 @@ jobs:
           key: spot-gems-{{ checksum "Gemfile.lock" }}
       - run:
           name: Use Bundler version specified in Gemfile.lock
-          command: gem uninstall bundler -aIx && gem install bundler -v`(tail -n1 Gemfile.lock | xargs)`
+          command: |
+            rvm @global do gem uninstall bundler -ax
+            gem install bundler -v`(tail -n1 Gemfile.lock | xargs)`
       - run:
           name: Install dependencies
           command: bundle check || bundle install
