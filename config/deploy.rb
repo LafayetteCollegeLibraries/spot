@@ -29,7 +29,7 @@ set :sidekiq_config, release_path.join('config', 'sidekiq.yml')
 set :sidekiq_env, fetch(:rails_env)
 set :sidekiq_processes, 1
 set :sidekiq_concurrency, 4
-set :sidekiq_role, :jobs
+set :sidekiq_roles, [:jobs]
 
 # remapping commands
 SSHKit.config.command_map[:rails] = 'bundle exec rails'
