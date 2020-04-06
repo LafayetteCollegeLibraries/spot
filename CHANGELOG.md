@@ -1,5 +1,28 @@
 # changelog
 
+## [2020.5] - 2020-04-06
+
+### features 🏔
+- specify ruby version in `.ruby-version` file (#457)
+- use vm version bundler as canon (rather than more-up-to-date one on system/circleci) (#457)
+
+### bug fixes 🐞
+- `Spot::Derivatives::AccessMasterService` uses the first layer of the object to generate access copies (using the entirety of large TIFFs was causing our local ImageMagick to hang) (#442)
+- fixes `Spot::Forms::CollectionForm` which broke after the work form changes of #407 (#445, #446)
+- updates image batch 1 + 2 mappers to include islandora_urls as identifiers (#451)
+- force http scheme for islandora `uri:` identifiers (via mapper) (#453)
+- ensure `/redirect?url=` values are transformed to http (uses the same technique as #453) (#456)
+
+### dependency updates 👩‍👩‍👧‍👧
+- almond-rails to 0.3.0 (#438)
+- byebug to 11.1.1 (#436)
+- capistrano-sidekiq to 1.0.3 (#454)
+- capybara-screenshot to 1.0.24 (#455)
+- darlingtonia to 3.2.2 (#437)
+- honeybadger to 4.5.6 (#439)
+- okcomputer to 1.18.1 (#435)
+
+
 ## [2020.4] - 2020-03-10
 
 ### features 🔬
@@ -327,6 +350,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.5
 [2020.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.4
 [2020.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.3
 [2020.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.2
