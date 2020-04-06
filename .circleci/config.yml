@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Use Bundler version specified in Gemfile.lock
           command: |
-            rvm @global do gem uninstall bundler -ax
+            gem uninstall bundler -aIx
             gem install bundler -v`(tail -n1 Gemfile.lock | xargs)`
       - run:
           name: Install dependencies
