@@ -38,6 +38,10 @@ module Spot
                           as_user: true)
       end
 
+      def fixity_host
+        ENV.fetch('URL_HOST', "`#{`hostname`.chomp}`")
+      end
+
       # rubocop:disable Metrics/MethodLength
       #
       # The expected API format to create a 'block', rather than
@@ -51,7 +55,7 @@ module Spot
             text: {
               type: 'mrkdwn',
               text: "Performed #{@item_count} fixity #{'check'.pluralize(@item_count)} " \
-                    "in #{@job_time} seconds on `#{`hostname`.chomp}`"
+                    "in #{@job_time} seconds on #{fixity_host}"
             },
             fields: [
               { type: 'mrkdwn',     text: ':white_check_mark: *Successes*' },
