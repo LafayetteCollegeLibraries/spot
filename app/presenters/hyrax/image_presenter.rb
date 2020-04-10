@@ -13,8 +13,8 @@ module Hyrax
     def manifest_metadata_fields
       %i[
         title subtitle title_alternative creator contributor date
-        description inscription keyword language_label subject subject_ocm
-        standard_identifier rights_statement
+        description inscription keyword language_label location_label
+        subject_label subject_ocm standard_identifier rights_statement
       ]
     end
 
