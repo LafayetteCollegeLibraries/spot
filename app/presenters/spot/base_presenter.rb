@@ -104,7 +104,7 @@ module Spot
         # tuple. for now, we'll only use the label of the value,
         # but this is where we would map to a Hash of URI and label
         # in the future
-        wrapped_values = Array.wrap(values).map { |v| v.is_a?(Array) ? v.last : v }
+        wrapped_values = Array.wrap(raw_values).map { |v| v.is_a?(Array) ? v.last : v }
 
         { 'label' => I18n.t("blacklight.search.fields.#{field}", field.to_s.humanize.titleize),
           'value' => wrapped_values }
