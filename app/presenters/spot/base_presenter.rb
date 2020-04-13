@@ -43,18 +43,10 @@ module Spot
       return super unless respond_to?(:manifest_metadata_fields)
 
       manifest_metadata_fields.inject([]) do |metadata, field|
-        values = send(field.to_sym)
-        next metadata if values.blank?
+        values = iiif_metadata_for(field)
+        next metadata if values.nil?
 
-        # our presenter logic for controlled fields is to return an array
-        # for each value in the form of: [uri, label]. while mapping through
-        # the values for each field, if we get to a value that is an array,
-        # we'll assume it's controlled and provide a Hash with '@id' pointing
-        # to the uri. otherwise, retain the value as-is.
-        metadata << {
-          'label' => I18n.t("blacklight.search.fields.#{field}", field.to_s.humanize.titleize),
-          'value' => Array.wrap(values).map { |v| v.is_a?(Array) ? { '@id' => v.first } : v }
-        }
+        metadata << values
       end
     end
 
@@ -95,5 +87,27 @@ module Spot
     def work_featurable?
       false
     end
+
+    private
+
+      # Maps a field + its values to a Hash of 'label' and 'value',
+      # where 'label' is our translated field name and 'value' is
+      # an Array of values.
+      #
+      # @return [Hash<String => String,Array<String>>
+      # @todo for LD fields, can we include both the URI and the label?
+      def iiif_metadata_for(field)
+        raw_values = send(field.to_sym)
+        return if raw_values.blank?
+
+        # our controlled fields are typically zipped a [uri, label]
+        # tuple. for now, we'll only use the label of the value,
+        # but this is where we would map to a Hash of URI and label
+        # in the future
+        wrapped_values = Array.wrap(raw_values).map { |v| v.is_a?(Array) ? v.last : v }
+
+        { 'label' => I18n.t("blacklight.search.fields.#{field}", field.to_s.humanize.titleize),
+          'value' => wrapped_values }
+      end
   end
 end
