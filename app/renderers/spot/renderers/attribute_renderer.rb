@@ -2,6 +2,24 @@
 #
 # Rewriting Hyrax::Renderers::AttributeRenderer to better suit
 # how we're displaying metadata.
+#
+# @example
+#   renderer = Spot::Renderers::AttributeRenderer.new(:title, ['Title of Work'])
+#   renderer.render
+#   #=> "<tr><th rowspan=\"1\">Title</th><td>Title of Work</td></tr>"
+#
+# @exampe Using {Spot::Presenters::BasePresenter} (intended use)
+#   work = Publication.find('abc123def')
+#   ability = Ability.new(nil)
+#   presenter = Spot::Presenters::PublicationPresenter(SolrDocument.new(work.to_solr), ability, nil)
+#   presenter.attribute_to_html(:title)
+#   #=> "<tr><th rowspan=\"1\">Title</th><td>Title of Work</td></tr>"
+#
+# @example Render with a Bootstrap Tooltip displaying help text
+#   presenter.attribute_to_html(:title, show_help_text: true)
+#   #=> "<tr><th rowspan=\"1\">Title <span ...>Name of the work</span></th><td>Title of Work</td></tr>"
+#
+# @note: if rendering a help tooltip, _be sure to use single quotes for HTML elements_
 module Spot
   module Renderers
     class AttributeRenderer
@@ -93,9 +111,10 @@ module Spot
           %(#{label_text}
             <span
               class="fa fa-question-circle-o"
+              data-html="true"
               data-toggle="popover"
-              data-content="#{help_text}"
               data-trigger="hover click"
+              data-content="#{help_text}"
             ></span>
           )
         end
