@@ -73,8 +73,8 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
             <span
               class="fa fa-question-circle-o"
               data-toggle="popover"
-              data-content="#{help_text}"
               data-trigger="hover click"
+              data-content="#{help_text}"
             ></span>
           </th>
           <td class="attribute attribute-title">
