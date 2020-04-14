@@ -25,6 +25,16 @@ class ApplicationController < ActionController::Base
     super.reject { |k, _v| k == :locale }
   end
 
+  # Borrowed from pul's figgy app. Restricts our guests to a single entry
+  # in the database, preventing hundreds of fake user accounts from being
+  # generated.
+  #
+  # @see https://github.com/pulibrary/figgy/blob/801141d/app/controllers/application_controller.rb#L31-L35
+  # @return [User]
+  def guest_user
+    @guest_user ||= User.where(guest: true).first || super
+  end
+
   private
 
     # Modified from its source in +Hyrax::Controller+ in that we're
