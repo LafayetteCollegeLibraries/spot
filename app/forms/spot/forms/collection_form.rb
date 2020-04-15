@@ -23,6 +23,7 @@ module Spot
       include ::LanguageTaggedFormFields
       include ::NestedFormFields
       include ::SingularFormFields
+      include ::StripsWhitespace
 
       transforms_language_tags_for :title, :abstract, :description
       transforms_nested_fields_for :language

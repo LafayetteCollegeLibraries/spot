@@ -7,6 +7,7 @@ RSpec.describe Spot::Forms::CollectionForm do
   let(:hyrax_fields) { %i[visibility collection_type_gid] }
 
   it_behaves_like 'it handles identifier form fields'
+  it_behaves_like 'it strips whitespaces from values'
 
   shared_context 'required fields' do
     it 'contains required fields' do
