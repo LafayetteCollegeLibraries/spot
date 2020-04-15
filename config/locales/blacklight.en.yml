@@ -2,6 +2,7 @@ en:
   blacklight:
     search:
       facets:
+        research_assistance: Research Assistance
         subject_ocm: OCM Classification
         admin:
           title: Admin Facets
