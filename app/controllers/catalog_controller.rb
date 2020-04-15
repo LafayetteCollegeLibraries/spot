@@ -136,6 +136,9 @@ class CatalogController < ApplicationController
     config.add_facet_field 'subject_ocm_ssim',
                            label: :'blacklight.search.facets.subject_ocm',
                            if: false
+    config.add_facet_field 'research_assistance_ssim',
+                           label: :'blacklight.search.facets.research_assistance',
+                           if: false
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
