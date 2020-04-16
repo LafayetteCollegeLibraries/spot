@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
     # Also adds a check to ignore download paths (iframe requests made by an item
     # viewer will take precedence over the user's last visited path).
     def storable_location?
-      return false if request.path.start_with? '/downloads'
+      return false if request.path.start_with? '/downloads' || request.path.end_with? '/manifest'
       request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
     end
 
