@@ -40,8 +40,8 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
 
     let(:expected_commands) do
       [
-        '/path/to/file.jpg[0]',
-        '-define', 'tiff:tile-geometry=128x128',
+        '/path/to/file.jpg',
+        '-flatten', '-define', 'tiff:tile-geometry=128x128',
         '-compress', 'jpeg',
         'ptif:/path/to/a/fs-access.tif'
       ]

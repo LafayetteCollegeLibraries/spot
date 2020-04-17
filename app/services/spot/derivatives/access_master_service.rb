@@ -21,10 +21,10 @@ module Spot
       # @return [void]
       def create_derivatives(filename)
         MiniMagick::Tool::Convert.new do |magick|
-          magick << "#{filename}[0]"
+          magick << "#{filename}"
           # note: we need to use an array for each piece of this command;
           # using a string will cause an error
-          magick.merge! %w[-define tiff:tile-geometry=128x128 -compress jpeg]
+          magick.merge! %w[-flatten -define tiff:tile-geometry=128x128 -compress jpeg]
           magick << "ptif:#{derivative_path}"
         end
       end
