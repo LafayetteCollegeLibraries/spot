@@ -6,7 +6,7 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="icon" href="favicon.ico">
-        <link rel="stylesheet" type="text/css" href="uv/universalviewer/uv/uv.css">
+        <link rel="stylesheet" type="text/css" href="/uv/uv.css">
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script type="text/javascript" src="/uv/lib/offline.js"></script>
         <script type="text/javascript" src="/uv/helpers.js"></script>
@@ -41,7 +41,7 @@
                 }
 
                 uv = createUV('#uv', {
-                    root: '/uv',
+                    root: '.',
                     iiifResourceUri: urlDataProvider.get('manifest'),
                     configUri: urlDataProvider.get('config'),
                     collectionIndex: Number(urlDataProvider.get('c', 0)),
