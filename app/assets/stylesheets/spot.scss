@@ -80,3 +80,9 @@
 select[multiple] {
   min-height: 15rem;
 }
+
+// styling the iiif viewer iframe to fill the space
+.viewer-wrapper iframe {
+  height: 100%;
+  width: 100%;
+}
