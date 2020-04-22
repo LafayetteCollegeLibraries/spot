@@ -1,5 +1,11 @@
 {
   "name": "spot",
   "private": true,
-  "dependencies": {}
+  "scripts": {
+    "install-uv": "yarn install --modules-folder ./public/uv"
+  },
+  "dependencies": {
+    "universalviewer": "^3.0.16"
+  },
+  "version": "0.0.0"
 }
