@@ -1,0 +1,8 @@
+<%# note: this can be removed after we upgrade to hyrax@3 (part of hyrax core) %>
+<div class="viewer-wrapper">
+  <iframe
+    src="<%= universal_viewer_base_url %>#?manifest=<%= main_app.polymorphic_url [main_app, :manifest, presenter], { locale: nil } %>&config=<%= universal_viewer_config_url %>"
+    allowfullscreen="true"
+    frameborder="0"
+  ></iframe>
+</div>
