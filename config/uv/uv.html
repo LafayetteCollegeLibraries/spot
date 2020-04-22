@@ -8,8 +8,8 @@
         <link rel="icon" href="favicon.ico">
         <link rel="stylesheet" type="text/css" href="uv/universalviewer/uv/uv.css">
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-        <script type="text/javascript" src="uv/universalviewer/uv/lib/offline.js"></script>
-        <script type="text/javascript" src="uv/universalviewer/uv/helpers.js"></script>
+        <script type="text/javascript" src="/uv/lib/offline.js"></script>
+        <script type="text/javascript" src="/uv/helpers.js"></script>
         <style>
             body {
                 margin: 0;
@@ -18,7 +18,7 @@
             }
         </style>
         <script type="text/javascript">
-        window.addEventListener('uvLoaded', function(e) { 
+        window.addEventListener('uvLoaded', function(e) {
                 urlDataProvider = new UV.URLDataProvider(true);
                 var formattedLocales;
                 var locales = urlDataProvider.get('locales', '');
@@ -41,7 +41,7 @@
                 }
 
                 uv = createUV('#uv', {
-                    root: './uv/universalviewer/uv',
+                    root: '/uv',
                     iiifResourceUri: urlDataProvider.get('manifest'),
                     configUri: urlDataProvider.get('config'),
                     collectionIndex: Number(urlDataProvider.get('c', 0)),
@@ -56,7 +56,7 @@
                 }, urlDataProvider);
             }, false);
         </script>
-    </head>    
+    </head>
     <body>
 
         <div id="uv" class="uv"></div>
@@ -81,6 +81,6 @@
             });
 
         </script>
-        <script type="text/javascript" src="uv/universalviewer/uv/uv.js"></script>
+        <script type="text/javascript" src="/uv/uv.js"></script>
     </body>
 </html>
