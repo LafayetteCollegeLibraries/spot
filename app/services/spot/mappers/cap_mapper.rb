@@ -3,7 +3,7 @@ module Spot::Mappers
   class CapMapper < BaseMapper
     include LanguageTaggedTitles
 
-    self.primary_title_map = { 'english' => :en }
+    self.primary_title_map = { 'title' => :en }
     self.fields_map = {
       creator: 'creator.photographer',
       date: 'date.range',

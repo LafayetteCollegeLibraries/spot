@@ -3,7 +3,7 @@ module Spot::Mappers
   class MckelvyHouseMapper < BaseMapper
     include LanguageTaggedTitles
 
-    self.primary_title_map = { 'english' => :en }
+    self.primary_title_map = { 'title' => :en }
     self.fields_map = {
       creator: 'creator.maker',
       date: 'date.original.search',
