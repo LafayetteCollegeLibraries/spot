@@ -26,15 +26,5 @@ module Spot::Mappers
         :title_alternative
       ]
     end
-
-    # @return [Array<RDF::URI>]
-    def location
-      convert_uri_strings(merge_fields('coverage.location', 'coverage.location.country'))
-    end
-
-    # @return [Array<RDF::URI>]
-    def rights_statement
-      convert_uri_strings(metadata.fetch('rights.statement', []))
-    end
   end
 end

@@ -136,9 +136,16 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
     describe '#rights_statement' do
       subject { mapper.rights_statement }
 
-      let(:metadata) { { 'rights.statement' => ['http://rightsstatements.org/vocab/InC-EDU/1.0/'] } }
+      let(:uri) { 'http://rightsstatements.org/vocab/InC-EDU/1.0/' }
+      let(:metadata) { { 'rights.statement' => [uri] } }
 
-      it { is_expected.to eq [RDF::URI('http://rightsstatements.org/vocab/InC-EDU/1.0/')] }
+      it { is_expected.to eq [RDF::URI(uri)] }
+
+      context 'when the field used is rights.digital' do
+        let(:metadata) { { 'rights.digital' => [uri] } }
+
+        it { is_expected.to eq [RDF::URI(uri)] }
+      end
     end
   end
 
