@@ -70,12 +70,12 @@ module Spot::Mappers
     end
     alias representative_file representative_files
 
-    # Grabs and convert values in 'rights.statement' to RDF::URI objects
-    # (where applicable). Non-URIs are retained as strings.
+    # Grabs and convert values in 'rights.statement' and 'rights.digital'
+    # to RDF::URI objects (where applicable). Non-URIs are retained as strings.
     #
     # @return [Array<RDF::URI, String>]
     def rights_statement
-      convert_uri_strings(metadata.fetch('rights.statement', []))
+      convert_uri_strings(merge_fields('rights.statement', 'rights.digital').uniq)
     end
 
     # Grabs and convert values in 'subject' to RDF::URI objects
