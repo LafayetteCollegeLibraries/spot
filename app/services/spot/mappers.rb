@@ -10,12 +10,14 @@ module Spot
     def self.available_mappers
       {
         alsace: AlsaceImagesMapper,
+        cap: CapMapper,
         cpw_nofuko: CpwNofukoMapper,
         cpw_shashinkai: CpwShashinkaiMapper,
         gc_iroha: GcIrohaMapper,
         lewis: LewisPostcardsMapper,
         ldr: LdrDspaceMapper,
         magazine: MagazineMapper,
+        mckelvy: MckelvyHouseMapper,
         newspaper: NewspaperMapper,
         pa_koshitsu: PaKoshitsuMapper,
         pa_omitsu: PaOmitsuMapper,
