@@ -57,6 +57,13 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
 
         it { is_expected.to eq ['1930'] }
       end
+
+      context 'when lower + upper dates match' do
+        let(:date_lower) { ['1930'] }
+        let(:date_upper) { ['1930'] }
+
+        it { is_expected.to eq ['1930'] }
+      end
     end
   end
 
@@ -69,6 +76,14 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
       end
 
       it { is_expected.to eq ['1921-01/1932-02-11'] }
+
+      context 'when lower + upper dates match' do
+        let(:metadata) do
+          { 'date.image.lower' => ['1921-01'], 'date.image.upper' => ['1921-01'] }
+        end
+
+        it { is_expected.to eq ['1921-01'] }
+      end
     end
   end
 
