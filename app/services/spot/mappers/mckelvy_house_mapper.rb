@@ -16,6 +16,7 @@ module Spot::Mappers
     def fields
       super + [
         :description,
+        :identifier,
         :keyword,
         :rights_statement,
         :subject,
@@ -28,6 +29,11 @@ module Spot::Mappers
     # @return [Array<RDF::Literal>]
     def description
       field_to_tagged_literals('description', :en)
+    end
+
+    # @return [Array<String>]
+    def identifier
+      islandora_url_identifiers
     end
 
     # @return [Array<String>]

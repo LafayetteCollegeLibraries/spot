@@ -33,6 +33,16 @@ RSpec.describe Spot::Mappers::CapMapper do
     it { is_expected.to eq [RDF::Literal('A photograph of life on campus in 1964.', language: :en)] }
   end
 
+  describe '#identifier' do
+    subject { mapper.identifier }
+
+    let(:metadata) do
+      { 'islandora_url' => ['https://digital.lafayette.edu/path/to/the/item'] }
+    end
+
+    it { is_expected.to eq ['url:http://digital.lafayette.edu/path/to/the/item'] }
+  end
+
   describe '#keyword' do
     subject { mapper.keyword }
 
