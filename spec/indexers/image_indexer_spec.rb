@@ -11,7 +11,7 @@ RSpec.describe ImageIndexer do
     publisher: %w[tesim sim],
     repository_location: %w[ssim],
     source: %w[ssim],
-    resource_type: %w[ssim],
+    resource_type: %w[tesim sim],
     physical_medium: %w[tesim sim],
     original_item_extent: %w[tesim],
     description: %w[tesim],

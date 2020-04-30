@@ -2,6 +2,7 @@ en:
   blacklight:
     search:
       facets:
+        research_assistance: Research Assistance
         subject_ocm: OCM Classification
         admin:
           title: Admin Facets
@@ -41,6 +42,7 @@ en:
         physical_medium: Physical Medium
         proxy_depositor: Proxy Depositor
         publisher: Publisher
+        research_assistance: Research Assistance
         resource_type: Type
         rights_holder: Rights Holders
         rights_statement: Rights Statement

@@ -31,6 +31,9 @@
                                       search_field: :location_label_ssim) %>
       <%= presenter.attribute_to_html(:standard_identifier, render_as: :identifier) %>
       <%= presenter.attribute_to_html(:related_resource) %>
+      <%= presenter.attribute_to_html(:research_assistance,
+                                      render_as: :faceted,
+                                      search_field: :research_assistance_ssim) %>
       <%= presenter.attribute_to_html(:permalink) %>
 
       <%= render 'shared/metadata/rights_statement', presenter: presenter %>

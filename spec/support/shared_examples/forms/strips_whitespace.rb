@@ -2,10 +2,11 @@
 RSpec.shared_examples 'it strips whitespaces from values' do
   subject(:attributes) { described_class.model_attributes(params) }
 
+  let(:field) { :language }
   let(:params) { ActionController::Parameters.new(raw_params) }
-  let(:raw_params) { { creator: ['   An important scholar   ', '  '] } }
+  let(:raw_params) { { field => [' en   ', '  '] } }
 
   it do
-    expect(attributes[:creator]).to eq ['An important scholar']
+    expect(attributes[field]).to eq ['en']
   end
 end

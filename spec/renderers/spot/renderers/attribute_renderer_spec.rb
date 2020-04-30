@@ -72,9 +72,10 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
           <th rowspan="1">Title
             <span
               class="fa fa-question-circle-o"
+              data-html="true"
               data-toggle="popover"
-              data-content="#{help_text}"
               data-trigger="hover click"
+              data-content="#{help_text}"
             ></span>
           </th>
           <td class="attribute attribute-title">

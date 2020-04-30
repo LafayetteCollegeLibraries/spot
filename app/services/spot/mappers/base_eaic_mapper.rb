@@ -70,12 +70,12 @@ module Spot::Mappers
     end
     alias representative_file representative_files
 
-    # Grabs and convert values in 'rights.statement' to RDF::URI objects
-    # (where applicable). Non-URIs are retained as strings.
+    # Grabs and convert values in 'rights.statement' and 'rights.digital'
+    # to RDF::URI objects (where applicable). Non-URIs are retained as strings.
     #
     # @return [Array<RDF::URI, String>]
     def rights_statement
-      convert_uri_strings(metadata.fetch('rights.statement', []))
+      convert_uri_strings(merge_fields('rights.statement', 'rights.digital').uniq)
     end
 
     # Grabs and convert values in 'subject' to RDF::URI objects
@@ -119,7 +119,7 @@ module Spot::Mappers
 
         start_dates.zip(end_dates).map do |(start_date, end_date)|
           # EDTF date ranges are "#{start_date}/#{end_date}"
-          [start_date, end_date].reject(&:blank?).join('/')
+          [start_date, end_date].reject(&:blank?).uniq.join('/')
         end
       end
   end

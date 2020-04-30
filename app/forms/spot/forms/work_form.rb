@@ -7,6 +7,7 @@ module Spot
       include ::LanguageTaggedFormFields
       include ::NestedFormFields
       include ::SingularFormFields
+      include ::StripsWhitespace
 
       # These are Hyrax-specific fields that deal with embargoes,
       # parent/child relationships. These need to be present in
@@ -34,33 +35,6 @@ module Spot
       # @return [TrueClass, FalseClass]
       def multiple?(term)
         self.class.multiple?(term)
-      end
-
-      class << self
-        # Used to transform values from the form into those that
-        # get added to the object.
-        #
-        # @param [ActionController::Parameters, Hash] form_params
-        # @return [Hash<Symbol => Array<String>>]
-        def model_attributes(form_params)
-          super.tap do |params|
-            strip_whitespace(params)
-          end
-        end
-
-        private
-
-          # @param [ActiveController::Parameters, Hash<String => *>]
-          # @return [void]
-          def strip_whitespace(params)
-            terms.each do |key|
-              if params[key].is_a? Array
-                params[key] = params[key].map(&:strip).reject(&:blank?)
-              elsif params[key].is_a? String
-                params[key] = params[key].strip
-              end
-            end
-          end
       end
     end
   end

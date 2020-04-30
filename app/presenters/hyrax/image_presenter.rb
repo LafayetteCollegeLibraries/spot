@@ -7,14 +7,15 @@ module Hyrax
              :original_item_extent, :physical_medium, :publisher,
              :related_resource, :repository_location, :requested_by,
              :research_assistance, :resource_type, :rights_holder,
-             :rights_statement, :standard_identifier, :subtitle, :title_alternative,
+             :rights_statement, :standard_identifier, :subtitle,
+             :title_alternative,
              to: :solr_document
 
     def manifest_metadata_fields
       %i[
         title subtitle title_alternative creator contributor date
-        description inscription keyword language_label subject subject_ocm
-        standard_identifier rights_statement
+        description inscription keyword language_label location
+        subject subject_ocm standard_identifier rights_statement
       ]
     end
 

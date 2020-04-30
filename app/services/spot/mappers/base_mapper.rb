@@ -108,7 +108,7 @@ module Spot::Mappers
       # @param [Array<String>] *names field names to merge
       # @return [Array<String>]
       def merge_fields(*names)
-        names.map { |name| metadata[name] }.flatten.reject(&:blank?).compact
+        names.map { |name| metadata.fetch(name, nil) }.flatten.reject(&:blank?)
       end
   end
 end

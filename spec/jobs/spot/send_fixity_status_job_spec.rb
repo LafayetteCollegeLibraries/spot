@@ -25,6 +25,7 @@ RSpec.describe Spot::SendFixityStatusJob do
     before do
       stub_env('SLACK_API_TOKEN', 'abc123')
       stub_env('SLACK_FIXITY_CHANNEL', '#the-cool-zone')
+      stub_env('URL_HOST', 'https://ldr.lafayette.edu')
 
       perform_job!
     end
@@ -38,8 +39,7 @@ RSpec.describe Spot::SendFixityStatusJob do
                               type: 'section',
                               text: {
                                 type: 'mrkdwn',
-                                text: 'Performed 100 fixity checks in 25 seconds on ' \
-                    "`#{`hostname`.chomp}`"
+                                text: 'Performed 100 fixity checks in 25 seconds on https://ldr.lafayette.edu'
                               },
                               fields: [
                                 { type: 'mrkdwn', text: ':white_check_mark: *Successes*' },

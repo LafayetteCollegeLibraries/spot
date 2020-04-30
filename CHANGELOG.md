@@ -1,5 +1,24 @@
 # changelog
 
+## [2020.6] - 2020-04-30
+
+### updates ⛰
+- use `URL_HOST` environment variable for slack fixity notifications, falling back to `hostname` (#460)
+- add location to image iiif manifest (#463)
+- add `research_assistance` to image display view (#472)
+
+### bug fixes 🐞
+- use subject labels for image iiif manifests (#463)
+- eradicate collections during tests to prevent `Ldp::Gone` errors (#470)
+- restrict guest accounts to a single db entry (#469)
+- use single quotes when adding html to simple_form hints to allow links to render properly in tooltips (#471)
+- collection_form now strips whitespace from all strings (#474)
+- Image#resource_type now indexes as `_tesim` and `_sim`, similarly to Publication (#475)
+- logging in from an Image show page will no longer redirect back to the item's iiif manifest (#477)
+- date values with matching start/end values are mapped to the single value (rather than `1930/1930`) (#480)
+- w/ eaic collections, map rights_statement values from either `rights.digital` or `rights.statement` (#481)
+
+
 ## [2020.5] - 2020-04-06
 
 ### features 🏔
@@ -350,6 +369,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.6
 [2020.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.5
 [2020.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.4
 [2020.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.3

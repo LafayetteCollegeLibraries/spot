@@ -20,15 +20,15 @@ RSpec.describe Collection do
   it { is_expected.to have_editable_property(:sponsor).with_predicate(schema.sponsor) }
 
   describe '.find' do
+    subject { described_class.find(param) }
+
     before { collection.save }
-    after { collection.destroy }
+    after { collection.destroy(eradicate: true) }
 
     context 'when a slug' do
       let(:param) { 'cool-collection' }
 
       context 'when a collection with that slug exists' do
-        subject { described_class.find(param) }
-
         let(:params) { base_params.merge(identifier: ["slug:#{param}"]) }
 
         it { is_expected.to eq collection }
