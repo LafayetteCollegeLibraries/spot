@@ -32,7 +32,7 @@ RSpec.describe Spot::Mappers::PaTsubokuraMapper do
 
     context 'description.inscription.japanese' do
       let(:value) { 'postmark: 38-11-23' }
-      let(:metadata) { { 'description.inscription.japanese' => [value ] } }
+      let(:metadata) { { 'description.inscription.japanese' => [value] } }
 
       it { is_expected.to eq [RDF::Literal(value, language: nil)] }
     end
@@ -49,7 +49,7 @@ RSpec.describe Spot::Mappers::PaTsubokuraMapper do
     subject { mapper.related_resource }
 
     let(:metadata) do
-      { 'description.citation' => ['[ww0001]'], 'relation.seealso' => ['another resource']}
+      { 'description.citation' => ['[ww0001]'], 'relation.seealso' => ['another resource'] }
     end
 
     it { is_expected.to eq ['[ww0001]', 'another resource'] }
