@@ -43,10 +43,10 @@ RSpec.describe Spot::Mappers::CpwShashinkaiMapper do
     subject { mapper.keyword }
 
     let(:metadata) do
-     { 'keyword' => ['East Asia Image Collection'], 'relation.ispartof' => ['cpw-shashinkai'] }
+      { 'keyword' => ['East Asia Image Collection'], 'relation.ispartof' => ['cpw-shashinkai'] }
     end
 
-    it { is_expected.to eq [ 'East Asia Image Collection', 'cpw-shashinkai'] }
+    it { is_expected.to eq ['East Asia Image Collection', 'cpw-shashinkai'] }
   end
 
   describe '#original_item_extent' do
