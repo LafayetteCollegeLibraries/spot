@@ -21,6 +21,7 @@ module Spot
         newspaper: NewspaperMapper,
         pa_koshitsu: PaKoshitsuMapper,
         pa_omitsu: PaOmitsuMapper,
+        pa_tsubokura: PaTsubokuraMapper,
         pacwar: PacwarPostcardsMapper,
         rjw_stereo: RjwStereoMapper,
         shakespeare: ShakespeareBulletinMapper,
