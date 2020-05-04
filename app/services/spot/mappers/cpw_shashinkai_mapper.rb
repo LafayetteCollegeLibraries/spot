@@ -4,7 +4,6 @@ module Spot::Mappers
   class CpwShashinkaiMapper < BaseEaicMapper
     self.fields_map = {
       creator: 'creator.maker',
-      keyword: 'relation.ispartof',
       original_item_extent: 'format.extant',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
@@ -14,6 +13,7 @@ module Spot::Mappers
 
     def fields
       super + [
+        :keyword,
         :inscription,
         :related_resource,
 
@@ -26,6 +26,10 @@ module Spot::Mappers
         :title,
         :title_alternative
       ]
+    end
+
+    def keyword
+      merge_fields('keyword', 'relation.ispartof')
     end
 
     def inscription

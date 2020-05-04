@@ -47,8 +47,7 @@ RSpec.describe Spot::Mappers::MckelvyHouseMapper do
     subject { mapper.keyword }
 
     let(:metadata) do
-      { 'keyword' => ['Campus life'],
-        'relation.ispartof' => ['McKelvy House Photographs'] }
+      { 'keyword' => ['Campus life'], 'relation.ispartof' => ['McKelvy House Photographs'] }
     end
 
     it { is_expected.to eq ['Campus life', 'McKelvy House Photographs'] }

@@ -42,9 +42,11 @@ RSpec.describe Spot::Mappers::CpwNofukoMapper do
   describe '#keyword' do
     subject { mapper.keyword }
 
-    let(:field) { 'relation.ispartof' }
+    let(:metadata) do
+      { 'keyword' => ['East Asia Image Collection'], 'relation.ispartof' => ['cpw-nofuko'] }
+    end
 
-    it_behaves_like 'a mapped field'
+    it { is_expected.to eq ['East Asia Image Collection', 'cpw-nofuko'] }
   end
 
   describe '#original_item_extent' do

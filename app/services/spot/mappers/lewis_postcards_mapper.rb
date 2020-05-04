@@ -4,7 +4,6 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'creator.maker',
       date_scope_note: 'description.indicia',
-      keyword: 'relation.ispartof',
       original_item_extent: 'format.extant',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
@@ -15,6 +14,7 @@ module Spot::Mappers
     def fields
       super + [
         :inscription,
+        :keyword,
         :related_resource,
 
         # inherited methods
@@ -36,6 +36,10 @@ module Spot::Mappers
         ['description.text.english', :en],
         ['description.text.japanese', :ja]
       ].inject([]) { |pool, (field, lang)| pool + field_to_tagged_literals(field, lang) }
+    end
+
+    def keyword
+      merge_fields('keyword', 'relation.ispartof')
     end
 
     def related_resource
