@@ -6,6 +6,8 @@
 ---
 :verbose: false
 :timeout: 30
+:concurrency: 10
+:logfile: <%= Rails.root.join('log', 'sidekiq.log') %>
 :queues:
   - default
   - ingest
