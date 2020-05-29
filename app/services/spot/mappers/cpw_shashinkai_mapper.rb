@@ -46,7 +46,7 @@ module Spot::Mappers
     # @return [Array<RDF::Literal>]
     def title
       metadata['title.english']
-        .select { |v| has_identifier_prefix?(v) }
+        .select { |v| identifier_prefix?(v) }
         .map { |v| RDF::Literal(v, language: :en) }
     end
 
@@ -55,9 +55,7 @@ module Spot::Mappers
     #
     # @return [Array<RDF::Literal>]
     def title_alternative
-      super + metadata['title.english']
-                .reject { |v| has_identifier_prefix?(v) }
-                .map { |v| RDF::Literal(v, language: :en) }
+      super + metadata['title.english'].reject { |v| identifier_prefix?(v) }.map { |v| RDF::Literal(v, language: :en) }
     end
 
     private
@@ -65,8 +63,8 @@ module Spot::Mappers
       # Does a value look like "[aa0001] title" ?
       #
       # @return bool
-      def has_identifier_prefix?(value)
-        value.match?(/^\[[^\]]+\])
+      def identifier_prefix?(value)
+        value.match?(/^\[[^\]]+\]/)
       end
   end
 end
