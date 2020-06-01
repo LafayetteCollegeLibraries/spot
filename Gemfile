@@ -73,7 +73,7 @@ gem 'honeybadger', '4.5.6'
 gem 'hydra-role-management', '1.0.2'
 
 # an authorative source for our two-character language codes
-gem 'iso-639', '0.2.8'
+gem 'iso-639', '0.3.5'
 
 # install jquery with rails (no longer the default)
 gem 'jquery-rails', '4.3.5'
