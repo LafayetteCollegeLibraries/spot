@@ -89,7 +89,7 @@ gem 'pg', '1.2.2'
 gem 'rdf-vocab', '3.1.2'
 
 # a iiif server for ruby from curationexperts
-gem 'riiif', '2.1.0'
+gem 'riiif', '2.3.0'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '2.3.0'
