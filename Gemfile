@@ -106,7 +106,7 @@ gem 'slack-ruby-client', '0.14.4'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
-gem 'kaminari', '1.1.1'
+gem 'kaminari', '1.2.1'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
