@@ -64,7 +64,7 @@ module Spot::Mappers
       #
       # @return bool
       def identifier_prefix?(value)
-        value.match?(/^\[[^\]]+\]/)
+        value.match?(/^\[\w{2}\d{4}\]/)
       end
   end
 end
