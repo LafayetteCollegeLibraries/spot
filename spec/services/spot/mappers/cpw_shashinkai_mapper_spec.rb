@@ -5,7 +5,7 @@ RSpec.describe Spot::Mappers::CpwShashinkaiMapper do
 
   before { mapper.metadata = metadata }
 
-  it_behaves_like 'a base EAIC mapper'
+  it_behaves_like 'a base EAIC mapper', skip_fields: [:title, :title_alternative]
 
   describe '#creator' do
     subject { mapper.creator }
@@ -93,5 +93,51 @@ RSpec.describe Spot::Mappers::CpwShashinkaiMapper do
     let(:field) { 'subject.ocm' }
 
     it_behaves_like 'a mapped field'
+  end
+
+  describe '#title' do
+    subject { mapper.title }
+
+    let(:metadata) do
+      {
+        'title.english' => [
+          '[ts0001] The Monopoly Bureau at Taihoku (Outside of South Gate)',
+          'The Taiwan Government General (Inside of the Walled City, West Gate District)'
+        ]
+      }
+    end
+
+    let(:expected_result) do
+      [RDF::Literal('[ts0001] The Monopoly Bureau at Taihoku (Outside of South Gate)', language: :en)]
+    end
+
+    it { is_expected.to eq expected_result }
+  end
+
+  describe '#title_alternative' do
+    subject { mapper.title_alternative }
+
+    let(:metadata) do
+      {
+        'title.english' => [
+          '[ts0001] The Monopoly Bureau at Taihoku (Outside of South Gate)',
+          'The Taiwan Government General (Inside of the Walled City, West Gate District)'
+        ],
+        'title.japanese' => [
+          '台湾総督府（台北城内西門街）',
+          '台湾総督府専売局（台北南門外)'
+        ]
+      }
+    end
+
+    let(:expected_result) do
+      [
+        RDF::Literal('台湾総督府（台北城内西門街）', language: :ja),
+        RDF::Literal('台湾総督府専売局（台北南門外)', language: :ja),
+        RDF::Literal('The Taiwan Government General (Inside of the Walled City, West Gate District)', language: :en)
+      ]
+    end
+
+    it { is_expected.to eq expected_result }
   end
 end

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
-RSpec.shared_examples 'it has language-tagged titles' do
+RSpec.shared_examples 'it has language-tagged titles' do |options|
+  options ||= {}
+  skip_fields = options.fetch(:skip_fields, [])
+
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
@@ -7,7 +10,7 @@ RSpec.shared_examples 'it has language-tagged titles' do
     mapper.metadata = metadata
   end
 
-  if described_class.new.fields.include? :title
+  if described_class.new.fields.include?(:title) && !skip_fields.include?(:title)
     describe '#title' do
       subject { mapper.title }
 
@@ -18,7 +21,7 @@ RSpec.shared_examples 'it has language-tagged titles' do
     end
   end
 
-  if described_class.new.fields.include? :title_alternative
+  if described_class.new.fields.include?(:title_alternative) && !skip_fields.include?(:title_alternative)
     describe '#title_alternative' do
       subject { mapper.title_alternative }
 

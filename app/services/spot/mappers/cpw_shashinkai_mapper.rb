@@ -40,5 +40,31 @@ module Spot::Mappers
     def related_resource
       merge_fields('description.citation', 'relation.seealso')
     end
+
+    # only selects titles that begin with our identifer prefix
+    #
+    # @return [Array<RDF::Literal>]
+    def title
+      metadata['title.english']
+        .select { |v| identifier_prefix?(v) }
+        .map { |v| RDF::Literal(v, language: :en) }
+    end
+
+    # relies on LanguageTaggedTitles to gather up our usual title_alternative suspects
+    # and then adds 'title.english' values that _don't_ include our identifier prefix
+    #
+    # @return [Array<RDF::Literal>]
+    def title_alternative
+      super + metadata['title.english'].reject { |v| identifier_prefix?(v) }.map { |v| RDF::Literal(v, language: :en) }
+    end
+
+    private
+
+      # Does a value look like "[aa0001] title" ?
+      #
+      # @return bool
+      def identifier_prefix?(value)
+        value.match?(/^\[\w{2}\d{4}\]/)
+      end
   end
 end
