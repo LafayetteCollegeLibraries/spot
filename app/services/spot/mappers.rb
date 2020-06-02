@@ -17,6 +17,7 @@ module Spot
         lewis: LewisPostcardsMapper,
         ldr: LdrDspaceMapper,
         magazine: MagazineMapper,
+        mammana: MammanaPostcardsMapper,
         mckelvy: MckelvyHouseMapper,
         newspaper: NewspaperMapper,
         pa_koshitsu: PaKoshitsuMapper,
