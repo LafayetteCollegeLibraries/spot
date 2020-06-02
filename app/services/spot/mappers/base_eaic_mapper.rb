@@ -37,15 +37,6 @@ module Spot::Mappers
       field_to_tagged_literals('description.critical', :en)
     end
 
-    # Extracts an EAIC style ID from a title field (default is "title.english")
-    #
-    # @example
-    #   metadata['title.english']
-    #   # => ["[ww0032] [Ami pottery-making]"]
-    #
-    #   identifier
-    #   # => ['eaic:ww0032']
-    #
     def identifier
       eaic_ids_from_title + islandora_url_identifiers
     end
@@ -93,7 +84,18 @@ module Spot::Mappers
         edtf_ranges_for('date.image.lower', 'date.image.upper')
       end
 
-      # @param [String] field
+      # Extracts an EAIC style ID from a title field (default is "title.english")
+      #
+      # @example
+      #   metadata['title.english']
+      #   # => ["[ww0032] [Ami pottery-making]"]
+      #
+      #   eaic_ids_from_title
+      #   # => ['eaic:ww0032']
+      #
+      # @param [Hash] opts
+      # @option [String] field   metadata field to source from
+      # @option [String] prefix  identifier prefix to use
       # @return [Array<String>]
       def eaic_ids_from_title(field: 'title.english', prefix: 'eaic')
         values = metadata.fetch(field, [])

@@ -5,8 +5,10 @@ module Spot::Mappers
       creator: 'creator',
       date: 'date.original',
       inscription: 'description.note',
+      keyword: ['keyword', 'description.series', 'relation.IsPartOf'],
       language: 'language',
       original_item_extent: 'format.extent',
+      physical_medium: ['description.condition', 'format.medium'],
       publisher: 'publisher.original',
       repository_location: 'source',
       resource_type: 'resource.type'
@@ -33,16 +35,6 @@ module Spot::Mappers
     def identifier
       islandora_url_identifiers +
         metadata.fetch('identifier.itemnumber', []).map { |id| Spot::Identifier.new('mdl', id).to_s }
-    end
-
-    # @return [Array<String>]
-    def keyword
-      merge_fields('keyword', 'description.series', 'relation.IsPartOf')
-    end
-
-    # @return [Array<String>]
-    def physical_medium
-      merge_fields('description.condition', 'format.medium')
     end
 
     # @return [Array<RDF::URI>]

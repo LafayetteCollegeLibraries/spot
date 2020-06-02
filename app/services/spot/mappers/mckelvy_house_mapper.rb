@@ -7,6 +7,7 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'creator.maker',
       date: 'date.original.search',
+      keyword: ['keyword', 'relation.ispartof'],
       original_item_extent: 'description.size',
       physical_medium: 'format.medium',
       repository_location: 'source',
@@ -34,11 +35,6 @@ module Spot::Mappers
     # @return [Array<String>]
     def identifier
       islandora_url_identifiers
-    end
-
-    # @return [Array<String>]
-    def keyword
-      merge_fields('keyword', 'relation.ispartof')
     end
 
     # Grabs and convert values in 'rights.statement' to RDF::URI objects

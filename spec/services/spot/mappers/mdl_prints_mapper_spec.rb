@@ -56,15 +56,9 @@ RSpec.describe Spot::Mappers::MdlPrintsMapper do
   describe '#keyword' do
     subject { mapper.keyword }
 
-    let(:metadata) do
-      {
-        'keyword' => ['Marquis de Lafayette'],
-        'description.series' => ['Portraits: Before 1789'],
-        'relation.IsPartOf' => ['Marquis de Lafayette Prints Collection']
-      }
-    end
+    let(:fields) { ['keyword', 'description.series', 'relation.IsPartOf'] }
 
-    it { is_expected.to eq ['Marquis de Lafayette', 'Portraits: Before 1789', 'Marquis de Lafayette Prints Collection'] }
+    it_behaves_like 'a mapped field'
   end
 
   describe '#language' do
@@ -86,12 +80,9 @@ RSpec.describe Spot::Mappers::MdlPrintsMapper do
   describe '#physical_medium' do
     subject { mapper.physical_medium }
 
-    let(:metadata) do
-      { 'description.condition' => ['tear on edge of painting'],
-        'format.medium' => ['painting'] }
-    end
+    let(:fields) { ['description.condition', 'format.medium'] }
 
-    it { is_expected.to eq ['tear on edge of painting', 'painting'] }
+    it_behaves_like 'a mapped field'
   end
 
   describe '#publisher' do

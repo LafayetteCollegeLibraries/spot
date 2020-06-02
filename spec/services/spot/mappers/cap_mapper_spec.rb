@@ -46,11 +46,9 @@ RSpec.describe Spot::Mappers::CapMapper do
   describe '#keyword' do
     subject { mapper.keyword }
 
-    let(:metadata) do
-      { 'keyword' => ['Academic Life'], 'relation.ispartof' => ['Historical Photograph Collection'] }
-    end
+    let(:fields) { ['keyword', 'relation.ispartof'] }
 
-    it { is_expected.to eq ['Academic Life', 'Historical Photograph Collection'] }
+    it_behaves_like 'a mapped field'
   end
 
   describe '#original_item_extent' do
