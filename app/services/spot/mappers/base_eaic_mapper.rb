@@ -95,7 +95,7 @@ module Spot::Mappers
 
       # @param [String] field
       # @return [Array<String>]
-      def eaic_ids_from_title(field = 'title.english')
+      def eaic_ids_from_title(field: 'title.english', prefix: 'eaic')
         values = metadata.fetch(field, [])
         return [] if values.empty?
 
@@ -103,7 +103,7 @@ module Spot::Mappers
           match_data = value.match(/^\[(\w+\d+)\]/)
           next if match_data.nil?
 
-          Spot::Identifier.new('eaic', match_data[1]).to_s
+          Spot::Identifier.new(prefix, match_data[1]).to_s
         end.reject(&:blank?)
       end
 

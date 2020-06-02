@@ -14,6 +14,7 @@ module Spot
         cpw_nofuko: CpwNofukoMapper,
         cpw_shashinkai: CpwShashinkaiMapper,
         gc_iroha: GcIrohaMapper,
+        geology: GeologySlidesEsiMapper,
         lewis: LewisPostcardsMapper,
         ldr: LdrDspaceMapper,
         magazine: MagazineMapper,
