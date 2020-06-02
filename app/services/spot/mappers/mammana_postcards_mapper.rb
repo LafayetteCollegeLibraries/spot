@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 module Spot::Mappers
-  class LewisPostcardsMapper < BaseEaicMapper
+  class MammanaPostcardsMapper < BaseEaicMapper
     self.fields_map = {
       creator: 'creator.maker',
       date_scope_note: 'description.indicia',
-      original_item_extent: 'format.extant',
+      donor: 'contributor.donor',
+      language: 'language',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
+      related_resource: ['description.citation', 'relation.seealso'],
       research_assistance: 'contributor',
       subject_ocm: 'subject.ocm'
     }
@@ -14,36 +16,26 @@ module Spot::Mappers
     def fields
       super + [
         :inscription,
-        :keyword,
-        :related_resource,
 
-        # inherited methods
+        :date,
         :date_associated,
         :description,
         :identifier,
         :location,
         :rights_statement,
-        :subject,
         :title,
         :title_alternative
       ]
     end
 
+    # @return [Array<RDF:Literal>]
     def inscription
       [
         ['description.inscription.english', :en],
         ['description.inscription.japanese', :ja],
         ['description.text.english', :en],
         ['description.text.japanese', :ja]
-      ].inject([]) { |pool, (field, lang)| pool + field_to_tagged_literals(field, lang) }
-    end
-
-    def keyword
-      merge_fields('keyword', 'relation.ispartof')
-    end
-
-    def related_resource
-      merge_fields('description.citation', 'relation.seealso')
+      ].map { |(key, language)| field_to_tagged_literals(key, language) }.flatten
     end
   end
 end

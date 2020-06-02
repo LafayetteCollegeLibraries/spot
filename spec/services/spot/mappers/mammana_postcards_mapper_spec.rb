@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::LewisPostcardsMapper do
+RSpec.describe Spot::Mappers::MammanaPostcardsMapper do
   let(:mapper) { described_class.new }
   let(:metadata) { {} }
 
@@ -19,6 +19,14 @@ RSpec.describe Spot::Mappers::LewisPostcardsMapper do
     subject { mapper.date_scope_note }
 
     let(:field) { 'description.indicia' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#donor' do
+    subject { mapper.donor }
+
+    let(:field) { 'contributor.donor' }
 
     it_behaves_like 'a mapped field'
   end
@@ -47,20 +55,10 @@ RSpec.describe Spot::Mappers::LewisPostcardsMapper do
     it { is_expected.to eq expected_values }
   end
 
-  describe '#keyword' do
-    subject { mapper.keyword }
+  describe '#language' do
+    subject { mapper.language }
 
-    let(:metadata) do
-      { 'keyword' => ['East Asia Image Collection'], 'relation.ispartof' => ['lewis-postcards'] }
-    end
-
-    it { is_expected.to eq ['East Asia Image Collection', 'lewis-postcards'] }
-  end
-
-  describe '#original_item_extent' do
-    subject { mapper.original_item_extent }
-
-    let(:field) { 'format.extant' }
+    let(:field) { 'language' }
 
     it_behaves_like 'a mapped field'
   end
@@ -84,14 +82,9 @@ RSpec.describe Spot::Mappers::LewisPostcardsMapper do
   describe '#related_resource' do
     subject { mapper.related_resource }
 
-    let(:metadata) do
-      {
-        'description.citation' => ['Found this in a book'],
-        'relation.seealso' => ['[ww0002]']
-      }
-    end
+    let(:fields) { ['description.citation', 'relation.seealso'] }
 
-    it { is_expected.to eq ['Found this in a book', '[ww0002]'] }
+    it_behaves_like 'a mapped field'
   end
 
   describe '#research_assistance' do

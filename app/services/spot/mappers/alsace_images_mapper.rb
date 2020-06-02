@@ -61,7 +61,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::URI, String>]
     def subject
-      convert_uri_strings(metadata['subject'])
+      convert_uri_strings(metadata.fetch('subject', []))
     end
 
     # Since we don't have English titles for these, we'll prioritize (in order):
