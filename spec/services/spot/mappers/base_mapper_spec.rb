@@ -27,13 +27,14 @@ RSpec.describe Spot::Mappers::BaseMapper do
   describe '#map_field' do
     before do
       @previous_fields_map = mapper.class.fields_map
-      mapper.class.fields_map = { title: 'dc:title' }
+      mapper.class.fields_map = fields_map
     end
 
     after do
       mapper.class.fields_map = @previous_fields_map
     end
 
+    let(:fields_map) { { title: 'dc:title' } }
     let(:title_value) { ['Good work'] }
     let(:md_title) { 'dc:title' }
     let(:metadata) do
@@ -46,6 +47,17 @@ RSpec.describe Spot::Mappers::BaseMapper do
 
     it 'returns nil if field is not mapped' do
       expect(mapper.map_field(:subject)).to be nil
+    end
+
+    context 'when an array' do
+      let(:fields_map) { { title: ['dc:title', 'another:title'] } }
+      let(:metadata) do
+        { 'dc:title' => ['Good work'], 'another:title' => ['Another title'] }
+      end
+
+      it 'gathers values for all fields + returns them' do
+        expect(mapper.map_field(:title)).to eq ['Good work', 'Another title']
+      end
     end
   end
 
