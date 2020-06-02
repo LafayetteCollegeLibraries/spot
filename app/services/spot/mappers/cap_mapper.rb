@@ -17,7 +17,6 @@ module Spot::Mappers
       super + [
         :description,
         :identifier,
-        :keyword,
         :rights_statement,
         :subject,
 
