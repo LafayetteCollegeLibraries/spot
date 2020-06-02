@@ -28,7 +28,7 @@ RSpec.shared_examples 'a mapped field' do
     # - ensure that these values are mapped back to the subject of the block
     let(:raw_values) { ['one value', 'a second value', 'a third'] }
     let(:metadata) do
-      Array.wrap(fields).each_with_index.inject({}) do |obj, (field, idx)|
+      Array.wrap(fields).each_with_index.each_with_object({}) do |(field, idx), obj|
         value_index = idx % raw_values.size
         obj[field] ||= []
         obj[field] += [raw_values[value_index]]
