@@ -21,14 +21,8 @@ set :rails_env, 'production'
 set :assets_roles, :app
 
 # capistrano-sidekiq
-#
-# note: it's probably best to specify concurrency per-environment.
-# the default we're using here is the minimum working amount that
-# worked on our single-server development instance.
-set :sidekiq_config, release_path.join('config', 'sidekiq.yml')
-set :sidekiq_env, fetch(:rails_env)
-set :sidekiq_processes, 1
-set :sidekiq_concurrency, 4
+set :init_system, -> { :upstart }
+set :upstart_service_name, 'sidekiq'
 set :sidekiq_roles, [:jobs]
 
 # remapping commands
