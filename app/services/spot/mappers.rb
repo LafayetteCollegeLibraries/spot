@@ -20,6 +20,7 @@ module Spot
         magazine: MagazineMapper,
         mammana: MammanaPostcardsMapper,
         mckelvy: MckelvyHouseMapper,
+        mdl_prints: MdlPrintsMapper,
         newspaper: NewspaperMapper,
         pa_koshitsu: PaKoshitsuMapper,
         pa_omitsu: PaOmitsuMapper,
