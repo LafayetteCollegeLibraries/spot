@@ -121,7 +121,7 @@ module Spot::Mappers
 
         start_dates.zip(end_dates).map do |(start_date, end_date)|
           # EDTF date ranges are "#{start_date}/#{end_date}"
-          [start_date, end_date].reject(&:blank?).uniq.join('/')
+          [start_date, end_date].reject(&:blank?).uniq.sort.join('/')
         end
       end
   end
