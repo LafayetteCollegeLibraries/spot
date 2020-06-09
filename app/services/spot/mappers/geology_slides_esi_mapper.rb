@@ -34,7 +34,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def description
-      field_to_tagged_literals('description', :en)
+      ['description', 'description.vantagepoint'].map { |f| field_to_tagged_literals(f, :en) }.flatten
     end
 
     # @return [Array<String>]
