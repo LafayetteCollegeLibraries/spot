@@ -19,9 +19,21 @@ RSpec.describe Spot::Mappers::GeologySlidesEsiMapper do
   describe '#description' do
     subject { mapper.description }
 
-    let(:metadata) { { 'description' => ['Cycles are a fundamental rhythm of nature'] } }
+    let(:metadata) do
+      {
+        'description' => ['Cycles are a fundamental rhythm of nature'],
+        'description.vantagepoint' => ['vantage point: air']
+      }
+    end
 
-    it { is_expected.to eq [RDF::Literal('Cycles are a fundamental rhythm of nature', language: :en)] }
+    let(:expected_results) do
+      [
+        RDF::Literal('Cycles are a fundamental rhythm of nature', language: :en),
+        RDF::Literal('vantage point: air', language: :en)
+      ]
+    end
+
+    it { is_expected.to eq expected_results }
   end
 
   describe '#identifier' do
