@@ -12,8 +12,14 @@ RSpec.shared_examples 'it indexes a sortable date' do
 
   it { is_expected.to eq '2020-06-08T00:00:00Z' }
 
-  context 'when an EDTF set' do
+  context 'when an EDTF list' do
     let(:date_values) { ['{1986,1991,2020}'] }
+
+    it { is_expected.to eq '1986-01-01T00:00:00Z' }
+  end
+
+  context 'when a choice EDTF list' do
+    let(:date_values) { ['[1986,1991]'] }
 
     it { is_expected.to eq '1986-01-01T00:00:00Z' }
   end
@@ -23,4 +29,5 @@ RSpec.shared_examples 'it indexes a sortable date' do
 
     it { is_expected.to eq '1986-02-01T00:00:00Z' }
   end
+
 end
