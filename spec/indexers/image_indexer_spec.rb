@@ -3,6 +3,7 @@ RSpec.describe ImageIndexer do
   include_context 'indexing'
 
   it_behaves_like 'a Spot indexer'
+  it_behaves_like 'it indexes a sortable date'
 
   {
     title: %w[tesim],
@@ -26,14 +27,6 @@ RSpec.describe ImageIndexer do
     let(:solr_fields) { suffixes.map { |suffix| "#{method}_#{suffix}" } }
 
     it_behaves_like 'simple model indexing'
-  end
-
-  describe 'sortable date' do
-    let(:work) { build(:image, date: ['2019-12?']) }
-
-    it 'parses a sortable date' do
-      expect(solr_doc['date_sort_dtsi']).to eq '2019-12-01T00:00:00Z'
-    end
   end
 
   describe 'years_encompassed' do

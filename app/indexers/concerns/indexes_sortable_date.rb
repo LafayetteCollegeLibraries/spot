@@ -39,7 +39,7 @@ module IndexesSortableDate
   # @return [Hash<String => *>]
   def generate_solr_document
     super.tap do |doc|
-      doc['date_sort_dtsi'] = parse_sortable_date || object.create_date
+      doc['date_sort_dtsi'] = parse_sortable_date
     end
   end
 
@@ -60,8 +60,10 @@ module IndexesSortableDate
 
       return Date.parse(object.create_date.to_s).strftime('%FT%TZ') if parsed.nil?
 
-      # if we've got an EDTF range we'll just use the earliest date
-      parsed = parsed.first if parsed.is_a? EDTF::Interval
+      # if we get an edtf range/set/etc, we want the earliest date.
+      # rather than checking if it's a +EDTF::Set+, +EDTF::Interval+, etc.
+      # we'll see if it's inherited from +Enumerable+ and call +#first+ if so
+      parsed = parsed.first if parsed.class < ::Enumerable
 
       parsed.strftime('%FT%TZ')
     end
