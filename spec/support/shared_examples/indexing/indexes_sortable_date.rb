@@ -29,5 +29,4 @@ RSpec.shared_examples 'it indexes a sortable date' do
 
     it { is_expected.to eq '1986-02-01T00:00:00Z' }
   end
-
 end
