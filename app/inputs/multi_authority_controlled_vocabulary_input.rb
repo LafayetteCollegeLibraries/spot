@@ -65,7 +65,7 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
 
     # @return [String]
     def authority_option_html(authorities)
-     select_service.select_options_for(*authorities).map do |auth|
+      select_service.select_options_for(*authorities).map do |auth|
         %(<option value="#{auth[:search]}">#{auth[:label]}</option>)
       end.join.html_safe
     end
