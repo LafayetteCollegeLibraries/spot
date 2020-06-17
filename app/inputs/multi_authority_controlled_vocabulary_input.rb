@@ -24,6 +24,19 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
       HTML
     end
 
+    # sets options if we're creating a new row (+value.node?+ is true). since
+    # we need to set the authority first, our input needs to be read-only.
+    #
+    # @param [String] _attribute_name
+    # @param [Number] _index
+    # @param [Hash] options
+    # @return [void]
+    def build_options_for_new_row(_attribute_name, _index, options)
+      super
+
+      options[:readonly] = true
+    end
+
     # Builds out the values for our object and inserts an empty option at the end
     #
     # @return [Array<ActiveTriples::Resource>]
@@ -61,7 +74,7 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
     # @return [String]
     def authority_dropdown(authorities)
       <<-HTML
-      <select class="form-control authority-select">
+      <select class="form-control authority-select" name="_authority-select-options">
         <option value="" selected>Select an Authority source</option>
         #{authority_option_html(authorities)}
       </select>

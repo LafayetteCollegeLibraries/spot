@@ -1,4 +1,5 @@
-import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary'
+import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary';
+import Autocomplete from 'hyrax/autocomplete';
 
 export default class MultiAuthControlledVocabulary extends ControlledVocabulary {
   constructor(element, paramKey) {
@@ -11,9 +12,12 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
     this.element.find('select.form-control').on('change', e => this.handleAuthoritySelect(e));
   }
 
+  // replaces the same method in ControlledVocabulary, but avoids using Handlebars
+  // to compile a template (see +_input_template_source+). builds out the field to
+  // look like what's produced with +MultiAuthorityControlledVocabularyInput#build_field+
   _newFieldTemplate() {
     let controls = this.controls.clone();
-    let placeholder = this.element.find('input.multi-text-field').last().attr('placeholder');
+    let placeholder = this.element.find('input.multi-text-field').attr('placeholder');
     let $selectElement = this.element.find('select.form-control').last().clone();
     $selectElement.on('change', e => this.handleAuthoritySelect(e));
 
@@ -24,6 +28,9 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
     return $('<li class="field-wrapper input-group input-append"></li>').append($listBody).append(controls);
   }
 
+  // we don't need Mustache to compile a template, especially when we're writing
+  // these methods/classes in es6. there are a few options you can pass to this,
+  // but only +placeholder+ isn't able to be pulled from various class methods/properties.
   _input_template_source(opts = {}) {
     let klass = opts.klass || 'controlled_vocabulary';
     let index = opts.index || this._maxIndex();
@@ -33,10 +40,12 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
 
     return `
       <input
-        class="string ${klass} optional form-control ${paramKey}_${name} form-control multi-text-field"
-        data-attribute="${name}"
+        class="string ${klass} optional form-control ${paramKey}_${name} multi-text-field"
+        data-autocomplete="${name}"
         id="${paramKey}_${name}_attributes_${index}_hidden_label"
         name="${paramKey}[${name}_attributes][${index}][hidden_label]"
+        placeholder="${placeholder}"
+        readonly="readonly"
         type="text"
         value="" />
       <input
@@ -53,16 +62,25 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
         value="" />`;
   }
 
+  // making this a no-op, as we're initializing the autocomplete _after_ the autority
+  // selection is made (if we were to try to do so when the new row is completed, we'd
+  // be missing the "data-autocomplete-url" property which is kind of important for autocompleting)
+  _addAutocompleteToEditor (input) {}
+
+  // event handler for when the select box changes. sets the "data-autocomplete-url"
+  // property of the nearby input + initializes the autocomplete for it. essentially
+  // the same functionality provided by the AuthoritySelect class but doesn't use
+  // mutation observers which completely locked up my browser when i tried implementing it.
   handleAuthoritySelect (event) {
     event.preventDefault();
 
-    let $target = $(event.target);
+    let $target = $(event.currentTarget);
     let $input = $target.parent().parent().find('input.form-control');
     let authorityPath = $target.val();
-
-    console.log('handleAuthoritySelect: %s', authorityPath);
+    let autocomplete = new Autocomplete();
 
     $input.data('autocompleteUrl', authorityPath);
+    $input.val(''); // zero-out an existing value
     $input.attr('readonly', false);
 
     autocomplete.setup($input, $input.data('autocomplete'), $input.data('autocompleteUrl'));
