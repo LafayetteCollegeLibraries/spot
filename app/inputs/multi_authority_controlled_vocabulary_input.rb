@@ -14,10 +14,9 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
 
       <<-HTML
       <div class="row">
-        <div class="col-sm-4">
-          #{authority_dropdown(authorities)}
-        </div>
-        <div class="col-sm-8">
+        #{authority_dropdown(authorities) if value.node? }
+
+        <div class="col-sm-#{value.node? ? '8' : '12'}">
           #{super}
         </div>
       </div>
@@ -31,9 +30,17 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
     # @param [Number] _index
     # @param [Hash] options
     # @return [void]
-    def build_options_for_new_row(_attribute_name, _index, options)
+    def build_options_for_new_row(attribute_name, _index, options)
       super
 
+      options[:readonly] = true
+      options[:data] ||= {}
+      options[:data][:autocomplete] = attribute_name
+    end
+
+    # updating the existing method to display both the rdf label + subject
+    def build_options_for_existing_row(_attribute_name, _index, value, options)
+      options[:value] = "#{value.rdf_label.first} (#{value.rdf_subject})" || "Unable to fetch label for #{value.rdf_subject}"
       options[:readonly] = true
     end
 
@@ -74,10 +81,12 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
     # @return [String]
     def authority_dropdown(authorities)
       <<-HTML
-      <select class="form-control authority-select" name="_authority-select-options">
-        <option value="" selected>Select an Authority source</option>
-        #{authority_option_html(authorities)}
-      </select>
+      <div class="col-sm-4">
+        <select class="form-control authority-select" name="_authority-select-options">
+          <option value="" selected>Select an Authority source</option>
+          #{authority_option_html(authorities)}
+        </select>
+      </div>
       HTML
     end
 end

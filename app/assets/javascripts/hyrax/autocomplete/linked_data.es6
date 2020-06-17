@@ -10,7 +10,7 @@ export default class LinkedData {
   activate() {
     this.element
       .select2(this.options(this.element))
-      .on("change", (e) => { this.selected(e) })
+      .on("change.select2", (e) => { this.selected(e) })
   }
 
   // Called when a choice is made
