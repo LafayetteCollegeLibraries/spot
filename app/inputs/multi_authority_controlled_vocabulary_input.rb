@@ -1,4 +1,21 @@
 # frozen_string_literal: true
+#
+# An input for rendering a controlled vocabulary input with a <select>
+# element to toggle the URI source.
+#
+# @example usage in a field
+#   # app/views/records/edit_fields/_some_field.html.erb
+#   # note: the values for the "authorities" property are the ids
+#   # in config/authorities/remote_authorities.yml
+#   <%=
+#       f.input :some_field,
+#       as: :multi_authority_controlled_vocabulary,
+#       placeholder: 'Search for a value',
+#       authorities: [:geonames, :fast],
+#       wrapper_html: { data: { 'field-name' => 'some_field' } },
+#       required: f.object.required?(:some_field)
+#   %>
+#
 class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
   def input_type
     'multi_auth_controlled_vocabulary'
@@ -14,7 +31,7 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
 
       <<-HTML
       <div class="row">
-        #{authority_dropdown(authorities) if value.node? }
+        #{authority_dropdown(authorities) if value.node?}
 
         <div class="col-sm-#{value.node? ? '8' : '12'}">
           #{super}
@@ -39,6 +56,11 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
     end
 
     # updating the existing method to display both the rdf label + subject
+    # (note: this impacts the +hidden_label+ attribute, which is the value displayed,
+    # and _not_ the underlying value.)
+    #
+    # @todo do we want to patch this into +ControlledVocabularyInput+?
+    # @return [void]
     def build_options_for_existing_row(_attribute_name, _index, value, options)
       options[:value] = "#{value.rdf_label.first} (#{value.rdf_subject})" || "Unable to fetch label for #{value.rdf_subject}"
       options[:readonly] = true
