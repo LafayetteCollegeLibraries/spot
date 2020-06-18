@@ -23,5 +23,5 @@
 
 //= require hyrax
 
-//= require_tree .
 //= require almond
+//= require_tree .
