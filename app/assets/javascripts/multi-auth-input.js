@@ -9,7 +9,7 @@ $(document).ready(function () {
   // the work-type
   let paramKey = $formElement.data('paramKey');
 
-  $formElement.find('.form-group.multi_auth_controlled_vocabulary').each((_idx, field) => {
-    new MultiAuthControlledVocabulary(field, paramKey);
-  });
+  $formElement
+    .find('.form-group.multi_auth_controlled_vocabulary')
+    .each((_idx, field) => new MultiAuthControlledVocabulary(field, paramKey));
 });
