@@ -16,14 +16,14 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
   // to compile a template (see +_input_template_source+). builds out the field to
   // look like what's produced with +MultiAuthorityControlledVocabularyInput#build_field+
   _newFieldTemplate() {
-    let controls = this.controls.clone();
-    let placeholder = this.element.find('input.multi-text-field').attr('placeholder');
-    let $selectElement = this.element.find('select.form-control').last().clone();
+    var controls = this.controls.clone();
+    var placeholder = this.element.find('input.multi-text-field').attr('placeholder');
+    var $selectElement = this.element.find('select.form-control').last().clone();
     $selectElement.on('change', e => this.handleAuthoritySelect(e));
 
-    let $selectField = $('<div class="col-sm-4"></div>').append($selectElement);
-    let $inputs = $(`<div class="col-sm-8">${this._input_template_source({ placeholder: placeholder })}</div>`);
-    let $listBody = $('<div class="row"></div>').append($selectField).append($inputs);
+    var $selectField = $('<div class="col-sm-4"></div>').append($selectElement);
+    var $inputs = $(`<div class="col-sm-8">${this._input_template_source({ placeholder: placeholder })}</div>`);
+    var $listBody = $('<div class="row"></div>').append($selectField).append($inputs);
 
     return $('<li class="field-wrapper input-group input-append"></li>').append($listBody).append(controls);
   }
@@ -32,11 +32,11 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
   // these methods/classes in es6. there are a few options you can pass to this,
   // but only +placeholder+ isn't able to be pulled from various class methods/properties.
   _input_template_source(opts = {}) {
-    let klass = opts.klass || 'controlled_vocabulary';
-    let index = opts.index || this._maxIndex();
-    let paramKey = opts.paramKey || this.paramKey;
-    let name = opts.fieldName || this.fieldName;
-    let placeholder = opts.placeholder || '';
+    var klass = opts.klass || 'controlled_vocabulary';
+    var index = opts.index || this._maxIndex();
+    var paramKey = opts.paramKey || this.paramKey;
+    var name = opts.fieldName || this.fieldName;
+    var placeholder = opts.placeholder || '';
 
     return `
       <input
@@ -74,10 +74,10 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
   handleAuthoritySelect (event) {
     event.preventDefault();
 
-    let $target = $(event.currentTarget);
-    let $input = $target.parent().parent().find('input.form-control');
-    let authorityPath = $target.val();
-    let autocomplete = new Autocomplete();
+    var $target = $(event.currentTarget);
+    var $input = $target.parent().parent().find('input.form-control');
+    var authorityPath = $target.val();
+    var autocomplete = new Autocomplete();
 
     $input.data('autocompleteUrl', authorityPath);
     $input.val(''); // zero-out an existing value
