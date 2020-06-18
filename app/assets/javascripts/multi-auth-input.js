@@ -11,5 +11,8 @@ $(document).ready(function () {
 
   $formElement
     .find('.form-group.multi_auth_controlled_vocabulary')
-    .each((_idx, field) => new MultiAuthControlledVocabulary(field, paramKey));
+    .each((_idx, field) => {
+      console.log('adding multi-auth cv to our field', field)
+      return new MultiAuthControlledVocabulary(field, paramKey)
+    });
 });
