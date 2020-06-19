@@ -11,7 +11,7 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Sprockets::ES6.configuration = { 'modules' => 'amd', 'moduleIds' => true }
 
-Rails.application.config.assets.precompile += %w(*.js *.es6)
+Rails.application.config.assets.precompile += %w[*.js *.es6]
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
