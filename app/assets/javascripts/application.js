@@ -25,8 +25,8 @@
 //= require blacklight_gallery
 
 //= require openseadragon
-//= require almond
 //= require hyrax
+//= require almond
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require language-tagged-autocomplete-setup
