@@ -5,12 +5,12 @@ module Spot
       super('remote_authorities')
     end
 
-    # return the select options for +*ids+
+    # return the select options for +*keys+
     #
-    # @param [Symbol, String] *ids
+    # @param [Symbol, String] *keys
     # @return [Array<Hash<String => *>]
-    def select_options_for(*ids)
-      ids.map { |id| authority.find(id.to_s).reject { |k, _v| k == 'id' } }
+    def select_options_for(*keys)
+      keys.flatten.map { |key| authority.find(key.to_s).reject { |k, _v| k == 'id' } }
     end
   end
 end
