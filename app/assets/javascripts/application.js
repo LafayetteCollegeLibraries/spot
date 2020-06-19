@@ -21,7 +21,13 @@
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require blacklight/blacklight
 
+// local require that in turn calls a require
+//= require blacklight_gallery
+
+//= require openseadragon
+//= require almond
 //= require hyrax
 
-//= require almond
-//= require_tree .
+//= require spot/editor/multi_auth_controlled_vocabulary
+//= require language-tagged-autocomplete-setup
+//= require multi-auth-input
