@@ -5,3 +5,6 @@ terms:
   - id: geonames
     label: GeoNames
     search: /authorities/search/geonames
+  - id: tgn
+    label: Getty Thesaurus of Geo. Names
+    search: /authorities/search/getty/tgn
