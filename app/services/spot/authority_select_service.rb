@@ -10,7 +10,10 @@ module Spot
     # @param [Symbol, String] *keys
     # @return [Array<Hash<String => *>]
     def select_options_for(*keys)
-      keys.flatten.map { |key| authority.find(key.to_s).reject { |k, _v| k == 'id' } }
+      keys
+        .flatten
+        .map { |key| authority.find(key.to_s).reject { |k, _v| k == 'id' } }
+        .reject(&:blank?) # prevents [{}, {}] issues
     end
   end
 end
