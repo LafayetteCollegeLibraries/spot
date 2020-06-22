@@ -15,8 +15,8 @@ RSpec.describe Spot::AuthoritySelectService do
       let(:keys) { [:geonames, :tgn] }
       let(:results_array) do
         [
-          {'label' => 'GeoNames', 'search' => '/authorities/search/geonames'},
-          {'label' => 'Getty Thesaurus of Geo. Names', 'search' =>  '/authorities/search/getty/tgn'}
+          { 'label' => 'GeoNames', 'search' => '/authorities/search/geonames' },
+          { 'label' => 'Getty Thesaurus of Geo. Names', 'search' => '/authorities/search/getty/tgn' }
         ]
       end
 
