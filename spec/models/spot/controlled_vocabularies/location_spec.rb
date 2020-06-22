@@ -8,7 +8,25 @@ RSpec.describe Spot::ControlledVocabularies::Location do
   describe '#fetch' do
     subject { resource.fetch }
 
-    it { is_expected.to be_a Symbol }
+    context 'when a location is not a GeoNames URI' do
+      before do
+        stub_request(:get, location_uri).to_return(status: 200, body: graph.dump(:ttl))
+      end
+
+      let(:graph) { RDF::Graph.new << statement }
+      let(:statement) { RDF::Statement(resource, RDF::Vocab::SKOS.prefLabel, 'Fogelsville, PA') }
+      let(:location_uri) { 'http://vocab.getty.edu/tgn/2088495' }
+
+      it 'performs as usual' do
+        resource.fetch
+
+        expect(WebMock).to have_requested(:get, location_uri)
+      end
+    end
+
+    context 'when a location is a GeoNames URI' do
+      it { is_expected.to eq :skipped_use_geonames_api }
+    end
   end
 
   describe '#preferred_label' do
