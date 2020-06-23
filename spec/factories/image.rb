@@ -12,7 +12,7 @@ FactoryBot.define do
     inscription { ['hey look over here'] }
     keyword { ['photo'] }
     language { ['en'] }
-    location { [] }
+    location { ['http://sws.geonames.org/5188140/'] }
     note { ['Some staff-side information'] }
     original_item_extent { ['24 x 19.5 cm.'] }
     physical_medium { ['Photograph'] }
@@ -22,7 +22,7 @@ FactoryBot.define do
     requested_by { ['Requester, Jennifer Q.'] }
     research_assistance { ['Student, Ashley'] }
     resource_type { ['Photograph'] }
-    rights_holder { [] }
+    rights_holder { ['Holder, R.'] }
     rights_statement { ['http://creativecommons.org/publicdomain/mark/1.0/'] }
     source { ['A grouped collection'] }
     subject { ['http://id.worldcat.org/fast/1061714'] }

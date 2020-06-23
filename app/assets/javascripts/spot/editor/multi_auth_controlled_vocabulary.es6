@@ -19,6 +19,7 @@ export default class MultiAuthControlledVocabulary extends ControlledVocabulary 
     var controls = this.controls.clone();
     var placeholder = this.element.find('input.multi-text-field').attr('placeholder');
     var $selectElement = this.element.find('select.form-control').last().clone();
+    $selectElement.attr('name', $selectElement.attr('name').replace(/\d+$/, this._maxIndex()));
     $selectElement.on('change', e => this.handleAuthoritySelect(e));
 
     var $selectField = $('<div class="col-sm-4"></div>').append($selectElement);
