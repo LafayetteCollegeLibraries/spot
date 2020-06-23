@@ -31,7 +31,7 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
 
       <<-HTML
       <div class="row">
-        #{authority_dropdown(authorities) if value.node?}
+        #{authority_dropdown(authorities, index) if value.node?}
 
         <div class="col-sm-#{value.node? ? '8' : '12'}">
           #{super}
@@ -87,6 +87,10 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
       object.model.class.properties[attribute_name.to_s].class_name
     end
 
+    def id_for_select(index)
+      "#{@builder.object_name}_#{attribute_name}_authority_select_#{index}"
+    end
+
     # @return [Spot::AuthoritySelectService]
     def select_service
       @select_service ||= Spot::AuthoritySelectService.new
@@ -101,10 +105,10 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
 
     # @todo make this an i18n translation
     # @return [String]
-    def authority_dropdown(authorities)
+    def authority_dropdown(authorities, index)
       <<-HTML
       <div class="col-sm-4">
-        <select class="form-control authority-select" name="_authority-select-options">
+        <select id="#{id_for_select(index)}" class="form-control authority-select" name="#{id_for_select(index)}">
           <option value="" selected>Select an Authority source</option>
           #{authority_option_html(authorities)}
         </select>
