@@ -18,6 +18,7 @@ en:
         date_created: Date Created
         date_issued: Date Issued
         date_modified: Date Modified
+        date_scope_note: Date Scope Note
         date_uploaded: Date Uploaded
         depositor: Deposited by
         description: Description
@@ -37,11 +38,15 @@ en:
         member_of_collections: Collections
         organization: Organization
         original_checksum: Original Checksum (MD5)
+        original_item_extent: Original Item Extent
         page_count: Page Count
         permalink: Permalink
         physical_medium: Physical Medium
         proxy_depositor: Proxy Depositor
         publisher: Publisher
+        related_resource: Related Resource
+        repository_location: Repository Location
+        requested_by: Requested By
         research_assistance: Research Assistance
         resource_type: Type
         rights_holder: Rights Holders

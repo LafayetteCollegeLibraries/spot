@@ -3,6 +3,7 @@ en:
   activefedora:
     models:
       publication: 'Publication'
+      image: 'Image'
   hyrax:
     account_name:           "My Institution Account Id"
 
