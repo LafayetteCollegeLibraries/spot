@@ -1004,6 +1004,7 @@ DEPENDENCIES
   solr_wrapper (~> 2.1)
   spring (~> 2.1.0)
   spring-watcher-listen (~> 2.0.0)
+  sprockets-es6
   stub_env (~> 1.0.4)
   turbolinks (= 5.2.1)
   tzinfo-data (~> 1.2018)

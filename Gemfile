@@ -104,6 +104,15 @@ gem 'sidekiq-cron', '1.1.0'
 # using Slack for some of our messaging
 gem 'slack-ruby-client', '0.14.4'
 
+# now that we're writing es6 javascript of our own (+ not just using the hyrax js)
+# we need to compile it in sprockets.
+#
+# note from hyrax source:
+#   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD
+#   in this way:
+#   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
+gem 'sprockets-es6'
+
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
 gem 'kaminari', '1.2.1'

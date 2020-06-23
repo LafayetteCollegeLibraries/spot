@@ -1,0 +1,30 @@
+// these are adjustments we need to make to the multi-authority controlled vocabulary
+// inputs so that they resemble their '.multi_value' or '.controlled_vocabulary' siblings.
+.multi_auth_controlled_vocabulary {
+  .listing {
+    margin-bottom: 0;
+    margin-left: 0;
+    max-width: 100%;
+    padding-left: 0;
+  }
+
+  .btn {
+    &.add {
+      padding-left: 0;
+    }
+
+    &.remove {
+      color: #d33a35;
+    }
+
+    &.add,
+    &.remove {
+      text-decoration: underline;
+    }
+  }
+
+  .add .glyphicon-plus,
+  .remove .glyphicon-remove {
+    margin-right: 0.3rem;
+  }
+}
