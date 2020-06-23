@@ -17,7 +17,7 @@ RSpec.feature 'Create an Image', :clean, :js do
     let(:user) { create(:admin_user) }
     let(:attrs) { attributes_for(:image) }
 
-    # currently we're hiding the new Image form from the nav menus –
+    # currently we're hiding the new Image form from the nav menus,
     # the thinking is that Images are likely to be ingested as part of
     # a batch, rather than individually. if that changes, you'll want
     # to uncomment the block below
