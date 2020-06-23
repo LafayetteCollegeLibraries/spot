@@ -112,6 +112,9 @@ describe Publication do
 
         work.rights_statement = ['http://creativecommons.org/publicdomain/mark/1.0/']
         expect(work.valid?).to be true
+
+        work.rights_statement = [RDF::URI('http://creativecommons.org/publicdomain/mark/1.0/')]
+        expect(work.valid?).to be true
       end
     end
 
