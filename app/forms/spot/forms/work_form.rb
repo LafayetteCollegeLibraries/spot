@@ -58,7 +58,8 @@ module Spot
       #
       # @return [Array<String>]
       def rights_statement
-        self['rights_statement'].map { |v| v.respond_to?(:id) ? v.id : v }
+        mapped_strings = Array.wrap(self['rights_statement']).map { |v| v.respond_to?(:id) ? v.id : v }
+        multiple?('rights_statement') ? mapped_strings : mapped_strings.first
       end
     end
   end
