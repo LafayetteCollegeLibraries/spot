@@ -62,7 +62,7 @@ RSpec.shared_examples 'a Spot actor' do
   describe 'converts rights_statement values to RDF::URIs' do
     let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
     let(:attributes) { { rights_statement: uri } }
-    let(:expected) { { rights_statement: [RDF::URI(uri)] } }
+    let(:expected) { { 'rights_statement' => [RDF::URI(uri)] } }
 
     context '#create' do
       before { actor.create(env) }
