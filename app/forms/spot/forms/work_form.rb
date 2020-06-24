@@ -36,6 +36,30 @@ module Spot
       def multiple?(term)
         self.class.multiple?(term)
       end
+
+      # our rights_statement URIs may be stored as +ActiveTriples::Resource+ objects
+      # (rather than Strings), so we'll want to make sure that the value is displayed
+      # in the <select> object.
+      #
+      # @return [Array<String>]
+      def rights_statement
+        @rights_statement ||= begin
+          source = self['rights_statement']
+          wrapped = source.respond_to?(:to_a) ? source.to_a : Array.wrap(source)
+          mapped_strings = wrapped.map do |value|
+            # most likely case, ActiveTriples::Resource
+            next value.rdf_subject.to_s if value.respond_to?(:rdf_subject)
+
+            # might be an RDF::URI?
+            next value.id if value.respond_to?(:id)
+
+            # otherwise, leave it as-is
+            value
+          end
+
+          multiple?('rights_statement') ? mapped_strings : mapped_strings.first
+        end
+      end
     end
   end
 end
