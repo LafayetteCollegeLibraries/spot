@@ -14,14 +14,6 @@ module Spot
     include ::DeserializesRdfLiterals
     include ::CreateHandleIdentifiers
 
-    def create(env)
-      convert_rights_statement(env) && super
-    end
-
-    def update(env)
-      convert_rights_statement(env) && super
-    end
-
     private
 
       # Overrides the BaseActor method to allow us to stuff in
@@ -32,13 +24,15 @@ module Spot
         env.curation_concern.date_uploaded = get_date_uploaded_value(env)
       end
 
-      # ensures that our rights_statement attribute values are RDF::URIs instead
-      # of Strings.
+      # if we've been passed attributes with a :rights_statement value, convert it
+      # to an RDF::URI object for storage
       #
       # @param [Hyrax::Actors::Environment] env
       # @return [void]
-      def convert_rights_statement(env)
-        env.attributes[:rights_statement] = Array.wrap(env.attributes[:rights_statement]).map { |v| RDF::URI(v) }
+      def apply_save_data_to_curation_concern(env)
+        transform_rights_statement(env) if env.attributes.key?(:rights_statement)
+
+        super
       end
 
       # @param [Hyrax::Actors::Environment] env
@@ -59,6 +53,12 @@ module Spot
           # keep that as our fallback.
           ::Hyrax::TimeService.time_in_utc
         end
+      end
+
+      # @param [Hyrax::Actors::Environment] env
+      # @return [void]
+      def transform_rights_statement(env)
+        env.attributes[:rights_statement] = Array.wrap(env.attributes[:rights_statement]).map { |v| RDF::URI(v) }
       end
   end
 end
