@@ -12,21 +12,6 @@ RSpec.shared_examples 'a Spot work form' do
     end
   end
 
-  describe '.model_attributes' do
-    subject(:attributes) { described_class.model_attributes(form_params) }
-
-    let(:form_params) { ActionController::Parameters.new(raw_params) }
-    let(:raw_params) { {} }
-
-    describe '(rights_statement)' do
-      subject { attributes['rights_statement'] }
-
-      let(:raw_params) { { 'rights_statement' => 'http://rightsstatements.org/vocab/NoC-OKLR/1.0/' } }
-
-      it { is_expected.to eq [ActiveTriples::Resource.new('http://rightsstatements.org/vocab/NoC-OKLR/1.0/')] }
-    end
-  end
-
   describe '#rights_statement' do
     subject(:rights) { form.rights_statement }
 

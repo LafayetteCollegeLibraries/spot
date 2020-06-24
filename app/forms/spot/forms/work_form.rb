@@ -22,21 +22,6 @@ module Spot
         :member_of_collection_ids, :admin_set_id
       ]
 
-      # class method used to transform the form parameters into attributes for the work.
-      # a bunch of the form concerns will sub-method this and use a +super+ call to chain
-      # them together, so don't forget to include +super+!
-      #
-      # we're using this in the form to ensure that the values for +rights_statement+ are
-      # stored as +ActiveTriples::Resource+s
-      #
-      # @param [ActionController::Parameters, Hash] form_params
-      # @return [ActionController::Parameters]
-      def self.model_attributes(form_params)
-        super.tap do |params|
-          params['rights_statement'] = Array.wrap(params['rights_statement']).map { |v| RDF::URI(v) }
-        end
-      end
-
       # samvera/hydra-editor uses both the class method (new form) and
       # instance method (edit form) versions of this method, so we need
       # to provide both (otherwise we're head-first down a rabbit hole
@@ -58,8 +43,10 @@ module Spot
       #
       # @return [Array<String>]
       def rights_statement
-        mapped_strings = Array.wrap(self['rights_statement']).map { |v| v.respond_to?(:id) ? v.id : v }
-        multiple?('rights_statement') ? mapped_strings : mapped_strings.first
+        @rights_statement ||= begin
+          mapped_strings = Array.wrap(self['rights_statement']).map { |v| v.respond_to?(:id) ? v.id : v }
+          multiple?('rights_statement') ? mapped_strings : mapped_strings.first
+        end
       end
     end
   end

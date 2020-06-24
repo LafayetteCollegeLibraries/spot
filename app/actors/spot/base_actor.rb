@@ -14,6 +14,14 @@ module Spot
     include ::DeserializesRdfLiterals
     include ::CreateHandleIdentifiers
 
+    def create(env)
+      convert_rights_statement(env) && super
+    end
+
+    def update(env)
+      convert_rights_statement(env) && super
+    end
+
     private
 
       # Overrides the BaseActor method to allow us to stuff in
@@ -22,6 +30,15 @@ module Spot
       # @return [void]
       def apply_deposit_date(env)
         env.curation_concern.date_uploaded = get_date_uploaded_value(env)
+      end
+
+      # ensures that our rights_statement attribute values are RDF::URIs instead
+      # of Strings.
+      #
+      # @param [Hyrax::Actors::Environment] env
+      # @return [void]
+      def convert_rights_statement(env)
+        env.attributes[:rights_statement] = Array.wrap(env.attributes[:rights_statement]).map { |v| RDF::URI(v) }
       end
 
       # @param [Hyrax::Actors::Environment] env
