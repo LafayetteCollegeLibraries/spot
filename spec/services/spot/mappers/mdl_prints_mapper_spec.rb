@@ -29,6 +29,14 @@ RSpec.describe Spot::Mappers::MdlPrintsMapper do
     it { is_expected.to eq [RDF::Literal('Engraving with hand-coloring', language: :en)] }
   end
 
+  describe '#donor' do
+    subject { mapper.donor }
+
+    let(:field) { 'description.provenance' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#identifier' do
     subject { mapper.identifier }
 
@@ -123,6 +131,14 @@ RSpec.describe Spot::Mappers::MdlPrintsMapper do
         expect { mapper.rights_statement }.to raise_error(KeyError)
       end
     end
+  end
+
+  describe '#subject' do
+    subject { mapper.subject }
+
+    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1898429'] } }
+
+    it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1898429')] }
   end
 
   describe '#title' do

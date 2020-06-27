@@ -4,6 +4,7 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'creator',
       date: 'date.original',
+      donor: 'description.provenance',
       inscription: 'description.note',
       keyword: ['keyword', 'description.series', 'relation.IsPartOf'],
       language: 'language',
@@ -19,6 +20,8 @@ module Spot::Mappers
         :description,
         :identifier,
         :physical_medium,
+        :rights_statement,
+        :subject,
         :title
       ]
     end
