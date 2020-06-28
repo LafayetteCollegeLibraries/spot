@@ -27,6 +27,7 @@ RSpec.describe SolrDocument do
     },
     depositor: { type: String, suffix: 'ssim' },
     description: { type: Array, suffix: 'tesim' },
+    donor: { type: Array, suffix: 'ssim' },
     division: { type: Array, suffix: 'tesim' },
     editor: { type: Array, suffix: 'tesim' },
     file_set_ids: { type: Array, suffix: 'ssim', value: ['abc123', 'def456'] },

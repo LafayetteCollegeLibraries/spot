@@ -117,14 +117,13 @@ class Image < ActiveFedora::Base
     index.as :symbol
   end
 
-  # @todo
   property :research_assistance, predicate: ::RDF::URI.new('http://www.rdaregistry.info/Elements/a/#P50265') do |index|
     index.as :symbol
   end
 
-  # @todo Should this be indexed as searchable (are we using statements?
-  #       ex. "Donated by Soand So") or as a symbol (are we using a name value?)
-  property :donor, predicate: ::RDF::Vocab::DC.provenance
+  property :donor, predicate: ::RDF::Vocab::DC.provenance do |index|
+    index.as :symbol
+  end
 
   property :note, predicate: ::RDF::Vocab::SKOS.note do |index|
     index.as :stored_searchable
