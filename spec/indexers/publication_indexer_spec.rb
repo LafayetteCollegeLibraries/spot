@@ -15,6 +15,7 @@ RSpec.describe PublicationIndexer do
 
   it_behaves_like 'a Spot indexer'
   it_behaves_like 'it indexes English-language dates'
+  it_behaves_like 'it indexes a sortable date'
 
   # simple_model_indexing just means that it maps the values
   # on the object (the keys) to the solr_doc fields (the values)
@@ -63,14 +64,6 @@ RSpec.describe PublicationIndexer do
 
     it 'stores the label' do
       expect(solr_doc['location_label_ssim']).to eq [label]
-    end
-  end
-
-  describe 'sortable date' do
-    let(:work) { build(:publication, date_issued: ['2019-12?']) }
-
-    it 'parses a sortable date' do
-      expect(solr_doc['date_sort_dtsi']).to eq '2019-12-01T00:00:00Z'
     end
   end
 

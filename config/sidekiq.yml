@@ -6,6 +6,7 @@
 ---
 :verbose: false
 :timeout: 30
+:concurrency: 5
 :queues:
   - default
   - ingest

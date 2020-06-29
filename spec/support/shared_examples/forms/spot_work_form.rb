@@ -11,4 +11,33 @@ RSpec.shared_examples 'a Spot work form' do
       expect(terms).to include(*described_class.hyrax_form_fields)
     end
   end
+
+  describe '#rights_statement' do
+    subject(:rights) { form.rights_statement }
+
+    let(:form) { described_class.new(work, ability, nil) }
+    let(:work) { build(work_klass.downcase.to_sym) }
+    let(:work_klass) { described_class.name.split('::').last.gsub(/Form$/, '') }
+    let(:ability) { Ability.new(build(:admin_user)) }
+
+    it 'transforms the values into strings' do
+      if form.multiple?('rights_statement')
+        expect(rights.all? { |v| v.is_a? String }).to be true
+      else
+        expect(rights).to be_a String
+      end
+    end
+
+    context 'when no rights_statement present' do
+      let(:work) { work_klass.constantize.new }
+
+      it do
+        if form.multiple?('rights_statement')
+          expect(rights).to eq []
+        else
+          expect(rights).to eq ''
+        end
+      end
+    end
+  end
 end

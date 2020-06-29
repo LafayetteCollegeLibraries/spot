@@ -12,7 +12,7 @@ end
 gem 'rails', '5.1.6.2'
 
 # use Puma as the app server (dev only, we're using passenger in production)
-gem 'puma', '3.12.4'
+gem 'puma', '3.12.6'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '5.0.7'
@@ -73,7 +73,7 @@ gem 'honeybadger', '4.5.6'
 gem 'hydra-role-management', '1.0.2'
 
 # an authorative source for our two-character language codes
-gem 'iso-639', '0.2.8'
+gem 'iso-639', '0.3.5'
 
 # install jquery with rails (no longer the default)
 gem 'jquery-rails', '4.3.5'
@@ -82,14 +82,14 @@ gem 'jquery-rails', '4.3.5'
 gem 'okcomputer', '1.18.1'
 
 # we're using postgres as our database within rails
-gem 'pg', '1.2.2'
+gem 'pg', '1.2.3'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
 gem 'rdf-vocab', '3.1.2'
 
 # a iiif server for ruby from curationexperts
-gem 'riiif', '2.1.0'
+gem 'riiif', '2.3.0'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '2.3.0'
@@ -103,6 +103,15 @@ gem 'sidekiq-cron', '1.1.0'
 
 # using Slack for some of our messaging
 gem 'slack-ruby-client', '0.14.4'
+
+# now that we're writing es6 javascript of our own (+ not just using the hyrax js)
+# we need to compile it in sprockets.
+#
+# note from hyrax source:
+#   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD
+#   in this way:
+#   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
+gem 'sprockets-es6'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.

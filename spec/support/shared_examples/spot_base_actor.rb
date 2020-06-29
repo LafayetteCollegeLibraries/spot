@@ -58,4 +58,26 @@ RSpec.shared_examples 'a Spot actor' do
       expect(MintHandleJob).to have_received(:perform_later).with(work)
     end
   end
+
+  describe 'converts rights_statement values to RDF::URIs' do
+    let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
+    let(:attributes) { { rights_statement: uri } }
+    let(:expected) { { 'rights_statement' => [RDF::URI(uri)] } }
+
+    context '#create' do
+      before { actor.create(env) }
+
+      it 'converts rights_statement uri strings to RDF::URI objects' do
+        expect(env.attributes).to eq expected
+      end
+    end
+
+    context '#update' do
+      before { actor.update(env) }
+
+      it 'converts rights_statement uri strings to RDF::URI objects' do
+        expect(env.attributes).to eq expected
+      end
+    end
+  end
 end

@@ -1,0 +1,10 @@
+terms:
+  - id: fast
+    label: FAST
+    search: /authorities/search/linked_data/oclc_fast
+  - id: geonames
+    label: GeoNames
+    search: /authorities/search/geonames
+  - id: tgn
+    label: Getty Thesaurus of Geo. Names
+    search: /authorities/search/getty/tgn

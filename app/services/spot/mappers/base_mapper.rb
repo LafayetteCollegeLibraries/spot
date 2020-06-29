@@ -62,7 +62,7 @@ module Spot::Mappers
       field_name = fields_map[name.to_sym]
       return nil unless field_name
 
-      metadata[field_name]
+      merge_fields(*Array.wrap(field_name))
     end
 
     # Copied from Darlingtonia::HashMapper. Ensures that

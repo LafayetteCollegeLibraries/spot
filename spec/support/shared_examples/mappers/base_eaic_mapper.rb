@@ -10,9 +10,9 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
   options ||= {}
 
   fields = described_class.new.fields
-  skip_fields = options[:skip_fields] || []
+  skip_fields = options.fetch(:skip_fields, [])
 
-  it_behaves_like 'it has language-tagged titles'
+  it_behaves_like 'it has language-tagged titles', skip_fields: skip_fields
 
   describe '#representative_file' do
     subject { mapper.representative_file }
@@ -63,6 +63,13 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
         let(:date_upper) { ['1930'] }
 
         it { is_expected.to eq ['1930'] }
+      end
+
+      context 'when lower + upper dates are out of order' do
+        let(:date_lower) { ['1986-02-11'] }
+        let(:date_upper) { ['1986-02'] }
+
+        it { is_expected.to eq ['1986-02/1986-02-11'] }
       end
     end
   end

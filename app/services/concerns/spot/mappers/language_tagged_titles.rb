@@ -85,7 +85,7 @@ module Spot::Mappers
       def field_to_tagged_literals(field, language)
         Array.wrap(metadata.fetch(field, []))
              .reject(&:blank?)
-             .map { |v| RDF::Literal(v, language: language.to_sym) }
+             .map { |v| RDF::Literal(v, language: language.respond_to?(:to_sym) ? language.to_sym : language) }
       end
   end
 end

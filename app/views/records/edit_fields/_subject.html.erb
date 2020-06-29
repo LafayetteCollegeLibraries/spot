@@ -9,5 +9,12 @@
               'autocomplete' => 'subject'
             }
           },
+          ### Required for the ControlledVocabulary javascript:
+          wrapper_html: {
+            data: {
+              'autocomplete-url' => '/authorities/search/linked_data/oclc_fast',
+              'field-name' => 'subject'
+            }
+          },
           required: f.object.required?(:subject)
 %>

@@ -20,20 +20,17 @@ module Spot::ControlledVocabularies
     #
     # @return [Symbol]
     def fetch(*)
+      return super unless subject_is_geonames?
+
       Rails.logger.info "Skipping fetch of <#{rdf_subject}> in favor of Geonames API"
       :skipped_use_geonames_api
     end
 
     private
 
-      # Overrides the RDF way we're set-up to find a preferred label in lieu
-      # of using the Geonames API to return a more detailed label.
-      #
-      # @return [String]
-      def pick_preferred_label
-        find_or_create_from_cache do |label|
-          label.value = label_for(fetch_geonames_data)
-        end.value
+      # @return [Class]
+      def authority_class
+        Qa::Authorities::Geonames
       end
 
       # Uses the Qa::Authorities::Geonames API to fetch Geonames data
@@ -62,9 +59,20 @@ module Spot::ControlledVocabularies
           .join(', ')
       end
 
-      # @return [Class]
-      def authority_class
-        Qa::Authorities::Geonames
+      # Overrides the RDF way we're set-up to find a preferred label in lieu
+      # of using the Geonames API to return a more detailed label.
+      #
+      # @return [String]
+      def pick_preferred_label
+        return super unless subject_is_geonames?
+
+        find_or_create_from_cache do |label|
+          label.value = label_for(fetch_geonames_data)
+        end.value
+      end
+
+      def subject_is_geonames?
+        rdf_subject.to_s =~ /^https?:\/\/\w+\.geonames\.org\//
       end
   end
 end
