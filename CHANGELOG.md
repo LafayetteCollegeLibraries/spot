@@ -1,5 +1,38 @@
 # changelog
 
+## [2020.7] - 2020-06-29
+
+### features 🎁
+- adds mappers for image batch 3 collections (#447): 
+  - cap
+  - mckelvy-house
+  - mammana-postcards
+  - pa-tsubokura
+  - mdl-prints
+  - geology-slides-esi
+- updates capistrano to start/stop sidekiq as a service (recommended for sidekiq @6) (#500) 
+- adds a multi-authority controlled vocabulary input for `Image#location` (#512) 
+
+### bug fixes 🐞 
+- disable noid minting in specs to circumvent `Ldp::Gone` errors, 🤞 (#487)
+- `Spot::Mappers::CpwShashinkaiMapper` will map titles that aren't prefixed with an identifier (ex. `[ts0001] The Monopoly Bureau at Taihoku (Outside of South Gate)`) to `title_alternative`
+- make sure edtf dates are created in a valid order (earliest is first) (#508)
+- allow different edtf types for `date_sort_dtsi` (#509)
+- `Spot::ControlledVocabularies::Location` will fetch labels for URIs other than just GeoNames (#514)
+- `rights_statement` values stored as `RDF::URI` objects will render correctly in the work-edit form (#518)
+  - `Spot::Actors::BaseActor` has been modified to ensure that we're always storing those values as `RDF::URI` objects
+- `subject` edit partial now includes a `wrapper_html` attribute, so new rows have will initialize the Autocomplete fields (#520)
+
+### dependency updates 👩‍👩‍👧‍👧 
+- blacklight to 6.23.0 (#515) 
+- capybara to 3.32.1 (#484) 
+- iso-639 to 0.3.5 (#486)
+- kaminari to 1.2.1 (#494, done on master but rebased to this version) 
+- pg to 1.2.3 (#485)
+- puma to 3.12.6 (#492)
+- riiif to 2.3.0 (#497)
+- websocket-extensions to 0.1.5 (#505)
+
 ## [2020.6] - 2020-04-30
 
 ### updates ⛰
@@ -369,6 +402,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.7
 [2020.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.6
 [2020.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.5
 [2020.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.4
