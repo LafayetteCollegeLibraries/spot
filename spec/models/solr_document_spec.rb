@@ -48,7 +48,7 @@ RSpec.describe SolrDocument do
     physical_medium: { type: Array, suffix: 'tesim' },
     page_count: { type: String, suffix: 'tesim', value: '100' },
     permalink: { type: String, suffix: 'ss', value: 'http://hdl.handle.net/10385/test' },
-    related_resource: { type: Array, suffix: 'ssim' },
+    related_resource: { type: Array, suffix: 'tesim' },
     repository_location: { type: Array, suffix: 'ssim' },
     requested_by: { type: Array, suffix: 'ssim' },
     research_assistance: { type: Array, suffix: 'ssim' },

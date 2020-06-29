@@ -57,7 +57,7 @@ module Spot
       attribute :permalink,              ::Blacklight::Types::String, 'permalink_ss'
       attribute :physical_medium,        ::Blacklight::Types::Array, 'physical_medium_tesim'
       attribute :publisher,              ::Blacklight::Types::Array, 'publisher_tesim'
-      attribute :related_resource,       ::Blacklight::Types::Array, 'related_resource_ssim'
+      attribute :related_resource,       ::Blacklight::Types::Array, 'related_resource_tesim'
       attribute :repository_location,    ::Blacklight::Types::Array, 'repository_location_ssim'
       attribute :requested_by,           ::Blacklight::Types::Array, 'requested_by_ssim'
       attribute :research_assistance,    ::Blacklight::Types::Array, 'research_assistance_ssim'
