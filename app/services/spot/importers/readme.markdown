@@ -122,8 +122,8 @@ See the [readme document](validator-readme) for more details.
 
 
 [Darlingtonia]: https://github.com/curationexperts/darlingtonia
-[`Spot::Importers::Base::RecordImporter`]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/importers/base/record_importer.rb
-[Spot::Importers::Bag::Parser]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/importers/bag/parser.rb
-[`Spot::StreamLogger`]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/stream_logger.rb
-[mapper-readme]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/mappers/readme.markdown
-[validator-readme]: https://github.com/LafayetteCollegeLibraries/spot/blob/master/app/services/spot/validators/readme.markdown
+[`Spot::Importers::Base::RecordImporter`]: https://github.com/LafayetteCollegeLibraries/spot/blob/release/app/services/spot/importers/base/record_importer.rb
+[Spot::Importers::Bag::Parser]: https://github.com/LafayetteCollegeLibraries/spot/blob/release/app/services/spot/importers/bag/parser.rb
+[`Spot::StreamLogger`]: https://github.com/LafayetteCollegeLibraries/spot/blob/release/app/services/spot/stream_logger.rb
+[mapper-readme]: https://github.com/LafayetteCollegeLibraries/spot/blob/release/app/services/spot/mappers/readme.markdown
+[validator-readme]: https://github.com/LafayetteCollegeLibraries/spot/blob/release/app/services/spot/validators/readme.markdown
