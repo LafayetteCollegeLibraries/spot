@@ -51,16 +51,16 @@ RSpec.describe Spot::Mappers::LewisPostcardsMapper do
     subject { mapper.keyword }
 
     let(:metadata) do
-      { 'keyword' => ['East Asia Image Collection'], 'relation.ispartof' => ['lewis-postcards'] }
+      { 'keyword' => ['Han'], 'relation.ispartof' => ['East Asia Image Collection'] }
     end
 
-    it { is_expected.to eq ['East Asia Image Collection', 'lewis-postcards'] }
+    it { is_expected.to eq ['Han', 'East Asia Image Collection'] }
   end
 
   describe '#original_item_extent' do
     subject { mapper.original_item_extent }
 
-    let(:field) { 'format.extant' }
+    let(:field) { 'format.extent' }
 
     it_behaves_like 'a mapped field'
   end
