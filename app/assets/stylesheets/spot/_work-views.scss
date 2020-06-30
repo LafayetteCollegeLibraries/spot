@@ -2,6 +2,20 @@
   max-width: 120px;
 }
 
+// if including the work-show page header in the panel coloring,
+// change `.work-metadata` to `.work-type`
+//
+// .work-metadata {
+//   .panel {
+//     border-color: $red-dark;
+//   }
+
+//   .panel-heading {
+//     background-color: $red-dark;
+//     color: $white;
+//   }
+// }
+
 .panel-heading-slim {
   padding: 4px 15px;
   padding-left: 8px; // TODO: this is a magic number; what's the value in bootstrap?
