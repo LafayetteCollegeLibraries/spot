@@ -1,0 +1,28 @@
+.rights-statement-icon {
+  max-width: 120px;
+}
+
+.panel-heading-slim {
+  padding: 4px 15px;
+  padding-left: 8px; // TODO: this is a magic number; what's the value in bootstrap?
+
+  h5,
+  h6 {
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
+
+// bootstrap is very specific in targeting table cells,
+// so we also need to be that specific to override
+.metadata-table > tbody > tr {
+  > td,
+  > th {
+    vertical-align: middle;
+  }
+}
+
+.thumbnail.file-set {
+  margin: auto;
+  max-width: 250px;
+}
