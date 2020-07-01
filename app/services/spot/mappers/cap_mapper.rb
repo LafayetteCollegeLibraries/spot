@@ -27,7 +27,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def description
-      field_to_tagged_literals('description.critical', :en)
+      field_to_tagged_literals('description', :en)
     end
 
     # @return [Array<String>]
@@ -48,7 +48,7 @@ module Spot::Mappers
     #
     # @return [Array<RDF::URI, String>]
     def subject
-      convert_uri_strings(metadata.fetch('subject', []))
+      convert_uri_strings(metadata.fetch('subject.LOC', []))
     end
   end
 end
