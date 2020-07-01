@@ -20,6 +20,7 @@ module Spot::Mappers
         :description,
         :identifier,
         :location,
+        :related_resource,
         :rights_statement,
         :subject,
         :title,
