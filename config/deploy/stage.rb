@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# we're releasing off of `master`, so anything going on to
+# we're releasing off of `primary`, so anything going on to
 # the stage application will most likely be from our `develop` branch
 set :branch, ENV.fetch('BRANCH') { 'develop' }
 

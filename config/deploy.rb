@@ -5,7 +5,7 @@ lock '~> 3.11.0'
 
 # application variables
 set :application, 'spot'
-set :branch, ENV['BRANCH'] || 'master'
+set :branch, ENV['BRANCH'] || 'primary'
 set :deploy_to, '/var/www/spot'
 set :keep_releases, 3
 set :repo_url, 'https://github.com/LafayetteCollegeLibraries/spot.git'
