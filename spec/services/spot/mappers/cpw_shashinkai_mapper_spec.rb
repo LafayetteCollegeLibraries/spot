@@ -52,7 +52,7 @@ RSpec.describe Spot::Mappers::CpwShashinkaiMapper do
   describe '#original_item_extent' do
     subject { mapper.original_item_extent }
 
-    let(:field) { 'format.extant' }
+    let(:field) { 'format.extent' }
 
     it_behaves_like 'a mapped field'
   end
@@ -85,6 +85,14 @@ RSpec.describe Spot::Mappers::CpwShashinkaiMapper do
     subject { mapper.research_assistance }
 
     let(:field) { 'contributor' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    let(:field) { 'resource.type' }
 
     it_behaves_like 'a mapped field'
   end
