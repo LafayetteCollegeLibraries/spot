@@ -6,6 +6,7 @@ RSpec.describe Spot::Mappers::MckelvyHouseMapper do
   before { mapper.metadata = metadata }
 
   it_behaves_like 'it has language-tagged titles'
+  it_behaves_like 'it maps original create date'
 
   describe '#creator' do
     subject { mapper.creator }

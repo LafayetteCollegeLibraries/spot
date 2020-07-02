@@ -4,6 +4,7 @@ module Spot::Mappers
     # note: we're not using the public #title or #title_alternative methods
     # but we are using the #field_to_tagged_literals helper
     include LanguageTaggedTitles
+    include MapsOriginalCreateDate
 
     self.fields_map = {
       date_scope_note: 'date.period',

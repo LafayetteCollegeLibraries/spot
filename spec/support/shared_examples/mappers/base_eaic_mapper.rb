@@ -13,6 +13,7 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
   skip_fields = options.fetch(:skip_fields, [])
 
   it_behaves_like 'it has language-tagged titles', skip_fields: skip_fields
+  it_behaves_like 'it maps original create date'
 
   describe '#representative_file' do
     subject { mapper.representative_file }

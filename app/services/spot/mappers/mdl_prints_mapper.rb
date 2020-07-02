@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Spot::Mappers
   class MdlPrintsMapper < BaseMapper
+    include MapsOriginalCreateDate
+
     self.fields_map = {
       creator: 'creator',
       date: 'date.original',
