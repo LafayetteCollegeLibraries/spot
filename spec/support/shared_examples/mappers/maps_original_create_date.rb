@@ -5,7 +5,7 @@ RSpec.shared_examples 'it maps original create date' do
 
     let(:mapper) { described_class.new }
     let(:field) { described_class.original_create_date_field }
-    let(:metadata) { field => value }
+    let(:metadata) { { field => value } }
 
     before { mapper.metadata = metadata }
 
