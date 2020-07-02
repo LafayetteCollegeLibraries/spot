@@ -2,6 +2,7 @@
 module Spot::Mappers
   class CapMapper < BaseMapper
     include LanguageTaggedTitles
+    include MapsOriginalCreateDate
 
     self.primary_title_map = { 'title' => :en }
     self.fields_map = {

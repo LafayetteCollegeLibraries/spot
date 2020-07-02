@@ -5,6 +5,8 @@ RSpec.describe Spot::Mappers::MdlPrintsMapper do
 
   before { mapper.metadata = metadata }
 
+  it_behaves_like 'it maps original create date'
+
   describe '#creator' do
     subject { mapper.creator }
 
