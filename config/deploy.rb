@@ -18,7 +18,7 @@ set :bundle_roles, %i[app]
 # capistrano-rails
 set :log_level, :debug
 set :rails_env, 'production'
-set :assets_roles, :app
+set :assets_roles, :web
 
 # capistrano-sidekiq
 set :init_system, -> { :upstart }
