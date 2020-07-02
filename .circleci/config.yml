@@ -22,13 +22,21 @@ jobs:
             sudo gem uninstall -i /usr/local/lib/ruby/gems/2.4.0 -aIx bundler
             sudo gem install -i /usr/local/lib/ruby/gems/2.4.0 bundler -v`(tail -n1 Gemfile.lock | xargs)`
       - run:
-          name: Install dependencies
+          name: Install dependencies (ruby)
           command: bundle check || bundle install
-      - save_cache:
+      - run:
+          name: Install dependencies (js)
+          command: yarn install
+      - save_gem_cache:
           name: Store cache of bundle
           key: spot-gems-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      - save_yarn_cache:
+          name: Store cache of node_modules
+          key: spot-yarn-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
       - persist_to_workspace:
           root: ~/
           paths:
