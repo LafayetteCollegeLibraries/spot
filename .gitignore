@@ -37,6 +37,10 @@ fits.log
 # Ignore collection branding items
 /public/branding
 
+# universalviewer target directory
+/public/uv/*
+!/public/uv/.keep
+
 # our deployed version file (shouldn't actually appear in dev,
 # but you never know i guess)
 VERSION
