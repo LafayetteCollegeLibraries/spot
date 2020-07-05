@@ -14,6 +14,7 @@ RSpec.shared_examples 'a base EAIC mapper' do |options|
 
   it_behaves_like 'it has language-tagged titles', skip_fields: skip_fields
   it_behaves_like 'it maps original create date'
+  it_behaves_like 'it maps image creation note'
 
   describe '#representative_file' do
     subject { mapper.representative_file }
