@@ -27,7 +27,7 @@ module Spot::Mappers
     # @return [Array<String>]
     def note
       Array.wrap(metadata.fetch(image_creation_note_field, []))
-           .map { |s| s.to_s.gsub(/Online display image was converted to JPG format\.$/, '').trim }
+           .map { |s| s.to_s.gsub(/Online display image was converted to JPG format\.$/, '').strip }
     end
   end
 end
