@@ -44,22 +44,13 @@ describe Publication do
 
   describe 'validations' do
     let(:work) { build(:publication) }
-    let(:attributes) { attributes_for(:publication) }
 
+    it_behaves_like 'it validates local authorities', field: :resource_type, authority: 'resource_types'
+    it_behaves_like 'it validates local authorities', field: :rights_statement, authority: 'rights_statements'
+    it_behaves_like 'it validates field presence', field: :title
+    it_behaves_like 'it validates field presence', field: :resource_type, value: ['Article']
+    it_behaves_like 'it validates field presence', field: :rights_statement
     it_behaves_like 'it ensures the existence of a NOID identifier'
-
-    describe 'title' do
-      it 'must be present' do
-        work.title = []
-
-        expect(work.valid?).to be false
-        expect(work.errors[:title]).to include 'Your work must include a Title.'
-
-        work.title = ['A cool title']
-
-        expect(work.valid?).to be true
-      end
-    end
 
     describe 'date_issued' do
       it 'can not be absent' do
@@ -95,48 +86,20 @@ describe Publication do
 
         expect(work.valid?).to be true
       end
-    end
 
-    it 'can be YYYY' do
-      work.date_issued = ['2019']
+      it 'can be YYYY' do
+        work.date_issued = ['2019']
 
-      expect(work.valid?).to be true
+        expect(work.valid?).to be true
+      end
     end
 
     describe 'rights_statement' do
       let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
-      it 'must be present' do
-        work.rights_statement = []
-
-        expect(work.valid?).to be false
-        expect(work.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
-
-        work.rights_statement = [uri]
-        expect(work.valid?).to be true
-      end
 
       it 'can be an ActiveTriples::Resource' do
         work.rights_statement = [ActiveTriples::Resource.new(RDF::URI(uri))]
         expect(work.valid?).to be true
-      end
-    end
-
-    describe 'resource_type' do
-      it 'must be present' do
-        work.resource_type = []
-
-        expect(work.valid?).to be false
-        expect(work.errors[:resource_type]).to include 'Your work must include a Resource Type.'
-
-        work.resource_type = ['Article']
-        expect(work.valid?).to be true
-      end
-
-      it 'must be included in the authority' do
-        work.resource_type = ['A noise tape']
-
-        expect(work.valid?).to be false
-        expect(work.errors[:resource_type]).to include '"A noise tape" is not a valid Resource Type.'
       end
     end
   end

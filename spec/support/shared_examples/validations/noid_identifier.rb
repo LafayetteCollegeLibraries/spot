@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it ensures the existence of a NOID identifier' do
+  let(:work_factory) { described_class.name.downcase.to_sym }
+  let(:attributes) { attributes_for(work_factory) }
+
   # rubocop:disable RSpec/ExampleLength
   describe '#ensure_noid_in_identifier callback' do
     it 'inserts "noid:<id>" before save when an ID is present' do
