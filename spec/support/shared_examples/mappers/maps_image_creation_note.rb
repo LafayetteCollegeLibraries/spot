@@ -10,7 +10,7 @@ RSpec.shared_examples 'it maps image creation note' do
     before { mapper.metadata = metadata }
 
     context 'when a value exists' do
-      let(:value) { 'Created on an Epson scanner' }
+      let(:value) { ['Created on an Epson scanner'] }
 
       it { is_expected.to eq value }
     end
@@ -23,7 +23,7 @@ RSpec.shared_examples 'it maps image creation note' do
 
     context 'when value contains magic string' do
       let(:value) do
-        'Master TIF image captured at 4000 pixels across the long edge using SilverFast AI 6.6 software and an Epson v700 scanner. Online display image was converted to JPG format.'
+        ['Master TIF image captured at 4000 pixels across the long edge using SilverFast AI 6.6 software and an Epson v700 scanner. Online display image was converted to JPG format.']
       end
 
       it { is_expected.to eq ['Master TIF image captured at 4000 pixels across the long edge using SilverFast AI 6.6 software and an Epson v700 scanner.'] }
