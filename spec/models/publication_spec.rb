@@ -1,47 +1,35 @@
 # frozen_string_literal: true
 describe Publication do
-  let(:dc) { RDF::Vocab::DC }
-  let(:dc11) { RDF::Vocab::DC11 }
-  let(:bibo) { RDF::Vocab::BIBO }
-  let(:rdfs) { RDF::RDFS }
-  let(:schema) { RDF::Vocab::SCHEMA }
-  let(:edm) { RDF::Vocab::EDM }
-  let(:skos) { RDF::Vocab::SKOS }
-  let(:subtitle_uri) { 'http://purl.org/spar/doco/Subtitle' }
-  let(:dept_uri) { 'http://vivoweb.org/ontology/core#AcademicDepartment' }
-  let(:division_uri) { 'http://vivoweb.org/ontology/core#Division' }
-  let(:org_uri) { 'http://vivoweb.org/ontology/core#Organization' }
-
   it_behaves_like 'a model with hyrax core metadata'
 
   [
-    [:subtitle, subtitle_uri],
-    [:title_alternative, dc.alternative],
-    [:publisher, dc11.publisher],
-    [:source, dc.source],
-    [:resource_type, dc.type],
-    [:physical_medium, dc.PhysicalMedium],
-    [:language, dc11.language],
-    [:abstract, dc.abstract],
-    [:description, dc11.description],
-    [:note, skos.note],
-    [:identifier, dc.identifier],
-    [:bibliographic_citation, dc.bibliographicCitation],
-    [:date_issued, dc.issued],
-    [:date_available, dc.available],
-    [:creator, dc11.creator],
-    [:contributor, dc11.contributor],
-    [:editor, bibo.editor],
-    [:academic_department, dept_uri],
-    [:division, division_uri],
-    [:organization, org_uri],
-    [:related_resource, rdfs.seeAlso],
-    [:subject, dc11.subject],
-    [:keyword, schema.keywords],
-    [:location, dc.spatial],
-    [:license, dc.license],
-    [:rights_statement, edm.rights],
-    [:rights_holder, dc.rightsHolder]
+    [:subtitle, 'http://purl.org/spar/doco/Subtitle'],
+    [:title_alternative, RDF::Vocab::DC.alternative],
+    [:publisher, RDF::Vocab::DC11.publisher],
+    [:source, RDF::Vocab::DC.source],
+    [:resource_type, RDF::Vocab::DC.type],
+    [:physical_medium, RDF::Vocab::DC.PhysicalMedium],
+    [:language, RDF::Vocab::DC11.language],
+    [:abstract, RDF::Vocab::DC.abstract],
+    [:description, RDF::Vocab::DC11.description],
+    [:note, RDF::Vocab::SKOS.note],
+    [:identifier, RDF::Vocab::DC.identifier],
+    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
+    [:date_issued, RDF::Vocab::DC.issued],
+    [:date_available, RDF::Vocab::DC.available],
+    [:creator, RDF::Vocab::DC11.creator],
+    [:contributor, RDF::Vocab::DC11.contributor],
+    [:editor, RDF::Vocab::BIBO.editor],
+    [:academic_department, 'http://vivoweb.org/ontology/core#AcademicDepartment'],
+    [:division, 'http://vivoweb.org/ontology/core#Division'],
+    [:organization, 'http://vivoweb.org/ontology/core#Organization'],
+    [:related_resource, RDF::RDFS.seeAlso],
+    [:subject, RDF::Vocab::DC11.subject],
+    [:keyword,  RDF::Vocab::SCHEMA.keywords],
+    [:location, RDF::Vocab::DC.spatial],
+    [:license, RDF::Vocab::DC.license],
+    [:rights_statement, RDF::Vocab::EDM.rights],
+    [:rights_holder, RDF::Vocab::DC.rightsHolder]
   ].each do |(prop, uri)|
     it { is_expected.to have_editable_property(prop).with_predicate(uri) }
   end
