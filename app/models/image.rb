@@ -23,7 +23,6 @@ class Image < ActiveFedora::Base
   validates_with ::Spot::RequiredLocalAuthorityValidator,
                  field: :rights_statement, authority: 'rights_statements'
 
-
   # title is included with ::ActiveFedora::Base
   property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
     index.as :stored_searchable
