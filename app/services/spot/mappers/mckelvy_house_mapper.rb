@@ -13,6 +13,7 @@ module Spot::Mappers
       original_item_extent: 'description.size',
       physical_medium: 'format.medium',
       repository_location: 'source',
+      resource_type: 'resource.type',
       source: 'description.note'
     }
 
