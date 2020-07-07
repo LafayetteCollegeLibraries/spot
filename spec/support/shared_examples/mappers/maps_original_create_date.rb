@@ -12,7 +12,7 @@ RSpec.shared_examples 'it maps original create date' do
 
     context 'when a valid value exists' do
       it { is_expected.to be_a String }
-      it { is_expected.to eq value }
+      it { is_expected.to eq DateTime.parse(value).utc.to_s }
     end
 
     context 'when the value is not valid' do
