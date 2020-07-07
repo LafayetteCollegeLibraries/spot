@@ -35,7 +35,8 @@ module Spot::Mappers
     def date_uploaded
       return unless metadata.include?(original_create_date_field)
 
-      DateTime.parse(Array.wrap(metadata[original_create_date_field]).first).utc
+      raw_value = Array.wrap(metadata[original_create_date_field]).first
+      DateTime.parse(raw_value).utc.to_s
     rescue ArgumentError
       nil
     end
