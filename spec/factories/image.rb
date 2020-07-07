@@ -21,7 +21,7 @@ FactoryBot.define do
     repository_location { ['On that one shelf in the back'] }
     requested_by { ['Requester, Jennifer Q.'] }
     research_assistance { ['Student, Ashley'] }
-    resource_type { ['Photograph'] }
+    resource_type { ['Image'] }
     rights_holder { ['Holder, R.'] }
     rights_statement { ['http://creativecommons.org/publicdomain/mark/1.0/'] }
     source { ['A grouped collection'] }

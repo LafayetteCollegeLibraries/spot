@@ -14,7 +14,14 @@ class Image < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
 
-  validates :title, presence: { message: 'Your work must have a title.' }
+  validates :title, presence: { message: 'Your work must include a Title.' }
+  validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }
+  validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }
+
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :resource_type, authority: 'resource_types'
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :rights_statement, authority: 'rights_statements'
 
   # title is included with ::ActiveFedora::Base
   property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|

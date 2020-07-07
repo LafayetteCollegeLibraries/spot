@@ -38,9 +38,11 @@ RSpec.describe Image do
   end
 
   describe 'validations' do
-    let(:work) { build(:image) }
-    let(:attributes) { attributes_for(:image) }
-
+    it_behaves_like 'it validates field presence', field: :title
+    it_behaves_like 'it validates field presence', field: :resource_type, value: ['Image']
+    it_behaves_like 'it validates field presence', field: :rights_statement
+    it_behaves_like 'it validates local authorities', field: :resource_type, authority: 'resource_types'
+    it_behaves_like 'it validates local authorities', field: :rights_statement, authority: 'rights_statements'
     it_behaves_like 'it ensures the existence of a NOID identifier'
   end
 end
