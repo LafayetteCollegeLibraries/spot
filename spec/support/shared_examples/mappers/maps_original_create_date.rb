@@ -6,13 +6,13 @@ RSpec.shared_examples 'it maps original create date' do
     let(:mapper) { described_class.new }
     let(:field) { described_class.original_create_date_field }
     let(:metadata) { { field => value } }
+    let(:value) { '2015-04-14 15:55:52' }
 
     before { mapper.metadata = metadata }
 
     context 'when a valid value exists' do
-      let(:value) { '2015-04-14 15:55:52' }
-
-      it { is_expected.to eq value }
+      it { is_expected.to be_a String }
+      it { is_expected.to eq DateTime.parse(value).utc.to_s }
     end
 
     context 'when the value is not valid' do
