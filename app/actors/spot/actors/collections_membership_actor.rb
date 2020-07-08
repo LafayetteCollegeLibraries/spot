@@ -13,14 +13,14 @@ module Spot
           collection_ids = env.curation_concern.member_of_collections.map(&:id)
           collection_stack = [collection]
 
-          while collection_stack.size > 0
+          until collection_stack.empty?
             col = collection_stack.shift
 
-            unless collection_ids.include?(col.id)
-              collection_ids << col.id
-              env.curation_concern.member_of_collections << col
-              collection_stack += col.member_of_collections
-            end
+            next if collection_ids.include?(col.id)
+
+            collection_ids << col.id
+            env.curation_concern.member_of_collections << col
+            collection_stack += col.member_of_collections
           end
         end
     end
