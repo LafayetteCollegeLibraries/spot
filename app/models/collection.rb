@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Collection < ActiveFedora::Base
-  include ::Hyrax::CollectionBehavior
+  include Hyrax::CollectionBehavior
+  include Spot::NestedCollectionBehavior
 
   class_attribute :controlled_properties
   self.controlled_properties = [:place]
