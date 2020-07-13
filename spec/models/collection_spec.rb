@@ -119,4 +119,51 @@ RSpec.describe Collection do
       it { is_expected.not_to be_empty }
     end
   end
+
+  # note: this should fail when we update to hyrax@3 because we'll need to stub +Hyrax.query_service+
+  describe '#add_member_objects' do
+    let(:work) { Publication.new(id: 'publication-to-add-to-collections') }
+
+    before do
+      allow(work).to receive(:save!)
+      allow(ActiveFedora::Base).to receive(:find).with(work.id).and_return(work)
+    end
+
+    context 'with no parent objects' do
+      let(:col) { Collection.new(id: 'a-single-collection') }
+
+      it 'adds the work to the collection' do
+        expect(col.add_member_objects(work.id)).to eq [work]
+        expect(work.member_of_collections).to eq [col]
+      end
+    end
+
+    context 'with a single parent object' do
+      let(:parent_collection) { Collection.new(id: 'parent-collection') }
+      let(:child_collection) { Collection.new(id: 'child-collection') }
+
+      before { child_collection.member_of_collections << parent_collection }
+
+      it 'adds the work to the collection + parent' do
+        expect(child_collection.add_member_objects(work.id)).to eq [work]
+        expect(work.member_of_collections).to eq [child_collection, parent_collection]
+      end
+    end
+
+    context 'with a deeper tree' do
+      let(:grandparent_collection) { Collection.new(id: 'grandparent-collection') }
+      let(:parent_collection) { Collection.new(id: 'parent-collection') }
+      let(:child_collection) { Collection.new(id: 'child-collection') }
+
+      before do
+        parent_collection.member_of_collections << grandparent_collection
+        child_collection.member_of_collections << parent_collection
+      end
+
+      it 'adds the work to all of the collections downstream' do
+        expect(child_collection.add_member_objects(work.id)).to eq [work]
+        expect(work.member_of_collections).to eq [child_collection, parent_collection, grandparent_collection]
+      end
+    end
+  end
 end
