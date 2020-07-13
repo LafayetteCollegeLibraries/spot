@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 module Spot
   module Actors
+    # Intended as a drop-in replacement for +Hyrax::Actors::CollectionsMembershipActor+.
+    # When we add a work to a collection, we want to make sure that the work belongs
+    # to all of the parent collections as well.
+    #
+    # @example replacing the actor in the stack
+    #   # config/initializers/spot_overrides.rb (or wherever)
+    #   Hyrax::CurationConcern.actor_factory.swap(Hyrax::Actors::CollectionsMembershipActor, Spot::Actors::CollectionsMembershipActor)
+    #
+    # This will affect create and update calls from the form.
+    #
     class CollectionsMembershipActor < ::Hyrax::Actors::CollectionsMembershipActor
       private
 

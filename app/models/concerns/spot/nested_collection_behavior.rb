@@ -26,7 +26,6 @@ module Spot
   module NestedCollectionBehavior
     # Add items to a collection via their id values
     #
-    # @note this stops at parents of the current collection.
     # @param [Array<String>, String] new_member_ids
     # @return [Array<ActiveFedora::Base>]
     def add_member_objects(new_member_ids)
