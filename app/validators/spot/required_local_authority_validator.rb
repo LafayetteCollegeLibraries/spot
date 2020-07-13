@@ -20,8 +20,8 @@ module Spot
       values = record.send(field)
       values = Array.wrap(values) unless values.respond_to?(:each)
 
-      values.each do |v|
-        value = v.is_a?(ActiveTriples::Resource) ? v.id : v.to_s
+      values.each do |raw_value|
+        value = raw_value.respond_to?(:rdf_subject) ? raw_value.rdf_subject.to_s : raw_value.to_s
         record.errors[field] << %("#{value}" is not a valid #{field.to_s.titleize}.) if authority.find(value).empty?
       end
     end
