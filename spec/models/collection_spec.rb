@@ -130,7 +130,7 @@ RSpec.describe Collection do
     end
 
     context 'with no parent objects' do
-      let(:col) { Collection.new(id: 'a-single-collection') }
+      let(:col) { described_class.new(id: 'a-single-collection') }
 
       it 'adds the work to the collection' do
         expect(col.add_member_objects(work.id)).to eq [work]
@@ -139,8 +139,8 @@ RSpec.describe Collection do
     end
 
     context 'with a single parent object' do
-      let(:parent_collection) { Collection.new(id: 'parent-collection') }
-      let(:child_collection) { Collection.new(id: 'child-collection') }
+      let(:parent_collection) { described_class.new(id: 'parent-collection') }
+      let(:child_collection) { described_class.new(id: 'child-collection') }
 
       before { child_collection.member_of_collections << parent_collection }
 
@@ -151,9 +151,9 @@ RSpec.describe Collection do
     end
 
     context 'with a deeper tree' do
-      let(:grandparent_collection) { Collection.new(id: 'grandparent-collection') }
-      let(:parent_collection) { Collection.new(id: 'parent-collection') }
-      let(:child_collection) { Collection.new(id: 'child-collection') }
+      let(:grandparent_collection) { described_class.new(id: 'grandparent-collection') }
+      let(:parent_collection) { described_class.new(id: 'parent-collection') }
+      let(:child_collection) { described_class.new(id: 'child-collection') }
 
       before do
         parent_collection.member_of_collections << grandparent_collection
