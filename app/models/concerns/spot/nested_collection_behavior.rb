@@ -58,6 +58,8 @@ module Spot
         [].tap do |collections|
           until collections_to_check.size.zero?
             col = collections_to_check.shift
+            col.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+
             collections << col unless collections.include?(col)
             collections_to_check += col.member_of_collections
           end

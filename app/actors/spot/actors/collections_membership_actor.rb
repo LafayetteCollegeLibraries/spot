@@ -16,7 +16,6 @@ module Spot
 
         def add(env, id)
           collection = ::Collection.find(id)
-          collection.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
 
           return unless env.current_ability.can?(:deposit, collection)
 
@@ -25,8 +24,9 @@ module Spot
 
           until collection_stack.empty?
             col = collection_stack.shift
-
             next if collection_ids.include?(col.id)
+
+            col.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
 
             collection_ids << col.id
             env.curation_concern.member_of_collections << col
