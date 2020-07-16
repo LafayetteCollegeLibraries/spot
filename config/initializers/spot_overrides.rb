@@ -7,9 +7,11 @@ Rails.application.config.to_prepare do
   # Spot overrides Hyrax
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
+  Hyrax::Dashboard::CollectionsController.include Spot::CollectionsControllerBehavior
 
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::CollectionsController.include Spot::CollectionSlugsBehavior
+  Hyrax::CollectionsController.include Spot::CollectionsControllerBehavior
 
   Hyrax::DerivativeService.services = [
     ::Spot::ImageDerivativesService,
