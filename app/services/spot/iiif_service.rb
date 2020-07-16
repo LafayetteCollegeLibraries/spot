@@ -9,11 +9,11 @@ module Spot
     DEFAULT_SIZE = '600,'
 
     def self.image_url(file_id, base_url, size)
-      new(file_id, base_url).image_url(size: size)
+      new(file_id).image_url(size: size)
     end
 
     def self.info_url(file_id, base_url)
-      new(file_id, base_url).info_url
+      new(file_id).info_url
     end
 
     attr_reader :file_id, :base_url
