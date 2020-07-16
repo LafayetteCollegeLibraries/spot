@@ -25,7 +25,7 @@ module Spot
     end
 
     def info_url
-      URI.join(base_url, "#{file_set_id}/info.json")
+      URI.join(base_url, file_set_id)
     end
 
     # :id/:region/:size/:rotation/:quality.:format
