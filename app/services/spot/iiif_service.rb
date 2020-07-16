@@ -21,15 +21,16 @@ module Spot
     def initialize(file_id, base_url = ENV['IIIF_URL_BASE'])
       @file_id = file_id
       @base_url = base_url
+      @base_url += '/' unless @base_url.end_with?('/')
     end
 
     def info_url
-      URI.join(base_url, file_set_id, 'info.json')
+      URI.join(base_url, "#{file_set_id}/info.json")
     end
 
     # :id/:region/:size/:rotation/:quality.:format
     def image_url(region: 'full', size: DEFAULT_SIZE, rotation: '0', quality: 'default', format: 'jpg')
-      URI.join(base_url, file_set_id, region, size, rotation, "#{quality}.#{format}")
+      URI.join(base_url, "#{file_set_id}/#{region}/#{size}/#{rotation}/#{quality}.#{format}")
     end
 
     # file_id will look like "abc123def/files/00000000-0000-0000-0000-000000000000", but all
