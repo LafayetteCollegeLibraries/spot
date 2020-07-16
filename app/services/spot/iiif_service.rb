@@ -18,7 +18,7 @@ module Spot
 
     attr_reader :file_id, :base_url
 
-    def initialize(file_id, base_url: ENV['IIIF_URL_BASE'])
+    def initialize(file_id, base_url = ENV['IIIF_URL_BASE'])
       @file_id = file_id
       @base_url = base_url
     end
