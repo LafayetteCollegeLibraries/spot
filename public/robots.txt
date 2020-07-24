@@ -9,3 +9,7 @@ User-agent: *
 Disallow: /catalog
 Disallow: /catalog/*
 Disallow: /downloads
+
+# Legacy DSpace paths we no longer support
+Disallow: /bitstream
+Disallow: /bitstream/*

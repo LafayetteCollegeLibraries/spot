@@ -1,19 +1,58 @@
 # changelog
 
+## [2020.8] - 2020-07-24
+
+### features 👩‍🔬
+
+- `master` branch has been renamed to `primary`. the old trunk has been locked down to prevent pushes (#538)
+- tell webcrawlers to ignore legacy dspace `/bitstream/*` urls (#551)
+- install universalviewer via yarn (backported from hyrax@3) (#479)
+- updates to mappers
+  - `Spot::Mappers::MapsOriginalCreateDate` mixin added, which retains the object's original create_date by storing it in `Image#date_uploaded` (#553, #559)
+  - `Spot::Mappers::MapsImageCreationNote` mixin added, which stores information about the original image's creation (stored in `format.digital`) in `Image#note` (#555)
+- Image model validations added (#557)
+- sort collection members by title by default (#567)
+
+### bug fixes 🐞
+- add public fields to Image display (#525)
+  - `donor`, `repository_location`, `original_item_extent`, `date_scope_note`
+  - fix `related_resource` index field
+- quality control fixes for mappers (thanks @noraegloff!)
+  - cap (#540)
+  - cpw-shashinkai (#542)
+  - lewis-postcards (#532)
+  - mckelvy-house (#558)
+  - pa-omitsu (#566)
+  - pacwar-postcards (#562)
+  - warner-souvenirs (#537)
+  - woodsworth-images (#539)
+- add `#permalink` to the image presenter so view pages (+ catalog) will display the url (#564)
+
+### dependencies 👩‍👩‍👧‍👧
+
+- faraday 0.17.3 (#546)
+- honeybadger to 4.7.0 (#547)
+- hyrax to 2.8.0 (#543)
+- listen to 3.2.1 (#548)
+- rails to 5.2.4.3 (#544)
+- sidekiq to 5.2.9 (#549)
+- webmock to 3.8.3 (#545)
+
+
 ## [2020.7] - 2020-06-29
 
 ### features 🎁
-- adds mappers for image batch 3 collections (#447): 
+- adds mappers for image batch 3 collections (#447):
   - cap
   - mckelvy-house
   - mammana-postcards
   - pa-tsubokura
   - mdl-prints
   - geology-slides-esi
-- updates capistrano to start/stop sidekiq as a service (recommended for sidekiq @6) (#500) 
-- adds a multi-authority controlled vocabulary input for `Image#location` (#512) 
+- updates capistrano to start/stop sidekiq as a service (recommended for sidekiq @6) (#500)
+- adds a multi-authority controlled vocabulary input for `Image#location` (#512)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - disable noid minting in specs to circumvent `Ldp::Gone` errors, 🤞 (#487)
 - `Spot::Mappers::CpwShashinkaiMapper` will map titles that aren't prefixed with an identifier (ex. `[ts0001] The Monopoly Bureau at Taihoku (Outside of South Gate)`) to `title_alternative`
 - make sure edtf dates are created in a valid order (earliest is first) (#508)
@@ -23,11 +62,11 @@
   - `Spot::Actors::BaseActor` has been modified to ensure that we're always storing those values as `RDF::URI` objects
 - `subject` edit partial now includes a `wrapper_html` attribute, so new rows have will initialize the Autocomplete fields (#520)
 
-### dependency updates 👩‍👩‍👧‍👧 
-- blacklight to 6.23.0 (#515) 
-- capybara to 3.32.1 (#484) 
+### dependency updates 👩‍👩‍👧‍👧
+- blacklight to 6.23.0 (#515)
+- capybara to 3.32.1 (#484)
 - iso-639 to 0.3.5 (#486)
-- kaminari to 1.2.1 (#494, done on master but rebased to this version) 
+- kaminari to 1.2.1 (#494, done on master but rebased to this version)
 - pg to 1.2.3 (#485)
 - puma to 3.12.6 (#492)
 - riiif to 2.3.0 (#497)
@@ -402,6 +441,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.8
 [2020.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.7
 [2020.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.6
 [2020.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.5

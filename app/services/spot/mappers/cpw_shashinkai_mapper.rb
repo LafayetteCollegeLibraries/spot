@@ -4,10 +4,11 @@ module Spot::Mappers
   class CpwShashinkaiMapper < BaseEaicMapper
     self.fields_map = {
       creator: 'creator.maker',
-      original_item_extent: 'format.extant',
+      original_item_extent: 'format.extent',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       research_assistance: 'contributor',
+      resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
     }
 

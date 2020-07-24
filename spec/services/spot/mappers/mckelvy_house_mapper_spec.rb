@@ -6,6 +6,8 @@ RSpec.describe Spot::Mappers::MckelvyHouseMapper do
   before { mapper.metadata = metadata }
 
   it_behaves_like 'it has language-tagged titles'
+  it_behaves_like 'it maps image creation note'
+  it_behaves_like 'it maps original create date'
 
   describe '#creator' do
     subject { mapper.creator }
@@ -71,6 +73,14 @@ RSpec.describe Spot::Mappers::MckelvyHouseMapper do
     subject { mapper.repository_location }
 
     let(:field) { 'source' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    let(:field) { 'resource.type' }
 
     it_behaves_like 'a mapped field'
   end

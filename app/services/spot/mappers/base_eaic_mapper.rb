@@ -16,6 +16,8 @@ module Spot::Mappers
   #
   class BaseEaicMapper < BaseMapper
     include LanguageTaggedTitles
+    include MapsImageCreationNote
+    include MapsOriginalCreateDate
 
     # 'date.artifact.lower' and 'date.artifact.upper' fields concatted into
     # an EDTF date string. When both fields are available, a range object

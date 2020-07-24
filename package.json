@@ -1,5 +1,14 @@
 {
   "name": "spot",
   "private": true,
-  "dependencies": {}
+  "scripts": {
+    "preinstall": "rm -rf ./public/uv",
+    "postinstall": "yarn run uv-install && yarn run uv-config",
+    "uv-install": "cp -r ./node_modules/universalviewer/dist ./public/uv",
+    "uv-config": "cp ./config/uv/uv.html ./public/uv/uv.html && cp ./config/uv/uv-config.json ./public/uv/"
+  },
+  "dependencies": {
+    "universalviewer": "^3.0.16"
+  },
+  "version": "0.0.0"
 }

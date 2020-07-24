@@ -7,6 +7,7 @@ module Spot::Mappers
       language: 'language',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
+      resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
     }
 

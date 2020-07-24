@@ -4,7 +4,7 @@ module Spot::Mappers
     self.fields_map = {
       creator: 'creator.maker',
       date_scope_note: 'description.indicia',
-      original_item_extent: 'format.extant',
+      original_item_extent: 'format.extent',
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       research_assistance: 'contributor',
@@ -18,6 +18,7 @@ module Spot::Mappers
         :related_resource,
 
         # inherited methods
+        :date,
         :date_associated,
         :description,
         :identifier,

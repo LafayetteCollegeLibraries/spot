@@ -14,7 +14,14 @@ class Image < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
 
-  validates :title, presence: { message: 'Your work must have a title.' }
+  validates :title, presence: { message: 'Your work must include a Title.' }
+  validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }
+  validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }
+
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :resource_type, authority: 'resource_types'
+  validates_with ::Spot::RequiredLocalAuthorityValidator,
+                 field: :rights_statement, authority: 'rights_statements'
 
   # title is included with ::ActiveFedora::Base
   property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
@@ -117,14 +124,13 @@ class Image < ActiveFedora::Base
     index.as :symbol
   end
 
-  # @todo
   property :research_assistance, predicate: ::RDF::URI.new('http://www.rdaregistry.info/Elements/a/#P50265') do |index|
     index.as :symbol
   end
 
-  # @todo Should this be indexed as searchable (are we using statements?
-  #       ex. "Donated by Soand So") or as a symbol (are we using a name value?)
-  property :donor, predicate: ::RDF::Vocab::DC.provenance
+  property :donor, predicate: ::RDF::Vocab::DC.provenance do |index|
+    index.as :symbol
+  end
 
   property :note, predicate: ::RDF::Vocab::SKOS.note do |index|
     index.as :stored_searchable

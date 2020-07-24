@@ -1,65 +1,48 @@
 # frozen_string_literal: true
 describe Publication do
-  let(:dc) { RDF::Vocab::DC }
-  let(:dc11) { RDF::Vocab::DC11 }
-  let(:bibo) { RDF::Vocab::BIBO }
-  let(:rdfs) { RDF::RDFS }
-  let(:schema) { RDF::Vocab::SCHEMA }
-  let(:edm) { RDF::Vocab::EDM }
-  let(:skos) { RDF::Vocab::SKOS }
-  let(:subtitle_uri) { 'http://purl.org/spar/doco/Subtitle' }
-  let(:dept_uri) { 'http://vivoweb.org/ontology/core#AcademicDepartment' }
-  let(:division_uri) { 'http://vivoweb.org/ontology/core#Division' }
-  let(:org_uri) { 'http://vivoweb.org/ontology/core#Organization' }
-
   it_behaves_like 'a model with hyrax core metadata'
 
-  it { is_expected.to have_editable_property(:subtitle).with_predicate(subtitle_uri) }
-  it { is_expected.to have_editable_property(:title_alternative).with_predicate(dc.alternative) }
-  it { is_expected.to have_editable_property(:publisher).with_predicate(dc11.publisher) }
-  it { is_expected.to have_editable_property(:source).with_predicate(dc.source) }
-  it { is_expected.to have_editable_property(:resource_type).with_predicate(dc.type) }
-  it { is_expected.to have_editable_property(:physical_medium).with_predicate(dc.PhysicalMedium) }
-  it { is_expected.to have_editable_property(:language).with_predicate(dc11.language) }
-  it { is_expected.to have_editable_property(:abstract).with_predicate(dc.abstract) }
-  it { is_expected.to have_editable_property(:description).with_predicate(dc11.description) }
-  it { is_expected.to have_editable_property(:note).with_predicate(skos.note) }
-  it { is_expected.to have_editable_property(:identifier).with_predicate(dc.identifier) }
-  it { is_expected.to have_editable_property(:bibliographic_citation).with_predicate(dc.bibliographicCitation) }
-  it { is_expected.to have_editable_property(:date_issued).with_predicate(dc.issued) }
-  it { is_expected.to have_editable_property(:date_available).with_predicate(dc.available) }
-  it { is_expected.to have_editable_property(:creator).with_predicate(dc11.creator) }
-  it { is_expected.to have_editable_property(:contributor).with_predicate(dc11.contributor) }
-  it { is_expected.to have_editable_property(:editor).with_predicate(bibo.editor) }
-  it { is_expected.to have_editable_property(:academic_department).with_predicate(dept_uri) }
-  it { is_expected.to have_editable_property(:division).with_predicate(division_uri) }
-  it { is_expected.to have_editable_property(:organization).with_predicate(org_uri) }
-  it { is_expected.to have_editable_property(:related_resource).with_predicate(rdfs.seeAlso) }
-  it { is_expected.to have_editable_property(:subject).with_predicate(dc11.subject) }
-  it { is_expected.to have_editable_property(:keyword).with_predicate(schema.keywords) }
-  it { is_expected.to have_editable_property(:location).with_predicate(dc.spatial) }
-  it { is_expected.to have_editable_property(:license).with_predicate(dc.license) }
-  it { is_expected.to have_editable_property(:rights_statement).with_predicate(edm.rights) }
-  it { is_expected.to have_editable_property(:rights_holder).with_predicate(dc.rightsHolder) }
+  [
+    [:subtitle, 'http://purl.org/spar/doco/Subtitle'],
+    [:title_alternative, RDF::Vocab::DC.alternative],
+    [:publisher, RDF::Vocab::DC11.publisher],
+    [:source, RDF::Vocab::DC.source],
+    [:resource_type, RDF::Vocab::DC.type],
+    [:physical_medium, RDF::Vocab::DC.PhysicalMedium],
+    [:language, RDF::Vocab::DC11.language],
+    [:abstract, RDF::Vocab::DC.abstract],
+    [:description, RDF::Vocab::DC11.description],
+    [:note, RDF::Vocab::SKOS.note],
+    [:identifier, RDF::Vocab::DC.identifier],
+    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
+    [:date_issued, RDF::Vocab::DC.issued],
+    [:date_available, RDF::Vocab::DC.available],
+    [:creator, RDF::Vocab::DC11.creator],
+    [:contributor, RDF::Vocab::DC11.contributor],
+    [:editor, RDF::Vocab::BIBO.editor],
+    [:academic_department, 'http://vivoweb.org/ontology/core#AcademicDepartment'],
+    [:division, 'http://vivoweb.org/ontology/core#Division'],
+    [:organization, 'http://vivoweb.org/ontology/core#Organization'],
+    [:related_resource, RDF::RDFS.seeAlso],
+    [:subject, RDF::Vocab::DC11.subject],
+    [:keyword,  RDF::Vocab::SCHEMA.keywords],
+    [:location, RDF::Vocab::DC.spatial],
+    [:license, RDF::Vocab::DC.license],
+    [:rights_statement, RDF::Vocab::EDM.rights],
+    [:rights_holder, RDF::Vocab::DC.rightsHolder]
+  ].each do |(prop, uri)|
+    it { is_expected.to have_editable_property(prop).with_predicate(uri) }
+  end
 
   describe 'validations' do
     let(:work) { build(:publication) }
-    let(:attributes) { attributes_for(:publication) }
 
+    it_behaves_like 'it validates local authorities', field: :resource_type, authority: 'resource_types'
+    it_behaves_like 'it validates local authorities', field: :rights_statement, authority: 'rights_statements'
+    it_behaves_like 'it validates field presence', field: :title
+    it_behaves_like 'it validates field presence', field: :resource_type, value: ['Article']
+    it_behaves_like 'it validates field presence', field: :rights_statement
     it_behaves_like 'it ensures the existence of a NOID identifier'
-
-    describe 'title' do
-      it 'must be present' do
-        work.title = []
-
-        expect(work.valid?).to be false
-        expect(work.errors[:title]).to include 'Your work must include a Title.'
-
-        work.title = ['A cool title']
-
-        expect(work.valid?).to be true
-      end
-    end
 
     describe 'date_issued' do
       it 'can not be absent' do
@@ -95,48 +78,20 @@ describe Publication do
 
         expect(work.valid?).to be true
       end
-    end
 
-    it 'can be YYYY' do
-      work.date_issued = ['2019']
+      it 'can be YYYY' do
+        work.date_issued = ['2019']
 
-      expect(work.valid?).to be true
+        expect(work.valid?).to be true
+      end
     end
 
     describe 'rights_statement' do
       let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
-      it 'must be present' do
-        work.rights_statement = []
-
-        expect(work.valid?).to be false
-        expect(work.errors[:rights_statement]).to include 'Your work must include a Rights Statement.'
-
-        work.rights_statement = [uri]
-        expect(work.valid?).to be true
-      end
 
       it 'can be an ActiveTriples::Resource' do
         work.rights_statement = [ActiveTriples::Resource.new(RDF::URI(uri))]
         expect(work.valid?).to be true
-      end
-    end
-
-    describe 'resource_type' do
-      it 'must be present' do
-        work.resource_type = []
-
-        expect(work.valid?).to be false
-        expect(work.errors[:resource_type]).to include 'Your work must include a Resource Type.'
-
-        work.resource_type = ['Article']
-        expect(work.valid?).to be true
-      end
-
-      it 'must be included in the authority' do
-        work.resource_type = ['A noise tape']
-
-        expect(work.valid?).to be false
-        expect(work.errors[:resource_type]).to include '"A noise tape" is not a valid Resource Type.'
       end
     end
   end

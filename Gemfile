@@ -9,7 +9,7 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '5.1.6.2'
+gem 'rails', '~> 5.2'
 
 # use Puma as the app server (dev only, we're using passenger in production)
 gem 'puma', '3.12.6'
@@ -35,7 +35,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 2.7.0'
+gem 'hyrax', '~> 2.8.0'
 
 # modularize our javascripts
 gem 'almond-rails', '0.3.0'
@@ -67,7 +67,7 @@ gem 'edtf', '3.0.4'
 gem 'edtf-humanize', '0.0.7'
 
 # error trackijng
-gem 'honeybadger', '4.5.6'
+gem 'honeybadger', '4.7.0'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0.2'
@@ -98,7 +98,7 @@ gem 'rsolr', '2.3.0'
 gem 'rubyzip', '1.3.0'
 
 # our jobs server
-gem 'sidekiq', '5.2.7'
+gem 'sidekiq', '5.2.9'
 gem 'sidekiq-cron', '1.1.0'
 
 # using Slack for some of our messaging
@@ -119,7 +119,7 @@ gem 'kaminari', '1.2.1'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '0.12.2'
+gem 'faraday', '0.17.3'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
@@ -132,7 +132,7 @@ gem 'linkeddata', '~> 3.0'
 # lock down versions here)
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen', '>= 3.0.5', '< 3.3'
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1.0'

@@ -2,6 +2,8 @@
 module Spot::Mappers
   class MckelvyHouseMapper < BaseMapper
     include LanguageTaggedTitles
+    include MapsImageCreationNote
+    include MapsOriginalCreateDate
 
     self.primary_title_map = { 'title' => :en }
     self.fields_map = {
@@ -11,6 +13,7 @@ module Spot::Mappers
       original_item_extent: 'description.size',
       physical_medium: 'format.medium',
       repository_location: 'source',
+      resource_type: 'resource.type',
       source: 'description.note'
     }
 

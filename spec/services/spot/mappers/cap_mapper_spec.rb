@@ -6,6 +6,8 @@ RSpec.describe Spot::Mappers::CapMapper do
   before { mapper.metadata = metadata }
 
   it_behaves_like 'it has language-tagged titles'
+  it_behaves_like 'it maps image creation note'
+  it_behaves_like 'it maps original create date'
 
   describe '#creator' do
     subject { mapper.creator }
@@ -27,7 +29,7 @@ RSpec.describe Spot::Mappers::CapMapper do
     subject { mapper.description }
 
     let(:metadata) do
-      { 'description.critical' => ['A photograph of life on campus in 1964.'] }
+      { 'description' => ['A photograph of life on campus in 1964.'] }
     end
 
     it { is_expected.to eq [RDF::Literal('A photograph of life on campus in 1964.', language: :en)] }
@@ -81,7 +83,7 @@ RSpec.describe Spot::Mappers::CapMapper do
     subject { mapper.subject }
 
     let(:metadata) do
-      { 'subject' => ['http://id.worldcat.org/fast/1898429'] }
+      { 'subject.LOC' => ['http://id.worldcat.org/fast/1898429'] }
     end
 
     it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1898429')] }

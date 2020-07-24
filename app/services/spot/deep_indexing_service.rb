@@ -35,18 +35,18 @@ module Spot
       val = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
 
       # first, add the value to the default solr key
-      self.class.create_and_insert_terms(solr_field_key,
-                                         val.first,
-                                         field_info.behaviors,
-                                         solr_doc)
+      ActiveFedora::Indexing::Inserter.create_and_insert_terms(solr_field_key,
+                                                               val.first,
+                                                               field_info.behaviors,
+                                                               solr_doc)
 
       return unless val.last.is_a?(Hash) && val.last.include?(:label)
 
       # then, add the '*_label' value to the doc
-      self.class.create_and_insert_terms("#{solr_field_key}_label",
-                                         label_for(val),
-                                         field_info.behaviors,
-                                         solr_doc)
+      ActiveFedora::Indexing::Inserter.create_and_insert_terms("#{solr_field_key}_label",
+                                                               label_for(val),
+                                                               field_info.behaviors,
+                                                               solr_doc)
     end
 
     # Fetches values (when possible) before calling up to insert

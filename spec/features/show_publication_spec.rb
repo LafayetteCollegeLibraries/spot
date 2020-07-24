@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.feature 'Show Publication page', js: false do
+  include ::Hyrax::IiifHelper
+
   let(:pub) do
     create(:publication_with_file_set,
            content: file,
@@ -7,7 +9,8 @@ RSpec.feature 'Show Publication page', js: false do
            subject: [RDF::URI(subject_uri)])
   end
 
-  let(:item_base_url) { "/concern/#{pub.class.to_s.downcase.pluralize}/#{pub.id}" }
+  let(:url_host) { ENV['URL_HOST'] }
+  let(:item_base_url) { "#{url_host}/concern/publications/#{pub.id}" }
   let(:language) { ['en'] }
   let(:subject_uri) { 'http://id.worldcat.org/fast/2004076' }
   let(:subject_label) { 'Little free libraries' }
@@ -120,11 +123,13 @@ RSpec.feature 'Show Publication page', js: false do
   context 'when Publication is an image' do
     let(:file) { File.open(Rails.root.join('spec', 'fixtures', 'image.png')) }
     let(:presenter_check_method) { :image? }
+    let(:url_host) { ENV['URL_HOST'] }
+    let(:viewer_src) { "#{url_host}/uv/uv.html#?manifest=#{item_base_url}/manifest&config=#{url_host}/uv/uv-config.json" }
 
     scenario 'the UniversalViewer is displayed' do
-      viewer = page.find('.uv.viewer')
+      viewer = page.find('.viewer-wrapper iframe')
       expect(viewer).to be_present
-      expect(viewer[:'data-uri']).to include "#{item_base_url}/manifest"
+      expect(viewer[:src]).to eq viewer_src
     end
   end
 end
