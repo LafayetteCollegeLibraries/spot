@@ -2,6 +2,26 @@
 #
 # Configuration for OkComputer, an engine to register system healthchecks
 
+module Spot
+  class CantaloupeCheck < ::OkComputer::HttpCheck
+    require 'json'
+
+    def check
+      response = JSON.parse(perform_request)
+      message = case response['color']
+                when 'GREEN' then 'Cantaloupe check successful!'
+                when 'YELLOW' then "WARNING: #{response['message']}"
+                when 'RED' then "ERROR: #{response['message']}"
+                end
+      mark_message(message)
+      mark_failure unless response['color'] == 'GREEN'
+    rescue => e
+      mark_message("Error: '#{e}'")
+      mark_failure
+    end
+  end
+end
+
 # by default, OkComputer mounts at `/okcomputer`. setting this to `false`
 # lets us mount it manually (and at a different endpoint) in config/routes.rb
 OkComputer.mount_at = false
@@ -23,6 +43,7 @@ end.to_s
 OkComputer::Registry.register 'solr', OkComputer::SolrCheck.new(solr_config['url'])
 OkComputer::Registry.register 'redis', OkComputer::RedisCheck.new(redis_config)
 OkComputer::Registry.register 'fedora', OkComputer::HttpCheck.new(fcrepo_uri)
+OkComputer::Registry.register 'cantaloupe', Spot::CantaloupeCheck.new("#{ENV['URL_HOST']}/iiif/health")
 
 sidekiq_config[:queues].each do |queue|
   OkComputer::Registry.register "sidekiq :#{queue}", OkComputer::SidekiqLatencyCheck.new(queue.to_sym)
