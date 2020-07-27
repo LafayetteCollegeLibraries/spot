@@ -8,7 +8,7 @@ set :sidekiq_concurrency, 10
 
 server 'nostromo0-0.stage.lafayette.edu',
        user: 'deploy',
-       roles: %w[app db web]
+       roles: %w[app db iiif web]
 
 server 'parker0-0.stage.lafayette.edu',
        user: 'deploy',
