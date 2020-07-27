@@ -5,6 +5,7 @@
 module Spot
   class CantaloupeCheck < ::OkComputer::HttpCheck
     require 'json'
+    require 'openssl'
 
     def check
       response = JSON.parse(perform_request)
@@ -19,6 +20,19 @@ module Spot
       mark_message("Error: '#{e}'")
       mark_failure
     end
+  end
+
+  def perform_request
+    Timeout.timeout(request_timeout) do
+      options = { read_timeout: request_timeout }
+
+      options[:http_basic_authentication] = basic_auth_options if basic_auth_options.any?
+      options[:ssl_verify_mode] = OpenSSL::SSL::VERIFY_NONE
+
+      url.read(options)
+    end
+  rescue => e
+    raise ConnectionFailed, e
   end
 end
 
