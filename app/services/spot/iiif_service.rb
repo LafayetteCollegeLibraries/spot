@@ -95,8 +95,8 @@ module Spot
     # @option [String] format (default: 'jpg')
     # @return [String]
     # @see https://cantaloupe-project.github.io/manual/4.1/endpoints.html#Response%20Content%20Disposition
-    def download_url(filename: nil, **args)
-      filename = "#{file_set_id}.jpg" if filename.nil?
+    def download_url(filename: nil, format: 'jpg', **args)
+      filename = "#{file_set_id}.#{format}" if filename.nil?
       base_url = image_url(**args)
 
       "#{base_url}?response-content-disposition=attachment%3B%20#{filename}"
