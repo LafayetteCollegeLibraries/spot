@@ -50,7 +50,7 @@ module Spot
     # @param [String] size
     # @param [String] filename (must include extension)
     # @return [String]
-    def self.download_url(file_id, size, filename)
+    def self.download_url(file_id:, size:, filename:)
       new(file_id: file_id, base_url: ENV['IIIF_URL_BASE']).download_url(size: size, filename: filename)
     end
 
