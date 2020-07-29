@@ -18,7 +18,8 @@ Rails.application.config.to_prepare do
     ::Hyrax::FileSetDerivativesService
   ]
 
-  # see above
+  Hyrax::CurationConcern.actor_factory.swap(Hyrax::Actors::CollectionsMembershipActor, Spot::Actors::CollectionsMembershipActor)
+
   Hyrax::ContactFormController.class_eval { layout 'hyrax/1_column' }
 
   # the dashboard/my/collections (+ thus, dashboard/collections) controller defines
