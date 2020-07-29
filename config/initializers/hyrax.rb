@@ -135,23 +135,16 @@ Hyrax.config do |config|
   config.iiif_image_server = true
 
   # Returns a URL that resolves to an image provided by a IIIF image server
-  config.iiif_image_url_builder = lambda do |file_id, base_url, size|
-    Riiif::Engine.routes.url_helpers.image_url(file_id, host: base_url, size: size)
-  end
+  config.iiif_image_url_builder = Spot::IiifService.method(:image_url)
 
   # Returns a URL that resolves to an info.json file provided by a IIIF image server
-  config.iiif_info_url_builder = lambda do |file_id, base_url|
-    uri = Riiif::Engine.routes.url_helpers.info_url(file_id, host: base_url)
-    Rails.logger.debug "[IIIF INFO URI] #{uri}"
-
-    uri.sub(%r{/info\.json\Z}, '')
-  end
+  config.iiif_info_url_builder = Spot::IiifService.method(:info_url)
 
   # Returns a URL that indicates your IIIF image server compliance level
-  config.iiif_image_compliance_level_uri = 'http://iiif.io/api/image/2/level2.json'
+  config.iiif_image_compliance_level_uri = Spot::IiifService::COMPLIANCE_LEVEL_URI
 
   # Returns a IIIF image size default
-  config.iiif_image_size_default = '600,'
+  config.iiif_image_size_default = Spot::IiifService::DEFAULT_SIZE
 
   # Fields to display in the IIIF metadata section; default is the required fields
   config.iiif_metadata_fields = Hyrax::Forms::WorkForm.required_fields
