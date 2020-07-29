@@ -45,31 +45,4 @@ RSpec.describe Hyrax::PublicationsController do
       expect(response.body).to start_with('id,title')
     end
   end
-
-  # test iiif manifest cache
-  context 'when requesting the iiif manifest of an item' do
-    before do
-      allow(IIIFManifest::ManifestFactory).to receive(:new)
-        .with(presenter)
-        .and_return(manifest_factory)
-
-      allow(controller).to receive(:presenter).and_return(presenter)
-
-      Rails.cache.clear
-    end
-
-    let(:doc) { instance_double(ActiveFedora::Base, id: 'abc123def') }
-    let(:manifest_factory) { instance_double(IIIFManifest::ManifestBuilder, to_h: { test: 'manifest' }) }
-    let(:presenter) { instance_double(Hyrax::WorkShowPresenter, id: doc.id, solr_document: solr_document) }
-    let(:solr_document) { { '_version_' => 123 } }
-    let(:cache_key) { "#{doc.id}/123" }
-
-    it 'adds the doc to the cache' do
-      expect(Rails.cache.exist?(cache_key)).to be false
-
-      get :manifest, params: { id: doc.id }
-
-      expect(Rails.cache.exist?(cache_key)).to be true
-    end
-  end
 end

@@ -5,7 +5,6 @@ module Hyrax
     include Hyrax::WorksControllerBehavior
     include Hyrax::BreadcrumbsForWorks
     include Spot::AdditionalFormatsForController
-    include Spot::CachedManifestBehavior
 
     self.curation_concern_type = ::Publication
 
