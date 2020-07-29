@@ -1,0 +1,10 @@
+{
+  "modules": {
+    "seadragonCenterPanel": {
+      "options": {
+        "crossOriginPolicy": "Anonymous",
+        "loadTilesWithAjax": true
+      }
+    }
+  }
+}
