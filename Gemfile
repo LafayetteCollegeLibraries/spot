@@ -88,9 +88,6 @@ gem 'pg', '1.2.3'
 # calling it within our code we shouldn't expect it to always be there
 gem 'rdf-vocab', '3.1.2'
 
-# a iiif server for ruby from curationexperts
-gem 'riiif', '2.3.0'
-
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '2.3.0'
 
