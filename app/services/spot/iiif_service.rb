@@ -13,7 +13,7 @@ module Spot
 
     # Class method to be used via Hyrax initializer for generating an image's IIIF URL.
     # We're not using the +base_url+ parameter provided and instead relying on
-    # the default, which is the environment value for 'IIIF_URL_BASE'.
+    # the default, which is the environment value for 'IIIF_BASE_URL'.
     #
     # @example adding to hyrax initializer
     #   Hyrax.config.iiif_image_url_builder = Spot::IiifService.method(:image_url)
@@ -24,12 +24,12 @@ module Spot
     # @return [String]
     # @see config/initializers/hyrax.rb
     def self.image_url(file_id, _base_url, size)
-      new(file_id: file_id, base_url: ENV['IIIF_URL_BASE']).image_url(size: size)
+      new(file_id: file_id, base_url: ENV['IIIF_BASE_URL']).image_url(size: size)
     end
 
     # Class method to be used via Hyrax initializer for generating an info.json URL.
     # We're not using the +base_url+ parameter provided and instead relying on
-    # the default, which is the environment value for 'IIIF_URL_BASE'.
+    # the default, which is the environment value for 'IIIF_BASE_URL'.
     #
     # @example adding to hyrax initializer
     #   Hyrax.config.iiif_image_url_builder = Spot::IiifService.method(:info_url)
@@ -41,7 +41,7 @@ module Spot
     # @note this produces a URL _without_ the final 'info.json' of the path.
     #       Somewhere in the pipeline this is added (possibly by the viewer?)
     def self.info_url(file_id, _base_url)
-      new(file_id: file_id, base_url: ENV['IIIF_URL_BASE']).info_url
+      new(file_id: file_id, base_url: ENV['IIIF_BASE_URL']).info_url
     end
 
     # Class method for providing a download url (one where the content-disposition is set to 'attachment')
@@ -51,12 +51,12 @@ module Spot
     # @param [String] filename (must include extension)
     # @return [String]
     def self.download_url(file_id:, size:, filename:)
-      new(file_id: file_id, base_url: ENV['IIIF_URL_BASE']).download_url(size: size, filename: filename)
+      new(file_id: file_id, base_url: ENV['IIIF_BASE_URL']).download_url(size: size, filename: filename)
     end
 
     attr_reader :file_id, :base_url
 
-    def initialize(file_id:, base_url: ENV['IIIF_URL_BASE'])
+    def initialize(file_id:, base_url: ENV['IIIF_BASE_URL'])
       @file_id = file_id
       @base_url = base_url
       @base_url += '/' unless @base_url.end_with?('/')
