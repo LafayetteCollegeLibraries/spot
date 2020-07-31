@@ -15,10 +15,8 @@ RSpec.shared_examples 'it exports image derivatives' do
 
   it 'returns an array of labels and iiif urls' do
     expect(derivative_options).to eq [
-      ['Full Size', url_builder.call('full', 'full')],
-      ['Large (1200px)', url_builder.call('!1200,1200', 'large')],
-      ['Medium (900px)', url_builder.call('!900,900', 'medium')],
-      ['Small (600px)', url_builder.call('!600,600', 'small')]
+      ['Full Size', url_builder.call('full', 'full')], ['Large (1200px)', url_builder.call('!1200,1200', 'large')],
+      ['Medium (900px)', url_builder.call('!900,900', 'medium')], ['Small (600px)', url_builder.call('!600,600', 'small')]
     ]
   end
 end
