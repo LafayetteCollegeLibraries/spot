@@ -5,7 +5,7 @@ module Spot
   class IiifManifestPresenter < ::Hyrax::IiifManifestPresenter
     def manifest_metadata
       metadata_fields.map do |field|
-        raw_values = self[field.to_sym]
+        raw_values = send(field.to_sym)
         next if raw_values.blank?
 
         # our controlled fields are typically a [uri, label] tuple.
