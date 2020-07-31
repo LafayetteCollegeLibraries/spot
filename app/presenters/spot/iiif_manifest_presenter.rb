@@ -13,7 +13,7 @@ module Spot
         # but this is where we would map to a Hash of URI and label
         wrapped_and_scrubbed_values = Array.wrap(raw_values).map { |v| v.is_a?(Array) ? v.last : v }.map { |v| scrub(v.to_s) }
 
-        { 'label' => I18n.t("blacklight.search.fields.#{field}", field.to_s.humanize.titleize),
+        { 'label' => I18n.t("blacklight.search.fields.#{field}", default: field.to_s.humanize.titleize),
           'value' => wrapped_and_scrubbed_values }
       end.compact
     end
