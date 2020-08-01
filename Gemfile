@@ -153,7 +153,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.24'
-  gem 'database_cleaner', '~> 1.8.3'
+  gem 'database_cleaner', '~> 1.8.5'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
