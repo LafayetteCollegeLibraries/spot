@@ -45,7 +45,7 @@ module Spot::Mappers
       branch_rank = [branch, rank].compact.join(' ')
       military_title = [branch_rank, unit].compact.join(', ')
 
-      [military_title, graduating_class].compact
+      [military_title, graduating_class].reject(&:blank?)
     end
 
     # need to override BaseEaicMapper#title
