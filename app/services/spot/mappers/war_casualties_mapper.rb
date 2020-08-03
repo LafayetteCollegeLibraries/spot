@@ -5,8 +5,7 @@ module Spot::Mappers
       keyword: 'relation.IsPartOf',
       repository_location: 'publisher.digital',
       resource_type: 'resource.type',
-      source: 'format.analog',
-      title: 'title.name'
+      source: 'format.analog'
     }
 
     def fields
@@ -42,6 +41,13 @@ module Spot::Mappers
       military_title = [branch_rank, metadata['contributor.military.unit']].compact.join(', ')
 
       [military_title, metadata['description.class']].compact
+    end
+
+    # need to override BaseEaicMapper#title
+    #
+    # @return [Array<String>]
+    def title
+      Array.wrap(metadata['title.name'])
     end
   end
 end

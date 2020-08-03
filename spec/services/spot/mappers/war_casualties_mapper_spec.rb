@@ -75,6 +75,8 @@ RSpec.describe Spot::Mappers::WarCasualtiesMapper do
   end
 
   describe '#subtitle' do
+    subject { mapper.subtitle }
+
     context 'with branch, unit, rank, and class' do
       let(:metadata) do
         {
