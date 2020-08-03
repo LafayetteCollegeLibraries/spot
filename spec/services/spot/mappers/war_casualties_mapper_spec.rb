@@ -41,10 +41,10 @@ RSpec.describe Spot::Mappers::WarCasualtiesMapper do
     subject { mapper.location }
 
     let(:metadata) do
-       {
-        'coverage.place.birth' => ['https://www.geonames.org/5177568/']
+      {
+        'coverage.place.birth' => ['https://www.geonames.org/5177568/'],
         'coverage.place.death' => ['https://www.geonames.org/3030071/']
-       }
+      }
     end
 
     it { is_expected.to eq [RDF::URI('https://www.geonames.org/5177568/'), RDF::URI('https://www.geonames.org/3030071/')] }
@@ -85,7 +85,7 @@ RSpec.describe Spot::Mappers::WarCasualtiesMapper do
         }
       end
 
-      it { is_expected.to eq ['Army Sergeant, 142nd Infantry - 36th Division', 'Class of 1934']}
+      it { is_expected.to eq ['Army Sergeant, 142nd Infantry - 36th Division', 'Class of 1934'] }
     end
 
     context 'with branch, rank, and class' do
