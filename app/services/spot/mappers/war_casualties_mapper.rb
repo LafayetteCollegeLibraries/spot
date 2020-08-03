@@ -40,7 +40,7 @@ module Spot::Mappers
       branch_rank = [metadata['description.military.branch'], metadata['description.military.rank']].compact.join(' ')
       military_title = [branch_rank, metadata['contributor.military.unit']].compact.join(', ')
 
-      [military_title, metadata['description.class']].compact
+      [military_title, metadata['description.class']].flatten.compact
     end
 
     # need to override BaseEaicMapper#title
