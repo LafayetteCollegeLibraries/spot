@@ -26,7 +26,7 @@ RSpec.describe Spot::Mappers::TjwarPostcardsMapper do
   describe '#keyword' do
     subject { mapper.keyword }
 
-    let(:field) { ['keyword', 'relation.ispartof'] }
+    let(:fields) { ['keyword', 'relation.ispartof'] }
 
     it_behaves_like 'a mapped field'
   end
