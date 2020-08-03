@@ -146,8 +146,12 @@ Hyrax.config do |config|
   # Returns a IIIF image size default
   config.iiif_image_size_default = Spot::IiifService::DEFAULT_SIZE
 
-  # Fields to display in the IIIF metadata section; default is the required fields
-  config.iiif_metadata_fields = Hyrax::Forms::WorkForm.required_fields
+  # Fields to display in the IIIF metadata section
+  config.iiif_metadata_fields = %i[
+    title subtitle title_alternative creator contributor date date_issued
+    abstract description inscription subject subject_ocm keyword language_label
+    location standard_identifier rights_holder rights_statement
+  ]
 
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
   # config.display_share_button_when_not_logged_in = true

@@ -6,6 +6,9 @@ module Hyrax
     include Hyrax::BreadcrumbsForWorks
     include Spot::AdditionalFormatsForController
 
+    # use our local IiifManifestPresenter for rendering manifest metadata
+    include Spot::ConfigurableIiifManifestPresenter
+
     self.curation_concern_type = ::Publication
 
     # Use this line if you want to use a custom presenter

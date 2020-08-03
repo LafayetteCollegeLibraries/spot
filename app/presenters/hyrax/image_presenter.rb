@@ -11,14 +11,6 @@ module Hyrax
              :subtitle, :title_alternative,
              to: :solr_document
 
-    def manifest_metadata_fields
-      %i[
-        title subtitle title_alternative creator contributor date
-        description inscription keyword language_label location
-        subject subject_ocm standard_identifier rights_statement
-      ]
-    end
-
     def subject_ocm
       solr_document.subject_ocm.sort
     end
