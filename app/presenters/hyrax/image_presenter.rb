@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Hyrax
   class ImagePresenter < ::Spot::BasePresenter
+    include ::Spot::ExportsImageDerivatives
+
     delegate :contributor, :creator, :date, :date_associated,
              :date_scope_note, :description, :donor, :inscription,
              :keyword, :language_label, :local_identifier, :note,

@@ -1,0 +1,56 @@
+<div class="btn-group">
+  <button type="button"
+          class="btn btn-default dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false">
+    <%= t('spot.work.export.additional_options') %>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li class="dropdown-header">
+      <%= t('spot.work.export.dropdown.export_header') %>
+    </li>
+    <li>
+    <%= link_to presenter.export_all_text,
+                main_app.export_path(presenter),
+                data: { turbolinks: false } %>
+    </li>
+
+    <!-- pre-canned download options -->
+    <% if presenter.representative_id %>
+    <li class="dropdown-header">
+      <%= t('spot.work.export.dropdown.image_derivatives') %>
+    </li>
+    <% presenter.image_derivative_options.each do |(title, url)| %>
+    <li>
+      <%= link_to title, url, data: { turbolinks: false } %>
+    </li>
+    <% end %>
+    <% end %>
+
+    <% if presenter.multiple_members? %>
+    <li class="dropdown-header">
+      <%= t('spot.work.export.dropdown.files_header') %>
+    </li>
+    <li>
+      <%= link_to t('spot.work.export.all_files'),
+                  main_app.export_path(presenter, export_type: :files),
+                  data: { turbolinks: false } %>
+    </li>
+    <% end %>
+
+    <li class="dropdown-header">
+      <%= t('spot.work.export.dropdown.metadata_header') %>
+    </li>
+    <% presenter.export_formats.each do |format| %>
+      <li>
+        <%= link_to main_app.polymorphic_path([presenter], format: format, locale: nil) do %>
+          <%= t "spot.work.export.metadata.#{format}",
+                default: 'spot.work.export.metadata.default',
+                format: format %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
