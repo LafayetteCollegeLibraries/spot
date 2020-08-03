@@ -37,10 +37,15 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def subtitle
-      branch_rank = [metadata['description.military.branch'], metadata['description.military.rank']].compact.join(' ')
-      military_title = [branch_rank, metadata['contributor.military.unit']].compact.join(', ')
+      branch = metadata.fetch('description.military.branch', []).first
+      rank = metadata.fetch('description.military.rank', []).first
+      unit = metadata.fetch('contributor.military.unit', []).first
+      graduating_class = metadata.fetch('description.class', []).first
 
-      [military_title, metadata['description.class']].flatten.compact
+      branch_rank = [branch, rank].compact.join(' ')
+      military_title = [branch_rank, unit].compact.join(', ')
+
+      [military_title, graduating_class].compact
     end
 
     # need to override BaseEaicMapper#title
