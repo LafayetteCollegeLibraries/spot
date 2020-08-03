@@ -29,6 +29,7 @@ module Spot
         pacwar: PacwarPostcardsMapper,
         rjw_stereo: RjwStereoMapper,
         shakespeare: ShakespeareBulletinMapper,
+        tjwar: TjwarPostcardsMapper,
         war_casualties: WarCasualtiesMapper,
         warner_souvenirs: WarnerSouvenirsMapper,
         woodsworth: WoodsworthImagesMapper
