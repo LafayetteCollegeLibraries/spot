@@ -72,7 +72,7 @@ RSpec.describe Spot::Mappers::WarCasualtiesMapper do
     let(:metadata) do
       {
         'rights.statement' => ['http://rightsstatements.org/vocab/InC-EDU/1.0/'],
-        'rights.digital' => ['This image is posted publicly for non-profit educational use, excluding print publication. For additional information, please see http://digital.lafayette.edu/copyright for our Reproduction, Use, and Copyright Guidelines.']
+        'rights.digital' => ['This image is posted publicly for non-profit educational use, excluding print publication.']
       }
     end
 
