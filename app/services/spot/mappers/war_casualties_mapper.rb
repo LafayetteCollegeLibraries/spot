@@ -13,10 +13,11 @@ module Spot::Mappers
         :date,
         :description,
         :location,
+        :rights_statement,
         :subtitle,
 
-        :rights_statement,
-        :subject
+        :subject,
+        :title
       ]
     end
 
@@ -33,6 +34,11 @@ module Spot::Mappers
     # @return [Array<RDF::URI>]
     def location
       convert_uri_strings(merge_fields('coverage.place.birth', 'coverage.place.death'))
+    end
+
+    # @return [Array<RDF::URI>]
+    def rights_statement
+      convert_uri_strings(metadata.fetch('rights.statement', []))
     end
 
     # @return [Array<String>]
