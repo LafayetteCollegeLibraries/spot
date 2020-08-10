@@ -66,6 +66,19 @@ RSpec.describe Spot::Mappers::WarCasualtiesMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#rights_statement' do
+    subject { mapper.rights_statement }
+
+    let(:metadata) do
+      {
+        'rights.statement' => ['http://rightsstatements.org/vocab/InC-EDU/1.0/'],
+        'rights.digital' => ['This image is posted publicly for non-profit educational use, excluding print publication. For additional information, please see http://digital.lafayette.edu/copyright for our Reproduction, Use, and Copyright Guidelines.']
+      }
+    end
+
+    it { is_expected.to eq [RDF::URI('http://rightsstatements.org/vocab/InC-EDU/1.0/')] }
+  end
+
   describe '#source' do
     subject { mapper.source }
 
