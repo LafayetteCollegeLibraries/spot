@@ -37,10 +37,10 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def subtitle
-      branch = metadata.fetch('description.military.branch', []).first
-      rank = metadata.fetch('description.military.rank', []).first
-      unit = metadata.fetch('contributor.military.unit', []).first
-      graduating_class = metadata.fetch('description.class', []).first
+      branch = Array.wrap(metadata['description.military.branch']).first
+      rank = Array.wrap(metadata['description.military.rank']).first
+      unit = Array.wrap(metadata['contributor.military.unit']).first
+      graduating_class = Array.wrap(metadata['description.class']).first
 
       branch_rank = [branch, rank].compact.join(' ')
       military_title = [branch_rank, unit].compact.join(', ')
