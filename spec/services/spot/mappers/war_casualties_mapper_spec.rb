@@ -5,7 +5,7 @@ RSpec.describe Spot::Mappers::WarCasualtiesMapper do
 
   before { mapper.metadata = metadata }
 
-  it_behaves_like 'a base EAIC mapper', skip_fields: [:date, :description, :location]
+  it_behaves_like 'a base EAIC mapper', skip_fields: [:date, :description, :location, :rights_statement, :title]
 
   describe '#date' do
     subject { mapper.date }
