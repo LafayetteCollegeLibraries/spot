@@ -60,21 +60,34 @@ module Spot::Mappers
 
     # @return [Array<RDF::Literal>]
     def title
-      field = primary_title_map.keys.first
-      language = primary_title_map[field]
-
-      field_to_tagged_literals(field, language)
+      tagged_literals(primary_titles, primary_title_language)
     end
 
     # @return [Array<RDF::Literal>]
     def title_alternative
-      title_alternative_map.keys.map do |field|
-        language = title_alternative_map[field].to_sym
-        field_to_tagged_literals(field, language)
-      end.flatten
+      title_alternative_map.collect { |(field, language)| field_to_tagged_literals(field, language.to_sym) }.flatten
+    end
+
+    # @return [Array<RDF::Literal>]
+    def titles_with_identifiers
+      tagged_literals(primary_titles.select { |v| identifier_prefix?(v) }, primary_title_language)
+    end
+
+    # @return [Array<RDF::Literal>]
+    def titles_without_identifiers
+      tagged_literals(primary_titles.reject { |v| identifier_prefix?(v) }, primary_title_language)
     end
 
     private
+
+      # maps the values of an array to RDF::Literals tagged with a language
+      #
+      # @param [Array] arr
+      # @param [String,Symbol] language
+      # @return [Array<RDF::Literal>]
+      def tagged_literals(arr, language)
+        Array.wrap(arr).reject(&:blank?).map { |value| literal_for(value, language) }
+      end
 
       # Maps a field's values to RDF::Literals tagged with a language
       #
@@ -83,9 +96,29 @@ module Spot::Mappers
       # @param [String, Symbol] language
       #   2 character language code (ex. :en)
       def field_to_tagged_literals(field, language)
-        Array.wrap(metadata.fetch(field, []))
-             .reject(&:blank?)
-             .map { |v| RDF::Literal(v, language: language.respond_to?(:to_sym) ? language.to_sym : language) }
+        tagged_literals(metadata.fetch(field, []), language)
+      end
+
+      # Does a value look like "[aa0001] title" ?
+      #
+      # @return bool
+      def identifier_prefix?(value)
+        value.match?(/^\[\w{2}\d{4}\]/)
+      end
+
+      # @return [RDF::Literal]
+      def literal_for(value, language = nil)
+        RDF::Literal(value, language: language.respond_to?(:to_sym) ? language.to_sym : language)
+      end
+
+      # @return [Symbol,String]
+      def primary_title_language
+        primary_title_map.values.first
+      end
+
+      # @return [Array<*>]
+      def primary_titles
+        metadata.fetch(primary_title_map.keys.first, [])
       end
   end
 end
