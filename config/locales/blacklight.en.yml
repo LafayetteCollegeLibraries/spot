@@ -35,6 +35,7 @@ en:
         license: License
         local_identifier: Local Identifier
         location: Location
+        location_label: Location
         member_of_collections: Collections
         organization: Organization
         original_checksum: Original Checksum (MD5)
@@ -51,6 +52,7 @@ en:
         resource_type: Type
         rights_holder: Rights Holders
         rights_statement: Rights Statement
+        rights_statement_label: Rights Statement
         source: Source
         standard_identifier: Standard Identifier
         subject: Subject
