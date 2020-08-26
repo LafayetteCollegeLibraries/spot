@@ -15,8 +15,8 @@ module Spot
 
     # @return [void]
     def load_collection
-      @curation_concern = Collection.where(collection_slug_ssi: params[:id]).first
-      params[:id] = @curation_concern.id unless @curation_concern.nil?
+      @collection = Collection.where(collection_slug_ssi: params[:id]).first
+      params[:id] = @collection.id unless @collection.nil?
     end
   end
 end

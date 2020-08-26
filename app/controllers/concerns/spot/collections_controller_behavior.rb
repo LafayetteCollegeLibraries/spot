@@ -3,6 +3,8 @@ module Spot
   module CollectionsControllerBehavior
     extend ActiveSupport::Concern
 
+    include CollectionSlugsBehavior
+
     included do
       configure_blacklight do |config|
         # clear out sort_fields from CatalogController

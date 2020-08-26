@@ -10,7 +10,6 @@ Rails.application.config.to_prepare do
   Hyrax::Dashboard::CollectionsController.include Spot::CollectionsControllerBehavior
 
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
-  Hyrax::CollectionsController.include Spot::CollectionSlugsBehavior
   Hyrax::CollectionsController.include Spot::CollectionsControllerBehavior
 
   Hyrax::DerivativeService.services = [
