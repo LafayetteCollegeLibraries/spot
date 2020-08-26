@@ -13,6 +13,8 @@ so setting up an environment on your local machine should be as simple as:
 $ git clone https://github.com/LafayetteCollegeLibraries/spot
 $ cd spot
 $ docker-compose up -d
+$ docker-compose run --rm app bundle exec rails db:migrate
+$ docker-compose run --rm app bundle exec rails db:seed
 ```
 
 and visit `http://localhost:3000` :tada:.
