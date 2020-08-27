@@ -111,7 +111,13 @@ en:
         dropdown:
           export_header: Export
           files_header: Files
+          image_derivatives: Download JPG
           metadata_header: Metadata
+        image_sizes:
+          full: Full Size
+          large: Large (1200px)
+          medium: Medium (900px)
+          small: Small (600px)
         metadata:
           csv: View metadata as CSV
           default: View metadata as .%{format}

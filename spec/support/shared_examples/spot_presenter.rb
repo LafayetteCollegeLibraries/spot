@@ -47,16 +47,6 @@ RSpec.shared_examples 'a Spot presenter' do
     it { is_expected.to eq [[uri, label]] }
   end
 
-  describe '#manifest_metadata' do
-    subject(:manifest_metadata) { presenter.manifest_metadata }
-
-    it 'is an Array of Hashes' do
-      expect(manifest_metadata).to be_an Array
-      expect(manifest_metadata.all? { |v| v.is_a? Hash }).to be true
-      expect(manifest_metadata.all? { |v| v.include?('label') && v.include?('value') })
-    end
-  end
-
   describe '#page_title' do
     subject { presenter.page_title }
 

@@ -35,7 +35,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 2.8.0'
+gem 'hyrax', '~> 2.9.0'
 
 # modularize our javascripts
 gem 'almond-rails', '0.3.0'
@@ -49,7 +49,7 @@ gem 'blacklight_oai_provider', '6.0.0'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '1.4.4'
+gem 'bootsnap', '1.4.7'
 
 # record importer pattern from curationexperts
 gem 'darlingtonia', '3.2.2'
@@ -86,10 +86,7 @@ gem 'pg', '1.2.3'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '3.1.2'
-
-# a iiif server for ruby from curationexperts
-gem 'riiif', '2.3.0'
+gem 'rdf-vocab', '3.1.4'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '2.3.0'
@@ -156,7 +153,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.24'
-  gem 'database_cleaner', '~> 1.8.3'
+  gem 'database_cleaner', '~> 1.8.5'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'

@@ -9,6 +9,7 @@ RSpec.describe Hyrax::ImagePresenter do
   let(:ability) { Ability.new(build(:user)) }
 
   it_behaves_like 'a Spot presenter'
+  it_behaves_like 'it exports image derivatives'
 
   describe '#subject_ocm' do
     subject { presenter.subject_ocm }

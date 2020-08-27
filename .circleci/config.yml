@@ -84,6 +84,7 @@ jobs:
       CI: true
       CAS_BASE_URL: http://localhost
       URL_HOST: http://localhost
+      IIIF_BASE_URL: http://localhost/iiif/2
 
     steps:
       - attach_workspace:

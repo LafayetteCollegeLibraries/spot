@@ -1,5 +1,28 @@
 # changelog
 
+## [2020.9] - 2020-08-27
+
+### features 🏖️  
+- works added to subcollections will now be added to any parent collections (#561)
+- switch to using an external cantaloupe iiif server instead of riiif (#569, #583)
+- adds jpg derivative download options to images (#575)
+- add mappers for image batch 4 collections (#504)
+  - imperial-postcards
+  - war-casualties
+  - tjwar-postcards
+
+### bug fixes 🐞 
+- subclasses Hyrax::IiifManifestPresenter to retain our iiif manifest metadata generation with the new hyrax patterns (#576, #584)
+- fixes permission errors that arose from collections not being fetched properly (#585)
+
+### dependencies 👩‍👩‍👧‍👧
+- bootsnap to 1.4.7 (#578)
+- database_cleaner to 1.8.5 (#579)
+- hyrax to 2.9.0 (#573)
+- rdf-vocab to 3.1.4 (#581)
+- webdrivers to 4.4.1 (#557)
+ 
+
 ## [2020.8] - 2020-07-24
 
 ### features 👩‍🔬
@@ -441,6 +464,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.9
 [2020.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.8
 [2020.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.7
 [2020.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.6
