@@ -37,7 +37,7 @@ module Spot::Mappers
 
       raw_value = Array.wrap(metadata[original_create_date_field]).first
       DateTime.parse(raw_value).utc.to_s
-    rescue ArgumentError
+    rescue
       nil
     end
   end
