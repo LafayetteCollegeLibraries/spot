@@ -26,5 +26,11 @@ RSpec.shared_examples 'it maps original create date' do
 
       it { is_expected.to be_nil }
     end
+
+    context 'when the metadata returns nil for the field' do
+      let(:metadata) { { field => nil } }
+
+      it { is_expected.to be_nil }
+    end
   end
 end
