@@ -102,6 +102,14 @@ RSpec.describe Spot::Mappers::LewisPostcardsMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    let(:field) { 'resource.type' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#subject_ocm' do
     subject { mapper.subject_ocm }
 
