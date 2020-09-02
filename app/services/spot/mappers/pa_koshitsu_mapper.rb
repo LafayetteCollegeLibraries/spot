@@ -9,6 +9,7 @@ module Spot::Mappers
       publisher: 'creator.company',
       related_resource: 'description.citation',
       research_assistance: 'contributor',
+      resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
     }
 
