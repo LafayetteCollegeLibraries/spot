@@ -9,8 +9,8 @@ module Hyrax
              :original_item_extent, :permalink, :physical_medium,
              :publisher, :related_resource, :repository_location,
              :requested_by, :research_assistance, :resource_type,
-             :rights_holder, :rights_statement, :standard_identifier,
-             :subtitle, :title_alternative,
+             :rights_holder, :rights_statement, :source,
+             :standard_identifier, :subtitle, :title_alternative,
              to: :solr_document
 
     def subject_ocm
