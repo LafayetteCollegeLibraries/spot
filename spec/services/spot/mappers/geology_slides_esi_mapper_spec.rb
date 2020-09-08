@@ -70,6 +70,14 @@ RSpec.describe Spot::Mappers::GeologySlidesEsiMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#resource_type' do
+    subject { mapper.resource_type }
+
+    let(:field) { 'resource.type' }
+
+    it_behaves_like 'a mapped field'
+  end
+
   describe '#rights_statement' do
     subject { mapper.rights_statement }
 
