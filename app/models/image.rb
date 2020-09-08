@@ -41,7 +41,7 @@ class Image < ActiveFedora::Base
   end
 
   property :source, predicate: ::RDF::Vocab::DC.source do |index|
-    index.as :symbol
+    index.as :stored_searchable, :facetable
   end
 
   property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
