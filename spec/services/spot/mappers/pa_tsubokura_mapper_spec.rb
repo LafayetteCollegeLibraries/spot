@@ -15,6 +15,7 @@ RSpec.describe Spot::Mappers::PaTsubokuraMapper do
     [:language],
     [:physical_medium, 'format.medium'],
     [:publisher, 'creator.company'],
+    [:research_assistance, 'contributor'],
     [:resource_type, 'resource.type'],
     [:subject_ocm, 'subject.ocm']
   ].each do |(method, key)|
