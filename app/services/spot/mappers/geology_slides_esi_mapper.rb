@@ -5,7 +5,8 @@ module Spot::Mappers
 
     self.fields_map = {
       keyword: ['keyword', 'relation.ispartof'],
-      related_resource: ['relation.seealso.book', 'relation.seealso.image']
+      related_resource: ['relation.seealso.book', 'relation.seealso.image'],
+      resource_type: 'resource.type'
     }
 
     def fields
