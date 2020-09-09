@@ -1,4 +1,11 @@
 <div class="work-export-tools btn-toolbar" style="margin-bottom:1rem;">
   <%= render 'export_primary_file', presenter: presenter %>
   <%= render 'export_options', presenter: presenter %>
+
+  <div class="btn-group pull-right">
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#item-feedback-modal">
+      <span class="fa fa-comment"></span>
+      Leave Feedback
+    </button>
+  </div>
 </div>

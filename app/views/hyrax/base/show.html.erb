@@ -7,6 +7,8 @@
   <%= render 'relationships', presenter: @presenter, polymorphic_url: method(:polymorphic_url) %>
 </div>
 
+<%= render 'item_feedback_modal', presenter: @presenter %>
+
 <script>
   // need to initialize the popovers in the metadata
   $(function () { $('[data-toggle="popover"]').popover() })
