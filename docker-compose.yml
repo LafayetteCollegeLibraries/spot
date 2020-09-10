@@ -22,7 +22,7 @@ services:
       REDIS_URL: redis://redis:6379
       SOLR_URL: http://solr:8983/solr/spot-development
       DEV_USER: dss@lafayette.edu
-      IIIF_URL_BASE: http://localhost:8182/iiif/2
+      IIIF_BASE_URL: http://localhost:8182/iiif/2
     restart: always
     depends_on:
       - cantaloupe
