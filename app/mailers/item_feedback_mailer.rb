@@ -5,8 +5,8 @@ class ItemFeedbackMailer < ApplicationMailer
 
   def feedback
     @item = params[:item]
-    @user_email = params[:user].email
-    @user_name = params[:user].name
+    @user_email = params[:user][:email]
+    @user_name = params[:user][:name]
     @comment = params[:comment]
 
     mail(from: from_address, subject: "Item Feedback Submission for #{@item.id}")
