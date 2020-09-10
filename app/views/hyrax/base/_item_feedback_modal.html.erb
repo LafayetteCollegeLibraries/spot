@@ -12,8 +12,8 @@
         </div>
 
         <div class="modal-body">
-          <%= f.hidden_field :item_id, presenter.id %>
-          <%= f.hidden_field :item_title, Array.wrap(presenter.title).first %>
+          <input type="hidden" name="item_feedback[item_id]" value="<%= presenter.id %>" />
+          <input type="hidden" name="item_feedback[item_title]" value="<%= Array.wrap(presenter.title).first %>" />
 
           <div class="form-group">
             <%= f.label :name, 'Your Name' %>
