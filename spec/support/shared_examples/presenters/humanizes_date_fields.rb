@@ -5,7 +5,6 @@ RSpec.shared_examples 'it humanizes date fields' do |opts|
 
   raise 'No fields provided for example' if fields.empty?
 
-
   fields.each do |field|
     describe "for :#{field}" do
       subject { presenter.send(field.to_sym) }
