@@ -1,5 +1,6 @@
 version: '3.7'
 volumes:
+  app_derivatives:
   db:
   fedora:
   solr:
@@ -7,22 +8,13 @@ volumes:
 services:
   app: &app
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0'"
     volumes:
       - .:/spot
       - ./config/uv/uv-config-development.json:/spot/public/uv/uv-config.json
+      - app_derivatives:/spot/tmp/derivatives
     ports:
       - "3000:3000"
-    environment:
-      CAS_BASE_URL: ''
-      DATABASE_URL: postgres://spot_dev_user:@db:5432/spot_dev
-      FEDORA_URL: http://fedora:8080/rest
-      FITS_SERVLET_URL: http://fitsservlet:8080/fits
-      RAILS_ENV: development
-      REDIS_URL: redis://redis:6379
-      SOLR_URL: http://solr:8983/solr/spot-development
-      DEV_USER: dss@lafayette.edu
-      IIIF_BASE_URL: http://localhost:8182/iiif/2
+    env_file: .env
     restart: always
     depends_on:
       - cantaloupe
@@ -38,7 +30,7 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - ./tmp/derivatives:/imageroot
+      - app_derivatives:/imageroot
     ports:
       - '8182:8182'
     environment:
@@ -87,6 +79,10 @@ services:
 
   sidekiq:
     <<: *app
+    build:
+      context: .
+      args:
+        EXTRA_APT_PACKAGES: 'git ghostscript ImageMagick libreoffice'
     command: bundle exec sidekiq
     volumes:
       - .:/app
