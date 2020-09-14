@@ -1,1 +1,11 @@
-console.log('righteous!')
+;(function ($) {
+  $('#content-wrapper').prepend(thankYouAlert());
+  $('#item-feedback-modal').modal('hide');
+
+  function thankYouAlert () {
+    return $('<div></div>')
+      .addClass('alert alert-success alert-dismissable')
+      .append('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
+      .append('<%= "Thanks for your feedback!" %>');
+  }
+})(jQuery);
