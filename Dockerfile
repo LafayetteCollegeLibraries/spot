@@ -19,6 +19,7 @@ WORKDIR /app
 # copy our current work files to the image
 COPY . /app
 RUN bundle install --jobs "$(nproc)"
+RUN yarn install
 
 ENTRYPOINT ["bin/spot-entrypoint.sh"]
 CMD ["bundle", "exec", "puma", "-v", "-b", "tcp://0.0.0.0:3000"]
