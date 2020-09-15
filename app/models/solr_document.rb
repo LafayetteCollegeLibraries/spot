@@ -61,6 +61,10 @@ class SolrDocument
   end
   # rubocop:enable Metrics/MethodLength
 
+  def sets
+    Spot::OaiCollectionSolrSet.sets_for(self)
+  end
+
   # Overrides +Hyrax::SolrDocumentBehavior#to_param+ by preferring collection slugs
   # (where present).
   #
