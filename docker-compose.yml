@@ -1,17 +1,19 @@
 version: '3.7'
 volumes:
-  app_derivatives:
   db:
   fedora:
+  rails_public:
+  rails_tmp:
   solr:
   redis:
+
 services:
   app: &app
     build: .
     volumes:
       - .:/spot
-      - ./config/uv/uv-config-development.json:/spot/public/uv/uv-config.json
-      - app_derivatives:/spot/tmp/derivatives
+      - rails_public:/spot/public
+      - rails_tmp:/spot/tmp
     ports:
       - "3000:3000"
     env_file: .env
@@ -30,9 +32,9 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - app_derivatives:/imageroot
+      - rails_tmp/derivatives:/imageroot
     ports:
-      - '8182:8182'
+      - "8182:8182"
     environment:
       CANTALOUPE_DELEGATE_SCRIPT_ENABLED: 'true'
       CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
@@ -54,6 +56,8 @@ services:
     image: samvera/fcrepo4:4.7.5
     volumes:
       - fedora:/data
+    ports:
+      - "8080:8080"
     restart: always
 
   fitsservlet:
@@ -87,6 +91,8 @@ services:
     volumes:
       - .:/app
       - ./ingest:/ingest
+      - rails_public:/spot/public
+      - rails_tmp:/spot/tmp
     ports:
       - "3003:3000"
     restart: always
