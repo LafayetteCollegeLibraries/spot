@@ -10,6 +10,7 @@ RSpec.describe Hyrax::ImagePresenter do
 
   it_behaves_like 'a Spot presenter'
   it_behaves_like 'it exports image derivatives'
+  it_behaves_like 'it humanizes date fields', for: %i[date date_associated]
 
   describe '#subject_ocm' do
     subject { presenter.subject_ocm }

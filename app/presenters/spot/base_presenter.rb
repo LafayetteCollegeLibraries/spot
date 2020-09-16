@@ -13,7 +13,8 @@ module Spot
   #   end
   #
   class BasePresenter < ::Hyrax::WorkShowPresenter
-    include ::Spot::PresentsAttributes
+    include PresentsAttributes
+    include HumanizesDateFields
 
     # @return [String]
     def export_all_text
