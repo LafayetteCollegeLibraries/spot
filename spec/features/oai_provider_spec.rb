@@ -37,8 +37,10 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
       visit oai_catalog_path(verb: 'ListSets')
 
       values = xml.css('ListSets setSpec').map(&:text)
-      expect(values).to include('collection:Collection 1')
-      expect(values).not_to include('collection:Collection 2')
+
+      # note: we're translating spaces to underscores for setSpec ids
+      expect(values).to include('collection:Collection_1')
+      expect(values).not_to include('collection:Collection_2')
     end
   end
 
