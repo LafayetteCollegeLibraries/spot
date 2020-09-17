@@ -1,5 +1,21 @@
 # changelog
 
+## [2020.10] - 2020-09-17
+
+### features 🥼 
+- add mixin to pass presenter date fields through `edtf-humanize` (#604)
+
+### bug fixes 🐞 
+- be more lenient with error handling in original_create_date mapper (#586)
+- add `resource_type` to LewisPostcardsMapper (#588), PaKoshitsuMapper (#589), and GeologySlideEsiMapper (#602)
+- add `research_assistance` to PaTsubokuraMapper (#596)
+- add `subject` to MammanaPostcardsMapper (#603) 
+- fix typo for `Image#repository_location` in `_metadata` partial (#601)
+- index `Image#source` similarly to `Publication#source` (#601)
+- use the right ENV value for IIIF in docker (77ac980)
+- translate spaces to underscores in OAI-PMH setSpec identifiers (#606)
+
+
 ## [2020.9] - 2020-08-27
 
 ### features 🏖️  
@@ -464,6 +480,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.10]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.10
 [2020.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.9
 [2020.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.8
 [2020.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.7
