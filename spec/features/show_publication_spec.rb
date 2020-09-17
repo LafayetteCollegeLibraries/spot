@@ -60,7 +60,7 @@ RSpec.feature 'Show Publication page', js: false do
     expect(page.all('.attribute-creator').map(&:text))
       .to eq pub.creator.map(&:to_s)
     expect(page.all('.attribute-date_issued').map(&:text))
-      .to eq pub.date_issued.map(&:to_s)
+      .to eq pub.date_issued.map(&:to_s).map { |d| Date.edtf(d).humanize }
     expect(page.all('.attribute-date_available').map(&:text))
       .to eq pub.date_available.map(&:to_s)
     expect(page.all('.attribute-division').map(&:text))

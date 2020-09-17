@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 module Hyrax
   class PublicationPresenter < ::Spot::BasePresenter
+    humanize_date_fields :date_issued
+
     delegate :abstract, :academic_department, :bibliographic_citation,
-             :contributor, :creator, :date_issued, :date_available,
+             :contributor, :creator, :date_available,
              :division, :editor, :keyword, :language, :language_label,
              :local_identifier, :organization, :permalink, :publisher,
              :resource_type, :rights_holder, :source, :standard_identifier,

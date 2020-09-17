@@ -8,6 +8,7 @@ module Spot::Mappers
       physical_medium: 'format.medium',
       publisher: 'creator.company',
       research_assistance: 'contributor',
+      resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
     }
 

@@ -23,6 +23,7 @@ module Spot::Mappers
         :identifier,
         :location,
         :rights_statement,
+        :subject,
         :title,
         :title_alternative
       ]
