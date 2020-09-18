@@ -5,15 +5,20 @@ volumes:
   rails_public:
   rails_tmp:
   solr:
+  spot_derivatives:
   redis:
 
 services:
   app: &app
-    build: .
+    build:
+      context: .
+      target: spot
+    image: spot
     volumes:
       - .:/spot
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
+      - spot_derivatives:/spot/tmp/derivatives
     ports:
       - "3000:3000"
     env_file: .env
@@ -25,6 +30,7 @@ services:
       - fitsservlet
       - redis
       - solr
+      - db_migrate
     stdin_open: true
     tty: true
 
@@ -32,7 +38,7 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - rails_tmp/derivatives:/imageroot
+      - spot_derivatives:/imageroot
     ports:
       - "8182:8182"
     environment:
@@ -51,6 +57,24 @@ services:
       POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
     restart: always
+
+  db_migrate:
+    build:
+      context: .
+      target: spot-base
+    image: spot-base
+    env_file: .env
+    entrypoint: ["sh", "-c"]
+    command: bin/migrate-and-seed-db.sh
+    depends_on:
+      - db
+      - fedora
+      - solr
+    volumes:
+      - .:/spot
+      - rails_public:/spot/public
+      - rails_tmp:/spot/tmp
+      - spot_derivatives:/spot/tmp/derivatives
 
   fedora:
     image: samvera/fcrepo4:4.7.5
@@ -85,16 +109,18 @@ services:
     <<: *app
     build:
       context: .
-      args:
-        EXTRA_APT_PACKAGES: 'git ghostscript ImageMagick libreoffice'
+      target: spot-sidekiq
+    image: spot-sidekiq
     command: bundle exec sidekiq
     volumes:
       - .:/app
       - ./ingest:/ingest
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
+      - spot_derivatives:/spot/tmp/derviatives
     ports:
       - "3003:3000"
     restart: always
     depends_on:
+      - db_migrate
       - app

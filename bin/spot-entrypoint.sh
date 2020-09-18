@@ -10,6 +10,6 @@ cp config/uv/uv-config-development.json public/uv/uv-config.json
 # we're not copying over tmp directories, so we need to ensure that
 # they exist on the the docker side, otherwise derivatives etc.
 # won't be generated.
-mkdir -p tmp/{derivatives,export,pids}
+mkdir -p tmp/{export,pids}
 
 exec "$@"

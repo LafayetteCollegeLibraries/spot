@@ -1,8 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-wait-for.sh db:5432
-wait-for.sh fedora:8080
-wait-for.sh solr:8983
+script_root=$(dirname $0)
 
-bundle exec rails db:migrate
-bundle exec rails db:seed
+$script_root/wait-for.sh db:5432
+$script_root/wait-for.sh fedora:8080
+$script_root/wait-for.sh solr:8983
+
+echo "migrating + seeding databases"
+bundle exec rake db:migrate
+bundle exec rake db:seed
