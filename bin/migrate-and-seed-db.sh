@@ -1,6 +1,6 @@
 #!/bin/bash
 
-script_root=$(dirname $0)
+script_root="$(dirname $0)"
 
 $script_root/wait-for.sh db:5432
 $script_root/wait-for.sh fedora:8080

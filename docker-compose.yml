@@ -5,24 +5,21 @@ volumes:
   rails_public:
   rails_tmp:
   solr:
-  spot_derivatives:
   redis:
 
 services:
   app: &app
-    build:
-      context: .
-      target: spot
-    image: spot
+    build: .
     volumes:
       - .:/spot
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
-      - spot_derivatives:/spot/tmp/derivatives
     ports:
       - "3000:3000"
     env_file: .env
     restart: always
+    entrypoint: ["bin/spot-dev-entrypoint.sh"]
+    command: ["bundle", "exec", "puma", "-v", "-b", "tcp://0.0.0.0:3000"]
     depends_on:
       - cantaloupe
       - db
@@ -38,7 +35,7 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - spot_derivatives:/imageroot
+      - rails_tmp:/imageroot
     ports:
       - "8182:8182"
     environment:
@@ -59,10 +56,7 @@ services:
     restart: always
 
   db_migrate:
-    build:
-      context: .
-      target: spot-base
-    image: spot-base
+    build: .
     env_file: .env
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
@@ -74,7 +68,6 @@ services:
       - .:/spot
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
-      - spot_derivatives:/spot/tmp/derivatives
 
   fedora:
     image: samvera/fcrepo4:4.7.5
@@ -106,18 +99,16 @@ services:
     restart: always
 
   sidekiq:
-    <<: *app
-    build:
-      context: .
-      target: spot-sidekiq
-    image: spot-sidekiq
-    command: bundle exec sidekiq
+    build: .
+    command:
+      - bundle
+      - exec
+      - sidekiq
     volumes:
       - .:/app
       - ./ingest:/ingest
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
-      - spot_derivatives:/spot/tmp/derviatives
     ports:
       - "3003:3000"
     restart: always
