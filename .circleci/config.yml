@@ -76,7 +76,7 @@ jobs:
     environment:
       BUNDLE_PATH: vendor/bundle
       RAILS_ENV: test
-      FCREPO_TEST_URL: http://localhost:8080/rest
+      FEDORA_TEST_URL: http://localhost:8080/rest
       SOLR_TEST_URL: http://localhost:8983/solr/spot-test
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       PSQL_USER: spot_dev_user
