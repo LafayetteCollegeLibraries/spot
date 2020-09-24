@@ -118,7 +118,7 @@ jobs:
       - run:
           name: Run RSpec tests
           command: |
-            bundle exec rails db:migrate
+            bundle exec rake db:migrate
             mkdir /tmp/test-results
             ./cc-test-reporter before-build
             bundle exec rspec \
