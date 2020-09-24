@@ -64,7 +64,7 @@ jobs:
           POSTGRES_USER: spot_dev_user
           POSTGRES_PASSWORD: password
           POSTGRES_DB: spot_test
-      - image: ualbertalib/docker-fcrepo4:4.7
+      - image: samvera/fcrepo4:4.7.5
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
       - image: solr:7.5.0-alpine
