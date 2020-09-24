@@ -49,6 +49,7 @@ services:
     image: postgres:alpine
     volumes:
       - db:/data
+      - ./bin/create-test-db.sh:/docker-entrypoint-initdb.d/10-create-test-db.sh
     environment:
       PGDATA: /data
       POSTGRES_DB: spot_dev
@@ -95,7 +96,10 @@ services:
       - solr:/opt/solr/server/solr
     ports:
       - '8983:8983'
-    command: solr-create -c spot-development -d /spot-config
+    entrypoint:
+      - bash
+      - "-c"
+      - "precreate-core spot-test /spot-config; precreate-core spot-development /spot-config; exec solr -f"
     restart: always
 
   sidekiq:
