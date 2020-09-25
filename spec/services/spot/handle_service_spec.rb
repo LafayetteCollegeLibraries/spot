@@ -42,7 +42,7 @@ RSpec.describe Spot::HandleService do
         permissions: '1110',
         data: {
           format: 'string',
-          value: "http://localhost:3000/handle/#{handle_value}"
+          value: "http://localhost/handle/#{handle_value}"
         }
       }
     end
