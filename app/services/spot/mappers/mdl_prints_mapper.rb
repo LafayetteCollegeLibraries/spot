@@ -50,7 +50,7 @@ module Spot::Mappers
 
     # @return [Array<RDF::URI,String>]
     def subject
-      convert_uri_strings(metadata.fetch('subject', []))
+      convert_uri_strings(metadata.fetch('subject.lcsh', []))
     end
 
     # we'll +.fetch+ without a fallback, as a title is required
