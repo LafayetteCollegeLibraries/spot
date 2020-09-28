@@ -139,7 +139,7 @@ RSpec.describe Spot::Mappers::MdlPrintsMapper do
   describe '#subject' do
     subject { mapper.subject }
 
-    let(:metadata) { { 'subject' => ['http://id.worldcat.org/fast/1898429'] } }
+    let(:metadata) { { 'subject.lcsh' => ['http://id.worldcat.org/fast/1898429'] } }
 
     it { is_expected.to eq [RDF::URI('http://id.worldcat.org/fast/1898429')] }
   end
