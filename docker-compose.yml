@@ -2,28 +2,24 @@ version: '3.7'
 volumes:
   db:
   fedora:
+  rails_public:
+  rails_tmp:
   solr:
   redis:
+
 services:
   app: &app
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0'"
     volumes:
       - .:/spot
-      - ./config/uv/uv-config-development.json:/spot/public/uv/uv-config.json
+      - rails_public:/spot/public
+      - rails_tmp:/spot/tmp
     ports:
       - "3000:3000"
-    environment:
-      CAS_BASE_URL: ''
-      DATABASE_URL: postgres://spot_dev_user:@db:5432/spot_dev
-      FEDORA_URL: http://fedora:8080/rest
-      FITS_SERVLET_URL: http://fitsservlet:8080/fits
-      RAILS_ENV: development
-      REDIS_URL: redis://redis:6379
-      SOLR_URL: http://solr:8983/solr/spot-development
-      DEV_USER: dss@lafayette.edu
-      IIIF_BASE_URL: http://localhost:8182/iiif/2
+    env_file: .env
     restart: always
+    entrypoint: ["bin/spot-dev-entrypoint.sh"]
+    command: ["bundle", "exec", "puma", "-v", "-b", "tcp://0.0.0.0:3000"]
     depends_on:
       - cantaloupe
       - db
@@ -31,6 +27,7 @@ services:
       - fitsservlet
       - redis
       - solr
+      - db_migrate
     stdin_open: true
     tty: true
 
@@ -38,9 +35,9 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - ./tmp/derivatives:/imageroot
+      - rails_tmp:/imageroot
     ports:
-      - '8182:8182'
+      - "8182:8182"
     environment:
       CANTALOUPE_DELEGATE_SCRIPT_ENABLED: 'true'
       CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
@@ -52,16 +49,33 @@ services:
     image: postgres:alpine
     volumes:
       - db:/data
+      - ./bin/create-test-db.sh:/docker-entrypoint-initdb.d/10-create-test-db.sh
     environment:
       PGDATA: /data
       POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
     restart: always
 
+  db_migrate:
+    build: .
+    env_file: .env
+    entrypoint: ["sh", "-c"]
+    command: bin/migrate-and-seed-db.sh
+    depends_on:
+      - db
+      - fedora
+      - solr
+    volumes:
+      - .:/spot
+      - rails_public:/spot/public
+      - rails_tmp:/spot/tmp
+
   fedora:
     image: samvera/fcrepo4:4.7.5
     volumes:
       - fedora:/data
+    ports:
+      - "8080:8080"
     restart: always
 
   fitsservlet:
@@ -82,17 +96,26 @@ services:
       - solr:/opt/solr/server/solr
     ports:
       - '8983:8983'
-    command: solr-create -c spot-development -d /spot-config
+    entrypoint:
+      - bash
+      - "-c"
+      - "precreate-core spot-test /spot-config; precreate-core spot-development /spot-config; exec solr -f"
     restart: always
 
   sidekiq:
-    <<: *app
-    command: bundle exec sidekiq
+    build: .
+    command:
+      - bundle
+      - exec
+      - sidekiq
     volumes:
       - .:/app
       - ./ingest:/ingest
+      - rails_public:/spot/public
+      - rails_tmp:/spot/tmp
     ports:
       - "3003:3000"
     restart: always
     depends_on:
+      - db_migrate
       - app

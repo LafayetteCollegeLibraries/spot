@@ -52,9 +52,10 @@ module Spot
       end
 
       def handle_certificate
-        validate_env_auth_values!('HANDLE_CLIENT_CERT')
+        raise "No HANDLE_CLIENT_CERT ENV value provided" unless ENV['HANDLE_CLIENT_CERT'].present?
+        raise "HANDLE_CLIENT_CERT path does not exist" unless cert_exist?
 
-        OpenSSL::X509::Certificate.new(File.read(ENV['HANDLE_CLIENT_CERT']))
+        OpenSSL::X509::Certificate.new(cert_contents)
       end
 
       # @return [String]
@@ -63,9 +64,26 @@ module Spot
       end
 
       def handle_key
-        validate_env_auth_values!('HANDLE_CLIENT_KEY')
+        raise "No HANDLE_CLIENT_KEY ENV value provided" unless ENV['HANDLE_CLIENT_KEY'].present?
+        raise "HANDLE_CLIENT_KEY path does not exist" unless key_exist?
 
-        OpenSSL::PKey.read(File.read(ENV['HANDLE_CLIENT_KEY']))
+        OpenSSL::PKey.read(key_contents)
+      end
+
+      def cert_contents
+        File.read(ENV['HANDLE_CLIENT_CERT'])
+      end
+
+      def cert_exist?
+        File.exist?(ENV['HANDLE_CLIENT_CERT'])
+      end
+
+      def key_contents
+        File.read(ENV['HANDLE_CLIENT_KEY'])
+      end
+
+      def key_exist?
+        File.exist?(ENV['HANDLE_CLIENT_KEY'])
       end
 
       # @return [String]
@@ -113,11 +131,6 @@ module Spot
         # deal with the response: did everything go ok?
         # if so, update the item
         JSON.parse(response.body)
-      end
-
-      def validate_env_auth_values!(key)
-        raise "No #{key} ENV value provided" unless ENV[key].present?
-        raise "#{key} path does not exist" unless File.exist?(ENV[key])
       end
 
       # @return [true, false]

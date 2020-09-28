@@ -11,7 +11,7 @@ class CustomDelegate
   def filesystemsource_pathname(_options = {})
     raw_id = context['identifier']
     derivative_path = raw_id.scan(/..?/).join('/') + '-access.tif'
-    full_path = ::File.join('/imageroot', derivative_path)
+    full_path = ::File.join('/imageroot/derivatives', derivative_path)
 
     full_path if ::File.exist?(full_path)
   end

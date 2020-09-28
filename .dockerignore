@@ -6,3 +6,4 @@
 /coverage
 .byebug_history
 fits.log
+node_modules
