@@ -34,7 +34,9 @@ Rails.application.routes.draw do
     concerns :range_searchable
   end
 
-  curation_concerns_basic_routes
+  curation_concerns_basic_routes do
+    post 'feedback', format: false, as: :item_feedback, to: '/item_feedback#submit'
+  end
 
   resources :solr_documents, only: [:show], path: '/catalog', controller: 'catalog' do
     concerns :exportable

@@ -1,0 +1,7 @@
+<h1>Feedback!</h1>
+
+<p><%= @user_name %> has feedback for <a href="<%= @item.permalink %>"><%= Array.wrap(@item.title).first %></a>:</p>
+
+<blockquote>
+  <%= @comment %>
+</blockquote>
