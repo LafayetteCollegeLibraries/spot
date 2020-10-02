@@ -16,6 +16,7 @@ module Spot::Mappers
 
     def fields
       super + [
+        :date,
         :date_associated,
         :description,
         :identifier,
