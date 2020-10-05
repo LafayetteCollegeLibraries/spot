@@ -3,6 +3,9 @@ executors:
   ruby:
     docker:
       - image: circleci/ruby:2.4.3-stretch-node-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     working_directory: ~/spot
     environment:
       BUNDLE_PATH: vendor/bundle
@@ -58,8 +61,17 @@ jobs:
   test:
     docker:
       - image: circleci/ruby:2.4.3-stretch-node-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
       - image: circleci/redis:4
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
       - image: postgres:9.4-alpine
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
         environment:
           POSTGRES_USER: spot_dev_user
           POSTGRES_PASSWORD: password
@@ -149,6 +161,9 @@ jobs:
   upload-coverage:
     docker:
       - image: circleci/ruby:2.4.3-stretch-node-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     working_directory: ~/spot
 
     steps:
@@ -167,13 +182,21 @@ workflows:
   version: 2
   ci:
     jobs:
-    - bundle
+    - bundle:
+        context:
+          - dss-docker-auth
     - lint:
+        context:
+          - dss-docker-auth
         requires:
           - bundle
     - test:
+        context:
+          - dss-docker-auth
         requires:
           - lint
     - upload-coverage:
+        context:
+          - dss-docker-auth
         requires:
           - test
