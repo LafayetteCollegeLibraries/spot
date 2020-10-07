@@ -29,6 +29,13 @@ module Spot::Mappers
       ]
     end
 
+    #  @return [Array<RDF::Literal>]
+    def description
+      ['description.critical', 'description.text.english'].inject([]) do |pool, field|
+        pool + field_to_tagged_literals(field, :en)
+      end
+    end
+
     # For all of the collections, only the English inscription fields
     # are used, but for warner-negs-taiwan we had some English values
     # accidentally land in description.text.japanese, so we'll just map
