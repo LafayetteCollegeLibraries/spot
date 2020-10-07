@@ -9,6 +9,7 @@ module Spot::Mappers
       keyword: ['keyword', 'relation.ispartof'],
       physical_medium: 'format.medium',
       research_assistance: 'contributor',
+      resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
     }
 
