@@ -19,6 +19,7 @@ module Spot::Mappers
         :date,
         :date_associated,
         :description,
+        :identifier,
         :inscription,
         :location,
         :rights_statement,
