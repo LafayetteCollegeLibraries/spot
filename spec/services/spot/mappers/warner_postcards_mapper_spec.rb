@@ -23,6 +23,30 @@ RSpec.describe Spot::Mappers::WarnerPostcardsMapper do
     it_behaves_like 'a mapped field'
   end
 
+  describe '#inscription' do
+    subject { mapper.inscription }
+
+    let(:metadata) do
+      {
+        'description.inscription.english' => ['Hello!'],
+        'description.inscription.japanese' => ['こんにちは！'],
+        'description.text.english' => ['A nice thing'],
+        'description.text.japanese' => ['すてきなこと']
+      }
+    end
+
+    let(:expected_values) do
+      [
+        RDF::Literal('Hello!', language: :en),
+        RDF::Literal('こんにちは！', language: :ja),
+        RDF::Literal('A nice thing', language: :en),
+        RDF::Literal('すてきなこと', language: :ja)
+      ]
+    end
+
+    it { is_expected.to eq expected_values }
+  end
+
   describe '#keyword' do
     subject { mapper.keyword }
 
