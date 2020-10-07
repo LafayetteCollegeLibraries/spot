@@ -8,6 +8,7 @@ module Spot::Mappers
     self.fields_map = {
       keyword: ['keyword', 'relation.ispartof'],
       physical_medium: 'format.medium',
+      related_resource: 'relation.seealso',
       research_assistance: 'contributor',
       resource_type: 'resource.type',
       subject_ocm: 'subject.ocm'
@@ -27,6 +28,13 @@ module Spot::Mappers
         :title,
         :title_alternative
       ]
+    end
+
+    # some warner-negs collections use 'date.original' instead of 'date.artifact.upper/lower'
+    #
+    # @return [Array<String>]
+    def date
+      super + metadata.fetch('date.original', [])
     end
 
     #  @return [Array<RDF::Literal>]

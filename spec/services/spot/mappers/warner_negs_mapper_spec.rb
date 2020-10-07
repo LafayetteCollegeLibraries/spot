@@ -7,6 +7,19 @@ RSpec.describe Spot::Mappers::WarnerNegsMapper do
 
   it_behaves_like 'a base EAIC mapper', skip_fields: [:description]
 
+  # we're testing the default date fields (date.artifact.upper/date.artifact.lower)
+  # with the base EAIC mapper shared_example, but we want to make sure that
+  # we're also capturing values stored in 'date.original'
+  describe '#date' do
+    subject { mapper.date }
+
+    context 'when values are stored in date.original' do
+      let(:metadata) { { 'date.original' => ['1986-02-11/2020-10-07'] } }
+
+      it { is_expected.to eq ['1986-02-11/2020-10-07'] }
+    end
+  end
+
   describe '#description' do
     subject { mapper.description }
 
@@ -61,6 +74,14 @@ RSpec.describe Spot::Mappers::WarnerNegsMapper do
     subject { mapper.physical_medium }
 
     let(:field) { 'format.medium' }
+
+    it_behaves_like 'a mapped field'
+  end
+
+  describe '#related_resource' do
+    subject { mapper.related_resource }
+
+    let(:field) { 'relation.seealso' }
 
     it_behaves_like 'a mapped field'
   end
