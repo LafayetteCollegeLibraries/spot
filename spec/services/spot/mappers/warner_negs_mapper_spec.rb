@@ -20,26 +20,6 @@ RSpec.describe Spot::Mappers::WarnerNegsMapper do
     end
   end
 
-  describe '#description' do
-    subject { mapper.description }
-
-    let(:metadata) do
-      {
-        'description.critical' => ["It's a postcard"],
-        'description.text.english' => ['A description of the item']
-      }
-    end
-
-    let(:expected_values) do
-      [
-        RDF::Literal("It's a postcard", language: :en),
-        RDF::Literal('A description of the item', language: :en)
-      ]
-    end
-
-    it { is_expected.to eq expected_values }
-  end
-
   describe '#inscription' do
     subject { mapper.inscription }
 
