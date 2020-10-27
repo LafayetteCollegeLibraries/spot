@@ -33,6 +33,7 @@ module Spot
         tjwar: TjwarPostcardsMapper,
         war_casualties: WarCasualtiesMapper,
         warner_negs: WarnerNegsMapper,
+        warner_postcards: WarnerPostcardsMapper,
         warner_souvenirs: WarnerSouvenirsMapper,
         woodsworth: WoodsworthImagesMapper
       }
