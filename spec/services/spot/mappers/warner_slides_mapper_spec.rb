@@ -16,7 +16,7 @@ RSpec.describe Spot::Mappers::WarnerSlidesMapper do
   end
 
   describe '#inscription' do
-    subject { mapper.description }
+    subject { mapper.inscription }
 
     let(:metadata) { { 'description.text.english' => ['Text within a photograph album'] } }
 
