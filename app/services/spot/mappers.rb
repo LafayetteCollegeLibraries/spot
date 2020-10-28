@@ -34,6 +34,7 @@ module Spot
         war_casualties: WarCasualtiesMapper,
         warner_negs: WarnerNegsMapper,
         warner_postcards: WarnerPostcardsMapper,
+        warner_slides: WarnerSlidesMapper,
         warner_souvenirs: WarnerSouvenirsMapper,
         woodsworth: WoodsworthImagesMapper
       }
