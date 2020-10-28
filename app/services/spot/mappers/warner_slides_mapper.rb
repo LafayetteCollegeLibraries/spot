@@ -2,7 +2,6 @@
 module Spot::Mappers
   class WarnerSlidesMapper < BaseEaicMapper
     self.fields_map = {
-      date: 'date.original',
       keyword: 'relation.ispartof',
       original_item_extent: 'format.extent',
       physical_medium: 'format.medium',
@@ -13,6 +12,7 @@ module Spot::Mappers
 
     def fields
       super + [
+        :date,
         :description,
         :identifier,
         :inscription,
@@ -21,6 +21,10 @@ module Spot::Mappers
         :subject,
         :title
       ]
+    end
+
+    def date
+      metadata.fetch('date.original', [])
     end
 
     def inscription
