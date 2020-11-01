@@ -21,7 +21,7 @@ gem 'sass-rails', '5.0.7'
 gem 'uglifier', '4.1.20'
 
 # ugh, we're stuck with coffee-script until it's out of hyrax i guess
-gem 'coffee-rails', '4.2.2'
+gem 'coffee-rails', '5.0.0'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '5.2.1'
