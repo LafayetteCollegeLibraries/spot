@@ -82,7 +82,7 @@ RSpec.describe Spot::Mappers::LinPostcardsMapper do
   describe '#related_resource' do
     subject { mapper.related_resource }
 
-    let(:field) { 'description.citation' }
+    let(:fields) { ['description.citation', 'relation.seealso'] }
 
     it_behaves_like 'a mapped field'
   end
