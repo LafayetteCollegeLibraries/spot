@@ -5,7 +5,7 @@ RSpec.describe Spot::Mappers::WarnerSlidesMapper do
 
   before { mapper.metadata = metadata }
 
-  it_behaves_like 'a base EAIC mapper'
+  it_behaves_like 'a base EAIC mapper', skip_fields: [:date]
 
   describe '#date' do
     subject { mapper.date }
