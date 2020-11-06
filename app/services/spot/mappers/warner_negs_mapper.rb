@@ -30,11 +30,12 @@ module Spot::Mappers
       ]
     end
 
-    # some warner-negs collections use 'date.original' instead of 'date.artifact.upper/lower'
+    # warner-negs-indonesia and warner-negs-manchuria use +date.image.lower+ and +date.image.upper+ for
+    # their edtf ranges, but warner-negs-taiwan
     #
     # @return [Array<String>]
     def date
-      super + metadata.fetch('date.original', [])
+      edtf_ranges_for('date.image.lower', 'date.image.upper') + metadata.fetch('date.original', [])
     end
 
     # For all of the collections, only the English inscription fields
