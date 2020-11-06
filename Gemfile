@@ -158,7 +158,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
   gem 'hyrax-spec', '~> 0.3.2'
-  gem 'rails-controller-testing', '~> 1.0.4'
+  gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.8'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 3.6'
