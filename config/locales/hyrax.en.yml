@@ -27,6 +27,7 @@ en:
       my:
         heading:
           collection_type: Collection Type
+          model_type: Model
           visibility: Visibility
 
     footer:

@@ -3,8 +3,7 @@
     <div class="row">
       <div class="col-sm-4">
         <h4><%= t('hyrax.product_name') %></h4>
-        <p>Version: <%= SPOT_VERSION %>, last updated: <%= LAST_DEPLOYED %></p>
-        <%= render 'shared/debug_info' if Rails.env.development? || ENV['SHOW_DEBUG_FOOTER'].present? %>
+        <p>Version: <%= Spot::VERSION %>, last updated: <%= Spot::LAST_DEPLOYED %></p>
       </div>
 
       <div class="col-sm-5 col-sm-offset-3">

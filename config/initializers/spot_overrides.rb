@@ -27,13 +27,25 @@ Rails.application.config.to_prepare do
   # "translation missing" message being provided as a fall-back label. this should
   # prevent that error from appearing by replacing the +translate+ calls with a symbolized
   # I18n key (see also 0717dee, + catalog_controller.rb)
-  Hyrax::My::CollectionsController.class_eval do
-    def self.update_facet_labels
-      blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-      blacklight_config.facet_fields[Collection.collection_type_gid_document_field_name].label = :'hyrax.dashboard.my.heading.collection_type'
-      blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
+  [Hyrax::My::CollectionsController, Hyrax::Dashboard::CollectionsController].each do |klass|
+    klass.class_eval do
+      def self.update_facet_labels!
+        blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
+        blacklight_config.facet_fields[Collection.collection_type_gid_document_field_name].label = :'hyrax.dashboard.my.heading.collection_type'
+        blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
+      end
+      update_facet_labels!
     end
-    update_facet_labels
+  end
+
+  # same as previous: updating facet labels for dashboard works controller
+  [Hyrax::My::WorksController, Hyrax::Dashboard::WorksController].each do |klass|
+    klass.class_eval do
+      def self.update_facet_labels!
+        blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
+      end
+      update_facet_labels!
+    end
   end
 
   # We're using an older version of the FITSServlet tool (1.1.3 as of 2019-12-03,

@@ -3,6 +3,9 @@ executors:
   ruby:
     docker:
       - image: circleci/ruby:2.4.3-stretch-node-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     working_directory: ~/spot
     environment:
       BUNDLE_PATH: vendor/bundle
@@ -58,17 +61,26 @@ jobs:
   test:
     docker:
       - image: circleci/ruby:2.4.3-stretch-node-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
       - image: circleci/redis:4
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
       - image: postgres:9.4-alpine
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
         environment:
           POSTGRES_USER: spot_dev_user
           POSTGRES_PASSWORD: password
           POSTGRES_DB: spot_test
-      - image: ualbertalib/docker-fcrepo4:4.7
+      - image: samvera/fcrepo4:4.7.5
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
       - image: solr:7.5.0-alpine
-        command: bin/solr -cloud -noprompt -f -p 8985
+        command: bin/solr -cloud -noprompt -f -p 8983
 
     working_directory: ~/spot
     parallelism: 4
@@ -76,7 +88,8 @@ jobs:
     environment:
       BUNDLE_PATH: vendor/bundle
       RAILS_ENV: test
-      FCREPO_TEST_PORT: 8080/fcrepo
+      FEDORA_TEST_URL: http://localhost:8080/rest
+      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       PSQL_USER: spot_dev_user
       PSQL_PASSWORD: password
@@ -106,8 +119,8 @@ jobs:
           command: |
             cd solr/config
             zip -1 spot_solr_config.zip ./*
-            curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8985/solr/admin/configs?action=UPLOAD&name=spot"
-            curl -H "Content-type: application/json" http://localhost:8985/api/collections/ -d "{create: {name: hydra-test, config: spot, numShards: 1}}"
+            curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=spot"
+            curl -H "Content-type: application/json" http://localhost:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
 
       - run:
           name: Install Code Climate Test Reporter
@@ -118,7 +131,7 @@ jobs:
       - run:
           name: Run RSpec tests
           command: |
-            bundle exec rails db:migrate
+            bundle exec rake db:migrate
             mkdir /tmp/test-results
             ./cc-test-reporter before-build
             bundle exec rspec \
@@ -148,6 +161,9 @@ jobs:
   upload-coverage:
     docker:
       - image: circleci/ruby:2.4.3-stretch-node-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     working_directory: ~/spot
 
     steps:
@@ -166,13 +182,21 @@ workflows:
   version: 2
   ci:
     jobs:
-    - bundle
+    - bundle:
+        context:
+          - dss-docker-auth
     - lint:
+        context:
+          - dss-docker-auth
         requires:
           - bundle
     - test:
+        context:
+          - dss-docker-auth
         requires:
           - lint
     - upload-coverage:
+        context:
+          - dss-docker-auth
         requires:
           - test

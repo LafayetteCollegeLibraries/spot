@@ -4,16 +4,20 @@ RSpec.describe Spot::HandleService do
 
   let(:work) { instance_double(Publication, id: 'abc123def', identifier: identifiers) }
   let(:identifiers) { [] }
+  let(:handle_server_url) { 'http://handle-service:8000' }
+  let(:handle_prefix) { '10385' }
+  let(:cert_path) { '/path/to/client/cert' }
+  let(:key_path) { '/path/to/client/key' }
 
   describe '.env_values_defined?' do
     subject { described_class.env_values_defined? }
 
     context 'when all values are provided' do
       before do
-        stub_env('HANDLE_SERVER_URL', 'http://localhost:8000')
-        stub_env('HANDLE_PREFIX', '10385')
-        stub_env('HANDLE_CLIENT_CERT', '/path/to/client/cert')
-        stub_env('HANDLE_CLIENT_KEY', '/path/to/client/key')
+        stub_env('HANDLE_SERVER_URL', handle_server_url)
+        stub_env('HANDLE_PREFIX', handle_prefix)
+        stub_env('HANDLE_CLIENT_CERT', cert_path)
+        stub_env('HANDLE_CLIENT_KEY', key_path)
       end
 
       it { is_expected.to be true }
@@ -27,13 +31,8 @@ RSpec.describe Spot::HandleService do
   describe '#mint' do
     subject { service.mint }
 
-    let(:cert_path) { '/path/to/client/cert' }
-    let(:key_path) { '/path/to/client/key' }
-
     let(:cert_double) { instance_double(OpenSSL::X509::Certificate) }
     let(:key_double) { instance_double(OpenSSL::PKey::PKey) }
-    let(:handle_server_url) { 'http://localhost:8000' }
-    let(:handle_prefix) { '10385' }
     let(:body_content) { { responseCode: 1, handle: "#{handle_prefix}/#{work.id}" } }
     let(:handle_value) { "#{handle_prefix}/#{work.id}" }
     let(:request_object) do
@@ -54,10 +53,10 @@ RSpec.describe Spot::HandleService do
       stub_env('HANDLE_CLIENT_CERT', cert_path)
       stub_env('HANDLE_CLIENT_KEY', key_path)
 
-      allow(File).to receive(:read).with(cert_path).and_return(:cert_data)
-      allow(File).to receive(:exist?).with(cert_path).and_return(true)
-      allow(File).to receive(:read).with(key_path).and_return(:key_data)
-      allow(File).to receive(:exist?).with(key_path).and_return(true)
+      allow(service).to receive(:cert_exist?).and_return(true)
+      allow(service).to receive(:cert_contents).and_return(:cert_data)
+      allow(service).to receive(:key_exist?).and_return(true)
+      allow(service).to receive(:key_contents).and_return(:key_data)
 
       allow(OpenSSL::X509::Certificate).to receive(:new).with(:cert_data).and_return(cert_double)
       allow(OpenSSL::PKey).to receive(:read).with(:key_data).and_return(key_double)

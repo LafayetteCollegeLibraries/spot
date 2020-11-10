@@ -15,13 +15,13 @@ gem 'rails', '~> 5.2'
 gem 'puma', '3.12.6'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '5.0.7'
+gem 'sass-rails', '5.1.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '4.1.20'
 
 # ugh, we're stuck with coffee-script until it's out of hyrax i guess
-gem 'coffee-rails', '4.2.2'
+gem 'coffee-rails', '5.0.0'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '5.2.1'
@@ -67,7 +67,7 @@ gem 'edtf', '3.0.4'
 gem 'edtf-humanize', '0.0.7'
 
 # error trackijng
-gem 'honeybadger', '4.7.0'
+gem 'honeybadger', '4.7.2'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0.2'
@@ -96,7 +96,7 @@ gem 'rubyzip', '1.3.0'
 
 # our jobs server
 gem 'sidekiq', '5.2.9'
-gem 'sidekiq-cron', '1.1.0'
+gem 'sidekiq-cron', '1.2.0'
 
 # using Slack for some of our messaging
 gem 'slack-ruby-client', '0.14.4'
@@ -158,7 +158,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 5', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
   gem 'hyrax-spec', '~> 0.3.2'
-  gem 'rails-controller-testing', '~> 1.0.4'
+  gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.8'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 3.6'
