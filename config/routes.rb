@@ -4,6 +4,11 @@ require 'sidekiq/cron/web'
 require 'rack'
 
 Rails.application.routes.draw do
+  ##
+  # spot routing
+  ##
+
+  # user routes
   devise_for :users
 
   # need to call `root` before mounting our engines
@@ -15,6 +20,21 @@ Rails.application.routes.draw do
   get '/help', to: 'spot/page#help', as: 'help'
   get '/terms-of-use', to: 'spot/page#terms_of_use', as: 'terms_of_use'
 
+  # add our collections landing page(s)
+  get '/collections', to: 'hyrax/collections#index'
+
+  # only allow urls to be passed to the redirect controller
+  get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
+    qs = Rack::Utils.parse_nested_query(request.query_string)
+    qs['url'] && qs['url'].match?(URI.regexp)
+  }
+
+  # handle uri catching: ldr.lafayette.edu/handle/:id
+  resources :handle, only: :show, constraints: { id: %r{[0-9]+/[a-zA-Z0-9]+} }
+
+  ##
+  # routes for engines + hyrax
+  ##
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
   mount Hydra::RoleManagement::Engine => '/admin'
@@ -66,11 +86,4 @@ Rails.application.routes.draw do
 
     resources :export, only: :show
   end
-
-  get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
-    qs = Rack::Utils.parse_nested_query(request.query_string)
-    qs['url'] && qs['url'].match?(URI.regexp)
-  }
-
-  resources :handle, only: :show, constraints: { id: %r{[0-9]+/[a-zA-Z0-9]+} }
 end

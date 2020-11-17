@@ -1,0 +1,32 @@
+<%# cache the values so we don't have to keep looking them up in solr %>
+<% subcollection_count = collection.total_viewable_collections %>
+<% item_count = collection.total_items %>
+
+<div class="collection-list-item <%= item_wrapper_class %>">
+  <div class="thumbnail">
+    <img src="<%= collection_banner_file_path(collection) %>" />
+    <div class="caption">
+      <h3><%= collection.title.first %></h3>
+      <p><%= collection.abstract.first %></p>
+      <div class="row">
+        <div class="<%= count_wrapper_class %>">
+          <div class="row collection-counts-wrapper">
+            <% unless subcollection_count.zero? %>
+            <div class="col-xs-6">
+              <div class="collection-counts-item">
+                <span><%= subcollection_count %></span><%= 'Collection'.pluralize(subcollection_count) %>
+              </div>
+            </div>
+            <% end %>
+            <div class="col-xs-<%= subcollection_count.zero? ? '12' : '6' %>">
+              <div class="collection-counts-item">
+                <span><%= item_count %></span><%= 'Item'.pluralize(item_count) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p><%= link_to('View Collection', [hyrax, collection], class: 'btn btn-primary btn-block') %></p>
+    </div>
+  </div>
+</div>

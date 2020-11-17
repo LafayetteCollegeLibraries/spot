@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 module Spot
   module CollectionHelper
+    def collection_banner_file_path(presenter)
+      image_path(presenter.banner_file.present? ? presenter.banner_file : 'default-collection-background.jpg')
+    end
+
     # Responsible for generating the text that preceeds a collection's
     # related_resource URLs.
     #

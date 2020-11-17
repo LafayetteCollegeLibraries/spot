@@ -20,6 +20,8 @@ en:
         page_title: 'Search Results // %{name}'
 
     collection:
+      index:
+        page_title: 'Browse Collections // %{name}'
       show:
         related_resource_single: "To learn more about this collection, visit %{link_html}."
         related_resource_multiple: "To learn more about this collection, visit the following: %{link_html}."

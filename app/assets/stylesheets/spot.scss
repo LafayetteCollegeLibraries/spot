@@ -58,6 +58,12 @@
   }
 }
 
+.collection-list-item {
+  .thumbnail img {
+    height: 200px;
+  }
+}
+
 // give some breathing room to collection items w/ thumbnails in search results
 .search-result-wrapper {
   padding-bottom: 1rem;
@@ -85,4 +91,39 @@ select[multiple] {
 .viewer-wrapper iframe {
   height: 100%;
   width: 100%;
+}
+
+.collection-list-item {
+  .thumbnail {
+    .caption {
+      min-height: 2em;
+    }
+  }
+
+  .collection-counts-wrapper {
+    margin: 1em auto;
+  }
+
+  .collection-counts-item {
+    background-color: #f5f5f5;
+    color: #666;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 10px;
+    padding: 8px;
+    text-align: center;
+    width: 100%;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    span {
+      display: block;
+      font-size: 18px;
+      font-weight: normal;
+      line-height: 1;
+    }
+  }
 }
