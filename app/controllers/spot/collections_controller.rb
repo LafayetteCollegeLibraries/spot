@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-#
-# provides a CollectionsController#index method to paginate
-# through top-level collections
 module Spot
-  module CollectionLandingBehavior
+  class CollectionsController < Hyrax::CollectionsController
     def index
+      @response = collection_index_response
       @collections = collection_presenters
+
       render 'index', layout: 'hyrax/1_column'
     end
 
@@ -13,11 +12,11 @@ module Spot
 
       # @note: this will change once we upgrade to hyrax@3
       def collection_index_response
-        @collection_index_response ||= blacklight_config.repository_class.new(blacklight_config).search(index_search_builder)
+        blacklight_config.repository_class.new(blacklight_config).search(index_search_builder)
       end
 
       def collection_presenters
-        collection_index_response.documents.map { |doc| presenter_class.new(doc, current_ability, request) }
+        @response.documents.map { |doc| presenter_class.new(doc, current_ability, request) }
       end
 
       def index_search_builder

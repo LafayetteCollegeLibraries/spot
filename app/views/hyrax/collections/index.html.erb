@@ -7,14 +7,20 @@
 <% count_wrapper_class = "col-sm-#{12 - grid_base} col-sm-offset-#{grid_base / 2}" %>
 
 <% @collections.each_slice(per_row).each do |collections| %>
-<%# we need 'search-results-wrapper' to inherit styles from blacklight %>
 <div class="row">
   <% collections.each do |collection| %>
     <%= render 'collection_list_item',
                collection: collection,
                item_wrapper_class: item_wrapper_class,
-               count_wrapper_class: count_wrapper_class
-    %>
+               count_wrapper_class: count_wrapper_class %>
   <% end %>
 </div>
 <% end %>
+
+<div class="row record-padding">
+  <div class="col-md-12">
+    <div class="pagination">
+      <%= paginate @response, outer_window: 2, theme: 'blacklight' %>
+    </div>
+  </div>
+</div>

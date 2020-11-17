@@ -11,7 +11,6 @@ Rails.application.config.to_prepare do
 
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::CollectionsController.include Spot::CollectionsControllerBehavior
-  Hyrax::CollectionsController.include Spot::CollectionLandingBehavior
 
   Hyrax::DerivativeService.services = [
     ::Spot::ImageDerivativesService,

@@ -20,9 +20,6 @@ Rails.application.routes.draw do
   get '/help', to: 'spot/page#help', as: 'help'
   get '/terms-of-use', to: 'spot/page#terms_of_use', as: 'terms_of_use'
 
-  # add our collections landing page(s)
-  get '/collections', to: 'hyrax/collections#index'
-
   # only allow urls to be passed to the redirect controller
   get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
     qs = Rack::Utils.parse_nested_query(request.query_string)
@@ -86,4 +83,6 @@ Rails.application.routes.draw do
 
     resources :export, only: :show
   end
+
+  get '/collections', action: 'index', controller: 'spot/collections', as: 'collections'
 end
