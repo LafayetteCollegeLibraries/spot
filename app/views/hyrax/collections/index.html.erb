@@ -6,6 +6,8 @@
 <% item_wrapper_class = "col-md-#{grid_base}" %>
 <% count_wrapper_class = "col-sm-#{12 - grid_base} col-sm-offset-#{grid_base / 2}" %>
 
+<%= render partial: 'catalog/paginate_compact', object: @response %>
+
 <% @collections.each_slice(per_row).each do |collections| %>
 <div class="row">
   <% collections.each do |collection| %>
