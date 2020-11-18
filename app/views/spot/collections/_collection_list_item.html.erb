@@ -2,14 +2,14 @@
 <% subcollection_count = collection.total_viewable_collections %>
 <% item_count = collection.total_items %>
 
-<div class="collection-list-item <%= item_wrapper_class %>">
+<div class="collection-list-item col-md-4">
   <div class="thumbnail">
-    <img src="<%= collection_banner_file_path(collection) %>" />
+    <div class="banner-container" style="background-image:url('<%= collection_banner_file_path(collection) %>');"></div>
     <div class="caption">
       <h3><%= collection.title.first %></h3>
       <p><%= collection.abstract.first %></p>
       <div class="row">
-        <div class="<%= count_wrapper_class %>">
+        <div class="col-sm-10 col-sm-offset-1">
           <div class="row collection-counts-wrapper">
             <% unless subcollection_count.zero? %>
             <div class="col-xs-6">

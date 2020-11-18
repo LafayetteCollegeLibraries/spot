@@ -1,9 +1,3 @@
-<%# adjusting the per_row variable will resize the width of the various grid values.
-    for best results, use 2, 3, or 4 %>
-<% per_row = 3 %>
-<% grid_base = 12 / per_row %>
-<% item_wrapper_class = "col-md-#{grid_base}" %>
-<% count_wrapper_class = "col-sm-#{12 - grid_base} col-sm-offset-#{grid_base / 2}" %>
 <% provide(:page_title) { t('.page_title', name: application_name) } %>
 
 <div class="page-header">
@@ -12,13 +6,10 @@
 
 <%= render partial: 'catalog/paginate_compact', object: @response %>
 
-<% @collections.each_slice(per_row).each do |collections| %>
+<% @collections.each_slice(3).each do |collections| %>
 <div class="row">
   <% collections.each do |collection| %>
-    <%= render 'collection_list_item',
-               collection: collection,
-               item_wrapper_class: item_wrapper_class,
-               count_wrapper_class: count_wrapper_class %>
+    <%= render 'collection_list_item', collection: collection %>
   <% end %>
 </div>
 <% end %>

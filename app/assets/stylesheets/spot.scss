@@ -94,10 +94,15 @@ select[multiple] {
 }
 
 .collection-list-item {
-  .thumbnail {
-    .caption {
-      min-height: 2em;
-    }
+  .banner-container {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 200px;
+  }
+
+  .thumbnail .caption {
+    min-height: 2em;
   }
 
   .collection-counts-wrapper {
