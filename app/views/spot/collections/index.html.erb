@@ -1,10 +1,14 @@
 <%# adjusting the per_row variable will resize the width of the various grid values.
     for best results, use 2, 3, or 4 %>
-<% provide(:page_title) { t('spot.collection.index.page_title', name: application_name) } %>
 <% per_row = 3 %>
 <% grid_base = 12 / per_row %>
 <% item_wrapper_class = "col-md-#{grid_base}" %>
 <% count_wrapper_class = "col-sm-#{12 - grid_base} col-sm-offset-#{grid_base / 2}" %>
+<% provide(:page_title) { t('.page_title', name: application_name) } %>
+
+<div class="page-header">
+  <h1><%= t('.header') %></h1>
+</div>
 
 <%= render partial: 'catalog/paginate_compact', object: @response %>
 
