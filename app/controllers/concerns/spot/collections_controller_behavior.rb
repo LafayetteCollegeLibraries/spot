@@ -22,6 +22,14 @@ module Spot
       end
     end
 
+    def default_trail
+      add_breadcrumb(I18n.t('hyrax.controls.home'), hyrax.root_path)
+    end
+
+    def add_breadcrumb_for_controller
+      add_breadcrumb(I18n.t('spot.collections.breadcrumb'), index_collections_path)
+    end
+
     def load_collection_from_slug
       @collection = Collection.where(collection_slug_ssi: params[:id]).first
       params[:id] = @collection.id unless @collection.nil?

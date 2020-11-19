@@ -20,6 +20,7 @@ en:
         page_title: 'Search Results // %{name}'
 
     collections:
+      breadcrumb: Collections
       index:
         page_title: 'Browse Collections // %{name}'
         header: Browse Collections
