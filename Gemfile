@@ -142,8 +142,6 @@ group :development do
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rails', '~> 1.3', require: false
   gem 'capistrano-sidekiq', '~> 1.0.3'
-
-  gem 'xray-rails', '~> 0.3.1'
 end
 
 # things used for development + testing (again, not as

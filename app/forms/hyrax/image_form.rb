@@ -6,14 +6,14 @@ module Hyrax
     singular_form_fields :title
 
     self.model_class = ::Image
-    self.required_fields = [:title, :resource_type, :date, :rights_statement]
+    self.required_fields = [:title, :resource_type, :rights_statement]
     self.terms = [
       :title,
       :resource_type,
-      :date,
       :rights_statement,
 
       # non-required fields
+      :date,
       :title_alternative,
       :subtitle,
       :date_associated,

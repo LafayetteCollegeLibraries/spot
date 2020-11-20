@@ -5,6 +5,8 @@ RSpec.describe Hyrax::ImageForm do
   shared_context 'required fields' do
     it 'contains required fields' do
       expect(terms).to include :title
+      expect(terms).to include :resource_type
+      expect(terms).to include :rights_statement
     end
   end
 
@@ -20,9 +22,7 @@ RSpec.describe Hyrax::ImageForm do
     include_context 'required fields'
 
     describe 'includes optional fields' do
-      it { is_expected.to include :resource_type }
       it { is_expected.to include :date }
-      it { is_expected.to include :rights_statement }
       it { is_expected.to include :title_alternative }
       it { is_expected.to include :subtitle }
       it { is_expected.to include :date_associated }

@@ -17,6 +17,7 @@ module Spot
         geology: GeologySlidesEsiMapper,
         imperial: ImperialPostcardsMapper,
         lewis: LewisPostcardsMapper,
+        lin: LinPostcardsMapper,
         ldr: LdrDspaceMapper,
         magazine: MagazineMapper,
         mammana: MammanaPostcardsMapper,
@@ -31,6 +32,9 @@ module Spot
         shakespeare: ShakespeareBulletinMapper,
         tjwar: TjwarPostcardsMapper,
         war_casualties: WarCasualtiesMapper,
+        warner_negs: WarnerNegsMapper,
+        warner_postcards: WarnerPostcardsMapper,
+        warner_slides: WarnerSlidesMapper,
         warner_souvenirs: WarnerSouvenirsMapper,
         woodsworth: WoodsworthImagesMapper
       }

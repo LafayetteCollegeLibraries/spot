@@ -1,5 +1,37 @@
 # changelog
 
+## [2020.12] - 2020-11-20
+
+### updates
+- Image batch 5 mappers added (#616)
+
+### bug fixes 🐞 
+- `ImageForm#date` should not be a required field (#634)
+
+### dependencies 👩‍👩‍👧‍👧 
+- remove `xray-rails` (#636)
+
+
+## [2020.11] - 2020-11-10
+
+### features 👩‍🔬 
+- refactor docker environment for development (#607)
+- use authenticated docker pulls for circleci (#615)
+
+### bug fixes 🐞 
+- ensure that fields are provided when calling OaiCollectionSolrSet.sets_for (#608)
+- add resource_type to mammana-postcards mapper (#610)
+- use correct subject field for mdl-prints mapper (#611)
+- updates missing dashboard (collections/works) translations (#612)
+
+### dependency updates 👩‍👩‍👧‍👧 
+- honeybadger to 4.7.2 (#626)
+- coffee-rails to 5.0.0 (#627)
+- sidekiq-cron to 1.2.0 (#628)
+- sass-rails to 5.1.0 (#629)
+- rails-controller-testing to 1.0.5 (#630)
+
+
 ## [2020.10] - 2020-09-17
 
 ### features 🥼 
@@ -480,6 +512,8 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2020.12]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.12
+[2020.11]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.11
 [2020.10]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.10
 [2020.9]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.9
 [2020.8]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.8
