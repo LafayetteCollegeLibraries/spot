@@ -3,6 +3,10 @@ module Spot
   class CollectionsIndexSearchBuilder < Hyrax::CollectionSearchBuilder
     self.default_processor_chain += [:only_include_top_level_collections]
 
+    def sort_field
+      'title_sort_si'
+    end
+
     private
 
       def only_include_top_level_collections(solr_params)
