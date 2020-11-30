@@ -19,7 +19,6 @@ RSpec.describe Spot::CollectionsIndexSearchBuilder do
   end
 
   describe '#only_include_top_level_collections' do
-
     it 'excludes subcollections' do
       expect(solr_params['fq']).to include('-member_of_collection_ids_ssim:[* TO *]')
     end
