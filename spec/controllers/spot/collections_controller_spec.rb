@@ -9,21 +9,29 @@ RSpec.describe Spot::CollectionsController do
     before { get :index }
 
     let(:objects) do
-      [{ id: 'collection_1',
-        has_model_ssim: ['Collection'],
-        title_tesim: ['Collection #1'],
-        read_access_group_ssim: ['public'],
-        member_of_collection_ids_ssim: [] },
-      { id: 'collection_2',
-        has_model_ssim: ['Collection'],
-        title_tesim: ['Collection #2'],
-        read_access_group_ssim: ['public'],
-        member_of_collection_ids_ssim: [] },
-      { id: 'subcollection_1',
-        has_model_ssim: ['Collection'],
-        title_tesim: ['Subcollection #1'],
-        read_access_group_ssim: ['public'],
-        member_of_collection_ids_ssim: ['collection_1']}]
+      [
+        {
+          id: 'collection_1',
+          has_model_ssim: ['Collection'],
+          title_tesim: ['Collection #1'],
+          read_access_group_ssim: ['public'],
+          member_of_collection_ids_ssim: []
+        },
+        {
+          id: 'collection_2',
+          has_model_ssim: ['Collection'],
+          title_tesim: ['Collection #2'],
+          read_access_group_ssim: ['public'],
+          member_of_collection_ids_ssim: []
+        },
+        {
+          id: 'subcollection_1',
+          has_model_ssim: ['Collection'],
+          title_tesim: ['Subcollection #1'],
+          read_access_group_ssim: ['public'],
+          member_of_collection_ids_ssim: ['collection_1']
+        }
+      ]
     end
 
     it 'renders the template' do
