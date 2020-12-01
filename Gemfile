@@ -70,7 +70,7 @@ gem 'edtf-humanize', '0.0.7'
 gem 'honeybadger', '4.7.2'
 
 # allows us to create admin (and more!) roles for users
-gem 'hydra-role-management', '1.0.2'
+gem 'hydra-role-management', '1.0.3'
 
 # an authorative source for our two-character language codes
 gem 'iso-639', '0.3.5'
