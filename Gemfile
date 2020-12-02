@@ -70,7 +70,7 @@ gem 'edtf-humanize', '0.0.7'
 gem 'honeybadger', '4.7.2'
 
 # allows us to create admin (and more!) roles for users
-gem 'hydra-role-management', '1.0.2'
+gem 'hydra-role-management', '1.0.3'
 
 # an authorative source for our two-character language codes
 gem 'iso-639', '0.3.5'
@@ -124,6 +124,13 @@ gem 'mini_magick', '4.10.1'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
+
+# hydra-role-management requires bootstrap_form without declaring a version,
+# bootstrap_form >=4.5.0 requires a ruby version >= 2.5 (we're stuck on 2.4.3
+# until we migrate to aws).
+#
+# @todo remove this restriction after aws migration
+gem 'bootstrap_form', '~> 4.4.0'
 
 # development dependencies (not as necessary to
 # lock down versions here)
