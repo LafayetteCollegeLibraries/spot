@@ -125,6 +125,8 @@ gem 'mini_magick', '4.10.1'
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
 
+gem 'bootstrap_form', '~> 4.4.0'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
