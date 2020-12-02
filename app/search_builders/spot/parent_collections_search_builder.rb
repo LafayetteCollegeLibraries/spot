@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Spot
-  class CollectionsIndexSearchBuilder < Hyrax::CollectionSearchBuilder
+  # SearchBuilder used to query for top-level collections (hiding sub-collections).
+  # Used for generating an index display.
+  class ParentCollectionsSearchBuilder < Hyrax::CollectionSearchBuilder
     self.default_processor_chain += [:only_include_top_level_collections]
 
     def sort_field

@@ -16,7 +16,7 @@ module Spot
       end
 
       def index_search_builder
-        Spot::CollectionsIndexSearchBuilder.new(self).with(page: params[:page], rows: params[:per_page])
+        Spot::ParentCollectionsSearchBuilder.new(self).with(page: params[:page], rows: params[:per_page])
       end
   end
 end

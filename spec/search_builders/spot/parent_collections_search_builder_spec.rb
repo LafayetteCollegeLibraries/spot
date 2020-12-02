@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::CollectionsIndexSearchBuilder do
+RSpec.describe Spot::ParentCollectionsSearchBuilder do
   let(:solr_params) { builder.to_h }
   let(:builder) { described_class.new(scope).with({}) }
   let(:scope) { OpenStruct.new(blacklight_config: CatalogController.blacklight_config, current_ability: ability) }
