@@ -1,14 +1,9 @@
 <div class="row">
-  <% if collection.banner_file.present? %>
   <div class="col-sm-12 featured-collection"
-       style="background-image: url(<%= image_path(collection.banner_file) %>)">
-  <% else %>
-  <div class="col-sm-12 featured-collection"
-       style="background-image: url(<%= image_path('default-collection-background.jpg') %>)">
-  <% end %>
+       style="background-image: url(<%= collection_banner_file_path(collection) %>)">
     <div class="collection-info">
       <h3 class="collection-title"><%= collection.title.first %></h3>
-      <% if collection.abstract.present? %>
+      <% unless collection.abstract.empty? %>
       <p><%= collection.abstract.first %></p>
       <% end %>
       <%= link_to t('.collection.view'), [hyrax, collection], class: 'btn btn-primary' %>
