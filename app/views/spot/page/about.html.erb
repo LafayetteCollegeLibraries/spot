@@ -4,16 +4,16 @@
   <h1><%= t('.header', name: application_name) %></h1>
 </div>
 
-<%= image_tag('about-splash.jpg', class: 'img-responsive') %>
+<%= image_tag('about-splash.jpg', class: 'splash-image img-responsive') %>
 
 <p>
   The Lafayette Digital Repository (LDR) is both an institutional repository and
   an access portal to Lafayette College Library’s Digital Collections. In
-  accordance with the departmental <a href="https://dss.lafayette.edu/about/" target="_blank">mission</a>
+  accordance with the departmental <%= link_to('mission of Digital Scholarship Services', 'https://dss.lafayette.edu/about/', target: '_blank') %>
   of Digital Scholarship Services, the LDR supports the activities of the
   College’s faculty, researchers, students, and community partners by preserving,
   curating, and disseminating digital resources.  The LDR enacts the Libraries’
-  ongoing <a href="https://library.lafayette.edu/about/about-the-lafayette-libraries/" target="_blank">mission</a>
+  ongoing <%= link_to("Libraries’ ongoing mission", 'https://library.lafayette.edu/about/about-the-lafayette-libraries/', target: '_blank') %>
   of providing information resources and services to help Lafayette faculty
   and students attain their goals as teachers, scholars, and learners, through
   the creation and maintenance of accessible digital collections, scholarly
@@ -21,7 +21,32 @@
   inquiry and documentation of College activities.
 </p>
 
-<h2>Faculty Scholarship and the LDR</h2>
+<div class="panel panel-primary" id="note-about-content">
+  <div class="panel-heading">
+    <h3 class="panel-title">A Note About Content</h3>
+  </div>
+
+  <div class="panel-body">
+    <p>
+      The Lafayette Digital Repository (LDR) makes unique and historical materials accessible for study and research.
+      These materials represent the context in which they were created and the perspectives of their creators, and
+      may contain depictions of racism, anti-semitism, misogyny, homophobia, violence, and other challenging or offensive
+      attitudes and actions. The materials do not reflect the values of Lafayette College or the Digital Scholarship
+      Services department. By providing access to these records in our digital collections, we acknowledge the role that
+      digital archives play in learning from the past.
+    </p>
+
+    <p>
+      Item metadata in the LDR re-uses language provided by creators on or within the resources themselves, in accordance
+      with best practices for archival description. We strive to place outdated or offensive terminology in context through
+      curation and critical descriptive information.  We also welcome feedback from users so that we can learn and adjust
+      our practices. Please contact us at <%= mail_to "repository@lafayette.edu" %> if you encounter problematic language or would like to
+      give feedback about descriptive information accompanying an item or collection in the LDR.
+    </p>
+  </div>
+</div>
+
+<h2 id="faculty-scholarship">Faculty Scholarship and the LDR</h2>
 <p>
   The Lafayette College faculty passed an open access resolution in April, 2011.
   Faculty are encouraged to share their research outputs via inclusion in the
@@ -29,7 +54,7 @@
   available for deposited content.
 </p>
 
-<h2>Why submit your content to the LDR?</h2>
+<h2 id="why-submit-your-content">Why submit your content to the LDR?</h2>
 <ul>
   <li>boost the search engine discoverability of your research</li>
   <li>provide persistent access to your research over time (i.e. prevent “link rot” in citations to your work)</li>
@@ -43,16 +68,16 @@
   at egloffn@lafayette.edu for more information.
 </p>
 
-<h2>Policies</h2>
+<h2 id="policies">Policies</h2>
 
-<h3>Copyright and Use</h3>
+<h3 id="copyright-and-uses">Copyright and Use</h3>
 <p>
-  Please consult the <a href="https://dss.lafayette.edu/copyright-and-use/" target="_blank">Digital Scholarship Services Copyright & Use Guidelines</a>
+  Please consult the <%= link_to "Digital Scholarship Services Copyright & Use Guidelines", "https://dss.lafayette.edu/copyright-and-use/" %>
   for information about using and sharing content in the LDR. If you have further
-  questions, please contact us at dss@lafayette.edu.
+  questions, please contact us at <%= mail_to "dss@lafayette.edu" %>.
 </p>
 
-<h3>Preservation Support Policy</h3>
+<h3 id="preservation-support-policy">Preservation Support Policy</h3>
 <p>
   The Lafayette Digital Repository is committed to providing sustainable
   and trustworthy long-term access to content according to international
