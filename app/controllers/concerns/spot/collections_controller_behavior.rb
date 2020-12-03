@@ -27,7 +27,7 @@ module Spot
     end
 
     def add_breadcrumb_for_controller
-      add_breadcrumb(I18n.t('spot.collections.breadcrumb'), index_collections_path)
+      add_breadcrumb(I18n.t('spot.collections.breadcrumb'), collections_path)
     end
 
     def load_collection_from_slug
