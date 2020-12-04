@@ -1,0 +1,23 @@
+<% provide(:page_title) { t('.page_title', name: application_name) } %>
+
+<div class="page-header">
+  <h1><%= t('.header') %></h1>
+</div>
+
+<%= render partial: 'catalog/paginate_compact', object: @response %>
+
+<% @collections.each_slice(3).each do |collections| %>
+<div class="row">
+  <% collections.each do |collection| %>
+    <%= render 'collection_list_item', collection: collection %>
+  <% end %>
+</div>
+<% end %>
+
+<div class="row record-padding">
+  <div class="col-md-12">
+    <div class="pagination">
+      <%= paginate @response, outer_window: 2, theme: 'blacklight' %>
+    </div>
+  </div>
+</div>

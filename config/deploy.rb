@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 # config valid for current version and patch releases of Capistrano
-lock '~> 3.11.0'
+lock '~> 3.14'
 
 # application variables
 set :application, 'spot'
-set :branch, ENV['BRANCH'] || 'primary'
+set :branch, ENV.fetch('BRANCH') { 'primary' }
 set :deploy_to, '/var/www/spot'
 set :keep_releases, 3
 set :repo_url, 'https://github.com/LafayetteCollegeLibraries/spot.git'

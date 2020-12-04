@@ -70,7 +70,7 @@ gem 'edtf-humanize', '0.0.7'
 gem 'honeybadger', '4.7.2'
 
 # allows us to create admin (and more!) roles for users
-gem 'hydra-role-management', '1.0.2'
+gem 'hydra-role-management', '1.0.3'
 
 # an authorative source for our two-character language codes
 gem 'iso-639', '0.3.5'
@@ -92,14 +92,14 @@ gem 'rdf-vocab', '3.1.4'
 gem 'rsolr', '2.3.0'
 
 # used in conjunction with our importers to zip/unzip files
-gem 'rubyzip', '1.3.0'
+gem 'rubyzip', '2.3.0'
 
 # our jobs server
 gem 'sidekiq', '5.2.9'
 gem 'sidekiq-cron', '1.2.0'
 
 # using Slack for some of our messaging
-gem 'slack-ruby-client', '0.14.4'
+gem 'slack-ruby-client', '0.14.6'
 
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
@@ -125,6 +125,13 @@ gem 'mini_magick', '4.10.1'
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
 
+# hydra-role-management requires bootstrap_form without declaring a version,
+# bootstrap_form >=4.5.0 requires a ruby version >= 2.5 (we're stuck on 2.4.3
+# until we migrate to aws).
+#
+# @todo remove this restriction after aws migration
+gem 'bootstrap_form', '~> 4.4.0'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
@@ -136,7 +143,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Use Capistrano for deployment
-  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano', '~> 3.14', require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.0'
