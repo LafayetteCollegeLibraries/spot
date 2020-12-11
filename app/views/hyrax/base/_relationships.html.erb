@@ -14,16 +14,19 @@
     <h2>Member of <%= thing.pluralize(presenters.size) %></h2>
 
     <%#
-      putting 4 items in a row -- using 3 seemed a little too large.
-      if this changes, you'll need to update the +#each_slice+ parameter
-      as well as the size of the column (ex +<div class="col-md-3">+)
+      calculate the grid size + bootstrap classname before the loop begins.
+      at most, we'll have 4 per row, but for items in fewer things/collections
+      (the common use-case) we'll expand the space they have.
     %>
-    <% presenters.each_slice(4) do |batch| %>
+    <% per_row = [presenters.size, 4].min %>
+    <% grid_classname = "col-md-#{12 / per_row}" %>
+
+    <% presenters.each_slice(per_row) do |batch| %>
       <div class="row">
       <% batch.each do |item| %>
         <% item_type = item.model_name.human.underscore.to_sym %>
         <% url = polymorphic_url([item_type], id: item.id) %>
-        <div class="col-md-3">
+        <div class="<%= grid_classname %>">
           <div class="thumbnail">
             <%# TODO: add alt text (i believe it's indexed/stored?) %>
             <img src="<%= item.thumbnail_path %>" />
