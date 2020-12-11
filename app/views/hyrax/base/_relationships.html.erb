@@ -9,42 +9,42 @@
   any kind of presenter -- as long as that thing has a title.
 %>
 <% presenter.grouped_presenters.each_pair do |key, presenters| %>
-  <% if presenters.present? %>
-    <% thing = key.titleize %>
-    <h2>Member of <%= thing.pluralize(presenters.size) %></h2>
+  <% next if presenters.empty? %>
 
-    <%#
-      calculate the grid size + bootstrap classname before the loop begins.
-      at most, we'll have 4 per row, but for items in fewer things/collections
-      (the common use-case) we'll expand the space they have.
-    %>
-    <% per_row = [presenters.size, 4].min %>
-    <% grid_classname = "col-md-#{12 / per_row}" %>
+  <% thing = key.titleize %>
+  <h2>Member of <%= thing.pluralize(presenters.size) %></h2>
 
-    <% presenters.each_slice(per_row) do |batch| %>
-      <div class="row">
-      <% batch.each do |item| %>
-        <% item_type = item.model_name.human.underscore.to_sym %>
-        <% url = polymorphic_url([item_type], id: item.id) %>
-        <div class="<%= grid_classname %>">
-          <div class="thumbnail">
-            <%# TODO: add alt text (i believe it's indexed/stored?) %>
-            <img src="<%= item.thumbnail_path %>" />
-            <div class="caption">
-              <h3><%= item.title.first %></h3>
-              <% if item.description.present? %>
-              <p><%= item.description.first %></p>
-              <% end %>
-              <p>
-                <a href="<%= url %>" class="btn btn-info btn-block">
-                  View <%= thing %>
-                </a>
-              </p>
-            </div>
+  <%#
+    calculate the grid size + bootstrap classname before the loop begins.
+    at most, we'll have 4 per row, but for items in fewer things/collections
+    (the common use-case) we'll expand the space they have.
+  %>
+  <% per_row = [presenters.size, 4].min %>
+  <% grid_classname = "col-md-#{12 / per_row}" %>
+
+  <% presenters.each_slice(per_row) do |batch| %>
+    <div class="row">
+    <% batch.each do |item| %>
+      <% item_type = item.model_name.human.underscore.to_sym %>
+      <% url = polymorphic_url([item_type], id: item.id) %>
+      <div class="<%= grid_classname %>">
+        <div class="thumbnail">
+          <%# TODO: add alt text (i believe it's indexed/stored?) %>
+          <img src="<%= item.thumbnail_path %>" />
+          <div class="caption">
+            <h3><%= item.title.first %></h3>
+            <% if item.description.present? %>
+            <p><%= item.description.first %></p>
+            <% end %>
+            <p>
+              <a href="<%= url %>" class="btn btn-info btn-block">
+                View <%= thing %>
+              </a>
+            </p>
           </div>
-        </div> <%# /col-md-3 %>
-      <% end %>
-      </div>
+        </div>
+      </div> <%# /col-md-3 %>
     <% end %>
+    </div>
   <% end %>
 <% end %>
