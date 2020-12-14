@@ -5,6 +5,7 @@ Disallow: /concern
 
 # Prevent indexers from crawling every facet/search option
 User-agent: *
+Disallow: /bookmarks/*
 Disallow: /catalog
 Disallow: /catalog/*
 Disallow: /downloads
