@@ -3,14 +3,17 @@
 User-agent: archive.org_bot
 Disallow: /concern
 
-# Prevent indexers from crawling every facet/search option
+# Things we don't need to be crawled
 User-agent: *
 Disallow: /bookmarks/*
 Disallow: /catalog
 Disallow: /catalog/*
+Disallow: /dashboard
+Disallow: /dashboard/*
 Disallow: /downloads
 Disallow: /downloads/*
 Disallow: /export/*
+Disallow: /iiif/*
 Disallow: /redirect/*
 
 # Legacy DSpace paths we no longer support
