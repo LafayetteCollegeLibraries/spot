@@ -2,13 +2,15 @@
 # repository items, which will be too much data for our budget.
 User-agent: archive.org_bot
 Disallow: /concern
-Disallow: /downloads
 
 # Prevent indexers from crawling every facet/search option
 User-agent: *
 Disallow: /catalog
 Disallow: /catalog/*
 Disallow: /downloads
+Disallow: /downloads/*
+Disallow: /export/*
+Disallow: /redirect/*
 
 # Legacy DSpace paths we no longer support
 Disallow: /bitstream
