@@ -2,41 +2,44 @@
 RSpec.describe Spot::OaiCollectionSolrSet do
   before do
     described_class.fields = fields
+    solr_docs.each { |doc| ActiveFedora::SolrService.add(doc) }
+    ActiveFedora::SolrService.commit
   end
 
-  let(:fields) { [{ label: 'Collection', solr_field: 'member_of_collections_ssim' }] }
+  after do
+    solr_docs.each { |doc| ActiveFedora::SolrService.delete(doc[:id]) }
+  end
+
+  let(:fields) { [{ label: 'collection', solr_field: 'member_of_collection_ids_ssim' }] }
+  let(:solr_docs) do
+    [
+      { id: 'collection_1', has_model_ssim: ['Collection'], read_access_group_ssim: ['public'],
+        title_tesim: ['Cool Collection #1'] },
+      { id: 'work_1', has_model_ssim: ['Publication'], read_access_group_ssim: ['public'],
+        title_tesim: ['Cool Work'], member_of_collection_ids_ssim: ['collection_1'] },
+      { id: 'work_2', has_model_ssim: ['Publication'], read_access_group_ssim: ['public'],
+        title_tesim: ['Cool Work pt 2'], member_of_collection_ids_ssim: ['collection_2'] },
+      { id: 'collection_2', has_model_ssim: ['Collection'], read_access_group_ssim: ['public'],
+        title_tesim: ['Collection #2'] },
+      { id: 'work_3', has_model_ssim: ['Image'], read_access_group_ssim: ['public'],
+        title_tesim: ['An Image'], membber_of_collection_ids_ssim: ['collection_2'] }
+    ]
+  end
+
 
   describe '.from_spec' do
     subject(:solr_filter) { described_class.from_spec(spec) }
 
-    context 'when a spec has underscores in it' do
-      let(:spec) { 'Collection:A_Test_Collection' }
+    let(:spec) { 'collection:abc123def' }
 
-      it 'replaces them with spaces' do
-        expect(solr_filter).to eq 'member_of_collections_ssim:"A Test Collection"'
-      end
-    end
-
-    context 'when a spec has no spaces' do
-      let(:spec) { 'Collection:Photographs' }
-
-      it 'does nothing' do
-        expect(solr_filter).to eq 'member_of_collections_ssim:"Photographs"'
-      end
+    it 'creates a solr_query using the id sent' do
+      expect(solr_filter).to eq 'member_of_collection_ids_ssim:"abc123def"'
     end
   end
 
-  describe '#initialize' do
-    subject(:solr_set) { described_class.new(spec) }
+  describe '#name' do
+    subject { described_class.new('collection:collection_1').name }
 
-    let(:spec) { 'Collection:A_Test_Collection' }
-
-    it 'replaces underscores with spaces for the @value property' do
-      expect(solr_set.value).to eq 'A Test Collection'
-    end
-
-    it 'puts the underscores back when calling #spec' do
-      expect(solr_set.spec).to eq spec
-    end
+    it { is_expected.to eq 'Collection: Cool Collection #1'}
   end
 end
