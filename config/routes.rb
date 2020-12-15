@@ -60,13 +60,15 @@ Rails.application.routes.draw do
     concerns :exportable
   end
 
-  resources :bookmarks do
-    concerns :exportable
+  # hiding blacklight's bookmark feature for now, but keeping the option available for down the road
+  #
+  # resources :bookmarks do
+  #   concerns :exportable
 
-    collection do
-      delete 'clear'
-    end
-  end
+  #   collection do
+  #     delete 'clear'
+  #   end
+  # end
 
   scope module: 'spot' do
     # adding administrative pages to the site. we'll keep them under
