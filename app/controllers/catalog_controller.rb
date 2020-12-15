@@ -85,6 +85,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'subject_label_ssim',
                            label: :'blacklight.search.fields.subject',
                            limit: 5
+    config.add_facet_field 'subject_ocm_ssim',
+                           label: :'blacklight.search.fields.subject_ocm',
+                           limit: 5,
+                           if: :facet_included_in_params?
     config.add_facet_field 'keyword_sim',
                            label: :'blacklight.search.fields.keyword',
                            limit: 5
@@ -130,11 +134,6 @@ class CatalogController < ApplicationController
     # see also: has_model_ssim for the 'View collections' link
     config.add_facet_field 'has_model_ssim',
                            label: :'blacklight.search.fields.has_model',
-                           if: false
-
-    # Facets from the Work-level that aren't provided in the catalog
-    config.add_facet_field 'subject_ocm_ssim',
-                           label: :'blacklight.search.facets.subject_ocm',
                            if: false
     config.add_facet_field 'research_assistance_ssim',
                            label: :'blacklight.search.facets.research_assistance',
@@ -286,6 +285,11 @@ class CatalogController < ApplicationController
         ]
       }
     }
+  end
+
+  def facet_included_in_params?(facet_config, _facet_results)
+    return false unless params.include?(:f)
+    params[:f].include?(facet_config.key)
   end
 
   # disable the bookmark control from displaying in gallery view
