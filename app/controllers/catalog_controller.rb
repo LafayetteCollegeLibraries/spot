@@ -280,9 +280,8 @@ class CatalogController < ApplicationController
       },
 
       document: {
-        set_model: Spot::OaiCollectionSolrSet,
         set_fields: [
-          { label: 'collection', solr_field: 'member_of_collections_ssim' }
+          { label: 'collection', solr_field: 'member_of_collection_ids_ssim' }
         ]
       }
     }
