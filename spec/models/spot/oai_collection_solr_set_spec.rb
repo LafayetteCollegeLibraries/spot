@@ -40,6 +40,6 @@ RSpec.describe Spot::OaiCollectionSolrSet do
   describe '#name' do
     subject { described_class.new('collection:collection_1').name }
 
-    it { is_expected.to eq 'Collection: Cool Collection #1'}
+    it { is_expected.to eq 'Collection: Cool Collection #1' }
   end
 end
