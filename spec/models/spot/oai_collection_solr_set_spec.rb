@@ -26,7 +26,6 @@ RSpec.describe Spot::OaiCollectionSolrSet do
     ]
   end
 
-
   describe '.from_spec' do
     subject(:solr_filter) { described_class.from_spec(spec) }
 
