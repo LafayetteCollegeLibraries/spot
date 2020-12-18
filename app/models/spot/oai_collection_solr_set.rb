@@ -10,7 +10,7 @@ module Spot
     def self.sets_for(record)
       @fields = CatalogController.blacklight_config.oai[:document][:set_fields] if @fields.nil?
 
-      super
+      super(record)
     end
 
     def name

@@ -2,8 +2,7 @@
 RSpec.feature 'OAI-PMH provider (via Blacklight)' do
   before do
     ActiveFedora::SolrService.instance.conn.tap do |conn|
-      query = Hyrax.config.curation_concerns.map { |m| "has_model_ssim:#{m}" }.join(' OR ')
-      conn.delete_by_query("(#{query})", params: { 'softCommit' => true })
+      conn.delete_by_query('*:*', params: { 'softCommit' => true })
     end
 
     objects.each { |obj| ActiveFedora::SolrService.add(obj) }
@@ -12,35 +11,38 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
 
   # clear out the objects
   after do
-    ActiveFedora::SolrService.instance.conn.tap do |conn|
-      obj_query = objects.map { |o| "id:#{o[:id]}" }.join(' OR ')
-      conn.delete_by_query("(#{obj_query})", params: { 'softCommit' => true })
-    end
+    # ActiveFedora::SolrService.instance.conn.tap do |conn|
+    #   conn.delete_by_query('*:*', params: { 'softCommit' => true })
+    # end
   end
 
   let(:xml) { Nokogiri::XML(page.body) }
 
   describe 'verb=ListSets' do
-    let(:objects) { [item_1, item_2] }
+    let(:objects) do
+      [
+        { id: 'item_1', has_model_ssim: ['Publication'], title_tesim: ['Item 1'],
+          read_access_group_ssim: ['public'], member_of_collection_ids_ssim: ['collection_1'] },
 
-    let(:item_1) do
-      { id: 'item_1', has_model_ssim: ['Publication'], title_tesim: ['Item 1'],
-        read_access_group_ssim: ['public'], member_of_collections_ssim: ['Collection 1'] }
-    end
+        { id: 'item_2', has_model_ssim: ['Publication'], title_tesim: ['Item 2'],
+          member_of_collection_ids_ssim: ['collection_2'] },
 
-    let(:item_2) do
-      { id: 'item_2', has_model_ssim: ['Publication'], title_tesim: ['Item 2'],
-        member_of_collections_ssim: ['Collection 2'] }
+        { id: 'collection_1', has_model_ssim: ['Collection'], title_tesim: ['Collection #1'],
+          read_access_group_ssim: ['public'] },
+
+        { id: 'collection_2', has_model_ssim: ['Collection'], title_tesim: ['Collection #2'] }
+      ]
     end
 
     it 'only returns public items' do
+      byebug
+
       visit oai_catalog_path(verb: 'ListSets')
 
       values = xml.css('ListSets setSpec').map(&:text)
 
-      # note: we're translating spaces to underscores for setSpec ids
-      expect(values).to include('collection:Collection_1')
-      expect(values).not_to include('collection:Collection_2')
+      expect(values).to include('collection:collection_1')
+      expect(values).not_to include('collection:collection_2')
     end
   end
 
@@ -101,7 +103,7 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
     let(:objects) { [item_4, item_5] }
     let(:item_4) do
       { id: 'item_4', has_model_ssim: ['Publication'],
-        read_access_group_ssim: ['public'], member_of_collections_ssim: ['Collection 1'] }
+        read_access_group_ssim: ['public'], member_of_collection_ids_ssim: ['collection_1'] }
     end
     let(:item_5) do
       { id: 'item_5', has_model_ssim: ['Publication'], read_access_group_ssim: ['public'] }
@@ -116,7 +118,7 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)' do
     end
 
     it 'lists identifiers by a set when provided' do
-      visit oai_catalog_path(verb: 'ListIdentifiers', metadata_prefix: 'oai_dc', set: 'collection:Collection 1')
+      visit oai_catalog_path(verb: 'ListIdentifiers', metadata_prefix: 'oai_dc', set: 'collection:collection_1')
 
       expect(xml.css('identifier').map(&:text)).to eq ['oai:ldr:item_4']
     end
