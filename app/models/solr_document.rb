@@ -42,18 +42,21 @@ class SolrDocument
   # rubocop:disable Metrics/MethodLength
   def self.field_semantics
     {
-      collection_name: 'member_of_collections_ssim',
+      alternative: 'title_alternative_tesim',
       contributor: 'contributor_tesim',
       coverage: 'location_label_ssim',
       creator: 'creator_tesim',
-      date: 'date_issued_ssim',
+      date: ['date_ssim', 'date_issued_ssim'],
       description: 'description_tesim',
+      extent: 'original_item_extent',
       format: 'file_format_ssim',
       identifier: ['id', 'permalink_ss', 'thumbnail_url_ss'],
+      isPartOf: 'member_of_collections_ssim',
       language: 'language_ssim',
       publisher: 'publisher_tesim',
       rights: 'rights_statement_ssim',
       source: 'source_tesim',
+      spatial: 'location_label_ssim',
       subject: 'subject_label_ssim',
       title: 'title_tesim',
       type: 'resource_type_tesim'
