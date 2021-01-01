@@ -130,7 +130,7 @@ gem 'linkeddata', '~> 3.0'
 # until we migrate to aws).
 #
 # @todo remove this restriction after aws migration
-gem 'bootstrap_form', '~> 4.4.0'
+gem 'bootstrap_form', '~> 4.5.0'
 
 # development dependencies (not as necessary to
 # lock down versions here)
