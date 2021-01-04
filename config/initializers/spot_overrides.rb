@@ -20,6 +20,7 @@ Rails.application.config.to_prepare do
   Hyrax::CurationConcern.actor_factory.swap(Hyrax::Actors::CollectionsMembershipActor, Spot::Actors::CollectionsMembershipActor)
 
   Hyrax::ContactFormController.class_eval { layout 'hyrax/1_column' }
+  Hyrax::PagesController.class_eval { layout 'hyrax/1_column' }
 
   # the dashboard/my/collections (+ thus, dashboard/collections) controller defines
   # blacklight facets + uses I18n.t to provide a label. as we've found from past experience,

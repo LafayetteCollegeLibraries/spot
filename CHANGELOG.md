@@ -1,5 +1,36 @@
 # changelog
 
+## [2021.1] - 2021-01-04
+
+### bug fixes 🐞 
+- add `<link>` tag for favicon (#654)
+- use `hyrax/1_column` layout for `Hyrax::PagesController` pages (#667)
+
+### enhancements 💪 
+- add disallow routes to robots.txt (#652)
+- remove blacklight's bookmark feature from routes (#653)
+- only conduct passenger capistrano tasks on `:web` servers (#668)
+- use `bundle exec rails s` as command for docker-compose main app to allow for better debugging (#669) 
+
+### dependencies 👩‍👩‍👧‍👧 
+- capistrano-rails to 1.6.1 (#666)
+- jquery-rails to 4.4.0 (#663)
+- shoulda-matchers to 4.4.1 (#665)
+
+
+## [2020.13] - 2020-12-04
+
+### features ✨ 
+- adds `/collections` landing page, displaying collection branding + summaries (#638)
+- note about collections content added to `/about` page (#631)
+
+### dependencies 👩‍👩‍👧‍👧 
+- capistrano to 3.14.1 (#640) 
+- hydra-role-management to 1.0.3 (#644)
+- rubyzip to 2.3.0 (#641)
+- slack-ruby-client to 0.14.6 (#643)
+
+
 ## [2020.12] - 2020-11-20
 
 ### updates
@@ -512,6 +543,8 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2021.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.1
+[2020.13]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.13
 [2020.12]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.12
 [2020.11]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.11
 [2020.10]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.10

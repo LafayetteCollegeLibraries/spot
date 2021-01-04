@@ -76,7 +76,7 @@ gem 'hydra-role-management', '1.0.3'
 gem 'iso-639', '0.3.5'
 
 # install jquery with rails (no longer the default)
-gem 'jquery-rails', '4.3.5'
+gem 'jquery-rails', '4.4.0'
 
 # system monitoring
 gem 'okcomputer', '1.18.1'
@@ -147,7 +147,7 @@ group :development do
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.0'
-  gem 'capistrano-rails', '~> 1.3', require: false
+  gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-sidekiq', '~> 1.0.3'
 end
 
