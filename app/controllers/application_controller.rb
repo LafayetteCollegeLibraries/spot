@@ -35,6 +35,16 @@ class ApplicationController < ActionController::Base
     @guest_user ||= User.where(guest: true).first || super
   end
 
+  # Method used by Blacklight to determine whether a bookmarks toggle should be rendered.
+  # This is previously just in CatalogController, but moved to this parent controller to
+  # ensure that any future controllers which inherit configs (but not methods) from CatalogController
+  # also know to not display bookmarks.
+  #
+  # @return false
+  def render_bookmarks_control?
+    false
+  end
+
   private
 
     # Modified from its source in +Hyrax::Controller+ in that we're
