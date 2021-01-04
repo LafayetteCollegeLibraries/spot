@@ -3,6 +3,7 @@
 !/log/.keep
 /tmp/*
 !/tmp/.keep
+/spec/*
 /coverage
 .byebug_history
 fits.log
