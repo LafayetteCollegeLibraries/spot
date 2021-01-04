@@ -76,7 +76,7 @@ gem 'hydra-role-management', '1.0.3'
 gem 'iso-639', '0.3.5'
 
 # install jquery with rails (no longer the default)
-gem 'jquery-rails', '4.3.5'
+gem 'jquery-rails', '4.4.0'
 
 # system monitoring
 gem 'okcomputer', '1.18.1'
