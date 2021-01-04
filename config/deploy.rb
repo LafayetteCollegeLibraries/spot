@@ -15,6 +15,9 @@ set :bundle_env_variables, nokogiri_use_system_libraries: 1
 set :bundle_flags, '--deployment'
 set :bundle_roles, %i[app]
 
+# capistrano-passenger
+set :passenger_roles, :web
+
 # capistrano-rails
 set :log_level, :debug
 set :rails_env, 'production'
@@ -26,11 +29,11 @@ set :upstart_service_name, 'sidekiq'
 set :sidekiq_roles, [:jobs]
 
 # remapping commands
-SSHKit.config.command_map[:rails] = 'bundle exec rails'
-SSHKit.config.command_map[:rake] = 'bundle exec rake'
-SSHKit.config.command_map[:sidekiq] = 'bundle exec sidekiq'
+SSHKit.config.command_map[:rails]      = 'bundle exec rails'
+SSHKit.config.command_map[:rake]       = 'bundle exec rake'
+SSHKit.config.command_map[:sidekiq]    = 'bundle exec sidekiq'
 SSHKit.config.command_map[:sidekiqctl] = 'bundle exec sidekiqctl'
-SSHKit.config.command_map[:solr] = '/opt/solr/bin/solr'
+SSHKit.config.command_map[:solr]       = '/opt/solr/bin/solr'
 
 # shared things
 append :linked_dirs, 'log'
