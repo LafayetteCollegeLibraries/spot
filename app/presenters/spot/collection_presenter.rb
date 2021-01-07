@@ -55,7 +55,7 @@ module Spot
     #
     # @return [Array<String>]
     def related_resource
-      solr_document['related_resource_ssim']
+      solr_document.fetch('related_resource_ssim', [])
     end
 
     # @return [true,false]
