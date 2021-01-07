@@ -104,4 +104,12 @@ RSpec.describe Spot::CollectionPresenter do
       it { is_expected.to be false }
     end
   end
+
+  describe '#related_resource' do
+    subject { presenter.related_resource }
+
+    let(:metadata) { core_metadata.merge('related_resource_ssim', ['http://cool.example.org']) }
+
+    it { is_expected.to eq ['http://cool.example.org'] }
+  end
 end
