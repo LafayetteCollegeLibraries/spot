@@ -12,6 +12,9 @@ class Publication < ActiveFedora::Base
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
 
+  # additional validation
+  validates_with Spot::DateIssuedValidator
+
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
   end
