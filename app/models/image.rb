@@ -1,65 +1,24 @@
 # frozen_string_literal: true
 #
-# Images are digital representations of physical objects
-# obtained by scanning or photographing the object.
+# Images are digital representations of physical objects obtained by scanning or photographing the object.
 class Image < ActiveFedora::Base
-  include ::Hyrax::WorkBehavior
-  include ::Spot::NoidIdentifier
-
-  class_attribute :controlled_properties
-  self.controlled_properties = [:location, :subject]
+  include Spot::WorkBehavior
 
   self.indexer = ImageIndexer
 
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
 
-  validates :title, presence: { message: 'Your work must include a Title.' }
-  validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }
-  validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }
-
-  validates_with ::Spot::RequiredLocalAuthorityValidator,
-                 field: :resource_type, authority: 'resource_types'
-  validates_with ::Spot::RequiredLocalAuthorityValidator,
-                 field: :rights_statement, authority: 'rights_statements'
-
-  # title is included with ::ActiveFedora::Base
-  property :subtitle, predicate: ::RDF::URI.new('http://purl.org/spar/doco/Subtitle') do |index|
-    index.as :stored_searchable
-  end
-
-  property :title_alternative, predicate: ::RDF::Vocab::DC.alternative do |index|
-    index.as :stored_searchable
-  end
-
-  property :publisher, predicate: ::RDF::Vocab::DC11.publisher do |index|
-    index.as :stored_searchable, :facetable
-  end
+  # if adding controlled fields (other than :location and :subject), uncomment this
+  # and add the fields to the +controlled_properties+ array
+  #
+  # self.controlled_properties += []
 
   property :repository_location, predicate: ::RDF::URI.new('http://purl.org/vra/placeOfRepository') do |index|
     index.as :symbol
   end
 
-  property :source, predicate: ::RDF::Vocab::DC.source do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :resource_type, predicate: ::RDF::Vocab::DC.type do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :physical_medium, predicate: ::RDF::Vocab::DC.PhysicalMedium do |index|
-    index.as :stored_searchable, :facetable
-  end
-
   property :original_item_extent, predicate: ::RDF::Vocab::DC.extent do |index|
-    index.as :stored_searchable
-  end
-
-  # see {IndexesLanguageAndLabel} mixin for indexing
-  property :language, predicate: ::RDF::Vocab::DC11.language
-
-  property :description, predicate: ::RDF::Vocab::DC11.description do |index|
     index.as :stored_searchable
   end
 
@@ -81,42 +40,8 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :related_resource, predicate: ::RDF::RDFS.seeAlso do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :subject, predicate: ::RDF::Vocab::DC11.subject,
-                     class_name: Spot::ControlledVocabularies::Base do |index|
-    index.as :symbol
-  end
-
   # @note The URI provided is the landing page for the OCM, as a predicate doesn't exist
   property :subject_ocm, predicate: ::RDF::URI('https://hraf.yale.edu/resources/reference/outline-of-cultural-materials') do |index|
-    index.as :symbol
-  end
-
-  property :keyword, predicate: ::RDF::Vocab::SCHEMA.keywords do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :location, predicate: ::RDF::Vocab::DC.spatial,
-                      class_name: Spot::ControlledVocabularies::Location do |index|
-    index.as :symbol
-  end
-
-  # rights_statements are stored as URIs
-  property :rights_statement, predicate: ::RDF::Vocab::EDM.rights
-  property :rights_holder, predicate: ::RDF::Vocab::DC.rightsHolder
-
-  property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
     index.as :symbol
   end
 
@@ -132,19 +57,6 @@ class Image < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :note, predicate: ::RDF::Vocab::SKOS.note do |index|
-    index.as :stored_searchable
-  end
-
-  # accepts_nested_attributes_for needs to be defined at the end of the model.
-  # see note from Hyrax::BasicMetadata mixin:
-  #
-  #   This must be mixed after all other properties are defined because no other
-  #   properties will be defined once accepts_nested_attributes_for is called
-
-  id_blank = proc { |attributes| attributes[:id].blank? }
-
-  controlled_properties.each do |property|
-    accepts_nested_attributes_for property, reject_if: id_blank, allow_destroy: true
-  end
+  # see {Spot::WorkBehavior.setup_nested_attributes!}
+  setup_nested_attributes!
 end
