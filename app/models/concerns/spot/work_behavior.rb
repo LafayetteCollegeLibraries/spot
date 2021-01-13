@@ -31,21 +31,23 @@ module Spot
                      field: :rights_statement, authority: 'rights_statements'
     end
 
-    # Intended to be called at the end of your model to setup +accepts_nested_attributes_for+
-    # for your controlled properties. Uses the +controlled_properties+ attribute.
-    #
-    # @note from Hyrax::BasicMetadata mixin:
-    #   This must be mixed after all other properties are defined because no other
-    #   properties will be defined once accepts_nested_attributes_for is called
-    # @return true
-    def self.setup_nested_attributes!
-      id_blank = proc { |attributes| attributes[:id].blank? }
+    module ClassMethods
+      # Intended to be called at the end of your model to setup +accepts_nested_attributes_for+
+      # for your controlled properties. Uses the +controlled_properties+ attribute.
+      #
+      # @note from Hyrax::BasicMetadata mixin:
+      #   This must be mixed after all other properties are defined because no other
+      #   properties will be defined once accepts_nested_attributes_for is called
+      # @return true
+      def setup_nested_attributes!
+        id_blank = proc { |attributes| attributes[:id].blank? }
 
-      controlled_properties.each do |property|
-        accepts_nested_attributes_for property, reject_if: id_blank, allow_destroy: true
+        controlled_properties.each do |property|
+          accepts_nested_attributes_for property, reject_if: id_blank, allow_destroy: true
+        end
+
+        true
       end
-
-      true
     end
   end
 end
