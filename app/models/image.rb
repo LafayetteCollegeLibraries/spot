@@ -14,18 +14,6 @@ class Image < ActiveFedora::Base
   #
   # self.controlled_properties += []
 
-  property :repository_location, predicate: ::RDF::URI.new('http://purl.org/vra/placeOfRepository') do |index|
-    index.as :symbol
-  end
-
-  property :original_item_extent, predicate: ::RDF::Vocab::DC.extent do |index|
-    index.as :stored_searchable
-  end
-
-  property :inscription, predicate: ::RDF::URI.new('http://dbpedia.org/ontology/inscription') do |index|
-    index.as :stored_searchable
-  end
-
   # date indexing is covered in ImageIndexer
   property :date, predicate: ::RDF::Vocab::DC.date do |index|
     index.as :symbol
@@ -40,8 +28,19 @@ class Image < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  # @note The URI provided is the landing page for the OCM, as a predicate doesn't exist
-  property :subject_ocm, predicate: ::RDF::URI('https://hraf.yale.edu/resources/reference/outline-of-cultural-materials') do |index|
+  property :donor, predicate: ::RDF::Vocab::DC.provenance do |index|
+    index.as :symbol
+  end
+
+  property :inscription, predicate: ::RDF::URI.new('http://dbpedia.org/ontology/inscription') do |index|
+    index.as :stored_searchable
+  end
+
+  property :original_item_extent, predicate: ::RDF::Vocab::DC.extent do |index|
+    index.as :stored_searchable
+  end
+
+  property :repository_location, predicate: ::RDF::URI.new('http://purl.org/vra/placeOfRepository') do |index|
     index.as :symbol
   end
 
@@ -53,7 +52,8 @@ class Image < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :donor, predicate: ::RDF::Vocab::DC.provenance do |index|
+  # @note The URI provided is the landing page for the OCM, as a predicate doesn't exist
+  property :subject_ocm, predicate: ::RDF::URI('https://hraf.yale.edu/resources/reference/outline-of-cultural-materials') do |index|
     index.as :symbol
   end
 

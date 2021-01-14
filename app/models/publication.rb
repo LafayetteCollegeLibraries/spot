@@ -19,6 +19,10 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable
   end
 
+  property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
+    index.as :stored_searchable, :facetable
+  end
+
   property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
     index.as :stored_searchable
   end
@@ -31,23 +35,18 @@ class Publication < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :editor, predicate: ::RDF::Vocab::BIBO.editor do |index|
-    index.as :stored_searchable, :facetable
-  end
-
-  property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
-    index.as :stored_searchable, :facetable
-  end
-
   property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
     index.as :stored_searchable, :facetable
   end
 
+  property :editor, predicate: ::RDF::Vocab::BIBO.editor do |index|
+    index.as :stored_searchable, :facetable
+  end
+  property :license, predicate: ::RDF::Vocab::DC.license
+
   property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
     index.as :stored_searchable, :facetable
   end
-
-  property :license, predicate: ::RDF::Vocab::DC.license
 
   # see {Spot::WorkBehavior.setup_nested_attributes!}
   setup_nested_attributes!
