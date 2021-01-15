@@ -102,6 +102,10 @@ class CatalogController < ApplicationController
     # Facets from the Work-level that aren't provided in the catalog
     config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.facets.research_assistance', if: false
 
+    # Blacklight will default a facet's limit to the +blacklight_config.default_facet_limit+ value
+    # only if the field config +:limit+ entry is true. This does that.
+    config.facet_fields.each { |(_key, val)| val[:limit] = true }
+
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
     # handler defaults, or have no facets.
