@@ -41,6 +41,9 @@ class CatalogController < ApplicationController
       'hl.snippets': 5
     }
 
+    # save ourselves the hassle of passing this for every facet definition
+    config.default_facet_limit = 5
+
     # solr field configuration for document/show views
     config.index.title_field = 'title_tesim'
     config.index.display_type_field = 'has_model_ssim'
@@ -60,85 +63,48 @@ class CatalogController < ApplicationController
     #        @example
     #          config.add_index_field('keyword_ssim', label: :'blacklight.search.fields.keyword')
 
-    # config.add_facet_field 'human_readable_type_sim', label: "Type", limit: 5
-    config.add_facet_field 'member_of_collections_ssim',
-                           label: :'blacklight.search.fields.member_of_collection',
-                           limit: 5
-    config.add_facet_field 'resource_type_sim',
-                           label: :'blacklight.search.fields.resource_type',
-                           limit: 5
-    config.add_facet_field 'creator_sim',
-                           label: :'blacklight.search.fields.creator',
-                           limit: 5
-    config.add_facet_field 'publisher_sim',
-                           label: :'blacklight.search.fields.publisher',
-                           limit: 5
-    config.add_facet_field 'organization_sim',
-                           label: :'blacklight.search.fields.organization',
-                           limit: 5
-    config.add_facet_field 'division_sim',
-                           label: :'blacklight.search.fields.division',
-                           limit: 5
-    config.add_facet_field 'academic_department_sim',
-                           label: :'blacklight.search.fields.academic_department',
-                           limit: 5
-    config.add_facet_field 'subject_label_ssim',
-                           label: :'blacklight.search.fields.subject',
-                           limit: 5
-    config.add_facet_field 'keyword_sim',
-                           label: :'blacklight.search.fields.keyword',
-                           limit: 5
-    config.add_facet_field 'language_label_ssim',
-                           label: :'blacklight.search.fields.language',
-                           limit: 5
-    config.add_facet_field 'location_label_ssim',
-                           label: :'blacklight.search.fields.location',
-                           limit: 5
+    config.add_facet_field 'member_of_collections_ssim', label: :'blacklight.search.fields.member_of_collection'
+    config.add_facet_field 'resource_type_sim',          label: :'blacklight.search.fields.resource_type'
+    config.add_facet_field 'creator_sim',                label: :'blacklight.search.fields.creator'
+    config.add_facet_field 'publisher_sim',              label: :'blacklight.search.fields.publisher'
+    config.add_facet_field 'organization_sim',           label: :'blacklight.search.fields.organization'
+    config.add_facet_field 'division_sim',               label: :'blacklight.search.fields.division'
+    config.add_facet_field 'academic_department_sim',    label: :'blacklight.search.fields.academic_department'
+    config.add_facet_field 'subject_label_ssim',         label: :'blacklight.search.fields.subject'
+    config.add_facet_field 'keyword_sim',                label: :'blacklight.search.fields.keyword'
+    config.add_facet_field 'language_label_ssim',        label: :'blacklight.search.fields.language'
+    config.add_facet_field 'location_label_ssim',        label: :'blacklight.search.fields.location'
     config.add_facet_field 'years_encompassed_iim',
                            include_in_advanced_search: false,
                            label: :'blacklight.search.fields.years_encompassed',
                            range: true
-    config.add_facet_field 'rights_statement_shortcode_ssim',
-                           label: :'blacklight.search.fields.rights_statement',
-                           limit: 5
+    config.add_facet_field 'rights_statement_shortcode_ssim', label: :'blacklight.search.fields.rights_statement'
+    config.add_facet_field 'subject_ocm_ssim', label: :'blacklight.search.facets.subject_ocm'
 
     #
     # admin facets
     #
     config.add_facet_field 'visibility_ssi',
                            label: :'blacklight.search.fields.visibility',
-                           limit: 5,
-                           admin: true,
-                           helper_method: :render_catalog_visibility_facet
-    config.add_facet_field 'depositor_ssim',
-                           label: :'blacklight.search.fields.depositor',
-                           limit: 5,
+                           helper_method: :render_catalog_visibility_facet,
                            admin: true
-    config.add_facet_field 'proxy_depositor_ssim',
-                           label: :'blacklight.search.fields.proxy_depositor',
-                           limit: 5,
-                           admin: true
-    config.add_facet_field 'admin_set_sim',
-                           label: :'blacklight.search.fields.admin_set',
-                           limit: 5,
-                           admin: true
+    config.add_facet_field 'depositor_ssim', label: :'blacklight.search.fields.depositor', admin: true
+    config.add_facet_field 'proxy_depositor_ssim', label: :'blacklight.search.fields.proxy_depositor', admin: true
+    config.add_facet_field 'admin_set_sim', label: :'blacklight.search.fields.admin_set', admin: true
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
     config.add_facet_field 'generic_type_sim', if: false
 
     # see also: has_model_ssim for the 'View collections' link
-    config.add_facet_field 'has_model_ssim',
-                           label: :'blacklight.search.fields.has_model',
-                           if: false
+    config.add_facet_field 'has_model_ssim', label: :'blacklight.search.fields.has_model', if: false
 
     # Facets from the Work-level that aren't provided in the catalog
-    config.add_facet_field 'subject_ocm_ssim',
-                           label: :'blacklight.search.facets.subject_ocm',
-                           if: false
-    config.add_facet_field 'research_assistance_ssim',
-                           label: :'blacklight.search.facets.research_assistance',
-                           if: false
+    config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.facets.research_assistance', if: false
+
+    # Blacklight will default a facet's limit to the +blacklight_config.default_facet_limit+ value
+    # only if the field config +:limit+ entry is true. This does that.
+    config.facet_fields.each { |(_key, val)| val[:limit] = true }
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -150,10 +116,10 @@ class CatalogController < ApplicationController
     config.add_index_field 'title_tesim',
                            itemprop: 'name',
                            if: false
-    config.add_index_field 'resource_type_ssim',
+    config.add_index_field 'resource_type_tesim',
                            itemprop: 'resourceType',
                            label: :'blacklight.search.fields.resource_type',
-                           link_to_search: 'resource_type_ssim'
+                           link_to_search: 'resource_type_sim'
     config.add_index_field 'academic_department_tesim',
                            itemprop: 'department',
                            label: :'blacklight.search.fields.academic_department',
@@ -162,7 +128,7 @@ class CatalogController < ApplicationController
                            itemprop: 'keywords',
                            label: :'blacklight.search.fields.keyword',
                            link_to_search: 'keyword_sim'
-    config.add_index_field 'subject_tesim',
+    config.add_index_field 'subject_label_ssim',
                            itemprop: 'about',
                            label: :'blacklight.search.fields.subject',
                            link_to_search: 'subject_sim'
@@ -170,10 +136,6 @@ class CatalogController < ApplicationController
                            itemprop: 'creator',
                            label: :'blacklight.search.fields.creator',
                            link_to_search: 'creator_sim'
-    config.add_index_field 'contributor_tesim',
-                           itemprop: 'contributor',
-                           label: :'blacklight.search.fields.contributor',
-                           link_to_search: 'contributor_sim'
     config.add_index_field 'publisher_tesim',
                            itemprop: 'publisher',
                            label: :'blacklight.search.fields.publisher',
@@ -183,7 +145,11 @@ class CatalogController < ApplicationController
                            label: :'blacklight.search.fields.language',
                            link_to_search: 'language_sim'
     config.add_index_field 'date_issued_ssim',
-                           label: :'blacklight.search.fields.date_issued'
+                           label: :'blacklight.search.fields.date_issued',
+                           helper_method: :humanize_edtf_values
+    config.add_index_field 'date_ssim',
+                           label: :'blacklight.search.fields.date',
+                           helper_method: :humanize_edtf_values
     config.add_index_field 'rights_statement_tesim',
                            helper_method: :rights_statement_links,
                            label: :'blacklight.search.fields.rights_statement'
