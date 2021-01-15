@@ -5,6 +5,10 @@ module Spot
     # Falls back to the original value.
     #
     # @return [String]
+    def humanize_edtf_values(args)
+      Array.wrap(args[:value]).map { |val| humanize_edtf_value(val) }.to_sentence
+    end
+
     def humanize_edtf_value(value)
       Date.edtf(value).humanize
     rescue
