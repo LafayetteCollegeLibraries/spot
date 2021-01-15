@@ -144,8 +144,12 @@ class CatalogController < ApplicationController
                            itemprop: 'inLanguage',
                            label: :'blacklight.search.fields.language',
                            link_to_search: 'language_sim'
-    config.add_index_field 'date_issued_ssim', label: :'blacklight.search.fields.date_issued'
-    config.add_index_field 'date_ssim', label: :'blacklight.search.fields.date'
+    config.add_index_field 'date_issued_ssim',
+                           label: :'blacklight.search.fields.date_issued',
+                           helper_method: :humanize_edtf_value
+    config.add_index_field 'date_ssim',
+                           label: :'blacklight.search.fields.date',
+                           helper_method: :humanize_edtf_value
     config.add_index_field 'rights_statement_tesim',
                            helper_method: :rights_statement_links,
                            label: :'blacklight.search.fields.rights_statement'
