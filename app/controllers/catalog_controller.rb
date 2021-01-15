@@ -124,7 +124,7 @@ class CatalogController < ApplicationController
                            itemprop: 'keywords',
                            label: :'blacklight.search.fields.keyword',
                            link_to_search: 'keyword_sim'
-    config.add_index_field 'subject_tesim',
+    config.add_index_field 'subject_label_ssim',
                            itemprop: 'about',
                            label: :'blacklight.search.fields.subject',
                            link_to_search: 'subject_sim'
@@ -132,10 +132,6 @@ class CatalogController < ApplicationController
                            itemprop: 'creator',
                            label: :'blacklight.search.fields.creator',
                            link_to_search: 'creator_sim'
-    config.add_index_field 'contributor_tesim',
-                           itemprop: 'contributor',
-                           label: :'blacklight.search.fields.contributor',
-                           link_to_search: 'contributor_sim'
     config.add_index_field 'publisher_tesim',
                            itemprop: 'publisher',
                            label: :'blacklight.search.fields.publisher',
@@ -144,8 +140,8 @@ class CatalogController < ApplicationController
                            itemprop: 'inLanguage',
                            label: :'blacklight.search.fields.language',
                            link_to_search: 'language_sim'
-    config.add_index_field 'date_issued_ssim',
-                           label: :'blacklight.search.fields.date_issued'
+    config.add_index_field 'date_issued_ssim', label: :'blacklight.search.fields.date_issued'
+    config.add_index_field 'date_ssim', label: :'blacklight.search.fields.date'
     config.add_index_field 'rights_statement_tesim',
                            helper_method: :rights_statement_links,
                            label: :'blacklight.search.fields.rights_statement'
