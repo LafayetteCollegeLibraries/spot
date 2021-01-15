@@ -79,6 +79,7 @@ class CatalogController < ApplicationController
                            label: :'blacklight.search.fields.years_encompassed',
                            range: true
     config.add_facet_field 'rights_statement_shortcode_ssim', label: :'blacklight.search.fields.rights_statement'
+    config.add_facet_field 'subject_ocm_ssim', label: :'blacklight.search.facets.subject_ocm'
 
     #
     # admin facets
@@ -99,7 +100,6 @@ class CatalogController < ApplicationController
     config.add_facet_field 'has_model_ssim', label: :'blacklight.search.fields.has_model', if: false
 
     # Facets from the Work-level that aren't provided in the catalog
-    config.add_facet_field 'subject_ocm_ssim', label: :'blacklight.search.facets.subject_ocm', if: false
     config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.facets.research_assistance', if: false
 
     # Have BL send all facet field names to Solr, which has been the default
