@@ -36,3 +36,5 @@ json.extract!(@curation_concern, :academic_department, :division, :organization)
 # rights stuff
 json.rights_statement(map_uris(@curation_concern.rights_statement))
 json.extract!(@curation_concern, :rights_holder, :license)
+
+json.version(@curation_concern.etag)

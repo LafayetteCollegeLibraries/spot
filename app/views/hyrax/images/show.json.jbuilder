@@ -36,3 +36,5 @@ json.extract!(@curation_concern, :physical_medium, :original_item_extent, :repos
 # rights info
 json.rights_statement(map_uris(@curation_concern.rights_statement))
 json.rights_holder(@curation_concern.rights_holder)
+
+json.version(@curation_concern.etag)
