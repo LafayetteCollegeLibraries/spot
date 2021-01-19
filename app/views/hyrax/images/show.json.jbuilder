@@ -1,4 +1,4 @@
-# Jbuilder template for rendering Publication works as JSON. The out-of-the-box template
+# Jbuilder template for rendering Image works as JSON. The out-of-the-box template
 # from hyrax (see <hyrax-root>/app/views/hyrax/base/show.json.jbuilder) will generate a
 # stack depth error for some reason (the logs aren't very helpful) that seems to be related
 # to fields with non-standard values (namely wrapped URIs). So our current solution is to
