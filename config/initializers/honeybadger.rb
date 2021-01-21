@@ -6,9 +6,15 @@ Honeybadger.configure do |config|
     # Change "errors" to match your custom controller name.
     break if notice.component != "error"
 
-    # Look up original route path and override controller/action in Honeybadger.
-    params = Rails.application.routes.recognize_path(notice.url)
-    notice.component = params[:controller]
-    notice.action = params[:action]
+    # wrapping this in a begin/rescue block bc sometimes the path isn't recognizable
+    # (see ActionController::RoutingError)
+    begin
+      # Look up original route path and override controller/action in Honeybadger.
+      params = Rails.application.routes.recognize_path(notice.url)
+      notice.component = params[:controller]
+      notice.action = params[:action]
+    rescue
+      # do nothing, send the params we've attached
+    end
   end
 end
