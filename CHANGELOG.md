@@ -1,5 +1,22 @@
 # changelog
 
+## [2021.2] - 2021-01-21
+
+### bug fixes 🐞 
+- ensure bookmark toggles aren't displayed on _any_ controller (#670)
+- point CollectionPresenter to the correct related_resource key (#674)
+- add link to LDR submission form on about page (#679)
+- add partials for Publication and Image json responses (fixes a "stack level too deep" error that would pop up) (#680)
+
+### features 🧑‍🏭 
+- split common work-model behavior into `Spot::CoreMetadata` and `Spot::WorkBehavior` mixins (#676)
+- catalog_controller updates (#677)
+  - facet limit defined globally (rather than per-facet)
+  - added OCM Classification facet to sidebar
+  - fixed field keys for #index views 
+  - humanize edtf date values 
+
+
 ## [2021.1] - 2021-01-04
 
 ### bug fixes 🐞 
@@ -543,6 +560,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2021.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.2
 [2021.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.1
 [2020.13]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.13
 [2020.12]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.12
