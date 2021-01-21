@@ -6,7 +6,7 @@ module Spot
     include ActionView::Helpers::AssetUrlHelper
     include PresentsAttributes
 
-    delegate :abstract, :permalink, :related_resource, to: :solr_document
+    delegate :abstract, :permalink, to: :solr_document
 
     # Presenter fields displayed on the #show sidebar (on the right).
     # Modify this to change what's displayed + the order.
@@ -47,6 +47,15 @@ module Spot
     # @return [true, false]
     def public?
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    end
+
+    # SolrDocument#related_resource maps to +related_resource_tesim+, since Publication and Image both
+    # index the field as +:stored_searchable, :facetable+. We store links in Collection#related_resource
+    # and index them as +:symbol+ (aka '*_ssim'), so we need to point there instead.
+    #
+    # @return [Array<String>]
+    def related_resource
+      solr_document.fetch('related_resource_ssim', [])
     end
 
     # @return [true,false]

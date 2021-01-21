@@ -1,48 +1,24 @@
 # frozen_string_literal: true
-describe Publication do
-  it_behaves_like 'a model with hyrax core metadata'
+RSpec.describe Publication do
+  it_behaves_like 'it includes Spot::WorkBehavior'
 
+  # @todo might be useful to turn this into a shared_example?
   [
-    [:subtitle, 'http://purl.org/spar/doco/Subtitle'],
-    [:title_alternative, RDF::Vocab::DC.alternative],
-    [:publisher, RDF::Vocab::DC11.publisher],
-    [:source, RDF::Vocab::DC.source],
-    [:resource_type, RDF::Vocab::DC.type],
-    [:physical_medium, RDF::Vocab::DC.PhysicalMedium],
-    [:language, RDF::Vocab::DC11.language],
-    [:abstract, RDF::Vocab::DC.abstract],
-    [:description, RDF::Vocab::DC11.description],
-    [:note, RDF::Vocab::SKOS.note],
-    [:identifier, RDF::Vocab::DC.identifier],
+    [:abstract,               RDF::Vocab::DC.abstract],
+    [:academic_department,    'http://vivoweb.org/ontology/core#AcademicDepartment'],
     [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
-    [:date_issued, RDF::Vocab::DC.issued],
-    [:date_available, RDF::Vocab::DC.available],
-    [:creator, RDF::Vocab::DC11.creator],
-    [:contributor, RDF::Vocab::DC11.contributor],
-    [:editor, RDF::Vocab::BIBO.editor],
-    [:academic_department, 'http://vivoweb.org/ontology/core#AcademicDepartment'],
-    [:division, 'http://vivoweb.org/ontology/core#Division'],
-    [:organization, 'http://vivoweb.org/ontology/core#Organization'],
-    [:related_resource, RDF::RDFS.seeAlso],
-    [:subject, RDF::Vocab::DC11.subject],
-    [:keyword,  RDF::Vocab::SCHEMA.keywords],
-    [:location, RDF::Vocab::DC.spatial],
-    [:license, RDF::Vocab::DC.license],
-    [:rights_statement, RDF::Vocab::EDM.rights],
-    [:rights_holder, RDF::Vocab::DC.rightsHolder]
+    [:date_available,         RDF::Vocab::DC.available],
+    [:date_issued,            RDF::Vocab::DC.issued],
+    [:division,               'http://vivoweb.org/ontology/core#Division'],
+    [:editor,                 RDF::Vocab::BIBO.editor],
+    [:license,                RDF::Vocab::DC.license],
+    [:organization,           'http://vivoweb.org/ontology/core#Organization']
   ].each do |(prop, uri)|
     it { is_expected.to have_editable_property(prop).with_predicate(uri) }
   end
 
   describe 'validations' do
     let(:work) { build(:publication) }
-
-    it_behaves_like 'it validates local authorities', field: :resource_type, authority: 'resource_types'
-    it_behaves_like 'it validates local authorities', field: :rights_statement, authority: 'rights_statements'
-    it_behaves_like 'it validates field presence', field: :title
-    it_behaves_like 'it validates field presence', field: :resource_type, value: ['Article']
-    it_behaves_like 'it validates field presence', field: :rights_statement
-    it_behaves_like 'it ensures the existence of a NOID identifier'
 
     describe 'date_issued' do
       it 'can not be absent' do
