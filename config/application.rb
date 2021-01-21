@@ -9,6 +9,9 @@ require 'sprockets/es6'
 Bundler.require(*Rails.groups)
 
 module Spot
+  # Settings in config/environments/* take precedence over those specified here.
+  # Application configuration should go into files in config/initializers
+  # -- all .rb files in that directory are automatically loaded.
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
@@ -16,8 +19,9 @@ module Spot
     # use sidekiq for async jobs
     config.active_job.queue_adapter = :sidekiq
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # route UnknownFormat errors to :not_found
+    config.action_dispatch.rescue_responses.merge!(
+      'ActionController::UnknownFormat' => :not_found
+    )
   end
 end
