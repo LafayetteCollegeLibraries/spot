@@ -33,8 +33,8 @@ class ErrorController < ApplicationController
 
     def send_honeybadger_notification!
       Honeybadger.notify(
-        'An error occurred causing a 500 page to render',
-        backtrace: @exception.full_trace,
+        @raw_exception,
+        backtrace: @wrapped_exception.full_trace,
         controller: self.class.name.to_s,
         action: action_name,
         parameters: params
@@ -43,9 +43,9 @@ class ErrorController < ApplicationController
 
     def set_status
       backtrace_cleaner = request.env['action_dispatch.backtrace_cleaner']
-      raw_exception = request.env['action_dispatch.exception']
-      @exception = ActionDispatch::ExceptionWrapper.new(backtrace_cleaner, raw_exception)
-      @status = @exception.status_code
+      @raw_exception = request.env['action_dispatch.exception']
+      @wrapped_exception = ActionDispatch::ExceptionWrapper.new(backtrace_cleaner, raw_exception)
+      @status = @wrapped_exception.status_code
 
       # hyrax's dashboard_helper_behavior is expecting this to be defined from a route
       params[:controller] = self.class.name.to_s
