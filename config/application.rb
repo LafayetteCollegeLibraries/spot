@@ -20,9 +20,7 @@ module Spot
     config.active_job.queue_adapter = :sidekiq
 
     # route UnknownFormat errors to :not_found
-    config.action_dispatch.rescue_responses.merge!(
-      'ActionController::UnknownFormat' => :not_found
-    )
+    config.action_dispatch.rescue_responses['ActionController::UnknownFormat'] = :not_found
 
     # use our error_controller to render error pages
     # (see: https://stackoverflow.com/a/24239490)

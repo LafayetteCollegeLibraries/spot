@@ -2,7 +2,7 @@
 class ErrorController < ApplicationController
   respond_to :html, :json, :text
 
-  helper_method :error_t
+  helper_method :error_t, :error_banner_image
 
   # The idea here is that we'll try to render the error page via a partial, but if that
   # partial doesn't exist (ex. we've received an error we haven't anticipated) we'll
@@ -21,19 +21,20 @@ class ErrorController < ApplicationController
   end
 
   private
+
     def send_honeybadger_notification!
       Honeybadger.notify(@exception, action: action_name, parameters: params)
     end
 
     # @return [String]
-    def banner_image
+    def error_banner_image
       found_asset = Rails.application.assets.find_asset("#{@status}-splash.jpg")
       return "#{@status}-splash.jpg" unless found_asset.nil?
 
       '500-splash.jpg'
     end
 
-    def error_t(key)
-      I18n.t("#{@response_key}.#{key}", scope: ['spot', 'error'], default: [@status_text, "internal_server_error.#{key}"])
+    def error_t(key, **kwargs)
+      I18n.t("#{@response_key}.#{key}", scope: ['spot', 'error'], default: [@status_text, "internal_server_error.#{key}"], **kwargs)
     end
 end

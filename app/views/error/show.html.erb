@@ -1,6 +1,6 @@
-<% provide(:page_title) { error_t('page_title') } %>
+<% provide(:page_title) { error_t('page_title', name: application_name) } %>
 
-<%= image_tag(banner_image, class: 'img-responsive') %>
+<%= image_tag(error_banner_image, class: 'img-responsive') %>
 
 <div class="page-title">
   <h1><%= error_t('header') %></h1>
