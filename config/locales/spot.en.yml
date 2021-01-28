@@ -43,10 +43,14 @@ en:
         title: System Status
 
     error:
-      404:
+      not_found:
         page_title: 'Page not found // %{name}'
-      500:
+        header: Not found
+        body: The page you requested could not be found
+      internal_server_error:
         page_title: 'Something went wrong! // %{name}'
+        header: Something went wrong!
+        body: Well this is embarrassing! We've encountered an error with your request.
 
     homepage:
       index:

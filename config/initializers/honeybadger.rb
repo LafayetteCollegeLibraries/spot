@@ -4,7 +4,7 @@
 Honeybadger.configure do |config|
   config.before_notify do |notice|
     # Change "errors" to match your custom controller name.
-    break if notice.component != "error"
+    next if notice.component != "error"
 
     # wrapping this in a begin/rescue block bc sometimes the path isn't recognizable
     # (see ActionController::RoutingError)
