@@ -5,6 +5,7 @@ module Hyrax
     # Adds Hyrax behaviors to the controller.
     include Hyrax::WorksControllerBehavior
     include Hyrax::BreadcrumbsForWorks
+    include Spot::AdditionalFormatsForController
 
     # use our local IiifManifestPresenter for rendering manifest metadata
     include Spot::ConfigurableIiifManifestPresenter
