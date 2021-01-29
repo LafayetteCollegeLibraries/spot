@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-#
-# Configuring Honeybadger to
 Honeybadger.configure do |config|
+  # add not-found exceptions to the list of errors we don't need to know about
   config.exceptions.ignore += [
     ActiveFedora::ObjectNotFoundError,
     Blacklight::Exceptions::RecordNotFound,
