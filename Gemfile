@@ -167,7 +167,7 @@ group :development, :test do
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.8'
   gem 'rspec-its', '~> 1.1'
-  gem 'rspec-rails', '~> 3.6'
+  gem 'rspec-rails', '~> 4.0'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rubocop', '~> 0.63'
   gem 'rubocop-rspec', '~> 1.3'
