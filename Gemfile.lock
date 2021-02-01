@@ -1007,6 +1007,7 @@ DEPENDENCIES
   linkeddata (~> 3.0)
   listen (>= 3.0.5, < 3.3)
   mini_magick (= 4.10.1)
+  nokogiri (~> 1.10.10)
   okcomputer (= 1.18.2)
   pg (= 1.2.3)
   puma (= 3.12.6)

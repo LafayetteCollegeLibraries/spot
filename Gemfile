@@ -125,12 +125,13 @@ gem 'mini_magick', '4.10.1'
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
 
-# hydra-role-management requires bootstrap_form without declaring a version,
-# bootstrap_form >=4.5.0 requires a ruby version >= 2.5 (we're stuck on 2.4.3
-# until we migrate to aws).
 #
-# @todo remove this restriction after aws migration
+# these are gems that we need to lock until we can upgrade ruby to >= 2.5
+# (on-prem is locked at 2.4.3).
+#
+# @todo remove these restriction after aws migration
 gem 'bootstrap_form', '~> 4.4.0'
+gem 'nokogiri', '~> 1.10.10'
 
 # development dependencies (not as necessary to
 # lock down versions here)
