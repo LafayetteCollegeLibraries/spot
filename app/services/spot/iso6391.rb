@@ -26,13 +26,15 @@ module Spot
 
       private
 
+        def language_hash
+          YAML.load_file(Rails.root.join('config', 'authorities', 'languages.yml'))
+        end
+
         # iso639-1 entries mapped to a key/val hash
         #
         # @return [Hash<String => String>]
         def mapped_639_1_entries
-          ISO_639::ISO_639_1.select { |e| e.alpha2.present? }
-                            .map { |e| [e.alpha2, e.english_name] }
-                            .to_h
+          language_hash['terms'].map { |entry| [entry['id'], entry['term']] }.to_h
         end
     end
   end
