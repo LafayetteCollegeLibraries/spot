@@ -16,6 +16,14 @@ RSpec.describe Spot::ISO6391 do
       it { is_expected.to eq 'Esperanto' }
     end
 
+    context 'when a local override for an entry exists' do
+      let(:id) { 'es' }
+      let(:original_value) { ISO_639.find(id).english_name }
+
+      it { is_expected.not_to eq original_value }
+      it { is_expected.to eq described_class::OVERRIDES[id] }
+    end
+
     context 'when an entry does not exist' do
       let(:id) { ':(' }
 
