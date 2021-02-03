@@ -1,0 +1,370 @@
+---
+terms:
+- id: aa
+  term: Afar
+- id: ab
+  term: Abkhazian
+- id: af
+  term: Afrikaans
+- id: ak
+  term: Akan
+- id: sq
+  term: Albanian
+- id: am
+  term: Amharic
+- id: ar
+  term: Arabic
+- id: an
+  term: Aragonese
+- id: hy
+  term: Armenian
+- id: as
+  term: Assamese
+- id: av
+  term: Avaric
+- id: ae
+  term: Avestan
+- id: ay
+  term: Aymara
+- id: az
+  term: Azerbaijani
+- id: ba
+  term: Bashkir
+- id: bm
+  term: Bambara
+- id: eu
+  term: Basque
+- id: be
+  term: Belarusian
+- id: bn
+  term: Bengali
+- id: bh
+  term: Bihari languages
+- id: bi
+  term: Bislama
+- id: bs
+  term: Bosnian
+- id: br
+  term: Breton
+- id: bg
+  term: Bulgarian
+- id: my
+  term: Burmese
+- id: ca
+  term: Catalan; Valencian
+- id: ch
+  term: Chamorro
+- id: ce
+  term: Chechen
+- id: zh
+  term: Chinese
+- id: cu
+  term: Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic
+- id: cv
+  term: Chuvash
+- id: kw
+  term: Cornish
+- id: co
+  term: Corsican
+- id: cr
+  term: Cree
+- id: cs
+  term: Czech
+- id: da
+  term: Danish
+- id: dv
+  term: Divehi; Dhivehi; Maldivian
+- id: nl
+  term: Dutch; Flemish
+- id: dz
+  term: Dzongkha
+- id: en
+  term: English
+- id: eo
+  term: Esperanto
+- id: et
+  term: Estonian
+- id: ee
+  term: Ewe
+- id: fo
+  term: Faroese
+- id: fj
+  term: Fijian
+- id: fi
+  term: Finnish
+- id: fr
+  term: French
+- id: fy
+  term: Western Frisian
+- id: ff
+  term: Fulah
+- id: ka
+  term: Georgian
+- id: de
+  term: German
+- id: gd
+  term: Gaelic; Scottish Gaelic
+- id: ga
+  term: Irish
+- id: gl
+  term: Galician
+- id: gv
+  term: Manx
+- id: el
+  term: Greek, Modern (1453-)
+- id: gn
+  term: Guarani
+- id: gu
+  term: Gujarati
+- id: ht
+  term: Haitian; Haitian Creole
+- id: ha
+  term: Hausa
+- id: he
+  term: Hebrew
+- id: hz
+  term: Herero
+- id: hi
+  term: Hindi
+- id: ho
+  term: Hiri Motu
+- id: hr
+  term: Croatian
+- id: hu
+  term: Hungarian
+- id: ig
+  term: Igbo
+- id: is
+  term: Icelandic
+- id: io
+  term: Ido
+- id: ii
+  term: Sichuan Yi; Nuosu
+- id: iu
+  term: Inuktitut
+- id: ie
+  term: Interlingue; Occidental
+- id: ia
+  term: Interlingua (International Auxiliary Language Association)
+- id: id
+  term: Indonesian
+- id: ik
+  term: Inupiaq
+- id: it
+  term: Italian
+- id: jv
+  term: Javanese
+- id: ja
+  term: Japanese
+- id: kl
+  term: Kalaallisut; Greenlandic
+- id: kn
+  term: Kannada
+- id: ks
+  term: Kashmiri
+- id: kr
+  term: Kanuri
+- id: kk
+  term: Kazakh
+- id: km
+  term: Central Khmer
+- id: ki
+  term: Kikuyu; Gikuyu
+- id: rw
+  term: Kinyarwanda
+- id: ky
+  term: Kirghiz; Kyrgyz
+- id: kv
+  term: Komi
+- id: kg
+  term: Kongo
+- id: ko
+  term: Korean
+- id: kj
+  term: Kuanyama; Kwanyama
+- id: ku
+  term: Kurdish
+- id: lo
+  term: Lao
+- id: la
+  term: Latin
+- id: lv
+  term: Latvian
+- id: li
+  term: Limburgan; Limburger; Limburgish
+- id: ln
+  term: Lingala
+- id: lt
+  term: Lithuanian
+- id: lb
+  term: Luxembourgish; Letzeburgesch
+- id: lu
+  term: Luba-Katanga
+- id: lg
+  term: Ganda
+- id: mk
+  term: Macedonian
+- id: mh
+  term: Marshallese
+- id: ml
+  term: Malayalam
+- id: mi
+  term: Maori
+- id: mr
+  term: Marathi
+- id: ms
+  term: Malay
+- id: mg
+  term: Malagasy
+- id: mt
+  term: Maltese
+- id: mn
+  term: Mongolian
+- id: na
+  term: Nauru
+- id: nv
+  term: Navajo; Navaho
+- id: nr
+  term: Ndebele, South; South Ndebele
+- id: nd
+  term: Ndebele, North; North Ndebele
+- id: ng
+  term: Ndonga
+- id: ne
+  term: Nepali
+- id: nn
+  term: Norwegian Nynorsk; Nynorsk, Norwegian
+- id: nb
+  term: Bokmål, Norwegian; Norwegian Bokmål
+- id: 'no'
+  term: Norwegian
+- id: ny
+  term: Chichewa; Chewa; Nyanja
+- id: oc
+  term: Occitan (post 1500)
+- id: oj
+  term: Ojibwa
+- id: or
+  term: Oriya
+- id: om
+  term: Oromo
+- id: os
+  term: Ossetian; Ossetic
+- id: pa
+  term: Panjabi; Punjabi
+- id: fa
+  term: Persian
+- id: pi
+  term: Pali
+- id: pl
+  term: Polish
+- id: pt
+  term: Portuguese
+- id: ps
+  term: Pushto; Pashto
+- id: qu
+  term: Quechua
+- id: rm
+  term: Romansh
+- id: ro
+  term: Romanian; Moldavian; Moldovan
+- id: rn
+  term: Rundi
+- id: ru
+  term: Russian
+- id: sg
+  term: Sango
+- id: sa
+  term: Sanskrit
+- id: si
+  term: Sinhala; Sinhalese
+- id: sk
+  term: Slovak
+- id: sl
+  term: Slovenian
+- id: se
+  term: Northern Sami
+- id: sm
+  term: Samoan
+- id: sn
+  term: Shona
+- id: sd
+  term: Sindhi
+- id: so
+  term: Somali
+- id: st
+  term: Sotho, Southern
+- id: es
+  term: Spanish; Castilian
+- id: sc
+  term: Sardinian
+- id: sr
+  term: Serbian
+- id: ss
+  term: Swati
+- id: su
+  term: Sundanese
+- id: sw
+  term: Swahili
+- id: sv
+  term: Swedish
+- id: ty
+  term: Tahitian
+- id: ta
+  term: Tamil
+- id: tt
+  term: Tatar
+- id: te
+  term: Telugu
+- id: tg
+  term: Tajik
+- id: tl
+  term: Tagalog
+- id: th
+  term: Thai
+- id: bo
+  term: Tibetan
+- id: ti
+  term: Tigrinya
+- id: to
+  term: Tonga (Tonga Islands)
+- id: tn
+  term: Tswana
+- id: ts
+  term: Tsonga
+- id: tk
+  term: Turkmen
+- id: tr
+  term: Turkish
+- id: tw
+  term: Twi
+- id: ug
+  term: Uighur; Uyghur
+- id: uk
+  term: Ukrainian
+- id: ur
+  term: Urdu
+- id: uz
+  term: Uzbek
+- id: ve
+  term: Venda
+- id: vi
+  term: Vietnamese
+- id: vo
+  term: Volapük
+- id: cy
+  term: Welsh
+- id: wa
+  term: Walloon
+- id: wo
+  term: Wolof
+- id: xh
+  term: Xhosa
+- id: yi
+  term: Yiddish
+- id: yo
+  term: Yoruba
+- id: za
+  term: Zhuang; Chuang
+- id: zu
+  term: Zulu
