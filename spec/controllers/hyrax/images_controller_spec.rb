@@ -1,11 +1,4 @@
 # frozen_string_literal: true
-
-# Generated via
-#  `rails generate hyrax:work Image`
-require 'rails_helper'
-
 RSpec.describe Hyrax::ImagesController do
-  it "has tests" do
-    skip "Add your tests here"
-  end
+  it_behaves_like 'it includes Spot::WorksControllerBehavior'
 end
