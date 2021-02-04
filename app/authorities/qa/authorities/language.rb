@@ -11,7 +11,7 @@ module Qa::Authorities
     #
     # @return [Array<Hash<Symbol => String>>]
     def all
-      Spot::ISO6391.all.map { |key, val| wrap(id: key, label: val) }
+      Spot::ISO6391.all.map { |key, val| wrap(id: key, label: val) }.compact
     end
 
     # @param [String] id
@@ -38,7 +38,7 @@ module Qa::Authorities
       # @param [String] label
       # @return [Hash<Symbol => String>]
       def wrap(id:, label:)
-        return if id.nil? || label.nil?
+        return if id == label
 
         { id: id, label: label, value: id }
       end
