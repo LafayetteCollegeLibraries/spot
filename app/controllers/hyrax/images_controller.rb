@@ -1,17 +1,9 @@
 # frozen_string_literal: true
 module Hyrax
-  # Generated controller for Image
   class ImagesController < ApplicationController
-    # Adds Hyrax behaviors to the controller.
-    include Hyrax::WorksControllerBehavior
-    include Hyrax::BreadcrumbsForWorks
-
-    # use our local IiifManifestPresenter for rendering manifest metadata
-    include Spot::ConfigurableIiifManifestPresenter
+    include ::Spot::WorksControllerBehavior
 
     self.curation_concern_type = ::Image
-
-    # Use this line if you want to use a custom presenter
     self.show_presenter = Hyrax::ImagePresenter
   end
 end
