@@ -14,7 +14,7 @@ module IndexesLanguageAndLabel
 
       object.language.each do |lang|
         doc[value_field] << lang
-        doc[label_field] << (Spot::ISO6391.label_for(lang) || lang)
+        doc[label_field] << (Spot::ISO6391.label_for(lang))
       end
     end
   end
