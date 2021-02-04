@@ -24,7 +24,7 @@ RSpec.describe Spot::ISO6391 do
       before do
         allow(I18n)
           .to receive(:t)
-          .with(id, { default: [original_value, id], scope: ['iso_639_1'] })
+          .with(id, default: [original_value, id], scope: ['iso_639_1'])
           .and_return(expected_value)
       end
 
