@@ -9,6 +9,7 @@ module Spot
   #   end
   #
   module WorksControllerBehavior
+    extend ActiveSupport::Concern
     include ::Hyrax::WorksControllerBehavior
     include ::Hyrax::BreadcrumbsForWorks
     include AdditionalFormatsForController
