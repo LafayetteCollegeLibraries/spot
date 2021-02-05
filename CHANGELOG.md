@@ -1,5 +1,21 @@
 # changelog
 
+## [2021.3] - 2021-02-05
+
+### enhancements 🔧 
+- adds a locale for custom language labels (`"iso_639_1.<2 letter code>"`) (#693)
+- creates a `Spot::WorksControllerBehavior` mixin for common mixins/behavior (#694)
+  - adds .csv handling to `Hyrax::ImagesController`, which was causing a bunch of honeybadger reports
+- add "Center for the Integration of Teaching, Learning, and Scholarship" academic department option (#695)
+
+### dependencies 👩‍👩‍👧‍👧 
+- capistrano to 3.15.0 (#687)
+- nokogiri locked at `~> "1.10.10"` until we can upgrade ruby (#688)
+- okcomputer to 1.18.2 (#685)
+- rails to 5.2.4.4 (#686)
+- rspec-rails to 4.0.1 (#684)
+
+
 ## [2021.2] - 2021-01-21
 
 ### bug fixes 🐞 
@@ -560,6 +576,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2021.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.3
 [2021.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.2
 [2021.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.1
 [2020.13]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2020.13
