@@ -79,7 +79,7 @@ gem 'iso-639', '0.3.5'
 gem 'jquery-rails', '4.4.0'
 
 # system monitoring
-gem 'okcomputer', '1.18.1'
+gem 'okcomputer', '1.18.2'
 
 # we're using postgres as our database within rails
 gem 'pg', '1.2.3'
@@ -125,12 +125,13 @@ gem 'mini_magick', '4.10.1'
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
 
-# hydra-role-management requires bootstrap_form without declaring a version,
-# bootstrap_form >=4.5.0 requires a ruby version >= 2.5 (we're stuck on 2.4.3
-# until we migrate to aws).
 #
-# @todo remove this restriction after aws migration
+# these are gems that we need to lock until we can upgrade ruby to >= 2.5
+# (on-prem is locked at 2.4.3).
+#
+# @todo remove these restriction after aws migration
 gem 'bootstrap_form', '~> 4.4.0'
+gem 'nokogiri', '~> 1.10.10'
 
 # development dependencies (not as necessary to
 # lock down versions here)
@@ -143,7 +144,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Use Capistrano for deployment
-  gem 'capistrano', '~> 3.14', require: false
+  gem 'capistrano', '~> 3.15', require: false
   gem 'capistrano-bundler', '~> 1.3'
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.0'
@@ -166,7 +167,7 @@ group :development, :test do
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.8'
   gem 'rspec-its', '~> 1.1'
-  gem 'rspec-rails', '~> 3.6'
+  gem 'rspec-rails', '~> 4.0'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rubocop', '~> 0.63'
   gem 'rubocop-rspec', '~> 1.3'
