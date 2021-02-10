@@ -21,7 +21,9 @@ class CatalogController < ApplicationController
     config.advanced_search[:query_parser] ||= 'dismax'
     config.advanced_search[:form_solr_parameters] ||= {}
 
+    # partial config
     config.view.gallery.partials = [:index_header, :index]
+    config.index.partials = [:index_header, :thumbnail, :index, :index_highlighting]
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
@@ -156,13 +158,6 @@ class CatalogController < ApplicationController
     config.add_index_field 'license_tesim',
                            helper_method: :license_links,
                            label: :'blacklight.search.fields.license'
-    config.add_index_field 'embargo_release_date_dtsi',
-                           label: :'blacklight.search.fields.embargo_release_date',
-                           helper_method: :human_readable_date
-    config.add_index_field 'lease_expiration_date_dtsi',
-                           label: :'blacklight.search.fields.lease_expiration_date',
-                           helper_method: :human_readable_date
-
     #
     # search field configuration
     #

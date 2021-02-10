@@ -106,6 +106,10 @@ en:
         page_title: Terms of Use // %{name}
 
     work:
+      embargo:
+        catalog_result_html: File(s) under embargo until <strong>%{date}</strong>
+      lease:
+        catalog_result_html: File(s) available until <strong>%{date}</strong>
       export:
         additional_options: Additional options
         all_files: Download all files

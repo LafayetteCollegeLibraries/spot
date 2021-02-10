@@ -16,19 +16,4 @@
     <% end %>
     </dl>
   </div>
-
-  <% highlight_values = extracted_text_highlight_values_for(document) %>
-  <% unless highlight_values.length.zero? -%>
-    <blockquote class="full-text-excerpt text-muted">
-      <p><%= highlight_values.join(' ... ').html_safe %></p>
-    </blockquote>
-  <% end -%>
-
-  <% if document.embargo_release_date.present? %>
-    <div class="alert alert-info">File(s) under embargo until: <%= document.embargo_release_date %></div>
-  <% end %>
-
-  <% if document.lease_expiration_date.present? %>
-    <div class="alert alert-info">File(s) available until: <%= document.lease_expiration_date %></div>
-  <% end %>
 </div>
