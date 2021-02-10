@@ -5,18 +5,28 @@
   <div class="panel-body">
     <div class="row">
       <%= render 'workflow_actions_widget', presenter: presenter %>
+
       <div class="col-sm-12">
         <%= render 'show_actions', presenter: presenter %>
       </div>
+
       <div class="col-sm-12 work-representative-media">
-        <%= render 'representative_media', presenter: presenter, viewer: presenter.iiif_viewer? %>
-      </div>
+        <%# @todo make this a partial? %>
+        <% if presenter.metadata_only? %>
+          <div class="alert alert-warning">
+            <%= presenter.metadata_only_alert_text %>
+          </div>
+        <% else %>
+          <%= render 'representative_media', presenter: presenter, viewer: presenter.iiif_viewer? %>
+        </div>
+      <% end %>
+
       <%# <div class="col-sm-3 text-center"> %>
         <%# render 'citations', presenter: presenter %>
         <%# render 'social_media' %>
       <%# </div> %>
       <div class="col-sm-12 work-metadata">
-        <%= render 'export_tools', presenter: presenter %>
+        <%= render('export_tools', presenter: presenter) unless presenter.metadata_only? %>
         <%= render 'work_description', presenter: presenter %>
         <%= render 'metadata', presenter: presenter %>
         <%= render 'items_table', presenter: presenter %>

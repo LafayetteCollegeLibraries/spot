@@ -15,6 +15,7 @@ module Spot
   class BasePresenter < ::Hyrax::WorkShowPresenter
     include PresentsAttributes
     include HumanizesDateFields
+    include MetadataOnlyDisplay
 
     # @return [String]
     def export_all_text
