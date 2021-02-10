@@ -32,6 +32,7 @@ module Spot
         # @return [void]
         def apply_save_data_to_curation_concern(env)
           transform_rights_statement(env) if env.attributes.key?(:rights_statement)
+          update_discovery_visibility(env)
 
           super
         end
@@ -60,6 +61,24 @@ module Spot
         # @return [void]
         def transform_rights_statement(env)
           env.attributes[:rights_statement] = Array.wrap(env.attributes[:rights_statement]).map { |v| RDF::URI(v) }
+        end
+
+        # Adds 'public' to the item's +discover_groups+ array unless the item is set to 'private'
+        # or the incoming attributes change the visibility to 'private'. Note, this also removes
+        # 'public' from the +discover_groups+ array if it's present and the item is being set
+        # to 'private'
+        #
+        # @return [true]
+        def update_discovery_visibility(env)
+          private_val = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+          public_val = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+          wants_private_visibility = [env.curation_concern.visibility, env.attributes[:visibility]].include?(private_val)
+
+          env.curation_concern.discover_groups ||= []
+          env.curation_concern.discover_groups -= [public_val] if wants_private_visibility
+          env.curation_concern.discover_groups += [public_val] unless wants_private_visibility
+
+          true
         end
     end
   end
