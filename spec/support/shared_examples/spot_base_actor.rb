@@ -157,9 +157,19 @@ RSpec.shared_examples 'a Spot actor' do
     end
 
     context '#update' do
+      let(:work) { create(work_klass.to_s.downcase.to_sym, :public, discover_groups: ['public']) }
+
       before { actor.update(env) }
 
       it_behaves_like 'it adjusts work#discover_groups based on desired visibility'
+
+      context 'when a public item becomes private' do
+        let(:attributes) { { visibility: private_viz } }
+
+        it 'removes "public" from work#discover_groups' do
+          expect(work.discover_groups).to be_empty
+        end
+      end
     end
   end
 end
