@@ -70,15 +70,18 @@ module Spot
         #
         # @return [true]
         def update_discovery_visibility(env)
-          private_val = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
-          public_val = Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
-          wants_private_visibility = [env.curation_concern.visibility, env.attributes[:visibility]].include?(private_val)
+          visibility_possibilities = [
+            env.curation_concern.visibility,
+            env.attributes[:visibility],
+            env.attributes[:visibility_during_embargo],
+            env.attributes[:visibility_during_lease]
+          ]
+
+          wants_private = visibility_possibilities.flatten.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
 
           env.curation_concern.discover_groups ||= []
-          env.curation_concern.discover_groups -= [public_val] if wants_private_visibility
-          env.curation_concern.discover_groups += [public_val] unless wants_private_visibility
-
-          true
+          env.curation_concern.discover_groups -= ['public'] if wants_private
+          env.curation_concern.discover_groups += ['public'] unless wants_private
         end
     end
   end

@@ -80,4 +80,86 @@ RSpec.shared_examples 'a Spot actor' do
       end
     end
   end
+
+  describe '#update_discover_visibility' do
+    let(:actor) { Hyrax::Actors::InterpretVisibilityActor.new(described_class.new(Hyrax::Actors::Terminator.new)) }
+    let(:attributes) { { visibility: viz } }
+
+    let(:public_viz) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+    let(:private_viz) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    let(:authenticated_viz) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+    let(:embargoed_viz) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO }
+    let(:leased_viz) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE }
+
+    shared_examples 'it adjusts work#discover_groups based on desired visibility' do
+      # we're gonna use these two a lot in this example, so let's set up shared_examples
+      shared_examples 'it adds "public" to #discover_groups' do
+        subject { work.discover_groups }
+
+        it { is_expected.to be_an(Array) }
+        it { is_expected.to include('public') }
+      end
+
+      shared_examples 'it adds nothing to #discover_groups' do
+        subject { work.discover_groups }
+
+        it { is_expected.to be_an(Array) }
+        it { is_expected.to be_empty }
+      end
+
+      # now the different contexts:
+      context 'when visibility requested is "public"' do
+        let(:viz) { public_viz }
+
+        it_behaves_like 'it adds "public" to #discover_groups'
+      end
+
+      context 'when visibility requested is "private"' do
+        let(:viz) { private_viz }
+
+        it_behaves_like 'it adds nothing to #discover_groups'
+      end
+
+      context 'when embargo is requested' do
+        let(:attributes) do
+          {
+            visibility: embargoed_viz,
+            visibility_during_embargo: viz_during_embargo,
+            visibility_after_embargo: public_viz,
+            embargo_release_date: (Time.zone.today + 1.year).to_s
+          }
+        end
+
+        context '(work is public during embargo)' do
+          let(:viz_during_embargo) { public_viz }
+
+          it_behaves_like 'it adds "public" to #discover_groups'
+        end
+
+        context '(work is authenticated during embargo)' do
+          let(:viz_during_embargo) { authenticated_viz }
+
+          it_behaves_like 'it adds "public" to #discover_groups'
+        end
+
+        context '(work is private during embargo)' do
+          let(:viz_during_embargo) { private_viz }
+
+          it_behaves_like 'it adds nothing to #discover_groups'
+        end
+      end
+    end
+
+    context '#create' do
+      before { actor.create(env) }
+
+      it_behaves_like 'it adjusts work#discover_groups based on desired visibility'
+    end
+
+    context '#update' do
+      before { actor.update(env) }
+
+      it_behaves_like 'it adjusts work#discover_groups based on desired visibility'
+    end
+  end
 end
