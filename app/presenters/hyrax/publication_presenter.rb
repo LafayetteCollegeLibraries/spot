@@ -4,11 +4,7 @@ module Hyrax
     humanize_date_fields :date_issued
 
     delegate :abstract, :academic_department, :bibliographic_citation,
-             :contributor, :creator, :date_available,
-             :division, :editor, :keyword, :language, :language_label,
-             :local_identifier, :organization, :permalink, :publisher,
-             :resource_type, :rights_holder, :source, :standard_identifier,
-             :subtitle, :title_alternative,
+             :date_available, :division, :editor, :organization,
              to: :solr_document
 
     # Metadata formats we're able to export as.

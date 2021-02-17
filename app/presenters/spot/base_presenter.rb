@@ -16,6 +16,15 @@ module Spot
     include PresentsAttributes
     include HumanizesDateFields
 
+    # delegate common properties to solr_document, so descendents only need
+    # to add their unique fields
+    delegate :contributor, :creator, :description, :identifier, :keyword, :language,
+             :language_label, :location, :local_identifier, :note, :permalink, :physical_medium,
+             :publisher, :related_resource, :resource_type, :rights_holder, :rights_statement,
+             :source, :standard_identifier, :subject, :subtitle, :title_alternative, :title,
+             :visibility,
+             to: :solr_document
+
     # @return [String]
     def export_all_text
       I18n.t("spot.work.export.download_work_and_metadata_#{multiple_members? ? 'multiple' : 'single'}")
