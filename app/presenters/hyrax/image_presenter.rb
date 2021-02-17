@@ -5,13 +5,8 @@ module Hyrax
 
     humanize_date_fields :date, :date_associated
 
-    delegate :contributor, :creator, :date_scope_note, :description,
-             :donor, :inscription, :keyword, :language_label,
-             :local_identifier, :note, :original_item_extent, :permalink,
-             :physical_medium, :publisher, :related_resource, :repository_location,
-             :requested_by, :research_assistance, :resource_type,
-             :rights_holder, :rights_statement, :source,
-             :standard_identifier, :subtitle, :title_alternative,
+    delegate :date_scope_note, :donor, :inscription, :original_item_extent,
+             :repository_location, :requested_by, :research_assistance
              to: :solr_document
 
     def subject_ocm
