@@ -6,7 +6,7 @@ module Hyrax
     humanize_date_fields :date, :date_associated
 
     delegate :date_scope_note, :donor, :inscription, :original_item_extent,
-             :repository_location, :requested_by, :research_assistance
+             :repository_location, :requested_by, :research_assistance,
              to: :solr_document
 
     def subject_ocm
