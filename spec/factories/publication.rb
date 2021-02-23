@@ -56,20 +56,25 @@ FactoryBot.define do
 
     factory :publication_with_file_set do
       after(:create) do |pub, evaluator|
-        fs_opts = {
-          user: evaluator.user,
-          title: ['Publication FileSet'],
-          label: evaluator.label
-        }
-
+        fs_opts = { user: evaluator.user, title: ['Image FileSet'], label: evaluator.label }
         fs_opts[:content] = evaluator.content if evaluator.content
-        fs = create(:file_set, :public, **fs_opts)
+        fs_visibility = case pub.visibility
+                        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+                          :public
+                        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+                          :authenticated
+                        else
+                          :private
+                        end
+
+        fs = create(:file_set, fs_visibility, **fs_opts)
 
         pub.ordered_members << fs
         pub.representative_id = fs.id
         pub.save
       end
     end
+
 
     before(:create) do |work, evaluator|
       work.apply_depositor_metadata(evaluator.user.user_key)

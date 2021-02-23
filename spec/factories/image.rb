@@ -57,14 +57,18 @@ FactoryBot.define do
 
     factory :image_with_file_set do
       after(:create) do |image, evaluator|
-        fs_opts = {
-          user: evaluator.user,
-          title: ['Image FileSet'],
-          label: evaluator.label
-        }
-
+        fs_opts = { user: evaluator.user, title: ['Image FileSet'], label: evaluator.label }
         fs_opts[:content] = evaluator.content if evaluator.content
-        fs = create(:file_set, :public, **fs_opts)
+        fs_visibility = case image.visibility
+                        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+                          :public
+                        when Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+                          :authenticated
+                        else
+                          :private
+                        end
+
+        fs = create(:file_set, fs_visibility, **fs_opts)
 
         image.ordered_members << fs
         image.representative_id = fs.id

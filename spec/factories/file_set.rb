@@ -18,11 +18,18 @@ FactoryBot.define do
     end
 
     trait :public do
-      read_groups { ["public"] }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      read_groups { ['public'] }
     end
 
-    trait :registered do
-      read_groups { ["registered"] }
+    trait :authenticated do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+      read_groups { ['registered'] }
+    end
+
+    trait :private do
+      visibility {  Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+      read_groups { ['admin'] }
     end
   end
 end
