@@ -31,6 +31,6 @@ module ApplicationHelper
     args[:date] = document.embargo_release_date.strftime('%B %e, %Y')  if key == :embargo
     args[:date] = document.lease_expiration_date.strftime('%B %e, %Y') if key == :lease
 
-    %(<div class="alert alert-warning" style="margin:0; padding: 5px;">#{I18n.t(key, **args)}</div>).html_safe
+    %(<div class="alert alert-warning" style="margin:0; padding: 5px;">#{I18n.t(key, **args).html_safe}</div>).html_safe
   end
 end

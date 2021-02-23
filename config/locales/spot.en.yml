@@ -107,10 +107,10 @@ en:
 
     work:
       access_message:
-        authenticated_html: File access restricted to members of the Lafayette College community.
-        embargo_html: File(s) under embargo until <strong>%{date}</strong>
-        lease_html: File(s) available until <strong>%{date}</strong>
-        private_html: This work's files are unavailable.
+        authenticated: File access restricted to members of the Lafayette College community.
+        embargo: File(s) under embargo until <strong>%{date}</strong>
+        lease: File(s) available until <strong>%{date}</strong>
+        private: This work's files are unavailable.
       export:
         additional_options: Additional options
         all_files: Download all files
