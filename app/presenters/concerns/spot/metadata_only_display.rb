@@ -13,7 +13,7 @@ module Spot
     #
     # @return [true, false]
     def metadata_only?
-      @metadata_only ||= !(current_ability.admin? || current_ability.can?(:download, solr_document))
+      @metadata_only ||= !(current_ability.admin? || current_ability.can?(:download, id))
     end
 
     # Text content for the alert informing the user that they can not view a work's files.
