@@ -14,7 +14,7 @@
         <%# @todo make this a partial? %>
         <% if presenter.metadata_only? %>
           <div class="alert alert-warning">
-            <%= presenter.metadata_only_alert_text %>
+            <%= metadata_only_display_html(presenter.solr_document) %>
           </div>
         <% else %>
           <%= render 'representative_media', presenter: presenter, viewer: presenter.iiif_viewer? %>

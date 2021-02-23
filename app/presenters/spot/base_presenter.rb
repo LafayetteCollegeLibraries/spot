@@ -15,7 +15,6 @@ module Spot
   class BasePresenter < ::Hyrax::WorkShowPresenter
     include PresentsAttributes
     include HumanizesDateFields
-    include MetadataOnlyDisplay
 
     # delegate common properties to solr_document, so descendents only need
     # to add their unique fields
@@ -47,6 +46,20 @@ module Spot
     # @return [Array<Array<String>>]
     def location
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
+    end
+
+    # Conditions for whether to display only metadata or the files attached:
+    #   - "admin" users can see files for all items
+    #   - if the user can +:download+ a record (which includes those that can +:read+),
+    #     we'll show the file
+    #     - if the item is "authenticated" and the user is logged in, show the file
+    #     - if the item is "public" and not embargoed, show the file
+    #
+    # Otherwise, we'll display just the metadata.
+    #
+    # @return [true, false]
+    def metadata_only?
+      @metadata_only ||= !(current_ability.admin? || current_ability.can?(:download, id))
     end
 
     # @return [true, false]
