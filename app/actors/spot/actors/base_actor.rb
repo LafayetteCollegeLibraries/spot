@@ -80,8 +80,12 @@ module Spot
           wants_private = visibility_possibilities.flatten.include?(Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE)
 
           env.curation_concern.discover_groups ||= []
-          env.curation_concern.discover_groups -= ['public'] if wants_private
-          env.curation_concern.discover_groups += ['public'] unless wants_private
+
+          if wants_private
+            env.curation_concern.discover_groups -= ['public']
+          else
+            env.curation_concern.discover_groups += ['public']
+          end
         end
     end
   end
