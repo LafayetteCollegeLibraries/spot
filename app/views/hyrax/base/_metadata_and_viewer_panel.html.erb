@@ -11,9 +11,11 @@
       </div>
 
       <div class="col-sm-12 work-representative-media">
-        <% if presenter.metadata_only? %>
-          <%= render('restricted_access_alert', presenter: presenter) if display_info_alert?(presenter) %>
-        <% else %>
+        <% if display_info_alert?(presenter) %>
+          <%= render('restricted_access_alert', presenter: presenter) %>
+        <% end %>
+
+        <% unless presenter.metadata_only? %>
           <%= render 'representative_media', presenter: presenter, viewer: presenter.iiif_viewer? %>
         <% end %>
       </div>
