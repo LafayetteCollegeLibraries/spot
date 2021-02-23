@@ -11,13 +11,12 @@
       </div>
 
       <div class="col-sm-12 work-representative-media">
-        <%# @todo make this a partial? %>
         <% if presenter.metadata_only? %>
-          <%= document_access_display_alert(presenter) if display_info_alert?(presenter) %>
+          <%= render('restricted_access_alert', presenter: presenter) if display_info_alert?(presenter) %>
         <% else %>
           <%= render 'representative_media', presenter: presenter, viewer: presenter.iiif_viewer? %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
 
       <%# <div class="col-sm-3 text-center"> %>
         <%# render 'citations', presenter: presenter %>

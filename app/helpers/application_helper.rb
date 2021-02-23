@@ -15,7 +15,7 @@ module ApplicationHelper
   end
 
   # @return [String] HTML of bootstrap alert with text
-  def document_access_display_alert(document)
+  def document_access_display_text(document)
     key = if document.embargo_release_date.present?
             :embargo
           elsif document.lease_expiration_date.present?
@@ -31,6 +31,6 @@ module ApplicationHelper
     args[:date] = document.embargo_release_date.strftime('%B %e, %Y')  if key == :embargo
     args[:date] = document.lease_expiration_date.strftime('%B %e, %Y') if key == :lease
 
-    %(<div class="alert alert-warning" style="margin:0; padding: 5px;">#{I18n.t(key, **args).html_safe}</div>).html_safe
+    I18n.t(key, **args)
   end
 end
