@@ -1,6 +1,6 @@
 <div class="search-results-title-row">
   <h4 class="search-result-title"><%= link_to document.title_or_label, document %></h4>
-  <% unless current_user.can?(:download, document.id) %>
+  <% unless current_user && current_user.can?(:download, document.id) %>
     <div class="alert alert-warning" style="margin:0; padding:5px;">
       metadata_only_display_html(document)
     </div>
