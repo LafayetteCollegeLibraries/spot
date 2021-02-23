@@ -23,7 +23,6 @@ class CatalogController < ApplicationController
 
     # partial config
     config.view.gallery.partials = [:index_header, :index]
-    config.index.partials = [:index_header, :thumbnail, :index, :index_highlighting]
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)

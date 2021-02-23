@@ -15,5 +15,12 @@
       <dd><%= document.permalink %></dd>
     <% end %>
     </dl>
+
+    <% highlight_values = extracted_text_highlight_values_for(document) %>
+    <% unless highlight_values.length.zero? -%>
+      <blockquote class="full-text-excerpt text-muted">
+        <p><%= highlight_values.join(' ... ').html_safe %></p>
+      </blockquote>
+    <% end -%>
   </div>
 </div>

@@ -6,13 +6,12 @@ module Spot
     #
     # @return [String]
     def humanize_edtf_values(args)
-      Array.wrap(args[:value]).map { |val| humanize_edtf_value(val) }.to_sentence
+      Array.wrap(args[:value]).map { |val| Date.edtf(value).humanize rescue value }.to_sentence
     end
 
-    def humanize_edtf_value(value)
-      Date.edtf(value).humanize
-    rescue
-      value
+    def display_info_alert?(document)
+      return true if document.embargo_release_date.present? || document.lease_expiration_date.present? || document.authenticated?
+      false
     end
   end
 end
