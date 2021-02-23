@@ -15,26 +15,20 @@ module ApplicationHelper
   end
 
   def metadata_only_display_html(document)
-    scope = ['spot', 'access_message']
+    key = if document.embargo_release_date.present?
+            'embargo_html'
+          elsif document.lease_expiration_date.present?
+            'lease_html'
+          elsif document.registered?
+            'authenticated_html'
+          else
+            # we shouldn't be getting here, but if we do, it's just a blanket "private" message
+            'private_html'
+          end
 
-    if document.embargo_release_date.present?
-      key = 'embargo'
-    elsif document.lease_expiration_date.present?
-      key = 'lease'
-    elsif document.visibility == 'authenticated' && !current_ability.can?(:download, document.id)
-      key = 'authenticated'
-    else
-      key = 'private'
-    end
-
-    args = { scope: scope, default: [ket, 'This message is unavailable to view.'] }
-    date_strftime_args = '%B %e, %Y'
-
-    if key == 'embargo'
-      args[:date] = document.embargo_release_date.strftime(date_strftime_args)
-    elsif key = 'lease'
-      args[:date] = document.lease_expiration_date.strftime(date_strftime_args)
-    end
+    args = { scope: ['spot', 'access_message'], default: "This item's files are unavailable to view." }
+    args[:date] = document.embargo_release_date.strftime('%B %e, %Y') if key == 'embargo'
+    args[:date] = document.lease_expiration_date.strftime('%B %e, %Y') if key == 'lease'
 
     I18n.t("#{key}_html", **args)
   end

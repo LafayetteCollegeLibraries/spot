@@ -110,6 +110,7 @@ en:
         authenticated_html: File access restricted to members of the Lafayette College community.
         embargo_html: File(s) under embargo until <strong>%{date}</strong>
         lease_html: File(s) available until <strong>%{date}</strong>
+        private_html: This work's files are unavailable.
       export:
         additional_options: Additional options
         all_files: Download all files
