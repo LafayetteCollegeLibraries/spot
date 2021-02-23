@@ -75,7 +75,6 @@ FactoryBot.define do
       end
     end
 
-
     before(:create) do |work, evaluator|
       work.apply_depositor_metadata(evaluator.user.user_key)
     end
