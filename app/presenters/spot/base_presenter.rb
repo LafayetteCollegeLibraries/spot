@@ -21,8 +21,8 @@ module Spot
     delegate :contributor, :creator, :description, :identifier, :keyword, :language,
              :language_label, :location, :local_identifier, :note, :permalink, :physical_medium,
              :publisher, :related_resource, :resource_type, :rights_holder, :rights_statement,
-             :source, :standard_identifier, :subject, :subtitle, :title_alternative, :title,
-             :visibility,
+             :source, :standard_identifier, :subject, :subtitle, :title_alternative, :title, :visibility,
+             :registered?,
              to: :solr_document
 
     # @return [String]

@@ -12,8 +12,7 @@ module Spot
     # rubocop:enable Style/RescueModifier
 
     def display_info_alert?(document)
-      return true if document.embargo_release_date.present? || document.lease_expiration_date.present? || document.registered?
-      false
+      document.embargo_release_date.present? || document.lease_expiration_date.present? || document.registered?
     end
   end
 end

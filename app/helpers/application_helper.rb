@@ -14,7 +14,8 @@ module ApplicationHelper
     document.highlight_field('extracted_text_tsimv').reject(&:blank?)
   end
 
-  def metadata_only_display_html(document)
+  # @return [String] HTML of bootstrap alert with text
+  def document_access_display_alert(document)
     key = if document.embargo_release_date.present?
             'embargo_html'
           elsif document.lease_expiration_date.present?
@@ -26,10 +27,10 @@ module ApplicationHelper
             'private_html'
           end
 
-    args = { scope: ['spot', 'access_message'], default: "This item's files are unavailable to view." }
+    args = { scope: ['spot', 'work', 'access_message'], default: "This item's files are currently unavailable." }
     args[:date] = document.embargo_release_date.strftime('%B %e, %Y') if key == 'embargo'
     args[:date] = document.lease_expiration_date.strftime('%B %e, %Y') if key == 'lease'
 
-    I18n.t("#{key}_html", **args)
+    %(<div class="alert alert-warning>#{I18n.t(key, **args)}</div>).html_safe
   end
 end

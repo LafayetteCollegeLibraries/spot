@@ -13,9 +13,7 @@
       <div class="col-sm-12 work-representative-media">
         <%# @todo make this a partial? %>
         <% if presenter.metadata_only? %>
-          <div class="alert alert-warning">
-            <%= metadata_only_display_html(presenter.solr_document) %>
-          </div>
+          <%= document_access_display_alert(presenter) if display_info_alert?(presenter) %>
         <% else %>
           <%= render 'representative_media', presenter: presenter, viewer: presenter.iiif_viewer? %>
         </div>
