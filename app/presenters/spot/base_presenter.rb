@@ -19,9 +19,9 @@ module Spot
     # delegate common properties to solr_document, so descendents only need
     # to add their unique fields
     delegate :contributor, :creator, :description, :identifier, :keyword, :language,
-             :language_label, :location, :local_identifier, :note, :permalink, :physical_medium,
+             :language_label, :location, :note, :permalink, :physical_medium,
              :publisher, :related_resource, :resource_type, :rights_holder, :rights_statement,
-             :source, :standard_identifier, :subject, :subtitle, :title_alternative, :title,
+             :source, :subject, :subtitle, :title_alternative, :title,
              :visibility,
              to: :solr_document
 
@@ -48,6 +48,16 @@ module Spot
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
+    # @return [Array<Spot::Identifier>]
+    def local_identifier
+      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
+    end
+
+    # @return [Array<Spot::Identifier>]
+    def standard_identifier
+      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
+    end
+
     # @return [true, false]
     def multiple_members?
       list_of_item_ids_to_display.count > 1
@@ -68,6 +78,12 @@ module Spot
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
+    # Subject URIs and Labels in an array of tuples
+    #
+    # @example
+    #   presenter.subject
+    #   => [["http://id.worldcat.org/fast/2004076", "Little free libraries"]]
+    # @return [Array<Array<String>>]
     def subject
       solr_document.subject.zip(solr_document.subject_label)
     end
