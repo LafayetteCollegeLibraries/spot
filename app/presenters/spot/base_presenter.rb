@@ -48,6 +48,18 @@ module Spot
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
+    # @return [true, false]
+    def metadata_only?
+      # admins get all-access
+      return false if current_ability.admin?
+
+      # bounce out if we've set the visibility to 'metadata'
+      return true if visibility == 'metadata'
+
+      # lafayette-only items should show the metadata for anyone who can't 'download' the item
+      solr_document.registered? && !current_ability.can?(:download, id)
+    end
+
     # @return [Array<Spot::Identifier>]
     def local_identifier
       @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }

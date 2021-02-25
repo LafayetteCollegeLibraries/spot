@@ -7,6 +7,7 @@ module Spot
     include ::Hyrax::WorkBehavior
     include NoidIdentifier
     include CoreMetadata
+    include MetadataOnlyVisibility
 
     included do
       # The `controlled_properties` attribute is used by the Hyrax::DeepIndexingService,

@@ -73,4 +73,8 @@ class SolrDocument
     return collection_slug if collection? && collection_slug.present?
     super
   end
+
+  def visibility
+    @visibility ||= self['visibility_ssi'] == 'metadata' ? 'metadata' : super
+  end
 end
