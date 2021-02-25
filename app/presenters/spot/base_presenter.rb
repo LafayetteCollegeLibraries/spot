@@ -48,6 +48,8 @@ module Spot
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
+    # Check if an item's record should include files or just display the metadata.
+    #
     # @return [true, false]
     def metadata_only?
       # admins get all-access

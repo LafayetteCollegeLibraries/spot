@@ -21,11 +21,10 @@ module Spot
     # @return [String]
     # @see https://github.com/samvera/hydra-head/blob/v11.0.0/hydra-access-controls/app/models/concerns/hydra/access_controls/visibility.rb#L20-L28
     def visibility
-      if discover_groups.present? && discover_groups.include?('public') && !read_groups.include?('open')
-        'metadata'
-      else
-        super
-      end
+      return 'metadata' if discover_groups&.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC) &&
+                           !read_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+
+      super
     end
 
     private
@@ -36,7 +35,7 @@ module Spot
       def metadata_only_visibility!
         visibility_will_change! unless visibility == 'metadata'
         set_discover_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], [])
-        set_read_groups(['admin'], read_groups)
+        set_read_groups([Ability.admin_group_name], read_groups)
       end
   end
 end

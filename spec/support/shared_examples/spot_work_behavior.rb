@@ -6,6 +6,7 @@ RSpec.shared_examples 'it includes Spot::WorkBehavior' do
   it_behaves_like 'a model with hyrax core metadata'
   it_behaves_like 'it ensures the existence of a NOID identifier'
   it_behaves_like 'it includes Spot::CoreMetadata'
+  it_behaves_like 'it accepts "metadata" as a visibility'
 
   # validations
   it_behaves_like 'it validates field presence', field: :title

@@ -114,4 +114,15 @@ RSpec.describe SolrDocument do
       it { is_expected.to eq 'abc123' }
     end
   end
+
+  describe '#visibility' do
+    subject { document.visibility }
+
+    context 'when visibility is "metadata"' do
+      let(:metadata) { { 'visibility_ssi' => visibility } }
+      let(:visibility) { 'metadata' }
+
+      it { is_expected.to eq 'metadata' }
+    end
+  end
 end

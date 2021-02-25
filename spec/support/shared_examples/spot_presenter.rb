@@ -80,6 +80,56 @@ RSpec.shared_examples 'a Spot presenter' do
     it { is_expected.to eq [[uri, label]] }
   end
 
+  describe '#metadata_only?' do
+    subject { presenter.metadata_only? }
+
+    let(:admin_ability) { Ability.new(build(:admin_user)) }
+    let(:registered_ability) { Ability.new(build(:registered_user)) }
+    let(:solr_data) { { id: 'abc123def' }.merge(_solr_data) }
+    let(:_solr_data) { {} }
+
+    context 'when the ability is admin' do
+      let(:ability) { admin_ability }
+
+      it { is_expected.to be false }
+    end
+
+    context "when an item's visibility is 'metadata'" do
+      let(:_solr_data) { { 'visibility_ssi' => 'metadata' } }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when an item is restricted to authenticated users' do
+      let(:_solr_data) { { 'read_access_group_ssim' => [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED] } }
+
+      before do
+        allow(ability).to receive(:can?).with(:download, solr_data[:id]).and_return(can_download_response)
+      end
+
+      context 'with an unauthenticated user' do
+        let(:ability) { Ability.new(build(:public_user)) }
+        let(:can_download_response) { false }
+
+        it { is_expected.to be true }
+      end
+
+      context 'with an authenticated user' do
+        let(:ability) { registered_ability }
+        let(:can_download_response) { true }
+
+        it { is_expected.to eq false }
+      end
+
+      context "with an authenticated user that can't download the item" do
+        let(:ability) { registered_ability }
+        let(:can_download_response) { false }
+
+        it { is_expected.to be true }
+      end
+    end
+  end
+
   describe '#page_title' do
     subject { presenter.page_title }
 
