@@ -20,7 +20,7 @@ module Spot
     # to add their unique fields
     delegate :contributor, :creator, :description, :identifier, :keyword, :language,
              :language_label, :location, :note, :permalink, :physical_medium,
-             :publisher, :related_resource, :resource_type, :rights_holder, :rights_statement,
+             :publisher, :registered?, :related_resource, :resource_type, :rights_holder, :rights_statement,
              :source, :subject, :subtitle, :title_alternative, :title,
              :visibility,
              to: :solr_document

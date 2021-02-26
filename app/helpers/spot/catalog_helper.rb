@@ -7,7 +7,7 @@ module Spot
     # @return [String]
     # rubocop:disable Style/RescueModifier
     def humanize_edtf_values(args)
-      Array.wrap(args[:value]).map { |val| humanize_edtf_value(val) rescue value }.to_sentence
+      Array.wrap(args[:value]).map { |value| humanize_edtf_value(value) rescue value }.to_sentence
     end
     # rubocop:enable Style/RescueModifier
 
@@ -16,6 +16,8 @@ module Spot
     # @param [SolrDocument]
     # @return [true, false]
     def display_info_alert?(document)
+      return false if document.public?
+
       document.embargo_release_date.present? ||
         document.lease_expiration_date.present? ||
         document.registered? ||
@@ -37,8 +39,8 @@ module Spot
               :private # not expecting to get here, but we should have a generic message just in case
             end
 
-      date_method = [:embargo_release_date, :lease_expiration_date].find { |m| document.send(m).present? }
-      date = document.send(:date_method).strftime('%B %e, %Y') unless date_method.nil?
+      date = [:embargo_release_date, :lease_expiration_date].find { |m| (val = document.send(m)).present? && val }
+      date = date.strftime('%B %e, %Y') unless date.nil?
 
       I18n.t("#{key}_html", scope: ['spot', 'work', 'access_message'], default: "This item's files are currently unavailable", date: date)
     end

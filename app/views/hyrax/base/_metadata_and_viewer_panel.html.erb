@@ -5,9 +5,11 @@
   <div class="panel-body">
     <div class="row">
       <%= render 'workflow_actions_widget', presenter: presenter %>
+      <% if current_ability.can?(:edit, presenter.id) %>
       <div class="col-sm-12">
         <%= render 'show_actions', presenter: presenter %>
       </div>
+      <% end %>
       <div class="col-sm-12 work-representative-media">
         <% if display_info_alert?(presenter) %>
           <%= render 'restricted_access_alert', presenter: presenter %>
