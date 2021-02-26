@@ -33,12 +33,16 @@ module Spot
 
     private
 
+      def set_visibility_discover_groups
+        set_discover_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], discover_groups)
+      end
+
       # Sets discover groups to +['public']+ and read groups to +['admin']+ only
       #
       # @return [void]
       def metadata_only_visibility!
         visibility_will_change! unless visibility == 'metadata'
-        set_discover_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], discover_groups)
+        set_visibility_discover_groups
         set_read_groups([Ability.admin_group_name], read_groups)
       end
 
@@ -48,6 +52,12 @@ module Spot
       def private_visibility!
         super
         set_discover_groups([], discover_groups)
+      end
+
+      # Ensure unauthenticated users are able to view metadata of authenticated items.
+      def registered_visibility!
+        super
+        set_visibility_discover_groups
       end
   end
 end

@@ -47,6 +47,15 @@ RSpec.shared_examples 'it accepts "metadata" as a visibility' do
       end
     end
 
+    context 'when authenticated' do
+      it 'sets discover_groups to public access' do
+        expect { work.visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+          .to change { work.discover_groups }
+          .from([])
+          .to([::Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC])
+      end
+    end
+
     context 'when invalid visibility' do
       it 'raises an ArgumentError' do
         expect { work.visibility = 'nonsense' }.to raise_error(ArgumentError)
