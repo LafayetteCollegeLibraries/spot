@@ -7,7 +7,7 @@ module Spot
     # @return [String]
     # rubocop:disable Style/RescueModifier
     def humanize_edtf_values(args)
-      Array.wrap(args[:value]).map { |value| humanize_edtf_value(value) rescue value }.to_sentence
+      Array.wrap(args[:value]).map { |value| Date.edtf(value).humanize rescue value }.to_sentence
     end
     # rubocop:enable Style/RescueModifier
 
@@ -36,13 +36,13 @@ module Spot
             elsif document.metadata_only?
               :metadata
             else
-              :private # not expecting to get here, but we should have a generic message just in case
+              :default # not expecting to get here, but we should have a generic message just in case
             end
 
       date_method = [:embargo_release_date, :lease_expiration_date].find { |m| document.send(m).present? }
       date = document.send(date_method).strftime('%B %e, %Y') unless date_method.nil?
 
-      I18n.t("#{key}_html", scope: ['spot', 'work', 'access_message'], default: "This item's files are currently unavailable", date: date)
+      I18n.t("#{key}_html", scope: ['spot', 'work', 'access_message'], date: date)
     end
   end
 end
