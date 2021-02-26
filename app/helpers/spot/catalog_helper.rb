@@ -39,8 +39,8 @@ module Spot
               :private # not expecting to get here, but we should have a generic message just in case
             end
 
-      date = [:embargo_release_date, :lease_expiration_date].find { |m| (val = document.send(m)).present? && val }
-      date = date.strftime('%B %e, %Y') unless date.nil?
+      date_method = [:embargo_release_date, :lease_expiration_date].find { |m| document.send(m).present? }
+      date = document.send(date_method).strftime('%B %e, %Y') unless date_method.nil?
 
       I18n.t("#{key}_html", scope: ['spot', 'work', 'access_message'], default: "This item's files are currently unavailable", date: date)
     end
