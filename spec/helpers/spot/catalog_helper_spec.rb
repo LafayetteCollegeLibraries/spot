@@ -23,18 +23,6 @@ RSpec.describe Spot::CatalogHelper, type: :helper do
     let(:document) { SolrDocument.new(solr_data) }
     let(:solr_data) { {} }
 
-    context 'when a public document' do
-      let(:solr_data) do
-        {
-          read_access_group_ssim: [
-            Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
-          ]
-        }
-      end
-
-      it { is_expected.to be false }
-    end
-
     context 'when the doc has an embargo release date' do
       let(:solr_data) do
         { embargo_release_date_dtsi: '2021-02-26T00:00:00Z' }

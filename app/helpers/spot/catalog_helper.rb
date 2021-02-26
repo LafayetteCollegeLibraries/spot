@@ -16,8 +16,6 @@ module Spot
     # @param [SolrDocument]
     # @return [true, false]
     def display_info_alert?(document)
-      return false if document.public?
-
       document.embargo_release_date.present? ||
         document.lease_expiration_date.present? ||
         document.registered? ||

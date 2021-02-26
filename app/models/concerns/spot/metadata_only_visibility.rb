@@ -6,6 +6,11 @@ module Spot
   module MetadataOnlyVisibility
     extend ActiveSupport::Concern
 
+    # Can this item be discovered in the catalog?
+    def publicly_discoverable?
+      public? || discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+    end
+
     # @return [void]
     # @see https://github.com/samvera/hydra-head/blob/v11.0.0/hydra-access-controls/app/models/concerns/hydra/access_controls/visibility.rb#L5-L18
     def visibility=(value)
@@ -21,8 +26,7 @@ module Spot
     # @return [String]
     # @see https://github.com/samvera/hydra-head/blob/v11.0.0/hydra-access-controls/app/models/concerns/hydra/access_controls/visibility.rb#L20-L28
     def visibility
-      return 'metadata' if discover_groups&.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC) &&
-                           !read_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+      return 'metadata' if publicly_discoverable? && !public?
 
       super
     end
@@ -34,8 +38,16 @@ module Spot
       # @return [void]
       def metadata_only_visibility!
         visibility_will_change! unless visibility == 'metadata'
-        set_discover_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], [])
+        set_discover_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], discover_groups)
         set_read_groups([Ability.admin_group_name], read_groups)
+      end
+
+      # Be sure to remove the ['public'] from discover_groups if we're making this work private
+      #
+      # @return [void]
+      def private_visibility!
+        super
+        set_discover_groups([], discover_groups)
       end
   end
 end
