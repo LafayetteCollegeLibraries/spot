@@ -61,6 +61,14 @@ class SolrDocument
   end
   # rubocop:enable Metrics/MethodLength
 
+  # Less involved than the same method on WorkShowPresenters,
+  # all we want to know is if the item's visibility is "metadata"
+  #
+  # @return [true, false]
+  def metadata_only?
+    visibility == 'metadata'
+  end
+
   def sets
     Spot::OaiCollectionSolrSet.sets_for(self)
   end

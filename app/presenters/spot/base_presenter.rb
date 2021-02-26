@@ -37,6 +37,11 @@ module Spot
       %i[csv ttl nt jsonld]
     end
 
+    # @return [Array<Spot::Identifier>]
+    def local_identifier
+      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
+    end
+
     # location values + labels zipped into tuples.
     #
     # @example
@@ -52,24 +57,7 @@ module Spot
     #
     # @return [true, false]
     def metadata_only?
-      # admins get all-access
-      return false if current_ability.admin?
-
-      # bounce out if we've set the visibility to 'metadata'
-      return true if visibility == 'metadata'
-
-      # lafayette-only items should show the metadata for anyone who can't 'download' the item
-      solr_document.registered? && !current_ability.can?(:download, id)
-    end
-
-    # @return [Array<Spot::Identifier>]
-    def local_identifier
-      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
-    end
-
-    # @return [Array<Spot::Identifier>]
-    def standard_identifier
-      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
+      @metadata_only ||= metadata_only_status
     end
 
     # @return [true, false]
@@ -92,6 +80,16 @@ module Spot
       solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
+    # @return [Array<Array<String>>]
+    def rights_statement_merged
+      solr_document.rights_statement.zip(solr_document.rights_statement_label)
+    end
+
+    # @return [Array<Spot::Identifier>]
+    def standard_identifier
+      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
+    end
+
     # Subject URIs and Labels in an array of tuples
     #
     # @example
@@ -102,11 +100,6 @@ module Spot
       solr_document.subject.zip(solr_document.subject_label)
     end
 
-    # @return [Array<Array<String>>]
-    def rights_statement_merged
-      solr_document.rights_statement.zip(solr_document.rights_statement_label)
-    end
-
     # For now, overriding the ability to feature individual works
     # on the homepage. This should prevent the 'Feature'/'Unfeature'
     # button from rendering on the work edit page.
@@ -115,5 +108,18 @@ module Spot
     def work_featurable?
       false
     end
+
+    private
+
+      def metadata_only_status
+        # admins get all-access
+        return false if current_ability.admin? || public?
+
+        # bounce out if we've set the visibility to 'metadata'
+        return true if solr_document.metadata_only?
+
+        # lafayette-only items should show the metadata for anyone who can't 'download' the item
+        solr_document.registered? && !current_ability.can?(:download, id)
+      end
   end
 end
