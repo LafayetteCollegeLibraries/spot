@@ -95,7 +95,7 @@ gem 'rsolr', '2.3.0'
 gem 'rubyzip', '2.3.0'
 
 # our jobs server
-gem 'sidekiq', '5.2.9'
+gem 'sidekiq', '6.1.3'
 gem 'sidekiq-cron', '1.2.0'
 
 # using Slack for some of our messaging
@@ -149,7 +149,7 @@ group :development do
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rails', '~> 1.6', require: false
-  gem 'capistrano-sidekiq', '~> 1.0.3'
+  gem 'capistrano-sidekiq', '~> 2.0.0'
 end
 
 # things used for development + testing (again, not as
