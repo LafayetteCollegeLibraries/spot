@@ -161,7 +161,7 @@ group :development, :test do
   gem 'capybara-screenshot', '~> 1.0.24'
   gem 'database_cleaner', '~> 1.8.5'
   gem 'equivalent-xml', '~> 0.6.0', require: false
-  gem 'factory_bot_rails', '~> 5', require: false
+  gem 'factory_bot_rails', '~> 6', require: false
   gem 'fcrepo_wrapper', '~> 0.9.0'
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.5'
