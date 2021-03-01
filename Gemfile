@@ -165,7 +165,7 @@ group :development, :test do
   gem 'fcrepo_wrapper', '~> 0.9.0'
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.5'
-  gem 'rspec', '~> 3.8'
+  gem 'rspec', '~> 3.10'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 4.0'
   gem 'rspec_junit_formatter', '~> 0.4.1'
