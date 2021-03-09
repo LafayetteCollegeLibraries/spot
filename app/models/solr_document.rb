@@ -65,6 +65,10 @@ class SolrDocument
   # all we want to know is if the item's visibility is "metadata"
   #
   # @return [true, false]
+  def discoverable?
+    public? || discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+  end
+
   def metadata_only?
     visibility == 'metadata'
   end
@@ -95,7 +99,7 @@ class SolrDocument
                       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
                     elsif registered?
                       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
-                    elsif discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+                    elsif discoverable?
                       'metadata'
                     else
                       Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE

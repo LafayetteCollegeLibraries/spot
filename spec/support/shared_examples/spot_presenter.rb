@@ -103,29 +103,16 @@ RSpec.shared_examples 'a Spot presenter' do
     context 'when an item is restricted to authenticated users' do
       let(:_solr_data) { { 'read_access_group_ssim' => [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED] } }
 
-      before do
-        allow(ability).to receive(:can?).with(:download, solr_data[:id]).and_return(can_download_response)
-      end
-
       context 'with an unauthenticated user' do
         let(:ability) { Ability.new(build(:public_user)) }
-        let(:can_download_response) { false }
 
         it { is_expected.to be true }
       end
 
       context 'with an authenticated user' do
         let(:ability) { registered_ability }
-        let(:can_download_response) { true }
 
         it { is_expected.to eq false }
-      end
-
-      context "with an authenticated user that can't download the item" do
-        let(:ability) { registered_ability }
-        let(:can_download_response) { false }
-
-        it { is_expected.to be true }
       end
     end
   end

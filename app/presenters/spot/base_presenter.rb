@@ -25,6 +25,8 @@ module Spot
              :visibility,
              to: :solr_document
 
+    delegate :public?, to: :solr_document
+
     # @return [String]
     def export_all_text
       I18n.t("spot.work.export.download_work_and_metadata_#{multiple_members? ? 'multiple' : 'single'}")
@@ -57,7 +59,7 @@ module Spot
     #
     # @return [true, false]
     def metadata_only?
-      @metadata_only ||= metadata_only_status
+      @metadata_only ||= metadata_only_flag
     end
 
     # @return [true, false]
@@ -71,13 +73,6 @@ module Spot
     # @return [String]
     def page_title
       "#{title.first} // #{I18n.t('hyrax.product_name')}"
-    end
-
-    # Is the document's visibility public?
-    #
-    # @return [true, false]
-    def public?
-      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
     end
 
     # @return [Array<Array<String>>]
@@ -111,15 +106,11 @@ module Spot
 
     private
 
-      def metadata_only_status
-        # admins get all-access
-        return false if current_ability.admin? || public?
+      def metadata_only_flag
+        return false if public? || current_ability.admin?
+        return false if registered? && current_ability.user_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
 
-        # bounce out if we've set the visibility to 'metadata'
-        return true if solr_document.metadata_only?
-
-        # lafayette-only items should show the metadata for anyone who can't 'download' the item
-        solr_document.registered? && !current_ability.can?(:download, id)
+        true
       end
   end
 end

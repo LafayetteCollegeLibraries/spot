@@ -6,11 +6,6 @@ module Spot
   module MetadataOnlyVisibility
     extend ActiveSupport::Concern
 
-    # Can this item be discovered in the catalog?
-    def publicly_discoverable?
-      public? || discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
-    end
-
     # @return [void]
     # @see https://github.com/samvera/hydra-head/blob/v11.0.0/hydra-access-controls/app/models/concerns/hydra/access_controls/visibility.rb#L5-L18
     def visibility=(value)
@@ -26,7 +21,7 @@ module Spot
     # @return [String]
     # @see https://github.com/samvera/hydra-head/blob/v11.0.0/hydra-access-controls/app/models/concerns/hydra/access_controls/visibility.rb#L20-L28
     def visibility
-      return 'metadata' if publicly_discoverable? && !public?
+      return 'metadata' if !public? && discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
 
       super
     end
