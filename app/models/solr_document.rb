@@ -82,7 +82,23 @@ class SolrDocument
     super
   end
 
+  # Override Hyrax::SolrDocumentBehavior#visibility to add our custom metadata-only
+  # visibility as an option when discover_groups include 'public'
+  #
+  # @return [String]
   def visibility
-    @visibility ||= self['visibility_ssi'] == 'metadata' ? 'metadata' : super
+    @visibility ||= if embargo_release_date.present?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO
+                    elsif lease_expiration_date.present?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE
+                    elsif public?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+                    elsif registered?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+                    elsif discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+                      'metadata'
+                    else
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+                    end
   end
 end

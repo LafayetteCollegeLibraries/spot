@@ -118,11 +118,40 @@ RSpec.describe SolrDocument do
   describe '#visibility' do
     subject { document.visibility }
 
-    context 'when visibility is "metadata"' do
-      let(:metadata) { { 'visibility_ssi' => visibility } }
-      let(:visibility) { 'metadata' }
+    context 'when an embargo_release_date is present' do
+      let(:metadata) { { 'embargo_release_date_dtsi' => Time.zone.now.to_s } }
+
+      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO }
+    end
+
+    context 'when a lease_expiration_date is present' do
+      let(:metadata) { { 'lease_expiration_date_dtsi' => Time.zone.now.to_s } }
+
+      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE }
+    end
+
+    context 'when public' do
+      let(:metadata) { { Ability.read_group_field => [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC] } }
+
+      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+    end
+
+    context 'when authenticated' do
+      let(:metadata) { { Ability.read_group_field => [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED] } }
+
+      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED }
+    end
+
+    context 'when metadata only' do
+      let(:metadata) { { Ability.discover_group_field => [Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC] } }
 
       it { is_expected.to eq 'metadata' }
+    end
+
+    context 'default case (private)' do
+      let(:metadata) { {} }
+
+      it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
   end
 end
