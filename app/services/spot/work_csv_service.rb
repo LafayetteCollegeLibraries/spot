@@ -9,13 +9,17 @@ module Spot
   class WorkCSVService
     attr_reader :work, :terms, :multi_value_separator, :include_headers
 
+    def self.for(work, terms: nil, multi_value_separator: '|', include_headers: true)
+      new(work, terms: terms, multi_value_separator: multi_value_separator, include_headers: include_headers).csv
+    end
+
     # @param [ActiveFedora::Base,SolrDocument] work
     # @param [Array<Symbol>] :terms
     # @param [String] :multi_value_separator
     # @param [true, false] :include_headers
     def initialize(work, terms: nil, multi_value_separator: '|', include_headers: true)
       @work = work
-      @terms = terms || default_terms
+      @terms = terms || default_fields
       @multi_value_separator = multi_value_separator
       @include_headers = include_headers
     end
@@ -32,9 +36,9 @@ module Spot
     def content
       ::CSV.generate do |csv|
         csv << terms.map do |term|
-          values = work.respond_to?(term) ? work.send(term) : ''
+          values = term == :files ? work.file_sets.map(&:label) : work.try(term)
           values = values.respond_to?(:to_a) ? values.to_a : [values]
-          values = values.map(&:to_s)
+          values = values.compact.map(&:to_s)
           values.join(multi_value_separator)
         end
       end
@@ -48,36 +52,20 @@ module Spot
     private
 
       # @return [Array<Symbol>]
-      # rubocop:disable Metrics/MethodLength
-      def default_terms
+      def default_fields
+        [:id] + (work.class.properties.keys.map(&:to_sym) - fields_to_skip) + [:files]
+      end
+
+      def fields_to_skip
         %i[
-          id
-          title
-          title_alternative
-          subtitle
-          creator
-          contributor
-          editor
-          source
-          resource_type
-          physical_medium
-          language
-          abstract
-          description
-          identifier
-          date_issued
-          date_available
-          academic_department
-          division
-          organization
-          subject
-          keyword
-          place
-          license
-          rights_statement
-          visibility
+          head
+          tail
+          access_control_id
+          representative_id
+          rendering_ids
+          embargo_id
+          lease_id
         ]
       end
-    # rubocop:enable Metrics/MethodLength
   end
 end

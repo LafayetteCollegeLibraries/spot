@@ -20,7 +20,7 @@ RSpec.describe Spot::WorkCSVService do
     context 'when no terms are provided' do
       subject { described_class.new(work).headers }
 
-      it { is_expected.to eq service.send(:default_terms).join(',') + "\n" }
+      it { is_expected.to eq service.send(:default_fields).join(',') + "\n" }
     end
   end
 
