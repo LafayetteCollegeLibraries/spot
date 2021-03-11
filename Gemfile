@@ -27,7 +27,7 @@ gem 'coffee-rails', '5.0.0'
 gem 'turbolinks', '5.2.1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '2.10.0'
+gem 'jbuilder', '2.11.2'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -168,7 +168,7 @@ group :development, :test do
   gem 'fcrepo_wrapper', '~> 0.9.0'
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.5'
-  gem 'rspec', '~> 3.8'
+  gem 'rspec', '~> 3.10'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 4.0'
   gem 'rspec_junit_formatter', '~> 0.4.1'
