@@ -53,7 +53,19 @@ module Spot
 
       # @return [Array<Symbol>]
       def default_fields
-        [:id] + (work.class.properties.keys.map(&:to_sym) - fields_to_skip) + [:files]
+        [:id] + (work_class_properties - fields_to_skip) + [:files]
+      end
+
+      def work_class_properties
+        base = if work.is_a?(ActiveFedora::Base)
+                 work.class&.properties
+               elsif work.is_a?(SolrDocument)
+                 work.hydra_model&.properties
+               end
+
+        return [] if base.nil?
+
+        base.keys.map(&:to_sym)
       end
 
       def fields_to_skip
