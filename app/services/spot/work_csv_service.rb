@@ -36,7 +36,7 @@ module Spot
     def content
       ::CSV.generate do |csv|
         csv << terms.map do |term|
-          values = term == :files ? work.file_sets.map(&:label) : work.try(term)
+          values = term == :files ? file_sets.map(&:label) : work.try(term)
           values = values.respond_to?(:to_a) ? values.to_a : [values]
           values = values.compact.map(&:to_s)
           values.join(multi_value_separator)
@@ -56,18 +56,6 @@ module Spot
         [:id] + (work_class_properties - fields_to_skip) + [:files]
       end
 
-      def work_class_properties
-        base = if work.is_a?(ActiveFedora::Base)
-                 work.class&.properties
-               elsif work.is_a?(SolrDocument)
-                 work.hydra_model&.properties
-               end
-
-        return [] if base.nil?
-
-        base.keys.map(&:to_sym)
-      end
-
       def fields_to_skip
         %i[
           head
@@ -78,6 +66,26 @@ module Spot
           embargo_id
           lease_id
         ]
+      end
+
+      # Fetches an array of SolrDocuments for a work's file_sets
+      #
+      # @return [Array<SolrDocument>]
+      def file_sets
+        work.file_set_ids.map { |id| SolrDocument.find(id) }
+      end
+
+      # @return [Array<Symbol>]
+      def work_class_properties
+        base = if work.is_a?(ActiveFedora::Base)
+                 work.class&.properties
+               elsif work.is_a?(SolrDocument)
+                 work.hydra_model&.properties
+               end
+
+        return [] if base.nil?
+
+        base.keys.map(&:to_sym)
       end
   end
 end
