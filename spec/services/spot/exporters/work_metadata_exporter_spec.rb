@@ -90,7 +90,7 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
       end
 
       it 'outputs the headers' do
-        expect(content.first.join(',')).to start_with 'id,title'
+        expect(content.first.join(',')).to start_with 'id,has_model'
       end
 
       it 'outputs the content' do

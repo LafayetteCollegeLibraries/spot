@@ -1,26 +1,52 @@
 # frozen_string_literal: true
 module Spot
+  # Service for creating tar'd BagIt directories for works. These are intended to
+  # be our preservation copies of items and are laid out as such:
+  #
+  #   $> tree /path/to/ldr-<work.id>-
+  #   |--- bag-info.txt
+  #   |--- bagit.txt
+  #   |--- data
+  #   |    |--- files
+  #   |         |--- image-file.png
+  #   |    |--- metadata.csv
+  #   |    |--- metadata-image-file-png.csv
+  #   |--- manifest-sha256.txt
+  #   |--- tagmanifest-md5.txt
+  #   |--- tagmanifest-sha1.txt
+  #
+  # @example Basic usage
+  #   work = Image.find('abc123def')
+  #   Spot::BagExportService.export(work, to: Rails.root.join('tmp', 'export'))
   class BagExportService
     attr_reader :work
 
-    def self.identifier_for(work, date: formatted_date)
-      new(work).bag_identifier(date: date)
-    end
-
+    # @param [ActiveFedora::Base,SolrDocument] work
+    # @param [Hash] options
+    # @option [String,Pathname] to
+    #   Directory to export work to
+    # @option [true, false] gzip
+    #   Whether or not to gzip the tar'd bag (default: false)
     def self.export(work, to:, gzip: false)
       new(work).export(destination: to, gzip: gzip)
     end
 
-    # @param [SolrDocument, ActiveFedora::Base]
+    # @param [SolrDocument, ActiveFedora::Base] work
     def initialize(work)
       @work = work
     end
 
     # @return [String]
-    def bag_identifier(date: formatted_date)
-      "ldr-#{work.id}-#{date}-#{etag_digest}"
+    def identifier
+      "ldr-#{work.id}-#{etag_digest}"
     end
 
+    # @param [Hash] options
+    # @option [String,Pathname] destination
+    #   Directory to export tar'd work to
+    # @option [true, false] gzip
+    #   Whether or not to gzip the tar'd bag (default: false)
+    # @return [true]
     def export(destination:, gzip: false)
       outpath = File.join(destination, filename_for_bag(gzip: gzip))
 
@@ -46,7 +72,7 @@ module Spot
       #
       # @return [String]
       def filename_for_bag(gzip:)
-        "#{bag_identifier}.tar#{gzip ? '.gz' : ''}"
+        "#{identifier}.tar#{gzip ? '.gz' : ''}"
       end
 
       # I'd like to leave some flexibility for +@work+ to be either a +SolrDocument+
@@ -75,13 +101,6 @@ module Spot
       # @return [void]
       def finalize_bag
         @bag.manifest!(algo: 'sha256')
-      end
-
-      # Today's date formatted YYYYMMDDTHHMMSS
-      #
-      # @return [String]
-      def formatted_date
-        Time.zone.now.strftime('%Y%m%dT%H%M%S')
       end
 
       # Local headers to write to our Bag manifests
@@ -144,7 +163,7 @@ module Spot
         @bag.add_file('metadata.csv') { |io| io.write(Spot::WorkCSVService.for(work)) }
 
         file_sets.each do |fs|
-          @bag.add_file("metadata-#{fs.label}.csv") { |io| io.write(file_set_csv(fs)) }
+          @bag.add_file("metadata-#{fs.label.gsub(/\W+/, '-')}.csv") { |io| io.write(file_set_csv(fs)) }
         end
       end
   end

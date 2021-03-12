@@ -45,7 +45,7 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
         expect(response).to be_successful
         expect(disposition).to include 'attachment'
         expect(content_type).to eq 'text/csv'
-        expect(response.body).to start_with('id,title')
+        expect(response.body).to start_with('id,has_model')
       end
     end
   end
