@@ -22,7 +22,7 @@ module Spot
 
       # @return [String]
       def work_as_csv
-        Spot::WorkCSVService.new(presenter.solr_document).csv
+        Spot::WorkCSVService.for(presenter.solr_document)
       end
   end
 end

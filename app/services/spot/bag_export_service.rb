@@ -10,7 +10,7 @@ module Spot
   #   |    |--- files
   #   |         |--- image-file.png
   #   |    |--- metadata.csv
-  #   |    |--- metadata-image-file-png.csv
+  #   |    |--- metadata_files.csv
   #   |--- manifest-sha256.txt
   #   |--- tagmanifest-md5.txt
   #   |--- tagmanifest-sha1.txt
@@ -84,18 +84,6 @@ module Spot
         @file_sets ||= work.file_set_ids.map { |id| ::FileSet.find(id) }
       end
 
-      # Processes file_set object through +Hyrax::FileSetCSVService+ with our preferred
-      # fields and combains headers + values into a single string.
-      #
-      # @param [FileSet] file_set
-      # @return [String]
-      def file_set_csv(file_set)
-        fields = [:id, :label, :title, :depositor, :creator, :visibility, :format_label, :original_checksum, :etag]
-        service = Hyrax::FileSetCSVService.new(file_set, fields)
-
-        [service.csv_header, service.csv].join
-      end
-
       # Wraps up Bag generation by creating a SHA-256 manifest
       #
       # @return [void]
@@ -114,7 +102,7 @@ module Spot
         }
       end
 
-      # @return [Zli]
+      # @return [File,Zlib::GzipWriter]
       def output_io(filename, gzip:)
         return File.open(filename, 'wb') unless gzip
 
@@ -140,14 +128,17 @@ module Spot
         FileUtils.remove_entry(@workdir)
       end
 
+      # @return [Spot::WorkMembersExporter]
+      def work_members_exporter
+        Spot::WorkMembersExporter.new(work)
+      end
+
       # @return [void]
       def write_files_to_bag
         files_dir = File.join(@bag.data_dir, 'files')
         FileUtils.mkdir_p(files_dir)
 
-        file_sets.map(&:original_file).each do |file|
-          # need to write our own +@bag.add_file+ as the BagIt gem doesn't
-          # handle binary files so well
+        work_members_exporter.each_file do |file|
           absolute_path = File.join(files_dir, file.file_name.first)
 
           File.open(absolute_path, 'wb') do |io|
@@ -160,11 +151,8 @@ module Spot
 
       # @return [void]
       def write_metadata_to_bag
-        @bag.add_file('metadata.csv') { |io| io.write(Spot::WorkCSVService.for(work)) }
-
-        file_sets.each do |fs|
-          @bag.add_file("metadata-#{fs.label.gsub(/\W+/, '-')}.csv") { |io| io.write(file_set_csv(fs)) }
-        end
+        @bag.add_file('metadata.csv') { |io| io.write(Spot::WorkCSVService.for(work, include_administrative: true)) }
+        @bag.add_file('metadata_files.csv') { |io| io.write(Spot::FileSetCSVService.for(file_sets, include_administrative: true)) }
       end
   end
 end

@@ -13,12 +13,17 @@ module Spot
         @solr_document = solr_document
       end
 
+      # @yield [Hydra::PCDM::File]
+      def each_file
+        files.each { |file| yield file }
+      end
+
       # Writes each Hydra::PCDM::File of a work to the provided destination
       #
       # @param [Pathname, String] :destination
       # @return [void]
       def export!(destination:)
-        files.each do |file|
+        each_file do |file|
           File.open(File.join(destination, file.file_name.first), 'wb') do |io|
             file.stream.each { |chunk| io.write(chunk) }
           end
@@ -28,8 +33,7 @@ module Spot
       # @todo How do we export members that are themselves works?
       # @return [Array<FileSet>]
       def file_sets
-        @file_sets ||= ActiveFedora::Base.find(solr_document.file_set_ids)
-                                         .select { |fs| fs.is_a? FileSet }
+        @file_sets ||= solr_document.file_set_ids.map { |id| FileSet.find(id) }
       end
 
       # Selects all items that the current user can download.

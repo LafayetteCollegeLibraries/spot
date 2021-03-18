@@ -55,7 +55,7 @@ module Spot
 
         # @return [String]
         def generate_csv_content
-          Spot::WorkCSVService.new(solr_document).csv
+          Spot::WorkCSVService.for(solr_document)
         end
 
         # @return [RDF::Graph]

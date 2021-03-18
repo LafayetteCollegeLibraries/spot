@@ -17,7 +17,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
   let(:destination) { '/tmp/spot-work_members_exporter_spec' }
 
   before do
-    allow(ActiveFedora::Base).to receive(:find).with(['abc123']).and_return([file_set])
+    allow(FileSet).to receive(:find).with('abc123').and_return(file_set)
     allow(file_set).to receive(:is_a?).with(FileSet).and_return true
     FileUtils.mkdir_p(destination)
   end

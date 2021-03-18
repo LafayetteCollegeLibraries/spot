@@ -9,44 +9,48 @@ module Spot
   class WorkCSVService
     attr_reader :work, :terms, :multi_value_separator, :include_headers
 
-    def self.for(work, terms: nil, multi_value_separator: '|', include_headers: true)
-      new(work, terms: terms, multi_value_separator: multi_value_separator, include_headers: include_headers).csv
+    def self.for(work, terms: nil, multi_value_separator: '|', include_headers: true, include_administrative: false)
+      new(work,
+          terms: terms,
+          multi_value_separator: multi_value_separator,
+          include_headers: include_headers,
+          include_administrative: include_administrative).csv
     end
 
     # @param [ActiveFedora::Base,SolrDocument] work
     # @param [Array<Symbol>] :terms
     # @param [String] :multi_value_separator
     # @param [true, false] :include_headers
-    def initialize(work, terms: nil, multi_value_separator: '|', include_headers: true)
+    # @param [true, false] :include_administrative
+    def initialize(work, terms: nil, multi_value_separator: '|', include_headers: true, include_administrative: false)
       @work = work
       @terms = terms || default_fields
       @multi_value_separator = multi_value_separator
       @include_headers = include_headers
+      @include_administrative = include_administrative
     end
 
     # @return [String]
     def csv
-      [].tap do |out|
-        out << headers if include_headers
-        out << content
-      end.join
+      ::CSV.generate do |csv|
+        csv << headers if include_headers
+        csv << content
+      end
     end
 
     # @return [String]
     def content
-      ::CSV.generate do |csv|
-        csv << terms.map do |term|
-          values = term == :files ? file_sets.map(&:label) : work.try(term)
-          values = values.respond_to?(:to_a) ? values.to_a : [values]
-          values = values.compact.map(&:to_s)
-          values.join(multi_value_separator)
-        end
+      terms.map do |term|
+        values = term == :files ? file_sets.map(&:label) : work.try(term)
+        values = values.respond_to?(:to_a) ? values.to_a : [values]
+        values = values.compact.map(&:to_s)
+        values.join(multi_value_separator)
       end
     end
 
     # @return [String]
     def headers
-      ::CSV.generate { |csv| csv << terms }
+      terms
     end
 
     private
@@ -68,6 +72,18 @@ module Spot
         ]
       end
 
+      def administrative_fields
+        %i[
+          etag
+          read_groups
+          read_users
+          edit_groups
+          edit_users
+          discover_groups
+          discover_users
+        ]
+      end
+
       # Fetches an array of SolrDocuments for a work's file_sets
       #
       # @return [Array<SolrDocument>]
@@ -85,7 +101,9 @@ module Spot
 
         return [] if base.nil?
 
-        base.keys.map(&:to_sym)
+        base = base.keys.map(&:to_sym)
+
+        @include_administrative ? base + administrative_fields : base
       end
   end
 end
