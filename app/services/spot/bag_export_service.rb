@@ -60,11 +60,22 @@ module Spot
 
     private
 
+      def calculate_bag_size
+        bytes = @bag.bag_files.reduce(0) { |total, file| total += File.size(file) || 0 }
+
+        ActiveSupport::NumberHelper.number_to_human_size(bytes)
+      end
+
       # @return [String]
       def etag_digest
         [work, file_sets].flatten.map(&:etag).sort.each_with_object(Digest::SHA1.new) do |etag, digest|
           digest << etag[3..-2]
         end.hexdigest
+      end
+
+      def external_identifier
+        doc = work.is_a?(SolrDocument) ? work : SolrDocument.find(work.id)
+        doc.permalink_url
       end
 
       # @param [Hash] options
@@ -88,6 +99,7 @@ module Spot
       #
       # @return [void]
       def finalize_bag
+        @bag.write_bag_info('Bag-Size' => calculate_bag_size)
         @bag.manifest!(algo: 'sha256')
       end
 
@@ -96,9 +108,8 @@ module Spot
       # @return [Hash]
       def local_bag_info
         {
+          'External-Identifier' => external_identifier,
           'Source-Organization' => 'Lafayette College Libraries',
-          'Bagging-Date' => Time.zone.now.strftime('%Y-%m-%d'),
-          'External-Identifier' => work.id
         }
       end
 
