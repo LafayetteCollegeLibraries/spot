@@ -1,0 +1,8 @@
+<div class="search-results-title-row">
+  <h4 class="search-result-title"><%= link_to(document.title_or_label, document) %></h4>
+  <% if display_info_alert?(document) %>
+    <div class="alert alert-warning" style="margin:0; padding:5px;">
+      <%= document_access_display_text(document) %>
+    </div>
+  <% end %>
+</div>

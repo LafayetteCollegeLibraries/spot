@@ -156,12 +156,6 @@ class CatalogController < ApplicationController
     config.add_index_field 'license_tesim',
                            helper_method: :license_links,
                            label: :'blacklight.search.fields.license'
-    config.add_index_field 'embargo_release_date_dtsi',
-                           label: :'blacklight.search.fields.embargo_release_date',
-                           helper_method: :human_readable_date
-    config.add_index_field 'lease_expiration_date_dtsi',
-                           label: :'blacklight.search.fields.lease_expiration_date',
-                           helper_method: :human_readable_date
 
     #
     # search field configuration

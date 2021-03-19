@@ -20,10 +20,12 @@ module Spot
     # to add their unique fields
     delegate :contributor, :creator, :description, :identifier, :keyword, :language,
              :language_label, :location, :note, :permalink, :physical_medium,
-             :publisher, :related_resource, :resource_type, :rights_holder, :rights_statement,
+             :publisher, :registered?, :related_resource, :resource_type, :rights_holder, :rights_statement,
              :source, :subject, :subtitle, :title_alternative, :title,
              :visibility,
              to: :solr_document
+
+    delegate :public?, to: :solr_document
 
     # @return [String]
     def export_all_text
@@ -37,6 +39,11 @@ module Spot
       %i[csv ttl nt jsonld]
     end
 
+    # @return [Array<Spot::Identifier>]
+    def local_identifier
+      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
+    end
+
     # location values + labels zipped into tuples.
     #
     # @example
@@ -48,14 +55,11 @@ module Spot
       solr_document.location.zip(solr_document.location_label).reject(&:empty?)
     end
 
-    # @return [Array<Spot::Identifier>]
-    def local_identifier
-      @local_identifier ||= solr_document.local_identifier.map { |id| Spot::Identifier.from_string(id) }
-    end
-
-    # @return [Array<Spot::Identifier>]
-    def standard_identifier
-      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
+    # Check if an item's record should include files or just display the metadata.
+    #
+    # @return [true, false]
+    def metadata_only?
+      @metadata_only ||= metadata_only_flag
     end
 
     # @return [true, false]
@@ -71,11 +75,14 @@ module Spot
       "#{title.first} // #{I18n.t('hyrax.product_name')}"
     end
 
-    # Is the document's visibility public?
-    #
-    # @return [true, false]
-    def public?
-      solr_document.visibility == ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+    # @return [Array<Array<String>>]
+    def rights_statement_merged
+      solr_document.rights_statement.zip(solr_document.rights_statement_label)
+    end
+
+    # @return [Array<Spot::Identifier>]
+    def standard_identifier
+      @standard_identifier ||= solr_document.standard_identifier.map { |id| Spot::Identifier.from_string(id) }
     end
 
     # Subject URIs and Labels in an array of tuples
@@ -88,11 +95,6 @@ module Spot
       solr_document.subject.zip(solr_document.subject_label)
     end
 
-    # @return [Array<Array<String>>]
-    def rights_statement_merged
-      solr_document.rights_statement.zip(solr_document.rights_statement_label)
-    end
-
     # For now, overriding the ability to feature individual works
     # on the homepage. This should prevent the 'Feature'/'Unfeature'
     # button from rendering on the work edit page.
@@ -101,5 +103,14 @@ module Spot
     def work_featurable?
       false
     end
+
+    private
+
+      def metadata_only_flag
+        return false if public? || current_ability.admin?
+        return false if registered? && current_ability.user_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
+
+        true
+      end
   end
 end
