@@ -61,7 +61,7 @@ module Spot
     private
 
       def calculate_bag_size
-        bytes = @bag.bag_files.reduce(0) { |total, file| total += File.size(file) || 0 }
+        bytes = @bag.bag_files.reduce(0) { |total, file| total + File.size(file) }
 
         ActiveSupport::NumberHelper.number_to_human_size(bytes)
       end
@@ -109,7 +109,7 @@ module Spot
       def local_bag_info
         {
           'External-Identifier' => external_identifier,
-          'Source-Organization' => 'Lafayette College Libraries',
+          'Source-Organization' => 'Lafayette College Libraries'
         }
       end
 
