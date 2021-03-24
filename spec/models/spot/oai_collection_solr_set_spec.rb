@@ -29,4 +29,14 @@ RSpec.describe Spot::OaiCollectionSolrSet do
       expect(solr_set.spec).to eq spec
     end
   end
+
+  describe '#name' do
+    subject(:solr_set) { described_class.new(spec) }
+
+    let(:spec) { 'Collection:A+Test+Collection' }
+
+    it 'uses the unescaped value' do
+      expect(solr_set.name).to eq 'Collection: A Test Collection'
+    end
+  end
 end

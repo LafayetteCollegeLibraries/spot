@@ -17,6 +17,10 @@ module Spot
       super(CGI.unescape(spec))
     end
 
+    def name
+      "#{@label}: #{@value}"
+    end
+
     def spec
       "#{@label}:#{CGI.escape(@value)}"
     end
