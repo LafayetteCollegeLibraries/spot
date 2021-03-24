@@ -24,15 +24,5 @@ module Spot
     def spec
       "#{@label}:#{CGI.escape(@value)}"
     end
-
-    private
-
-      def escape(value)
-        CGI.escape(value)
-      end
-
-      def unescape(value)
-        CGI.unescape(value)
-      end
   end
 end
