@@ -21,7 +21,7 @@ RSpec.describe Spot::OaiCollectionSolrSet do
 
     let(:spec) { 'Collection:A+Test+Collection' }
 
-    it 'replaces underscores with spaces for the @value property' do
+    it 'escapes the setspec' do
       expect(solr_set.value).to eq 'A Test Collection'
     end
 
