@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'cgi'
+
 module Spot
   # Subclass of +BlacklightOaiProvider::SolrSet+ that translates
   # spaces to underscores, making the following assumptions:
@@ -12,15 +14,21 @@ module Spot
     end
 
     def initialize(spec)
-      super(spec.tr('_', ' '))
-    end
-
-    def solr_filter
-      "#{@solr_field}:\"#{@value.tr('_', ' ')}\""
+      super(CGI.unescape(spec))
     end
 
     def spec
-      "#{@label}:#{@value.tr(' ', '_')}"
+      "#{@label}:#{CGI.escape(@value)}"
     end
+
+    private
+
+      def escape(value)
+        CGI.escape(value)
+      end
+
+      def unescape(value)
+        CGI.unescape(value)
+      end
   end
 end
