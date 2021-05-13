@@ -903,7 +903,7 @@ GEM
     sparql-client (3.1.0)
       net-http-persistent (~> 3.1)
       rdf (~> 3.1)
-    spring (2.1.0)
+    spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
       spring (>= 1.2, < 3.0)
@@ -1036,7 +1036,7 @@ DEPENDENCIES
   simplecov (~> 0.17)
   slack-ruby-client (= 0.14.6)
   solr_wrapper (~> 2.1)
-  spring (~> 2.1.0)
+  spring (~> 2.1.1)
   spring-watcher-listen (~> 2.0.0)
   sprockets-es6
   stub_env (~> 1.0.4)
