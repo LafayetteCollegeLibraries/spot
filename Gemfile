@@ -173,7 +173,7 @@ group :development, :test do
   gem 'rubocop-rspec', '~> 1.3'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.17', require: false
-  gem 'solr_wrapper', '~> 2.1'
+  gem 'solr_wrapper', '~> 3.1'
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 4'
   gem 'webmock', '~> 3.8'
