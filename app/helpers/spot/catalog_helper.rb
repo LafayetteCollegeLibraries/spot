@@ -30,7 +30,7 @@ module Spot
       date_method = [:embargo_release_date, :lease_expiration_date].find { |m| document.send(m).present? }
       date = document.send(date_method).strftime('%B %e, %Y') unless date_method.nil?
 
-      I18n.t("#{key}_html", scope: ['spot', 'work', 'access_message'], date: date).html_safe
+      I18n.t(key, scope: ['spot', 'work', 'access_message'], date: date).html_safe
     end
 
     def i18n_key_for_document(document)
