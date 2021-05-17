@@ -25,22 +25,26 @@ module Spot
     # @param [SolrDocument]
     # @return [String]
     def document_access_display_text(document)
-      key = if document.embargo_release_date.present?
-              :embargo
-            elsif document.lease_expiration_date.present?
-              :lease
-            elsif document.registered?
-              :authenticated
-            elsif document.metadata_only?
-              :metadata
-            else
-              :default # not expecting to get here, but we should have a generic message just in case
-            end
+      key = i18n_key_for_document(document)
 
       date_method = [:embargo_release_date, :lease_expiration_date].find { |m| document.send(m).present? }
       date = document.send(date_method).strftime('%B %e, %Y') unless date_method.nil?
 
       I18n.t("#{key}_html", scope: ['spot', 'work', 'access_message'], date: date).html_safe
+    end
+
+    def i18n_key_for_document(document)
+      if document.embargo_release_date.present?
+        'embargo_html'
+      elsif document.lease_expiration_date.present?
+        'lease_html'
+      elsif document.registered?
+        'authenticated_html'
+      elsif document.metadata_only?
+        'metadata_html'
+      else
+        'default_html' # not expecting to get here, but we should have a generic message just in case
+      end
     end
   end
 end
