@@ -162,7 +162,6 @@ group :development, :test do
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
-  gem 'fcrepo_wrapper', '~> 0.9.0'
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.10'
@@ -173,7 +172,6 @@ group :development, :test do
   gem 'rubocop-rspec', '~> 1.3'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.17', require: false
-  gem 'solr_wrapper', '~> 2.1'
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 4'
   gem 'webmock', '~> 3.8'

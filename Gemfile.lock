@@ -337,8 +337,6 @@ GEM
       faraday
     faraday_middleware (0.14.0)
       faraday (>= 0.7.4, < 1.0)
-    fcrepo_wrapper (0.9.0)
-      ruby-progressbar
     ffi (1.13.1)
     flipflop (2.6.0)
       activesupport (>= 4.0)
@@ -883,11 +881,6 @@ GEM
       hashie
       websocket-driver
     slop (4.8.2)
-    solr_wrapper (2.1.0)
-      faraday
-      retriable
-      ruby-progressbar
-      rubyzip
     solrizer (4.1.0)
       activesupport
       nokogiri
@@ -1002,7 +995,6 @@ DEPENDENCIES
   equivalent-xml (~> 0.6.0)
   factory_bot_rails (~> 5)
   faraday (= 0.17.3)
-  fcrepo_wrapper (~> 0.9.0)
   honeybadger (= 4.7.2)
   hydra-role-management (= 1.0.3)
   hyrax (~> 2.9.0)
@@ -1035,7 +1027,6 @@ DEPENDENCIES
   sidekiq-cron (= 1.2.0)
   simplecov (~> 0.17)
   slack-ruby-client (= 0.14.6)
-  solr_wrapper (~> 2.1)
   spring (~> 2.1.1)
   spring-watcher-listen (~> 2.0.0)
   sprockets-es6
