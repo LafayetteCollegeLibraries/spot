@@ -5,14 +5,16 @@ RSpec.describe Spot::RedirectController do
   describe '#show' do
     subject { get :show, params: { url: url } }
 
+    let(:solr_service) { ActiveFedora::SolrService }
+
     before do
-      ActiveFedora::SolrService.add(solr_data)
-      ActiveFedora::SolrService.commit
+      solr_service.add(solr_data)
+      solr_service.commit
     end
 
     after do
-      ActiveFedora::SolrService.delete(id: solr_data[:id])
-      ActiveFedora::SolrService.commit
+      solr_service.delete(id: solr_data[:id])
+      solr_service.commit
     end
 
     context 'when a matching URL exists' do
