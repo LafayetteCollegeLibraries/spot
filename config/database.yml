@@ -3,18 +3,19 @@ default: &default
   pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
   timeout: 5000
   encoding: unicode
-  host: localhost
+  host: <%= ENV.fetch('PSQL_HOST') { 'localhost' } %>
+  username: "<%= ENV.fetch('PSQL_USER') %>"
+  password: "<%= ENV.fetch('PSQL_PASSWORD') { '' } %>"
 
 development:
   <<: *default
+  database: "<%= ENV.fetch('PSQL_DATABASE') { 'spot_dev' } %>"
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  username: "<%= ENV.fetch('PSQL_USER') { '' } %>"
-  password: "<%= ENV.fetch('PSQL_PASSWORD') { '' } %>"
   database: "<%= ENV.fetch('PSQL_DATABASE') { 'spot_test' } %>"
 
 production:
