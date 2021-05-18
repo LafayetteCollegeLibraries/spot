@@ -51,3 +51,8 @@ en:
       form:
         q:
           label: Search LDR
+
+    visibility:
+      metadata:
+        note_html: Make metadata available to all but restrict file access
+        text: Metadata Only

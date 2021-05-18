@@ -1,5 +1,4 @@
-<% array_of_ids = presenter.list_of_item_ids_to_display %>
-<% members = presenter.member_presenters_for(array_of_ids) %>
+<% members = presenter.member_presenters_for(presenter.list_of_item_ids_to_display) %>
 
 <div class="panel panel-default">
   <div class="panel-heading panel-heading-slim">
@@ -15,14 +14,24 @@
         <td class="text-center">
           <span class="label label-<%= type_class %>"><%= type %></span>
         </td>
-        <td><%= link_to(member.link_name, contextual_path(member, presenter)) %></td>
-        <td>Uploaded <%= member.try(:date_uploaded) %></td>
-        <td><%= member.permission_badge %></td>
-        <td class="text-center">
-        <% if model_name == :file_set %>
-          <%= render "hyrax/file_sets/actions", file_set: member %>
-        <% end %>
+        <td>
+          <% if presenter.metadata_only? %>
+            <%= member.first_title %>
+          <% else %>
+            <%= link_to(member.link_name, contextual_path(member, presenter)) %>
+          <% end %>
         </td>
+        <td>
+          Uploaded <%= member.try(:date_uploaded) %>
+        </td>
+        <td>
+          <%= member.permission_badge %>
+        </td>
+        <% if !presenter.metadata_only? && model_name == :file_set -%>
+        <td class="text-center">
+          <%= render "hyrax/file_sets/actions", file_set: member -%>
+        </td>
+        <% end %>
       </tr>
     <% end %>
     </tbody>

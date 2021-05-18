@@ -16,6 +16,7 @@ module Spot
   #       (soon to be HandleController) follows (almost) the same  logic.
   class RedirectController < ApplicationController
     include ::Hydra::Catalog
+    include ::Spot::RedirectionHelpers
 
     def show
       # all that we need for this controller are the object's ID + Hydra Model
@@ -25,9 +26,8 @@ module Spot
       raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
 
       document = result.response['docs'].first
-      controller = document['has_model_ssim'].first.downcase.pluralize
 
-      redirect_to controller: "hyrax/#{controller}", action: 'show', id: document['id']
+      redirect_to redirect_params_for(solr_document: document)
     end
 
     private

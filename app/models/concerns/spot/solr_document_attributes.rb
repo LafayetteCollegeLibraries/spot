@@ -35,6 +35,7 @@ module Spot
       attribute :date_issued,            ::Blacklight::Types::Array, 'date_issued_ssim'
       attribute :depositor,              ::Blacklight::Types::String, 'depositor_ssim'
       attribute :description,            ::Blacklight::Types::Array, 'description_tesim'
+      attribute :discover_groups,        ::Blacklight::Types::Array, ::Ability.discover_group_field
       attribute :division,               ::Blacklight::Types::Array, 'division_tesim'
       attribute :donor,                  ::Blacklight::Types::Array, 'donor_ssim'
       attribute :editor,                 ::Blacklight::Types::Array, 'editor_tesim'

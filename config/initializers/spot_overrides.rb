@@ -112,4 +112,11 @@ Rails.application.config.to_prepare do
       options[:label] || I18n.t("blacklight.search.fields.#{attribute_name}", default: label_translation)
     end
   end
+
+  # Adding label support for metadata-only records
+  Hyrax::PermissionBadge.class_eval do
+    old_visibility_label_class = Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS.dup
+    remove_const(:VISIBILITY_LABEL_CLASS) if const_defined?(:VISIBILITY_LABEL_CLASS)
+    const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
+  end
 end

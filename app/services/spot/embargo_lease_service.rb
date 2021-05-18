@@ -19,15 +19,15 @@ module Spot
       # @return [void]
       # @see {.clear_expired_embargoes}
       # @see {.clear_expired_leases}
-      def clear_all_expired
-        clear_expired_embargoes && clear_expired_leases
+      def clear_all_expired(regenerate_thumbnails: false)
+        clear_expired_embargoes(regenerate_thumbnails: regenerate_thumbnails) && clear_expired_leases(regenerate_thumbnails: regenerate_thumbnails)
       end
 
       # Clears out expired embargoes and sets the +date_available+ property
       # to today's date.
       #
       # @return [void]
-      def clear_expired_embargoes
+      def clear_expired_embargoes(regenerate_thumbnails: false)
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
           item = ActiveFedora::Base.find(presenter.id)
 
@@ -40,13 +40,15 @@ module Spot
           item.date_available = [Time.zone.now.strftime('%Y-%m-%d')] if item.respond_to?(:date_available=)
           item.copy_visibility_to_files
           item.save!
+
+          RegenerateThumbnailJob.perform_later(item) if regenerate_thumbnails == true
         end
       end
 
       # Clears out expired leases
       #
       # @return [void]
-      def clear_expired_leases
+      def clear_expired_leases(regenerate_thumbnails: false)
         ::Hyrax::LeaseService.assets_with_expired_leases.each do |presenter|
           item = ActiveFedora::Base.find(presenter.id)
 
@@ -55,6 +57,8 @@ module Spot
           ::Hyrax::Actors::LeaseActor.new(item).destroy
 
           item.copy_visibility_to_files unless item.is_a? FileSet
+
+          RegenerateThumbnailJob.perform_later(item) if regenerate_thumbnails == true
         end
       end
     end

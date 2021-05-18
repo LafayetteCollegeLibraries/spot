@@ -61,6 +61,18 @@ class SolrDocument
   end
   # rubocop:enable Metrics/MethodLength
 
+  # Less involved than the same method on WorkShowPresenters,
+  # all we want to know is if the item's visibility is "metadata"
+  #
+  # @return [true, false]
+  def discoverable?
+    public? || discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+  end
+
+  def metadata_only?
+    visibility == 'metadata'
+  end
+
   def sets
     Spot::OaiCollectionSolrSet.sets_for(self)
   end
@@ -72,5 +84,25 @@ class SolrDocument
   def to_param
     return collection_slug if collection? && collection_slug.present?
     super
+  end
+
+  # Override Hyrax::SolrDocumentBehavior#visibility to add our custom metadata-only
+  # visibility as an option when discover_groups include 'public'
+  #
+  # @return [String]
+  def visibility
+    @visibility ||= if embargo_release_date.present?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_EMBARGO
+                    elsif lease_expiration_date.present?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_LEASE
+                    elsif public?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+                    elsif registered?
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+                    elsif discoverable?
+                      'metadata'
+                    else
+                      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+                    end
   end
 end

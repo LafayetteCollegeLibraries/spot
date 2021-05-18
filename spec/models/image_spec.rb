@@ -2,7 +2,7 @@
 RSpec.describe Image do
   subject { described_class.new }
 
-  it_behaves_like 'a model with hyrax core metadata'
+  it_behaves_like 'it includes Spot::WorkBehavior'
 
   # @todo might be useful to turn this into a shared_example?
   [

@@ -4,6 +4,7 @@ FROM ruby:2.4.3 as spot-base
 # add node + yarn repositories (do we need both?)
 RUN apt-get update && apt-get install -y -qq apt-transport-https apt-utils \
     && (curl -sL https://deb.nodesource.com/setup_10.x | bash) \
+    && (curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -) \
     && (curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -) \
     && (echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list)
 

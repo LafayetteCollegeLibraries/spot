@@ -3,6 +3,7 @@
 # Responsible for redirecting Handle requests to their associated items
 class HandleController < ApplicationController
   include Hydra::Catalog
+  include ::Spot::RedirectionHelpers
 
   # Searches for a Handle based on an +hdl:+ identifier.
   # Displays a 404 (via raised +Blacklight::Exceptions::RecordNotFound+
@@ -12,13 +13,9 @@ class HandleController < ApplicationController
     result, _documents = repository.search(query)
 
     raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
-
     document = result.response['docs'].first
-    controller = document['has_model_ssim'].first.downcase.pluralize
 
-    redirect_to controller: "hyrax/#{controller}",
-                action: 'show',
-                id: document['id']
+    redirect_to redirect_params_for(solr_document: document)
   end
 
   private
