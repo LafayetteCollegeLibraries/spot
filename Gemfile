@@ -145,7 +145,7 @@ group :development do
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.16', require: false
-  gem 'capistrano-bundler', '~> 1.3'
+  gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.0'
   gem 'capistrano-rails', '~> 1.6', require: false
