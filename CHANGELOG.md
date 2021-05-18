@@ -1,5 +1,34 @@
 # changelog
 
+## [2021.4] - 2021-05-18
+
+### enhancements
+- clean up presenters and move common delegation/methods to `Spot::BasePresenter` (#703)
+- adds metadata-only visibility option (#704)
+- adds a job to sync a Collection's permission_template with its members (#714)
+- updates to Docker setup for better local testing (#729)
+
+### features 😎 
+- add "Board of Trustees" to divisions (#699)
+
+### bug fixes 🐞 
+- call `CGI.escape` and `CGI.unescape` on OAI setSpec values for valid identifiers (#713)
+- `HandleController` and `Spot::RedirectController` will now successfully redirect to Collections with matching identifiers (#726)
+
+### dependencies 👩‍👩‍👧‍👧 
+- byebug to 11.1.3 (#718)
+- capistrano to 3.16.0 (#722)
+- carrierwave to 1.3.2 (#697)
+- database_cleaner to 2.0.1 (#720)
+- jbuilder to 2.11.2 (#710)
+- mimemagic to 0.3.10 (#715)
+- oauth to 0.5.6 (#716)
+- rspec to 3.10.0 (#707)
+- spring to 2.1.1 (#719)
+- removes `solr_wrapper` and `fcrepo_wrapper` dev dependencies (#724)
+- moves Dependabot configuration to v2 config file (#717)
+
+
 ## [2021.3] - 2021-02-05
 
 ### enhancements 🔧 
@@ -576,6 +605,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2021.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.4
 [2021.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.3
 [2021.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.2
 [2021.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.1
