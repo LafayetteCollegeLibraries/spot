@@ -41,7 +41,7 @@ gem 'hyrax', '~> 2.9.0'
 gem 'almond-rails', '0.3.0'
 
 # parse + build bagit-compliant files
-gem 'bagit', '0.4.3'
+gem 'bagit', '0.4.4'
 
 # blacklight plugins for enhanced searching
 gem 'blacklight_advanced_search', '6.4.1'
