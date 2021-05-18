@@ -8,7 +8,7 @@ volumes:
   redis:
 
 services:
-  app: &app
+  app:
     build: .
     volumes:
       - .:/spot
@@ -16,7 +16,22 @@ services:
       - rails_tmp:/spot/tmp
     ports:
       - "3000:3000"
-    env_file: .env
+    environment: &dev_environment
+      CAS_BASE_URL: ''
+      DEV_USER: dss@lafayette.edu
+      FEDORA_URL: http://fedora:8080/rest
+      FEDORA_TEST_URL: http://fedora:8080/rest
+      FITS_SERVLET_URL: http://fitsservlet:8080/fits
+      IIIF_BASE_URL: http://localhost:8182/iiif/2
+      PSQL_PASSWORD: spot_dev_pw
+      PSQL_HOST: db
+      PSQL_USER: spot_dev_user
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: 'true'
+      REDIS_URL: redis://redis:6379
+      SOLR_URL: http://solr:8983/solr/spot-development
+      SOLR_TEST_URL: http://solr:8983/solr/spot-test
+      URL_HOST: http://localhost:3000
     restart: always
     entrypoint: ["bin/spot-dev-entrypoint.sh"]
     command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
@@ -49,16 +64,18 @@ services:
     image: postgres:alpine
     volumes:
       - db:/data
-      - ./bin/create-test-db.sh:/docker-entrypoint-initdb.d/10-create-test-db.sh
+      - ./bin/create-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-db.sql
     environment:
       PGDATA: /data
       POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
+      POSTGRES_PASSWORD: spot_dev_pw
     restart: always
 
   db_migrate:
     build: .
-    env_file: .env
+    environment:
+      <<: *dev_environment
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
     depends_on:
@@ -115,6 +132,8 @@ services:
       - rails_tmp:/spot/tmp
     ports:
       - "3003:3000"
+    environment:
+      <<: *dev_environment
     restart: always
     depends_on:
       - db_migrate

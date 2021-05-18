@@ -158,8 +158,15 @@ WebMock.disable_net_connect!(
   allow_localhost: true,
   net_http_connect_on_start: true,
 
-  # let webdrivers gem fetch the chrome browser
-  allow: 'chromedriver.storage.googleapis.com'
+  # let webdrivers gem fetch the chrome browser and
+  # account for our aliased services via docker
+  allow: %w[
+    chromedriver.storage.googleapis.com
+    db
+    fedora
+    fitsservlet
+    solr
+  ]
 )
 
 Shoulda::Matchers.configure do |config|
