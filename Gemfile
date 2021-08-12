@@ -45,7 +45,7 @@ gem 'bagit', '0.4.4'
 
 # blacklight plugins for enhanced searching
 gem 'blacklight_advanced_search', '6.4.1'
-gem 'blacklight_oai_provider', '6.0.0'
+gem 'blacklight_oai_provider', '6.1.1'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
