@@ -1,5 +1,18 @@
 # changelog
 
+## [2021.5] - 2021-08-13
+
+### updates
+- update email address + links for reproduction requests on About page (thanks @noraegloff!)
+
+### dependencies 👩‍👩‍👧‍👧 
+
+- bagit to 0.4.4 (#732)
+- capybara-screenshot to 1.0.25 (#735)
+- edtf-humanize to 2.0.1 (#737)
+- honeybadger to 4.9.0 (#742)
+- mini_magick to 4.11.0 (#739)
+
 ## [2021.4] - 2021-05-18
 
 ### enhancements
@@ -605,6 +618,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2021.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.5
 [2021.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.4
 [2021.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.3
 [2021.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.2
