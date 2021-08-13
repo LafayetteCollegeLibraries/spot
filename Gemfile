@@ -158,7 +158,7 @@ group :development, :test do
   gem 'bixby', '~> 2.0.0.pre.beta1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
-  gem 'capybara-screenshot', '~> 1.0.24'
+  gem 'capybara-screenshot', '~> 1.0.25'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
