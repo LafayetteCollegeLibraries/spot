@@ -41,7 +41,7 @@ gem 'hyrax', '~> 2.9.0'
 gem 'almond-rails', '0.3.0'
 
 # parse + build bagit-compliant files
-gem 'bagit', '0.4.3'
+gem 'bagit', '0.4.4'
 
 # blacklight plugins for enhanced searching
 gem 'blacklight_advanced_search', '6.4.1'
@@ -64,10 +64,10 @@ gem 'dotenv-rails', '2.7.5'
 
 # extended date formats
 gem 'edtf', '3.0.4'
-gem 'edtf-humanize', '0.0.7'
+gem 'edtf-humanize', '2.0.1'
 
 # error trackijng
-gem 'honeybadger', '4.7.2'
+gem 'honeybadger', '4.9.0'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0.3'
@@ -120,7 +120,7 @@ gem 'faraday', '0.17.3'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '4.10.1'
+gem 'mini_magick', '4.11.0'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
@@ -158,7 +158,7 @@ group :development, :test do
   gem 'bixby', '~> 2.0.0.pre.beta1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
-  gem 'capybara-screenshot', '~> 1.0.24'
+  gem 'capybara-screenshot', '~> 1.0.25'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
