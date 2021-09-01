@@ -130,7 +130,7 @@ gem 'linkeddata', '~> 3.0'
 # (on-prem is locked at 2.4.3).
 #
 # @todo remove these restriction after aws migration
-gem 'bootstrap_form', '~> 4.4.0'
+gem 'bootstrap_form', '~> 4.5.0'
 gem 'nokogiri', '~> 1.10.10'
 
 # development dependencies (not as necessary to
