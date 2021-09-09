@@ -78,6 +78,9 @@ gem 'iso-639', '0.3.5'
 # install jquery with rails (no longer the default)
 gem 'jquery-rails', '4.4.0'
 
+# wrapping things in tar packages
+gem 'minitar', '0.9'
+
 # system monitoring
 gem 'okcomputer', '1.18.2'
 
