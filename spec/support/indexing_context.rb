@@ -5,7 +5,7 @@ RSpec.shared_context 'indexing' do
   subject(:solr_doc) { indexer.generate_solr_document }
 
   let(:indexer) { described_class.new(work) }
-  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').downcase.to_sym }
+  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').underscore.to_sym }
   let(:work) { build(work_klass, **attributes) }
   let(:attributes) { {} }
 

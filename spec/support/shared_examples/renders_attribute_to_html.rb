@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it renders an attribute to HTML' do
   let(:presenter) { described_class.new(SolrDocument.new(work.to_solr), ability) }
-  let(:work_klass) { described_class.name.split('::').last.gsub(/Presenter$/, '').downcase.to_sym }
+  let(:work_klass) { described_class.name.split('::').last.gsub(/Presenter$/, '').underscore.to_sym }
   let(:work) { build(work_klass) }
   let(:ability) { Ability.new(build(:user)) }
   let(:field) { :keyword }

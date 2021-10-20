@@ -6,7 +6,7 @@ RSpec.shared_examples 'it validates local authorities' do |options|
     options.include?(:field) && options.include?(:authority)
 
   let(:field) { options[:field] }
-  let(:work_factory) { described_class.name.downcase.to_sym }
+  let(:work_factory) { described_class.name.underscore.to_sym }
   let(:work) { build(work_factory, attributes) }
   let(:authority) { Qa::Authorities::Local::FileBasedAuthority.new(options[:authority]) }
   let(:attributes) { { field => [value] } }

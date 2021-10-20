@@ -5,7 +5,7 @@ RSpec.shared_examples 'a Spot actor' do
   let(:work) { work_klass.new }
   let(:user) { create(:user) }
   let(:ability) { Ability.new(user) }
-  let(:attributes) { attributes_for(work_klass.to_s.downcase.to_sym) }
+  let(:attributes) { attributes_for(work_klass.to_s.underscore.to_sym) }
   let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
 
   describe '#apply_deposit_date' do

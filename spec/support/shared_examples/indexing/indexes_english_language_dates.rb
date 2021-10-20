@@ -3,7 +3,7 @@ RSpec.shared_examples 'it indexes English-language dates' do
   subject(:solr_doc) { indexer.generate_solr_document }
 
   let(:indexer) { described_class.new(work) }
-  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').downcase.to_sym }
+  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').underscore.to_sym }
   let(:work) { build(work_klass) }
   let(:date) { '2019-02-08T00:00:00Z' }
   let(:field_name) { described_class.english_language_date_field }

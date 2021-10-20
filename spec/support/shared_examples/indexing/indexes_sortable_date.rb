@@ -5,7 +5,7 @@ RSpec.shared_examples 'it indexes a sortable date' do
   let(:solr_doc) { indexer.generate_solr_document }
   let(:indexer) { described_class.new(work) }
   let(:work) { build(work_klass, id: 'abc123def', sortable_date_property => date_values) }
-  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').downcase.to_sym }
+  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').underscore.to_sym }
 
   let(:sortable_date_property) { described_class.sortable_date_property }
   let(:date_values) { ['2020-06-08'] }

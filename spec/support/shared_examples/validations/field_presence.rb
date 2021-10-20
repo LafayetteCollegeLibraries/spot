@@ -5,7 +5,7 @@ RSpec.shared_examples 'it validates field presence' do |options|
   raise 'presence shared_examples requires a :field option passed' unless options.include?(:field)
 
   let(:attributes) { attributes_for(work_factory).merge(extra_attributes) }
-  let(:work_factory) { described_class.name.downcase.to_sym }
+  let(:work_factory) { described_class.name.underscore.to_sym }
   let(:field) { options[:field].to_sym }
   let(:value) { options.fetch(:value, ['a value']) }
   let(:extra_attributes) { {} }
