@@ -77,7 +77,7 @@ Rails.application.config.to_prepare do
   # @see https://github.com/samvera/hyrax/blob/v2.6.0/app/services/hyrax/quick_classification_query.rb
   Hyrax::QuickClassificationQuery.class_eval do
     def models
-      @models - ['Image']
+      @models - ['Image', 'StudentWork']
     end
   end
 
