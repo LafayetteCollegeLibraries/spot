@@ -173,6 +173,6 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.17', require: false
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 4'
+  gem 'webdrivers', '~> 5'
   gem 'webmock', '~> 3.8'
 end
