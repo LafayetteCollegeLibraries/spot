@@ -2,11 +2,10 @@
 en:
   activefedora:
     models:
-      publication: 'Publication'
-      image: 'Image'
+      publication: Publication
+      image: Image
+      student_work: Student Work
   hyrax:
-    account_name:           "My Institution Account Id"
-
     base:
       show_actions:
         feature: Feature
