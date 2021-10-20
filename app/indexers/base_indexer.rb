@@ -6,6 +6,7 @@ class BaseIndexer < ::Hyrax::WorkIndexer
   include IndexesLanguageAndLabel
   include IndexesPermalink
   include IndexesRightsStatements
+  include IndexesSortableDate
 
   # Overriding the default +Hyrax::DeepIndexingService+ for our own, which
   # doesn't require +Hyrax::BasicMetadata+
