@@ -61,7 +61,7 @@ services:
     restart: always
 
   db:
-    image: postgres:alpine
+    image: postgres:9-alpine
     volumes:
       - db:/data
       - ./bin/create-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-db.sql
