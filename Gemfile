@@ -147,7 +147,7 @@ group :development do
   gem 'capistrano', '~> 3.16', require: false
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-ext', '~> 1.2.1'
-  gem 'capistrano-passenger', '~> 0.2.0'
+  gem 'capistrano-passenger', '~> 0.2.1'
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-sidekiq', '~> 1.0.3'
 end
