@@ -92,7 +92,7 @@ gem 'rdf-vocab', '3.1.4'
 gem 'rsolr', '2.3.0'
 
 # used in conjunction with our importers to zip/unzip files
-gem 'rubyzip', '2.3.0'
+gem 'rubyzip', '2.3.2'
 
 # our jobs server
 gem 'sidekiq', '5.2.9'
