@@ -155,7 +155,7 @@ end
 # things used for development + testing (again, not as
 # necessary to lock down versions)
 group :development, :test do
-  gem 'bixby', '~> 2.0.0.pre.beta1'
+  gem 'bixby', '~> 2.0.0'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.25'
