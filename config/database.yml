@@ -20,3 +20,4 @@ test:
 
 production:
   <<: *default
+  database: "<%= ENV.fetch('PSQL_DATABASE') { 'spot_production' } %>"
