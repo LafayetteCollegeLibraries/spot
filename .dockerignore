@@ -1,10 +1,23 @@
-.git
-/log/*
+# start by ignoring everything
+*
+
+# allow app directories that we need
+!/app
+!/bin
+!/config
+!/db
+!/derivatives/.keep
+!/ingest/.keep
+!/lib
 !/log/.keep
-/tmp/*
+!/public
 !/tmp/.keep
-/spec/*
-/coverage
-.byebug_history
-fits.log
-node_modules
+!/vendor/.keep
+
+# allow files @ app root
+!config.ru
+!Gemfile
+!Gemfile.lock
+!package.json
+!Rakefile
+!yarn.lock
