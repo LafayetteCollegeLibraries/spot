@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 script_root="$(dirname $0)"
 $script_root/wait-for.sh db:5432

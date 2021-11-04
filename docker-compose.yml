@@ -8,9 +8,11 @@ services:
       context: .
     volumes:
       - .:/spot
+      - derivatives:/spot/derivatives
+      - gem_storage:/spot/vendor
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
-      - gem_storage:/spot/vendor
+      - uploads:/spot/uploads
     ports:
       - "3000:3000"
     environment: &dev_environment
@@ -19,12 +21,16 @@ services:
       FEDORA_URL: http://fedora:8080/rest
       FEDORA_TEST_URL: http://fedora:8080/rest
       FITS_SERVLET_URL: http://fitsservlet:8080/fits
+      HYRAX_DERIVATIVES_PATH: "/spot/derivatives" # env key is hyrax >= 3
+      HYRAX_DERIVATIVE_PATH: "/spot/derivatives"  # env key is hyrax < 3
+      HYRAX_UPLOAD_PATH: "/spot/uploads"
       IIIF_BASE_URL: http://localhost:8182/iiif/2
       PSQL_PASSWORD: spot_dev_pw
       PSQL_HOST: db
       PSQL_USER: spot_dev_user
       RAILS_ENV: development
       RAILS_LOG_TO_STDOUT: 'true'
+      RAILS_SERVE_STATIC_FILES: '1'
       REDIS_URL: redis://redis:6379
       SOLR_URL: http://solr:8983/solr/spot-development
       SOLR_TEST_URL: http://solr:8983/solr/spot-test
@@ -47,7 +53,7 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - rails_tmp:/imageroot
+      - derivatives:/spot/derivatives
     ports:
       - "8182:8182"
     environment:
@@ -55,15 +61,17 @@ services:
       CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
       CANTALOUPE_FILESYSTEMSOURCE_LOOKUP_STRATEGY: ScriptLookupStrategy
       CANTALOUPE_BASE_URI: 'http://localhost:8182'
+      DERIVATIVES_PATH: "/spot/derivatives"
     restart: always
 
   db:
-    image: postgres:9-alpine
+    image: postgres:13-alpine
     volumes:
-      - db:/data
+      - db:/var/lib/postgresql/data
       - ./bin/create-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-db.sql
+    ports:
+      - "5432:5432"
     environment:
-      PGDATA: /data
       POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
@@ -71,24 +79,26 @@ services:
 
   db_migrate:
     image: lafayettecollegelibraries/spot
-    build: .
+    build:
+      context: .
+      target: spot-app
     environment:
       <<: *dev_environment
+    volumes:
+      - gem_storage:/spot/vendor
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
     depends_on:
       - db
       - fedora
       - solr
-    volumes:
-      - .:/spot
-      - rails_public:/spot/public
-      - rails_tmp:/spot/tmp
 
   fedora:
-    image: samvera/fcrepo4:4.7.5
+    image: ghcr.io/samvera/fcrepo4:4.7.5
     volumes:
-      - fedora:/data
+      - fedora:/data:cached
+    ports:
+      - 8080:8080
     restart: always
 
   fitsservlet:
@@ -106,7 +116,7 @@ services:
       - ./solr/config:/spot-config
       - solr:/opt/solr/server/solr
     ports:
-      - '8983:8983'
+      - "8983:8983"
     entrypoint:
       - bash
       - "-c"
@@ -118,23 +128,29 @@ services:
     build:
       context: .
       target: spot-worker
-    volumes:
-      - .:/app
-      - ./ingest:/ingest
-      - rails_public:/spot/public
-      - rails_tmp:/spot/tmp
     environment:
       <<: *dev_environment
+    ports:
+      - "3003:3000"
+    command: ["bundle", "exec", "sidekiq"]
+    volumes:
+      - .:/spot
+      - ./ingest:/ingest
+      - derivatives:/spot/derivatives
+      - gem_storage:/spot/vendor
+      - uploads:/spot/uploads
     restart: always
     depends_on:
       - db_migrate
       - app
 
 volumes:
+  derivatives:
   db:
   fedora:
   gem_storage:
+  solr:
   rails_public:
   rails_tmp:
-  solr:
   redis:
+  uploads:
