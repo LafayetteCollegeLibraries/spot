@@ -11,6 +11,8 @@ en:
       defaults:
         abstract: A summary of the resource.
         academic_department: A distinct, usually specialized educational unit within an educational organization.
+        access_note: Information about who access the resource or an indication of its security status. Access Rights may include information regarding access or restrictions based on privacy, security, or other policies.
+        advisor: A person under whose supervision a degree candidate develops and presents a thesis, mémoire, or text of a dissertation.
         bibliographic_citation: A bibliographic reference for the resource.
         contributor: A person or group you want to recognize for playing a role in the creation of the work, but not the primary role.
         creator: The person or group responsible for the work. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;.
