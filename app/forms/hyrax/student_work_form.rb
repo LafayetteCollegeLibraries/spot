@@ -45,7 +45,6 @@ module Hyrax
       :rights_holder,
       :rights_statement,
 
-
       :bibliographic_citation,
       :access_note,
       :note
