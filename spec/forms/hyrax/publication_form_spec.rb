@@ -1,23 +1,10 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::PublicationForm do
   it_behaves_like 'a Spot work form'
-
-  shared_context 'required fields' do
-    it 'contains required fields' do
-      expect(terms).to include :title, :date_issued, :resource_type, :rights_statement
-    end
-  end
-
-  describe '.required_fields' do
-    subject(:terms) { described_class.required_fields }
-
-    include_context 'required fields'
-  end
+  it_behaves_like 'it handles required fields', :title, :date_issued, :resource_type, :rights_statement
 
   describe '.terms' do
     subject(:terms) { described_class.terms }
-
-    include_context 'required fields'
 
     describe 'includes optional fields' do
       it { is_expected.to include :rights_holder }

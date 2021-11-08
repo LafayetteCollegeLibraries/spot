@@ -38,6 +38,8 @@ module NestedFormFields
     #
     # @return [Array<Symbol, Hash<Symbol => Array>]
     def build_permitted_params
+      return super unless respond_to?(:_nested_fields)
+
       super.tap do |params|
         _nested_fields.each do |field|
           params << { "#{field}_attributes": [:id, :_destroy] }
@@ -78,6 +80,8 @@ module NestedFormFields
       # @param [ActionController::Parameters, Hash] params
       # @return [void]
       def transform_nested_fields!(params)
+        return unless respond_to?(:_nested_fields)
+
         _nested_fields.each do |field|
           attr_field_key = "#{field}_attributes"
           next unless params.include?(attr_field_key)
