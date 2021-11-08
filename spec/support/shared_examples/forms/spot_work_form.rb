@@ -3,6 +3,7 @@ RSpec.shared_examples 'a Spot work form' do
   it_behaves_like 'it strips whitespaces from values'
   it_behaves_like 'it handles identifier form fields'
   it_behaves_like 'it has hints for all primary_terms'
+  it_behaves_like 'it builds Hyrax permitted params'
 
   describe '.terms' do
     subject(:terms) { described_class.terms }
