@@ -73,6 +73,10 @@ Rails.application.config.to_prepare do
   # from the registered curation_concerns (in the Hyrax initializer),
   # we lose out on being able to dynamically generate URLs for permalinks.
   #
+  # @todo Get rid of this in favor of using Ability permissions to restrict
+  #       :create access to admins, as the select_type_list_presenter uses
+  #       Hyrax::QuickClassificationQuery#authorized_models, which checks
+  #       if a user `can?(:create, model)`.
   # @see https://github.com/samvera/hyrax/blob/v2.6.0/app/presenters/hyrax/select_type_list_presenter.rb#L20
   # @see https://github.com/samvera/hyrax/blob/v2.6.0/app/services/hyrax/quick_classification_query.rb
   Hyrax::QuickClassificationQuery.class_eval do
