@@ -6,9 +6,9 @@ RSpec.shared_examples 'it builds Hyrax permitted params' do
   it { is_expected.to include(rendering_ids: []) }
   it { is_expected.to include(files: []) }
   it {
-  is_expected.to include(:visibility_during_embargo, :embargo_release_date,
-                         :visibility_after_embargo, :visibility_during_lease,
-                         :lease_expiration_date, :visibility_after_lease, :visibility)
+    is_expected.to include(:visibility_during_embargo, :embargo_release_date,
+                           :visibility_after_embargo, :visibility_during_lease,
+                           :lease_expiration_date, :visibility_after_lease, :visibility)
   }
   it { is_expected.to include(ordered_member_ids: []) }
   it { is_expected.to include(in_works_ids: []) }
