@@ -1,53 +1,47 @@
 # frozen_string_literal: true
 module Hyrax
   class StudentWorkForm < ::Spot::Forms::WorkForm
-    singular_form_fields :title
+    singular_form_fields :title, :description, :date, :date_available, :rights_statement
 
     self.model_class = ::StudentWork
-    self.required_fields = [:title, :resource_type, :rights_statement]
+    self.required_fields = [
+      :title, :creator, :advisor, :academic_department, :division,
+      :description, :date, :date_available, :rights_statement, :resource_type
+    ]
 
-    # @todo finish ordering this
     self.terms = [
       # required
       :title,
-      :resource_type,
-      :rights_statement,
-
-      # ... and the rest!
-      :title_alternative,
-
       :creator,
-      :contributor,
-
-      :abstract,
-      :description,
-      :date,
-      :date_available,
-      :language,
-      :location,
-      :physical_medium,
-      :publisher,
-      :identifier,
-      :keyword,
-      :related_resource,
-      :resource_type,
-      :source,
-      :subject,
-      :subtitle,
-
-      # institutional metadata
       :advisor,
       :academic_department,
       :division,
-      :organization,
-
-      # rights
-      :rights_holder,
+      :description,
+      :date,
+      :date_available,
       :rights_statement,
+      :resource_type,
 
-      :bibliographic_citation,
+      # below the fold
+      :abstract,
+      :language,
+      :related_resource,
       :access_note,
+
+      # librarian-added fields, applied during review
+      :organization,
+      :subject,
+      :keyword,
+      :bibliographic_citation,
+      :identifier,
       :note
     ].concat(hyrax_form_fields)
+
+    def primary_terms
+      [
+        :title, :creator, :advisor, :academic_department, :division, :description,
+        :date, :date_available, :rights_statement, :resource_type
+      ]
+    end
   end
 end
