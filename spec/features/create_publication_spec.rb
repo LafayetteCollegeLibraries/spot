@@ -27,11 +27,8 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         sleep 1
 
-        # @todo uncomment these next two steps when we introduce
-        # another model + register it in the hyrax initializer
-        #
-        # choose 'Publication'
-        # click_button 'Create work'
+        choose 'Publication'
+        click_button 'Create work'
 
         expect(page).to have_content "Add New #{i18n_term}"
 

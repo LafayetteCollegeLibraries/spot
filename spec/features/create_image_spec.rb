@@ -23,16 +23,14 @@ RSpec.feature 'Create an Image', :clean, :js do
     # to uncomment the block below
     describe 'can fill out and submit a new Image' do
       scenario do
-        visit '/concern/images/new'
+        visit '/dashboard'
+        click_link 'Works'
+        click_link 'Add new work'
 
-        # visit '/dashboard'
-        # click_link 'Works'
-        # click_link 'Add new work'
-        #
-        # sleep 1
-        #
-        # choose 'Image'
-        # click_button 'Create work'
+        sleep 1
+
+        choose 'Image'
+        click_button 'Create work'
 
         expect(page).to have_content "Add New #{i18n_term}"
 
