@@ -18,7 +18,7 @@ gem 'puma', '3.12.6'
 gem 'sass-rails', '5.1.0'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '4.1.20'
+gem 'uglifier', '4.2.0'
 
 # ugh, we're stuck with coffee-script until it's out of hyrax i guess
 gem 'coffee-rails', '5.0.0'
