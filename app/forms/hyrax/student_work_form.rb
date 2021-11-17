@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Hyrax
   class StudentWorkForm < ::Spot::Forms::WorkForm
-    singular_form_fields :title, :description, :date, :date_available, :rights_statement
+    singular_form_fields :title, :description, :date, :date_available, :rights_statement, :abstract
 
     self.model_class = ::StudentWork
     self.required_fields = [

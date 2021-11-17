@@ -12,7 +12,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
   let(:i18n_term) { I18n.t(:'activefedora.models.publication') }
   let(:app_name) { I18n.t('hyrax.product_name') }
 
-  context 'a logged in admin user' do
+  context 'an admin user' do
     let(:user) { create(:admin_user) }
     let(:attrs) { attributes_for(:publication, identifier: [id_local.to_s, id_standard.to_s]) }
     let(:id_local) { Spot::Identifier.new('local', 'abc123') }
