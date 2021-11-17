@@ -76,7 +76,11 @@ RSpec.feature 'Show Student Work page', js: false do
 
     expect_field_to_be_faceted  :keyword
     expect_field_to_be_rendered :bibliographic_citation
-    expect_field_to_be_rendered :identifier
+
+    standard_id_values = work.identifier.map { |id| Spot::Identifier.from_string(id) }.select(&:standard?).map(&:value)
+    displayed_id_values = page.all('.attribute-standard_identifier').map { |v| v.text.gsub(/^\w+\s/, '') }
+    expect(displayed_id_values).to eq(standard_id_values)
+
     expect_field_to_be_rendered :note
 
     # @todo test rights statement is rendered correctly

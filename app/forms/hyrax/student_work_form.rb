@@ -34,7 +34,7 @@ module Hyrax
       :subject,
       :keyword,
       :bibliographic_citation,
-      :identifier,
+      :standard_identifier,
       :note
     ].concat(hyrax_form_fields)
 
