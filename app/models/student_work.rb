@@ -4,6 +4,7 @@ class StudentWork < ActiveFedora::Base
   include Spot::InstitutionalMetadata
 
   self.indexer = StudentWorkIndexer
+  self.controlled_properties = [:subject]
 
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
@@ -27,4 +28,6 @@ class StudentWork < ActiveFedora::Base
   property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
     index.as :symbol
   end
+
+  setup_nested_attributes!
 end

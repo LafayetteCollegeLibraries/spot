@@ -3,11 +3,7 @@ class Publication < ActiveFedora::Base
   include Spot::WorkBehavior
   include Spot::InstitutionalMetadata
 
-  # if adding controlled fields (other than :location and :subject), uncomment this
-  # and add the fields to the +controlled_properties+ array
-  #
-  # self.controlled_properties += []
-
+  self.controlled_properties = [:location, :subject]
   self.indexer = PublicationIndexer
 
   # Change this to restrict which works can be added as a child.
