@@ -36,7 +36,7 @@ RSpec.describe Hyrax::StudentWorkForm do
     it { is_expected.to include(:date_available) }
     it { is_expected.to include(:rights_statement) }
     it { is_expected.to include(resource_type: []) }
-    it { is_expected.to include(abstract: []) }
+    it { is_expected.to include(:abstract) }
     it { is_expected.to include(language: []) }
     it { is_expected.to include(related_resource: []) }
     it { is_expected.to include(access_note: []) }
