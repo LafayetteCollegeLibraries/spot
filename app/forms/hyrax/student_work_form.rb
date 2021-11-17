@@ -2,6 +2,7 @@
 module Hyrax
   class StudentWorkForm < ::Spot::Forms::WorkForm
     singular_form_fields :title, :description, :date, :date_available, :rights_statement, :abstract
+    transforms_nested_fields_for :academic_department, :division
 
     self.model_class = ::StudentWork
     self.required_fields = [
@@ -42,6 +43,14 @@ module Hyrax
         :title, :creator, :advisor, :academic_department, :division, :description,
         :date, :date_available, :rights_statement, :resource_type
       ]
+    end
+
+    class << self
+      def build_permitted_params
+        super.tap do |params|
+          params << { subject_attributes: [:id, :_destroy] }
+        end
+      end
     end
   end
 end
