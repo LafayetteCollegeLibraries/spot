@@ -23,7 +23,9 @@ class StudentWork < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :date, predicate: ::RDF::Vocab::DC.date
+  property :date, predicate: ::RDF::Vocab::DC.date do |index|
+    index.as :symbol
+  end
 
   property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
     index.as :symbol
