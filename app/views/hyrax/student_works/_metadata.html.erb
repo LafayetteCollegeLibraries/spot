@@ -22,7 +22,7 @@
                                       search_field: :subject_label_ssim) %>
       <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:bibliographic_citation) %>
-      <%= presenter.attribute_to_html(:identifier) %>
+      <%= presenter.attribute_to_html(:standard_identifier, render_as: :identifier) %>
       <%= presenter.attribute_to_html(:note) %>
 
       <%= render 'shared/metadata/rights_statement', presenter: presenter %>
