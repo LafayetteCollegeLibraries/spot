@@ -18,7 +18,7 @@ module Spot
       # @!attribute [rw] controlled_properties
       #   @return [Array<Symbol>]
       class_attribute :controlled_properties
-      self.controlled_properties = [:location, :subject]
+      self.controlled_properties = []
 
       # validations for CoreMetadata fields. it should be safe to include these here
       # rather than at the individual model level

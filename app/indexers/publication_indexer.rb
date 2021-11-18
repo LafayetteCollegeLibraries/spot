@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class PublicationIndexer < BaseIndexer
   include IndexesEnglishLanguageDates
-  include IndexesSortableDate
 
   self.sortable_date_property = :date_issued
 

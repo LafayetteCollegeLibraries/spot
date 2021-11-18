@@ -37,6 +37,13 @@ module Spot
         self.class.multiple?(term)
       end
 
+      # An array to iterate through when building our custom portion
+      # of the form. The Hyrax-specific fields are excluded.
+      # @return [Array<Symbol>]
+      def primary_terms
+        terms - self.class.hyrax_form_fields
+      end
+
       # our rights_statement URIs may be stored as +ActiveTriples::Resource+ objects
       # (rather than Strings), so we'll want to make sure that the value is displayed
       # in the <select> object.

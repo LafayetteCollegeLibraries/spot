@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
-  let(:work_type) { described_class.name.split('::').last.sub('Controller', '').singularize.downcase.to_sym }
+  let(:work_type) { described_class.name.split('::').last.sub('Controller', '').singularize.underscore.to_sym }
   let(:work) { create(work_type, :public) }
 
   describe 'Hyrax::WorksControllerBehavior' do

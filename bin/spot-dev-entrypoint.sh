@@ -17,4 +17,6 @@ mkdir -p "$app_root/tmp/export"
 mkdir -p "$app_root/tmp/pids"
 mkdir -p "$HYRAX_DERIVATIVES_PATH"
 
+rm -f tmp/pids/server.pid
+
 exec "$@"

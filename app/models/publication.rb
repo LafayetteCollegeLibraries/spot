@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 class Publication < ActiveFedora::Base
   include Spot::WorkBehavior
+  include Spot::InstitutionalMetadata
 
-  # if adding controlled fields (other than :location and :subject), uncomment this
-  # and add the fields to the +controlled_properties+ array
-  #
-  # self.controlled_properties += []
-
+  self.controlled_properties = [:location, :subject]
   self.indexer = PublicationIndexer
 
   # Change this to restrict which works can be added as a child.
@@ -17,10 +14,6 @@ class Publication < ActiveFedora::Base
 
   property :abstract, predicate: ::RDF::Vocab::DC.abstract do |index|
     index.as :stored_searchable
-  end
-
-  property :academic_department, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#AcademicDepartment') do |index|
-    index.as :stored_searchable, :facetable
   end
 
   property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
@@ -35,18 +28,10 @@ class Publication < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :division, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Division') do |index|
-    index.as :stored_searchable, :facetable
-  end
-
   property :editor, predicate: ::RDF::Vocab::BIBO.editor do |index|
     index.as :stored_searchable, :facetable
   end
   property :license, predicate: ::RDF::Vocab::DC.license
-
-  property :organization, predicate: ::RDF::URI.new('http://vivoweb.org/ontology/core#Organization') do |index|
-    index.as :stored_searchable, :facetable
-  end
 
   # see {Spot::WorkBehavior.setup_nested_attributes!}
   setup_nested_attributes!

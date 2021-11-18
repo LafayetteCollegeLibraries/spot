@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class ImageIndexer < BaseIndexer
-  include IndexesSortableDate
-
   self.sortable_date_property = :date
 
   def generate_solr_document

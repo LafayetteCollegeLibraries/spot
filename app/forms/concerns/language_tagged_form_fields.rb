@@ -36,6 +36,8 @@ module LanguageTaggedFormFields
     #
     # @return [Array<Symbol,Hash<Symbol => Array>>]
     def build_permitted_params
+      return super unless respond_to?(:language_tagged_fields)
+
       super.tap do |params|
         language_tagged_fields.each do |field|
           if multiple?(field)
@@ -70,6 +72,8 @@ module LanguageTaggedFormFields
       # @param params [ActiveController::Parameters, Hash<String => Array<String>>]
       # @return [void]
       def transform_language_tagged_fields!(params)
+        return unless respond_to?(:language_tagged_fields)
+
         language_tagged_fields.flatten.each do |field|
           value_key = "#{field}_value"
           lang_key = "#{field}_language"

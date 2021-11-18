@@ -9,9 +9,9 @@ module Select2Helpers
   # @see https://stackoverflow.com/a/25047358
   def fill_in_autocomplete(key, with:)
     page.execute_script(%{
-      var $input = $('#{key} input.form_control').last();
+      var $input = $('#{key} input.form-control').last();
       $input.val('#{with}');
-      $input.trigger('change');
+      $input.trigger('change.select2');
     })
   end
 end

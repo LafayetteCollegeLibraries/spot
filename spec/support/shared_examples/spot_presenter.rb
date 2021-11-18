@@ -2,7 +2,7 @@
 RSpec.shared_examples 'a Spot presenter' do
   subject(:presenter) { described_class.new(solr_doc, ability) }
 
-  let(:factory) { described_class.name.split('::').last.gsub(/Presenter/, '').downcase.to_sym }
+  let(:factory) { described_class.name.split('::').last.gsub(/Presenter/, '').underscore.to_sym }
   let(:solr_doc) { SolrDocument.new(solr_data) }
   let(:solr_data) { object.to_solr }
   let(:object) { build(factory) }

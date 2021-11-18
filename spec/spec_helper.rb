@@ -1,5 +1,8 @@
 # frozen_string_literal: true
+#
+# envs for running `bundle exec rspec` against an infrastructure brought up using `docker compose up -d`
 ENV['RAILS_ENV'] = 'test'
+ENV['URL_HOST'] = 'http://localhost' if ENV['URL_HOST'].nil?
 
 if ENV['COVERAGE'] || ENV['CI']
   require 'simplecov'

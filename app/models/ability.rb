@@ -20,6 +20,9 @@ class Ability
 
       can([:create, :delete, :manage], FeaturedCollection)
       can(role_abilities, Role)
+
+      # admins can create everything
+      can(:create, curation_concerns_models)
     end
 
     # Delegates abilities for users that have the 'depositor' role
@@ -29,8 +32,7 @@ class Ability
     def depositor_abilities
       return unless current_user.depositor?
 
-      # folks can create new items
-      can(:create, curation_concerns_models)
+      can(:create, Publication)
 
       # can view the user dashboard
       can(:read, :dashboard)

@@ -2,11 +2,10 @@
 en:
   activefedora:
     models:
-      publication: 'Publication'
-      image: 'Image'
+      publication: Publication
+      image: Image
+      student_work: Student Work
   hyrax:
-    account_name:           "My Institution Account Id"
-
     base:
       show_actions:
         feature: Feature
@@ -51,6 +50,18 @@ en:
       form:
         q:
           label: Search LDR
+
+    # Used in the "Add new work" modal
+    select_type:
+      image:
+        description: Digital representation of visual works
+        name: Image
+      publication:
+        description: Works that have been published
+        name: Publication
+      student_work:
+        description: Works created by students
+        name: Student Work
 
     visibility:
       metadata:

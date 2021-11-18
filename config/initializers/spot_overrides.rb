@@ -67,20 +67,6 @@ Rails.application.config.to_prepare do
   # enqueues the job).
   Hyrax::CurationConcern.actor_factory.unshift(SolrSuggestActor)
 
-  # Here we'll hide the Image model from the 'Create work' modal picker
-  # until we've reached a point where we're ready to have users choose
-  # the work model. If we try to do this by simply removing the model
-  # from the registered curation_concerns (in the Hyrax initializer),
-  # we lose out on being able to dynamically generate URLs for permalinks.
-  #
-  # @see https://github.com/samvera/hyrax/blob/v2.6.0/app/presenters/hyrax/select_type_list_presenter.rb#L20
-  # @see https://github.com/samvera/hyrax/blob/v2.6.0/app/services/hyrax/quick_classification_query.rb
-  Hyrax::QuickClassificationQuery.class_eval do
-    def models
-      @models - ['Image']
-    end
-  end
-
   # By default, +Hydra::AccessControls::Embargo#active?+ compares the
   # embargo_release_date (a DateTime) to +Date.today+ (a Date). When
   # the release date is the same day as today, we'll get a truthy return value
