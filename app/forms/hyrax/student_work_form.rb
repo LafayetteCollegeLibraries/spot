@@ -2,7 +2,7 @@
 module Hyrax
   class StudentWorkForm < ::Spot::Forms::WorkForm
     singular_form_fields :title, :description, :date, :date_available, :rights_statement, :abstract
-    transforms_nested_fields_for :academic_department, :division
+    transforms_nested_fields_for :academic_department, :division, :language
 
     self.model_class = ::StudentWork
     self.required_fields = [

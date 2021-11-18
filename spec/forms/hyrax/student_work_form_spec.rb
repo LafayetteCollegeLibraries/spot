@@ -18,7 +18,7 @@ RSpec.describe Hyrax::StudentWorkForm do
       it { is_expected.to include :subject }
       it { is_expected.to include :keyword }
       it { is_expected.to include :bibliographic_citation }
-      it { is_expected.to include :identifier }
+      it { is_expected.to include :standard_identifier }
       it { is_expected.to include :note }
     end
   end
@@ -44,7 +44,41 @@ RSpec.describe Hyrax::StudentWorkForm do
     it { is_expected.to include(subject: []) }
     it { is_expected.to include(keyword: []) }
     it { is_expected.to include(bibliographic_citation: []) }
-    it { is_expected.to include(identifier: []) }
+    it { is_expected.to include(standard_identifier_prefix: [], standard_identifier_value: []) }
     it { is_expected.to include(note: []) }
+  end
+
+  describe '.multiple?' do
+    it 'marks singular fields as false' do
+      [:title, :description, :date, :date_available, :rights_statement, :abstract].each do |f|
+        expect(described_class.multiple?(f)).to be false
+      end
+    end
+  end
+
+  describe '.model_attributes' do
+    subject(:attributes) { described_class.model_attributes(raw_params) }
+
+    let(:raw_params) { ActionController::Parameters.new(params) }
+
+    context 'handles nested attributes' do
+      describe 'language' do
+        let(:field) { 'language' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
+      end
+
+      describe 'academic_department' do
+        let(:field) { 'academic_department' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
+      end
+
+      describe 'division' do
+        let(:field) { 'division' }
+
+        it_behaves_like 'it transforms a local vocabulary attribute'
+      end
+    end
   end
 end
