@@ -2,6 +2,7 @@
 
 RSpec.feature 'Create an Image', :clean, :js do
   before do
+    stub_request(:get, subject_uri)
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
@@ -12,6 +13,8 @@ RSpec.feature 'Create an Image', :clean, :js do
 
   let(:i18n_term) { I18n.t(:'activefedora.models.image') }
   let(:app_name) { I18n.t('hyrax.product_name') }
+  let(:subject_uri) { 'http://id.worldcat.org/fast/1061714' }
+  let(:attrs) { attributes_for(:image, subject: [subject_uri]) }
 
   context 'a logged in admin user' do
     let(:user) { create(:admin_user) }

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 RSpec.feature 'Create a StudentWork', :clean, :js do
   before do
+    stub_request(:get, subject_uri)
+
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
@@ -11,7 +13,9 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
 
   let(:i18n_term) { I18n.t('activefedora.models.student_work') }
   let(:app_name) { I18n.t('hyrax.product_name') }
-  let(:attrs) { attributes_for(:student_work) }
+  let(:attrs) { attributes_for(:student_work, subject: [subject_uri]) }
+  let(:standard_id) { Spot::Identifier.new('issn', '1234-5678') }
+  let(:subject_uri) { 'http://id.worldcat.org/fast/895423' }
 
   context 'an admin user' do
     let(:user) { create(:admin_user) }
@@ -20,6 +24,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       visit '/dashboard'
 
       click_link 'Works'
+      sleep 1
       click_link 'Add new work'
 
       sleep 1
@@ -35,16 +40,13 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in 'student_work_creator', with: attrs[:creator].first
       expect(page).to have_css '.student_work_creator .controls-add-text'
 
-      fill_in 'student_work_creator', with: attrs[:creator].first
-      expect(page).to have_css '.student_work_creator .controls-add-text'
-
       fill_in 'student_work_advisor', with: attrs[:advisor].first
       expect(page).to have_css '.student_work_advisor .controls-add-text'
 
-      fill_in_autocomplete '.student_work_academic_department', with: attrs[:academic_department].first
+      fill_in_autocomplete '.student_work_academic_department', with: 'Libraries'
       expect(page).to have_css '.student_work_academic_department .controls-add-text'
 
-      fill_in_autocomplete '.student_work_division', with: attrs[:division].first
+      fill_in_autocomplete '.student_work_division', with: 'Humanities'
       expect(page).to have_css '.student_work_division .controls-add-text'
 
       fill_in 'student_work_description', with: attrs[:description].first
@@ -59,7 +61,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       select 'No Copyright - United States', from: 'student_work_rights_statement'
       expect(page).not_to have_css '.student_work_rights_statement .controls-add-text'
 
-      select attrs[:resource_type].first, from: 'student_work_resource_type'
+      select 'Research Paper', from: 'student_work_resource_type'
       # resource_type's form field allows for multiple values from within
       # a single gui widget, so we should not expect a button to add another value field
       expect(page).not_to have_css '.student_work_resource_type .controls-add-text'
@@ -82,7 +84,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in 'student_work_organization', with: attrs[:organization].first
       expect(page).to have_css '.student_work_organization .controls-add-text'
 
-      fill_in_autocomplete 'student_work_subject', with: attrs[:subject].first
+      fill_in_autocomplete '.student_work_subject', with: attrs[:subject].first
       expect(page).to have_css '.student_work_subject .controls-add-text'
 
       fill_in 'student_work_keyword', with: attrs[:keyword].first
@@ -91,8 +93,8 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in 'student_work_bibliographic_citation', with: attrs[:bibliographic_citation].first
       expect(page).to have_css '.student_work_bibliographic_citation .controls-add-text'
 
-      fill_in 'student_work_identifier', with: attrs[:identifier].first
-      expect(page).to have_css '.student_work_identifier .controls-add-text'
+      select standard_id.prefix_label, from: 'student_work[standard_identifier_prefix][]'
+      fill_in 'student_work[standard_identifier_value][]', with: standard_id.value
 
       fill_in 'student_work_note', with: attrs[:note].first
       expect(page).to have_css '.student_work_note .controls-add-text'
@@ -120,8 +122,10 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       sleep 2
 
       page.find('#with_files_submit').click
+
       expect(page).to have_content attrs[:title].first
       expect(page).to have_content "Your files are being processed by #{app_name} in the background."
+      expect(page).to have_content attrs[:academic_department].first
     end
   end
 end
