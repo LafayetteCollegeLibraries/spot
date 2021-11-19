@@ -78,15 +78,15 @@ module NestedFormFields
       # just using the jquery-ui autocomplete field type.
       #
       # @param [ActionController::Parameters, Hash] params
-      # @return [void]
+      # @return [ActionController::Parameters, Hash]
       def transform_nested_fields!(params)
         return unless respond_to?(:_nested_fields)
 
-        _nested_fields.each do |field|
-          attr_field_key = "#{field}_attributes"
-          next unless params.include?(attr_field_key)
+        _nested_fields.each do |field_key|
+          field = params.delete("#{field_key}_attributes")
+          next if field.nil?
 
-          params[field] = transform_nested_attributes(params, attr_field_key)
+          params[field_key] = transform_nested_attributes(params, field.values)
         end
       end
 
@@ -95,17 +95,15 @@ module NestedFormFields
       # is skipped, removing it from the record.
       #
       # @param [ActionController::Parameters,Hash] params
-      # @param [Symbol,String] field
+      # @param [Symbol,String] field_key
       # @return [Array<String>]
-      def transform_nested_attributes(params, field)
-        return [] if params[field].blank?
+      def transform_nested_attributes(params, values)
+        return [] if values.empty?
 
-        [].tap do |out|
-          params.delete(field.to_s).each_pair do |_idx, param|
-            next unless param['_destroy'].blank?
-            out << param['id'] if param['id']
-          end
-        end
+        values.map do |value|
+          next unless value['_destroy'].blank?
+          value['id'] if value['id']
+        end.compact
       end
   end
 end
