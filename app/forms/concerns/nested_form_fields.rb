@@ -86,9 +86,7 @@ module NestedFormFields
           attr_field_key = "#{field}_attributes"
           next unless params.include?(attr_field_key)
 
-          values = transform_nested_attributes(params, attr_field_key)
-
-          params[field] = values || []
+          params[field] = transform_nested_attributes(params, attr_field_key)
         end
       end
 
@@ -100,7 +98,7 @@ module NestedFormFields
       # @param [Symbol,String] field
       # @return [Array<String>]
       def transform_nested_attributes(params, field)
-        return if params[field].blank?
+        return [] if params[field].blank?
 
         [].tap do |out|
           params.delete(field.to_s).each_pair do |_idx, param|

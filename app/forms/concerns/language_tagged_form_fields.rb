@@ -40,14 +40,12 @@ module LanguageTaggedFormFields
 
       super.tap do |params|
         language_tagged_fields.each do |field|
+          field_params = { "#{field}_value": [], "#{field}_language": [] }
+
           if multiple?(field)
-            params << {
-              "#{field}_value": [],
-              "#{field}_language": []
-            }
+            params << field_params
           else
-            params << :"#{field}_value"
-            params << :"#{field}_language"
+            params += field_params.keys
           end
         end
       end
