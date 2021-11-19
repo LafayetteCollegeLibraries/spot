@@ -36,19 +36,20 @@ module LanguageTaggedFormFields
     #
     # @return [Array<Symbol,Hash<Symbol => Array>>]
     def build_permitted_params
-      return super unless respond_to?(:language_tagged_fields)
+      params = super
+      return params unless respond_to?(:language_tagged_fields)
 
-      super.tap do |params|
-        language_tagged_fields.each do |field|
-          field_params = { "#{field}_value": [], "#{field}_language": [] }
+      language_tagged_fields.each do |field|
+        field_params = { "#{field}_value": [], "#{field}_language": [] }
 
-          if multiple?(field)
-            params << field_params
-          else
-            params += field_params.keys
-          end
+        if multiple?(field)
+          params << field_params
+        else
+          params += field_params.keys
         end
       end
+
+      params
     end
 
     # Calls our transformation method as part of the chain of
