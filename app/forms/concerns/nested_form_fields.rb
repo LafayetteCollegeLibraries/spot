@@ -86,18 +86,18 @@ module NestedFormFields
           field = params.delete("#{field_key}_attributes")
           next if field.nil?
 
-          params[field_key] = transform_nested_attributes(params, field.values)
+          params[field_key] = transform_nested_values(field.values)
         end
       end
 
-      # flattens a nested_attribute hash into an array of
+      # flattens nested_attribute values into an array of
       # ids. if the +_destroy+ key is present, the field
       # is skipped, removing it from the record.
       #
       # @param [ActionController::Parameters,Hash] params
       # @param [Symbol,String] field_key
       # @return [Array<String>]
-      def transform_nested_attributes(params, values)
+      def transform_nested_values(values)
         return [] if values.empty?
 
         values.map do |value|
