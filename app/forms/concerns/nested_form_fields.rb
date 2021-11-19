@@ -94,16 +94,10 @@ module NestedFormFields
       # ids. if the +_destroy+ key is present, the field
       # is skipped, removing it from the record.
       #
-      # @param [ActionController::Parameters,Hash] params
-      # @param [Symbol,String] field_key
+      # @param [Array<Hash<'id', '_destroy'>>,#map] values
       # @return [Array<String>]
       def transform_nested_values(values)
-        return [] if values.empty?
-
-        values.map do |value|
-          next unless value['_destroy'].blank?
-          value['id'] if value['id']
-        end.compact
+        values.map { |value| value['id'] if value['_destroy'].blank? }.compact
       end
   end
 end
