@@ -8,6 +8,7 @@ en:
           title: Admin Facets
       fields:
         academic_department: Academic Department
+        advisor_label: Advisor
         author: Author
         bibliographic_citation: Bibliographic Citation
         contributor: Contributor

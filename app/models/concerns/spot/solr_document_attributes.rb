@@ -71,6 +71,7 @@ module Spot
       # StudentWork properties
       attribute :access_note,            ::Blacklight::Types::Array,  'access_note_tesim'
       attribute :advisor,                ::Blacklight::Types::Array,  'advisor_ssim'
+      attribute :advisor_label,          ::Blacklight::Types::Array,  'advisor_label_ssim'
 
       # FileSet properties
       attribute :file_set_ids,           ::Blacklight::Types::Array,  'file_set_ids_ssim'

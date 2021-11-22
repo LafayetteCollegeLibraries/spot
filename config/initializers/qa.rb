@@ -16,3 +16,5 @@ solr_suggestion_authorities = %w[
 solr_suggestion_authorities.each do |subauth|
   Qa::Authorities::Local.register_subauthority(subauth, 'Qa::Authorities::SolrSuggest')
 end
+
+Qa::Authorities::Local.register_subauthority('lafayette_instructors', 'Qa::Authorities::Local::TableBasedAuthority')
