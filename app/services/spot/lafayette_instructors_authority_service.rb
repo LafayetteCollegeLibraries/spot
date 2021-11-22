@@ -9,7 +9,7 @@ module Spot
   #   Spot::LafayetteInstructorsAuthorityService.load(term: '202130', api_key: ENV.fetch('LAFAYETTE_WDS_API_KEY'))
   #   # => [#<Qa::LocalAuthorityEntry id: 1, local_authority_id: 1...>...]
   class LafayetteInstructorsAuthorityService
-    API_ENV_KEY = 'LAFAYETTE_WDS_API_KEY'.freeze
+    API_ENV_KEY = 'LAFAYETTE_WDS_API_KEY'
 
     def self.label_for(lnumber, api_key: ENV.fetch(API_ENV_KEY))
       new(api_key: api_key).label_for(lnumber)
@@ -36,13 +36,11 @@ module Spot
     # @option [String] term
     #   Termcode to retrieve instructors for (ex. '202130')
     # @return [Array<Qa::LocalAuthorityEntry>]
+    # @todo how should we handle exceptions?
     def load(term:)
       instructors_for(term: term).map do |instructor|
         find_or_create_entry(label: instructor_label(instructor), value: instructor_id(instructor))
       end
-    # rescue Spot::LafayetteWdsService::SearchError => e
-    #   # do something?
-    #   []
     end
 
     def label_for(lnumber:)
