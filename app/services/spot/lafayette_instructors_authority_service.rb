@@ -14,8 +14,8 @@ module Spot
 
     class UserNotFoundError < StandardError; end
 
-    def self.label_for(lnumber, api_key: ENV.fetch(API_ENV_KEY))
-      new(api_key: api_key).label_for(lnumber)
+    def self.label_for(lnumber:, api_key: ENV.fetch(API_ENV_KEY))
+      new(api_key: api_key).label_for(lnumber: lnumber)
     end
 
     # @params [Hash] options

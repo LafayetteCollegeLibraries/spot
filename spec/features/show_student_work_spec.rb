@@ -8,6 +8,7 @@ RSpec.feature 'Show Student Work page', js: false do
            language: ['en'],
            date: ['2021-02-11'],
            date_available: ['2021-02-11'],
+           advisor: [advisor_lnumber],
            subject: [RDF::URI(subject_uri)])
   end
 
@@ -15,17 +16,21 @@ RSpec.feature 'Show Student Work page', js: false do
   let(:item_base_url) { "#{url_host}/concern/student_works/#{work.id}" }
   let(:subject_uri) { 'http://id.worldcat.org/fast/794949' }
   let(:subject_label) { 'Academic achievement' }
+  let(:advisor_lnumber) { 'L00000000' }
+  let(:advisor_label) { 'Smartfellow, Prof' }
 
   # see `before` block for how this used
   let(:presenter_check_method) { :pdf? }
   let(:file) { File.open(Rails.root.join('spec', 'fixtures', 'document.pdf')) }
 
-  # Only enqueue the ingest job, not charactarization.
-  # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
   before do
+    # Only enqueue the ingest job, not charactarization.
+    # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
-    RdfLabel.first_or_create(uri: subject_uri, value: subject_label)
+    allow(Spot::LafayetteInstructorsAuthorityService).to receive(:label_for).with(lnumber: advisor_lnumber).and_return(advisor_label)
+    RdfLabel.find_or_create_by(uri: subject_uri, value: subject_label)
+    RdfLabel.find_or_create_by(uri: advisor_lnumber, value: advisor_label)
 
     # Since we're not passing our objects through characterization,
     # we need to pretend we did by mocking a `:presenter_check_method`
@@ -35,6 +40,10 @@ RSpec.feature 'Show Student Work page', js: false do
       .and_return true
 
     visit item_base_url
+  end
+
+  after do
+    RdfLabel.destroy_all
   end
 
   scenario 'metadata fields are present' do
@@ -52,7 +61,9 @@ RSpec.feature 'Show Student Work page', js: false do
 
     expect_field_to_be_rendered :title
     expect_field_to_be_rendered :creator
-    expect_field_to_be_rendered :advisor
+
+    expect(page.all('.attribute-advisor_label').map(&:text)).to eq([advisor_label])
+
     expect_field_to_be_faceted  :academic_department
     expect_field_to_be_faceted  :division
     expect_field_to_be_rendered :description
