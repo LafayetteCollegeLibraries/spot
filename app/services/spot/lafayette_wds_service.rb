@@ -82,7 +82,7 @@ module Spot
       params[:term] = code unless code.nil?
       params[:year] = year unless year.nil?
 
-      fetch_and_parse('termInfo', params)
+      fetch_and_parse('/termInfo', params)
     end
 
     # prevent our api_key from leaking
@@ -113,17 +113,14 @@ module Spot
         response = client.get(path, params)
         parsed = JSON.parse(response.body)
 
-        case response.status
-        when 200
-          parsed
-        else
-          msg = parsed.fetch('message', 'An unknown error occurred')
-          raise(SearchError, msg)
-        end
+        return parsed if response.status == 200
+
+        msg = parsed.fetch('message', 'An unknown error occurred')
+        raise(SearchError, msg)
       end
 
       def web_data_services_url
-        ENV.fetch('LAFAYETTE_WDS_URL', 'https://webdataservices.lafayette.edu')
+        ENV.fetch('LAFAYETTE_WDS_URL')
       end
   end
 end

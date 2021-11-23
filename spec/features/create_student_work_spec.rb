@@ -40,7 +40,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in 'student_work_creator', with: attrs[:creator].first
       expect(page).to have_css '.student_work_creator .controls-add-text'
 
-      fill_in 'student_work_advisor', with: attrs[:advisor].first
+      fill_in_autocomplete '.student_work_advisor', with: attrs[:advisor].first
       expect(page).to have_css '.student_work_advisor .controls-add-text'
 
       fill_in_autocomplete '.student_work_academic_department', with: 'Libraries'

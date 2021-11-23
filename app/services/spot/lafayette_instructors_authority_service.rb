@@ -10,6 +10,9 @@ module Spot
   #   # => [#<Qa::LocalAuthorityEntry id: 1, local_authority_id: 1...>...]
   class LafayetteInstructorsAuthorityService
     API_ENV_KEY = 'LAFAYETTE_WDS_API_KEY'
+    SUBAUTHORITY_NAME = 'lafayette_instructors'
+
+    class UserNotFoundError < StandardError; end
 
     def self.label_for(lnumber, api_key: ENV.fetch(API_ENV_KEY))
       new(api_key: api_key).label_for(lnumber)
@@ -48,7 +51,7 @@ module Spot
       return stored.label unless stored.nil?
 
       remote = wds_service.person(lnumber: lnumber)
-      raise(ArgumentError, "No user found with L-number: #{lnumber}") unless remote.present?
+      raise(UserNotFoundError, "No user found with L-number: #{lnumber}") if remote == false
 
       find_or_create_entry(label: instructor_label(remote), value: instructor_id(remote)).label
     end
@@ -84,7 +87,7 @@ module Spot
       end
 
       def local_authority
-        @local_authority ||= Qa::LocalAuthority.find_or_create_by(name: 'lafayette_instructors')
+        @local_authority ||= Qa::LocalAuthority.find_or_create_by(name: SUBAUTHORITY_NAME)
       end
 
       def wds_service
