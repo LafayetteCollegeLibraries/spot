@@ -15,26 +15,8 @@ services:
       - uploads:/spot/uploads
     ports:
       - "3000:3000"
-    environment: &dev_environment
-      CAS_BASE_URL: ''
-      DEV_USER: dss@lafayette.edu
-      FEDORA_URL: http://fedora:8080/rest
-      FEDORA_TEST_URL: http://fedora:8080/rest
-      FITS_SERVLET_URL: http://fitsservlet:8080/fits
-      HYRAX_DERIVATIVES_PATH: "/spot/derivatives" # env key is hyrax >= 3
-      HYRAX_DERIVATIVE_PATH: "/spot/derivatives"  # env key is hyrax < 3
-      HYRAX_UPLOAD_PATH: "/spot/uploads"
-      IIIF_BASE_URL: http://localhost:8182/iiif/2
-      PSQL_PASSWORD: spot_dev_pw
-      PSQL_HOST: db
-      PSQL_USER: spot_dev_user
-      RAILS_ENV: development
-      RAILS_LOG_TO_STDOUT: 'true'
-      RAILS_SERVE_STATIC_FILES: '1'
-      REDIS_URL: redis://redis:6379
-      SOLR_URL: http://solr:8983/solr/spot-development
-      SOLR_TEST_URL: http://solr:8983/solr/spot-test
-      URL_HOST: http://localhost:3000
+    env_file:
+      - .env.local
     restart: always
     entrypoint: ["bin/spot-dev-entrypoint.sh"]
     command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
@@ -82,8 +64,8 @@ services:
     build:
       context: .
       target: spot-app
-    environment:
-      <<: *dev_environment
+    env_file:
+      - .env.local
     volumes:
       - gem_storage:/spot/vendor
     entrypoint: ["sh", "-c"]
@@ -128,8 +110,8 @@ services:
     build:
       context: .
       target: spot-worker
-    environment:
-      <<: *dev_environment
+    env_file:
+      - .env.local
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
