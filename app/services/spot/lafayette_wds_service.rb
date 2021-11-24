@@ -59,10 +59,7 @@ module Spot
     #   A user's L-number (ex. `"L00000000"`)
     # @return [Array<Hash<String => String>>, Hash<String => String>, false]
     def person(username: nil, email: nil, lnumber: nil)
-      params = {}
-      params[:lnumber] = lnumber unless lnumber.nil?
-      params[:email] = email unless email.nil?
-      params[:username] = username unless username.nil?
+      params = { lnumber: lnumber, email: email, username: username }.compact
 
       fetch_and_parse('/person', params)
     end
@@ -78,9 +75,7 @@ module Spot
     # @return [Hash<String => String>, false]
     # @todo Currently untested
     def term(code: nil, year: nil)
-      params = {}
-      params[:term] = code unless code.nil?
-      params[:year] = year unless year.nil?
+      params = { term: code, year: year }.compact
 
       fetch_and_parse('/termInfo', params)
     end
@@ -105,7 +100,7 @@ module Spot
         {
           'Accept' => 'application/json',
           'apikey' => api_key,
-          'User-Agent' => 'Lafayette Digital Repository / https://github.com/LafayetteCollegeLibraries/spot'
+          'User-Agent' => 'Lafayette Digital Repository // https://github.com/LafayetteCollegeLibraries/spot'
         }
       end
 
