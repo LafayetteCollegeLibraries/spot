@@ -17,3 +17,8 @@ update_solr_suggest_dictionaries:
   cron: '0 * * * *'
   class: Spot::UpdateSolrSuggestDictionariesJob
   queue: default
+
+load_lafayette_instructors:
+  cron: '0 0 * * 0'
+  class: Spot::LoadLafayetteInstructorsAuthorityJob
+  queue: default
