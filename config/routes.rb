@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   # only allow urls to be passed to the redirect controller
   get '/redirect', to: 'spot/redirect#show', constraints: lambda { |request|
     qs = Rack::Utils.parse_nested_query(request.query_string)
-    qs['url'] && qs['url'].match?(URI.regexp)
+    qs.dig('url')&.match?(URI.regexp)
   }
 
   # handle uri catching: ldr.lafayette.edu/handle/:id
