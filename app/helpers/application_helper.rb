@@ -23,7 +23,7 @@ module ApplicationHelper
                rescue
                  Time.zone.now
                end
-        date.strftime('%Y-%m-%d')
+        date.strftime('%B %d, %Y')
       else
         'Not in production environment'
       end
