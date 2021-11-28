@@ -10,6 +10,7 @@ RSpec.describe Spot::LafayetteWdsService do
 
   let(:api_key) { 'abc123def!' }
   let(:wds_host) { 'https://webdataservices.lafayette.edu' }
+  let(:search_uri) { wds_host }
   let(:response_body) { {} }
   let(:status_code) { 200 }
 
@@ -121,5 +122,11 @@ RSpec.describe Spot::LafayetteWdsService do
 
       it { is_expected.to eq response_body }
     end
+  end
+
+  describe '#inspect' do
+    subject { described_class.new(api_key: api_key).inspect }
+
+    it { is_expected.not_to include(api_key) }
   end
 end
