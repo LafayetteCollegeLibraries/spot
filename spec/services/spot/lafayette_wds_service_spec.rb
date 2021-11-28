@@ -122,4 +122,10 @@ RSpec.describe Spot::LafayetteWdsService do
       it { is_expected.to eq response_body }
     end
   end
+
+  describe '#inspect' do
+    subject { described_class.new(api_key: api_key).inspect }
+
+    it { is_expected.not_to include(api_key) }
+  end
 end
