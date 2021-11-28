@@ -7,9 +7,6 @@
 # before the job has a chance to perform)
 #
 # @todo clean up working directory after ingest (via callback?)
-# @todo fix rubocop warning; is this _too_ configurable?
-#
-# rubocop:disable Metrics/ParameterLists
 require 'fileutils'
 
 module Spot
@@ -45,4 +42,3 @@ module Spot
     end
   end
 end
-# rubocop:enable Metrics/ParameterLists

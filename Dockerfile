@@ -1,18 +1,20 @@
 # base image
-ARG RUBY_VERSION=2.7-alpine
+ARG RUBY_VERSION=2.4.3-alpine3.6
 FROM ruby:$RUBY_VERSION as spot-base
 
 # system dependencies
 # TODO: imagemagick might belong in the worker container instead?
 RUN apk --no-cache upgrade && \
+    apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nodejs=8.9.3-r1 && \
     apk --no-cache add \
         build-base \
+        coreutils \
         curl \
         ruby-dev \
         imagemagick \
         tzdata \
         netcat-openbsd \
-        nodejs yarn \
+        yarn \
         zip \
         postgresql postgresql-dev \
         git
