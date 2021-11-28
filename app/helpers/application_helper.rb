@@ -13,4 +13,20 @@ module ApplicationHelper
     return [] unless document.has_highlight_field? 'extracted_text_tsimv'
     document.highlight_field('extracted_text_tsimv').reject(&:blank?)
   end
+
+  def site_last_updated
+    @site_last_updated ||= begin
+      if Rails.env.production?
+        pwd = File.basename(Dir.pwd)
+        date = begin
+                 Date.parse(pwd)
+               rescue
+                 Time.zone.now
+               end
+        date.strftime('%Y-%m-%d')
+      else
+        'Not in production environment'
+      end
+    end
+  end
 end
