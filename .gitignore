@@ -16,12 +16,10 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+**/*.log
+.byebug_history
 
 /node_modules
-/yarn-error.log
-
-.byebug_history
-fits.log
 
 # Ignore the ingest directory
 /ingest
