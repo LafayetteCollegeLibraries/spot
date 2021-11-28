@@ -9,7 +9,7 @@ RSpec.describe ApplicationHelper do
   describe '#extracted_text_highlight_values_for' do
     subject { helper.extracted_text_highlight_values_for(document) }
 
-    let(:document) { SolrDocument.new({'id' => 'abc123def'}, solr_response) }
+    let(:document) { SolrDocument.new({ 'id' => 'abc123def' }, solr_response) }
 
     context 'when a document has highlight values' do
       let(:solr_response) do
