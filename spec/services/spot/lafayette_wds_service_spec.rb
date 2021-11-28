@@ -10,6 +10,7 @@ RSpec.describe Spot::LafayetteWdsService do
 
   let(:api_key) { 'abc123def!' }
   let(:wds_host) { 'https://webdataservices.lafayette.edu' }
+  let(:search_uri) { wds_host }
   let(:response_body) { {} }
   let(:status_code) { 200 }
 
