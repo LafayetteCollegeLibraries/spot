@@ -14,12 +14,18 @@ services:
       - rails_tmp:/spot/tmp
       - uploads:/spot/uploads
     ports:
-      - "3000:3000"
+      - "443:443"
     env_file:
       - .env.local
     restart: always
     entrypoint: ["bin/spot-dev-entrypoint.sh"]
-    command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+    command:
+      - "bundle"
+      - "exec"
+      - "rails"
+      - "server"
+      - "-b"
+      - "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"
     depends_on:
       - cantaloupe
       - db

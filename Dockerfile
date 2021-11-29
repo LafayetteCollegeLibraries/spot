@@ -17,7 +17,8 @@ RUN apk --no-cache upgrade && \
         yarn \
         zip \
         postgresql postgresql-dev \
-        git
+        git \
+        openssl
 
 # let's not run this as root
 # (taken from hyrax's Dockerfile)
@@ -62,6 +63,7 @@ FROM spot-base as spot-app
 COPY config/uv config/uv
 
 RUN yarn install
+CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/trustee_minutes/tmp/ssl/application.key&cert=/trustee_minutes/tmp/ssl/application.crt"]
 
 # precompile assets
 # RUN DATABASE_URL="postgres://fake" SECRET_KEY_BASE="secret-shh" bundle exec rake assets:precompile
