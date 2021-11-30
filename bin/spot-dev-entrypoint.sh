@@ -19,11 +19,16 @@ mkdir -p "$HYRAX_DERIVATIVES_PATH"
 mkdir -p "$app_root/tmp/ssl"
 
 # Generate a local SSL certificate so that we can run Rails on 443
-echo "generating ssl certificate"
-openssl req -x509 -nodes -newkey rsa:4096 \
-    -keyout "$app_root/tmp/ssl/application.key" \
-    -out "$app_root/tmp/ssl/application.crt" \
-    -subj "/C=US/ST=Pennsylvania/L=Easton/O=Lafayette College/OU=ITS/CN=${APPLICATION_FQDN}"
+ssl_key="$app_root/tmp/ssl/application.key"
+ssl_cert="$app_root/tmp/ssl/application.crt"
+
+if [[ ! -f $ssl_key && ! -f $ssl_cert ]]; then
+    echo "generating ssl certificate"
+    openssl req -x509 -nodes -newkey rsa:4096 \
+        -keyout "$ssl_key" \
+        -out "$ssl_cert" \
+        -subj "/C=US/ST=Pennsylvania/L=Easton/O=Lafayette College/OU=ITS/CN=${APPLICATION_FQDN}"
+fi
 
 rm -f tmp/pids/server.pid
 
