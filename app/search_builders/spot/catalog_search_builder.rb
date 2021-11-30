@@ -11,7 +11,7 @@ module Spot
     self.default_processor_chain -= [:show_works_or_works_that_contain_files]
     self.default_processor_chain += [
       :add_advanced_search_to_solr,
-      :conditionally_add_full_text_context
+      :add_full_text_context
     ]
 
     # Adds highlight field params if a query was passed
@@ -19,7 +19,7 @@ module Spot
     #
     # @params [Blacklight::Solr::Request] solr_parameters
     # @return [void]
-    def conditionally_add_full_text_context(params)
+    def add_full_text_context(params)
       return unless blacklight_params[:q].present?
 
       params['hl'] = true

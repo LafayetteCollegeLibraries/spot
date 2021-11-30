@@ -9,13 +9,7 @@ RSpec.describe Spot::CatalogSearchBuilder do
   end
 
   describe '#conditionally_add_full_text_context' do
-    subject(:context_query) { builder.conditionally_add_full_text_context(params) }
-
-    before do
-      allow(Flipflop)
-        .to receive(:enabled?)
-        .with(:search_result_contextual_match).and_return(feature_available)
-    end
+    subject(:context_query) { builder.add_full_text_context(params) }
 
     let(:builder) { described_class.new([]).with(blacklight_params) }
     let(:blacklight_params) { { q: 'a cool query' } }
@@ -31,12 +25,6 @@ RSpec.describe Spot::CatalogSearchBuilder do
 
     context 'when the query is empty' do
       let(:blacklight_params) { {} }
-
-      it { is_expected.to be_nil }
-    end
-
-    context 'when the feature is disabled' do
-      let(:feature_available) { false }
 
       it { is_expected.to be_nil }
     end
