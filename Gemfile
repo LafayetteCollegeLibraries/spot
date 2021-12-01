@@ -9,7 +9,7 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '5.2.5'
+gem 'rails', '5.2.6'
 
 # use Puma as the app server (dev only, we're using passenger in production)
 gem 'puma', '3.12.6'
