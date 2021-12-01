@@ -138,7 +138,7 @@ gem 'nokogiri', '~> 1.10.10'
 # to get things up to date. (see also `:development, :test` block below)
 gem 'amazing_print', '1.2.1'
 gem 'dry-container', '0.7.2'
-gem 'dry-core', '0.4.9'
+gem 'dry-core', '0.7.1'
 gem 'dry-inflector', '0.2.0'
 gem 'dry-matcher', '~> 0.8.3'
 gem 'dry-schema', '1.5.5'
