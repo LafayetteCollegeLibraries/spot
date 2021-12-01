@@ -5,10 +5,10 @@ RSpec.describe Spot::CatalogSearchBuilder do
 
     it { is_expected.not_to include :show_works_or_works_that_contain_files }
     it { is_expected.to include :add_advanced_search_to_solr }
-    it { is_expected.to include :conditionally_add_full_text_context }
+    it { is_expected.to include :add_full_text_context }
   end
 
-  describe '#conditionally_add_full_text_context' do
+  describe '#add_full_text_context' do
     subject(:context_query) { builder.add_full_text_context(params) }
 
     let(:builder) { described_class.new([]).with(blacklight_params) }
