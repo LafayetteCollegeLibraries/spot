@@ -147,7 +147,7 @@ gem 'dry-validation', '~> 1.5.6'
 gem 'globalid', '~> 0.4.2'
 gem 'parallel', '1.19.2'
 gem 'signet', '~> 0.13.2'
-gem 'simple_form', '~> 5.0.3'
+gem 'simple_form', '~> 5.1.0'
 gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
 
 # development dependencies (not as necessary to
