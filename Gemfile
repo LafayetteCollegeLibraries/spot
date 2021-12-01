@@ -63,7 +63,7 @@ gem 'devise_cas_authenticatable', '1.10.4'
 gem 'dotenv-rails', '2.7.5'
 
 # extended date formats
-gem 'edtf', '3.0.4'
+gem 'edtf', '3.0.6'
 gem 'edtf-humanize', '2.0.1'
 
 # error trackijng
