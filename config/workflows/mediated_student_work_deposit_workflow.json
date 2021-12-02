@@ -1,24 +1,10 @@
-// @todo (sipity questions)
-//   - what's the call order? methods then notifications? vice versa?
-//   - should we just be subclassing all of the notifications so that
-//     we have full control over how they're worded?
-//
-// @todo action classes to implement
-//   - Spot::Workflow::GrantReadToAdvisor
-//   - Spot::Workflow::GrantSipityRoleToAdvisor
-//
-// @todo notification classes to implement
-//   - Spot::Workflow::ChangesRequiredNotification
-//   - Spot::Workflow::PendingAdvisorReviewNotification
-//   - Spot::Workflow::PendingLibraryReviewNotification
-//   - Spot::Workflow::DepositedNotification
 {
   "workflows": [
     {
       "name": "mediated_student_work_deposit",
       "label": "Mediated StudentWork Deposit Workflow",
       "description": "",
-      "allow_access_grant": false, // what does this mean?
+      "allow_access_grant": false,
       "actions": [
         {
           "name": "deposit",
@@ -27,40 +13,30 @@
           "notifications": [
             {
               "notification_type": "email",
-              // note: implementing #users_to_notify (private) on this (if it inherits from Hyrax::Workflow::AbstractNotification)
-              //       will be how we know who to notify. it'll need to use `entity.proxy_for.advisor.first` to retrieve the
-              //       advisor's L-number, then look up the email in the local database. we'll also need to make sure the advisor's
-              //       `Sipity::User` entry has the "advising" role.
               "name": "Spot::Workflow::PendingAdvisorReviewNotification"
-
             }
           ],
           "methods": [
             "Hyrax::Workflow::DeactivateObject",
             "Hyrax::Workflow::GrantReadToDepositor",
-            "Spot::Workflow::GrantReadToAdvisor", // @todo
-            "Spot::Workflow::GrantSipityRoleToAdvisor" // @todo
-            // @todo should we grant edit to the advisor?
+            "Spot::Workflow::GrantReadToAdvisor",
+            "Spot::Workflow::GrantSipityRoleToAdvisor"
           ]
         },
         {
           "name": "advisor_requests_changes",
           "from_states": [
-            // @todo if we want to allow advisors to request changes _after_ a successful deposit,
-            // we can add "deposited" to the "names" field
             { "names": ["pending_advisor_review"], "roles": ["advising"] }
           ],
           "transition_to": "advisor_requests_changes",
           "notifications": [
             {
-              // this will look up the depositor + address the email to them
               "notification_type": "email",
-              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "name": "Spot::Workflow::ChangesRequiredNotification"
             }
           ],
           "methods": [
             "Hyrax::Workflow::GrantEditToDepositor"
-            // @todo if we granted edit to the advisor, should we revoke it at this point?
           ]
         },
         {
@@ -88,11 +64,10 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingLibraryReviewNotification"
+              "name": "Spot::Workflow::PendingLibraryReviewNotification",
+              "to": "library_approving"
             }
-            // @todo notify depositor?
-          ],
-          "methods": [] // may not need this field for this step
+          ]
         },
         {
           "name": "library_requests_changes",
@@ -134,7 +109,6 @@
           "transition_to": "deposited",
           "notifications": [
             {
-              // notify depositor
               "notification_type": "email",
               "name": "Spot::Workflow::DepositedNotification"
             }
