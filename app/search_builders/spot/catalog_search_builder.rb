@@ -11,29 +11,20 @@ module Spot
     self.default_processor_chain -= [:show_works_or_works_that_contain_files]
     self.default_processor_chain += [
       :add_advanced_search_to_solr,
-      :conditionally_add_full_text_context
+      :add_full_text_context
     ]
 
-    # Allows us to toggle highlighting on the extracted_text field,
-    # rather than defining the field within the CatalogController.
-    # This way we can preview the behavior first rather than exposing
-    # it and possibly having to remove it for performance reasons.
+    # Adds highlight field params if a query was passed
+    # to the search parameters.
     #
     # @params [Blacklight::Solr::Request] solr_parameters
     # @return [void]
-    def conditionally_add_full_text_context(params)
-      return unless display_full_text_context?
+    def add_full_text_context(params)
+      return unless blacklight_params[:q].present?
 
       params['hl'] = true
       params['hl.fl'] ||= []
       params['hl.fl'] << 'extracted_text_tsimv'
     end
-
-    private
-
-      # @return [true, false]
-      def display_full_text_context?
-        Flipflop.enabled?(:search_result_contextual_match) && blacklight_params[:q].present?
-      end
   end
 end
