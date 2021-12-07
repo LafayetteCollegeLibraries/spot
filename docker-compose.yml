@@ -1,40 +1,31 @@
 version: '3.7'
-volumes:
-  db:
-  fedora:
-  rails_public:
-  rails_tmp:
-  solr:
-  redis:
 
 services:
   app:
-    build: .
+    image: lafayettecollegelibraries/spot
+    build:
+      target: spot-app
+      context: .
     volumes:
       - .:/spot
+      - derivatives:/spot/derivatives
+      - gem_storage:/spot/vendor
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
+      - uploads:/spot/uploads
     ports:
-      - "3000:3000"
-    environment: &dev_environment
-      CAS_BASE_URL: ''
-      DEV_USER: dss@lafayette.edu
-      FEDORA_URL: http://fedora:8080/rest
-      FEDORA_TEST_URL: http://fedora:8080/rest
-      FITS_SERVLET_URL: http://fitsservlet:8080/fits
-      IIIF_BASE_URL: http://localhost:8182/iiif/2
-      PSQL_PASSWORD: spot_dev_pw
-      PSQL_HOST: db
-      PSQL_USER: spot_dev_user
-      RAILS_ENV: development
-      RAILS_LOG_TO_STDOUT: 'true'
-      REDIS_URL: redis://redis:6379
-      SOLR_URL: http://solr:8983/solr/spot-development
-      SOLR_TEST_URL: http://solr:8983/solr/spot-test
-      URL_HOST: http://localhost:3000
+      - "443:443"
+    env_file:
+      - .env.local
     restart: always
     entrypoint: ["bin/spot-dev-entrypoint.sh"]
-    command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+    command:
+      - "bundle"
+      - "exec"
+      - "rails"
+      - "server"
+      - "-b"
+      - "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"
     depends_on:
       - cantaloupe
       - db
@@ -50,55 +41,56 @@ services:
     image: uclalibrary/cantaloupe:4.1.5
     volumes:
       - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - rails_tmp:/imageroot
+      - derivatives:/spot/derivatives
     ports:
       - "8182:8182"
     environment:
-      CANTALOUPE_DELEGATE_SCRIPT_ENABLED: 'true'
+      CANTALOUPE_DELEGATE_SCRIPT_ENABLED: "true"
       CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
       CANTALOUPE_FILESYSTEMSOURCE_LOOKUP_STRATEGY: ScriptLookupStrategy
       CANTALOUPE_BASE_URI: 'http://localhost:8182'
+      DERIVATIVES_PATH: "/spot/derivatives"
     restart: always
 
   db:
-    image: postgres:alpine
+    image: postgres:9.6-alpine
     volumes:
-      - db:/data
+      - db:/var/lib/postgresql/data
       - ./bin/create-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-db.sql
+    ports:
+      - "5432:5432"
     environment:
-      PGDATA: /data
       POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
     restart: always
 
   db_migrate:
-    build: .
-    environment:
-      <<: *dev_environment
+    image: lafayettecollegelibraries/spot
+    build:
+      context: .
+      target: spot-app
+    env_file:
+      - .env.local
+    volumes:
+      - gem_storage:/spot/vendor
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
     depends_on:
       - db
       - fedora
       - solr
-    volumes:
-      - .:/spot
-      - rails_public:/spot/public
-      - rails_tmp:/spot/tmp
 
   fedora:
-    image: samvera/fcrepo4:4.7.5
+    image: ghcr.io/samvera/fcrepo4:4.7.5
     volumes:
-      - fedora:/data
+      - fedora:/data:cached
     ports:
-      - "8080:8080"
+      - 8080:8080
     restart: always
 
   fitsservlet:
     image: harvardlts/fitsservlet_container:1.4.1
-    environment:
-      FITSSERVLET_VERSION: '1.1.3'
 
   redis:
     image: redis:alpine
@@ -112,7 +104,7 @@ services:
       - ./solr/config:/spot-config
       - solr:/opt/solr/server/solr
     ports:
-      - '8983:8983'
+      - "8983:8983"
     entrypoint:
       - bash
       - "-c"
@@ -120,21 +112,33 @@ services:
     restart: always
 
   sidekiq:
-    build: .
-    command:
-      - bundle
-      - exec
-      - sidekiq
-    volumes:
-      - .:/app
-      - ./ingest:/ingest
-      - rails_public:/spot/public
-      - rails_tmp:/spot/tmp
+    image: lafayettecollegelibraries/spot
+    build:
+      context: .
+      target: spot-worker
+    env_file:
+      - .env.local
     ports:
       - "3003:3000"
-    environment:
-      <<: *dev_environment
+    command: ["bundle", "exec", "sidekiq"]
+    volumes:
+      - .:/spot
+      - ./ingest:/ingest
+      - derivatives:/spot/derivatives
+      - gem_storage:/spot/vendor
+      - uploads:/spot/uploads
     restart: always
     depends_on:
       - db_migrate
       - app
+
+volumes:
+  derivatives:
+  db:
+  fedora:
+  gem_storage:
+  solr:
+  rails_public:
+  rails_tmp:
+  redis:
+  uploads:

@@ -9,7 +9,7 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '~> 5.2'
+gem 'rails', '5.2.5'
 
 # use Puma as the app server (dev only, we're using passenger in production)
 gem 'puma', '3.12.6'
@@ -18,7 +18,7 @@ gem 'puma', '3.12.6'
 gem 'sass-rails', '5.1.0'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '4.1.20'
+gem 'uglifier', '4.2.0'
 
 # ugh, we're stuck with coffee-script until it's out of hyrax i guess
 gem 'coffee-rails', '5.0.0'
@@ -49,10 +49,10 @@ gem 'blacklight_oai_provider', '6.0.0'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '1.4.7'
+gem 'bootsnap', '1.9.1'
 
 # record importer pattern from curationexperts
-gem 'darlingtonia', '3.2.2'
+gem 'darlingtonia', '~> 3.0'
 
 # user management
 gem 'devise', '4.7.1'
@@ -92,7 +92,7 @@ gem 'rdf-vocab', '3.1.4'
 gem 'rsolr', '2.3.0'
 
 # used in conjunction with our importers to zip/unzip files
-gem 'rubyzip', '2.3.0'
+gem 'rubyzip', '2.3.2'
 
 # our jobs server
 gem 'sidekiq', '5.2.9'
@@ -116,7 +116,7 @@ gem 'kaminari', '1.2.1'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '0.17.3'
+gem 'faraday', '0.17.4'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
@@ -133,6 +133,23 @@ gem 'linkeddata', '~> 3.0'
 gem 'bootstrap_form', '~> 4.4.0'
 gem 'nokogiri', '~> 1.10.10'
 
+# These are subdependencies that need to be locked tighter to be run on ruby 2.4.3.
+# In theory, we should just be able to remove these entries and run `bundle update`
+# to get things up to date. (see also `:development, :test` block below)
+gem 'amazing_print', '1.2.1'
+gem 'dry-container', '0.7.2'
+gem 'dry-core', '0.4.9'
+gem 'dry-inflector', '0.2.0'
+gem 'dry-matcher', '~> 0.8.3'
+gem 'dry-schema', '1.5.5'
+gem 'dry-transaction', '0.12.1'
+gem 'dry-validation', '~> 1.5.6'
+gem 'globalid', '~> 0.4.2'
+gem 'parallel', '1.19.2'
+gem 'signet', '~> 0.13.2'
+gem 'simple_form', '~> 5.0.3'
+gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
@@ -145,9 +162,9 @@ group :development do
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.16', require: false
-  gem 'capistrano-bundler', '~> 1.3'
+  gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-ext', '~> 1.2.1'
-  gem 'capistrano-passenger', '~> 0.2.0'
+  gem 'capistrano-passenger', '~> 0.2.1'
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-sidekiq', '~> 1.0.3'
 end
@@ -155,9 +172,7 @@ end
 # things used for development + testing (again, not as
 # necessary to lock down versions)
 group :development, :test do
-  gem 'bixby', '~> 2.0.0.pre.beta1'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara', '~> 3'
   gem 'capybara-screenshot', '~> 1.0.25'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
@@ -168,11 +183,21 @@ group :development, :test do
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 4.0'
   gem 'rspec_junit_formatter', '~> 0.4.1'
-  gem 'rubocop', '~> 0.63'
-  gem 'rubocop-rspec', '~> 1.3'
   gem 'shoulda-matchers', '~> 4'
-  gem 'simplecov', '~> 0.17', require: false
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 4'
+  gem 'webdrivers', '~> 4.6.1'
   gem 'webmock', '~> 3.8'
+
+  # dependencies we have to lock in order to work with ruby 2.4.3 on prem
+  # (@todo update these when we're in the cloud)
+  gem 'bixby', '1.0.0'
+  gem 'capybara', '~> 3.32.0'
+  gem 'rubocop', '~> 0.52.0'
+  gem 'rubocop-rspec', '1.22.2'
+  gem 'simplecov', '~> 0.17.1', require: false
+
+  # subdependencies that we need to lock for ruby 2.4.3.
+  # (@todo remove these when we're in the cloud)
+  gem 'docile', '~> 1.3.5'
+  gem 'matrix', '0.1.0'
 end

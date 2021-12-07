@@ -4,7 +4,7 @@ RSpec.shared_examples 'it indexes a permalink' do
 
   let(:solr_doc) { indexer.generate_solr_document }
   let(:indexer) { described_class.new(work) }
-  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').downcase.to_sym }
+  let(:work_klass) { described_class.name.gsub(/Indexer$/, '').underscore.to_sym }
   let(:work) { build(work_klass, id: 'abc123def', identifier: identifier) }
   let(:solr_field) { described_class::PERMALINK_SOLR_FIELD }
   let(:application_url) do

@@ -1,5 +1,29 @@
 # changelog
 
+## [2021.6] - 2021-12-06
+
+### enhancements 🛠️ 
+- update repository_librarian_email address (abfc7ba)
+- add Athletics and College Archives to Lafayette Divisions authority (#751)
+- reconfigure Dockerfile + local docker-compose setup (#762, #763, #770)
+- add StudentWork model (#753) and switch to using Ability to determine what work types are presented to the user
+- add lafayette_instructors local authority endpoint and use it for `StudentWork#advisor` (#764)
+- removes broken version number from site footer (#766) 
+- switches to running rails on port 443 within the container, generating a self-signed ssl certificate as part of the docker entrypoint (#768)
+- removes FlipFlop option for contextual search results, leaving them on all the time (#771)
+- fixes for a couple of long out-standing "code complexity" issues
+
+### dependencies 👩‍👩‍👧‍👧 
+- updates hyrax to 2.9.6 and locks down dependencies needed to continue running locally on our on-prem version of ruby (#765). 
+- bootsnap to 1.9.1 (#760)
+- capistrano-bundler to 2.0.1 (#736)
+- capistrano-passenger to 0.2.1 (#756)
+- faraday to 0.17.4 (#731)
+- rubyzip to 2.3.2 (#759) 
+- uglifier to 4.2.0 (#757)
+
+
+
 ## [2021.5] - 2021-08-13
 
 ### updates
@@ -12,6 +36,7 @@
 - edtf-humanize to 2.0.1 (#737)
 - honeybadger to 4.9.0 (#742)
 - mini_magick to 4.11.0 (#739)
+
 
 ## [2021.4] - 2021-05-18
 
@@ -618,6 +643,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2021.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.6
 [2021.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.5
 [2021.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.4
 [2021.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.3

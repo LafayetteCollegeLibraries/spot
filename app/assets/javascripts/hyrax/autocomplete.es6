@@ -24,6 +24,7 @@ export default class Autocomplete {
           url)
         break
       case 'academic_department':
+      case 'advisor':
       case 'division':
       case 'language':
       case 'location':

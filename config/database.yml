@@ -1,22 +1,25 @@
 default: &default
   adapter: postgresql
-  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   timeout: 5000
   encoding: unicode
-  host: <%= ENV.fetch('PSQL_HOST') { 'localhost' } %>
+  host: <%= ENV.fetch('PSQL_HOST', 'localhost') %>
   username: "<%= ENV.fetch('PSQL_USER') %>"
-  password: "<%= ENV.fetch('PSQL_PASSWORD') { '' } %>"
+  password: "<%= ENV.fetch('PSQL_PASSWORD', '') %>"
 
 development:
   <<: *default
-  database: "<%= ENV.fetch('PSQL_DATABASE') { 'spot_dev' } %>"
+  database: "<%= ENV.fetch('PSQL_DATABASE', 'spot_dev') %>"
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: "<%= ENV.fetch('PSQL_DATABASE') { 'spot_test' } %>"
+  username: "<%= ENV.fetch('PSQL_USER', 'spot_dev_user') %>"
+  password: "<%= ENV.fetch('PSQL_PASSWORD', 'spot_dev_pw') %>"
+  database: "<%= ENV.fetch('PSQL_DATABASE', 'spot_test') %>"
 
 production:
   <<: *default
+  database: "<%= ENV.fetch('PSQL_DATABASE', 'spot_production') %>"

@@ -41,13 +41,6 @@ module Hyrax
       :note
     ].concat(hyrax_form_fields)
 
-    # An array to iterate through when building our custom portion
-    # of the form. The Hyrax-specific fields are excluded.
-    # @return [Array<Symbol>]
-    def primary_terms
-      terms - self.class.hyrax_form_fields
-    end
-
     class << self
       def build_permitted_params
         super.tap do |params|

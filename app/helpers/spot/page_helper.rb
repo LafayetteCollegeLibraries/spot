@@ -7,7 +7,7 @@ module Spot
 
     # @todo put this into a config file
     def repository_librarian_email
-      'egloffn@lafayette.edu'
+      'zimmerno@lafayette.edu'
     end
   end
 end

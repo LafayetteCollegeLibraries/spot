@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+  <table class="table table-bordered work-show <%= dom_class(presenter) %> metadata-table">
+    <tbody>
+      <%= presenter.attribute_to_html(:title) %>
+      <%= presenter.attribute_to_html(:creator) %>
+      <%= presenter.attribute_to_html(:advisor_label,
+                                      render_as: :faceted,
+                                      search_field: :advisor_label_ssim) %>
+      <%= presenter.attribute_to_html(:academic_department, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:division, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:description) %>
+      <%= presenter.attribute_to_html(:date) %>
+      <%= presenter.attribute_to_html(:date_available) %>
+      <%= presenter.attribute_to_html(:resource_type, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:abstract) %>
+      <%= presenter.attribute_to_html(:language_label,
+                                      render_as: :faceted,
+                                      search_field: :language_label_ssim) %>
+      <%= presenter.attribute_to_html(:related_resource) %>
+      <%= presenter.attribute_to_html(:access_note) %>
+      <%= presenter.attribute_to_html(:organization, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:subject,
+                                      render_as: :external_authority,
+                                      search_field: :subject_label_ssim) %>
+      <%= presenter.attribute_to_html(:keyword, render_as: :faceted) %>
+      <%= presenter.attribute_to_html(:bibliographic_citation) %>
+      <%= presenter.attribute_to_html(:standard_identifier, render_as: :identifier) %>
+      <%= presenter.attribute_to_html(:note) %>
+
+      <%= render 'shared/metadata/rights_statement', presenter: presenter %>
+    </tbody>
+  </table>
+</div>

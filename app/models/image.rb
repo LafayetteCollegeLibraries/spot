@@ -5,14 +5,10 @@ class Image < ActiveFedora::Base
   include Spot::WorkBehavior
 
   self.indexer = ImageIndexer
+  self.controlled_properties = [:location, :subject]
 
   # Change this to restrict which works can be added as a child.
   # self.valid_child_concerns = []
-
-  # if adding controlled fields (other than :location and :subject), uncomment this
-  # and add the fields to the +controlled_properties+ array
-  #
-  # self.controlled_properties += []
 
   # date indexing is covered in ImageIndexer
   property :date, predicate: ::RDF::Vocab::DC.date do |index|

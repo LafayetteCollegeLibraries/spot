@@ -7,24 +7,18 @@ RSpec.describe Spot::Forms::CollectionForm do
   let(:hyrax_fields) { %i[visibility collection_type_gid] }
 
   it_behaves_like 'it handles identifier form fields'
-  it_behaves_like 'it strips whitespaces from values'
+  it_behaves_like 'it handles required fields', :title
 
-  shared_context 'required fields' do
-    it 'contains required fields' do
-      expect(terms).to include :title
-    end
-  end
-
-  describe '.required_fields' do
-    subject(:terms) { described_class.required_fields }
-
-    include_context 'required fields'
+  # need to change the field being tested here, as Collections
+  # don't use :resource_type
+  #
+  # @see spec/support/shared_examples/forms/strips_whitespace.rb
+  it_behaves_like 'it strips whitespaces from values' do
+    let(:field) { :sponsor }
   end
 
   describe '.terms' do
     subject(:terms) { described_class.terms }
-
-    include_context 'required fields'
 
     it { is_expected.to include :abstract }
     it { is_expected.to include :description }

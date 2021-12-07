@@ -48,6 +48,9 @@ en:
       500:
         page_title: 'Something went wrong! // %{name}'
 
+    footer:
+      last_updated: 'Last updated: %{date}'
+
     homepage:
       index:
         page_title: Welcome to the %{name}

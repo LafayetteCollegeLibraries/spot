@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 RSpec.feature 'Create a Publication', :clean, :js do
   before do
+    stub_request(:get, subject_uri)
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
@@ -12,12 +13,13 @@ RSpec.feature 'Create a Publication', :clean, :js do
   let(:i18n_term) { I18n.t(:'activefedora.models.publication') }
   let(:app_name) { I18n.t('hyrax.product_name') }
 
-  context 'a logged in admin user' do
+  context 'an admin user' do
     let(:user) { create(:admin_user) }
-    let(:attrs) { attributes_for(:publication, identifier: [id_local.to_s, id_standard.to_s]) }
+    let(:attrs) { attributes_for(:publication, identifier: [id_local.to_s, id_standard.to_s], subject: [subject_uri]) }
     let(:id_local) { Spot::Identifier.new('local', 'abc123') }
     let(:id_standard) { Spot::Identifier.new('issn', '1234-5678') }
     let(:identifier) { Spot::Identifier.from_string(attrs[:identifier].first) }
+    let(:subject_uri) { 'http://id.worldcat.org/fast/1061714' }
 
     describe 'can fill out and submit a new Publication' do
       scenario do
@@ -27,11 +29,8 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         sleep 1
 
-        # @todo uncomment these next two steps when we introduce
-        # another model + register it in the hyrax initializer
-        #
-        # choose 'Publication'
-        # click_button 'Create work'
+        choose 'Publication'
+        click_button 'Create work'
 
         expect(page).to have_content "Add New #{i18n_term}"
 

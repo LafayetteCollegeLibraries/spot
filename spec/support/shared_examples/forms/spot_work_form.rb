@@ -3,6 +3,7 @@ RSpec.shared_examples 'a Spot work form' do
   it_behaves_like 'it strips whitespaces from values'
   it_behaves_like 'it handles identifier form fields'
   it_behaves_like 'it has hints for all primary_terms'
+  it_behaves_like 'it builds Hyrax permitted params'
 
   describe '.terms' do
     subject(:terms) { described_class.terms }
@@ -16,7 +17,7 @@ RSpec.shared_examples 'a Spot work form' do
     subject(:rights) { form.rights_statement }
 
     let(:form) { described_class.new(work, ability, nil) }
-    let(:work) { build(work_klass.downcase.to_sym) }
+    let(:work) { build(work_klass.underscore.to_sym) }
     let(:work_klass) { described_class.name.split('::').last.gsub(/Form$/, '') }
     let(:ability) { Ability.new(build(:admin_user)) }
 

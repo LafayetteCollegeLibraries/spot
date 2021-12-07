@@ -7,3 +7,14 @@ Rake::Task['hyrax:default_collection_types:create'].invoke
 # local set up: create roles + default collections + deposit user
 Rake::Task['spot:roles:default'].invoke
 Rake::Task['spot:create_deposit_user'].invoke
+
+if ENV['DEV_ADMIN_USERS'].present?
+  admin = Role.find_by(name: 'admin')
+
+  ENV['DEV_ADMIN_USERS'].split(/,\s*/).each do |email|
+    username = email.gsub(/@.+/, '')
+    admin.users << User.find_or_create_by(username: username, email: email)
+  end
+
+  admin.save
+end

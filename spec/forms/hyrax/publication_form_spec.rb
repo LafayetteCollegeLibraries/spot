@@ -1,23 +1,10 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::PublicationForm do
   it_behaves_like 'a Spot work form'
-
-  shared_context 'required fields' do
-    it 'contains required fields' do
-      expect(terms).to include :title, :date_issued, :resource_type, :rights_statement
-    end
-  end
-
-  describe '.required_fields' do
-    subject(:terms) { described_class.required_fields }
-
-    include_context 'required fields'
-  end
+  it_behaves_like 'it handles required fields', :title, :date_issued, :resource_type, :rights_statement
 
   describe '.terms' do
     subject(:terms) { described_class.terms }
-
-    include_context 'required fields'
 
     describe 'includes optional fields' do
       it { is_expected.to include :rights_holder }
@@ -122,22 +109,6 @@ RSpec.describe Hyrax::PublicationForm do
     it { is_expected.to include(local_identifier: []) }
     it { is_expected.to include(related_resource: []) }
     it { is_expected.to include(:rights_statement) }
-    it { is_expected.to include(:representative_id, :thumbnail_id) }
-    it { is_expected.to include(rendering_ids: []) }
-    it { is_expected.to include(files: []) }
-    it {
-      is_expected.to include(:visibility_during_embargo, :embargo_release_date,
-                             :visibility_after_embargo, :visibility_during_lease,
-                             :lease_expiration_date, :visibility_after_lease, :visibility)
-    }
-    it { is_expected.to include(ordered_member_ids: []) }
-    it { is_expected.to include(in_works_ids: []) }
-    it { is_expected.to include(member_of_collection_ids: []) }
-    it { is_expected.to include(:admin_set_id) }
-    it { is_expected.to include(permissions_attributes: [:type, :name, :access, :id, :_destroy]) }
-    it { is_expected.to include(:on_behalf_of) }
-    it { is_expected.to include(:version) }
-    it { is_expected.to include(:add_works_to_collection) }
     it {
       is_expected.to include(based_near_attributes: [:id, :_destroy],
                              member_of_collections_attributes: [:id, :_destroy],

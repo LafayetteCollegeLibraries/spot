@@ -36,19 +36,20 @@ module LanguageTaggedFormFields
     #
     # @return [Array<Symbol,Hash<Symbol => Array>>]
     def build_permitted_params
-      super.tap do |params|
-        language_tagged_fields.each do |field|
-          if multiple?(field)
-            params << {
-              "#{field}_value": [],
-              "#{field}_language": []
-            }
-          else
-            params << :"#{field}_value"
-            params << :"#{field}_language"
-          end
+      params = super
+      return params unless respond_to?(:language_tagged_fields)
+
+      language_tagged_fields.each do |field|
+        field_params = { "#{field}_value": [], "#{field}_language": [] }
+
+        if multiple?(field)
+          params << field_params
+        else
+          params += field_params.keys
         end
       end
+
+      params
     end
 
     # Calls our transformation method as part of the chain of
@@ -70,6 +71,8 @@ module LanguageTaggedFormFields
       # @param params [ActiveController::Parameters, Hash<String => Array<String>>]
       # @return [void]
       def transform_language_tagged_fields!(params)
+        return unless respond_to?(:language_tagged_fields)
+
         language_tagged_fields.flatten.each do |field|
           value_key = "#{field}_value"
           lang_key = "#{field}_language"

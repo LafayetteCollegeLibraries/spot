@@ -3,9 +3,8 @@
     <div class="row">
       <div class="col-sm-4">
         <h4><%= t('hyrax.product_name') %></h4>
-        <p>Version: <%= Spot::VERSION %>, last updated: <%= Spot::LAST_DEPLOYED %></p>
+        <p><%= t('spot.footer.last_updated', date: site_last_updated) %></p>
       </div>
-
       <div class="col-sm-5 col-sm-offset-3">
         <div class="col-sm-6">
           <ul>

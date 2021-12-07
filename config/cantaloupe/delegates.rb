@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 #
 # Bare-bones CustomDelegate for local development. This is expecting the
-# rails tmp/derivatives path to be mounted at /image-root
+# Hyrax derivatives path to be mounted at /spot/derivatives or defined on
+# the Cantaloupe container using the DERIVATIVES_PATH env value.
 class CustomDelegate
   attr_accessor :context
   # @param _options [Hash] Empty hash.
@@ -11,7 +12,7 @@ class CustomDelegate
   def filesystemsource_pathname(_options = {})
     raw_id = context['identifier']
     derivative_path = raw_id.scan(/..?/).join('/') + '-access.tif'
-    full_path = ::File.join('/imageroot/derivatives', derivative_path)
+    full_path = ::File.join(ENV.fetch('DERIVATIVES_PATH', '/spot/derivatives'), derivative_path)
 
     full_path if ::File.exist?(full_path)
   end

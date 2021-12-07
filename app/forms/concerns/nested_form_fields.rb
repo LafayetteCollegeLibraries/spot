@@ -38,6 +38,8 @@ module NestedFormFields
     #
     # @return [Array<Symbol, Hash<Symbol => Array>]
     def build_permitted_params
+      return super unless respond_to?(:_nested_fields)
+
       super.tap do |params|
         _nested_fields.each do |field|
           params << { "#{field}_attributes": [:id, :_destroy] }
@@ -76,34 +78,26 @@ module NestedFormFields
       # just using the jquery-ui autocomplete field type.
       #
       # @param [ActionController::Parameters, Hash] params
-      # @return [void]
+      # @return [ActionController::Parameters, Hash]
       def transform_nested_fields!(params)
-        _nested_fields.each do |field|
-          attr_field_key = "#{field}_attributes"
-          next unless params.include?(attr_field_key)
+        return unless respond_to?(:_nested_fields)
 
-          values = transform_nested_attributes(params, attr_field_key)
+        _nested_fields.each do |field_key|
+          field = params.delete("#{field_key}_attributes")
+          next if field.nil?
 
-          params[field] = values || []
+          params[field_key] = transform_nested_values(field.values)
         end
       end
 
-      # flattens a nested_attribute hash into an array of
+      # flattens nested_attribute values into an array of
       # ids. if the +_destroy+ key is present, the field
       # is skipped, removing it from the record.
       #
-      # @param [ActionController::Parameters,Hash] params
-      # @param [Symbol,String] field
+      # @param [Array<Hash<'id', '_destroy'>>,#map] values
       # @return [Array<String>]
-      def transform_nested_attributes(params, field)
-        return if params[field].blank?
-
-        [].tap do |out|
-          params.delete(field.to_s).each_pair do |_idx, param|
-            next unless param['_destroy'].blank?
-            out << param['id'] if param['id']
-          end
-        end
+      def transform_nested_values(values)
+        values.map { |value| value['id'] if value['_destroy'].blank? }.compact
       end
   end
 end

@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base
   with_themed_layout '1_column'
 
   before_action :store_user_location!, if: :storable_location?
-  before_action :log_in_as_dev_user!
 
   # from Blacklight: 'Discarding flash messages on XHR requests is deprecated.'
   skip_after_action :discard_flash_if_xhr
@@ -66,16 +65,6 @@ class ApplicationController < ActionController::Base
         wants.html { redirect_to main_app.new_user_session_path }
         wants.json { render_json_response(response_type: :unauthorized, message: json_message) }
       end
-    end
-
-    # Bypasses CAS authentication (development only)
-    # :nocov:
-    #
-    # @return [void]
-    def log_in_as_dev_user!
-      return unless Rails.env.development? && (current_user || ENV.key?('DEV_USER'))
-      user = User.find_by(email: ENV['DEV_USER'])
-      sign_in(user) unless user.nil?
     end
 
     # Borrowed from the Devise wiki:

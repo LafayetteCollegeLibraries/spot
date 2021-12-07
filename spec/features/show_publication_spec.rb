@@ -5,13 +5,12 @@ RSpec.feature 'Show Publication page', js: false do
   let(:pub) do
     create(:publication_with_file_set,
            content: file,
-           language: language,
+           language: ['en'],
            subject: [RDF::URI(subject_uri)])
   end
 
   let(:url_host) { ENV['URL_HOST'] }
   let(:item_base_url) { "#{url_host}/concern/publications/#{pub.id}" }
-  let(:language) { ['en'] }
   let(:subject_uri) { 'http://id.worldcat.org/fast/2004076' }
   let(:subject_label) { 'Little free libraries' }
 
