@@ -26,7 +26,7 @@ class User < ApplicationRecord
     faculty: 2,
     staff: 3,
     alumni: 4
-  }, _default: :unknown, _suffix: true
+  }, _suffix: true
 
   # Can this user deposit items?
   #
@@ -54,27 +54,36 @@ class User < ApplicationRecord
     self.username = attributes['uid']
     self.email = attributes['email']
     self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
+
     self.lnumber = attributes['lnumber']
     self.affiliation = affiliation_from_attributes(attributes)
   end
 
   private
 
-  # Determines the value for `affiliation` from the passed attributes.
-  #
-  # @return [Symbol]
-  def affiliation_from_attributes(attributes)
-    :unknown
-  end
+    # Determines the value for `affiliation` from the passed attributes.
+    #
+    # @return [Symbol]
+    def affiliation_from_attributes(attributes)
+      entitlement = URI.parse(attributes.fetch('eduPersonEntitlement', ''))
+      return :unknown unless entitlement.host == 'ldr.lafayette.edu'
 
-  # Callback to ensure that we store a username, as that's what's used for uniqueness.
-  # We occasionally provide a depositor in some ingest cases, but that relies on the
-  # email address and _not_ the username. We'll capture the username as anything
-  # before the +@+ symbol of the email.
-  #
-  # @return [void]
-  def ensure_username
-    return unless username.blank?
-    self.username = email.gsub(/@.*$/, '')
-  end
+      case entitlement.path
+      when '/student', '/faculty', '/staff', '/alumni'
+        entitlement.path[1..-1].to_sym
+      else
+        :unknown
+      end
+    end
+
+    # Callback to ensure that we store a username, as that's what's used for uniqueness.
+    # We occasionally provide a depositor in some ingest cases, but that relies on the
+    # email address and _not_ the username. We'll capture the username as anything
+    # before the +@+ symbol of the email.
+    #
+    # @return [void]
+    def ensure_username
+      return unless username.blank?
+      self.username = email.gsub(/@.*$/, '')
+    end
 end
