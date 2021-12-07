@@ -1,0 +1,18 @@
+# instead of generating a new file for each work type,
+# let's deal with those fields in a single file (per language)
+en:
+  hyrax:
+    icons:
+      image: 'fa fa-file-text-o'
+      publication: 'fa fa-file-text-o'
+      student_work: 'fa fa-file-text-o'
+    select_type:
+      image:
+        description: Digital representation of visual works
+        name: Image
+      publication:
+        name: Publication
+        description: Works that have been published
+      student_work:
+        name: Student Work
+        description: Works created by students
