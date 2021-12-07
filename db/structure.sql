@@ -9,9 +9,23 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -46,7 +60,6 @@ CREATE TABLE public.bookmarks (
 --
 
 CREATE SEQUENCE public.bookmarks_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -502,7 +515,6 @@ CREATE TABLE public.mailboxer_conversation_opt_outs (
 --
 
 CREATE SEQUENCE public.mailboxer_conversation_opt_outs_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -534,7 +546,6 @@ CREATE TABLE public.mailboxer_conversations (
 --
 
 CREATE SEQUENCE public.mailboxer_conversations_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -578,7 +589,6 @@ CREATE TABLE public.mailboxer_notifications (
 --
 
 CREATE SEQUENCE public.mailboxer_notifications_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -619,7 +629,6 @@ CREATE TABLE public.mailboxer_receipts (
 --
 
 CREATE SEQUENCE public.mailboxer_receipts_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -655,7 +664,6 @@ CREATE TABLE public.minter_states (
 --
 
 CREATE SEQUENCE public.minter_states_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -918,7 +926,6 @@ CREATE TABLE public.roles (
 --
 
 CREATE SEQUENCE public.roles_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -971,7 +978,6 @@ CREATE TABLE public.searches (
 --
 
 CREATE SEQUENCE public.searches_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1690,9 +1696,6 @@ CREATE TABLE public.users (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     guest boolean DEFAULT false,
-    facebook_handle character varying,
-    twitter_handle character varying,
-    googleplus_handle character varying,
     display_name character varying,
     address character varying,
     admin_area character varying,
@@ -1701,7 +1704,7 @@ CREATE TABLE public.users (
     office character varying,
     chat_id character varying,
     website character varying,
-    affiliation character varying,
+    affiliation integer DEFAULT 0,
     telephone character varying,
     avatar_file_name character varying,
     avatar_content_type character varying,
@@ -1714,7 +1717,8 @@ CREATE TABLE public.users (
     zotero_token bytea,
     zotero_userid character varying,
     preferred_locale character varying,
-    username character varying
+    username character varying,
+    lnumber character varying
 );
 
 
@@ -3306,6 +3310,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190220133607'),
 ('20190315143022'),
 ('20190327194742'),
-('20200128221650');
+('20200128221650'),
+('20211206185043');
 
 

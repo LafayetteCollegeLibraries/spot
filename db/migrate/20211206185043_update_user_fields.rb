@@ -1,27 +1,20 @@
 class UpdateUserFields < ActiveRecord::Migration[5.2]
   def up
-    change_table :users do |t|
-      # drop socials
-      t.remove :facebook_handle, :string
-      t.remove :twitter_handle, :string
-      t.remove :googleplus_handle, :string
+    remove_column :users, :facebook_handle
+    remove_column :users, :twitter_handle
+    remove_column :users, :googleplus_handle
 
-      # add lnumber (string) and affiliation (enum)
-      t.string :lnumber
-      t.integer :affiliation
-    end
+    # convert `User#affiliation` to an enum field (currently unused as :string)
+    change_column :users, :affiliation, :integer, default: 0, using: 'affiliation::integer'
+    add_column :users, :lnumber, :string
   end
 
   def down
-    change_table :users do |t|
-      # drop our additions
-      t.remove :lnumber, :string
-      t.remove :affiliation, :integer
+    remove_column :users, :lnumber
+    change_column :users, :affiliation, :string
 
-      # add our removals
-      t.string :facebook_handle
-      t.string :twitter_handle
-      t.string :googleplus_handle
-    end
+    add_column :users, :facebook_handle, :string
+    add_column :users, :twitter_handle, :string
+    add_column :users, :googleplus_handle, :string
   end
 end
