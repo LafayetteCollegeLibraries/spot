@@ -20,6 +20,14 @@ class User < ApplicationRecord
 
   before_save :ensure_username
 
+  enum affiliation: {
+    unknown: 0,
+    student: 1,
+    faculty: 2,
+    staff: 3,
+    alumni: 4
+  }, _default: :unknown, _suffix: true
+
   # Can this user deposit items?
   #
   # @return [true, false]
@@ -46,9 +54,18 @@ class User < ApplicationRecord
     self.username = attributes['uid']
     self.email = attributes['email']
     self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
+    self.lnumber = attributes['lnumber']
+    self.affiliation = affiliation_from_attributes(attributes)
   end
 
   private
+
+  # Determines the value for `affiliation` from the passed attributes.
+  #
+  # @return [Symbol]
+  def affiliation_from_attributes(attributes)
+    :unknown
+  end
 
   # Callback to ensure that we store a username, as that's what's used for uniqueness.
   # We occasionally provide a depositor in some ingest cases, but that relies on the
@@ -58,7 +75,6 @@ class User < ApplicationRecord
   # @return [void]
   def ensure_username
     return unless username.blank?
-
     self.username = email.gsub(/@.*$/, '')
   end
 end
