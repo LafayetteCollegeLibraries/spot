@@ -74,47 +74,47 @@ module Qa::Authorities
       []
     end
 
-    private
+  private
 
-      def connection
-        ActiveFedora::SolrService.instance.conn
+    def connection
+      ActiveFedora::SolrService.instance.conn
+    end
+
+    # @return [String]
+    def suggest_path
+      @suggest_path ||= begin
+        url = Rails.application.config_for(:solr)['url']
+        URI.join(url + '/', 'suggest').path
       end
+    end
 
-      # @return [String]
-      def suggest_path
-        @suggest_path ||= begin
-          url = Rails.application.config_for(:solr)['url']
-          URI.join(url + '/', 'suggest').path
-        end
+    # @param [String] query
+    # @return [Array<Hash<String => String>>]
+    def solr_suggestion_for_query(query)
+      params = {
+        'suggest.q' => query,
+        'suggest.dictionary' => dictionary
+      }
+
+      raw = connection.get(suggest_path, params: params)
+      parse_raw_response(raw, query: query)
+    end
+
+    # Takes the Solr response and transforms the results into the
+    # Questioning Authority preferred format.
+    #
+    # @param [Hash<String => *>] raw
+    # @param [Hash] options
+    # @option [String] query
+    #   The initial query, used to extract results from the returned Hash
+    # @return [Array<Hash<String => String>>]
+    def parse_raw_response(raw, query:)
+      suggestions = raw.dig('suggest', dictionary, query, 'suggestions')
+      suggestions ||= []
+
+      suggestions.map do |res|
+        { id: res['term'], label: res['term'], value: res['term'] }
       end
-
-      # @param [String] query
-      # @return [Array<Hash<String => String>>]
-      def solr_suggestion_for_query(query)
-        params = {
-          'suggest.q' => query,
-          'suggest.dictionary' => dictionary
-        }
-
-        raw = connection.get(suggest_path, params: params)
-        parse_raw_response(raw, query: query)
-      end
-
-      # Takes the Solr response and transforms the results into the
-      # Questioning Authority preferred format.
-      #
-      # @param [Hash<String => *>] raw
-      # @param [Hash] options
-      # @option [String] query
-      #   The initial query, used to extract results from the returned Hash
-      # @return [Array<Hash<String => String>>]
-      def parse_raw_response(raw, query:)
-        suggestions = raw.dig('suggest', dictionary, query, 'suggestions')
-        suggestions ||= []
-
-        suggestions.map do |res|
-          { id: res['term'], label: res['term'], value: res['term'] }
-        end
-      end
+    end
   end
 end

@@ -118,40 +118,40 @@ module Spot::Mappers
       [RDF::Literal(joined, language: :en)]
     end
 
-    private
+  private
 
-      # The metadata we're getting has four "name<number>_role" and
-      # "name<number>_displayForm" properties for its authors/editors.
-      # We'll iterate through to find those that match the requested role.
-      #
-      # @param [String] role
-      # @return [Array<String>] MODS name fields for role
-      def names_with_role(role)
-        (1..4).to_a.reduce([]) do |results, num|
-          role_key = "name#{num}_role"
-          value_key = "name#{num}_displayForm"
+    # The metadata we're getting has four "name<number>_role" and
+    # "name<number>_displayForm" properties for its authors/editors.
+    # We'll iterate through to find those that match the requested role.
+    #
+    # @param [String] role
+    # @return [Array<String>] MODS name fields for role
+    def names_with_role(role)
+      (1..4).to_a.reduce([]) do |results, num|
+        role_key = "name#{num}_role"
+        value_key = "name#{num}_displayForm"
 
-          next results if metadata[role_key].blank? || metadata[value_key].blank?
+        next results if metadata[role_key].blank? || metadata[value_key].blank?
 
-          results += metadata["name#{num}_displayForm"] if metadata[role_key].first.include?(role)
+        results += metadata["name#{num}_displayForm"] if metadata[role_key].first.include?(role)
 
-          results
-        end
+        results
       end
+    end
 
-      # @return [String]
-      def title_volume_issue
-        volume_info = [
-          metadata['relatedItem_part1_detail1_typeVolume_caption'],
-          metadata['relatedItem_part1_detail1_typeVolume_number']
-        ].flatten.join(' ').strip
+    # @return [String]
+    def title_volume_issue
+      volume_info = [
+        metadata['relatedItem_part1_detail1_typeVolume_caption'],
+        metadata['relatedItem_part1_detail1_typeVolume_number']
+      ].flatten.join(' ').strip
 
-        issue_info = [
-          metadata['relatedItem_part1_detail1_typeIssue_caption'],
-          metadata['relatedItem_part1_detail1_typeIssue_number']
-        ].flatten.join(' ').strip
+      issue_info = [
+        metadata['relatedItem_part1_detail1_typeIssue_caption'],
+        metadata['relatedItem_part1_detail1_typeIssue_number']
+      ].flatten.join(' ').strip
 
-        [volume_info, issue_info].reject(&:blank?).join(', ').strip
-      end
+      [volume_info, issue_info].reject(&:blank?).join(', ').strip
+    end
   end
 end

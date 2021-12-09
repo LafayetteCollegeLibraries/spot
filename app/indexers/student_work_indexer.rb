@@ -9,11 +9,11 @@ class StudentWorkIndexer < BaseIndexer
     end
   end
 
-  private
+private
 
-    def advisor_label_from(lnumber:)
-      return lnumber unless lnumber.match?(/^L\d{8}$/)
+  def advisor_label_from(lnumber:)
+    return lnumber unless lnumber.match?(/^L\d{8}$/)
 
-      Spot::LafayetteInstructorsAuthorityService.label_for(lnumber: lnumber)
-    end
+    Spot::LafayetteInstructorsAuthorityService.label_for(lnumber: lnumber)
+  end
 end

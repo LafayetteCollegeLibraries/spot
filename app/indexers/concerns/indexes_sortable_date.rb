@@ -43,28 +43,28 @@ module IndexesSortableDate
     end
   end
 
-  private
+private
 
-    # @return [String, nil]
-    def raw_date_value
-      object.send(sortable_date_property).sort.first
-    end
+  # @return [String, nil]
+  def raw_date_value
+    object.send(sortable_date_property).sort.first
+  end
 
-    # Converts whatever our +date_value+ is to a YYYY-MM-DDT00:00:00Z
-    # string for Solr to use in sorting.
-    #
-    # @return [String]
-    def parse_sortable_date
-      raw = object.send(sortable_date_property).sort.first
-      parsed = Date.edtf(raw)
+  # Converts whatever our +date_value+ is to a YYYY-MM-DDT00:00:00Z
+  # string for Solr to use in sorting.
+  #
+  # @return [String]
+  def parse_sortable_date
+    raw = object.send(sortable_date_property).sort.first
+    parsed = Date.edtf(raw)
 
-      return Date.parse(object.create_date.to_s).strftime('%FT%TZ') if parsed.nil?
+    return Date.parse(object.create_date.to_s).strftime('%FT%TZ') if parsed.nil?
 
-      # if we get an edtf range/set/etc, we want the earliest date.
-      # rather than checking if it's a +EDTF::Set+, +EDTF::Interval+, etc.
-      # we'll see if it's inherited from +Enumerable+ and call +#first+ if so
-      parsed = parsed.first if parsed.class < ::Enumerable
+    # if we get an edtf range/set/etc, we want the earliest date.
+    # rather than checking if it's a +EDTF::Set+, +EDTF::Interval+, etc.
+    # we'll see if it's inherited from +Enumerable+ and call +#first+ if so
+    parsed = parsed.first if parsed.class < ::Enumerable
 
-      parsed.strftime('%FT%TZ')
-    end
+    parsed.strftime('%FT%TZ')
+  end
 end

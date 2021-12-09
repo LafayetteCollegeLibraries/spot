@@ -134,61 +134,61 @@ module Spot::Mappers
       end
     end
 
-    private
+  private
 
-      # Is this work a chapter/part-of-book?
-      #
-      # @return [true, false]
-      def chapter_or_book?
-        ['Book chapter', 'Part of Book'].include? metadata['type'].first
-      end
+    # Is this work a chapter/part-of-book?
+    #
+    # @return [true, false]
+    def chapter_or_book?
+      ['Book chapter', 'Part of Book'].include? metadata['type'].first
+    end
 
-      # Gathers identifiers for DOI, ISBN, ISSN, and Handle.net urls
-      # into one place and appends a prefix.
-      #
-      # (see also {#uris_with_handles_mapped})
-      #
-      # @return [Array<String>]
-      def gather_identifiers
-        [].tap do |ids|
-          %w[doi isbn issn].each do |type|
-            key = "identifier.#{type}"
-            ids << metadata[key].map { |id| "#{type}:#{id}" } if metadata[key]
-          end
-
-          ids << uris_with_handles_mapped
-        end.flatten.compact
-      end
-
-      # Helper method to group the values for multiple fields into one place.
-      #
-      # @param [Array<String>] *names field names to merge
-      # @return [Array<String>]
-      def merge_fields(*names)
-        names.map { |name| metadata[name] }.flatten.compact
-      end
-
-      # Some of the fields are split on a semicolon but could actually
-      # contain a value that is intended to include a semicolon. This
-      # undoes that original split and returns it joined.
-      #
-      # @param [String] field
-      # @return [Array<String>]
-      def singularize_field(field)
-        return [] unless metadata[field].present?
-        Array(metadata[field].join(';'))
-      end
-
-      # +identifier.uri+ and +description.uri+ fields combined and handle.net
-      # uris are transformed into the path with a +hdl+ prefix
-      # (eg. +hdl:123/456+)
-      #
-      # @return [Array<String>]
-      def uris_with_handles_mapped
-        merge_fields('identifier.uri', 'description.uri').map do |item|
-          next item unless item.match?(/hdl.handle.net/)
-          "hdl:#{URI.parse(item).path.sub(/^\//, '')}"
+    # Gathers identifiers for DOI, ISBN, ISSN, and Handle.net urls
+    # into one place and appends a prefix.
+    #
+    # (see also {#uris_with_handles_mapped})
+    #
+    # @return [Array<String>]
+    def gather_identifiers
+      [].tap do |ids|
+        %w[doi isbn issn].each do |type|
+          key = "identifier.#{type}"
+          ids << metadata[key].map { |id| "#{type}:#{id}" } if metadata[key]
         end
+
+        ids << uris_with_handles_mapped
+      end.flatten.compact
+    end
+
+    # Helper method to group the values for multiple fields into one place.
+    #
+    # @param [Array<String>] *names field names to merge
+    # @return [Array<String>]
+    def merge_fields(*names)
+      names.map { |name| metadata[name] }.flatten.compact
+    end
+
+    # Some of the fields are split on a semicolon but could actually
+    # contain a value that is intended to include a semicolon. This
+    # undoes that original split and returns it joined.
+    #
+    # @param [String] field
+    # @return [Array<String>]
+    def singularize_field(field)
+      return [] unless metadata[field].present?
+      Array(metadata[field].join(';'))
+    end
+
+    # +identifier.uri+ and +description.uri+ fields combined and handle.net
+    # uris are transformed into the path with a +hdl+ prefix
+    # (eg. +hdl:123/456+)
+    #
+    # @return [Array<String>]
+    def uris_with_handles_mapped
+      merge_fields('identifier.uri', 'description.uri').map do |item|
+        next item unless item.match?(/hdl.handle.net/)
+        "hdl:#{URI.parse(item).path.sub(/^\//, '')}"
       end
+    end
   end
 end

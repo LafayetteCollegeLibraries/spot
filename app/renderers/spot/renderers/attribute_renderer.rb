@@ -59,79 +59,79 @@ module Spot
         markup.join.html_safe
       end
 
-      private
+    private
 
-        # @return [String]
-        def label
-          label_text = translated_field_label
-          return label_text unless options[:show_help_text]
+      # @return [String]
+      def label
+        label_text = translated_field_label
+        return label_text unless options[:show_help_text]
 
-          label_with_help_text(label_text)
+        label_with_help_text(label_text)
+      end
+
+      def translated_field_label
+        translate(:"blacklight.search.fields.#{work_type_label_key}.show.#{field}",
+                  default: [
+                    :"blacklight.search.fields.show.#{field}",
+                    :"blacklight.search.fields.#{field}",
+                    options.fetch(:label, field.to_s.titleize)
+                  ])
+      end
+
+      # @param attributes [Hash]
+      # @return [String]
+      def html_attributes(attributes)
+        buffer = []
+        attributes.each do |k, v|
+          buffer << " #{k}"
+          buffer << %(="#{v}") if v.present?
         end
+        buffer.join
+      end
 
-        def translated_field_label
-          translate(:"blacklight.search.fields.#{work_type_label_key}.show.#{field}",
-                    default: [
-                      :"blacklight.search.fields.show.#{field}",
-                      :"blacklight.search.fields.#{field}",
-                      options.fetch(:label, field.to_s.titleize)
-                    ])
+      # @return [String]
+      def attribute_value_to_html(value)
+        if microdata_value_attributes(field).present?
+          "<span#{html_attributes(microdata_value_attributes(field))}>#{li_value(value)}</span>"
+        else
+          li_value(value)
         end
+      end
 
-        # @param attributes [Hash]
-        # @return [String]
-        def html_attributes(attributes)
-          buffer = []
-          attributes.each do |k, v|
-            buffer << " #{k}"
-            buffer << %(="#{v}") if v.present?
-          end
-          buffer.join
-        end
+      # @param val [#to_s]
+      # @return [String]
+      def li_value(val)
+        auto_link(ERB::Util.h(val.to_s))
+      end
 
-        # @return [String]
-        def attribute_value_to_html(value)
-          if microdata_value_attributes(field).present?
-            "<span#{html_attributes(microdata_value_attributes(field))}>#{li_value(value)}</span>"
-          else
-            li_value(value)
-          end
-        end
+      # @return [String]
+      def label_with_help_text(label_text)
+        return label_text unless help_text
 
-        # @param val [#to_s]
-        # @return [String]
-        def li_value(val)
-          auto_link(ERB::Util.h(val.to_s))
-        end
+        %(#{label_text}
+          <span
+            class="fa fa-question-circle-o"
+            data-html="true"
+            data-toggle="popover"
+            data-trigger="hover click"
+            data-content="#{help_text}"
+          ></span>
+        )
+      end
 
-        # @return [String]
-        def label_with_help_text(label_text)
-          return label_text unless help_text
+      # @return [String, nil]
+      def help_text
+        translate(:"simple_form.hints.defaults.#{field.downcase}", default: nil)
+      end
 
-          %(#{label_text}
-            <span
-              class="fa fa-question-circle-o"
-              data-html="true"
-              data-toggle="popover"
-              data-trigger="hover click"
-              data-content="#{help_text}"
-            ></span>
-          )
-        end
-
-        # @return [String, nil]
-        def help_text
-          translate(:"simple_form.hints.defaults.#{field.downcase}", default: nil)
-        end
-
-        # We need to stuff a value in case +options[:work_type]+ isn't provided,
-        # so we'll go with 'default'. Using +nil+ raises a Blacklight deprecation
-        # notice and hecks up our locales for some reason.
-        #
-        # @return [String, nil]
-        def work_type_label_key
-          options[:work_type] ? options[:work_type].underscore : 'default'
-        end
+      # We need to stuff a value in case +options[:work_type]+ isn't provided,
+      # so we'll go with 'default'. Using +nil+ raises a Blacklight deprecation
+      # notice and hecks up our locales for some reason.
+      #
+      # @return [String, nil]
+      def work_type_label_key
+        options[:work_type] ? options[:work_type].underscore : 'default'
+      end
     end
   end
 end

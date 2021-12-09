@@ -87,35 +87,35 @@ module Spot
       "#<#{self.class.name}:#{object_id}>"
     end
 
-    private
+  private
 
-      attr_reader :api_key
+    attr_reader :api_key
 
-      # Faraday connection we'll use for making requests
-      def client
-        @client ||= Faraday::Connection.new(url: web_data_services_url, headers: client_headers)
-      end
+    # Faraday connection we'll use for making requests
+    def client
+      @client ||= Faraday::Connection.new(url: web_data_services_url, headers: client_headers)
+    end
 
-      def client_headers
-        {
-          'Accept' => 'application/json',
-          'apikey' => api_key,
-          'User-Agent' => 'Lafayette Digital Repository // https://github.com/LafayetteCollegeLibraries/spot'
-        }
-      end
+    def client_headers
+      {
+        'Accept' => 'application/json',
+        'apikey' => api_key,
+        'User-Agent' => 'Lafayette Digital Repository // https://github.com/LafayetteCollegeLibraries/spot'
+      }
+    end
 
-      def fetch_and_parse(path, params)
-        response = client.get(path, params)
-        parsed = JSON.parse(response.body)
+    def fetch_and_parse(path, params)
+      response = client.get(path, params)
+      parsed = JSON.parse(response.body)
 
-        return parsed if response.status == 200
+      return parsed if response.status == 200
 
-        msg = parsed.fetch('message', 'An unknown error occurred')
-        raise(SearchError, msg)
-      end
+      msg = parsed.fetch('message', 'An unknown error occurred')
+      raise(SearchError, msg)
+    end
 
-      def web_data_services_url
-        ENV.fetch('LAFAYETTE_WDS_URL')
-      end
+    def web_data_services_url
+      ENV.fetch('LAFAYETTE_WDS_URL')
+    end
   end
 end

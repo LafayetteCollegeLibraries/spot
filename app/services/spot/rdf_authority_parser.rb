@@ -21,7 +21,7 @@ module Spot
     self.preferred_language = :en
 
     class << self
-      private
+    private
 
         # Overriding Qa::Services::RDFAuthorityParser to prefer a language tag.
         # If a statement makes it through our checks, it's passed to Qa to create

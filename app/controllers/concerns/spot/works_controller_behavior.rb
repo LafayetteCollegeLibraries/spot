@@ -14,17 +14,17 @@ module Spot
     include ::Hyrax::BreadcrumbsForWorks
     include AdditionalFormatsForController
 
-    private
+  private
 
-      # Overrides Hyrax behavior by using our own IIIF presenter that relies on Blacklight locales
-      # to generate field labels.
-      #
-      # @return [Spot::IiifManifestPresenter]
-      def iiif_manifest_presenter
-        ::Spot::IiifManifestPresenter.new(curation_concern_from_search_results).tap do |p|
-          p.hostname = request.hostname
-          p.ability = current_ability
-        end
+    # Overrides Hyrax behavior by using our own IIIF presenter that relies on Blacklight locales
+    # to generate field labels.
+    #
+    # @return [Spot::IiifManifestPresenter]
+    def iiif_manifest_presenter
+      ::Spot::IiifManifestPresenter.new(curation_concern_from_search_results).tap do |p|
+        p.hostname = request.hostname
+        p.ability = current_ability
       end
+    end
   end
 end

@@ -55,61 +55,61 @@ module DeserializesRdfLiterals
     super
   end
 
-  private
+private
 
-    # Sets the tagged fields of +env.attributes+ with transformed
-    # literal values unless that field is empty
-    #
-    # @param env [Hyrax::Actors::Environment]
-    # @return [void]
-    def deserialize_rdf_literals!(env)
-      tagged_fields.each do |field|
-        env.attributes[field] = value_for(field, env) if env.attributes[field]
-      end
+  # Sets the tagged fields of +env.attributes+ with transformed
+  # literal values unless that field is empty
+  #
+  # @param env [Hyrax::Actors::Environment]
+  # @return [void]
+  def deserialize_rdf_literals!(env)
+    tagged_fields.each do |field|
+      env.attributes[field] = value_for(field, env) if env.attributes[field]
     end
+  end
 
-    # Fetches the value for +field+. handles whether or not to return
-    # an array or single object based on whether or not the +env.attributes[field]+
-    # is an array or not.
-    #
-    # @param field [String,Symbol] the attributes field to fetch
-    # @param env [Hyrax::Actors::Environment]
-    # @return [RDF::Literal,Array<RDF::Literal>]
-    def value_for(field, env)
-      raw = env.attributes.delete(field)
-      raw.is_a?(Array) ? raw.map { |val| deserialize(val) } : deserialize(raw)
-    end
+  # Fetches the value for +field+. handles whether or not to return
+  # an array or single object based on whether or not the +env.attributes[field]+
+  # is an array or not.
+  #
+  # @param field [String,Symbol] the attributes field to fetch
+  # @param env [Hyrax::Actors::Environment]
+  # @return [RDF::Literal,Array<RDF::Literal>]
+  def value_for(field, env)
+    raw = env.attributes.delete(field)
+    raw.is_a?(Array) ? raw.map { |val| deserialize(val) } : deserialize(raw)
+  end
 
-    # @return [RDF::Literal]
-    def deserialize(value)
-      serializer.deserialize(value) || value
-    end
+  # @return [RDF::Literal]
+  def deserialize(value)
+    serializer.deserialize(value) || value
+  end
 
-    # @return [RdfLiteralSerializer]
-    def serializer
-      @serializer ||= RdfLiteralSerializer.new
-    end
+  # @return [RdfLiteralSerializer]
+  def serializer
+    @serializer ||= RdfLiteralSerializer.new
+  end
 
-    # Fetches contents of the +language_tagged_fields+ singleton method defined
-    # by {LanguageTaggedForm.transforms_language_tags_for}. in the event that
-    # the class method was never called to define the fields, we fall back to
-    # an empty array
-    #
-    # @return [Array<Symbol>]
-    def tagged_fields
-      work_form.language_tagged_fields
-    rescue NoMethodError
-      []
-    end
+  # Fetches contents of the +language_tagged_fields+ singleton method defined
+  # by {LanguageTaggedForm.transforms_language_tags_for}. in the event that
+  # the class method was never called to define the fields, we fall back to
+  # an empty array
+  #
+  # @return [Array<Symbol>]
+  def tagged_fields
+    work_form.language_tagged_fields
+  rescue NoMethodError
+    []
+  end
 
-    # Does the work of +Hyrax::WorkFormService.form_class+ but via self vs a passed-through
-    # work object
-    #
-    # @return [Hyrax::Forms::WorkForm]
-    def work_form
-      @work_form ||= begin
-        klass = self.class.name.split('::').last.gsub(/Actor$/, '')
-        Hyrax.const_get("#{klass}Form")
-      end
+  # Does the work of +Hyrax::WorkFormService.form_class+ but via self vs a passed-through
+  # work object
+  #
+  # @return [Hyrax::Forms::WorkForm]
+  def work_form
+    @work_form ||= begin
+      klass = self.class.name.split('::').last.gsub(/Actor$/, '')
+      Hyrax.const_get("#{klass}Form")
     end
+  end
 end

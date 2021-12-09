@@ -127,7 +127,7 @@ module Spot
           end
         end
 
-        private
+      private
 
           # overriding this method from +LanguageTaggedFormFields+ mixin
           # to return RDF::Literals instead of strings (Collections aren't

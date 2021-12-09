@@ -18,21 +18,21 @@ module Spot
       end
     end
 
-    private
+  private
 
-      # @return [true, false]
-      def slug_valid?(slug)
-        slug.match?(/^slug\:[a-z0-9\-]+$/)
-      end
+    # @return [true, false]
+    def slug_valid?(slug)
+      slug.match?(/^slug\:[a-z0-9\-]+$/)
+    end
 
-      # @return [String]
-      def single_slug_message
-        "Collections may only have one 'slug' identifier"
-      end
+    # @return [String]
+    def single_slug_message
+      "Collections may only have one 'slug' identifier"
+    end
 
-      # @return [String]
-      def slug_regex_message
-        "Slugs may only contain lower-case letters, numbers, and hyphens"
-      end
+    # @return [String]
+    def slug_regex_message
+      "Slugs may only contain lower-case letters, numbers, and hyphens"
+    end
   end
 end

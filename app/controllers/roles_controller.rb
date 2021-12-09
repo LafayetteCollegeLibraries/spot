@@ -17,12 +17,12 @@ class RolesController < ApplicationController
     redirect_to role_management.role_path(@role) unless can? :edit, @role
   end
 
-  private
+private
 
-    # @return [void]
-    def add_common_breadcrumbs
-      add_breadcrumb t('hyrax.controls.home'), root_path
-      add_breadcrumb t('hyrax.dashboard.breadcrumbs.admin'), hyrax.dashboard_path
-      add_breadcrumb t('role-management.breadcrumb'), role_management.roles_path
-    end
+  # @return [void]
+  def add_common_breadcrumbs
+    add_breadcrumb t('hyrax.controls.home'), root_path
+    add_breadcrumb t('hyrax.dashboard.breadcrumbs.admin'), hyrax.dashboard_path
+    add_breadcrumb t('role-management.breadcrumb'), role_management.roles_path
+  end
 end

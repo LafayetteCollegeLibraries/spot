@@ -17,14 +17,14 @@ module PdfViewerHelper
     "search=#{search_query}&phrase=true"
   end
 
-  private
+private
 
-    # @return [String]
-    def search_query
-      search&.query_params && search.query_params[:q]
-    end
+  # @return [String]
+  def search_query
+    search&.query_params && search.query_params[:q]
+  end
 
-    def search
-      current_search_session
-    end
+  def search
+    current_search_session
+  end
 end

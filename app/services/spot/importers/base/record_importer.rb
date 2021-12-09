@@ -36,103 +36,103 @@ module Spot::Importers::Base
       @collection_ids = collection_ids
     end
 
-    private
+  private
 
-      # called from +#import+, which is inherited from
-      # +Darlingtonia::RecordImporter+, but this does most of the work
-      def create_for(record:)
-        attributes = attributes_from_record(record)
+    # called from +#import+, which is inherited from
+    # +Darlingtonia::RecordImporter+, but this does most of the work
+    def create_for(record:)
+      attributes = attributes_from_record(record)
 
-        error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
+      error_stream << empty_file_warning(attributes) if attributes[:remote_files].empty?
 
-        work = work_klass.new
-        ability = ability_for(attributes.delete(:depositor))
+      work = work_klass.new
+      ability = ability_for(attributes.delete(:depositor))
 
-        actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
-        kickoff_ingest(actor_env)
+      actor_env = Hyrax::Actors::Environment.new(work, ability, attributes)
+      kickoff_ingest(actor_env)
 
-        clean_errors(work).each { |error_message| error_stream << error_message }
-      rescue ::Ldp::Gone
-        error_stream << "Ldp::Gone => [#{work.id}]\n"
-      rescue => e
-        error_stream << "#{e.message}\n"
+      clean_errors(work).each { |error_message| error_stream << error_message }
+    rescue ::Ldp::Gone
+      error_stream << "Ldp::Gone => [#{work.id}]\n"
+    rescue => e
+      error_stream << "#{e.message}\n"
+    end
+
+    # @return [Hash<Symbol => Array<*>]
+    def attributes_from_record(record)
+      record.attributes.tap do |attributes|
+        attributes[BATCH_INGEST_KEY] = true
+        attributes[:remote_files] = create_remote_files_list(record)
+        attributes[:admin_set_id] ||= admin_set_id
+        attributes[:member_of_collections_attributes] = collection_attributes unless collection_ids.empty?
+      end
+    end
+
+    # determines the ability for an item based on the depositor's account.
+    # creates a new User if email does not exist in database.
+    #
+    # @param [String] depositor_email
+    # @return [Ability]
+    def ability_for(depositor_email)
+      depositor_email ||= default_depositor_email
+      Ability.new(find_or_create_depositor(email: depositor_email))
+    end
+
+    # @param [ActiveFedora::Base] work
+    # @return [Array<String>]
+    def clean_errors(work)
+      return [] unless work.errors.present?
+
+      work.errors.map { |field, message| "ERROR [#{field}]: #{message}" }
+    end
+
+    # @return [Hash<String => Hash<String => String>>]
+    def collection_attributes
+      collection_ids.each_with_object({}).with_index do |(id, obj), idx|
+        obj[idx.to_s] = { 'id' => id }
+      end
+    end
+
+    # @return [Array<Hash<Symbol => String>>]
+    def create_remote_files_list(record)
+      Array.wrap(record.representative_file).map do |filename|
+        url = filename.match?(%r{^https?://}) ? filename : "file://#{filename}"
+
+        { url: url, name: File.basename(filename) }
+      end
+    end
+
+    # @param [Hash] attributes
+    # @return [String] an error message
+    def empty_file_warning(attributes)
+      "[WARN] no files found for #{Array.wrap(attributes[:title]).first}\n"
+    end
+
+    # @param [String] email
+    # @return [User]
+    def find_or_create_depositor(email:)
+      user = User.find_or_initialize_by(email: email)
+
+      # add 'depositor' role to user if:
+      # - new record
+      # - not already a depositor
+      # - not an admin (can already deposit)
+      if user.new_record? || (!user.depositor? && !user.admin?)
+        user.roles << Role.find_by(name: 'depositor')
+        user.save(validate: false)
       end
 
-      # @return [Hash<Symbol => Array<*>]
-      def attributes_from_record(record)
-        record.attributes.tap do |attributes|
-          attributes[BATCH_INGEST_KEY] = true
-          attributes[:remote_files] = create_remote_files_list(record)
-          attributes[:admin_set_id] ||= admin_set_id
-          attributes[:member_of_collections_attributes] = collection_attributes unless collection_ids.empty?
-        end
-      end
+      user
+    end
 
-      # determines the ability for an item based on the depositor's account.
-      # creates a new User if email does not exist in database.
-      #
-      # @param [String] depositor_email
-      # @return [Ability]
-      def ability_for(depositor_email)
-        depositor_email ||= default_depositor_email
-        Ability.new(find_or_create_depositor(email: depositor_email))
-      end
-
-      # @param [ActiveFedora::Base] work
-      # @return [Array<String>]
-      def clean_errors(work)
-        return [] unless work.errors.present?
-
-        work.errors.map { |field, message| "ERROR [#{field}]: #{message}" }
-      end
-
-      # @return [Hash<String => Hash<String => String>>]
-      def collection_attributes
-        collection_ids.each_with_object({}).with_index do |(id, obj), idx|
-          obj[idx.to_s] = { 'id' => id }
-        end
-      end
-
-      # @return [Array<Hash<Symbol => String>>]
-      def create_remote_files_list(record)
-        Array.wrap(record.representative_file).map do |filename|
-          url = filename.match?(%r{^https?://}) ? filename : "file://#{filename}"
-
-          { url: url, name: File.basename(filename) }
-        end
-      end
-
-      # @param [Hash] attributes
-      # @return [String] an error message
-      def empty_file_warning(attributes)
-        "[WARN] no files found for #{Array.wrap(attributes[:title]).first}\n"
-      end
-
-      # @param [String] email
-      # @return [User]
-      def find_or_create_depositor(email:)
-        user = User.find_or_initialize_by(email: email)
-
-        # add 'depositor' role to user if:
-        # - new record
-        # - not already a depositor
-        # - not an admin (can already deposit)
-        if user.new_record? || (!user.depositor? && !user.admin?)
-          user.roles << Role.find_by(name: 'depositor')
-          user.save(validate: false)
-        end
-
-        user
-      end
-
-      # Logs + kicks off the ingest process with a given Environment
-      #
-      # @param [Hyrax::Actors::Environment]
-      # @return [void]
-      def kickoff_ingest(env)
-        info_stream << "Creating record: #{env.attributes[:title].first}\n"
-        stack_result = Hyrax::CurationConcern.actor.create(env)
-        info_stream << "Record created: #{env.curation_concern.id}\n" if stack_result
-      end
+    # Logs + kicks off the ingest process with a given Environment
+    #
+    # @param [Hyrax::Actors::Environment]
+    # @return [void]
+    def kickoff_ingest(env)
+      info_stream << "Creating record: #{env.attributes[:title].first}\n"
+      stack_result = Hyrax::CurationConcern.actor.create(env)
+      info_stream << "Record created: #{env.curation_concern.id}\n" if stack_result
+    end
   end
 end

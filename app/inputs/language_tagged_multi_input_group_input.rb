@@ -22,13 +22,13 @@ class LanguageTaggedMultiInputGroupInput < MultiValueInput
     'multi_value language_tagged'
   end
 
-  private
+private
 
-    # Explicitly state that this is a multi-value property, rather than
-    # expecting this method to be defined in MultiValueInput
-    #
-    # @return [TrueClass]
-    def multiple?
-      true
-    end
+  # Explicitly state that this is a multi-value property, rather than
+  # expecting this method to be defined in MultiValueInput
+  #
+  # @return [TrueClass]
+  def multiple?
+    true
+  end
 end

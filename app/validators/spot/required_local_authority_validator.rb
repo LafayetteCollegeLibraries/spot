@@ -26,18 +26,18 @@ module Spot
       end
     end
 
-    private
+  private
 
-      def authority_for(name)
-        # try the name
-        return Qa::Authorities::Local::FileBasedAuthority.new(name) if authority_exists?(name)
+    def authority_for(name)
+      # try the name
+      return Qa::Authorities::Local::FileBasedAuthority.new(name) if authority_exists?(name)
 
-        # otherwise oops!
-        raise "Authority doesn't exist: #{name}"
-      end
+      # otherwise oops!
+      raise "Authority doesn't exist: #{name}"
+    end
 
-      def authority_exists?(name)
-        File.exist?(Rails.root.join('config', 'authorities', "#{name}.yml"))
-      end
+    def authority_exists?(name)
+      File.exist?(Rails.root.join('config', 'authorities', "#{name}.yml"))
+    end
   end
 end

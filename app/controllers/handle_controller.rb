@@ -18,21 +18,21 @@ class HandleController < ApplicationController
     redirect_to redirect_params_for(solr_document: document)
   end
 
-  private
+private
 
-    def id_from_params
-      URI.decode(params[:id])
-    end
+  def id_from_params
+    URI.decode(params[:id])
+  end
 
-    # @return [String]
-    def identifier_solr_field
-      'identifier_ssim'
-    end
+  # @return [String]
+  def identifier_solr_field
+    'identifier_ssim'
+  end
 
-    # @param id [Spot::Identifier, #to_s] the identifier (with prefix)
-    # @return [Hash<Symbol => String>]
-    def query_for_identifier(id)
-      { q: "{!terms f=#{identifier_solr_field}}#{id}",
-        defType: 'lucene' }
-    end
+  # @param id [Spot::Identifier, #to_s] the identifier (with prefix)
+  # @return [Hash<Symbol => String>]
+  def query_for_identifier(id)
+    { q: "{!terms f=#{identifier_solr_field}}#{id}",
+      defType: 'lucene' }
+  end
 end

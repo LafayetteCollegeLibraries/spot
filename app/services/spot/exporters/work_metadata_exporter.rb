@@ -35,33 +35,33 @@ module Spot
         end
       end
 
-      private
+    private
 
-        # @return [Array<Symbol>]
-        def all_formats
-          %i[nt ttl jsonld csv]
-        end
+      # @return [Array<Symbol>]
+      def all_formats
+        %i[nt ttl jsonld csv]
+      end
 
-        # @param [Symbol] format
-        # @return [String, nil]
-        def export_for_format(format)
-          case format
-          when :nt then graph.dump(:ntriples)
-          when :ttl then graph.dump(:ttl)
-          when :jsonld then graph.dump(:jsonld, standard_prefixes: true)
-          when :csv then generate_csv_content
-          end
+      # @param [Symbol] format
+      # @return [String, nil]
+      def export_for_format(format)
+        case format
+        when :nt then graph.dump(:ntriples)
+        when :ttl then graph.dump(:ttl)
+        when :jsonld then graph.dump(:jsonld, standard_prefixes: true)
+        when :csv then generate_csv_content
         end
+      end
 
-        # @return [String]
-        def generate_csv_content
-          Spot::WorkCSVService.new(solr_document).csv
-        end
+      # @return [String]
+      def generate_csv_content
+        Spot::WorkCSVService.new(solr_document).csv
+      end
 
-        # @return [RDF::Graph]
-        def graph
-          @graph ||= Hyrax::GraphExporter.new(solr_document, request).fetch
-        end
+      # @return [RDF::Graph]
+      def graph
+        @graph ||= Hyrax::GraphExporter.new(solr_document, request).fetch
+      end
     end
   end
 end

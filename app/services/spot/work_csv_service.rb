@@ -45,37 +45,37 @@ module Spot
       ::CSV.generate { |csv| csv << terms }
     end
 
-    private
+  private
 
-      # @return [Array<Symbol>]
-      def default_terms
-        %i[
-          id
-          title
-          title_alternative
-          subtitle
-          creator
-          contributor
-          editor
-          source
-          resource_type
-          physical_medium
-          language
-          abstract
-          description
-          identifier
-          date_issued
-          date_available
-          academic_department
-          division
-          organization
-          subject
-          keyword
-          place
-          license
-          rights_statement
-          visibility
-        ]
-      end
+    # @return [Array<Symbol>]
+    def default_terms
+      %i[
+        id
+        title
+        title_alternative
+        subtitle
+        creator
+        contributor
+        editor
+        source
+        resource_type
+        physical_medium
+        language
+        abstract
+        description
+        identifier
+        date_issued
+        date_available
+        academic_department
+        division
+        organization
+        subject
+        keyword
+        place
+        license
+        rights_statement
+        visibility
+      ]
+    end
   end
 end

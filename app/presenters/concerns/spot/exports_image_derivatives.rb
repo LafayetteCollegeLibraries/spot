@@ -23,11 +23,11 @@ module Spot
       end
     end
 
-    private
+  private
 
-      # @return [String]
-      def download_url_for(size:, filename:)
-        Spot::IiifService.download_url(file_id: representative_id, size: size, filename: filename)
-      end
+    # @return [String]
+    def download_url_for(size:, filename:)
+      Spot::IiifService.download_url(file_id: representative_id, size: size, filename: filename)
+    end
   end
 end

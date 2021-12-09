@@ -20,16 +20,16 @@ module Spot
       end
     end
 
-    private
+  private
 
-      # @return [Array<Symbol>]
-      def fields
-        Array(options[:fields])
-      end
+    # @return [Array<Symbol>]
+    def fields
+      Array(options[:fields])
+    end
 
-      # @return [Regexp]
-      def uri_regex
-        URI.regexp
-      end
+    # @return [Regexp]
+    def uri_regex
+      URI.regexp
+    end
   end
 end

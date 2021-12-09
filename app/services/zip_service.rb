@@ -54,70 +54,70 @@ class ZipService
     end
   end
 
-  private
+private
 
-    # Entries returned from +Dir.entries(path)+ that we want to exclude
-    #
-    # @return [Array<String>]
-    def blacklisted_dir_entries
-      %w[. ..]
-    end
+  # Entries returned from +Dir.entries(path)+ that we want to exclude
+  #
+  # @return [Array<String>]
+  def blacklisted_dir_entries
+    %w[. ..]
+  end
 
-    # @return [Array<String>]
-    def entries
-      return [File.basename(src_path)] unless File.directory?(src_path)
-      Dir.entries(src_path) - blacklisted_dir_entries
-    end
+  # @return [Array<String>]
+  def entries
+    return [File.basename(src_path)] unless File.directory?(src_path)
+    Dir.entries(src_path) - blacklisted_dir_entries
+  end
 
-    # Writes an array of file entries (files or directories) to a Zip::File
-    #
-    # Copied from the rubyzip readme:
-    # https://github.com/rubyzip/rubyzip/blob/a27204f/README.md#zipping-a-directory-recursively
-    #
-    # @param [Array<String>] entries Things to zip up
-    # @param [String] path Relative path of entries
-    # @param [Zip::File] zipfile Zip to write to
-    def write_entries(entries, path, zipfile)
-      entries.each do |entry|
-        zipfile_path = path == '' ? entry : File.join(path, entry)
-        disk_file_path = File.join(src_path, zipfile_path)
+  # Writes an array of file entries (files or directories) to a Zip::File
+  #
+  # Copied from the rubyzip readme:
+  # https://github.com/rubyzip/rubyzip/blob/a27204f/README.md#zipping-a-directory-recursively
+  #
+  # @param [Array<String>] entries Things to zip up
+  # @param [String] path Relative path of entries
+  # @param [Zip::File] zipfile Zip to write to
+  def write_entries(entries, path, zipfile)
+    entries.each do |entry|
+      zipfile_path = path == '' ? entry : File.join(path, entry)
+      disk_file_path = File.join(src_path, zipfile_path)
 
-        if File.directory?(disk_file_path)
-          recursively_deflate_directory(disk_file_path, zipfile, zipfile_path)
-        else
-          put_into_archive(disk_file_path, zipfile, zipfile_path)
-        end
+      if File.directory?(disk_file_path)
+        recursively_deflate_directory(disk_file_path, zipfile, zipfile_path)
+      else
+        put_into_archive(disk_file_path, zipfile, zipfile_path)
       end
     end
+  end
 
-    # If we've hit a directory, this will create a matching one in the
-    # zipfile and recursively write the entries of the directory to it.
-    #
-    # Copied from the rubyzip readme:
-    # https://github.com/rubyzip/rubyzip/blob/a27204f/README.md#zipping-a-directory-recursively
-    #
-    # @param [String] disk_file_path The directory we want to deflate
-    # @param [Zip::File] zipfile The Zip::File we're writing to
-    # @param [String] zipfile_path where in the zip file we're writing to
-    # @return [void]
-    def recursively_deflate_directory(disk_file_path, zipfile, zipfile_path)
-      zipfile.mkdir(zipfile_path)
-      subdir = Dir.entries(disk_file_path) - blacklisted_dir_entries
-      write_entries(subdir, zipfile_path, zipfile)
-    end
+  # If we've hit a directory, this will create a matching one in the
+  # zipfile and recursively write the entries of the directory to it.
+  #
+  # Copied from the rubyzip readme:
+  # https://github.com/rubyzip/rubyzip/blob/a27204f/README.md#zipping-a-directory-recursively
+  #
+  # @param [String] disk_file_path The directory we want to deflate
+  # @param [Zip::File] zipfile The Zip::File we're writing to
+  # @param [String] zipfile_path where in the zip file we're writing to
+  # @return [void]
+  def recursively_deflate_directory(disk_file_path, zipfile, zipfile_path)
+    zipfile.mkdir(zipfile_path)
+    subdir = Dir.entries(disk_file_path) - blacklisted_dir_entries
+    write_entries(subdir, zipfile_path, zipfile)
+  end
 
-    # Writes an item into the zip archive
-    #
-    # Copied from the rubyzip readme:
-    # https://github.com/rubyzip/rubyzip/blob/a27204f/README.md#zipping-a-directory-recursively
-    #
-    # @param [String] disk_file_path The file we want to deflate
-    # @param [Zip::File] zipfile The Zip::File we're writing to
-    # @param [String] zipfile_path where in the zip file we're writing to
-    # @return [void]
-    def put_into_archive(disk_file_path, zipfile, zipfile_path)
-      zipfile.get_output_stream(zipfile_path) do |f|
-        f.write(File.open(disk_file_path, 'rb').read)
-      end
+  # Writes an item into the zip archive
+  #
+  # Copied from the rubyzip readme:
+  # https://github.com/rubyzip/rubyzip/blob/a27204f/README.md#zipping-a-directory-recursively
+  #
+  # @param [String] disk_file_path The file we want to deflate
+  # @param [Zip::File] zipfile The Zip::File we're writing to
+  # @param [String] zipfile_path where in the zip file we're writing to
+  # @return [void]
+  def put_into_archive(disk_file_path, zipfile, zipfile_path)
+    zipfile.get_output_stream(zipfile_path) do |f|
+      f.write(File.open(disk_file_path, 'rb').read)
     end
+  end
 end

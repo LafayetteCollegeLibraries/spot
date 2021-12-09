@@ -47,44 +47,44 @@ module Spot
       end
     end
 
-    private
+  private
 
-      # Go down (up?) the family tree until there are no more parent collections to add
-      #
-      # @return [Array<Collection>]
-      def gather_collections_to_add
-        collections_to_check = [self]
+    # Go down (up?) the family tree until there are no more parent collections to add
+    #
+    # @return [Array<Collection>]
+    def gather_collections_to_add
+      collections_to_check = [self]
 
-        [].tap do |collections|
-          until collections_to_check.size.zero?
-            col = collections_to_check.shift
-            col.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
+      [].tap do |collections|
+        until collections_to_check.size.zero?
+          col = collections_to_check.shift
+          col.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
 
-            collections << col unless collections.include?(col)
-            collections_to_check += col.member_of_collections
-          end
+          collections << col unless collections.include?(col)
+          collections_to_check += col.member_of_collections
         end
       end
+    end
 
-      # Hyrax@3 uses +Hyrax.query_service.find_by_alternate_id+ to fetch an object. Hyrax@2
-      # uses +ActiveFedora::Base.find+. This ought to allow us to upgrade without a fuss
-      # (at least as far as this code is concerned). We can replace this after the upgrade.
-      #
-      # @param [String] id
-      # @return [ActiveFedora::Base]
-      # @todo replace with just a call to +find_by_alternate_id+ after we upgrade to hyrax@3
-      #       and start switching to Wings
-      def member_query_service(id)
-        if Hyrax.respond_to?(:query_service)
-          Hyrax.query_service.find_by_alternate_id(alternate_id: id, use_valkyrie: false)
-        else
-          ActiveFedora::Base.find(id)
-        end
+    # Hyrax@3 uses +Hyrax.query_service.find_by_alternate_id+ to fetch an object. Hyrax@2
+    # uses +ActiveFedora::Base.find+. This ought to allow us to upgrade without a fuss
+    # (at least as far as this code is concerned). We can replace this after the upgrade.
+    #
+    # @param [String] id
+    # @return [ActiveFedora::Base]
+    # @todo replace with just a call to +find_by_alternate_id+ after we upgrade to hyrax@3
+    #       and start switching to Wings
+    def member_query_service(id)
+      if Hyrax.respond_to?(:query_service)
+        Hyrax.query_service.find_by_alternate_id(alternate_id: id, use_valkyrie: false)
+      else
+        ActiveFedora::Base.find(id)
       end
+    end
 
-      # just a wrapper to clean up +#add_member_objects+
-      def check_multiple_membership(item:, collection_ids:)
-        Hyrax::MultipleMembershipChecker.new(item: item).check(collection_ids: collection_ids, include_current_members: true)
-      end
+    # just a wrapper to clean up +#add_member_objects+
+    def check_multiple_membership(item:, collection_ids:)
+      Hyrax::MultipleMembershipChecker.new(item: item).check(collection_ids: collection_ids, include_current_members: true)
+    end
   end
 end

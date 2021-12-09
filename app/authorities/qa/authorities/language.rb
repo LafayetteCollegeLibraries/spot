@@ -30,17 +30,17 @@ module Qa::Authorities
                    .compact # just in case
     end
 
-    private
+  private
 
-      # Wraps our results in a nice JSON response
-      #
-      # @param [String] id
-      # @param [String] label
-      # @return [Hash<Symbol => String>]
-      def wrap(id:, label:)
-        return if id == label
+    # Wraps our results in a nice JSON response
+    #
+    # @param [String] id
+    # @param [String] label
+    # @return [Hash<Symbol => String>]
+    def wrap(id:, label:)
+      return if id == label
 
-        { id: id, label: label, value: id }
-      end
+      { id: id, label: label, value: id }
+    end
   end
 end

@@ -21,33 +21,33 @@ class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
     next_actor.destroy(env) && update_suggest_dictionaries
   end
 
-  private
+private
 
-    # Enqueue the job to update the solr suggest dictionaries if this actor
-    # isn't a part of a batch ingest
-    #
-    # @param [Hyrax::Actors::Environment] env
-    # @return [void]
-    def update_suggest_dictionaries
-      Spot::UpdateSolrSuggestDictionariesJob.perform_now unless part_of_batch?
-    end
+  # Enqueue the job to update the solr suggest dictionaries if this actor
+  # isn't a part of a batch ingest
+  #
+  # @param [Hyrax::Actors::Environment] env
+  # @return [void]
+  def update_suggest_dictionaries
+    Spot::UpdateSolrSuggestDictionariesJob.perform_now unless part_of_batch?
+  end
 
-    # @return [Symbol]
-    def batch_ingest_key
-      ::Spot::Importers::Base::RecordImporter::BATCH_INGEST_KEY
-    end
+  # @return [Symbol]
+  def batch_ingest_key
+    ::Spot::Importers::Base::RecordImporter::BATCH_INGEST_KEY
+  end
 
-    # @return [true, false]
-    def part_of_batch?
-      @part_of_batch == true
-    end
+  # @return [true, false]
+  def part_of_batch?
+    @part_of_batch == true
+  end
 
-    # Sets an instance variable flag if the batch_ingest_key is part of
-    # the environment's attributes.
-    #
-    # @param [Hyrax::Actors::Environment] env
-    # @return [void]
-    def extract_batch_flag(env)
-      @part_of_batch = env.attributes.delete(batch_ingest_key)
-    end
+  # Sets an instance variable flag if the batch_ingest_key is part of
+  # the environment's attributes.
+  #
+  # @param [Hyrax::Actors::Environment] env
+  # @return [void]
+  def extract_batch_flag(env)
+    @part_of_batch = env.attributes.delete(batch_ingest_key)
+  end
 end

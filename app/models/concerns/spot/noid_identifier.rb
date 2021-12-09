@@ -8,16 +8,16 @@ module Spot
       before_save :ensure_noid_in_identifier
     end
 
-    private
+  private
 
-      # @return [void]
-      def ensure_noid_in_identifier
-        return if id.nil?
+    # @return [void]
+    def ensure_noid_in_identifier
+      return if id.nil?
 
-        noid_id = "noid:#{id}"
-        return if identifier.include?(noid_id)
+      noid_id = "noid:#{id}"
+      return if identifier.include?(noid_id)
 
-        self.identifier += [noid_id]
-      end
+      self.identifier += [noid_id]
+    end
   end
 end

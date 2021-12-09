@@ -79,52 +79,52 @@ module Spot::Mappers
       convert_uri_strings(metadata.fetch('subject', []))
     end
 
-    private
+  private
 
-      # @return [Array<String>]
-      def image_date_ranges
-        edtf_ranges_for('date.image.lower', 'date.image.upper')
+    # @return [Array<String>]
+    def image_date_ranges
+      edtf_ranges_for('date.image.lower', 'date.image.upper')
+    end
+
+    # Extracts an EAIC style ID from a title field (default is "title.english")
+    #
+    # @example
+    #   metadata['title.english']
+    #   # => ["[ww0032] [Ami pottery-making]"]
+    #
+    #   eaic_ids_from_title
+    #   # => ['eaic:ww0032']
+    #
+    # @param [Hash] opts
+    # @option [String] field   metadata field to source from
+    # @option [String] prefix  identifier prefix to use
+    # @return [Array<String>]
+    def eaic_ids_from_title(field: 'title.english', prefix: 'eaic')
+      values = metadata.fetch(field, [])
+      return [] if values.empty?
+
+      values.map do |value|
+        match_data = value.match(/^\[(\w+\d+)\]/)
+        next if match_data.nil?
+
+        Spot::Identifier.new(prefix, match_data[1]).to_s
+      end.reject(&:blank?)
+    end
+
+    # @param [String] start_date_field
+    # @param [String] end_date_field
+    # @return [String] parsed EDTF range string
+    def edtf_ranges_for(start_date_field, end_date_field)
+      start_dates = metadata.fetch(start_date_field, [])
+      end_dates = metadata.fetch(end_date_field, [])
+
+      # Array#zip will return an empty array if the target (start_dates) is empty
+      start_dates.fill(0, end_dates.size) { nil } if start_dates.empty?
+
+      start_dates.zip(end_dates).map do |(start_date, end_date)|
+        # EDTF date ranges are "#{start_date}/#{end_date}"
+        [start_date, end_date].reject(&:blank?).uniq.sort.join('/')
       end
-
-      # Extracts an EAIC style ID from a title field (default is "title.english")
-      #
-      # @example
-      #   metadata['title.english']
-      #   # => ["[ww0032] [Ami pottery-making]"]
-      #
-      #   eaic_ids_from_title
-      #   # => ['eaic:ww0032']
-      #
-      # @param [Hash] opts
-      # @option [String] field   metadata field to source from
-      # @option [String] prefix  identifier prefix to use
-      # @return [Array<String>]
-      def eaic_ids_from_title(field: 'title.english', prefix: 'eaic')
-        values = metadata.fetch(field, [])
-        return [] if values.empty?
-
-        values.map do |value|
-          match_data = value.match(/^\[(\w+\d+)\]/)
-          next if match_data.nil?
-
-          Spot::Identifier.new(prefix, match_data[1]).to_s
-        end.reject(&:blank?)
-      end
-
-      # @param [String] start_date_field
-      # @param [String] end_date_field
-      # @return [String] parsed EDTF range string
-      def edtf_ranges_for(start_date_field, end_date_field)
-        start_dates = metadata.fetch(start_date_field, [])
-        end_dates = metadata.fetch(end_date_field, [])
-
-        # Array#zip will return an empty array if the target (start_dates) is empty
-        start_dates.fill(0, end_dates.size) { nil } if start_dates.empty?
-
-        start_dates.zip(end_dates).map do |(start_date, end_date)|
-          # EDTF date ranges are "#{start_date}/#{end_date}"
-          [start_date, end_date].reject(&:blank?).uniq.sort.join('/')
-        end
-      end
+    end
   end
 end
