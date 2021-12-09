@@ -21,7 +21,7 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
     'multi_auth_controlled_vocabulary'
   end
 
-private
+  private
 
   # @todo only display the value if it already exists (don't supply the dropdown
   #       for pre-existing values).

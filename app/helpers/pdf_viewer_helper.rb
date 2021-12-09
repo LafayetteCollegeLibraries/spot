@@ -17,7 +17,7 @@ module PdfViewerHelper
     "search=#{search_query}&phrase=true"
   end
 
-private
+  private
 
   # @return [String]
   def search_query

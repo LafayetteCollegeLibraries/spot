@@ -29,7 +29,7 @@ module Spot
         Hydra::Derivatives::ImageDerivatives.create(filename, outputs: output_options)
       end
 
-    private
+      private
 
       def derivative_path
         Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'thumbnail')

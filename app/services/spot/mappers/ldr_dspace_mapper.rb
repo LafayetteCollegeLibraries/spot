@@ -134,7 +134,7 @@ module Spot::Mappers
       end
     end
 
-  private
+    private
 
     # Is this work a chapter/part-of-book?
     #

@@ -63,7 +63,7 @@ module LanguageTaggedFormFields
       end
     end
 
-  private
+    private
 
     # transforms arrays of field values + languages into serialized RDF::Literals
     # tagged with said language

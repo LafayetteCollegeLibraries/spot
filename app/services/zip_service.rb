@@ -54,7 +54,7 @@ class ZipService
     end
   end
 
-private
+  private
 
   # Entries returned from +Dir.entries(path)+ that we want to exclude
   #

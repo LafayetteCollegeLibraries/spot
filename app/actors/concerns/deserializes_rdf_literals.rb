@@ -55,7 +55,7 @@ module DeserializesRdfLiterals
     super
   end
 
-private
+  private
 
   # Sets the tagged fields of +env.attributes+ with transformed
   # literal values unless that field is empty

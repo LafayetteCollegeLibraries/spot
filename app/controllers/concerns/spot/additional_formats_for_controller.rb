@@ -13,7 +13,7 @@ module Spot
       super if defined?(super)
     end
 
-  private
+    private
 
     # @return [String]
     def csv_filename

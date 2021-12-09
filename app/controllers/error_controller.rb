@@ -17,7 +17,7 @@ class ErrorController < ApplicationController
     render '500', status: 500
   end
 
-private
+  private
 
   def json_response
     %({"error": true, "status": #{@status.to_i}, "message": "#{status_message}"})

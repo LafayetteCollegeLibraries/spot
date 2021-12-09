@@ -26,7 +26,7 @@ module Spot
       end
     end
 
-  private
+    private
 
     def authority_for(name)
       # try the name

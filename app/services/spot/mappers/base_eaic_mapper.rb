@@ -79,7 +79,7 @@ module Spot::Mappers
       convert_uri_strings(metadata.fetch('subject', []))
     end
 
-  private
+    private
 
     # @return [Array<String>]
     def image_date_ranges

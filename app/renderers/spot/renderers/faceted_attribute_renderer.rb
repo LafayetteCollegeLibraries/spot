@@ -2,7 +2,7 @@
 module Spot
   module Renderers
     class FacetedAttributeRenderer < AttributeRenderer
-    private
+      private
 
       # @param value [#to_s]
       # @return [String] the value linked to a faceted search

@@ -5,7 +5,7 @@
 #
 module Spot::Validators
   class BagMetadataValidator < Darlingtonia::Validator
-  private
+    private
 
     # Called from within {#validate}. Will return an error if the metadata
     # file does not exist.

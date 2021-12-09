@@ -15,7 +15,7 @@ module Spot
       @presenter = presenter_class.new(recent_works, featured_collections)
     end
 
-  private
+    private
 
     # @return [Array<SolrDocument>]
     def recent_works

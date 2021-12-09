@@ -45,7 +45,7 @@ module Spot
       ::CSV.generate { |csv| csv << terms }
     end
 
-  private
+    private
 
     # @return [Array<Symbol>]
     def default_terms

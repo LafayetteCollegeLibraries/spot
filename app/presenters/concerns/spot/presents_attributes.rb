@@ -26,7 +26,7 @@ module Spot
       renderer_for(field, options).new(field, send(field), options).render
     end
 
-  private
+    private
 
     # Determine the renderer based on an option passed. Defaults to
     # {Spot::Renderers::AttributeRenderer}.

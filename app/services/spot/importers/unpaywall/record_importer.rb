@@ -2,7 +2,7 @@
 
 module Spot::Importers::Unpaywall
   class RecordImporter < ::Spot::Importers::Base::RecordImporter
-  private
+    private
 
     # Method used to construct a warning
     #

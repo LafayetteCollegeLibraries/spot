@@ -2,7 +2,7 @@
 module Spot
   module Renderers
     class IdentifierAttributeRenderer < AttributeRenderer
-    private
+      private
 
       # @param value [Spot::Identifier,String]
       # @return [String]

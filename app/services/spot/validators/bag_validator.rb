@@ -9,7 +9,7 @@ require 'bagit'
 
 module Spot::Validators
   class BagValidator < Darlingtonia::Validator
-  private
+    private
 
     # Called from {#validate}
     #

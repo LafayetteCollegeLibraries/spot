@@ -23,7 +23,7 @@ module Spot
       end
     end
 
-  private
+    private
 
     # @return [String]
     def download_url_for(size:, filename:)

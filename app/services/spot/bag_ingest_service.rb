@@ -20,7 +20,7 @@ module Spot
       importer.import if parser.validate!
     end
 
-  private
+    private
 
     # Is the work_class provided one of our curation_concerns?
     #

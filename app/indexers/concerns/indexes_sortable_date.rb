@@ -43,7 +43,7 @@ module IndexesSortableDate
     end
   end
 
-private
+  private
 
   # @return [String, nil]
   def raw_date_value

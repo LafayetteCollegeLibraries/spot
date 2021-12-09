@@ -27,7 +27,7 @@ module Spot
         end
       end
 
-    private
+      private
 
       attr_reader :tmpdir
 

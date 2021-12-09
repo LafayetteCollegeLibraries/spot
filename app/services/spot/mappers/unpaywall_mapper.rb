@@ -45,7 +45,7 @@ module Spot::Mappers
       Array.wrap(metadata.dig('best_oa_location', 'url_for_pdf'))
     end
 
-  private
+    private
 
     # Wraps the original response in an array, since all of those fields are multi-valued
     #

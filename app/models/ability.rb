@@ -10,7 +10,7 @@ class Ability
   # @return [void]
   def custom_permissions; end
 
-private
+  private
 
   # Delegates abilities for users that have the 'admin' role
   #

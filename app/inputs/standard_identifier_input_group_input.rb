@@ -21,7 +21,7 @@ class StandardIdentifierInputGroupInput < MultiValueInput
     'multi_value'
   end
 
-private
+  private
 
   # Called from +MultiValueInput#input+ to build out the HTML of the input.
   #

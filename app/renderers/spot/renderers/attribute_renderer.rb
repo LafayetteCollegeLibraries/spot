@@ -59,7 +59,7 @@ module Spot
         markup.join.html_safe
       end
 
-    private
+      private
 
       # @return [String]
       def label

@@ -53,7 +53,7 @@ module Spot
       file_set.class.image_mime_types.include?(mime_type)
     end
 
-  private
+    private
 
     # @return [Array<Spot::Derivatives::BaseDerivativesService>]
     def mapped_services

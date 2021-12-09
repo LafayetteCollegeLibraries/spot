@@ -17,7 +17,7 @@ class RolesController < ApplicationController
     redirect_to role_management.role_path(@role) unless can? :edit, @role
   end
 
-private
+  private
 
   # @return [void]
   def add_common_breadcrumbs

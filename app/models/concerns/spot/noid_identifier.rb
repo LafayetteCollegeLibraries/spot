@@ -8,7 +8,7 @@ module Spot
       before_save :ensure_noid_in_identifier
     end
 
-  private
+    private
 
     # @return [void]
     def ensure_noid_in_identifier

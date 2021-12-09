@@ -81,7 +81,7 @@ module Spot
         [rdf_subject.to_s, { label: "#{preferred_label}$#{rdf_subject}" }]
       end
 
-    private
+      private
 
       # @return [String]
       def pick_preferred_label

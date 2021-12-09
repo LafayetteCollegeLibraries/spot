@@ -14,7 +14,7 @@ class PublicationIndexer < BaseIndexer
     end
   end
 
-private
+  private
 
   # Store the full text content of all the contained file-sets
   #

@@ -15,7 +15,7 @@ module Spot
       include ::DeserializesRdfLiterals
       include ::CreateHandleIdentifiers
 
-    private
+      private
 
       # Overrides the BaseActor method to allow us to stuff in
       # `date_uploaded` values where necessary.

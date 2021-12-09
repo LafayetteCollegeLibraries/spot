@@ -21,7 +21,7 @@ module Spot
       send_message_to_slack
     end
 
-  private
+    private
 
     # Are we able to send messages to slack?
     #

@@ -110,7 +110,7 @@ module Spot::Mappers
       end
     end
 
-  private
+    private
 
     # @return [Array<String>]
     def legacy_url_identifiers

@@ -18,7 +18,7 @@ class HandleController < ApplicationController
     redirect_to redirect_params_for(solr_document: document)
   end
 
-private
+  private
 
   def id_from_params
     URI.decode(params[:id])

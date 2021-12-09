@@ -14,7 +14,7 @@ module Spot
     include ::Hyrax::BreadcrumbsForWorks
     include AdditionalFormatsForController
 
-  private
+    private
 
     # Overrides Hyrax behavior by using our own IIIF presenter that relies on Blacklight locales
     # to generate field labels.

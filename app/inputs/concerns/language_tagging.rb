@@ -53,7 +53,7 @@ module LanguageTagging
     "#{default_hint} <strong>#{hint_text}</strong>".html_safe
   end
 
-private
+  private
 
   # If inheriting from MultiValueInput, this method is called from
   # the +#input+ method (which itself is called from within the

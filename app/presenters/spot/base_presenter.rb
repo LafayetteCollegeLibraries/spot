@@ -104,7 +104,7 @@ module Spot
       false
     end
 
-  private
+    private
 
     def metadata_only_flag
       return false if public? || current_ability.admin?

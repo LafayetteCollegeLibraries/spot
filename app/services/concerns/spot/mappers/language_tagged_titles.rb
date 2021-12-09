@@ -78,7 +78,7 @@ module Spot::Mappers
       tagged_literals(primary_titles.reject { |v| identifier_prefix?(v) }, primary_title_language)
     end
 
-  private
+    private
 
     # maps the values of an array to RDF::Literals tagged with a language
     #

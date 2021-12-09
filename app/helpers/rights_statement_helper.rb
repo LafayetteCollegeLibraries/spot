@@ -16,7 +16,7 @@ module RightsStatementHelper
     link_to(link_content, uri, target: '_blank')
   end
 
-private
+  private
 
   # @param uri [String]
   # @return [String, nil]

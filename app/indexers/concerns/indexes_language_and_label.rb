@@ -19,7 +19,7 @@ module IndexesLanguageAndLabel
     end
   end
 
-private
+  private
 
   # @return [String]
   def label_field

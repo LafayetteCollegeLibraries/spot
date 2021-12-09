@@ -13,7 +13,7 @@ module IndexesRightsStatements
     super.tap { |solr_doc| add_rights_statement_label(solr_doc) }
   end
 
-private
+  private
 
   # @return [String]
   def value_key

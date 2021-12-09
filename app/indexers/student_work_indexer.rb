@@ -9,7 +9,7 @@ class StudentWorkIndexer < BaseIndexer
     end
   end
 
-private
+  private
 
   def advisor_label_from(lnumber:)
     return lnumber unless lnumber.match?(/^L\d{8}$/)

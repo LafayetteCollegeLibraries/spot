@@ -35,7 +35,7 @@ module Spot
         end
       end
 
-    private
+      private
 
       # @return [Array<Symbol>]
       def all_formats

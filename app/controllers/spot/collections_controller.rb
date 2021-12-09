@@ -8,7 +8,7 @@ module Spot
       render 'index', layout: 'hyrax/1_column'
     end
 
-  private
+    private
 
     # @note: this will change once we upgrade to hyrax@3
     def collection_index_response

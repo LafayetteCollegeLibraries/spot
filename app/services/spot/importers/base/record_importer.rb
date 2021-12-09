@@ -36,7 +36,7 @@ module Spot::Importers::Base
       @collection_ids = collection_ids
     end
 
-  private
+    private
 
     # called from +#import+, which is inherited from
     # +Darlingtonia::RecordImporter+, but this does most of the work

@@ -63,7 +63,7 @@ module Spot::Importers::Bag
       input_record
     end
 
-  private
+    private
 
     # Where the work we'll be doing exists
     #

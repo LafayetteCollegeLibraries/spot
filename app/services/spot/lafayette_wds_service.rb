@@ -87,7 +87,7 @@ module Spot
       "#<#{self.class.name}:#{object_id}>"
     end
 
-  private
+    private
 
     attr_reader :api_key
 

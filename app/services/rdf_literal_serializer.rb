@@ -12,7 +12,7 @@ class RdfLiteralSerializer
     reader.parse_literal(string)
   end
 
-private
+  private
 
   # @return [Symbol]
   def type

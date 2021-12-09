@@ -9,7 +9,10 @@ AllCops:
 Layout/AccessModifierIndentation:
   Enabled: true
   EnforcedStyle: indent
-  IndentationWidth: 0
+
+Layout/IndentationConsistency:
+  Enabled: true
+  EnforcedStyle: normal
 
 Rails/OutputSafety:
   Enabled: false

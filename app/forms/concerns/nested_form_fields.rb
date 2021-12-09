@@ -58,7 +58,7 @@ module NestedFormFields
       end
     end
 
-  private
+    private
 
     # There may be a clearer name for this. Local controlled
     # vocabulary fields are returned to the form looking like

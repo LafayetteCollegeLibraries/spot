@@ -12,7 +12,7 @@ module Spot
     # This will affect create and update calls from the form.
     #
     class CollectionsMembershipActor < ::Hyrax::Actors::CollectionsMembershipActor
-    private
+      private
 
       def add(env, id)
         collection = ::Collection.find(id)

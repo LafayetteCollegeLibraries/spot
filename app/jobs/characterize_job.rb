@@ -17,7 +17,7 @@ class CharacterizeJob < ::Hyrax::ApplicationJob
     CreateDerivativesJob.perform_later(file_set, file_id, filepath)
   end
 
-private
+  private
 
   def characterize(file_set, _file_id, filepath)
     Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, ch12n_tool: tool)

@@ -30,7 +30,7 @@ module Qa::Authorities
                    .compact # just in case
     end
 
-  private
+    private
 
     # Wraps our results in a nice JSON response
     #

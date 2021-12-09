@@ -19,7 +19,7 @@ module Spot
       relevant_log_records
     end
 
-  protected
+    protected
 
     # @return [String]
     def render_existing_check_summary

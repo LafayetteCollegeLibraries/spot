@@ -20,7 +20,7 @@ module Spot
       end
     end
 
-  private
+    private
 
     # run a value through +Date.edtf+, return the +.humanize+ value,
     # and fallback to the value if it's unparseable.

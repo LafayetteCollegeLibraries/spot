@@ -2,7 +2,7 @@
 module Hyrax
   module Actors
     class PublicationActor < ::Spot::Actors::BaseActor
-    private
+      private
 
       # Overrides the +Hyrax::Actors::BaseActor+ method so that we can apply a +date_available+
       # value to the item.

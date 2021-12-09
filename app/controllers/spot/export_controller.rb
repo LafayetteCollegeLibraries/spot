@@ -12,10 +12,10 @@ module Spot
     before_action :load_and_authorize_resource
 
     def show
-      redirect_to hyrax.download_path(solr_document.id) and return if wants_file_set?
+      redirect_to(hyrax.download_path(solr_document.id)) && return if wants_file_set?
 
       file_sets = solr_document.file_set_ids
-      redirect_to hyrax.download_path(file_sets.first) and return if wants_only_file_set?
+      redirect_to(hyrax.download_path(file_sets.first)) && return if wants_only_file_set?
 
       # for some reason, we need to reset the Fedora connection before
       # we can run an export of the members + metadata. my best guess is
@@ -27,7 +27,7 @@ module Spot
       send_file(export_work_to_cache!, filename: "#{solr_document.id}.zip")
     end
 
-  private
+    private
 
     # I think in the future this could/should be moved to something offsite
     # (read: more available storage) like S3. For now, we'll store it in 'tmp/'

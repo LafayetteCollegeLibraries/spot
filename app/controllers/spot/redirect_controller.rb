@@ -30,7 +30,7 @@ module Spot
       redirect_to redirect_params_for(solr_document: document)
     end
 
-  private
+    private
 
     # Ensures that the URL we're searching for is http (and not https)
     #

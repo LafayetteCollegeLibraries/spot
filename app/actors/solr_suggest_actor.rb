@@ -21,7 +21,7 @@ class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
     next_actor.destroy(env) && update_suggest_dictionaries
   end
 
-private
+  private
 
   # Enqueue the job to update the solr suggest dictionaries if this actor
   # isn't a part of a batch ingest

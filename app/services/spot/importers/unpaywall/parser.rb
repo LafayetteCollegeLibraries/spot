@@ -34,7 +34,7 @@ module Spot::Importers::Unpaywall
       input_record
     end
 
-  private
+    private
 
     # @return [Darlingtonia::InputRecord]
     def input_record_from(metadata)

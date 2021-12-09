@@ -31,7 +31,7 @@ module Spot
       true
     end
 
-  private
+    private
 
     # Convenience method to make our lives easier when switching to Valkyrie.
     #

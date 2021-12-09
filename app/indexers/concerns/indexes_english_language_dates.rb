@@ -37,7 +37,7 @@ module IndexesEnglishLanguageDates
     end
   end
 
-private
+  private
 
   # @param solr_doc [Hash]
   # @return [void]

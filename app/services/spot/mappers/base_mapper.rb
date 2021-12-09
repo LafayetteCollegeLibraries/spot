@@ -86,7 +86,7 @@ module Spot::Mappers
       default_visibility
     end
 
-  private
+    private
 
     # @return [Array<RDF::URI, String>]
     def convert_uri_strings(arr)

@@ -28,7 +28,7 @@ class BaseIndexer < ::Hyrax::WorkIndexer
     end
   end
 
-private
+  private
 
   # @return [Array<Spot::Identifier>]
   def mapped_identifiers

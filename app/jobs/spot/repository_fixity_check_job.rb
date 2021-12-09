@@ -30,7 +30,7 @@ module Spot
       end
     end
 
-  private
+    private
 
     # Wraps our check to pass a time to the send_fixity_status_job.
     #

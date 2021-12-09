@@ -118,7 +118,7 @@ module Spot::Mappers
       [RDF::Literal(joined, language: :en)]
     end
 
-  private
+    private
 
     # The metadata we're getting has four "name<number>_role" and
     # "name<number>_displayForm" properties for its authors/editors.

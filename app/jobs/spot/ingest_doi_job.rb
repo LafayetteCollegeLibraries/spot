@@ -14,7 +14,7 @@ module Spot
       importer.import if parser.validate!
     end
 
-  private
+    private
 
     # @return [Darlingtonia::Importer]
     def importer

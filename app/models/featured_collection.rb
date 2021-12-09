@@ -10,7 +10,7 @@ class FeaturedCollection < ApplicationRecord
     count < FEATURE_LIMIT
   end
 
-private
+  private
 
   # @return [void]
   def count_within_limit

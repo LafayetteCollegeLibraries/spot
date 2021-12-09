@@ -18,7 +18,7 @@ module Spot
       end
     end
 
-  private
+    private
 
     # @return [true, false]
     def slug_valid?(slug)

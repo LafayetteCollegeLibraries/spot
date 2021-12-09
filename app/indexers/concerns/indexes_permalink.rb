@@ -17,7 +17,7 @@ module IndexesPermalink
     end
   end
 
-private
+  private
 
   # Determines the right Handle identifier to use as the permalink.
   # - Are there any +hdl+ prefixed identifiers?

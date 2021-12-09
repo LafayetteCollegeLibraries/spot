@@ -64,7 +64,7 @@ module Hyrax
          { location_attributes: [:id, :_destroy] }]
       end
 
-    private
+      private
 
       attr_reader :combined_attributes
 

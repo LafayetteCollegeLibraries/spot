@@ -127,24 +127,24 @@ module Spot
           end
         end
 
-      private
+        private
 
-          # overriding this method from +LanguageTaggedFormFields+ mixin
-          # to return RDF::Literals instead of strings (Collections aren't
-          # put through the actor stack + don't need to pass around the values)
-          #
-          # @param tuples [Array<Array<String>>]
-          # @retrun [Array<RDF::Literal>]
-          def map_rdf_strings(tuples)
-            tuples.map do |(value, language)|
-              # need to skip blank entries here, otherwise we get a blank literal
-              # (""@"") which LDP doesn't like
-              next unless value.present?
+        # overriding this method from +LanguageTaggedFormFields+ mixin
+        # to return RDF::Literals instead of strings (Collections aren't
+        # put through the actor stack + don't need to pass around the values)
+        #
+        # @param tuples [Array<Array<String>>]
+        # @retrun [Array<RDF::Literal>]
+        def map_rdf_strings(tuples)
+          tuples.map do |(value, language)|
+            # need to skip blank entries here, otherwise we get a blank literal
+            # (""@"") which LDP doesn't like
+            next unless value.present?
 
-              language = language.present? ? language.to_sym : nil
-              RDF::Literal(value, language: language)
-            end.reject(&:blank?)
-          end
+            language = language.present? ? language.to_sym : nil
+            RDF::Literal(value, language: language)
+          end.reject(&:blank?)
+        end
       end
     end
   end

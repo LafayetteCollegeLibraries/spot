@@ -26,7 +26,7 @@ module Spot
       super
     end
 
-  private
+    private
 
     def set_visibility_discover_groups
       set_discover_groups([Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC], discover_groups)

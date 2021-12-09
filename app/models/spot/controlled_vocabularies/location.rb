@@ -26,7 +26,7 @@ module Spot::ControlledVocabularies
       :skipped_use_geonames_api
     end
 
-  private
+    private
 
     # @return [Class]
     def authority_class

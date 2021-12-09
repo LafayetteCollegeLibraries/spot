@@ -48,7 +48,7 @@ class User < ApplicationRecord
     self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
   end
 
-private
+  private
 
   # Callback to ensure that we store a username, as that's what's used for uniqueness.
   # We occasionally provide a depositor in some ingest cases, but that relies on the

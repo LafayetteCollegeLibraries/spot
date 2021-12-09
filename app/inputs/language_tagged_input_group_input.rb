@@ -36,7 +36,7 @@ class LanguageTaggedInputGroupInput < SimpleForm::Inputs::Base
     build_field(value, nil)
   end
 
-private
+  private
 
   # Explicitly state that this is a single property, rather than expecting
   # this method to not be defined.

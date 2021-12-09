@@ -74,7 +74,7 @@ module Qa::Authorities
       []
     end
 
-  private
+    private
 
     def connection
       ActiveFedora::SolrService.instance.conn

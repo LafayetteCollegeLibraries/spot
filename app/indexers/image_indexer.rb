@@ -8,7 +8,7 @@ class ImageIndexer < BaseIndexer
     end
   end
 
-private
+  private
 
   # Gathers the values found in +#date+ and +#date_associated+, parses out the years
   # and indexes them for use with the Years Encompassed slider

@@ -31,7 +31,7 @@ module Spot
       res['handle']
     end
 
-  private
+    private
 
     # @return [Faraday::Client]
     def client

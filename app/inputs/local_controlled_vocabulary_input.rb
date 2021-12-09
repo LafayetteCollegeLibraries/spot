@@ -31,7 +31,7 @@ class LocalControlledVocabularyInput < ControlledVocabularyInput
     'controlled_vocabulary'
   end
 
-private
+  private
 
   # Copied from {Hyrax::ControlledVocabularyInput}, but strips out
   # any of the RDF-related work. This is called from

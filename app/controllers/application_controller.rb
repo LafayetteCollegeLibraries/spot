@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
     false
   end
 
-private
+  private
 
   # Modified from its source in +Hyrax::Controller+ in that we're
   # _not_ passing the exception message in the +redirect_to+ call.

@@ -12,7 +12,7 @@
 module Spot
   module Renderers
     class ExternalAuthorityAttributeRenderer < FacetedAttributeRenderer
-    private
+      private
 
       # External Authority attributes are expected to be sent in a "merged"
       # array of [uri, label]. FacetedAttributeRenderer#li_value is called

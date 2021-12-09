@@ -47,7 +47,7 @@ module Spot
       end
     end
 
-  private
+    private
 
     # Go down (up?) the family tree until there are no more parent collections to add
     #
