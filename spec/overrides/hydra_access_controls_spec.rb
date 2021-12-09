@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable RSpec/MultipleDescribes
 RSpec.describe Hydra::AccessControls::Embargo do
   describe '#active?' do
     let(:embargo) do
@@ -27,4 +26,3 @@ RSpec.describe Hydra::AccessControls::Lease do
     end
   end
 end
-# rubocop:enable RSpec/MultipleDescribes

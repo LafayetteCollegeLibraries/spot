@@ -34,7 +34,6 @@ RSpec.shared_examples 'it has language-tagged titles' do |options|
         { 'title.french' => ["L'au-delà"], 'title.german' => ['Die Geisterstadt der Zombies'] }
       end
 
-      # rubocop:disable RSpec/InstanceVariable
       before do
         @previous_title_alternative_map = described_class.title_alternative_map
         described_class.title_alternative_map = spec_title_alternative_map
@@ -43,7 +42,6 @@ RSpec.shared_examples 'it has language-tagged titles' do |options|
       after do
         described_class.title_alternative_map = @previous_title_alternative_map
       end
-      # rubocop:enable RSpec/InstanceVariable
 
       it do
         is_expected.to include(RDF::Literal("L'au-delà", language: :fr),

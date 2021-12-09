@@ -44,9 +44,7 @@ solr_config = Rails.application.config_for(:solr)
 fcrepo_config = Rails.application.config_for(:fedora)
 redis_config = Rails.application.config_for(:redis)
 
-# rubocop:disable Security/YAMLLoad
 sidekiq_config = YAML.load(ERB.new(IO.read(Rails.root.join('config', 'sidekiq.yml'))).result)
-# rubocop:enable Security/YAMLLoad
 
 fcrepo_uri = URI.parse(fcrepo_config['url']).tap do |uri|
   uri.userinfo = "#{fcrepo_config['user']}:#{fcrepo_config['password']}"

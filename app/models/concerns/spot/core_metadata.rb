@@ -11,7 +11,6 @@ module Spot
   module CoreMetadata
     extend ActiveSupport::Concern
 
-    # rubocop:disable Metrics/BlockLength
     included do
       # Free text, use authorized version if possible.
       #
@@ -124,6 +123,5 @@ module Spot
         index.as :stored_searchable
       end
     end
-    # rubocop:enable Metrics/BlockLength
   end
 end

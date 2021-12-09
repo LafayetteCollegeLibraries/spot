@@ -1,18 +1,10 @@
+inherit_from: .rubocop_todo.yml
+
 inherit_gem:
   bixby: bixby_default.yml
 
 AllCops:
-  TargetRubyVersion: '2.4.2'
-
-# copying from Bixby, but adding spec files to that list
-Metrics/BlockLength:
-  Enabled: true
-  Exclude:
-    - '**/*.gemspec'
-    - 'config/**/*'
-    - '**/*/catalog_controller.rb'
-    - 'spec/**/*'
-    - 'lib/tasks/**/*'
+  TargetRubyVersion: '2.4.3'
 
 Rails/OutputSafety:
   Enabled: false
@@ -21,4 +13,4 @@ Rails/OutputSafety:
 RSpec/ExampleLength:
   Enabled: true
   Exclude:
-    - 'spec/features/**/*'
+    - 'spec/**/*'

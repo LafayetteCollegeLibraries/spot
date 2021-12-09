@@ -39,7 +39,6 @@ class SolrDocument
   #       mapped to dc:identifier. Will this just work out of the box?
   # @todo PA Digital guidelines specify ISO 639-3 for language (we're using 639-1);
   #       will we need to revisit that?
-  # rubocop:disable Metrics/MethodLength
   def self.field_semantics
     {
       collection_name: 'member_of_collections_ssim',
@@ -59,7 +58,6 @@ class SolrDocument
       type: 'resource_type_tesim'
     }
   end
-  # rubocop:enable Metrics/MethodLength
 
   # Less involved than the same method on WorkShowPresenters,
   # all we want to know is if the item's visibility is "metadata"

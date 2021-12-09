@@ -33,8 +33,6 @@ RSpec.describe Spot::SyncCollectionPermissionsJob do
   after { permission_template.destroy! }
 
   # rubo wants us to align +.and+ with the previous line's +.from+, which doesn't read correctly
-  #
-  # rubocop:disable Layout/MultilineMethodCallIndentation
   context 'default behavior' do
     it 'adds the permission_templates grants to the item' do
       expect { described_class.perform_now(collection) }
@@ -54,5 +52,4 @@ RSpec.describe Spot::SyncCollectionPermissionsJob do
         .and change { item.read_users  }.from(['helper@lafayette.edu']).to(['user@lafayette.edu'])
     end
   end
-  # rubocop:enable Layout/MultilineMethodCallIndentation
 end

@@ -48,7 +48,6 @@ module Spot
     private
 
       # @return [Array<Symbol>]
-      # rubocop:disable Metrics/MethodLength
       def default_terms
         %i[
           id
@@ -78,6 +77,5 @@ module Spot
           visibility
         ]
       end
-    # rubocop:enable Metrics/MethodLength
   end
 end

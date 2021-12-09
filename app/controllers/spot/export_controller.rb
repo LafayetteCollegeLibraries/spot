@@ -11,7 +11,6 @@ module Spot
 
     before_action :load_and_authorize_resource
 
-    # rubocop:disable Style/AndOr
     def show
       redirect_to hyrax.download_path(solr_document.id) and return if wants_file_set?
 
@@ -27,7 +26,6 @@ module Spot
 
       send_file(export_work_to_cache!, filename: "#{solr_document.id}.zip")
     end
-    # rubocop:enable Style/AndOr
 
     private
 
