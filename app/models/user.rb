@@ -20,19 +20,19 @@ class User < ApplicationRecord
 
   before_save :ensure_username
 
-  enum affiliation: {
-    unknown: 0,
-    student: 1,
-    faculty: 2,
-    staff: 3,
-    alumni: 4
-  }, _suffix: true
-
   # Can this user deposit items?
   #
   # @return [true, false]
   def depositor?
-    roles.where(name: [Ability.admin_group_name, 'depositor']).exists?
+    roles.where(name: [Ability.admin_group_name, Ability.depositor_group_name]).exists?
+  end
+
+  def faculty?
+    roles.where(name: Ability.faculty_group_name).exists?
+  end
+
+  def student?
+    roles.where(name: Ability.student_group_name).exists?
   end
 
   # Method added by Blacklight; Blacklight uses #to_s on your
@@ -54,36 +54,39 @@ class User < ApplicationRecord
     self.username = attributes['uid']
     self.email = attributes['email']
     self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
-
     self.lnumber = attributes['lnumber']
-    self.affiliation = affiliation_from_attributes(attributes)
+    self.roles = collect_roles(attributes: attributes)
   end
 
   private
 
-    # Determines the value for `affiliation` from the passed attributes.
-    #
-    # @return [Symbol]
-    def affiliation_from_attributes(attributes)
-      entitlement = URI.parse(attributes.fetch('eduPersonEntitlement', ''))
-      return :unknown unless entitlement.host == 'ldr.lafayette.edu'
+  def collect_roles(attributes:)
+    role_names = attributes.fetch('eduPersonEntitlement', []).map do |value|
+      parsed = URI.parse(value)
+      next unless parsed.host == 'ldr.lafayette.edu' # @todo should we make this configurable?
 
-      case entitlement.path
-      when '/student', '/faculty', '/staff', '/alumni'
-        entitlement.path[1..-1].to_sym
-      else
-        :unknown
+      case parsed.path
+      when '/faculty'
+        Ability.faculty_group_name
+      when '/staff'
+        Ability.staff_group_name
+      when '/student'
+        Ability.student_group_name
       end
-    end
+    end.compact.uniq
 
-    # Callback to ensure that we store a username, as that's what's used for uniqueness.
-    # We occasionally provide a depositor in some ingest cases, but that relies on the
-    # email address and _not_ the username. We'll capture the username as anything
-    # before the +@+ symbol of the email.
-    #
-    # @return [void]
-    def ensure_username
-      return unless username.blank?
-      self.username = email.gsub(/@.*$/, '')
-    end
+    role_names.map { |name| Role.find_or_create_by(name: name) }
+  end
+
+  # Callback to ensure that we store a username, as that's what's used for uniqueness.
+  # We occasionally provide a depositor in some ingest cases, but that relies on the
+  # email address and _not_ the username. We'll capture the username as anything
+  # before the +@+ symbol of the email.
+  #
+  # @return [void]
+  def ensure_username
+    return unless username.blank?
+
+    self.username = email.gsub(/@.*$/, '')
+  end
 end

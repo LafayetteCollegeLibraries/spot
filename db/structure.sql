@@ -9,23 +9,7 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -72,6 +56,245 @@ CREATE SEQUENCE public.bookmarks_id_seq
 --
 
 ALTER SEQUENCE public.bookmarks_id_seq OWNED BY public.bookmarks.id;
+
+
+--
+-- Name: bulkrax_entries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulkrax_entries (
+    id bigint NOT NULL,
+    identifier character varying,
+    collection_ids character varying,
+    type character varying,
+    importerexporter_id bigint,
+    raw_metadata text,
+    parsed_metadata text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    last_error_at timestamp without time zone,
+    last_succeeded_at timestamp without time zone,
+    importerexporter_type character varying DEFAULT 'Bulkrax::Importer'::character varying
+);
+
+
+--
+-- Name: bulkrax_entries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulkrax_entries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulkrax_entries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulkrax_entries_id_seq OWNED BY public.bulkrax_entries.id;
+
+
+--
+-- Name: bulkrax_exporter_runs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulkrax_exporter_runs (
+    id bigint NOT NULL,
+    exporter_id bigint,
+    total_work_entries integer DEFAULT 0,
+    enqueued_records integer DEFAULT 0,
+    processed_records integer DEFAULT 0,
+    deleted_records integer DEFAULT 0,
+    failed_records integer DEFAULT 0
+);
+
+
+--
+-- Name: bulkrax_exporter_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulkrax_exporter_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulkrax_exporter_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulkrax_exporter_runs_id_seq OWNED BY public.bulkrax_exporter_runs.id;
+
+
+--
+-- Name: bulkrax_exporters; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulkrax_exporters (
+    id bigint NOT NULL,
+    name character varying,
+    user_id bigint,
+    parser_klass character varying,
+    "limit" integer,
+    parser_fields text,
+    field_mapping text,
+    export_source character varying,
+    export_from character varying,
+    export_type character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    last_error_at timestamp without time zone,
+    last_succeeded_at timestamp without time zone,
+    start_date date,
+    finish_date date,
+    work_visibility character varying,
+    workflow_status character varying
+);
+
+
+--
+-- Name: bulkrax_exporters_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulkrax_exporters_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulkrax_exporters_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulkrax_exporters_id_seq OWNED BY public.bulkrax_exporters.id;
+
+
+--
+-- Name: bulkrax_importer_runs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulkrax_importer_runs (
+    id bigint NOT NULL,
+    importer_id bigint,
+    total_work_entries integer DEFAULT 0,
+    enqueued_records integer DEFAULT 0,
+    processed_records integer DEFAULT 0,
+    deleted_records integer DEFAULT 0,
+    failed_records integer DEFAULT 0,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    processed_collections integer DEFAULT 0,
+    failed_collections integer DEFAULT 0,
+    total_collection_entries integer DEFAULT 0,
+    processed_children integer DEFAULT 0,
+    failed_children integer DEFAULT 0,
+    invalid_records text
+);
+
+
+--
+-- Name: bulkrax_importer_runs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulkrax_importer_runs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulkrax_importer_runs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulkrax_importer_runs_id_seq OWNED BY public.bulkrax_importer_runs.id;
+
+
+--
+-- Name: bulkrax_importers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulkrax_importers (
+    id bigint NOT NULL,
+    name character varying,
+    admin_set_id character varying,
+    user_id bigint,
+    frequency character varying,
+    parser_klass character varying,
+    "limit" integer,
+    parser_fields text,
+    field_mapping text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    validate_only boolean,
+    last_error_at timestamp without time zone,
+    last_succeeded_at timestamp without time zone
+);
+
+
+--
+-- Name: bulkrax_importers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulkrax_importers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulkrax_importers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulkrax_importers_id_seq OWNED BY public.bulkrax_importers.id;
+
+
+--
+-- Name: bulkrax_statuses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bulkrax_statuses (
+    id bigint NOT NULL,
+    status_message character varying,
+    error_class character varying,
+    error_message character varying,
+    error_backtrace text,
+    statusable_id integer,
+    statusable_type character varying,
+    runnable_id integer,
+    runnable_type character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: bulkrax_statuses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bulkrax_statuses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bulkrax_statuses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bulkrax_statuses_id_seq OWNED BY public.bulkrax_statuses.id;
 
 
 --
@@ -1704,7 +1927,7 @@ CREATE TABLE public.users (
     office character varying,
     chat_id character varying,
     website character varying,
-    affiliation integer DEFAULT 0,
+    affiliation character varying,
     telephone character varying,
     avatar_file_name character varying,
     avatar_content_type character varying,
@@ -1814,6 +2037,48 @@ ALTER SEQUENCE public.work_view_stats_id_seq OWNED BY public.work_view_stats.id;
 --
 
 ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET DEFAULT nextval('public.bookmarks_id_seq'::regclass);
+
+
+--
+-- Name: bulkrax_entries id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_entries ALTER COLUMN id SET DEFAULT nextval('public.bulkrax_entries_id_seq'::regclass);
+
+
+--
+-- Name: bulkrax_exporter_runs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_exporter_runs ALTER COLUMN id SET DEFAULT nextval('public.bulkrax_exporter_runs_id_seq'::regclass);
+
+
+--
+-- Name: bulkrax_exporters id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_exporters ALTER COLUMN id SET DEFAULT nextval('public.bulkrax_exporters_id_seq'::regclass);
+
+
+--
+-- Name: bulkrax_importer_runs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_importer_runs ALTER COLUMN id SET DEFAULT nextval('public.bulkrax_importer_runs_id_seq'::regclass);
+
+
+--
+-- Name: bulkrax_importers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_importers ALTER COLUMN id SET DEFAULT nextval('public.bulkrax_importers_id_seq'::regclass);
+
+
+--
+-- Name: bulkrax_statuses id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_statuses ALTER COLUMN id SET DEFAULT nextval('public.bulkrax_statuses_id_seq'::regclass);
 
 
 --
@@ -2180,6 +2445,54 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 ALTER TABLE ONLY public.bookmarks
     ADD CONSTRAINT bookmarks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulkrax_entries bulkrax_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_entries
+    ADD CONSTRAINT bulkrax_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulkrax_exporter_runs bulkrax_exporter_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_exporter_runs
+    ADD CONSTRAINT bulkrax_exporter_runs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulkrax_exporters bulkrax_exporters_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_exporters
+    ADD CONSTRAINT bulkrax_exporters_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulkrax_importer_runs bulkrax_importer_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_importer_runs
+    ADD CONSTRAINT bulkrax_importer_runs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulkrax_importers bulkrax_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_importers
+    ADD CONSTRAINT bulkrax_importers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bulkrax_statuses bulkrax_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_statuses
+    ADD CONSTRAINT bulkrax_statuses_pkey PRIMARY KEY (id);
 
 
 --
@@ -2616,6 +2929,41 @@ CREATE INDEX index_bookmarks_on_document_id ON public.bookmarks USING btree (doc
 --
 
 CREATE INDEX index_bookmarks_on_user_id ON public.bookmarks USING btree (user_id);
+
+
+--
+-- Name: index_bulkrax_entries_on_importerexporter_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bulkrax_entries_on_importerexporter_id ON public.bulkrax_entries USING btree (importerexporter_id);
+
+
+--
+-- Name: index_bulkrax_exporter_runs_on_exporter_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bulkrax_exporter_runs_on_exporter_id ON public.bulkrax_exporter_runs USING btree (exporter_id);
+
+
+--
+-- Name: index_bulkrax_exporters_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bulkrax_exporters_on_user_id ON public.bulkrax_exporters USING btree (user_id);
+
+
+--
+-- Name: index_bulkrax_importer_runs_on_importer_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bulkrax_importer_runs_on_importer_id ON public.bulkrax_importer_runs USING btree (importer_id);
+
+
+--
+-- Name: index_bulkrax_importers_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bulkrax_importers_on_user_id ON public.bulkrax_importers USING btree (user_id);
 
 
 --
@@ -3180,6 +3528,14 @@ ALTER TABLE ONLY public.collection_type_participants
 
 
 --
+-- Name: bulkrax_importer_runs fk_rails_3690e86fd3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_importer_runs
+    ADD CONSTRAINT fk_rails_3690e86fd3 FOREIGN KEY (importer_id) REFERENCES public.bulkrax_importers(id);
+
+
+--
 -- Name: curation_concerns_operations fk_rails_3c63b420e5; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3193,6 +3549,14 @@ ALTER TABLE ONLY public.curation_concerns_operations
 
 ALTER TABLE ONLY public.permission_template_accesses
     ADD CONSTRAINT fk_rails_9c1ccdc6d5 FOREIGN KEY (permission_template_id) REFERENCES public.permission_templates(id);
+
+
+--
+-- Name: bulkrax_exporter_runs fk_rails_b9767c6c02; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bulkrax_exporter_runs
+    ADD CONSTRAINT fk_rails_b9767c6c02 FOREIGN KEY (exporter_id) REFERENCES public.bulkrax_exporters(id);
 
 
 --
@@ -3306,11 +3670,35 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180427181339'),
 ('20180427181340'),
 ('20180427181341'),
+('20181011230201'),
+('20181011230228'),
 ('20181101155934'),
 ('20190220133607'),
 ('20190315143022'),
+('20190325183136'),
 ('20190327194742'),
+('20190601221109'),
+('20190715161939'),
+('20190715162044'),
+('20190729124607'),
+('20190729134158'),
+('20190731114016'),
+('20191203225129'),
+('20191204191623'),
+('20191204223857'),
+('20191212155530'),
+('20200108194557'),
 ('20200128221650'),
+('20200301232856'),
+('20200312190638'),
+('20200326235838'),
+('20200601204556'),
+('20200818055819'),
+('20200819054016'),
+('20201106014204'),
+('20201117220007'),
+('20210806044408'),
+('20210806065737'),
 ('20211206185043');
 
 

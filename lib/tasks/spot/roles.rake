@@ -43,12 +43,8 @@ namespace :spot do
 
     desc "creates default roles"
     task default: [:environment] do
-      roles = [
-        Ability.admin_group_name,
-        'depositor'
-      ]
-
-      create_roles(roles)
+      names = Ability.preload_roles!.map(&:name)
+      puts "Created #{names.count} role#{'s' if names.count != 1}: #{names.join(', ')}"
     end
   end
 end
