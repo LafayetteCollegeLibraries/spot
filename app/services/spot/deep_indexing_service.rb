@@ -34,19 +34,13 @@ module Spot
 
       val = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
 
-      # first, add the value to the default solr key
-      ActiveFedora::Indexing::Inserter.create_and_insert_terms(solr_field_key,
-                                                               val.first,
-                                                               field_info.behaviors,
-                                                               solr_doc)
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_ssim", value: value.first)
 
       return unless val.last.is_a?(Hash) && val.last.include?(:label)
 
-      # then, add the '*_label' value to the doc
-      ActiveFedora::Indexing::Inserter.create_and_insert_terms("#{solr_field_key}_label",
-                                                               label_for(val),
-                                                               field_info.behaviors,
-                                                               solr_doc)
+      label = label_for(val)
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_tesim", value: label)
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_ssim", value: label)
     end
 
     # Fetches values (when possible) before calling up to insert
@@ -66,6 +60,12 @@ module Spot
     end
 
     private
+
+      # Replaces calls to ActiveFedora::Indexing::Inserter, which more or less does the same thing
+      def append_values(solr_doc:, field:, value:)
+        solr_doc[field] ||= []
+        solr_doc[field] += [value]
+      end
 
       # makes sure the value can be fetched before doing a cache check
       #
