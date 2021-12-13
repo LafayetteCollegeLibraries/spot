@@ -66,6 +66,7 @@ COPY config/uv config/uv
 ARG BUNDLE_WITHOUT=""
 RUN bundle install --jobs "$(nproc)"
 RUN yarn install
+
 CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/trustee_minutes/tmp/ssl/application.key&cert=/trustee_minutes/tmp/ssl/application.crt"]
 
 # precompile assets
