@@ -3,21 +3,17 @@ class Ability
   include Hydra::Ability
   include Hyrax::Ability
 
+  class_attribute :alumni_group_name, default: 'alumni'
   class_attribute :depositor_group_name, default: 'depositor'
-  class_attribute :student_group_name, default: 'student'
   class_attribute :faculty_group_name, default: 'faculty'
+  class_attribute :staff_group_name, default: 'staff'
+  class_attribute :student_group_name, default: 'student'
 
   self.ability_logic += [:depositor_abilities, :admin_abilities]
 
   def self.preload_roles!
-    [
-      admin_group_name,
-      depositor_group_name,
-      student_group_name,
-      faculty_group_name
-    ].map do |name|
-      Role.find_or_create_by!(name: name)
-    end
+    roles = [admin_group_name, depositor_group_name].concat(Spot::CasUserRolesServive.group_names_from_cas)
+    roles.map { |name| Role.find_or_create_by!(name: name) }
   end
 
   # Define any customized permissions here.

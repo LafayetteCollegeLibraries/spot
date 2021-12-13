@@ -20,6 +20,13 @@ class User < ApplicationRecord
 
   before_save :ensure_username
 
+  # Does this user belong to the Alumni group?
+  #
+  # @return [true, false]
+  def alumni?
+    roles.where(name: Ability.alumni_group_name).exists?
+  end
+
   # Can this user deposit items?
   #
   # @return [true, false]
@@ -27,10 +34,23 @@ class User < ApplicationRecord
     roles.where(name: [Ability.admin_group_name, Ability.depositor_group_name]).exists?
   end
 
+  # Does this user belong to the Faculty group?
+  #
+  # @return [true, false]
   def faculty?
     roles.where(name: Ability.faculty_group_name).exists?
   end
 
+  # Does this user belong to the Staff group?
+  #
+  # @return [true, false]
+  def staff?
+    roles.where(name: Ability.staff_group_name).exists?
+  end
+
+  # Does this user belong to the Student group?
+  #
+  # @return [true, false]
   def student?
     roles.where(name: Ability.student_group_name).exists?
   end
@@ -49,33 +69,25 @@ class User < ApplicationRecord
   #
   # @param [Hash<String => String>] attributes
   # @return [void]
-  # @todo when/if released, capture: memberOf, affiliation, department
   def cas_extra_attributes=(attributes)
     self.username = attributes['uid']
     self.email = attributes['email']
     self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
     self.lnumber = attributes['lnumber']
-    self.roles = collect_roles(attributes: attributes)
+
+    update_roles_from_attributes(attributes)
   end
 
   private
 
-  def collect_roles(attributes:)
-    role_names = attributes.fetch('eduPersonEntitlement', []).map do |value|
-      parsed = URI.parse(value)
-      next unless parsed.host == 'ldr.lafayette.edu' # @todo should we make this configurable?
-
-      case parsed.path
-      when '/faculty'
-        Ability.faculty_group_name
-      when '/staff'
-        Ability.staff_group_name
-      when '/student'
-        Ability.student_group_name
-      end
-    end.compact.uniq
-
-    role_names.map { |name| Role.find_or_create_by(name: name) }
+  # Delegates the updating of User Roles to `Spot::CasUserRolesService`, which will
+  # retain roles assigned outside of CAS.
+  #
+  # @param [Hash<String => String>] attributes
+  # @return [void]
+  def update_roles_from_attributes(attributes)
+    entitlements = Array.wrap(attributes.fetch('eduPersonEntitlement', []))
+    Spot::CasUserRolesService.update_roles_from_entitlements(user: self, entitlements: entitlements)
   end
 
   # Callback to ensure that we store a username, as that's what's used for uniqueness.
