@@ -23,7 +23,10 @@ module Spot
   class DeepIndexingService < ActiveFedora::RDF::IndexingService
     # Called from within {ActiveFedora::RDF::IndexingService#add_assertions}
     # to add a value to the solr doc hash. This is our failsafe to allow
-    # non-solrizable values to be added
+    # non-solrizable values to be added.
+    #
+    # Adds "#{field}_ssim", "#{field}_label_tesim", and "#{field}_label_sim"
+    # properties to the Solr Document.
     #
     # @param [Hash] solr_doc
     # @param [String] solr_field_key
@@ -40,7 +43,7 @@ module Spot
 
       label = label_for(val)
       append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_tesim", value: label)
-      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_ssim", value: label)
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_sim", value: label)
     end
 
     # Fetches values (when possible) before calling up to insert
@@ -71,10 +74,7 @@ module Spot
       #
       # @param [ActiveTriples::Resource] val
       def fetch_value(val)
-        return unless val.respond_to? :fetch
-        return if val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
-
-        val.fetch
+        val&.fetch unless val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
       end
 
       # @return [Class]

@@ -42,7 +42,7 @@ RSpec.describe Spot::DeepIndexingService do
     # it indexes our expected fields
     it { is_expected.to include 'title_tesim' }
     it { is_expected.to include 'location_ssim' }
-    it { is_expected.to include 'location_label_ssim' }
+    it { is_expected.to include 'location_label_sim' }
     it { is_expected.to include 'location_label_tesim' }
 
     context 'when a cached label exists' do
