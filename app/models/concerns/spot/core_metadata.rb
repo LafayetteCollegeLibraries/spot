@@ -46,7 +46,10 @@ module Spot
       # ISO 639-1 codes of the language(s). See {IndexesLanguageAndLabel} mixin for indexing
       property :language, predicate: ::RDF::Vocab::DC11.language
 
-      # Geonames or Getty TGN URI, displayed as human- readable prefLabel.
+      # Geonames or Getty TGN URI, displayed as human-readable prefLabel.
+      # Note: the `index.as` definition is not used but required to be present
+      # in order for the DeepIndexingServivce to be called.
+      #
       # @see {Spot::DeepIndexingService} for label indexing details
       property :location, predicate: ::RDF::Vocab::DC.spatial,
                           class_name: Spot::ControlledVocabularies::Location do |index|

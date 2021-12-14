@@ -63,7 +63,7 @@ RSpec.describe PublicationIndexer do
     end
 
     it 'stores the label' do
-      expect(solr_doc['location_label_ssim']).to eq [label]
+      expect(solr_doc['location_label_tesim']).to eq [label]
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe PublicationIndexer do
     end
 
     it 'stores the label' do
-      expect(solr_doc['subject_label_ssim']).to eq [label]
+      expect(solr_doc['subject_label_tesim']).to eq [label]
     end
   end
 

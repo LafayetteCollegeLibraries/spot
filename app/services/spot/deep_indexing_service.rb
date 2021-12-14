@@ -35,13 +35,14 @@ module Spot
     def append_to_solr_doc(solr_doc, solr_field_key, field_info, value)
       return super unless object.controlled_properties.include?(solr_field_key.to_sym)
 
-      val = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
+      value_uri, value_label_hash = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
 
-      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_ssim", value: value.first)
+      # uri behaviors - :symbol
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_ssim", value: value_uri)
+      return unless value_label_hash.is_a?(Hash) && value_label_hash.include?(:label)
 
-      return unless val.last.is_a?(Hash) && val.last.include?(:label)
-
-      label = label_for(val)
+      # label behaviors - :stored_searchable, :facetable
+      label = label_for(value_label_hash)
       append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_tesim", value: label)
       append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_sim", value: label)
     end
@@ -90,7 +91,7 @@ module Spot
       #   label(["http://id.loc.gov/authorities/subjects/sh85062487", {:label=>"Hotels$http://id.loc.gov/authorities/subjects/sh85062487"}])
       #   => 'Hotels'
       def label_for(val)
-        val.last[:label].split('$').first
+        val[:label].split('$').first
       end
   end
 end
