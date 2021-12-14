@@ -28,51 +28,51 @@ module Spot::ControlledVocabularies
 
     private
 
-      # @return [Class]
-      def authority_class
-        Qa::Authorities::Geonames
-      end
+    # @return [Class]
+    def authority_class
+      Qa::Authorities::Geonames
+    end
 
-      # Uses the Qa::Authorities::Geonames API to fetch Geonames data
-      # for a URI.
-      #
-      # @return [Hash]
-      def fetch_geonames_data
-        Rails.logger.info "Fetching Geonames API data for #{geonames_id}"
-        authority_class.new.find(geonames_id)
-      end
+    # Uses the Qa::Authorities::Geonames API to fetch Geonames data
+    # for a URI.
+    #
+    # @return [Hash]
+    def fetch_geonames_data
+      Rails.logger.info "Fetching Geonames API data for #{geonames_id}"
+      authority_class.new.find(geonames_id)
+    end
 
-      # @return [String]
-      def geonames_id
-        URI.parse(rdf_subject.to_s).path.gsub(/\//, '')
-      end
+    # @return [String]
+    def geonames_id
+      URI.parse(rdf_subject.to_s).path.gsub(/\//, '')
+    end
 
-      # Replacement for QA::Authorities::Geonames.label method that removes duplicate
-      # and empty values. Generates a label from the search results.
-      #
-      # @param [Hash<String => *>] data
-      # @return [String]
-      def label_for(data)
-        [data['name'], data['adminName1'], data['countryName']]
-          .reject(&:blank?)
-          .uniq
-          .join(', ')
-      end
+    # Replacement for QA::Authorities::Geonames.label method that removes duplicate
+    # and empty values. Generates a label from the search results.
+    #
+    # @param [Hash<String => *>] data
+    # @return [String]
+    def label_for(data)
+      [data['name'], data['adminName1'], data['countryName']]
+        .reject(&:blank?)
+        .uniq
+        .join(', ')
+    end
 
-      # Overrides the RDF way we're set-up to find a preferred label in lieu
-      # of using the Geonames API to return a more detailed label.
-      #
-      # @return [String]
-      def pick_preferred_label
-        return super unless subject_is_geonames?
+    # Overrides the RDF way we're set-up to find a preferred label in lieu
+    # of using the Geonames API to return a more detailed label.
+    #
+    # @return [String]
+    def pick_preferred_label
+      return super unless subject_is_geonames?
 
-        find_or_create_from_cache do |label|
-          label.value = label_for(fetch_geonames_data)
-        end.value
-      end
+      find_or_create_from_cache do |label|
+        label.value = label_for(fetch_geonames_data)
+      end.value
+    end
 
-      def subject_is_geonames?
-        rdf_subject.to_s =~ /^https?:\/\/\w+\.geonames\.org\//
-      end
+    def subject_is_geonames?
+      rdf_subject.to_s =~ /^https?:\/\/\w+\.geonames\.org\//
+    end
   end
 end

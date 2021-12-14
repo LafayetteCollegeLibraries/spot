@@ -16,30 +16,30 @@ class PublicationIndexer < BaseIndexer
 
   private
 
-    # Store the full text content of all the contained file-sets
-    #
-    # @param [SolrDocument] doc
-    # @return [void]
-    def store_full_text_content(doc)
-      doc['extracted_text_tsimv'] = object.file_sets.map do |fs|
-        fs.extracted_text.present? ? fs.extracted_text.content.strip : ''
-      end
+  # Store the full text content of all the contained file-sets
+  #
+  # @param [SolrDocument] doc
+  # @return [void]
+  def store_full_text_content(doc)
+    doc['extracted_text_tsimv'] = object.file_sets.map do |fs|
+      fs.extracted_text.present? ? fs.extracted_text.content.strip : ''
     end
+  end
 
-    # @param [SolrDocument] doc
-    # @return [void]
-    def store_years_encompassed(doc)
-      doc['years_encompassed_iim'] = object.date_issued.map { |d| parse_year(d) }.reject(&:blank?)
-    end
+  # @param [SolrDocument] doc
+  # @return [void]
+  def store_years_encompassed(doc)
+    doc['years_encompassed_iim'] = object.date_issued.map { |d| parse_year(d) }.reject(&:blank?)
+  end
 
-    # @param date [String]
-    # @return [Number]
-    def parse_year(date)
-      DateTime.parse(d).utc.year
-    rescue
-      year_match = date.match(/^(\d{4})/)
-      return nil if year_match.nil?
+  # @param date [String]
+  # @return [Number]
+  def parse_year(date)
+    DateTime.parse(d).utc.year
+  rescue
+    year_match = date.match(/^(\d{4})/)
+    return nil if year_match.nil?
 
-      year_match[1].to_i
-    end
+    year_match[1].to_i
+  end
 end

@@ -83,13 +83,13 @@ module Spot
 
       private
 
-        # @return [String]
-        def pick_preferred_label
-          return rdf_label.first if rdf_label.first.is_a? String
+      # @return [String]
+      def pick_preferred_label
+        return rdf_label.first if rdf_label.first.is_a? String
 
-          eng_label = rdf_label.select { |label| label.language == :en }&.first
-          eng_label.present? ? eng_label.to_s : rdf_label.first.to_s
-        end
+        eng_label = rdf_label.select { |label| label.language == :en }&.first
+        eng_label.present? ? eng_label.to_s : rdf_label.first.to_s
+      end
     end
   end
 end

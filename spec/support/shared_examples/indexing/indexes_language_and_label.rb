@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it indexes ISO language and label' do
   describe '#language' do
-    # rubocop:disable RSpec/InstanceVariable
     before do
       @previous_language = work.language
       work.language = languages
@@ -10,7 +9,6 @@ RSpec.shared_examples 'it indexes ISO language and label' do
     after do
       work.language = @previous_language
     end
-    # rubocop:enable RSpec/InstanceVariable
 
     let(:languages) { ['en', 'ja', 'nope'] }
     let(:labels) { languages.map { |lang| Spot::ISO6391.label_for(lang) } }

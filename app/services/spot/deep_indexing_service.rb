@@ -65,33 +65,28 @@ module Spot
 
     private
 
-      # Replaces calls to ActiveFedora::Indexing::Inserter, which more or less does the same thing
-      def append_values(solr_doc:, field:, value:)
-        solr_doc[field] ||= []
-        solr_doc[field] += [value]
-      end
+    # Replaces calls to ActiveFedora::Indexing::Inserter, which more or less does the same thing
+    def append_values(solr_doc:, field:, value:)
+      solr_doc[field] ||= []
+      solr_doc[field] += [value]
+    end
 
-      # makes sure the value can be fetched before doing a cache check
-      #
-      # @param [ActiveTriples::Resource] val
-      def fetch_value(val)
-        val&.fetch unless val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
-      end
+    # makes sure the value can be fetched before doing a cache check
+    #
+    # @param [ActiveTriples::Resource] val
+    def fetch_value(val)
+      val&.fetch unless val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
+    end
 
-      # @return [Class]
-      def inserter
-        ActiveFedora::Indexing::Inserter
-      end
-
-      # Return a label for the solrized term.
-      #
-      # @param [Array] val
-      #
-      # @example
-      #   label(["http://id.loc.gov/authorities/subjects/sh85062487", {:label=>"Hotels$http://id.loc.gov/authorities/subjects/sh85062487"}])
-      #   => 'Hotels'
-      def label_for(val)
-        val[:label].split('$').first
-      end
+    # Return a label for the solrized term.
+    #
+    # @param [Array] val
+    #
+    # @example
+    #   label(["http://id.loc.gov/authorities/subjects/sh85062487", {:label=>"Hotels$http://id.loc.gov/authorities/subjects/sh85062487"}])
+    #   => 'Hotels'
+    def label_for(val)
+      val[:label].split('$').first
+    end
   end
 end

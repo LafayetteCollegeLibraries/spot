@@ -21,10 +21,10 @@ module Spot
 
     protected
 
-      # @return [String]
-      def render_existing_check_summary
-        return 'Fixity checks have not yet been run on this object' if relevant_log_records.empty?
-        super
-      end
+    # @return [String]
+    def render_existing_check_summary
+      return 'Fixity checks have not yet been run on this object' if relevant_log_records.empty?
+      super
+    end
   end
 end

@@ -50,15 +50,15 @@ class User < ApplicationRecord
 
   private
 
-    # Callback to ensure that we store a username, as that's what's used for uniqueness.
-    # We occasionally provide a depositor in some ingest cases, but that relies on the
-    # email address and _not_ the username. We'll capture the username as anything
-    # before the +@+ symbol of the email.
-    #
-    # @return [void]
-    def ensure_username
-      return unless username.blank?
+  # Callback to ensure that we store a username, as that's what's used for uniqueness.
+  # We occasionally provide a depositor in some ingest cases, but that relies on the
+  # email address and _not_ the username. We'll capture the username as anything
+  # before the +@+ symbol of the email.
+  #
+  # @return [void]
+  def ensure_username
+    return unless username.blank?
 
-      self.username = email.gsub(/@.*$/, '')
-    end
+    self.username = email.gsub(/@.*$/, '')
+  end
 end

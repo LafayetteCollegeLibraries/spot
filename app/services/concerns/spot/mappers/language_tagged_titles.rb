@@ -80,45 +80,45 @@ module Spot::Mappers
 
     private
 
-      # maps the values of an array to RDF::Literals tagged with a language
-      #
-      # @param [Array] arr
-      # @param [String,Symbol] language
-      # @return [Array<RDF::Literal>]
-      def tagged_literals(arr, language)
-        Array.wrap(arr).reject(&:blank?).map { |value| literal_for(value, language) }
-      end
+    # maps the values of an array to RDF::Literals tagged with a language
+    #
+    # @param [Array] arr
+    # @param [String,Symbol] language
+    # @return [Array<RDF::Literal>]
+    def tagged_literals(arr, language)
+      Array.wrap(arr).reject(&:blank?).map { |value| literal_for(value, language) }
+    end
 
-      # Maps a field's values to RDF::Literals tagged with a language
-      #
-      # @param [String] field
-      #   Metadata field to target
-      # @param [String, Symbol] language
-      #   2 character language code (ex. :en)
-      def field_to_tagged_literals(field, language)
-        tagged_literals(metadata.fetch(field, []), language)
-      end
+    # Maps a field's values to RDF::Literals tagged with a language
+    #
+    # @param [String] field
+    #   Metadata field to target
+    # @param [String, Symbol] language
+    #   2 character language code (ex. :en)
+    def field_to_tagged_literals(field, language)
+      tagged_literals(metadata.fetch(field, []), language)
+    end
 
-      # Does a value look like "[aa0001] title" ?
-      #
-      # @return bool
-      def identifier_prefix?(value)
-        value.match?(/^\[\w{2}\d{4}\]/)
-      end
+    # Does a value look like "[aa0001] title" ?
+    #
+    # @return bool
+    def identifier_prefix?(value)
+      value.match?(/^\[\w{2}\d{4}\]/)
+    end
 
-      # @return [RDF::Literal]
-      def literal_for(value, language = nil)
-        RDF::Literal(value, language: language.respond_to?(:to_sym) ? language.to_sym : language)
-      end
+    # @return [RDF::Literal]
+    def literal_for(value, language = nil)
+      RDF::Literal(value, language: language.respond_to?(:to_sym) ? language.to_sym : language)
+    end
 
-      # @return [Symbol,String]
-      def primary_title_language
-        primary_title_map.values.first
-      end
+    # @return [Symbol,String]
+    def primary_title_language
+      primary_title_map.values.first
+    end
 
-      # @return [Array<*>]
-      def primary_titles
-        metadata.fetch(primary_title_map.keys.first, [])
-      end
+    # @return [Array<*>]
+    def primary_titles
+      metadata.fetch(primary_title_map.keys.first, [])
+    end
   end
 end

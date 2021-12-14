@@ -14,18 +14,18 @@ class RdfLiteralSerializer
 
   private
 
-    # @return [Symbol]
-    def type
-      :ntriples
-    end
+  # @return [Symbol]
+  def type
+    :ntriples
+  end
 
-    # @return [RDF::Reader]
-    def reader
-      @reader ||= RDF::Reader.for(type)
-    end
+  # @return [RDF::Reader]
+  def reader
+    @reader ||= RDF::Reader.for(type)
+  end
 
-    # @return [RDF::Writer]
-    def writer
-      @writer ||= RDF::Writer.for(type).new
-    end
+  # @return [RDF::Writer]
+  def writer
+    @writer ||= RDF::Writer.for(type).new
+  end
 end

@@ -60,44 +60,44 @@ module NestedFormFields
 
     private
 
-      # There may be a clearer name for this. Local controlled
-      # vocabulary fields are returned to the form looking like
-      # +WorkModel.accepts_nested_attributes_for+ properties.
-      # However, they're decidedly _not_ ActiveFedora nested
-      # attributes and they need to be transformed back.
-      #
-      # Essentially, we're receiving attributes that look like:
-      #
-      #   {'language_attributes' => {'0' => { 'id' => 'en' }}}
-      #
-      # and transforming them to look like:
-      #
-      #   {'language' => ['en']}
-      #
-      # Note that this step isn't necessary if we're
-      # just using the jquery-ui autocomplete field type.
-      #
-      # @param [ActionController::Parameters, Hash] params
-      # @return [ActionController::Parameters, Hash]
-      def transform_nested_fields!(params)
-        return unless respond_to?(:_nested_fields)
+    # There may be a clearer name for this. Local controlled
+    # vocabulary fields are returned to the form looking like
+    # +WorkModel.accepts_nested_attributes_for+ properties.
+    # However, they're decidedly _not_ ActiveFedora nested
+    # attributes and they need to be transformed back.
+    #
+    # Essentially, we're receiving attributes that look like:
+    #
+    #   {'language_attributes' => {'0' => { 'id' => 'en' }}}
+    #
+    # and transforming them to look like:
+    #
+    #   {'language' => ['en']}
+    #
+    # Note that this step isn't necessary if we're
+    # just using the jquery-ui autocomplete field type.
+    #
+    # @param [ActionController::Parameters, Hash] params
+    # @return [ActionController::Parameters, Hash]
+    def transform_nested_fields!(params)
+      return unless respond_to?(:_nested_fields)
 
-        _nested_fields.each do |field_key|
-          field = params.delete("#{field_key}_attributes")
-          next if field.nil?
+      _nested_fields.each do |field_key|
+        field = params.delete("#{field_key}_attributes")
+        next if field.nil?
 
-          params[field_key] = transform_nested_values(field.values)
-        end
+        params[field_key] = transform_nested_values(field.values)
       end
+    end
 
-      # flattens nested_attribute values into an array of
-      # ids. if the +_destroy+ key is present, the field
-      # is skipped, removing it from the record.
-      #
-      # @param [Array<Hash<'id', '_destroy'>>,#map] values
-      # @return [Array<String>]
-      def transform_nested_values(values)
-        values.map { |value| value['id'] if value['_destroy'].blank? }.compact
-      end
+    # flattens nested_attribute values into an array of
+    # ids. if the +_destroy+ key is present, the field
+    # is skipped, removing it from the record.
+    #
+    # @param [Array<Hash<'id', '_destroy'>>,#map] values
+    # @return [Array<String>]
+    def transform_nested_values(values)
+      values.map { |value| value['id'] if value['_destroy'].blank? }.compact
+    end
   end
 end

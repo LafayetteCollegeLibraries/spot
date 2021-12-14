@@ -47,12 +47,12 @@ module Spot::Mappers
 
     private
 
-      # Wraps the original response in an array, since all of those fields are multi-valued
-      #
-      # @param [String, Symbol] name The field name
-      # @return [Array<any>]
-      def map_field(name)
-        Array.wrap(super(name))
-      end
+    # Wraps the original response in an array, since all of those fields are multi-valued
+    #
+    # @param [String, Symbol] name The field name
+    # @return [Array<any>]
+    def map_field(name)
+      Array.wrap(super(name))
+    end
   end
 end

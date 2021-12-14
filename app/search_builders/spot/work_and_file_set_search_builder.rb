@@ -5,9 +5,9 @@ module Spot
   class WorkAndFileSetSearchBuilder < Hyrax::WorkSearchBuilder
     private
 
-      # @return [Array<Class>]
-      def models
-        super + [FileSet]
-      end
+    # @return [Array<Class>]
+    def models
+      super + [FileSet]
+    end
   end
 end

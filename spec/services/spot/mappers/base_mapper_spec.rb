@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable RSpec/InstanceVariable
 RSpec.describe Spot::Mappers::BaseMapper do
   subject(:mapper) { described_class.new }
 
@@ -85,4 +84,3 @@ RSpec.describe Spot::Mappers::BaseMapper do
     end
   end
 end
-# rubocop:enable RSpec/InstanceVariable

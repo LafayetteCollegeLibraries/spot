@@ -36,26 +36,26 @@ module Spot::Importers::Unpaywall
 
     private
 
-      # @return [Darlingtonia::InputRecord]
-      def input_record_from(metadata)
-        ::Darlingtonia::InputRecord.from(metadata: metadata,
-                                         mapper: @mapper)
-      end
+    # @return [Darlingtonia::InputRecord]
+    def input_record_from(metadata)
+      ::Darlingtonia::InputRecord.from(metadata: metadata,
+                                       mapper: @mapper)
+    end
 
-      # @raise [Spot::Importers::Unpaywall::DOINotFound] when DOI not found
-      # @return [Hash<String => String,Number,Boolean>]
-      def raw_metadata
-        response = connection.get("/v2/#{@doi}")
-        parsed = JSON.parse(response.body)
+    # @raise [Spot::Importers::Unpaywall::DOINotFound] when DOI not found
+    # @return [Hash<String => String,Number,Boolean>]
+    def raw_metadata
+      response = connection.get("/v2/#{@doi}")
+      parsed = JSON.parse(response.body)
 
-        raise DOINotFound, parsed['message'] if parsed['error']
+      raise DOINotFound, parsed['message'] if parsed['error']
 
-        parsed
-      end
+      parsed
+    end
 
-      # @return [Faraday::Connection]
-      def connection
-        @connection ||= Faraday.new(url: API_BASE_URL, params: { email: unpaywall_email })
-      end
+    # @return [Faraday::Connection]
+    def connection
+      @connection ||= Faraday.new(url: API_BASE_URL, params: { email: unpaywall_email })
+    end
   end
 end

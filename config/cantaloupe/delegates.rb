@@ -29,14 +29,19 @@ class CustomDelegate
     []
   end
 
-  # rubocop:disable Layout/EmptyLineBetweenDefs
   def source(_options = {}); end
+
   def azurestoragesource_blob_key(_options = {}); end
+
   def httpsource_resource_info(_options = {}); end
+
   def jdbcsource_database_identifier(_options = {}); end
+
   def jdbcsource_media_type(_options = {}); end
+
   def jdbcsource_lookup_sql(_options = {}); end
+
   def s3source_object_info(_options = {}); end
+
   def overlay(_options = {}); end
-  # rubocop:enable Layout/EmptyLineBetweenDefs
 end

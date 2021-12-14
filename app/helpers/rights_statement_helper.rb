@@ -18,16 +18,16 @@ module RightsStatementHelper
 
   private
 
-    # @param uri [String]
-    # @return [String, nil]
-    def rs_icon_path_for(uri)
-      case uri
-      when %r{^https?://creativecommons\.org/licenses/([^/]+)/}
-        image_path "rights-icons/cc-#{Regexp.last_match(1)}.svg"
-      when %r{^https?://creativecommons\.org/publicdomain/(mark|zero)/}
-        image_path "rights-icons/pd-#{Regexp.last_match(1)}.svg"
-      when %r{^https?://rightsstatements\.org/vocab/([^/]+)/}
-        image_path "rights-icons/rs-#{Regexp.last_match(1).downcase}.svg"
-      end
+  # @param uri [String]
+  # @return [String, nil]
+  def rs_icon_path_for(uri)
+    case uri
+    when %r{^https?://creativecommons\.org/licenses/([^/]+)/}
+      image_path "rights-icons/cc-#{Regexp.last_match(1)}.svg"
+    when %r{^https?://creativecommons\.org/publicdomain/(mark|zero)/}
+      image_path "rights-icons/pd-#{Regexp.last_match(1)}.svg"
+    when %r{^https?://rightsstatements\.org/vocab/([^/]+)/}
+      image_path "rights-icons/rs-#{Regexp.last_match(1).downcase}.svg"
     end
+  end
 end

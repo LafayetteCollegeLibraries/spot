@@ -65,33 +65,33 @@ module Spot
 
     private
 
-      attr_reader :api_key
+    attr_reader :api_key
 
-      def find_or_create_entry(label:, value:)
-        entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: value)
-        entry.label = label
-        entry.save
-        entry
-      end
+    def find_or_create_entry(label:, value:)
+      entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: value)
+      entry.label = label
+      entry.save
+      entry
+    end
 
-      def instructors_for(term:)
-        wds_service.instructors(term: term)
-      end
+    def instructors_for(term:)
+      wds_service.instructors(term: term)
+    end
 
-      def instructor_id(instructor)
-        instructor['LNUMBER']
-      end
+    def instructor_id(instructor)
+      instructor['LNUMBER']
+    end
 
-      def instructor_label(instructor)
-        "#{instructor['LAST_NAME']}, #{instructor['FIRST_NAME']}"
-      end
+    def instructor_label(instructor)
+      "#{instructor['LAST_NAME']}, #{instructor['FIRST_NAME']}"
+    end
 
-      def local_authority
-        @local_authority ||= Qa::LocalAuthority.find_or_create_by(name: SUBAUTHORITY_NAME)
-      end
+    def local_authority
+      @local_authority ||= Qa::LocalAuthority.find_or_create_by(name: SUBAUTHORITY_NAME)
+    end
 
-      def wds_service
-        Spot::LafayetteWdsService.new(api_key: api_key)
-      end
+    def wds_service
+      Spot::LafayetteWdsService.new(api_key: api_key)
+    end
   end
 end
