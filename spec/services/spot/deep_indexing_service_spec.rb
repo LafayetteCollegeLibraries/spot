@@ -30,7 +30,7 @@ RSpec.describe Spot::DeepIndexingService do
         property :location,
                  predicate: RDF::Vocab::DC.spatial,
                  class_name: Spot::ControlledVocabularies::Base do |index|
-          index.as :symbol
+          index.as :handled_by_deep_indexing_service
         end
       end
     end
@@ -42,7 +42,8 @@ RSpec.describe Spot::DeepIndexingService do
     # it indexes our expected fields
     it { is_expected.to include 'title_tesim' }
     it { is_expected.to include 'location_ssim' }
-    it { is_expected.to include 'location_label_ssim' }
+    it { is_expected.to include 'location_label_sim' }
+    it { is_expected.to include 'location_label_tesim' }
 
     context 'when a cached label exists' do
       before do
@@ -54,7 +55,9 @@ RSpec.describe Spot::DeepIndexingService do
         expect(object.location.first).not_to have_received(:fetch)
       end
 
-      it { is_expected.to include 'location_label_ssim' }
+      it { is_expected.to include 'location_ssim' }
+      it { is_expected.to include 'location_label_sim' }
+      it { is_expected.to include 'location_label_tesim' }
     end
 
     context 'when a label is not cached' do

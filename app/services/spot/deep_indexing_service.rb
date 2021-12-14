@@ -23,7 +23,10 @@ module Spot
   class DeepIndexingService < ActiveFedora::RDF::IndexingService
     # Called from within {ActiveFedora::RDF::IndexingService#add_assertions}
     # to add a value to the solr doc hash. This is our failsafe to allow
-    # non-solrizable values to be added
+    # non-solrizable values to be added.
+    #
+    # Adds "#{field}_ssim", "#{field}_label_tesim", and "#{field}_label_sim"
+    # properties to the Solr Document.
     #
     # @param [Hash] solr_doc
     # @param [String] solr_field_key
@@ -32,21 +35,16 @@ module Spot
     def append_to_solr_doc(solr_doc, solr_field_key, field_info, value)
       return super unless object.controlled_properties.include?(solr_field_key.to_sym)
 
-      val = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
+      value_uri, value_label_hash = value.respond_to?(:solrize) ? value.solrize : [value, { label: value }]
 
-      # first, add the value to the default solr key
-      ActiveFedora::Indexing::Inserter.create_and_insert_terms(solr_field_key,
-                                                               val.first,
-                                                               field_info.behaviors,
-                                                               solr_doc)
+      # uri behaviors - :symbol
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_ssim", value: value_uri)
+      return unless value_label_hash.is_a?(Hash) && value_label_hash.include?(:label)
 
-      return unless val.last.is_a?(Hash) && val.last.include?(:label)
-
-      # then, add the '*_label' value to the doc
-      ActiveFedora::Indexing::Inserter.create_and_insert_terms("#{solr_field_key}_label",
-                                                               label_for(val),
-                                                               field_info.behaviors,
-                                                               solr_doc)
+      # label behaviors - :stored_searchable, :facetable
+      label = label_for(value_label_hash)
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_tesim", value: label)
+      append_values(solr_doc: solr_doc, field: "#{solr_field_key}_label_sim", value: label)
     end
 
     # Fetches values (when possible) before calling up to insert
@@ -67,14 +65,17 @@ module Spot
 
     private
 
+      # Replaces calls to ActiveFedora::Indexing::Inserter, which more or less does the same thing
+      def append_values(solr_doc:, field:, value:)
+        solr_doc[field] ||= []
+        solr_doc[field] += [value]
+      end
+
       # makes sure the value can be fetched before doing a cache check
       #
       # @param [ActiveTriples::Resource] val
       def fetch_value(val)
-        return unless val.respond_to? :fetch
-        return if val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
-
-        val.fetch
+        val&.fetch unless val.is_a?(Spot::ControlledVocabularies::Base) && val.label_present?
       end
 
       # @return [Class]
@@ -90,7 +91,7 @@ module Spot
       #   label(["http://id.loc.gov/authorities/subjects/sh85062487", {:label=>"Hotels$http://id.loc.gov/authorities/subjects/sh85062487"}])
       #   => 'Hotels'
       def label_for(val)
-        val.last[:label].split('$').first
+        val[:label].split('$').first
       end
   end
 end
