@@ -23,68 +23,68 @@ class Ability
 
   private
 
-    # Delegates abilities for users that have the 'admin' role
-    #
-    # @return [void]
-    def admin_abilities
-      return unless current_user.admin?
+  # Delegates abilities for users that have the 'admin' role
+  #
+  # @return [void]
+  def admin_abilities
+    return unless current_user.admin?
 
-      can([:create, :delete, :manage], FeaturedCollection)
-      can(role_abilities, Role)
+    can([:create, :delete, :manage], FeaturedCollection)
+    can(role_abilities, Role)
 
-      # admins can create everything
-      can(:create, curation_concerns_models)
-    end
+    # admins can create everything
+    can(:create, curation_concerns_models)
+  end
 
-    # Delegates abilities for users that have the 'depositor' role
-    # (includes admins)
-    #
-    # @return [void]
-    def depositor_abilities
-      return unless current_user.depositor?
+  # Delegates abilities for users that have the 'depositor' role
+  # (includes admins)
+  #
+  # @return [void]
+  def depositor_abilities
+    return unless current_user.depositor?
 
-      can(:create, Publication)
+    can(:create, Publication)
 
-      # can view the user dashboard
-      can(:read, :dashboard)
+    # can view the user dashboard
+    can(:read, :dashboard)
 
-      # can add items to collections
-      can(:deposit, Collection)
-    end
+    # can add items to collections
+    can(:deposit, Collection)
+  end
 
-    # Delegates abilities for users that have the 'student' role
-    #
-    # @return [void]
-    def faculty_abilities
-      return unless current_user.faculty?
+  # Delegates abilities for users that have the 'student' role
+  #
+  # @return [void]
+  def faculty_abilities
+    return unless current_user.faculty?
 
-      can(:read, :dashboard)
-    end
+    can(:read, :dashboard)
+  end
 
-    # Delegates abilities for users that have the 'student' role
-    #
-    # @return [void]
-    def student_abilities
-      return unless current_user.student?
+  # Delegates abilities for users that have the 'student' role
+  #
+  # @return [void]
+  def student_abilities
+    return unless current_user.student?
 
-      can(:create, StudentWork)
-      can(:read, :dashboard)
-    end
+    can(:create, StudentWork)
+    can(:read, :dashboard)
+  end
 
-    # save some space by defining the Role abilities here
-    #
-    # @return [Array<Symbol>]
-    def role_abilities
-      %i[
-        create
-        show
-        add_user
-        remove_user
-        index
-        edit
-        update
-        destroy
-        manage
-      ]
-    end
+  # save some space by defining the Role abilities here
+  #
+  # @return [Array<Symbol>]
+  def role_abilities
+    %i[
+      create
+      show
+      add_user
+      remove_user
+      index
+      edit
+      update
+      destroy
+      manage
+    ]
+  end
 end

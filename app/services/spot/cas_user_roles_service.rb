@@ -53,7 +53,7 @@ module Spot
       role_names = user.roles.map(&:name)
       reset_roles = role_names - group_names_from_cas
       entitlement_roles = entitlements.map { |v| role_name_from_entitlement(v) }.compact.uniq
-      rehydrated_roles = (reset_roles + entitlement_roles).map  { |name| Role.find_or_create_by(name: name) }
+      rehydrated_roles = (reset_roles + entitlement_roles).map { |name| Role.find_or_create_by(name: name) }
       user.roles = rehydrated_roles
     end
 
