@@ -12,7 +12,7 @@ class Ability
   self.ability_logic += [:depositor_abilities, :admin_abilities]
 
   def self.preload_roles!
-    roles = [admin_group_name, depositor_group_name].concat(Spot::CasUserRolesServive.group_names_from_cas)
+    roles = [admin_group_name, depositor_group_name].concat(Spot::CasUserRolesService.group_names_from_cas)
     roles.map { |name| Role.find_or_create_by!(name: name) }
   end
 
