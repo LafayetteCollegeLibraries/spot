@@ -10,7 +10,7 @@ RSpec.describe Spot::CasUserRolesService do
     context 'when a user has roles already' do
       it 'retains the non-CAS roles' do
         expect { described_class.update_roles_from_entitlements(user: user, entitlements: entitlements) }
-          .to change { user.roles.map(&:name) }
+          .to change { user.roles.pluck(:name) }
           .from(['admin', 'depositor'])
           .to(['admin', 'depositor', 'staff', 'faculty'])
       end
@@ -22,7 +22,7 @@ RSpec.describe Spot::CasUserRolesService do
 
       it 'modifies role membership to match' do
         expect { described_class.update_roles_from_entitlements(user: user, entitlements: entitlements) }
-          .to change { user.roles.map(&:name) }
+          .to change { user.roles.pluck(:name) }
           .from(['student'])
           .to([])
       end
