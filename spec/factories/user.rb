@@ -28,11 +28,17 @@ FactoryBot.define do
 
     factory :registered_user do
       groups { ['registered', 'public'] }
+      roles { [] }
     end
 
     factory :public_user do
       groups { ['public'] }
       guest { true }
+    end
+
+    factory :student_user do
+      groups { ['registered', 'student', 'public'] }
+      roles { [create(:student_role)] }
     end
 
     after(:build) do |user, evaluator|

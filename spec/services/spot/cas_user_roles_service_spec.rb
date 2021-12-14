@@ -15,5 +15,17 @@ RSpec.describe Spot::CasUserRolesService do
           .to(['admin', 'depositor', 'staff', 'faculty'])
       end
     end
+
+    context 'when a users roles do not match entitlements' do
+      let(:user) { create(:student_user) }
+      let(:entitlements) { ['https://ldr.lafayette.edu/'] }
+
+      it 'modifies role membership to match' do
+        expect { described_class.update_roles_from_entitlements(user: user, entitlements: entitlements) }
+          .to change { user.roles.map(&:name) }
+          .from(['student'])
+          .to([])
+      end
+    end
   end
 end

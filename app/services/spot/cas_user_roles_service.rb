@@ -57,16 +57,6 @@ module Spot
       user.roles = rehydrated_roles
     end
 
-    # Wrapper around {#update_roles_from_entitlements} that also calls
-    # `#save!` on the user account.
-    #
-    # @param [Array<String>] entitlements
-    # @return [void]
-    def update_roles_from_entitlements!(entitlements)
-      update_roles_from_entitlements(entitlements)
-      user.save!
-    end
-
     private
 
     # Parses a role/group name from an entitlement URI.
