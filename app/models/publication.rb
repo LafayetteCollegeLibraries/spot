@@ -16,10 +16,6 @@ class Publication < ActiveFedora::Base
     index.as :stored_searchable
   end
 
-  property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
-    index.as :stored_searchable
-  end
-
   property :date_issued, predicate: ::RDF::Vocab::DC.issued do |index|
     index.as :symbol
   end
