@@ -19,8 +19,24 @@ RSpec.describe Hyrax::DashboardController do
     context 'when a depositor user' do
       let(:user) { create(:depositor_user) }
 
-      it 'renders the user/depositor dashboard' do
+      it 'renders the user dashboard' do
         expect(response).to render_template('show_user')
+      end
+    end
+
+    context 'when a faculty user' do
+      let(:user) { create(:faculty_user) }
+
+      it 'renders the user dashboard' do
+        expect(response).to render_template('show_user')
+      end
+    end
+
+    context 'when a public user' do
+      let(:user) { create(:public_user) }
+
+      it 'redirects to the main page' do
+        expect(response).to redirect_to(root_path)
       end
     end
 
@@ -32,11 +48,11 @@ RSpec.describe Hyrax::DashboardController do
       end
     end
 
-    context 'when a public user' do
-      let(:user) { create(:public_user) }
+    context 'when a student user' do
+      let(:user) { create(:student_user) }
 
-      it 'redirects to the main page' do
-        expect(response).to redirect_to(root_path)
+      it 'renders the user dashboard' do
+        expect(response).to render_template('show_user')
       end
     end
   end

@@ -26,6 +26,11 @@ FactoryBot.define do
       roles { [create(:depositor_role)] }
     end
 
+    factory :faculty_user do
+      groups { ['registered', 'faculty', 'public'] }
+      roles { [create(:faculty_role)] }
+    end
+
     factory :registered_user do
       groups { ['registered', 'public'] }
       roles { [] }

@@ -9,7 +9,12 @@ class Ability
   class_attribute :staff_group_name, default: 'staff'
   class_attribute :student_group_name, default: 'student'
 
-  self.ability_logic += [:depositor_abilities, :admin_abilities]
+  self.ability_logic += [
+    :depositor_abilities,
+    :admin_abilities,
+    :faculty_abilities,
+    :student_abilities
+  ]
 
   def self.preload_roles!
     roles = [admin_group_name, depositor_group_name].concat(Spot::CasUserRolesService.group_names_from_cas)
