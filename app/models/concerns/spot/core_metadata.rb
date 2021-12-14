@@ -13,15 +13,11 @@ module Spot
 
     included do
       # Free text, use authorized version if possible.
-      #
-      # @todo metadata application profile has this as non-faceted, remove :facetable ?
       property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
         index.as :stored_searchable, :facetable
       end
 
       # Free text, use authorized version if possible.
-      #
-      # @todo metadata application profile has this as non-faceted, remove :facetable ?
       property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
         index.as :stored_searchable, :facetable
       end
@@ -122,6 +118,11 @@ module Spot
       property :title_alternative, predicate: ::RDF::Vocab::DC.alternative do |index|
         index.as :stored_searchable
       end
+      
+      # A bibliographic reference for the resource.
+      property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
+        index.as :stored_searchable
+      end 
     end
   end
 end
