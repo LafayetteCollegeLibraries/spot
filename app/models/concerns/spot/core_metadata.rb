@@ -118,11 +118,11 @@ module Spot
       property :title_alternative, predicate: ::RDF::Vocab::DC.alternative do |index|
         index.as :stored_searchable
       end
-      
+     
       # A bibliographic reference for the resource.
       property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
         index.as :stored_searchable
-      end 
+      end
     end
   end
 end
