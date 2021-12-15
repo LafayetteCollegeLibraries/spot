@@ -50,7 +50,7 @@ RSpec.describe User do
     # meta-programming user groups
     %w[student faculty staff alumni].each do |entitlement|
       context %(when a "#{entitlement}" entitlement is present) do
-        let(:entitlements) { [%(https://ldr.lafayette.edu/#{entitlement})] }
+        let(:entitlements) { ["https://ldr.lafayette.edu/#{entitlement}"] }
 
         it "adds the user to the #{entitlement} group" do
           expect(user.send(:"#{entitlement}?")).to be true
