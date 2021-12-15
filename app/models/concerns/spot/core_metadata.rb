@@ -12,6 +12,11 @@ module Spot
     extend ActiveSupport::Concern
 
     included do
+      # A bibliographic reference for the resource.
+      property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
+        index.as :stored_searchable
+      end
+
       # Free text, use authorized version if possible.
       property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
         index.as :stored_searchable, :facetable
@@ -116,11 +121,6 @@ module Spot
 
       # Other forms of the title, e.g. for versions of the title in languages other than English.
       property :title_alternative, predicate: ::RDF::Vocab::DC.alternative do |index|
-        index.as :stored_searchable
-      end
-
-      # A bibliographic reference for the resource.
-      property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
         index.as :stored_searchable
       end
     end
