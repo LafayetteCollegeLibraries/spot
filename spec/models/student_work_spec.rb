@@ -8,7 +8,6 @@ RSpec.describe StudentWork do
     [:abstract,               RDF::Vocab::DC.abstract],
     [:access_note,            RDF::Vocab::DC.accessRights],
     [:advisor,                'http://id.loc.gov/vocabulary/relators/ths'],
-    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
     [:date,                   RDF::Vocab::DC.date],
     [:date_available,         RDF::Vocab::DC.available]
   ].each do |(prop, uri)|

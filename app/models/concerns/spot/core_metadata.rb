@@ -12,16 +12,17 @@ module Spot
     extend ActiveSupport::Concern
 
     included do
+      # A bibliographic reference for the resource.
+      property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
+        index.as :stored_searchable
+      end
+
       # Free text, use authorized version if possible.
-      #
-      # @todo metadata application profile has this as non-faceted, remove :facetable ?
       property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
         index.as :stored_searchable, :facetable
       end
 
       # Free text, use authorized version if possible.
-      #
-      # @todo metadata application profile has this as non-faceted, remove :facetable ?
       property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
         index.as :stored_searchable, :facetable
       end
