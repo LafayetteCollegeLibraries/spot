@@ -6,7 +6,6 @@ RSpec.describe Publication do
   [
     [:abstract,               RDF::Vocab::DC.abstract],
     [:academic_department,    'http://vivoweb.org/ontology/core#AcademicDepartment'],
-    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
     [:date_available,         RDF::Vocab::DC.available],
     [:date_issued,            RDF::Vocab::DC.issued],
     [:division,               'http://vivoweb.org/ontology/core#Division'],
