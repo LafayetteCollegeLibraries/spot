@@ -3,7 +3,7 @@ RSpec.shared_examples 'it includes Spot::CoreMetadata' do
   subject { described_class.new }
 
   [
-    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation]
+    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
     [:contributor,            RDF::Vocab::DC11.contributor],
     [:creator,                RDF::Vocab::DC11.creator],
     [:description,            RDF::Vocab::DC11.description],
