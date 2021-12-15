@@ -1,0 +1,62 @@
+<%# displays user fields as a profile#show page
+    (edited from hyrax to remove social profiles) %>
+<dl id="user_info">
+
+<% if user.orcid.present? %>
+  <dt><%= orcid_label('profile') %></dt>
+  <dd><%= link_to user.orcid, user.orcid, { target: '_blank' } %></dd>
+<% end %>
+
+<% if Hyrax.config.arkivo_api? && user.zotero_userid.present? %>
+  <dt><%= zotero_label(html_class: 'profile') %></dt>
+  <dd><%= link_to zotero_profile_url(user.zotero_userid), zotero_profile_url(user.zotero_userid), { target: '_blank' } %></dd>
+<% end %>
+
+  <dt><i class="fa fa-envelope" aria-hidden="true"></i> Email</dt>
+  <dd><%= mail_to user.email %></dd>
+
+  <% if user.chat_id %>
+    <dt><i class="glyphicon glyphicon-bullhorn" aria-hidden="true"></i> Chat ID</dt>
+    <dd><%= user.chat_id %></dd>
+  <% end %>
+
+  <% if user.website %>
+    <dt><i class="glyphicon glyphicon-globe" aria-hidden="true"></i> Website(s)</dt>
+    <dd><%= iconify_auto_link(user.website) %></dd>
+  <% end %>
+
+  <% if user.title %>
+    <dt>Title</dt>
+    <dd><%= user.title %></dd>
+  <% end %>
+
+  <% if user.admin_area %>
+    <dt>Administrative Area</dt>
+    <dd><%= user.admin_area %></dd>
+  <% end %>
+
+  <% if user.department %>
+    <dt>Department</dt>
+    <dd><%= user.department %></dd>
+  <% end %>
+
+  <% if user.office %>
+    <dt>Office</dt>
+    <dd><%= user.office %></dd>
+  <% end %>
+
+  <% if user.address %>
+    <dt><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i> Address</dt>
+    <dd><%= user.address %></dd>
+  <% end %>
+
+  <% if user.affiliation %>
+    <dt>Affiliation</dt>
+    <dd><%= user.affiliation %></dd>
+  <% end %>
+
+  <% if user.telephone %>
+    <dt><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i> Telephone</dt>
+    <dd><%= link_to_telephone(user) %></dd>
+  <% end %>
+</dl>
