@@ -4,7 +4,7 @@ services:
   app:
     image: lafayettecollegelibraries/spot
     build:
-      target: spot-app
+      target: spot-app-dev
       context: .
     volumes:
       - .:/spot
@@ -115,7 +115,7 @@ services:
     image: lafayettecollegelibraries/spot
     build:
       context: .
-      target: spot-worker
+      target: spot-worker-dev
     env_file:
       - .env.local
     ports:
