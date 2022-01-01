@@ -136,7 +136,7 @@ gem 'nokogiri', '~> 1.10.10'
 # These are subdependencies that need to be locked tighter to be run on ruby 2.4.3.
 # In theory, we should just be able to remove these entries and run `bundle update`
 # to get things up to date. (see also `:development, :test` block below)
-gem 'amazing_print', '1.2.1'
+gem 'amazing_print', '1.4.0'
 gem 'dry-container', '0.7.2'
 gem 'dry-core', '0.4.9'
 gem 'dry-inflector', '0.2.0'

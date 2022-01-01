@@ -73,7 +73,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     almond-rails (0.3.0)
       rails (>= 4.2)
-    amazing_print (1.2.1)
+    amazing_print (1.4.0)
     arel (9.0.0)
     ast (2.4.2)
     autoprefixer-rails (10.3.3.0)
@@ -981,7 +981,7 @@ PLATFORMS
 
 DEPENDENCIES
   almond-rails (= 0.3.0)
-  amazing_print (= 1.2.1)
+  amazing_print (= 1.4.0)
   bagit (= 0.4.4)
   bixby (= 1.0.0)
   blacklight_advanced_search (= 6.4.1)
