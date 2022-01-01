@@ -191,7 +191,7 @@ group :development, :test do
   # dependencies we have to lock in order to work with ruby 2.4.3 on prem
   # (@todo update these when we're in the cloud)
   gem 'bixby', '1.0.0'
-  gem 'capybara', '~> 3.32.0'
+  gem 'capybara', '~> 3.36.0'
   gem 'rubocop', '~> 0.52.0'
   gem 'rubocop-rspec', '1.22.2'
   gem 'simplecov', '~> 0.17.1', require: false
