@@ -104,7 +104,6 @@ module Spot
       end
     end
 
-
     module ClassMethods
       def attribute(name, type, field)
         define_method name do
