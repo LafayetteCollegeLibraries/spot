@@ -112,7 +112,7 @@ gem 'sprockets-es6'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
-gem 'kaminari', '1.2.1'
+gem 'kaminari', '1.2.2'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
