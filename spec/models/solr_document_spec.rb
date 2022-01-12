@@ -154,4 +154,24 @@ RSpec.describe SolrDocument do
       it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
   end
+
+  describe '#subject_label patch' do
+    subject { document.subject_label }
+
+    context 'when subject_label stored as string (_ssim)' do
+      let(:metadata) do
+        { 'subject_label_ssim' => ['Subject Label'] }
+      end
+
+      it { is_expected.to eq ['Subject Label'] }
+    end
+
+    context 'when subject_label stored as text (_tesim)' do
+      let(:metadata) do
+        { 'subject_label_tesim' => ['Subject Label'] }
+      end
+
+      it { is_expected.to eq ['Subject Label'] }
+    end
+  end
 end
