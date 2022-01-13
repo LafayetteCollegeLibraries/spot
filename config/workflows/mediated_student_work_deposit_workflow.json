@@ -3,7 +3,7 @@
     {
       "name": "mediated_student_work_deposit",
       "label": "Mediated StudentWork Deposit Workflow",
-      "description": "",
+      "description": "Mediated workflow for StudentWork submissions",
       "allow_access_grant": false,
       "actions": [
         {
@@ -13,7 +13,8 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingAdvisorReviewNotification"
+              "name": "Spot::Workflow::PendingAdvisorReviewNotification",
+              "to": ["advising"]
             }
           ],
           "methods": [
@@ -32,7 +33,8 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::ChangesRequiredNotification"
+              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "to": ["depositing"]
             }
           ],
           "methods": [
@@ -48,7 +50,8 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingAdvisorReviewNotification"
+              "name": "Spot::Workflow::PendingAdvisorReviewNotification",
+              "to": ["advising"]
             }
           ],
           "methods": [
@@ -65,7 +68,7 @@
             {
               "notification_type": "email",
               "name": "Spot::Workflow::PendingLibraryReviewNotification",
-              "to": "library_approving"
+              "to": ["library_approving"]
             }
           ]
         },
@@ -78,7 +81,8 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::ChangesRequiredNotification"
+              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "to": ["depositing"]
             }
           ],
           "methods": [
@@ -94,7 +98,8 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingLibraryReviewNotification"
+              "name": "Spot::Workflow::PendingLibraryReviewNotification",
+              "to": ["library_approving"]
             }
           ],
           "methods": [
@@ -110,7 +115,8 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::DepositedNotification"
+              "name": "Hyrax::Workflow::DepositedNotification",
+              "to": ["depositing"]
             }
           ],
           "methods": [
