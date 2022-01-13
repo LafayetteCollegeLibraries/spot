@@ -9,7 +9,6 @@ services:
     volumes:
       - .:/spot
       - derivatives:/spot/derivatives
-      - gem_storage:/spot/vendor
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
       - uploads:/spot/uploads
@@ -69,11 +68,9 @@ services:
     image: lafayettecollegelibraries/spot
     build:
       context: .
-      target: spot-app
+      target: spot-app-dev
     env_file:
       - .env.local
-    volumes:
-      - gem_storage:/spot/vendor
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
     depends_on:
@@ -125,7 +122,6 @@ services:
       - .:/spot
       - ./ingest:/ingest
       - derivatives:/spot/derivatives
-      - gem_storage:/spot/vendor
       - uploads:/spot/uploads
     restart: always
     depends_on:

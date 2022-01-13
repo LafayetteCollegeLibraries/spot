@@ -45,12 +45,12 @@ COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
 
 # b) make directories for installation configuration (`config/`, `public/`, and `vendor/`)
 #    and those for derivatives + uploads
-RUN mkdir -p /spot/config /spot/public /spot/vendor && \
+RUN mkdir -p /spot/config /spot/public && \
     mkdir -p /spot/derivatives /spot/uploads
 
 # c) install dependencies
 ARG BUNDLE_WITHOUT="development test"
-RUN bundle install --jobs "$(nproc)" --path "/spot/vendor"
+RUN bundle install --jobs "$(nproc)"
 
 # d) copy the application files
 # COPY --chown=1001:101 . /spot
