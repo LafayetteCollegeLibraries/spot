@@ -155,6 +155,26 @@ RSpec.describe SolrDocument do
     end
   end
 
+  describe '#location_label patch' do
+    subject { document.location_label }
+
+    context 'when location_label stored as string (_ssim)' do
+      let(:metadata) do
+        { 'location_label_ssim' => ['Location Label'] }
+      end
+
+      it { is_expected.to eq ['Location Label'] }
+    end
+
+    context 'when location_label stored as text (_tesim)' do
+      let(:metadata) do
+        { 'location_label_tesim' => ['Location Label'] }
+      end
+
+      it { is_expected.to eq ['Location Label'] }
+    end
+  end
+
   describe '#subject_label patch' do
     subject { document.subject_label }
 

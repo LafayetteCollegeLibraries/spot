@@ -90,15 +90,20 @@ module Spot
       # dates
       attribute :date_modified,          ::Blacklight::Types::Date,   'date_modified_dtsi'
 
-      # Helper while we reindex the collection to use the new `subject_label_tesim` property
-      # but falling back to the old `subject_label_ssim` if those values aren't present.
-      # If both fields are defined (which shouldn't happen), the newer "_tesim" field will be
-      # used if content exists.
+      # Patching while we reindex the collection to use the new `location_label_tesim` and
+      # `subject_label_tesim` properties but falling back to their old `*_label_ssim` counterparts
+      # if the others aren't present. This should help the old values appear during a collection
+      # reindex. If both fields are present (which shouldn't happen), the newer "_tesim" field
+      # will be used.
       #
-      # Placed in the `included` block to overwrite the `attribute :subject_label` definition
-      # above (defining this outside of the `included` block will cause the `attribute` definition to override)
+      # Placed in the `included` block to overwrite the `attribute` definitions, which are defined
+      # after methods in the mixin.
       #
       # @todo remove this after reindexing, 2022-01-10
+      def location_label
+        Array.wrap(self['location_label_tesim'] || self['location_label_ssim'])
+      end
+
       def subject_label
         Array.wrap(self['subject_label_tesim'] || self['subject_label_ssim'])
       end
