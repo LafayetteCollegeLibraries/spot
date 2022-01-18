@@ -5,7 +5,7 @@ module Spot
       private
 
       def subject
-        "The item you deposited requires changes."
+        'The item you deposited requires changes.'
       end
 
       def message

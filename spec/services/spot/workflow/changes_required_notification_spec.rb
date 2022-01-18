@@ -8,6 +8,7 @@ RSpec.describe Spot::Workflow::ChangesRequiredNotification do
   let(:comment) { 'Make it better, please?' }
   let(:sipity_comment) { instance_double('Sipity::Comment', comment: comment) }
   let(:recipients) { { 'to' => [to_user] } }
+  let(:subject_line) { 'The item you deposited requires changes.' }
   let(:message) do
     "Test Student Work (<a href=\"/concern/student_works/#{work.id}\">#{work.id}</a>) requires additional changes before approval." \
     "\n\n<blockquote>#{comment}</blockquote>"
@@ -18,7 +19,7 @@ RSpec.describe Spot::Workflow::ChangesRequiredNotification do
       before do
         allow(approver)
           .to receive(:send_message)
-          .with(anything, message, anything)
+          .with(anything, message, subject_line)
           .exactly(2).times.and_call_original
       end
 
@@ -39,7 +40,7 @@ RSpec.describe Spot::Workflow::ChangesRequiredNotification do
       before do
         allow(approver)
           .to receive(:send_message)
-          .with(anything, message, anything)
+          .with(anything, message, subject_line)
           .exactly(4).times.and_call_original
       end
 

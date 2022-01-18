@@ -17,8 +17,14 @@ module Spot
       private
 
       def advisor_from_target
-        lnumber = @target.advisor.first
-        User.find_by(lnumber: lnumber)
+        lnumber = @target.advisor.first.to_s
+
+        case lnumber
+        when /^L\d{8}$/
+          User.find_by(lnumber: lnumber)
+        when /^[^@]+@\w+\.\w+$/
+          User.find_by(email: lnumber)
+        end
       end
 
       def agent

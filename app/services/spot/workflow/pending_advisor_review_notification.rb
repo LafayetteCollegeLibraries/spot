@@ -20,9 +20,10 @@ module Spot
 
       def advisor_user
         advisor_key = document.advisor.first
+
         case advisor_key
         when /^L\d{8}$/
-          User.find_by(lnumber: advisor_lnumber)
+          User.find_by(lnumber: advisor_key)
         when /^[^@]+@\w+\.\w+$/
           User.find_by(email: advisor_key)
         end

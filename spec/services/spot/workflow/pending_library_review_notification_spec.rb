@@ -8,6 +8,7 @@ RSpec.describe Spot::Workflow::PendingLibraryReviewNotification do
   let(:comment) { 'Does the library approve?' }
   let(:sipity_comment) { instance_double('Sipity::Comment', comment: comment) }
   let(:recipients) { { 'to' => [to_user] } }
+  let(:subject_line) { 'Deposit needs review' }
   let(:message) do
     "Test Student Work (<a href=\"/concern/student_works/#{work.id}\">#{work.id}</a>) was submitted by #{depositor.user_key}. " \
     "It has been approved by its advisor and is awaiting Library approval." \
@@ -19,7 +20,7 @@ RSpec.describe Spot::Workflow::PendingLibraryReviewNotification do
       before do
         allow(approver)
           .to receive(:send_message)
-          .with(anything, message, anything)
+          .with(anything, message, subject_line)
           .exactly(1).times.and_call_original
       end
 
@@ -42,7 +43,7 @@ RSpec.describe Spot::Workflow::PendingLibraryReviewNotification do
       before do
         allow(approver)
           .to receive(:send_message)
-          .with(anything, message, anything)
+          .with(anything, message, subject_line)
           .exactly(3).times.and_call_original
       end
 
