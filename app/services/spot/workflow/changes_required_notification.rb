@@ -10,7 +10,7 @@ module Spot
 
       def message
         msg = "#{title} (#{link_to(work_id, document_path)}) requires additional changes before approval."
-        msg += "\n\n<blockquote>#{comment}</blockquote>" if comment
+        msg += "\n\n<blockquote>#{comment}</blockquote>" unless comment.empty?
         msg
       end
 
