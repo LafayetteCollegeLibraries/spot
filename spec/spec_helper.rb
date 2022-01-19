@@ -130,7 +130,6 @@ RSpec.configure do |config|
 
   config.before :suite do
     DatabaseCleaner.clean_with(:truncation)
-    ActiveFedora::Cleaner.clean!
 
     Hyrax.config.enable_noids = false
   end
@@ -151,7 +150,6 @@ RSpec.configure do |config|
 
   config.after clean: true do
     DatabaseCleaner.clean
-    ActiveFedora::Cleaner.clean!
   end
 
   config.before(js: true) do
