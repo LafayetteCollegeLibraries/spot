@@ -70,10 +70,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'organization_sim',           label: :'blacklight.search.fields.organization'
     config.add_facet_field 'division_sim',               label: :'blacklight.search.fields.division'
     config.add_facet_field 'academic_department_sim',    label: :'blacklight.search.fields.academic_department'
-    config.add_facet_field 'subject_label_ssim',         label: :'blacklight.search.fields.subject'
+    config.add_facet_field 'subject_label_sim',          label: :'blacklight.search.fields.subject'
     config.add_facet_field 'keyword_sim',                label: :'blacklight.search.fields.keyword'
     config.add_facet_field 'language_label_ssim',        label: :'blacklight.search.fields.language'
-    config.add_facet_field 'location_label_ssim',        label: :'blacklight.search.fields.location'
+    config.add_facet_field 'location_label_sim',         label: :'blacklight.search.fields.location'
     config.add_facet_field 'years_encompassed_iim',
                            include_in_advanced_search: false,
                            label: :'blacklight.search.fields.years_encompassed',

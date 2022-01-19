@@ -45,12 +45,12 @@ COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
 
 # b) make directories for installation configuration (`config/`, `public/`, and `vendor/`)
 #    and those for derivatives + uploads
-RUN mkdir -p /spot/config /spot/public /spot/vendor && \
+RUN mkdir -p /spot/config /spot/public && \
     mkdir -p /spot/derivatives /spot/uploads
 
 # c) install dependencies
 ARG BUNDLE_WITHOUT="development test"
-RUN bundle install --jobs "$(nproc)" --path "/spot/vendor"
+RUN bundle install --jobs "$(nproc)"
 
 # d) copy the application files
 # COPY --chown=1001:101 . /spot
@@ -59,16 +59,20 @@ COPY . /spot
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "tcp://0.0.0.0:3000"]
 
-FROM spot-base as spot-app
+FROM spot-base as spot-app-dev
+
 COPY config/uv config/uv
 
+ARG BUNDLE_WITHOUT=""
+RUN bundle install --jobs "$(nproc)"
 RUN yarn install
+
 CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/trustee_minutes/tmp/ssl/application.key&cert=/trustee_minutes/tmp/ssl/application.crt"]
 
 # precompile assets
 # RUN DATABASE_URL="postgres://fake" SECRET_KEY_BASE="secret-shh" bundle exec rake assets:precompile
 
-FROM spot-base as spot-worker
+FROM spot-base as spot-worker-dev
 # USER root
 RUN apk --no-cache upgrade && \
     apk --no-cache add \
@@ -77,5 +81,5 @@ RUN apk --no-cache upgrade && \
 
 # USER app
 ARG BUNDLE_WITHOUT=""
-RUN bundle install --jobs "$(nproc)" --path "/spot/vendor"
+RUN bundle install --jobs "$(nproc)"
 CMD ["bundle", "exec", "sidekiq"]

@@ -28,50 +28,50 @@ module Spot
 
     private
 
-      # Determine the renderer based on an option passed. Defaults to
-      # {Spot::Renderers::AttributeRenderer}.
-      #
-      # Copied from https://github.com/samvera/hyrax/blob/v3.0.0-beta1/app/presenters/hyrax/presents_attributes.rb#L63-L69
-      #
-      # @param _field [Symbol]
-      # @param options [Hash]
-      # @option :render_as
-      # @return [Spot::Renderer, Hyrax::Renderer]
-      def renderer_for(_field, options)
-        if options[:render_as]
-          find_renderer_class(options[:render_as])
-        else
-          Renderers::AttributeRenderer
-        end
+    # Determine the renderer based on an option passed. Defaults to
+    # {Spot::Renderers::AttributeRenderer}.
+    #
+    # Copied from https://github.com/samvera/hyrax/blob/v3.0.0-beta1/app/presenters/hyrax/presents_attributes.rb#L63-L69
+    #
+    # @param _field [Symbol]
+    # @param options [Hash]
+    # @option :render_as
+    # @return [Spot::Renderer, Hyrax::Renderer]
+    def renderer_for(_field, options)
+      if options[:render_as]
+        find_renderer_class(options[:render_as])
+      else
+        Renderers::AttributeRenderer
+      end
+    end
+
+    # Combines a Symbol name with one of two suffixes to locate a
+    # renderer class. If a super method is present, it will delegate
+    # there if no local renderers are found.
+    #
+    # Copied from https://github.com/samvera/hyrax/blob/v3.0.0-beta1/app/presenters/hyrax/presents_attributes.rb#L48-L61
+    #
+    # @param name [Symbol]
+    # @return [Spot::Renderer, Hyrax::Renderer]
+    # @raises [NameError] if renderer not found
+    def find_renderer_class(name)
+      renderer = nil
+      ['Renderer', 'AttributeRenderer'].each do |suffix|
+        const_name = "#{name.to_s.camelize}#{suffix}".to_sym
+        renderer =
+          begin
+            Renderers.const_get(const_name)
+          rescue NameError
+            nil
+          end
+
+        break unless renderer.nil?
       end
 
-      # Combines a Symbol name with one of two suffixes to locate a
-      # renderer class. If a super method is present, it will delegate
-      # there if no local renderers are found.
-      #
-      # Copied from https://github.com/samvera/hyrax/blob/v3.0.0-beta1/app/presenters/hyrax/presents_attributes.rb#L48-L61
-      #
-      # @param name [Symbol]
-      # @return [Spot::Renderer, Hyrax::Renderer]
-      # @raises [NameError] if renderer not found
-      def find_renderer_class(name)
-        renderer = nil
-        ['Renderer', 'AttributeRenderer'].each do |suffix|
-          const_name = "#{name.to_s.camelize}#{suffix}".to_sym
-          renderer =
-            begin
-              Renderers.const_get(const_name)
-            rescue NameError
-              nil
-            end
+      return renderer unless renderer.nil?
+      return super if defined?(:super)
 
-          break unless renderer.nil?
-        end
-
-        return renderer unless renderer.nil?
-        return super if defined?(:super)
-
-        raise NameError, "unknown renderer type: #{name}"
-      end
+      raise NameError, "unknown renderer type: #{name}"
+    end
   end
 end

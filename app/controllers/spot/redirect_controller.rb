@@ -32,16 +32,16 @@ module Spot
 
     private
 
-      # Ensures that the URL we're searching for is http (and not https)
-      #
-      # @return [String]
-      def http_uri
-        URI.parse(params[:url]).tap { |url| url.scheme = 'http' }.to_s
-      end
+    # Ensures that the URL we're searching for is http (and not https)
+    #
+    # @return [String]
+    def http_uri
+      URI.parse(params[:url]).tap { |url| url.scheme = 'http' }.to_s
+    end
 
-      # @return [Hash<Symbol => String>]
-      def solr_query_for_identifier
-        { defType: 'lucene', q: "{!terms f=identifier_ssim}url:#{http_uri}" }
-      end
+    # @return [Hash<Symbol => String>]
+    def solr_query_for_identifier
+      { defType: 'lucene', q: "{!terms f=identifier_ssim}url:#{http_uri}" }
+    end
   end
 end

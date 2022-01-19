@@ -38,11 +38,11 @@ class LanguageTaggedInputGroupInput < SimpleForm::Inputs::Base
 
   private
 
-    # Explicitly state that this is a single property, rather than expecting
-    # this method to not be defined.
-    #
-    # @return [FalseClass]
-    def multiple?
-      false
-    end
+  # Explicitly state that this is a single property, rather than expecting
+  # this method to not be defined.
+  #
+  # @return [FalseClass]
+  def multiple?
+    false
+  end
 end

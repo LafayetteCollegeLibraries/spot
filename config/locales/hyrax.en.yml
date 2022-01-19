@@ -51,18 +51,6 @@ en:
         q:
           label: Search LDR
 
-    # Used in the "Add new work" modal
-    select_type:
-      image:
-        description: Digital representation of visual works
-        name: Image
-      publication:
-        description: Works that have been published
-        name: Publication
-      student_work:
-        description: Works created by students
-        name: Student Work
-
     visibility:
       metadata:
         note_html: Make metadata available to all but restrict file access

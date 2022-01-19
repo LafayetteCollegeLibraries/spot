@@ -30,21 +30,21 @@ class BaseIndexer < ::Hyrax::WorkIndexer
 
   private
 
-    # @return [Array<Spot::Identifier>]
-    def mapped_identifiers
-      @mapped_identifiers ||= object.identifier.map { |id| Spot::Identifier.from_string(id) }
-    end
+  # @return [Array<Spot::Identifier>]
+  def mapped_identifiers
+    @mapped_identifiers ||= object.identifier.map { |id| Spot::Identifier.from_string(id) }
+  end
 
-    # @param [SolrDocument] doc
-    # @return [void]
-    def store_thumbnail_url(doc)
-      return if ENV['URL_HOST'].blank?
+  # @param [SolrDocument] doc
+  # @return [void]
+  def store_thumbnail_url(doc)
+    return if ENV['URL_HOST'].blank?
 
-      host = ENV['URL_HOST']
-      host = "http://#{host}" unless host.start_with?('http')
-      path = Hyrax::ThumbnailPathService.call(object)
-      url = URI.join(host, path).to_s
+    host = ENV['URL_HOST']
+    host = "http://#{host}" unless host.start_with?('http')
+    path = Hyrax::ThumbnailPathService.call(object)
+    url = URI.join(host, path).to_s
 
-      doc['thumbnail_url_ss'] = url unless url.empty?
-    end
+    doc['thumbnail_url_ss'] = url unless url.empty?
+  end
 end

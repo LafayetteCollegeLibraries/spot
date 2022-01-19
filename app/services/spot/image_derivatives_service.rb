@@ -55,9 +55,9 @@ module Spot
 
     private
 
-      # @return [Array<Spot::Derivatives::BaseDerivativesService>]
-      def mapped_services
-        @mapped_services ||= services.map { |service| service.new(file_set) }
-      end
+    # @return [Array<Spot::Derivatives::BaseDerivativesService>]
+    def mapped_services
+      @mapped_services ||= services.map { |service| service.new(file_set) }
+    end
   end
 end

@@ -33,15 +33,13 @@ RSpec.describe Spot::SyncCollectionPermissionsJob do
   after { permission_template.destroy! }
 
   # rubo wants us to align +.and+ with the previous line's +.from+, which doesn't read correctly
-  #
-  # rubocop:disable Layout/MultilineMethodCallIndentation
   context 'default behavior' do
     it 'adds the permission_templates grants to the item' do
       expect { described_class.perform_now(collection) }
         .to change { item.edit_groups }.from([admin]).to([admin, 'cool-group'])
-        .and change { item.edit_users  }.from(['helper@lafayette.edu']).to(['helper@lafayette.edu', 'user@lafayette.edu'])
-        .and change { item.read_groups }.from([admin]).to([admin, 'public'])
-        .and change { item.read_users  }.from(['helper@lafayette.edu']).to(['helper@lafayette.edu', 'user@lafayette.edu'])
+                                       .and change { item.edit_users }.from(['helper@lafayette.edu']).to(['helper@lafayette.edu', 'user@lafayette.edu'])
+                                                                      .and change { item.read_groups }.from([admin]).to([admin, 'public'])
+                                                                                                      .and change { item.read_users }.from(['helper@lafayette.edu']).to(['helper@lafayette.edu', 'user@lafayette.edu'])
     end
   end
 
@@ -49,10 +47,9 @@ RSpec.describe Spot::SyncCollectionPermissionsJob do
     it "replaces the existing item permissions with the collection's" do
       expect { described_class.perform_now(collection, reset: true) }
         .to  change { item.edit_groups }.from([admin]).to(['cool-group'])
-        .and change { item.edit_users  }.from(['helper@lafayette.edu']).to(['user@lafayette.edu'])
-        .and change { item.read_groups }.from([admin]).to(['public'])
-        .and change { item.read_users  }.from(['helper@lafayette.edu']).to(['user@lafayette.edu'])
+                                        .and change { item.edit_users }.from(['helper@lafayette.edu']).to(['user@lafayette.edu'])
+                                                                       .and change { item.read_groups }.from([admin]).to(['public'])
+                                                                                                       .and change { item.read_users }.from(['helper@lafayette.edu']).to(['user@lafayette.edu'])
     end
   end
-  # rubocop:enable Layout/MultilineMethodCallIndentation
 end

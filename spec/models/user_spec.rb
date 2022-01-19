@@ -13,30 +13,48 @@ RSpec.describe User do
 
     let(:attrs) do
       {
+        'lnumber' => 'L00000000',
         'uid' => 'wishmand',
         'givenName' => 'Doris',
         'surname' => 'Wishman',
-        'email' => 'wishmand@lafayette.edu'
+        'email' => 'wishmand@lafayette.edu',
+        'eduPersonEntitlement' => entitlements
       }
     end
+    let(:entitlements) { ['https://ldr.lafayette.edu/'] }
 
-    it 'stores "uid" as :username' do
+    it 'sets "uid" as #username' do
       expect(user.username).to eq attrs['uid']
     end
 
-    it 'stores the email' do
+    it 'sets the email' do
       expect(user.email).to eq attrs['email']
     end
 
-    it 'constructs :display_name from "surname" + "givenName"' do
+    it 'sets the L-number' do
+      expect(user.lnumber).to eq attrs['lnumber']
+    end
+
+    it 'constructs #display_name from "surname" + "givenName"' do
       expect(user.display_name).to eq "#{attrs['givenName']} #{attrs['surname']}"
     end
 
     context 'when "givenName" not present' do
       let(:attrs) { { 'uid' => 'spotapp', 'surname' => 'spot' } }
 
-      it 'uses only the "surname"' do
+      it 'uses only the "surname" for #display_name' do
         expect(user.display_name).to eq attrs['surname']
+      end
+    end
+
+    # meta-programming user groups
+    %w[student faculty staff alumni].each do |entitlement|
+      context %(when a "#{entitlement}" entitlement is present) do
+        let(:entitlements) { ["https://ldr.lafayette.edu/#{entitlement}"] }
+
+        it "adds the user to the #{entitlement} group" do
+          expect(user.send(:"#{entitlement}?")).to be true
+        end
       end
     end
   end

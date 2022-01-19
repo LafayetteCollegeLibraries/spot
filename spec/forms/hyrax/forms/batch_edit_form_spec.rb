@@ -2,8 +2,6 @@
 #
 # Copied directly from Hyrax @ d0539f3. See {Hyrax::Forms::BatchEditForm}
 # for the why (tl;dr it's because we're not using +date_created+)
-#
-# rubocop:disable RSpec/ExampleLength
 RSpec.describe Hyrax::Forms::BatchEditForm do
   let(:model) { Publication.new }
   let(:work1) do
@@ -122,4 +120,3 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
     end
   end
 end
-# rubocop:enable RSpec/ExampleLength

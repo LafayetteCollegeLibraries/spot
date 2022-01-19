@@ -19,10 +19,6 @@ class StudentWork < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
-    index.as :stored_searchable
-  end
-
   property :date, predicate: ::RDF::Vocab::DC.date do |index|
     index.as :symbol
   end

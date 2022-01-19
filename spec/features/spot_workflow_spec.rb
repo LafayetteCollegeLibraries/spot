@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 #
-# rubocop:disable RSpec/InstanceVariable
 RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
   let(:depositing_user) { FactoryBot.create(:user) }
   let(:admin_user) { FactoryBot.create(:admin_user) }
@@ -64,4 +63,3 @@ RSpec.feature 'SPOT one step workflow', :perform_jobs, :clean, :js do
     end
   end
 end
-# rubocop:enable RSpec/InstanceVariable

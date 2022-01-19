@@ -112,41 +112,41 @@ module Spot::Mappers
 
     private
 
-      # @return [Array<String>]
-      def legacy_url_identifiers
-        representative_files.map do |file|
-          key = File.basename(file, '.pdf').tr('_', '-')
-          url = "http://digital.lafayette.edu/collections/magazine/#{key}"
-          "url:#{url}" if url_valid?(url)
-        end.compact
-      end
+    # @return [Array<String>]
+    def legacy_url_identifiers
+      representative_files.map do |file|
+        key = File.basename(file, '.pdf').tr('_', '-')
+        url = "http://digital.lafayette.edu/collections/magazine/#{key}"
+        "url:#{url}" if url_valid?(url)
+      end.compact
+    end
 
-      # We should probably be checking that the URLs we're adding are valid.
-      #
-      # @param [String]
-      # @return [true, false]
-      def url_valid?(url)
-        Faraday::Connection.new.head(url) { |req| req.options.timeout = 5 }.success?
-      rescue
-        false
-      end
+    # We should probably be checking that the URLs we're adding are valid.
+    #
+    # @param [String]
+    # @return [true, false]
+    def url_valid?(url)
+      Faraday::Connection.new.head(url) { |req| req.options.timeout = 5 }.success?
+    rescue
+      false
+    end
 
-      # The display title is a combination of the `TitleInfoNonSort`,
-      # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
-      #
-      # @return [Array<String>]
-      def parsed_title
-        non_sort = metadata['TitleInfoNonSort']&.first
-        info_title = metadata['TitleInfoTitle']&.first
-        title = "#{non_sort} #{info_title}".strip
+    # The display title is a combination of the `TitleInfoNonSort`,
+    # `TitleInfoTitle`, and `PartDate_NaturalLanguage` fields.
+    #
+    # @return [Array<String>]
+    def parsed_title
+      non_sort = metadata['TitleInfoNonSort']&.first
+      info_title = metadata['TitleInfoTitle']&.first
+      title = "#{non_sort} #{info_title}".strip
 
-        volume = metadata['PartDetailTypeVolume']&.first
-        issue = metadata['PartDetailTypeIssue']&.first
-        volume_issue = "#{volume} #{issue}".strip
+      volume = metadata['PartDetailTypeVolume']&.first
+      issue = metadata['PartDetailTypeIssue']&.first
+      volume_issue = "#{volume} #{issue}".strip
 
-        date = metadata['PartDate_NaturalLanguage']&.first
+      date = metadata['PartDate_NaturalLanguage']&.first
 
-        [title, volume_issue, date].reject(&:blank?).join(', ')
-      end
+      [title, volume_issue, date].reject(&:blank?).join(', ')
+    end
   end
 end

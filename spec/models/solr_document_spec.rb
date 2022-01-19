@@ -40,7 +40,7 @@ RSpec.describe SolrDocument do
     license: { type: Array, suffix: 'ssim' },
     local_identifier: { type: Array, key: 'identifier_local_ssim' },
     location: { type: Array, suffix: 'ssim' },
-    location_label: { type: Array, suffix: 'ssim' },
+    location_label: { type: Array, suffix: 'tesim' },
     note: { type: Array, suffix: 'tesim' },
     organization: { type: Array, suffix: 'tesim' },
     original_checksum: { type: String, suffix: 'tesim' },
@@ -60,7 +60,7 @@ RSpec.describe SolrDocument do
     sponsor: { type: Array, suffix: 'tesim' },
     standard_identifier: { type: Array, key: 'identifier_standard_ssim' },
     subject: { type: Array, suffix: 'ssim' },
-    subject_label: { type: Array, suffix: 'ssim' },
+    subject_label: { type: Array, suffix: 'tesim' },
     subject_ocm: { type: Array, suffix: 'ssim' },
     subtitle: { type: Array, suffix: 'tesim' },
     title: { type: Array, suffix: 'tesim' },
@@ -152,6 +152,46 @@ RSpec.describe SolrDocument do
       let(:metadata) { {} }
 
       it { is_expected.to eq Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+    end
+  end
+
+  describe '#location_label patch' do
+    subject { document.location_label }
+
+    context 'when location_label stored as string (_ssim)' do
+      let(:metadata) do
+        { 'location_label_ssim' => ['Location Label'] }
+      end
+
+      it { is_expected.to eq ['Location Label'] }
+    end
+
+    context 'when location_label stored as text (_tesim)' do
+      let(:metadata) do
+        { 'location_label_tesim' => ['Location Label'] }
+      end
+
+      it { is_expected.to eq ['Location Label'] }
+    end
+  end
+
+  describe '#subject_label patch' do
+    subject { document.subject_label }
+
+    context 'when subject_label stored as string (_ssim)' do
+      let(:metadata) do
+        { 'subject_label_ssim' => ['Subject Label'] }
+      end
+
+      it { is_expected.to eq ['Subject Label'] }
+    end
+
+    context 'when subject_label stored as text (_tesim)' do
+      let(:metadata) do
+        { 'subject_label_tesim' => ['Subject Label'] }
+      end
+
+      it { is_expected.to eq ['Subject Label'] }
     end
   end
 end

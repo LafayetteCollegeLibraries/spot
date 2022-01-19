@@ -11,18 +11,18 @@ module Spot
   module CoreMetadata
     extend ActiveSupport::Concern
 
-    # rubocop:disable Metrics/BlockLength
     included do
+      # A bibliographic reference for the resource.
+      property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
+        index.as :stored_searchable
+      end
+
       # Free text, use authorized version if possible.
-      #
-      # @todo metadata application profile has this as non-faceted, remove :facetable ?
       property :contributor, predicate: ::RDF::Vocab::DC11.contributor do |index|
         index.as :stored_searchable, :facetable
       end
 
       # Free text, use authorized version if possible.
-      #
-      # @todo metadata application profile has this as non-faceted, remove :facetable ?
       property :creator, predicate: ::RDF::Vocab::DC11.creator do |index|
         index.as :stored_searchable, :facetable
       end
@@ -46,7 +46,10 @@ module Spot
       # ISO 639-1 codes of the language(s). See {IndexesLanguageAndLabel} mixin for indexing
       property :language, predicate: ::RDF::Vocab::DC11.language
 
-      # Geonames or Getty TGN URI, displayed as human- readable prefLabel.
+      # Geonames or Getty TGN URI, displayed as human-readable prefLabel.
+      # Note: the `index.as` definition is not used but required to be present
+      # in order for the DeepIndexingServivce to be called.
+      #
       # @see {Spot::DeepIndexingService} for label indexing details
       property :location, predicate: ::RDF::Vocab::DC.spatial,
                           class_name: Spot::ControlledVocabularies::Location do |index|
@@ -121,6 +124,5 @@ module Spot
         index.as :stored_searchable
       end
     end
-    # rubocop:enable Metrics/BlockLength
   end
 end

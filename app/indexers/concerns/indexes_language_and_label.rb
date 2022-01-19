@@ -21,13 +21,13 @@ module IndexesLanguageAndLabel
 
   private
 
-    # @return [String]
-    def label_field
-      'language_label_ssim'
-    end
+  # @return [String]
+  def label_field
+    'language_label_ssim'
+  end
 
-    # @return [String]
-    def value_field
-      'language_ssim'
-    end
+  # @return [String]
+  def value_field
+    'language_ssim'
+  end
 end

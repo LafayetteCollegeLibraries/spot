@@ -36,7 +36,6 @@ module Hyrax
       attr_reader :batch_document_ids
 
       # Returns a list of parameters we accept from the form
-      # rubocop:disable Metrics/MethodLength
       def self.build_permitted_params
         [{ creator: [] },
          { contributor: [] },
@@ -64,31 +63,30 @@ module Hyrax
          :visibility,
          { location_attributes: [:id, :_destroy] }]
       end
-      # rubocop:enable Metrics/MethodLength
 
       private
 
-        attr_reader :combined_attributes
+      attr_reader :combined_attributes
 
-        # override this method if you need to initialize more complex RDF assertions (b-nodes)
-        # @return [Hash<String, Array>] the list of unique values per field
-        def initialize_combined_fields
-          # For each of the files in the batch, set the attributes to be the concatenation of all the attributes
-          batch_document_ids.each_with_object({}) do |doc_id, combined_attributes|
-            work = ActiveFedora::Base.find(doc_id)
-            terms.each do |field|
-              combined_attributes[field] ||= []
-              combined_attributes[field] = (combined_attributes[field] + work[field].to_a).uniq
-            end
-            names << work.to_s
+      # override this method if you need to initialize more complex RDF assertions (b-nodes)
+      # @return [Hash<String, Array>] the list of unique values per field
+      def initialize_combined_fields
+        # For each of the files in the batch, set the attributes to be the concatenation of all the attributes
+        batch_document_ids.each_with_object({}) do |doc_id, combined_attributes|
+          work = ActiveFedora::Base.find(doc_id)
+          terms.each do |field|
+            combined_attributes[field] ||= []
+            combined_attributes[field] = (combined_attributes[field] + work[field].to_a).uniq
           end
+          names << work.to_s
         end
+      end
 
-        def initialize_field(key)
-          # if value is empty, we create an one element array to loop over for output
-          return model[key] = combined_attributes[key] if combined_attributes[key].present?
-          super
-        end
+      def initialize_field(key)
+        # if value is empty, we create an one element array to loop over for output
+        return model[key] = combined_attributes[key] if combined_attributes[key].present?
+        super
+      end
     end
   end
 end

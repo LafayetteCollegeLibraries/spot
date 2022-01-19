@@ -5,6 +5,8 @@ ENV['RAILS_ENV'] = 'test'
 ENV['URL_HOST'] = 'http://localhost' if ENV['URL_HOST'].nil?
 
 if ENV['COVERAGE'] || ENV['CI']
+  ENV['DISABLE_BOOTSNAP'] = 'true'
+
   require 'simplecov'
   SimpleCov.start 'rails'
 end

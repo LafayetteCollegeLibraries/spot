@@ -10,7 +10,6 @@ module Spot
   module SolrDocumentAttributes
     extend ActiveSupport::Concern
 
-    # rubocop:disable Metrics/BlockLength
     included do
       # Hyrax properties
       attribute :admin_set,              ::Blacklight::Types::String, 'admin_set_tesim'
@@ -27,7 +26,7 @@ module Spot
       attribute :language,               ::Blacklight::Types::Array,  'language_ssim'
       attribute :language_label,         ::Blacklight::Types::Array,  'language_label_ssim'
       attribute :location,               ::Blacklight::Types::Array,  'location_ssim'
-      attribute :location_label,         ::Blacklight::Types::Array,  'location_label_ssim'
+      attribute :location_label,         ::Blacklight::Types::Array,  'location_label_tesim'
       attribute :note,                   ::Blacklight::Types::Array,  'note_tesim'
       attribute :physical_medium,        ::Blacklight::Types::Array,  'physical_medium_tesim'
       attribute :publisher,              ::Blacklight::Types::Array,  'publisher_tesim'
@@ -38,7 +37,7 @@ module Spot
       attribute :rights_statement_label, ::Blacklight::Types::Array,  'rights_statement_label_ssim'
       attribute :source,                 ::Blacklight::Types::Array,  'source_tesim'
       attribute :subject,                ::Blacklight::Types::Array,  'subject_ssim'
-      attribute :subject_label,          ::Blacklight::Types::Array,  'subject_label_ssim'
+      attribute :subject_label,          ::Blacklight::Types::Array,  'subject_label_tesim'
       attribute :subtitle,               ::Blacklight::Types::Array,  'subtitle_tesim'
       attribute :title,                  ::Blacklight::Types::Array,  'title_tesim'
       attribute :title_alternative,      ::Blacklight::Types::Array,  'title_alternative_tesim'
@@ -90,8 +89,25 @@ module Spot
 
       # dates
       attribute :date_modified,          ::Blacklight::Types::Date,   'date_modified_dtsi'
+
+      # Patching while we reindex the collection to use the new `location_label_tesim` and
+      # `subject_label_tesim` properties but falling back to their old `*_label_ssim` counterparts
+      # if the others aren't present. This should help the old values appear during a collection
+      # reindex. If both fields are present (which shouldn't happen), the newer "_tesim" field
+      # will be used.
+      #
+      # Placed in the `included` block to overwrite the `attribute` definitions, which are defined
+      # after methods in the mixin.
+      #
+      # @todo remove this after reindexing, 2022-01-10
+      def location_label
+        Array.wrap(self['location_label_tesim'] || self['location_label_ssim'])
+      end
+
+      def subject_label
+        Array.wrap(self['subject_label_tesim'] || self['subject_label_ssim'])
+      end
     end
-    # rubocop:enable Metrics/BlockLength
 
     module ClassMethods
       def attribute(name, type, field)

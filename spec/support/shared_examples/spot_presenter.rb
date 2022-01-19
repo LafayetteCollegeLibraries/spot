@@ -73,7 +73,7 @@ RSpec.shared_examples 'a Spot presenter' do
     let(:solr_data) do
       {
         'location_ssim' => [uri],
-        'location_label_ssim' => [label]
+        'location_label_tesim' => [label]
       }
     end
 
@@ -165,7 +165,7 @@ RSpec.shared_examples 'a Spot presenter' do
     let(:solr_data) do
       {
         'subject_ssim': [uri],
-        'subject_label_ssim': [label]
+        'subject_label_tesim': [label]
       }
     end
 

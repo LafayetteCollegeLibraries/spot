@@ -5,11 +5,15 @@ module Spot
     # Falls back to the original value.
     #
     # @return [String]
-    # rubocop:disable Style/RescueModifier
     def humanize_edtf_values(args)
-      Array.wrap(args[:value]).map { |value| Date.edtf(value).humanize rescue value }.to_sentence
+      Array.wrap(args[:value]).map do |value|
+        begin
+          Date.edtf(value).humanize
+        rescue
+          value
+        end
+      end.to_sentence
     end
-    # rubocop:enable Style/RescueModifier
 
     # Should we display an info alert to catalog results?
     #

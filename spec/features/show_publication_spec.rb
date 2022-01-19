@@ -32,7 +32,7 @@ RSpec.feature 'Show Publication page', js: false do
     # we need to pretend we did and mock a `:presenter_check_method`
     # to return true in order to get the appropriate viewer to display
     #
-    allow_any_instance_of(Hyrax::FileSetPresenter) # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Hyrax::FileSetPresenter)
       .to receive(presenter_check_method)
       .and_return true
 

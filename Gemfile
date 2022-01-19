@@ -9,10 +9,10 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '5.2.5'
+gem 'rails', '5.2.6'
 
 # use Puma as the app server (dev only, we're using passenger in production)
-gem 'puma', '3.12.6'
+gem 'puma', '4.3.10'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '5.1.0'
@@ -27,7 +27,7 @@ gem 'coffee-rails', '5.0.0'
 gem 'turbolinks', '5.2.1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '2.11.2'
+gem 'jbuilder', '2.11.5'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -49,21 +49,21 @@ gem 'blacklight_oai_provider', '6.0.0'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '1.9.1'
+gem 'bootsnap', '1.9.4', require: false
 
 # record importer pattern from curationexperts
 gem 'darlingtonia', '~> 3.0'
 
 # user management
-gem 'devise', '4.7.1'
+gem 'devise', '4.8.1'
 gem 'devise-guests', '0.7.0'
 gem 'devise_cas_authenticatable', '1.10.4'
 
 # we're using .env files to manage our secrets
-gem 'dotenv-rails', '2.7.5'
+gem 'dotenv-rails', '2.7.6'
 
 # extended date formats
-gem 'edtf', '3.0.4'
+gem 'edtf', '3.0.6'
 gem 'edtf-humanize', '2.0.1'
 
 # error trackijng
@@ -89,7 +89,7 @@ gem 'pg', '1.2.3'
 gem 'rdf-vocab', '3.1.4'
 
 # solr client for interacting with rails (installed w/ hyrax)
-gem 'rsolr', '2.3.0'
+gem 'rsolr', '2.4.0'
 
 # used in conjunction with our importers to zip/unzip files
 gem 'rubyzip', '2.3.2'
@@ -112,7 +112,7 @@ gem 'sprockets-es6'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
-gem 'kaminari', '1.2.1'
+gem 'kaminari', '1.2.2'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.

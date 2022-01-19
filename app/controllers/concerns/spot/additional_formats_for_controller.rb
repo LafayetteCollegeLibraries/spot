@@ -15,14 +15,14 @@ module Spot
 
     private
 
-      # @return [String]
-      def csv_filename
-        "#{presenter.id}.csv"
-      end
+    # @return [String]
+    def csv_filename
+      "#{presenter.id}.csv"
+    end
 
-      # @return [String]
-      def work_as_csv
-        Spot::WorkCSVService.new(presenter.solr_document).csv
-      end
+    # @return [String]
+    def work_as_csv
+      Spot::WorkCSVService.new(presenter.solr_document).csv
+    end
   end
 end

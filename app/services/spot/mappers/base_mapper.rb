@@ -88,27 +88,27 @@ module Spot::Mappers
 
     private
 
-      # @return [Array<RDF::URI, String>]
-      def convert_uri_strings(arr)
-        arr.map { |val| val.match?(/^https?:\/\//) ? RDF::URI(val) : val }
-      end
+    # @return [Array<RDF::URI, String>]
+    def convert_uri_strings(arr)
+      arr.map { |val| val.match?(/^https?:\/\//) ? RDF::URI(val) : val }
+    end
 
-      # @return [Array<String>]
-      def islandora_url_identifiers
-        metadata.fetch('islandora_url', []).map do |value|
-          # force the uri into HTTP
-          http_uri = URI.parse(value).tap { |uri| uri.scheme = 'http' }.to_s
+    # @return [Array<String>]
+    def islandora_url_identifiers
+      metadata.fetch('islandora_url', []).map do |value|
+        # force the uri into HTTP
+        http_uri = URI.parse(value).tap { |uri| uri.scheme = 'http' }.to_s
 
-          Spot::Identifier.new('url', http_uri).to_s
-        end
+        Spot::Identifier.new('url', http_uri).to_s
       end
+    end
 
-      # Helper method to group the values for multiple fields into one place.
-      #
-      # @param [Array<String>] *names field names to merge
-      # @return [Array<String>]
-      def merge_fields(*names)
-        names.map { |name| metadata.fetch(name, nil) }.flatten.reject(&:blank?)
-      end
+    # Helper method to group the values for multiple fields into one place.
+    #
+    # @param [Array<String>] *names field names to merge
+    # @return [Array<String>]
+    def merge_fields(*names)
+      names.map { |name| metadata.fetch(name, nil) }.flatten.reject(&:blank?)
+    end
   end
 end

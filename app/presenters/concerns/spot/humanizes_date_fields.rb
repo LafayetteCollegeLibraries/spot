@@ -22,15 +22,15 @@ module Spot
 
     private
 
-      # run a value through +Date.edtf+, return the +.humanize+ value,
-      # and fallback to the value if it's unparseable.
-      #
-      # @param [String] val
-      # @return [String]
-      def humanize_value(val)
-        Date.edtf(val).humanize
-      rescue
-        val
-      end
+    # run a value through +Date.edtf+, return the +.humanize+ value,
+    # and fallback to the value if it's unparseable.
+    #
+    # @param [String] val
+    # @return [String]
+    def humanize_value(val)
+      Date.edtf(val).humanize
+    rescue
+      val
+    end
   end
 end

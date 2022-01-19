@@ -10,13 +10,13 @@ module Spot
 
     private
 
-      # @note: this will change once we upgrade to hyrax@3
-      def collection_index_response
-        blacklight_config.repository_class.new(blacklight_config).search(index_search_builder)
-      end
+    # @note: this will change once we upgrade to hyrax@3
+    def collection_index_response
+      blacklight_config.repository_class.new(blacklight_config).search(index_search_builder)
+    end
 
-      def index_search_builder
-        Spot::ParentCollectionsSearchBuilder.new(self).with(page: params[:page], rows: params[:per_page])
-      end
+    def index_search_builder
+      Spot::ParentCollectionsSearchBuilder.new(self).with(page: params[:page], rows: params[:per_page])
+    end
   end
 end

@@ -20,11 +20,39 @@ class User < ApplicationRecord
 
   before_save :ensure_username
 
+  # Does this user belong to the Alumni group?
+  #
+  # @return [true, false]
+  def alumni?
+    roles.where(name: Ability.alumni_group_name).exists?
+  end
+
   # Can this user deposit items?
   #
   # @return [true, false]
   def depositor?
-    roles.where(name: [Ability.admin_group_name, 'depositor']).exists?
+    roles.where(name: [Ability.admin_group_name, Ability.depositor_group_name]).exists?
+  end
+
+  # Does this user belong to the Faculty group?
+  #
+  # @return [true, false]
+  def faculty?
+    roles.where(name: Ability.faculty_group_name).exists?
+  end
+
+  # Does this user belong to the Staff group?
+  #
+  # @return [true, false]
+  def staff?
+    roles.where(name: Ability.staff_group_name).exists?
+  end
+
+  # Does this user belong to the Student group?
+  #
+  # @return [true, false]
+  def student?
+    roles.where(name: Ability.student_group_name).exists?
   end
 
   # Method added by Blacklight; Blacklight uses #to_s on your
@@ -41,24 +69,36 @@ class User < ApplicationRecord
   #
   # @param [Hash<String => String>] attributes
   # @return [void]
-  # @todo when/if released, capture: memberOf, affiliation, department
   def cas_extra_attributes=(attributes)
     self.username = attributes['uid']
     self.email = attributes['email']
     self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
+    self.lnumber = attributes['lnumber']
+
+    update_roles_from_attributes(attributes)
   end
 
   private
 
-    # Callback to ensure that we store a username, as that's what's used for uniqueness.
-    # We occasionally provide a depositor in some ingest cases, but that relies on the
-    # email address and _not_ the username. We'll capture the username as anything
-    # before the +@+ symbol of the email.
-    #
-    # @return [void]
-    def ensure_username
-      return unless username.blank?
+  # Delegates the updating of User Roles to `Spot::CasUserRolesService`, which will
+  # retain roles assigned outside of CAS.
+  #
+  # @param [Hash<String => String>] attributes
+  # @return [void]
+  def update_roles_from_attributes(attributes)
+    entitlements = Array.wrap(attributes.fetch('eduPersonEntitlement', []))
+    Spot::CasUserRolesService.update_roles_from_entitlements(user: self, entitlements: entitlements)
+  end
 
-      self.username = email.gsub(/@.*$/, '')
-    end
+  # Callback to ensure that we store a username, as that's what's used for uniqueness.
+  # We occasionally provide a depositor in some ingest cases, but that relies on the
+  # email address and _not_ the username. We'll capture the username as anything
+  # before the +@+ symbol of the email.
+  #
+  # @return [void]
+  def ensure_username
+    return unless username.blank?
+
+    self.username = email.gsub(/@.*$/, '')
+  end
 end

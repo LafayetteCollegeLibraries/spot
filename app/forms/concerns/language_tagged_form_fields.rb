@@ -65,48 +65,48 @@ module LanguageTaggedFormFields
 
     private
 
-      # transforms arrays of field values + languages into serialized RDF::Literals
-      # tagged with said language
-      #
-      # @param params [ActiveController::Parameters, Hash<String => Array<String>>]
-      # @return [void]
-      def transform_language_tagged_fields!(params)
-        return unless respond_to?(:language_tagged_fields)
+    # transforms arrays of field values + languages into serialized RDF::Literals
+    # tagged with said language
+    #
+    # @param params [ActiveController::Parameters, Hash<String => Array<String>>]
+    # @return [void]
+    def transform_language_tagged_fields!(params)
+      return unless respond_to?(:language_tagged_fields)
 
-        language_tagged_fields.flatten.each do |field|
-          value_key = "#{field}_value"
-          lang_key = "#{field}_language"
+      language_tagged_fields.flatten.each do |field|
+        value_key = "#{field}_value"
+        lang_key = "#{field}_language"
 
-          next unless params.include?(value_key) && params.include?(lang_key)
+        next unless params.include?(value_key) && params.include?(lang_key)
 
-          values = Array(params.delete(value_key))
-          langs = Array(params.delete(lang_key))
+        values = Array(params.delete(value_key))
+        langs = Array(params.delete(lang_key))
 
-          mapped = map_rdf_strings(values.zip(langs))
+        mapped = map_rdf_strings(values.zip(langs))
 
-          params[field] = mapped if mapped
-          params[field] = params[field].first unless multiple?(field)
-        end
+        params[field] = mapped if mapped
+        params[field] = params[field].first unless multiple?(field)
       end
+    end
 
-      # Transforms an array of value/language pairs into serialized literals
-      #
-      # @param tuples [Array<Array<String>>]
-      # @return [Array<String>]
-      def map_rdf_strings(tuples)
-        tuples.map do |(value, language)|
-          # need to skip blank entries here, otherwise we get a blank literal
-          # (""@"") which LDP doesn't like
-          next unless value.present?
+    # Transforms an array of value/language pairs into serialized literals
+    #
+    # @param tuples [Array<Array<String>>]
+    # @return [Array<String>]
+    def map_rdf_strings(tuples)
+      tuples.map do |(value, language)|
+        # need to skip blank entries here, otherwise we get a blank literal
+        # (""@"") which LDP doesn't like
+        next unless value.present?
 
-          language = language.present? ? language.to_sym : nil
-          serializer.serialize(RDF::Literal(value, language: language))
-        end.reject(&:blank?)
-      end
+        language = language.present? ? language.to_sym : nil
+        serializer.serialize(RDF::Literal(value, language: language))
+      end.reject(&:blank?)
+    end
 
-      # @return [RdfLiteralSerializer]
-      def serializer
-        @serializer ||= RdfLiteralSerializer.new
-      end
+    # @return [RdfLiteralSerializer]
+    def serializer
+      @serializer ||= RdfLiteralSerializer.new
+    end
   end
 end

@@ -19,32 +19,32 @@ class CharacterizeJob < ::Hyrax::ApplicationJob
 
   private
 
-    def characterize(file_set, _file_id, filepath)
-      Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, ch12n_tool: tool)
-      Rails.logger.debug "Ran characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
+  def characterize(file_set, _file_id, filepath)
+    Hydra::Works::CharacterizationService.run(file_set.characterization_proxy, filepath, ch12n_tool: tool)
+    Rails.logger.debug "Ran characterization on #{file_set.characterization_proxy.id} (#{file_set.characterization_proxy.mime_type})"
 
-      alpha_channels(file_set) if file_set.image? && Hyrax.config.iiif_image_server?
-      file_set.characterization_proxy.save!
+    alpha_channels(file_set) if file_set.image? && Hyrax.config.iiif_image_server?
+    file_set.characterization_proxy.save!
 
-      file_set.update_index
-      file_set.parent&.in_collections&.each(&:update_index)
+    file_set.update_index
+    file_set.parent&.in_collections&.each(&:update_index)
+  end
+
+  def channels(filepath)
+    ch = MiniMagick::Tool::Identify.new do |cmd|
+      cmd.format '%[channels]'
+      cmd << filepath
     end
+    [ch]
+  end
 
-    def channels(filepath)
-      ch = MiniMagick::Tool::Identify.new do |cmd|
-        cmd.format '%[channels]'
-        cmd << filepath
-      end
-      [ch]
-    end
+  def alpha_channels(file_set)
+    return unless file_set.characterization_proxy.respond_to?(:alpha_channels=)
 
-    def alpha_channels(file_set)
-      return unless file_set.characterization_proxy.respond_to?(:alpha_channels=)
+    file_set.characterization_proxy.alpha_channels = channels(filepath)
+  end
 
-      file_set.characterization_proxy.alpha_channels = channels(filepath)
-    end
-
-    def tool
-      ENV['FITS_SERVLET_URL'].present? ? :fits_servlet : :fits
-    end
+  def tool
+    ENV['FITS_SERVLET_URL'].present? ? :fits_servlet : :fits
+  end
 end

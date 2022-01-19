@@ -32,8 +32,6 @@ RSpec.describe Spot::Validators::BagValidator do
       it { is_expected.to include 'Bag is not a directory' }
     end
 
-    # rubocop:disable RSpec/InstanceVariable
-    #
     # NOTE: this will unfortunately write to STDOUT even though we're
     #       using File::NULL for our error stream. the BagIt gem itself
     #       creates a STDOUT logger within its validity checker
@@ -63,7 +61,6 @@ RSpec.describe Spot::Validators::BagValidator do
 
       it { is_expected.not_to be_empty }
     end
-    # rubocop:enable RSpec/InstanceVariable
 
     context 'when bag is valid' do
       it { is_expected.to be_empty }

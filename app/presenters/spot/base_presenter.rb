@@ -106,11 +106,11 @@ module Spot
 
     private
 
-      def metadata_only_flag
-        return false if public? || current_ability.admin?
-        return false if registered? && current_ability.user_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
+    def metadata_only_flag
+      return false if public? || current_ability.admin?
+      return false if registered? && current_ability.user_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
 
-        true
-      end
+      true
+    end
   end
 end

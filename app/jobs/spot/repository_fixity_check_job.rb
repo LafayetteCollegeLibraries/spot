@@ -32,16 +32,16 @@ module Spot
 
     private
 
-      # Wraps our check to pass a time to the send_fixity_status_job.
-      #
-      # @yields
-      # @return [void]
-      def wrap_check
-        start = Time.zone.now
+    # Wraps our check to pass a time to the send_fixity_status_job.
+    #
+    # @yields
+    # @return [void]
+    def wrap_check
+      start = Time.zone.now
 
-        yield
+      yield
 
-        SendFixityStatusJob.perform_now(item_count: @count, job_time: (Time.zone.now - start))
-      end
+      SendFixityStatusJob.perform_now(item_count: @count, job_time: (Time.zone.now - start))
+    end
   end
 end

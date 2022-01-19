@@ -12,9 +12,9 @@ class FeaturedCollection < ApplicationRecord
 
   private
 
-    # @return [void]
-    def count_within_limit
-      return if FeaturedCollection.can_create_another?
-      errors.add(:base, "Limited to #{FEATURE_LIMIT} featured collections.")
-    end
+  # @return [void]
+  def count_within_limit
+    return if FeaturedCollection.can_create_another?
+    errors.add(:base, "Limited to #{FEATURE_LIMIT} featured collections.")
+  end
 end
