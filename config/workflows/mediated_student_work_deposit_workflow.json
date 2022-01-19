@@ -1,0 +1,129 @@
+{
+  "workflows": [
+    {
+      "name": "mediated_student_work_deposit",
+      "label": "Mediated StudentWork Deposit Workflow",
+      "description": "Mediated workflow for StudentWork submissions",
+      "allow_access_grant": false,
+      "actions": [
+        {
+          "name": "deposit",
+          "from_states": [],
+          "transition_to": "pending_advisor_review",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::PendingAdvisorReviewNotification",
+              "to": ["advising"]
+            }
+          ],
+          "methods": [
+            "Hyrax::Workflow::DeactivateObject",
+            "Hyrax::Workflow::GrantReadToDepositor",
+            "Spot::Workflow::GrantReadToAdvisor",
+            "Spot::Workflow::GrantSipityRoleToAdvisor"
+          ]
+        },
+        {
+          "name": "advisor_requests_changes",
+          "from_states": [
+            { "names": ["pending_advisor_review"], "roles": ["advising"] }
+          ],
+          "transition_to": "advisor_requests_changes",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "to": ["depositing"]
+            }
+          ],
+          "methods": [
+            "Hyrax::Workflow::GrantEditToDepositor"
+          ]
+        },
+        {
+          "name": "depositor_submits_advisor_changes",
+          "from_states": [
+            { "names": ["advisor_requests_changes"], "roles": ["depositing"] }
+          ],
+          "transition_to": "pending_advisor_review",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::PendingAdvisorReviewNotification",
+              "to": ["advising"]
+            }
+          ],
+          "methods": [
+            "Hyrax::Workflow::RevokeEditFromDepositor"
+          ]
+        },
+        {
+          "name": "advisor_approves",
+          "from_states": [
+            { "names": ["pending_advisor_review"], "roles": ["advising"] }
+          ],
+          "transition_to": "pending_library_review",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::PendingLibraryReviewNotification",
+              "to": ["library_approving"]
+            }
+          ]
+        },
+        {
+          "name": "library_requests_changes",
+          "from_states": [
+            { "names": ["pending_library_review"], "roles": ["library_approving"] }
+          ],
+          "transition_to": "library_requests_changes",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "to": ["depositing"]
+            }
+          ],
+          "methods": [
+            "Hyrax::Workflow::GrantEditToDepositor"
+          ]
+        },
+        {
+          "name": "depositor_submits_library_changes",
+          "from_states": [
+            { "names": ["library_requests_changes"], "roles": ["depositing"] }
+          ],
+          "transition_to": "pending_library_review",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::PendingLibraryReviewNotification",
+              "to": ["library_approving"]
+            }
+          ],
+          "methods": [
+            "Hyrax::Workflow::RevokeEditFromDepositor"
+          ]
+        },
+        {
+          "name": "library_approves",
+          "from_states": [
+            { "names": ["pending_library_review"], "roles": ["library_approving"] }
+          ],
+          "transition_to": "deposited",
+          "notifications": [
+            {
+              "notification_type": "email",
+              "name": "Hyrax::Workflow::DepositedNotification",
+              "to": ["depositing"]
+            }
+          ],
+          "methods": [
+            "Hyrax::Workflow::ActivateObject"
+          ]
+        }
+      ]
+    }
+  ]
+}

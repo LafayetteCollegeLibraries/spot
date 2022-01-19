@@ -3,6 +3,7 @@ FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "person-#{n}@lafayette.edu" }
     sequence(:display_name) { |n| "Lastname, First (##{n})" }
+    sequence(:lnumber) { |n| format("L%08d", n) }
     guest { false }
     roles { [] }
 
