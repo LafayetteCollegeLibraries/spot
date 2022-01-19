@@ -1,5 +1,34 @@
 # changelog
 
+## [2022.1] - 2022-01-19
+
+### updates 🛠️ 
+- merge work_type locales into a single file (per language), remove locales we're not currently supporting (#786)
+- index controlled vocabulary labels as searchable text as well as strings (#791, #810, #813, #815)
+- rubocop updates (#788)
+  - use `.robocop_todo.yml` instead of inline disabling
+  - no longer indent `private`/`protected` methods rails style
+- dev updates (#793)
+- add `bibliographic_citation` to `Spot::CoreMetadata` mixin (thanks @noraegloff!!) (#792)
+- add `User#lnumber` attribute and determine user roles from CAS authentication entitlement URIs (#783, #797)
+- add StudentWork submission Sipity workflow (still experimental! but functional) (#782)
+
+### bug fixes 🐞 
+- use the string '202110' in `Spot::LoadLafayetteInstructorsAuthorityJob` , instead of dynamically generating one based on the current date (which was causing tests to fail in the new year) (#811)
+
+### dependencies 👩‍👩‍👧‍👧 
+- bootsnap to 1.9.4 (#812)
+- devise to 4.8.1 (#801)
+- dotenv-rails to 2.7.6 (#772)
+- edtf to 3.0.6 (#781) 
+- jbuilder to 2.11.5 (#805)
+- puma to 4.3.10 (#816)
+- kaminari to 1.2.2 (#809)
+- rails to 5.2.6 (#776)
+- rsolr to 2.4.0 (#802) 
+
+
+
 ## [2021.6] - 2021-12-06
 
 ### enhancements 🛠️ 
@@ -643,6 +672,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2022.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.1
 [2021.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.6
 [2021.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.5
 [2021.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.4
