@@ -11,7 +11,9 @@ module Spot
       end
 
       def grant!
-        Sipity::EntitySpecificResponsibility.find_or_create_by!(workflow_role: workflow_role, entity: entity, agent: agent)
+        Sipity::EntitySpecificResponsibility.find_or_create_by!(workflow_role: workflow_role,
+                                                                entity: sipity_entity,
+                                                                agent: sipity_agent)
       end
 
       private
@@ -27,11 +29,11 @@ module Spot
         end
       end
 
-      def agent
+      def sipity_agent
         advisor_from_target.to_sipity_agent
       end
 
-      def entity
+      def sipity_entity
         Sipity::Entity.find_or_create_by!(proxy_for_global_id: target_gid)
       end
 
@@ -40,7 +42,7 @@ module Spot
       end
 
       def workflow_role
-        Sipity::Role[:advising]
+        Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: @target.admin_set.active_workflow)
       end
     end
   end
