@@ -14,7 +14,7 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
           admin_set: admin_set,
           advisor: [advisor_key])
   end
-  let(:permission_template) { Hyrax::PermissionTemplate.find_by!(source_id: AdminSet.find_or_create_default_admin_set_id) }
+  let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set.id) }
   let(:sipity_agent) { advisor.to_sipity_agent }
   let(:sipity_entity) { Sipity::Entity.find_or_create_by!(proxy_for_global_id: work.to_global_id.to_s, workflow: permission_template.active_workflow) }
 
@@ -23,7 +23,7 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
 
   before do
     # ensure that a permission template exists and is active
-    Hyrax::PermissionTemplate.create!(source_id: admin_set.id, access_grants_attributes: default_access_grants)
+    Hyrax::PermissionTemplate.find_or_create_by(source_id: admin_set.id)
     Hyrax::Workflow::WorkflowImporter.load_workflows
 
     # activate the first workflow we get (doesn't matter which)
