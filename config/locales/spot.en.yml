@@ -42,6 +42,9 @@ en:
         sidebar: System Status
         title: System Status
 
+    email:
+      default_from: repository@lafayette.edu
+
     error:
       404:
         page_title: 'Page not found // %{name}'
