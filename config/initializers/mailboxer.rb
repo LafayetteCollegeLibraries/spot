@@ -9,7 +9,7 @@ Mailboxer.setup do |config|
   config.notification_mailer = Spot::WorkflowMessageMailer
 
   # Configures the methods needed by mailboxer
-  config.email_method = :email
+  config.email_method = :mailboxer_email
   config.name_method = :display_name
   config.notify_method = :notify
 
