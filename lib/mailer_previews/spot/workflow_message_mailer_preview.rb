@@ -37,11 +37,9 @@ module Spot
     end
 
     def load_klass(klass)
-      begin
-        Spot::Workflow.const_get(klass)
-      rescue NameError
-        Hyrax::Workflow.const_get(klass)
-      end
+      Spot::Workflow.const_get(klass)
+    rescue NameError
+      Hyrax::Workflow.const_get(klass)
     end
 
     def render_email(klass, comment)
@@ -81,6 +79,5 @@ module Spot
       notification = load_klass(klass).new(sipity_entity, wrap_comment(comment), sender, to: receiver)
       WrappedMessage.new(notification.send(:subject), notification.send(:message).html_safe, receiver)
     end
-
   end
 end
