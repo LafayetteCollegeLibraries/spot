@@ -8,7 +8,9 @@ if ENV['COVERAGE'] || ENV['CI']
   ENV['DISABLE_BOOTSNAP'] = 'true'
 
   require 'simplecov'
-  SimpleCov.start 'rails'
+  SimpleCov.start 'rails' do
+    add_filter 'lib/mailer_previews'
+  end
 end
 
 require File.expand_path('../../config/environment', __FILE__)
