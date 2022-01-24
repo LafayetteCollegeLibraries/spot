@@ -19,6 +19,7 @@ module Spot
     config.active_record.schema_format = :sql
 
     config.action_mailer.default_url_options = { host: ENV['URL_HOST'] }
+    config.action_mailer.preview_path = Rails.root.join('lib', 'mailer_previews')
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
