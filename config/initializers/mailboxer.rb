@@ -6,7 +6,9 @@ Mailboxer.setup do |config|
   # Configures the default from for emails sent for Messages and Notifications
   config.default_from = "repository@lafayette.edu"
 
-  config.message_mailer = Spot::WorkflowMessageMailer
+  config.custom_deliver_proc = -> (_mailer, mailable, receiver) do
+    Spot::WorkflowMessageMailer.send_mailboxer_email(mailable, receiver).deliver_now
+  end
 
   # Configures the methods needed by mailboxer
   config.email_method = :mailboxer_email

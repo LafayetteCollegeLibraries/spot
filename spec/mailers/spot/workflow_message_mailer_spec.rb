@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::WorkflowMessageMailer do
-  describe '#send_email' do
-    subject(:mail) { described_class.send_email(message, receiver) }
+  describe '#send_mailboxer_email' do
+    subject(:mail) { described_class.send_mailboxer_email(message, receiver) }
 
     let(:message) { instance_double('Mailboxer::Message', body: message_body, subject: message_subject) }
     let(:receiver) { build(:user) }

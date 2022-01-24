@@ -44,7 +44,7 @@ module Spot
 
     def render_email(klass, comment)
       message = wrapped_message_for(klass, comment: comment)
-      WorkflowMessageMailer.send_email(message, message.recipient)
+      WorkflowMessageMailer.send_mailboxer_email(message, message.recipient)
     end
 
     def receiver

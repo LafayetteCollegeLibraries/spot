@@ -28,6 +28,7 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
 
     # activate the first workflow we get (doesn't matter which)
     permission_template.available_workflows.first.tap { |pt| pt.active = true }.save
+    permission_template.reload
 
     # need to stub so we can test that it's been called
     allow(Sipity::EntitySpecificResponsibility)
