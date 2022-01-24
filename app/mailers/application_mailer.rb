@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ApplicationMailer < ActionMailer::Base
-  default from: 'dss@lafayette.edu'
+  default from: 'repository@lafayette.edu'
 
   layout 'mailer'
 end
