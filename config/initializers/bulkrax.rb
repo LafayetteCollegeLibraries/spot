@@ -4,16 +4,40 @@ Bulkrax.setup do |config|
   # config.parsers += [
   #   { name: 'MODS - My Local MODS parser', class_name: 'Bulkrax::ModsXmlParser', partial: 'mods_fields' },
   # ]
+  config.parsers = [
+    { name: 'CSV Parser', class_name: 'Spot::CsvParser', partial: 'csv_fields' }
+  ]
 
   # WorkType to use as the default if none is specified in the import
   # Default is the first returned by Hyrax.config.curation_concerns
-  # config.default_work_type = MyWork
+  config.default_work_type = Hyrax.config.curation_concerns.first.to_s
+
+  config.field_mappings['Spot::CsvParser'] = {
+    'title' => { from: ['title'], split: '|' },
+    'contributor' => { from: ['contributor'], split: '|' },
+    'creator' => { from: ['creator'], split: '|' },
+    'description' => { from: ['description'], split: '|' },
+    'abstract' => { from: ['abstract'], split: '|' },
+    'keyword' => { from: ['keyword'], split: '|' },
+    'language' => { from: ['language'], split: '|' },
+    'location' => { from: ['location'], split: '|' },
+    'note' => { from: ['note'], split: '|' },
+    'physical_medium' => { from: ['physical_medium'], split: '|' },
+    'publisher' => { from: ['publisher'], split: '|' },
+    'related_resource' => { from: ['related_resource'], split: '|' },
+    'resource_type' => { from: ['resource_type'], split: '|' },
+    'rights_statement' => { from: ['rights_statement'], split: '|' },
+    'source' => { from: ['source'], split: '|' },
+    'subject' => { from: ['subject'], split: '|' },
+    'subtitle' => { from: ['subtitle'], split: '|' },
+    'title_alternative' => { from: ['title_alternative'], split: '|' }
+  }
 
   # Path to store pending imports
   # config.import_path = 'tmp/imports'
 
   # Path to store exports before download
-  # config.export_path = 'tmp/exports'
+  config.export_path = 'tmp/exports'
 
   # Server name for oai request header
   # config.server_name = 'my_server@name.com'

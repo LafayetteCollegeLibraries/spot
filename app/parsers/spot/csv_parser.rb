@@ -7,5 +7,9 @@ module Spot
     def self.import_supported?
       false
     end
+
+    def entry_class
+      ::Spot::CsvEntry
+    end
   end
 end
