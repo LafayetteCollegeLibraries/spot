@@ -12,25 +12,68 @@ Bulkrax.setup do |config|
   # Default is the first returned by Hyrax.config.curation_concerns
   config.default_work_type = Hyrax.config.curation_concerns.first.to_s
 
+  # Similarly to our `Spot::SolrDocumentAttributes` mixin, the parsers need
+  # to be aware of every metadata field we'd like to include across all models
+  # and mixins. As exporters sort these fields alphabetically, and
+  # `CsvEntry#build_mapping_metadata` will skip fields the model doesn't respond_to,
+  # the order doesn't really matter. I'll be following the order/convention set
+  # by the SolrDocument mixin.
+  #
+  # Controlled fields and internal user fields (`depositor`, `advisor`) are handled
+  # by Spot::CsvEntry#build_export_metadata
+  #
+  # @see https://github.com/samvera-labs/bulkrax/blob/v2.0.0/app/models/bulkrax/csv_entry.rb#L120
   config.field_mappings['Spot::CsvParser'] = {
-    'title' => { from: ['title'], split: '|' },
-    'contributor' => { from: ['contributor'], split: '|' },
-    'creator' => { from: ['creator'], split: '|' },
-    'description' => { from: ['description'], split: '|' },
-    'abstract' => { from: ['abstract'], split: '|' },
-    'keyword' => { from: ['keyword'], split: '|' },
-    'language' => { from: ['language'], split: '|' },
-    'location' => { from: ['location'], split: '|' },
-    'note' => { from: ['note'], split: '|' },
-    'physical_medium' => { from: ['physical_medium'], split: '|' },
-    'publisher' => { from: ['publisher'], split: '|' },
-    'related_resource' => { from: ['related_resource'], split: '|' },
-    'resource_type' => { from: ['resource_type'], split: '|' },
-    'rights_statement' => { from: ['rights_statement'], split: '|' },
-    'source' => { from: ['source'], split: '|' },
-    'subject' => { from: ['subject'], split: '|' },
-    'subtitle' => { from: ['subtitle'], split: '|' },
-    'title_alternative' => { from: ['title_alternative'], split: '|' }
+    # Hyrax properties
+    'date_uploaded' => { from: ['date_uploaded'] },
+
+    # Spot::CoreMetadata mixin properties
+    'contributor' => { from: ['contributor'] },
+    'creator' => { from: ['creator'] },
+    'description' => { from: ['description'] },
+    'identifier' => { from: ['identifier'] },
+    'keyword' => { from: ['keyword'] },
+    'language' => { from: ['language'] },
+    'location' => { from: ['location'] },
+    'note' => { from: ['note'] },
+    'physical_medium' => { from: ['physical_medium'] },
+    'publisher' => { from: ['publisher'] },
+    'related_resource' => { from: ['related_resource'] },
+    'resource_type' => { from: ['resource_type'] },
+    'rights_statement' => { from: ['rights_statement'] },
+    'source' => { from: ['source'] },
+    'subject' => { from: ['subject'] },
+    'subtitle' => { from: ['subtitle'] },
+    'title' => { from: ['title'] },
+    'title_alternative' => { from: ['title_alternative'] },
+
+    # Spot::InstitutionalMetadata mixin properites
+    'academic_department' => { from: ['academic_department'] },
+    'division' => { from: ['division'] },
+    'organization' => { from: ['organization'] },
+
+    # Publication properties
+    'abstract' => { from: ['abstract'] },
+    'bibliographic_citation' => { from: ['bibliographic_citation'] },
+    'date_available' => { from: ['date_available'] },
+    'date_issued' => { from: ['date_issued'] },
+    'editor' => { from: ['editor'] },
+    'license' => { from: ['license'] },
+
+    # Image properties
+    'date' => { from: ['date'] },
+    'date_associated' => { from: ['date_associated'] },
+    'date_scope_note' => { from: ['date_scope_note'] },
+    'donor' => { from: ['donor'] },
+    'inscription' => { from: ['inscription'] },
+    'original_item_extent' => { from: ['original_item_extent'] },
+    'repository_location' => { from: ['repository_location'] },
+    'requested_by' => { from: ['requested_by'] },
+    'research_assistance' => { from: ['research_assistance'] },
+    'subject_ocm' => { from: ['subject_ocm'] },
+
+    # StudentWork properties
+    'access_note' => { from: ['access_note'] }
   }
 
   # Path to store pending imports
@@ -92,4 +135,4 @@ end
 # in the db_migrate container for some reason, and since we're not on Hyrax 3 yet we
 # already know the outcome of the check.
 #
-#Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions" if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:sidebar_partials)
+# Hyrax::DashboardController.sidebar_partials[:repository_content] << "hyrax/dashboard/sidebar/bulkrax_sidebar_additions" if Object.const_defined?(:Hyrax) && ::Hyrax::DashboardController&.respond_to?(:sidebar_partials)
