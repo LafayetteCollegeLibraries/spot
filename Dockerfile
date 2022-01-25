@@ -11,6 +11,7 @@ RUN apk --no-cache upgrade && \
         curl \
         git \
         imagemagick \
+        libxml2-dev \
         netcat-openbsd \
         nodejs \
         openssl \

@@ -11,4 +11,6 @@
   - default
   - ingest
   - mailers
+  - import
+  - export
   - low_priority

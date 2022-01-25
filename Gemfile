@@ -51,7 +51,12 @@ gem 'blacklight_range_limit', '6.3.3'
 # start up the server faster
 gem 'bootsnap', '1.9.4', require: false
 
+# bulkrax for import/export capabilities
+gem 'bulkrax', '~> 2.0.0'
+gem 'willow_sword', github: 'notch8/willow_sword'
+
 # record importer pattern from curationexperts
+# @todo replace with bulkrax
 gem 'darlingtonia', '~> 3.0'
 
 # user management

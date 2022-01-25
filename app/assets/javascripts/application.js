@@ -27,6 +27,7 @@
 //= require openseadragon
 //= require hyrax
 //= require almond
+//= require bulkrax/application
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require language-tagged-autocomplete-setup
