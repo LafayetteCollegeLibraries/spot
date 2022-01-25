@@ -52,7 +52,8 @@ def invalid?(opts)
   required_params.each do |p|
     return true if opts[p.to_sym].blank?
   end
-  return false
+
+  false
 end
 
 def required_params
@@ -76,7 +77,8 @@ def build_params(opts = {})
   params[:importer][:user_id] = opts.delete(:user_id)
   params[:importer][:admin_set_id] = opts.delete(:admin_set_id)
   params[:importer][:parser_fields] = parser_fields || {}
-  return params.compact
+
+  params.compact
 end
 
 def build_url(importer_id, url, port = nil)
@@ -89,7 +91,8 @@ def build_url(importer_id, url, port = nil)
   path = Bulkrax::Engine.routes.url_helpers.polymorphic_path(Bulkrax::Importer)
   url = File.join(url, path)
   url = File.join(url, importer_id) if importer_id
-  return url
+
+  url
 end
 
 def logger
