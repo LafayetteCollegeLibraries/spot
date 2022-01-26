@@ -27,15 +27,14 @@ module Spot
     #
     # @param [#to_s] key
     #   The field's key
-    # @param [HashWithIndifferentAccess] config
+    # @param [HashWithIndifferentAccess] _config
     #   The field's mapping configuration (see config/initializers/bulkrax.rb)
     # @return [void]
-    def build_value(key, config)
+    def build_value(key, _config)
       data = hyrax_record.send(key.to_s)
 
       if data.is_a?(ActiveTriples::Relation)
-        join_char = config['join'] && config['join'].is_a?(String) ? config['join'] : JOIN_CHARACTER
-        parsed_metadata[key_for_export(key)] = data.map { |d| prepare_export_data(d) }.join(join_char).to_s
+        parsed_metadata[key_for_export(key)] = data.map { |d| prepare_export_data(d) }.join(JOIN_CHARACTER).to_s
       else
         parsed_metadata[key_for_export(key)] = prepare_export_data(data)
       end
