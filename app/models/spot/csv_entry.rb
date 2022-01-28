@@ -32,12 +32,8 @@ module Spot
     # @return [void]
     def build_value(key, _config)
       data = hyrax_record.send(key.to_s)
-
-      if data.is_a?(ActiveTriples::Relation)
-        parsed_metadata[key_for_export(key)] = data.map { |d| prepare_export_data(d) }.join(JOIN_CHARACTER).to_s
-      else
-        parsed_metadata[key_for_export(key)] = prepare_export_data(data)
-      end
+      wrapped_data = data.is_a?(ActiveTriples::Relation) ? data : Array.wrap(data)
+      parsed_metadata[key_for_export(key)] = wrapped_data.map { |d| prepare_export_data(d) }.join(JOIN_CHARACTER).to_s
     end
 
     private
