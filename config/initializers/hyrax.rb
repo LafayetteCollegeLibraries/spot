@@ -156,10 +156,10 @@ Hyrax.config do |config|
   # config.display_share_button_when_not_logged_in = true
 
   # The user who runs batch jobs. Update this if you aren't using emails
-  # config.batch_user_key = 'batchuser@example.com'
+  config.batch_user_key = 'repository+deposibot@lafayette.edu'
 
   # The user who runs fixity check jobs. Update this if you aren't using emails
-  # config.audit_user_key = 'audituser@example.com'
+  config.audit_user_key = 'repository+auditbot@lafayette.edu'
   #
   # The banner image. Should be 5000px wide by 1000px tall
   config.banner_image = '/assets/skillman-banner.jpg'

@@ -8,6 +8,7 @@ Rake::Task['hyrax:default_collection_types:create'].invoke
 Rake::Task['spot:roles:default'].invoke
 Rake::Task['spot:create_deposit_user'].invoke
 Rake::Task['spot:student_work_admin_set:create'].invoke
+Rake::Task['spot:create_system_users'].invoke
 
 if ENV['DEV_ADMIN_USERS'].present?
   admin = Role.find_by(name: 'admin')
