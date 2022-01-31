@@ -11,6 +11,7 @@ services:
       - derivatives:/spot/derivatives
       - rails_public:/spot/public
       - exports:/spot/tmp/exports
+      - inventories:/spot/tmp/inventories
       - uploads:/spot/uploads
     ports:
       - "443:443"
@@ -123,6 +124,7 @@ services:
       - ./ingest:/ingest
       - derivatives:/spot/derivatives
       - exports:/spot/tmp/exports
+      - inventories:/spot/tmp/inventories
       - uploads:/spot/uploads
     restart: always
     depends_on:
@@ -134,7 +136,7 @@ volumes:
   db:
   exports:
   fedora:
-  gem_storage:
+  inventories:
   solr:
   rails_public:
   redis:
