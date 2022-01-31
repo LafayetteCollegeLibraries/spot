@@ -4,11 +4,15 @@ Mailboxer.setup do |config|
   config.uses_emails = true
 
   # Configures the default from for emails sent for Messages and Notifications
-  config.default_from = "no-reply@mailboxer.com"
+  config.default_from = "repository@lafayette.edu"
+
+  config.custom_deliver_proc = lambda do |_mailer, mailable, receiver|
+    Spot::WorkflowMessageMailer.send_mailboxer_email(mailable, receiver).deliver_now
+  end
 
   # Configures the methods needed by mailboxer
   config.email_method = :mailboxer_email
-  config.name_method = :name
+  config.name_method = :display_name
   config.notify_method = :notify
 
   # Configures if you use or not a search engine and which one you are using
