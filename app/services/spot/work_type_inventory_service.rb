@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 module Spot
+  # Service to produce CSV inventories of each WorkType model in the application.
   class WorkTypeInventoryService
+    def self.call(work_types = Hyrax.config.curation_concerns)
+      new(work_types).call
+    end
+
     def initialize(work_types = Hyrax.config.curation_concerns)
       @work_types = Array.wrap(work_types)
     end
@@ -11,7 +16,6 @@ module Spot
 
     private
 
-    # @todo maybe set this up in db/seeds.rb?
     def audit_user
       @audit_user ||= Spot::SystemUserService.audit_user
     end
@@ -48,14 +52,25 @@ module Spot
       Rails.root.join('tmp', 'inventories')
     end
 
+    # Since this is generating a name based on a potentially variable value, let's memoize it.
+    # (Theoretically, we could create the directory, generate each file, and create the output
+    # across midnight which would generate a different name on each call).
+    #
+    # @return [String] ldr-work_type_inventory-YYYYMMDD
     def inventory_filename
-      "ldr-work_type_inventory-#{Time.zone.now.strftime('%Y%m%d')}"
+      @inventory_filename ||= "ldr-work_type_inventory-#{Time.zone.now.strftime('%Y%m%d')}"
     end
 
+    # @return [Array<Bulkrax::Exporter>]
     def work_type_exporters
       @work_types.map { |work_type| find_or_create_exporter_for(work_type) }
     end
 
+    # Writes the individual CSV inventories to a Zip file and returns the outputted filename.
+    #
+    # @param [Array<String>] files
+    #   absolute paths to CSV inventories of each work_type (when a work_type has works)
+    # @return [String]
     def write_files_to_zip(files)
       output_filename = File.join(inventory_directory, "#{inventory_filename}.zip")
 

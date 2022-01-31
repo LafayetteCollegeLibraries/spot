@@ -7,6 +7,7 @@ module Spot
     BATCH_USER_DISPLAY_NAME = 'DeposiBot'
     BATCH_USER_EMAIL = Hyrax.config.batch_user_key
 
+    # Defining class methods this way so that we are able to keep `.find_or_create_system_user` private
     class << self
       # @return [User]
       def audit_user
@@ -27,8 +28,8 @@ module Spot
         admin_role = Role.find_or_create_by(name: Ability.admin_group_name)
         admin_role.users << user
         admin_role.save
-
         user.reload
+
         user
       end
     end
