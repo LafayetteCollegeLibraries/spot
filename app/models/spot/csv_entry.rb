@@ -33,7 +33,7 @@ module Spot
     def build_value(key, _config)
       data = hyrax_record.send(key.to_s)
       wrapped_data = data.is_a?(ActiveTriples::Relation) ? data : Array.wrap(data)
-      parsed_metadata[key_for_export(key)] = wrapped_data.map { |d| prepare_export_data(d) }.join(JOIN_CHARACTER).to_s
+      parsed_metadata[key_for_export(key)] = wrapped_data.map { |d| prepare_export_data(d) }.join(JOIN_CHARACTER)
     end
 
     private
@@ -53,13 +53,14 @@ module Spot
     def build_language_labels
       parsed_metadata['language_label'] = hyrax_record.language.map do |shortcode|
         Spot::ISO6391.label_for(shortcode)
-      end
+      end.join(JOIN_CHARACTER)
     end
 
     def build_rights_statement_labels
-      parsed_metadata['rights_statement_label'] = hyrax_record.rights_statement.map do |uri|
+      parsed_metadata['rights_statement_label'] = hyrax_record.rights_statement.map do |rs|
+        uri = rs.rdf_subject.to_s
         rights_statement_service.label(uri) { uri }
-      end
+      end.join(JOIN_CHARACTER)
     end
 
     def map_uri_labels(values)
