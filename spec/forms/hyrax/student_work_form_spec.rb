@@ -50,7 +50,7 @@ RSpec.describe Hyrax::StudentWorkForm do
 
   describe '.multiple?' do
     it 'marks singular fields as false' do
-      [:title, :description, :date, :date_available, :rights_statement, :abstract].each do |f|
+      [:title, :description, :date, :date_available, :abstract].each do |f|
         expect(described_class.multiple?(f)).to be false
       end
     end
