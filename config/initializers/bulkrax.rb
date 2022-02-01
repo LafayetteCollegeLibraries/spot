@@ -26,6 +26,7 @@ Bulkrax.setup do |config|
   config.field_mappings['Spot::CsvParser'] = {
     # Hyrax properties
     'date_uploaded' => { from: ['date_uploaded'] },
+    'work_type' => { from: ['model'] },
 
     # Spot::CoreMetadata mixin properties
     'contributor' => { from: ['contributor'] },
