@@ -8,7 +8,7 @@ RSpec.feature 'Show Student Work page', js: false do
            language: ['en'],
            date: ['2021-02-11'],
            date_available: ['2021-02-11'],
-           advisor: [advisor_lnumber],
+           advisor: [advisor_email],
            subject: [RDF::URI(subject_uri)])
   end
 
@@ -16,7 +16,7 @@ RSpec.feature 'Show Student Work page', js: false do
   let(:item_base_url) { "#{url_host}/concern/student_works/#{work.id}" }
   let(:subject_uri) { 'http://id.worldcat.org/fast/794949' }
   let(:subject_label) { 'Academic achievement' }
-  let(:advisor_lnumber) { 'L00000000' }
+  let(:advisor_email) { 'smartfep@lafayette.edu' }
   let(:advisor_label) { 'Smartfellow, Prof' }
 
   # see `before` block for how this used
@@ -24,13 +24,16 @@ RSpec.feature 'Show Student Work page', js: false do
   let(:file) { File.open(Rails.root.join('spec', 'fixtures', 'document.pdf')) }
 
   before do
+    stub_env('LAFAYETTE_WDS_API_KEY', 'abc123def!')
+
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
-    allow(Spot::LafayetteInstructorsAuthorityService).to receive(:label_for).with(lnumber: advisor_lnumber).and_return(advisor_label)
+    Qa::LocalAuthorityEntry.find_or_create_by(local_authority: Qa::LocalAuthority.find_or_create_by(name: 'lafayette_instructors'),
+                                              uri: advisor_email,
+                                              label: advisor_label)
     RdfLabel.find_or_create_by(uri: subject_uri, value: subject_label)
-    RdfLabel.find_or_create_by(uri: advisor_lnumber, value: advisor_label)
 
     # Since we're not passing our objects through characterization,
     # we need to pretend we did by mocking a `:presenter_check_method`

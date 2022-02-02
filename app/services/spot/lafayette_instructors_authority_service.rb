@@ -14,8 +14,8 @@ module Spot
 
     class UserNotFoundError < StandardError; end
 
-    def self.label_for(lnumber:, api_key: ENV.fetch(API_ENV_KEY))
-      new(api_key: api_key).label_for(lnumber: lnumber)
+    def self.label_for(email: nil, api_key: ENV.fetch(API_ENV_KEY))
+      new(api_key: api_key).label_for(email: email)
     end
 
     # @params [Hash] options
@@ -46,12 +46,12 @@ module Spot
       end
     end
 
-    def label_for(lnumber:)
-      stored = Qa::LocalAuthorityEntry.find_by(uri: lnumber, local_authority: local_authority)
+    def label_for(email:)
+      stored = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
       return stored.label unless stored.nil?
 
-      remote = wds_service.person(lnumber: lnumber)
-      raise(UserNotFoundError, "No user found with L-number: #{lnumber}") if remote == false
+      remote = wds_service.person(email: email)
+      raise(UserNotFoundError, "No user found with email address: #{email}") if remote == false
 
       find_or_create_entry(label: instructor_label(remote), value: instructor_id(remote)).label
     end
@@ -79,7 +79,7 @@ module Spot
     end
 
     def instructor_id(instructor)
-      instructor['LNUMBER']
+      instructor['EMAIL'].downcase
     end
 
     def instructor_label(instructor)

@@ -15,20 +15,20 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
   let(:wds_service) { instance_double(Spot::LafayetteWdsService) }
 
   describe '.label_for' do
-    subject { described_class.label_for(lnumber: lnumber) }
+    subject { described_class.label_for(email: email) }
 
     before do
-      allow(wds_service).to receive(:person).with(lnumber: lnumber).and_return(wds_response)
+      allow(wds_service).to receive(:person).with(email: email).and_return(wds_response)
     end
 
-    let(:lnumber) { 'L00000000' }
+    let(:email) { 'malantoa@lafayette.edu' }
     let(:last_name) { 'Malantonio' }
     let(:first_name) { 'Anna' }
     let(:label) { "#{last_name}, #{first_name}" }
-    let(:local_entry) { Qa::LocalAuthorityEntry.find_or_create_by(local_authority: local_auth, uri: lnumber, label: label) }
+    let(:local_entry) { Qa::LocalAuthorityEntry.find_or_create_by(local_authority: local_auth, uri: email, label: label) }
     let(:wds_response) do
       {
-        'LNUMBER' => lnumber,
+        'EMAIL' => email.upcase,
         'LAST_NAME' => last_name,
         'FIRST_NAME' => first_name
       }
@@ -37,7 +37,7 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
     context 'when an entry exists in the database' do
       before do
         local_entry
-        described_class.label_for(lnumber: lnumber)
+        described_class.label_for(email: email)
       end
 
       it { is_expected.to eq label }
@@ -48,13 +48,12 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
     end
 
     context 'when an entry does not exist in the database' do
-      before { described_class.label_for(lnumber: lnumber) }
+      before { described_class.label_for(email: email) }
 
       it { is_expected.to eq label }
 
       it 'calls the wds_service' do
-        described_class.label_for(lnumber: lnumber)
-        expect(wds_service).to have_received(:person).with(lnumber: lnumber).exactly(1).time
+        expect(wds_service).to have_received(:person).with(email: email)
       end
     end
 
@@ -62,8 +61,8 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
       let(:wds_response) { false }
 
       it 'raises an UserNotFoundError' do
-        expect { described_class.label_for(lnumber: lnumber) }
-          .to raise_error(described_class::UserNotFoundError, "No user found with L-number: #{lnumber}")
+        expect { described_class.label_for(email: email) }
+          .to raise_error(described_class::UserNotFoundError, "No user found with email address: #{email}")
       end
     end
   end
@@ -76,20 +75,20 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
     let(:term) { '202110' }
     let(:instructors) do
       [
-        { 'LNUMBER' => 'L00000000', 'LAST_NAME' => 'Malantonio', 'FIRST_NAME' => 'Anna' },
-        { 'LNUMBER' => 'L10000000', 'LAST_NAME' => 'Lafayette', 'FIRST_NAME' => 'Mark' },
-        { 'LNUMBER' => 'L20000000', 'LAST_NAME' => 'Noodleman', 'FIRST_NAME' => 'Irene' }
+        { 'EMAIL' => 'MALANTOA@LAFAYETTE.EDU', 'LAST_NAME' => 'Malantonio', 'FIRST_NAME' => 'Anna' },
+        { 'EMAIL' => 'LAFAYETM@LAFAYETTE.EDU', 'LAST_NAME' => 'Lafayette', 'FIRST_NAME' => 'Mark' },
+        { 'EMAIL' => 'NOODLEMI@LAFAYETTE.EDU', 'LAST_NAME' => 'Noodleman', 'FIRST_NAME' => 'Irene' }
       ]
     end
 
     it 'adds Qa::LocalAuthorityEntries for each returned person' do
-      expect(described_class.load(term: term).map(&:uri)).to eq(instructors.map { |i| i['LNUMBER'] })
+      expect(described_class.load(term: term).map(&:uri)).to eq(instructors.map { |i| i['EMAIL'].downcase })
     end
 
     context 'when an entry already exists' do
       before do
         entry = instructors.first
-        Qa::LocalAuthorityEntry.find_or_create_by(local_authority: local_auth, uri: entry['LNUMBER'], label: "#{entry['LAST_NAME']}, #{entry['FIRST_NAME']}")
+        Qa::LocalAuthorityEntry.find_or_create_by(local_authority: local_auth, uri: entry['EMAIL'].downcase, label: "#{entry['LAST_NAME']}, #{entry['FIRST_NAME']}")
       end
 
       it 'leaves it be' do
