@@ -5,15 +5,15 @@ class StudentWorkIndexer < BaseIndexer
   def generate_solr_document
     super.tap do |solr_doc|
       solr_doc['advisor_ssim'] = object.advisor.to_a
-      solr_doc['advisor_label_ssim'] = object.advisor.map { |lnumber| advisor_label_from(lnumber: lnumber) }
+      solr_doc['advisor_label_ssim'] = object.advisor.map { |email| advisor_label_from(email: email) }
     end
   end
 
   private
 
-  def advisor_label_from(lnumber:)
-    return lnumber unless lnumber.match?(/^L\d{8}$/)
+  def advisor_label_from(email:)
+    return email unless email.match?(/^[A-Za-z0-9\-_\.]+@lafayette.edu$/)
 
-    Spot::LafayetteInstructorsAuthorityService.label_for(lnumber: lnumber)
+    Spot::LafayetteInstructorsAuthorityService.label_for(email: email)
   end
 end

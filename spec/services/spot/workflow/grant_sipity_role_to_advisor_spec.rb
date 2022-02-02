@@ -2,8 +2,7 @@
 RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
   # let(:depositor) { create(:user) }
   let(:workflow_role) { Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: permission_template.active_workflow) }
-  let(:advisor) { create(:user, lnumber: 'L12341234') }
-  let(:advisor_key) { advisor.lnumber }
+  let(:advisor) { create(:user) }
   let(:admin_set) { AdminSet.find(AdminSet.find_or_create_default_admin_set_id) }
   let(:default_access_grants) do
     [{ agent_type: 'group', agent_id: ::Ability.admin_group_name, access: Hyrax::PermissionTemplateAccess::MANAGE }]
@@ -12,7 +11,7 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
     build(:student_work,
           id: 'abc123',
           admin_set: admin_set,
-          advisor: [advisor_key])
+          advisor: [advisor.email])
   end
   let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set.id) }
   let(:sipity_agent) { advisor.to_sipity_agent }
@@ -38,27 +37,11 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
 
   it_behaves_like 'a Hyrax workflow method'
 
-  context 'when "advisor" is an L-number' do
-    let(:advisor_key) { advisor.lnumber }
+  it "grants a Sipity::Role to the user" do
+    described_class.call(target: work)
 
-    it "grants a Sipity::Role to the user" do
-      described_class.call(target: work)
-
-      expect(Sipity::EntitySpecificResponsibility)
-        .to have_received(:find_or_create_by!)
-        .with(workflow_role: workflow_role, entity: sipity_entity, agent: sipity_agent)
-    end
-  end
-
-  context 'when "advisor" is an email' do
-    let(:advisor_key) { advisor.email }
-
-    it "grants a Sipity::Role to the user" do
-      described_class.call(target: work)
-
-      expect(Sipity::EntitySpecificResponsibility)
-        .to have_received(:find_or_create_by!)
-        .with(workflow_role: workflow_role, entity: sipity_entity, agent: sipity_agent)
-    end
+    expect(Sipity::EntitySpecificResponsibility)
+      .to have_received(:find_or_create_by!)
+      .with(workflow_role: workflow_role, entity: sipity_entity, agent: sipity_agent)
   end
 end

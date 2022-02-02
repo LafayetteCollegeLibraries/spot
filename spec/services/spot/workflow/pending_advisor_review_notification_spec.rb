@@ -19,7 +19,7 @@ RSpec.describe Spot::Workflow::PendingAdvisorReviewNotification do
     stub_env('LAFAYETTE_WDS_API_KEY', 'abc123def!')
 
     allow(Spot::LafayetteInstructorsAuthorityService)
-      .to receive(:label_for).with(lnumber: advisor.lnumber)
+      .to receive(:label_for).with(email: advisor.email)
       .and_return('Advisor, Faculty')
   end
 
