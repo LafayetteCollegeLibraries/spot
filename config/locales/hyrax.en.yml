@@ -55,3 +55,12 @@ en:
       metadata:
         note_html: Make metadata available to all but restrict file access
         text: Metadata Only
+
+    workflow:
+      mediated_student_work_deposit:
+        advisor_approves: Approve
+        advisor_requests_changes: Request changes
+        depositor_submits_advisor_changes: Submit requested changes
+        depositor_submits_library_changes: Submit requested changes
+        library_approves: Approve
+        library_requests_changes: Request changes
