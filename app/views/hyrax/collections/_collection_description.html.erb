@@ -1,12 +1,17 @@
-<% presenter.abstract.each do |abstract| %>
-  <%= simple_format(auto_link(abstract), class: 'lead') %>
+<%# this partial is shared between collections and admin_sets, but we're using
+    the stock Hyrax::AdminSetPresenter, which inherits from Hyrax::CollectionsPresenter
+    (not Spot::CollectionsPresenter) and does not have `#abstract` or `#related_resource` methods %>
+<% if presenter.respond_to?(:abstract) %>
+  <% presenter.abstract.each do |abstract| %>
+    <%= simple_format(auto_link(abstract), class: 'lead') %>
+  <% end %>
 <% end %>
 
 <% presenter.description.each do |description| %>
   <%= simple_format(auto_link(description)) %>
 <% end %>
 
-<% unless presenter.related_resource.empty? %>
+<% if presenter.respond_to?(:related_resource) && !presenter.related_resource.empty? %>
   <hr />
   <p><%= render_related_resource_language(presenter) %></p>
 <% end %>
