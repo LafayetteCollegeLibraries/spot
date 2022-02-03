@@ -3,8 +3,12 @@
 <div class="panel panel-default">
   <table class="table table-condensed collection-show metadata-table">
     <tbody>
-      <% presenter.terms_with_values.each do |term| %>
-        <%= presenter.attribute_to_html(term.to_sym) %>
+      <%# using the instance variable, rather than a local variable passed from the parent partial,
+          because the hyrax/admin/admin_sets/show view does not provide one, which triggers a call
+          to the blacklight helper method #presenter, which in turn requires a parameter to be
+          passed, causing an ArgumentError %>
+      <% @presenter.terms_with_values.each do |term| %>
+        <%= @presenter.attribute_to_html(term.to_sym) %>
       <% end %>
     </tbody>
   </table>
