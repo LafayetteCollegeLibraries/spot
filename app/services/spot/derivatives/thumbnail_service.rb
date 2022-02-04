@@ -11,33 +11,25 @@ module Spot
         FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
       end
 
-      # Creates a 200x150 ish thumbnail using the +hydra-derivatives+ gem
+      # Creates a 200x150 ish thumbnail using MiniMagick. Forces the input into
+      # an sRGB colorspace to address an issue with CMYK PDFs generating inverted
+      # thumbnails.
       #
       # @param [String, Pathname] filename
       # @return [void]
+      # @see https://github.com/LafayetteCollegeLibraries/spot/issues/831
       def create_derivatives(filename)
-        output_options = [
-          {
-            label: :thumbnail,
-            format: 'jpg',
-            size: '200x150>',
-            url: derivative_url,
-            layer: 0
-          }
-        ]
-
-        Hydra::Derivatives::ImageDerivatives.create(filename, outputs: output_options)
+        MiniMagick::Tool::Convert.new do |convert|
+          convert << "#{filename}[0]"
+          convert.merge! %w[-colorspace sRGB -flatten -resize 200x150> -format jpg]
+          convert << derivative_path
+        end
       end
 
       private
 
       def derivative_path
-        Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'thumbnail')
-      end
-
-      # @return [String]
-      def derivative_url
-        URI("file://#{derivative_path}").to_s
+        Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'thumbnail').to_s
       end
     end
   end
