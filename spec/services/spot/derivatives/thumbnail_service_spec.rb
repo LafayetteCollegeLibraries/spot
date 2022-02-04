@@ -28,6 +28,7 @@ RSpec.describe Spot::Derivatives::ThumbnailService do
   describe '#create_derivatives' do
     before do
       allow(MiniMagick::Tool::Convert).to receive(:new).and_yield(magick_commands)
+      allow(FileUtils).to receive(:mkdir_p).with(File.dirname(derivative_path))
     end
 
     let(:magick_commands) do
