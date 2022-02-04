@@ -20,6 +20,8 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
+        FileUtils.mkdir_p(File.dirname(derivative_path))
+
         MiniMagick::Tool::Convert.new do |magick|
           magick << "#{filename}[0]"
           # note: we need to use an array for each piece of this command;

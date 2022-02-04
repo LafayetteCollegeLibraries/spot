@@ -19,6 +19,8 @@ module Spot
       # @return [void]
       # @see https://github.com/LafayetteCollegeLibraries/spot/issues/831
       def create_derivatives(filename)
+        FileUtils.mkdir_p(File.dirname(derivative_path))
+
         MiniMagick::Tool::Convert.new do |convert|
           convert << "#{filename}[0]"
           convert.merge! %w[-colorspace sRGB -flatten -resize 200x150> -format jpg]
