@@ -4,7 +4,6 @@ RSpec.describe Spot::PdfDerivativesService do
 
   before do
     allow(valid_file_set).to receive(:mime_type).and_return('application/pdf')
-
     allow(::Spot::Derivatives::ThumbnailService).to receive(:new).and_return(thumbnail_service)
   end
 
@@ -44,6 +43,7 @@ RSpec.describe Spot::PdfDerivativesService do
 
     before do
       allow(thumbnail_service).to receive(:create_derivatives)
+      allow(FileUtils).to receive(:mkdir_p).with(File.dirname(filename))
     end
 
     it 'calls +#create_derivatives+ on the thumbnail services' do
