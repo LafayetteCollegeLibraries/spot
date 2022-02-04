@@ -19,7 +19,8 @@ module Spot
       # @return [void]
       # @see https://github.com/LafayetteCollegeLibraries/spot/issues/831
       def create_derivatives(filename)
-        FileUtils.mkdir_p(File.dirname(derivative_path))
+        output_dirname = File.dirname(derivative_path)
+        FileUtils.mkdir_p(output_dirname) unless File.directory?(output_dirname)
 
         MiniMagick::Tool::Convert.new do |convert|
           convert << "#{filename}[0]"
