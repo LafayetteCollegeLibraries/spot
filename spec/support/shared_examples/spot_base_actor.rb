@@ -49,16 +49,6 @@ RSpec.shared_examples 'a Spot actor' do
     end
   end
 
-  describe 'enqueues MintHandleJob on #create' do
-    before { allow(MintHandleJob).to receive(:perform_later).with(work) }
-
-    it 'enqueues MintHandleJob' do
-      actor.create(env)
-
-      expect(MintHandleJob).to have_received(:perform_later).with(work)
-    end
-  end
-
   describe 'converts rights_statement values to RDF::URIs' do
     let(:uri) { 'http://creativecommons.org/publicdomain/mark/1.0/' }
     let(:attributes) { { rights_statement: uri } }
