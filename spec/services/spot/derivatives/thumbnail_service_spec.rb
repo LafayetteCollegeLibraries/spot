@@ -27,29 +27,35 @@ RSpec.describe Spot::Derivatives::ThumbnailService do
 
   describe '#create_derivatives' do
     before do
-      allow(Hydra::Derivatives::ImageDerivatives).to receive(:create)
+      allow(MiniMagick::Tool::Convert).to receive(:new).and_yield(magick_commands)
+      allow(FileUtils).to receive(:mkdir_p).with(File.dirname(derivative_path))
+    end
+
+    let(:magick_commands) do
+      [].tap do |arr|
+        arr.define_singleton_method(:merge!) do |args|
+          args.each { |arg| self << arg }
+        end
+      end
     end
 
     let(:filename) { '/path/to/a/source/file.tif' }
 
-    let(:expected_outputs) do
+    let(:expected_commands) do
       [
-        {
-          label: :thumbnail,
-          format: 'jpg',
-          size: '200x150>',
-          url: 'file:/path/to/a/fs-thumbnail.jpg',
-          layer: 0
-        }
+        "#{filename}[0]",
+        '-colorspace', 'sRGB',
+        '-flatten',
+        '-resize', '200x150>',
+        '-format', 'jpg',
+        derivative_path
       ]
     end
 
-    it 'calls Hydra::Derivatives::ImageDerivatives with outputs' do
+    it 'sends imagemagick commands to MiniMagick' do
       service.create_derivatives(filename)
 
-      expect(Hydra::Derivatives::ImageDerivatives)
-        .to have_received(:create)
-        .with(filename, outputs: expected_outputs)
+      expect(magick_commands).to eq(expected_commands)
     end
   end
 end

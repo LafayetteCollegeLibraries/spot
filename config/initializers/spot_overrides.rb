@@ -13,6 +13,7 @@ Rails.application.config.to_prepare do
   Hyrax::CollectionsController.include Spot::CollectionsControllerBehavior
 
   Hyrax::DerivativeService.services = [
+    ::Spot::PdfDerivativesService,
     ::Spot::ImageDerivativesService,
     ::Hyrax::FileSetDerivativesService
   ]
