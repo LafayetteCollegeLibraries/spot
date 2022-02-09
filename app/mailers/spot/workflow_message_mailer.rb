@@ -4,7 +4,7 @@ module Spot
     # @param [Mailboxer::Message] message
     # @param [User] receiver
     def send_mailboxer_email(message, receiver)
-      @content = message.body
+      @content = message.body.html_safe
 
       mail(to: %("#{receiver.display_name}" <#{receiver.email}>), subject: message.subject)
     end
