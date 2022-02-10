@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class ChangesRequiredNotification < ::Hyrax::Workflow::AbstractNotification
+    class ChangesRequiredNotification < AbstractNotification
       private
 
       def subject

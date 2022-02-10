@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class PendingLibraryReviewNotification < ::Hyrax::Workflow::AbstractNotification
+    class PendingLibraryReviewNotification < AbstractNotification
       private
 
       def subject
@@ -9,7 +9,7 @@ module Spot
       end
 
       def message
-        msg = "#{title} (#{link_to work_id, document_path}) was submitted by #{document.depositor}. " \
+        msg = "#{title} (#{link_to work_id, document_path}) was submitted by #{depositor_user.display_name}. " \
               "It has been approved by its advisor and is awaiting Library approval."
         msg += "\n\n<blockquote>#{comment}</blockquote>" unless comment.empty?
         msg

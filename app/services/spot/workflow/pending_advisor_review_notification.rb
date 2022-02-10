@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class PendingAdvisorReviewNotification < ::Hyrax::Workflow::AbstractNotification
+    # Notification used as part of the mediated_student_work_deposit workflow. This message
+    # is sent to all email addresses found in the `document.advisor` field to notify them
+    # that a work has been submitted and is awaiting approval.
+    class PendingAdvisorReviewNotification < AbstractNotification
       private
 
       def subject
