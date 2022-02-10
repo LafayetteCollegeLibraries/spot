@@ -5,13 +5,14 @@ RSpec.describe Spot::Workflow::ChangesRequiredNotification do
   let(:to_user) { create(:user) }
   let(:work) { create(:student_work, user: depositor, title: ['Test Student Work']) }
   let(:entity) { instance_double('Sipity::Entity', proxy_for: work, proxy_for_global_id: work.to_global_id.to_s) }
-  let(:comment) { 'Make it better, please?' }
+  let(:comment) { "Make it better, please?\n\nTo start, add a clearer abstract." }
   let(:sipity_comment) { instance_double('Sipity::Comment', comment: comment) }
   let(:recipients) { { 'to' => [to_user] } }
-  let(:subject_line) { 'The item you deposited requires changes.' }
+  let(:subject_line) { '[LDR] A work you deposited requires changes.' }
   let(:message) do
-    "Test Student Work (<a href=\"/concern/student_works/#{work.id}\">#{work.id}</a>) requires additional changes before approval." \
-    "\n\n<blockquote>#{comment}</blockquote>"
+    %(A work you deposited to the Lafayette Digital Repository, "<a href="/concern/student_works/#{work.id}">#{work.title.first}</a>," requires additional changes to be accepted:) +
+      %(\n\n<blockquote>#{comment.gsub(/\n/, '<br>')}</blockquote>\n\n) +
+      %(Please make the requested changes via the <a href="/concern/student_works/#{work.id}/edit">edit work form</a>.)
   end
 
   describe '.send_notification' do
@@ -34,8 +35,6 @@ RSpec.describe Spot::Workflow::ChangesRequiredNotification do
       let(:cc_user_1) { create(:user) }
       let(:cc_user_2) { create(:user) }
       let(:recipients) { { 'to' => [to_user], 'cc' => [cc_user_1, cc_user_2] } }
-      let(:message) { "Test Student Work (<a href=\"/concern/student_works/#{work.id}\">#{work.id}</a>) requires additional changes before approval." }
-      let(:sipity_comment) { nil }
 
       before do
         allow(approver)
