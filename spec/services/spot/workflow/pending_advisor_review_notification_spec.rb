@@ -3,8 +3,7 @@ RSpec.describe Spot::Workflow::PendingAdvisorReviewNotification do
   let(:advisor) { create(:user) }
   let(:depositor) { create(:user) }
   let(:to_user) { create(:user) }
-  let(:advisor_key) { advisor.lnumber }
-  let(:work) { create(:student_work, user: depositor, advisor: [advisor_key], title: ['Test Student Work']) }
+  let(:work) { create(:student_work, user: depositor, advisor: [advisor.email], title: ['Test Student Work']) }
   let(:entity) { instance_double('Sipity::Entity', proxy_for: work, proxy_for_global_id: work.to_global_id.to_s) }
   let(:comment) { 'Is this ok?' }
   let(:sipity_comment) { instance_double('Sipity::Comment', comment: comment) }
@@ -61,23 +60,6 @@ RSpec.describe Spot::Workflow::PendingAdvisorReviewNotification do
           .and change { to_user.mailbox.inbox.count }.by(1)
           .and change { cc_user_1.mailbox.inbox.count }.by(1)
           .and change { cc_user_2.mailbox.inbox.count }.by(1)
-      end
-    end
-
-    context 'when "advisor" is an email' do
-      let(:advisor_key) { advisor.email }
-
-      before do
-        allow(advisor)
-          .to receive(:send_message)
-          .with(anything, message, subject_line)
-          .exactly(2).times.and_call_original
-      end
-
-      it 'sends a message to depositor and "to" user' do
-        expect { described_class.send_notification(entity: entity, user: advisor, comment: sipity_comment, recipients: recipients) }
-          .to change { to_user.mailbox.inbox.count }.by(1)
-          .and change { advisor.mailbox.inbox.count }.by(1)
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class ChangesRequiredNotification < ::Hyrax::Workflow::AbstractNotification
+    class ChangesRequiredNotification < AbstractNotification
       private
 
       def subject
@@ -15,8 +15,7 @@ module Spot
       end
 
       def users_to_notify
-        user_key = document.depositor
-        super << ::User.find_by(email: user_key)
+        super << depositor
       end
     end
   end
