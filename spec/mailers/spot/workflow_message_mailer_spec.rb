@@ -5,10 +5,10 @@ RSpec.describe Spot::WorkflowMessageMailer do
 
     let(:user) { build(:user) }
     let(:message) { 'Your input is requested to approve this item' }
-    let(:subject) { '[LDR] Your input is requested' }
+    let(:subject_val) { '[LDR] Your input is requested' } # rubocop thinks we mean the test's subject when we use :subject
 
     it 'renders the headers' do
-      expect(mail.subject).to eq subject
+      expect(mail.subject).to eq subject_val
       expect(mail.to).to eq [user.email] # Mail::Message#to strips out name
       expect(mail.from).to eq ['repository@lafayette.edu']
     end
