@@ -2,7 +2,7 @@
 module Spot
   class WorkflowMessageMailer < ::ApplicationMailer
     def workflow_notification
-      @content = params[:message]
+      @content = params[:message].html_safe
 
       mail(to: recipient, subject: subject)
     end
