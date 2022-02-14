@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::WorkflowMessageMailer do
   describe '#workflow_notification' do
-    subject(:mail) { described_class.with(message: message, recipient: user, subject: subject).workflow_notification }
+    subject(:mail) { described_class.with(message: message, recipient: user, subject: subject_val).workflow_notification }
 
     let(:user) { build(:user) }
     let(:message) { 'Your input is requested to approve this item' }
