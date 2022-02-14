@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class PendingLibraryReviewNotification < ::Hyrax::Workflow::AbstractNotification
+    class PendingLibraryReviewNotification < AbstractNotification
       private
 
       def subject

@@ -64,11 +64,6 @@ class User < ApplicationRecord
     email
   end
 
-  # Mailboxer calls this with a `Messageable` object to retrieve the email address for the user
-  def mailboxer_email(_obj = nil)
-    email
-  end
-
   # Sets up attributes returned from CAS. No need to save the object: that's done
   # via devise_cas_authenticatable.
   #

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class PendingAdvisorReviewNotification < ::Hyrax::Workflow::AbstractNotification
+    class PendingAdvisorReviewNotification < AbstractNotification
       private
 
       def subject
@@ -15,18 +15,12 @@ module Spot
       end
 
       def users_to_notify
-        super << advisor_user
+        super.concat(advisors)
       end
 
-      def advisor_user
-        advisor_key = document.advisor.first
-
-        case advisor_key
-        when /^L\d{8}$/
-          User.find_by(lnumber: advisor_key)
-        when /^[^@]+@\w+\.\w+$/
-          User.find_by(email: advisor_key)
-        end
+      def advisors
+        return [] unless document.respond_to?(:advisor)
+        document.advisor.map { |advisor| User.find_by(email: advisor) }.concat
       end
     end
   end
