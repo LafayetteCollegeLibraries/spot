@@ -2,16 +2,16 @@
 module Spot
   module Workflow
     class ChangesRequiredNotification < AbstractNotification
+      self.mailer_method = :changes_required
+
       private
 
       def subject
-        'The item you deposited requires changes.'
+        'A work you deposited requires changes.'
       end
 
       def message
-        msg = "#{title} (#{link_to(work_id, document_path)}) requires additional changes before approval."
-        msg += "\n\n<blockquote>#{comment}</blockquote>" unless comment.empty?
-        msg
+        "#{link_to(title, document_path)} requires additional changes before approval:" + comment_html
       end
 
       def users_to_notify

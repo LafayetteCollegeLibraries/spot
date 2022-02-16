@@ -13,7 +13,12 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingAdvisorReviewNotification",
+              "name": "Spot::Workflow::SubmissionConfirmationNotification",
+              "to": ["depositing"]
+            },
+            {
+              "notification_type": "email",
+              "name": "Spot::Workflow::SubmittedPendingAdvisorReviewNotification",
               "to": ["advising"]
             }
           ],
@@ -50,7 +55,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingAdvisorReviewNotification",
+              "name": "Spot::Workflow::ChangesPendingAdvisorReviewNotification",
               "to": ["advising"]
             }
           ],

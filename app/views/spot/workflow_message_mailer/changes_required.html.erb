@@ -1,0 +1,7 @@
+<p>A work you deposited to the Lafayette Digital Repository (<%= document_title %>) requires changes in order to be accepted:</p>
+
+<blockquote>
+  <%= @comment.strip.gsub(/\n/, '<br>').html_safe %>
+</blockquote>
+
+<p>Please make the requested changes via the <%= link_to('work edit form', edit_document_url) %>.</p>

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 module Spot
   module Workflow
-    class PendingAdvisorReviewNotification < AbstractNotification
+    class ChangesPendingAdvisorReviewNotification < AbstractNotification
+      self.mailer_method = :changes_pending_advisor_review
+
       private
 
       def subject

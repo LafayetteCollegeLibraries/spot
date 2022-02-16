@@ -1,23 +1,47 @@
 # frozen_string_literal: true
 module Spot
   class WorkflowMessageMailer < ::ApplicationMailer
-    def workflow_notification
-      @content = params[:message].html_safe
+    before_action :extract_params
 
-      mail(to: recipient, subject: subject)
+    default to: -> { recipient_address }
+
+    helper WorkflowMailerHelper
+
+    def changes_required
+      mail(subject: '[LDR] A submission you deposited requires changes')
+    end
+
+    def changes_pending_advisor_review
+      mail(subject: "[LDR] A submission's changes require your view")
+    end
+
+    def submission_confirmation
+      mail(subject: '[LDR] Thank you for your submission into the Lafayette Digital Repository!')
+    end
+
+    def submitted_pending_advisor_review
+      mail(subject: '[LDR] A submitted work requires your review')
+    end
+
+    # Defined in AbstractMailer, this should be a no-op
+    def no_notification
+      mail.perform_deliveries = false
     end
 
     private
 
-    def recipient
-      user = params[:recipient]
-      return user.email unless user.display_name
-
-      %("#{user.display_name}" <#{user.email}>)
+    def extract_params
+      @recipient = params[:recipient]
+      @performing_user = params[:performing_user]
+      @document = params[:document]
+      @comment = params[:comment].strip
     end
 
-    def subject
-      params[:subject]
+    # I don't think email_address_with_name exists in 5.2, so this is that
+    def recipient_address
+      return @recipient.email if @recipient.display_name.blank?
+
+      "#{@recipient.display_name} <#{@recipient.email}>"
     end
   end
 end
