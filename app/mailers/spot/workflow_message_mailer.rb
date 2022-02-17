@@ -7,19 +7,35 @@ module Spot
 
     helper WorkflowMailerHelper
 
-    def changes_required
-      mail(subject: '[LDR] A submission you deposited requires changes')
+    def advisor_requests_changes
+      mail(subject: '[LDR] Changes are required for a work you submitted')
     end
 
     def changes_pending_advisor_review
-      mail(subject: "[LDR] A submission's changes require your view")
+      mail(subject: "[LDR] A submission's edits require your review")
+    end
+
+    def changes_pending_library_review
+      mail(subject: "[LDR] A submission's edits require your review")
+    end
+
+    def library_requests_changes
+      mail(subject: '[LDR] Changes are required for a work you submitted')
     end
 
     def submission_confirmation
       mail(subject: '[LDR] Thank you for your submission into the Lafayette Digital Repository!')
     end
 
-    def submitted_pending_advisor_review
+    def submission_deposited
+      mail(subject: '[LDR] Your submission has been approved!')
+    end
+
+    def submission_pending_advisor_review
+      mail(subject: '[LDR] A submitted work requires your review')
+    end
+
+    def submission_pending_library_review
       mail(subject: '[LDR] A submitted work requires your review')
     end
 
@@ -31,10 +47,10 @@ module Spot
     private
 
     def extract_params
-      @recipient = params[:recipient]
-      @performing_user = params[:performing_user]
-      @document = params[:document]
       @comment = params[:comment].strip
+      @document = params[:document]
+      @performing_user = params[:performing_user]
+      @recipient = params[:recipient]
     end
 
     # I don't think email_address_with_name exists in 5.2, so this is that

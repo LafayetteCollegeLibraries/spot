@@ -1,0 +1,13 @@
+<p>
+  A submission you recently deposited (<em><%= link_to(document_title, document_url) %></em>)
+  has been reviewed by <%= @performing_user.display_name %> and requires the following changes:
+</p>
+
+<blockquote>
+  <%= comment_html.html_safe %>
+</blockquote>
+
+<p>
+  Please make the requested changes via the <%= link_to("work's edit form", edit_document_url) %> and
+  update the <strong><%= workflow_actions_title %></strong> form at the top of the work's display page.
+</p>

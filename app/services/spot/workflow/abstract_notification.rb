@@ -18,18 +18,24 @@ module Spot
       # Overrides the Hyrax method to send an email with an extended message to each user to notify
       def call
         users_to_notify.uniq.each do |recipient|
-          Hyrax::MessengerService.deliver(user, recipient, message, subject)
-          workflow_message_mailer(to: recipient).send(mailer_method).deliver_later
+          Hyrax::MessengerService.deliver(user, recipient, message.html_safe, subject)
+          workflow_message_mailer(to: recipient).send(mailer_method).deliver_later if workflow_message_mailer.responds_to?(mailer_method)
         end
       end
 
       private
 
-      def comment_html
-        return "" if comment.strip.empty?
-
-        "<blockquote>#{comment.strip.gsub(/\n/, '<br>')}</blockquote>"
+      def advisors
+        return [] unless document.respond_to?(:advisor)
+        document.advisor.map { |email| User.find_by(email: email) }.compact
       end
+
+      def comment_html
+        return '' if comment.strip.empty?
+
+        comment.strip.gsub(/\n/, '<br>')
+      end
+
 
       def depositor
         User.find_by(email: document.depositor)
@@ -44,6 +50,12 @@ module Spot
                                          document: document,
                                          performing_user: user,
                                          comment: comment)
+      end
+
+      def wrapped_comment_html
+        return '' if comment.strip.empty?
+
+        "<blockquote>#{comment_html}</blockquote>"
       end
     end
   end

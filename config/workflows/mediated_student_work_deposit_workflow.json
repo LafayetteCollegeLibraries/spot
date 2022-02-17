@@ -18,8 +18,8 @@
             },
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::SubmittedPendingAdvisorReviewNotification",
-              "to": ["advising"]
+              "name": "Spot::Workflow::SubmissionPendingAdvisorReviewNotification",
+              "to": []
             }
           ],
           "methods": [
@@ -38,7 +38,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "name": "Spot::Workflow::AdvisorRequestsChangesNotification",
               "to": ["depositing"]
             }
           ],
@@ -56,7 +56,7 @@
             {
               "notification_type": "email",
               "name": "Spot::Workflow::ChangesPendingAdvisorReviewNotification",
-              "to": ["advising"]
+              "to": []
             }
           ],
           "methods": [
@@ -72,7 +72,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingLibraryReviewNotification",
+              "name": "Spot::Workflow::SubmissionPendingLibraryReviewNotification",
               "to": ["library_approving"]
             }
           ]
@@ -86,7 +86,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::ChangesRequiredNotification",
+              "name": "Spot::Workflow::LibraryRequestsChangesNotification",
               "to": ["depositing"]
             }
           ],
@@ -120,7 +120,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Hyrax::Workflow::DepositedNotification",
+              "name": "Hyrax::Workflow::SubmissionDepositedNotification",
               "to": ["depositing"]
             }
           ],

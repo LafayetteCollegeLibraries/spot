@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 module Spot
   module WorkflowMailerHelper
+    def advisor_names
+      @advisor_names ||= User.where(email: @document.advisor.to_a).pluck(:display_name)
+    end
+
     def comment_html
       @comment.gsub(/\n/, '<br>').html_safe
     end
@@ -27,6 +31,15 @@ module Spot
 
     def submission_has_comment?
       @comment.present?
+    end
+
+    # The title of the Workflow Actions form widget. Hardcoded in Hyrax < 3 to "Review and Approval"
+    # but uses I18n.t beyond that.
+    #
+    # @todo update after Hyrax v3 upgrade
+    def workflow_actions_title
+      "Review and Approval"
+      # I18n.t('hyrax.base.workflow_actions.title')
     end
   end
 end

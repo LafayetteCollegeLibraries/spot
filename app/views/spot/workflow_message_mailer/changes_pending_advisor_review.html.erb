@@ -1,3 +1,13 @@
 <p>
+  <%= @performing_user.display_name %> has submitted changes to their work, <em><%= link_to(document_title, document_url) %></em>.
+</p>
 
+<% if comment %>
+<blockquote>
+  <%= comment_html %>
+</blockquote>
+<% end %>
+
+<p>
+  Please review these edits and approve or request additional changes.
 </p>

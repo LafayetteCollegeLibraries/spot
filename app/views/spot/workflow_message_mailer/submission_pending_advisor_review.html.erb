@@ -1,10 +1,13 @@
 <p>
   A work has been submitted to the Lafayette Digital Repository by <%= depositing_user.display_name %>,
-  listing you as an advisor. Please review <em><%= link_to(document_title, document_url) %></em> to
-  request metadata changes or approve it for deposit.
+  listing you as an advisor.
 </p>
 <% if submission_has_comment? %>
   <blockquote>
     <%= comment_html %>
   </blockquote>
 <% end %>
+<p>
+  Please review <em><%= link_to(document_title, document_url) %></em> to
+  request metadata changes or approve it for deposit.
+</p>

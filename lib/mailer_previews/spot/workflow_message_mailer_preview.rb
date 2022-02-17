@@ -7,13 +7,15 @@ module Spot
   # To view, visit localhost:3000/rails/mailers/spot/workflow_message_mailer
   # @see https://guides.rubyonrails.org/v5.2/action_mailer_basics.html#previewing-emails
   class WorkflowMessageMailerPreview < ::ActionMailer::Preview
-    def changes_required
-      mailer.changes_required
-    end
 
-    def submitted_pending_advisor_review
-      mailer.submitted_pending_advisor_review
-    end
+    delegate :advisor_requests_changes,
+             :changes_pending_advisor_review,
+             :changes_pending_library_review,
+             :submission_confirmation,
+             :submission_deposited,
+             :submission_pending_advisor_review,
+             :submission_pending_library_review,
+             to: :mailer
 
     private
 
