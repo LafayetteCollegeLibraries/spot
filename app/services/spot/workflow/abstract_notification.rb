@@ -32,10 +32,8 @@ module Spot
 
       def comment_html
         return '' if comment.strip.empty?
-
         comment.strip.gsub(/\n/, '<br>')
       end
-
 
       def depositor
         User.find_by(email: document.depositor)

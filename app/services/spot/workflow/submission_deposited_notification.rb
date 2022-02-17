@@ -2,7 +2,7 @@
 module Spot
   module Workflow
     class SubmissionDepositedNotification < AbstractNotification
-      self.mailer_method :submission_deposited
+      self.mailer_method = :submission_deposited
 
       private
 

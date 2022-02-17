@@ -15,7 +15,9 @@ module Spot
 
       def message
         "A work by #{depositor.display_name} (<em>#{link_to(document_title, document_path)}</em>) was submitted " \
-        "and is awaiting your approval. " + wrapped_comment_html + "Please approve or request changes using the form on the work's page."
+          "and is awaiting your approval. " +
+          wrapped_comment_html +
+          "Please approve or request changes using the form on the work's page."
       end
 
       def users_to_notify

@@ -12,7 +12,7 @@ module Spot
 
       def message
         "Changes for <em>#{link_to(document_title, document_path)}</em> have been submitted by #{user.display_name} and require your review." +
-        wrapped_comment_html
+          wrapped_comment_html
       end
     end
   end
