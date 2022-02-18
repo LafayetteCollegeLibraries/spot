@@ -11,7 +11,7 @@ module Spot
       end
 
       def message
-        "A submission you recently deposited (<em>#{link_to(document_title, document_path)}</em> has been reviewed by #{user.display_name} " \
+        "A submission you recently deposited (<em>#{link_to(document_title, document_path)}</em>) has been reviewed by #{user.display_name} " \
         "and requires the following changes: " + wrapped_comment_html
       end
 

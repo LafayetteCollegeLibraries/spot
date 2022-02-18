@@ -19,7 +19,9 @@ module Spot
       def call
         users_to_notify.uniq.each do |recipient|
           Hyrax::MessengerService.deliver(user, recipient, message.html_safe, subject)
-          workflow_message_mailer(to: recipient).send(mailer_method).deliver_later if workflow_message_mailer.responds_to?(mailer_method)
+
+          mailer = workflow_message_mailer(to: recipient)
+          mailer.send(mailer_method).deliver_later if mailer.respond_to?(mailer_method)
         end
       end
 
@@ -41,6 +43,10 @@ module Spot
 
       def document_model_route_key
         document.model_name.singular_route_key
+      end
+
+      def document_title
+        document.title.first
       end
 
       def workflow_message_mailer(to:)
