@@ -11,7 +11,7 @@ module Spot
       end
 
       def message
-        "Your submission, <em>#{link_to(document_title, document_path)}</em>, has been approved! Thank you!"
+        "Your submission, <em>#{link_to(document_title, document_path)}</em>, has been approved. Thank you!"
       end
     end
   end

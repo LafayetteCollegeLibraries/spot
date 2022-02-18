@@ -9,7 +9,7 @@ module Spot
       # contacting the depositor directly, so that we have room to expand in a case of multiple authors.
       def call
         users_to_notify.uniq.each do |recipient|
-          workflow_message_mailer(to: recipient).send(mailer_method).deliver_now
+          workflow_message_mailer(to: recipient).send(mailer_method).deliver_later
         end
       end
 

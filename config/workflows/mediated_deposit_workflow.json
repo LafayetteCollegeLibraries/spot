@@ -27,7 +27,7 @@
                     "notifications": [
                         {
                             "notification_type": "email",
-                            "name": "Spot::Workflow::ChangesRequiredNotification",
+                            "name": "Hyrax::Workflow::ChangesRequiredNotification",
                             "to": ["depositing"]
                         }
                     ],

@@ -5,7 +5,7 @@ module Spot
     # (differs from ChangesPendingAdvisorReview, which is intended for a
     # work-in-process context)
     class SubmissionPendingAdvisorReviewNotification < AbstractNotification
-      self.mailer_method = :submitted_pending_advisor_review
+      self.mailer_method = :submission_pending_advisor_review
 
       private
 

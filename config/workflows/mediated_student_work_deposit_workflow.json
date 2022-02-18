@@ -103,7 +103,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Spot::Workflow::PendingLibraryReviewNotification",
+              "name": "Spot::Workflow::ChangesPendingLibraryReviewNotification",
               "to": ["library_approving"]
             }
           ],
@@ -120,7 +120,7 @@
           "notifications": [
             {
               "notification_type": "email",
-              "name": "Hyrax::Workflow::SubmissionDepositedNotification",
+              "name": "Spot::Workflow::SubmissionDepositedNotification",
               "to": ["depositing"]
             }
           ],
