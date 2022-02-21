@@ -2,7 +2,7 @@
   <%= @performing_user.display_name %> has submitted changes to their work, <em><%= link_to(document_title, document_url) %></em>.
 </p>
 
-<% if comment %>
+<% if @comment %>
 <blockquote>
   <%= comment_html %>
 </blockquote>

@@ -3,7 +3,7 @@ module Spot
   class WorkflowMessageMailer < ::ApplicationMailer
     before_action :extract_params
 
-    default to: -> { recipient_address }
+    default to: -> { @recipient.email }
 
     helper WorkflowMailerHelper
 
@@ -40,9 +40,7 @@ module Spot
     end
 
     # Defined in AbstractMailer, this should be a no-op
-    def no_notification
-      mail.perform_deliveries = false
-    end
+    def no_notification; end
 
     private
 
@@ -51,13 +49,6 @@ module Spot
       @document = params[:document]
       @performing_user = params[:performing_user]
       @recipient = params[:recipient]
-    end
-
-    # I don't think email_address_with_name exists in 5.2, so this is that
-    def recipient_address
-      return @recipient.email if @recipient.display_name.blank?
-
-      "#{@recipient.display_name} <#{@recipient.email}>"
     end
   end
 end
