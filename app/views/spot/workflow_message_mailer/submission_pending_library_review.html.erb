@@ -1,0 +1,14 @@
+<p>
+  A work submitted by <%= depositing_user.display_name %> has been approved by its advisor (<%= @performing_user.display_name %>)
+  and requires your review.
+</p>
+
+<% if @comment.present? %>
+<blockquote>
+  <%= comment_html %>
+</blockquote>
+<% end %>
+
+<p>
+  View <em><%= link_to(document_title, document_url) %></em> to approve or request changes.
+</p>

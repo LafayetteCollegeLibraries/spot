@@ -1,0 +1,9 @@
+<p>
+  Changes for <em><%= link_to(document_title, document_url) %></em> have been submitted by <%= @performing_user.display_name %>
+  and require your review.
+</p>
+<% if comment_html %>
+<blockquote>
+  <%= comment_html %>
+</blockquote>
+<% end %>

@@ -5,49 +5,61 @@ module Spot
     # The Mailboxer gem (which is responsible for sending notifications to a user's inbox within
     # the application) can be configured to send emails, but it's become apparent that messages
     # that work within the small confines of the application messaging may not be detailed enough
-    # for an email (and vice-versa: an email may contain more details than necessary for a
-    # notification).
+    # for an email (and vice-versa: an email may contain more details than necessary for a notification).
     #
-    # To create a custom notification, subclass this class and define the following methods:
-    #   - #subject
-    #     - A subject for the application inbox
-    #   - #message
-    #     - A message for the application inbox. Uses Hyrax's default message:
-    #       "#{title} (#{link_to work_id, document_path}) was advanced in the workflow by #{user.user_key} and is awaiting approval #{comment}"
-    #   - #email_message
-    #     - A more detailed message to be sent via email. By default, this just calls the #message method
-    #   - #email_subject
-    #     - A subject for the email sent. By default this prefixes #subject with "[LDR] "
+    #
     class AbstractNotification < ::Hyrax::Workflow::AbstractNotification
-      # @!attribute [rw] mailer_method
+      # @!attribute [rw] [Symbol] mailer_method
       #   redefine which mailer method is called for the email notification,
       #   allowing us to use different partials where desired
       class_attribute :mailer_method
-      self.mailer_method = :workflow_notification
+      self.mailer_method = :no_notification
+
+      # @!attribute [rw] [Constant] mailer_class
+      #   allows us to replace the mailer in subclasses if desired.
+      #   also allows us to test that the mailer responds to :mailer_method
+      #   in a testing environment
+      class_attribute :mailer_class
+      self.mailer_class = Spot::WorkflowMessageMailer
 
       # Overrides the Hyrax method to send an email with an extended message to each user to notify
       def call
         users_to_notify.uniq.each do |recipient|
-          Hyrax::MessengerService.deliver(user, recipient, message, subject)
-          Spot::WorkflowMessageMailer.with(recipient: recipient, subject: email_subject, message: email_message, document: document)
-                                     .send(mailer_method)
-                                     .deliver
+          Hyrax::MessengerService.deliver(user, recipient, message.html_safe, subject)
+
+          mailer = workflow_message_mailer(to: recipient)
+          mailer.send(mailer_method).deliver_later if mailer.respond_to?(mailer_method)
         end
       end
 
       private
 
+      def advisors
+        return [] unless document.respond_to?(:advisor)
+        document.advisor.map { |email| User.find_by(email: email) }.compact
+      end
+
+      def comment_html
+        return '' if comment.strip.empty?
+        comment.strip.gsub(/\n/, '<br>')
+      end
+
       def depositor
         User.find_by(email: document.depositor)
       end
 
-      # Intended to be overriden with a more detailed message that uses URLs (rather than paths)
-      def email_message
-        message
+      def document_title
+        document.title.first
       end
 
-      def email_subject
-        "[LDR] #{subject}"
+      def workflow_message_mailer(to:)
+        mailer_class.with(recipient: to, document: document, performing_user: user, comment: comment)
+      end
+
+      def wrapped_comment_html
+        return '' if comment.strip.empty?
+
+        "<blockquote>#{comment_html}</blockquote>"
       end
     end
   end
