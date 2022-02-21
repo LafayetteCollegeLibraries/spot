@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module Spot
+  # Helper methods used within Spot::WorkflowMessageMailer
   module WorkflowMailerHelper
     def advisor_names
       @advisor_names ||= User.where(email: @document.advisor.to_a).pluck(:display_name)

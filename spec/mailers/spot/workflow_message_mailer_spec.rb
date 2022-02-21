@@ -64,7 +64,7 @@ RSpec.describe Spot::WorkflowMessageMailer do
 
     it_behaves_like 'it sets the recipient and sender'
 
-    it { is_expected.to have_sent_email.with_subject '[LDR] Thank you for your submission into the Lafayette Digital Repository!' }
+    it { is_expected.to have_sent_email.with_subject '[LDR] Thank you for your submission to the Lafayette Digital Repository!' }
   end
 
   describe '#submission_deposited' do
