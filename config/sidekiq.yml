@@ -10,4 +10,5 @@
 :queues:
   - default
   - ingest
+  - mailers
   - low_priority
