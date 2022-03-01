@@ -65,7 +65,7 @@ module Hyrax
 
       def workflow_admin_set_id
         workflow = Sipity::Workflow.where(name: 'mediated_student_work_deposit').order(updated_at: :desc).first
-        return AdminSet::find_or_create_default_admin_set_id if workflow.nil?
+        return AdminSet.find_or_create_default_admin_set_id if workflow.nil?
 
         workflow.permission_template.admin_set.id
       end
