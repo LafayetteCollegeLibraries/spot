@@ -51,6 +51,24 @@ module Hyrax
           params << { subject_attributes: [:id, :_destroy] }
         end
       end
+
+      # We aren't rendering the "relationships" tab for non-admin users, so when the form
+      # is submitted, it should be missing the "admin_set_id" param, which we'll stuff with
+      # the AdminSet that is utilizing the "mediated_student_work_deposit" workflow
+      def model_attributes(_form_params)
+        super.tap do |params|
+          params[:admin_set_id] = workflow_admin_set_id if params[:admin_set_id].blank?
+        end
+      end
+
+      private
+
+      def workflow_admin_set_id
+        workflow = Sipity::Workflow.where(name: 'mediated_student_work_deposit').order(updated_at: :desc).first
+        return AdminSet::find_or_create_default_admin_set_id if workflow.nil?
+
+        workflow.permission_template.admin_set.id
+      end
     end
   end
 end
