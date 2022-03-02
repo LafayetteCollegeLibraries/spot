@@ -85,8 +85,7 @@ RSpec.shared_examples 'a Spot presenter' do
 
     let(:admin_ability) { Ability.new(build(:admin_user)) }
     let(:registered_ability) { Ability.new(build(:registered_user)) }
-    let(:has_model_string) { factory.to_s.camelcase.constantize.to_s }
-    let(:solr_data) { { id: 'abc123def', has_model_ssim: [has_model_string] }.merge(_solr_data) }
+    let(:solr_data) { { id: 'abc123def' }.merge(_solr_data) }
     let(:_solr_data) { {} }
 
     # `metadata_only?` calls `can?(:read, solr_document)` so the data needs to be persisted
