@@ -107,9 +107,13 @@ module Spot
     private
 
     def metadata_only_flag
+      # exit early if the work is public or the user is an admin
       return false if public? || current_ability.admin?
-      return false if registered? && current_ability.user_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED)
 
+      # check if the user can read the solr_document (checks read_users and _groups)
+      return false if current_ability.can?(:read, solr_document)
+
+      # otherwise, only display the metadata
       true
     end
   end

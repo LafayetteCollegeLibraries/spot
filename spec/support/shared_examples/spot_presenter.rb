@@ -2,10 +2,10 @@
 RSpec.shared_examples 'a Spot presenter' do
   subject(:presenter) { described_class.new(solr_doc, ability) }
 
-  let(:factory) { described_class.name.split('::').last.gsub(/Presenter/, '').underscore.to_sym }
   let(:solr_doc) { SolrDocument.new(solr_data) }
   let(:solr_data) { object.to_solr }
   let(:object) { build(factory) }
+  let(:factory) { described_class.name.split('::').last.gsub(/Presenter/, '').underscore.to_sym }
   let(:ability) { Ability.new(build(:user)) }
 
   it_behaves_like 'it renders an attribute to HTML'
@@ -85,8 +85,13 @@ RSpec.shared_examples 'a Spot presenter' do
 
     let(:admin_ability) { Ability.new(build(:admin_user)) }
     let(:registered_ability) { Ability.new(build(:registered_user)) }
-    let(:solr_data) { { id: 'abc123def' }.merge(_solr_data) }
+    let(:has_model_string) { factory.to_s.camelcase.constantize.to_s }
+    let(:solr_data) { { id: 'abc123def', has_model_ssim: [has_model_string] }.merge(_solr_data) }
     let(:_solr_data) { {} }
+
+    # `metadata_only?` calls `can?(:read, solr_document)` so the data needs to be persisted
+    before { ActiveFedora::SolrService.add(solr_data, commit: true) }
+    after { ActiveFedora::SolrService.delete(solr_data[:id]) }
 
     context 'when the ability is admin' do
       let(:ability) { admin_ability }
