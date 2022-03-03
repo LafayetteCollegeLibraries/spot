@@ -3,12 +3,29 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-      /* Email styles need to be inline */
+      body {
+        font-family: sans-serif;
+      }
+
+      blockquote {
+        border-left: 3px solid #e8e6e2;
+        color: #555;
+        font-style: italic;
+        padding-left: 5px;
+      }
+
+      a { color: #4ea8d8; }
+
+      .header {
+        background: #910029;
+        color: #e8e6e2;
+        padding: .5em;
+      }
     </style>
   </head>
 
   <body>
-    <h1>Lafayette Digital Repository</h1>
+    <h1 class="header">Lafayette Digital Repository</h1>
     <%= yield %>
   </body>
 </html>
