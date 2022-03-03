@@ -107,5 +107,6 @@ Rails.application.config.to_prepare do
     const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
   end
 
+  # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = 'admin_set/student_work'
 end
