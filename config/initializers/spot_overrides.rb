@@ -106,4 +106,6 @@ Rails.application.config.to_prepare do
     remove_const(:VISIBILITY_LABEL_CLASS) if const_defined?(:VISIBILITY_LABEL_CLASS)
     const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
   end
+
+  AdminSet::STUDENT_WORK_ID = 'admin_set/student_work'
 end
