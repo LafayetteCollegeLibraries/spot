@@ -57,17 +57,20 @@ module Hyrax
       # the AdminSet that is utilizing the "mediated_student_work_deposit" workflow
       def model_attributes(_form_params)
         super.tap do |params|
-          params[:admin_set_id] = workflow_admin_set_id if params[:admin_set_id].blank?
+          params[:admin_set_id] = admin_set_id if params[:admin_set_id].blank?
         end
       end
 
       private
 
-      def workflow_admin_set_id
-        workflow = Sipity::Workflow.where(name: 'mediated_student_work_deposit').order(updated_at: :desc).first
-        return AdminSet.find_or_create_default_admin_set_id if workflow.nil?
-
-        workflow.permission_template.admin_set.id
+      # use our automatically-created admin_set for student works and
+      # fall back to the default set if the student one is gone
+      #
+      # @return [String]
+      def admin_set_id
+        Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id
+      rescue Ldp::Gone
+        AdminSet.find_or_create_default_admin_set_id
       end
     end
   end

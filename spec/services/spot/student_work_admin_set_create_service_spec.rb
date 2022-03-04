@@ -1,24 +1,22 @@
 # frozen_string_literal: true
 RSpec.describe Spot::StudentWorkAdminSetCreateService do
-  describe '.find_or_create_student_work_admin_set', clean: true do
-    subject { described_class.find_or_create_student_work_admin_set }
-
-    let(:admin_set) { instance_double('AdminSet') }
+  describe '.find_or_create_student_work_admin_set_id', clean: true do
+    subject { described_class.find_or_create_student_work_admin_set_id }
 
     context 'when the admin_set exists' do
       before do
-        allow(AdminSet).to receive(:find).with(described_class::ADMIN_SET_ID).and_return(admin_set)
+        allow(AdminSet).to receive(:exists?).with(described_class::ADMIN_SET_ID).and_return(true)
       end
 
-      it { is_expected.to eq admin_set }
+      it { is_expected.to eq described_class::ADMIN_SET_ID }
     end
 
     context 'when the admin_set does not exist' do
-      let(:admin_set) { AdminSet.find(described_class::ADMIN_SET_ID) }
+      let(:admin_set) { AdminSet.find(described_class.find_or_create_student_work_admin_set_id) }
 
       # This is going to be expensive, so I'm just going to test everything in the one block
       it 'creates an AdminSet, Hyrax::PermissionTemplates, Sipity::Workflow and activates the workflow' do
-        described_class.find_or_create_student_work_admin_set
+        # described_class.find_or_create_student_work_admin_set_id
 
         # Test the permission_template is persisted and includes 2 access grants:
         # - 1 provides manage access to admin users
@@ -45,7 +43,7 @@ RSpec.describe Spot::StudentWorkAdminSetCreateService do
       end
 
       it 'raises an error' do
-        expect { described_class.find_or_create_student_work_admin_set }
+        expect { described_class.find_or_create_student_work_admin_set_id }
           .to raise_error(RuntimeError)
       end
     end

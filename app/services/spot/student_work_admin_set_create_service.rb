@@ -5,14 +5,14 @@ module Spot
     DEFAULT_TITLE = ['Student Work'].freeze
     WORKFLOW_NAME = 'mediated_student_work_deposit'
 
-    def self.find_or_create_student_work_admin_set
-      AdminSet.find(ADMIN_SET_ID)
-    rescue ActiveFedora::ObjectNotFoundError
-      new.create_student_work_admin_set!
+    def self.find_or_create_student_work_admin_set_id
+      return ADMIN_SET_ID if AdminSet.exists?(ADMIN_SET_ID)
+
+      new.create_student_work_admin_set.id
     end
 
-    def create_student_work_admin_set!
-      raise "Can't create StudentWork admin_set because #{workflow_json_name} does not exist" unless File.exist?(workflow_json_path)
+    def create_student_work_admin_set
+      raise "Couldn't create StudentWork admin_set because #{workflow_json_name} does not exist" unless File.exist?(workflow_json_path)
 
       admin_set = create_admin_set
       permission_template = create_permission_template!(admin_set: admin_set)
@@ -25,18 +25,10 @@ module Spot
 
     # Admins can manage, Registered users can deposit
     def access_grants_attributes
-      {
-        '0' => {
-          agent_type: Hyrax::PermissionTemplateAccess::GROUP,
-          agent_id: Ability.admin_group_name,
-          access: Hyrax::PermissionTemplateAccess::MANAGE
-        },
-        '1' => {
-          agent_type: Hyrax::PermissionTemplateAccess::GROUP,
-          agent_id: Ability.registered_group_name,
-          access: Hyrax::PermissionTemplateAccess::DEPOSIT
-        }
-      }
+      [
+        { agent_type: Hyrax::PermissionTemplateAccess::GROUP, agent_id: Ability.admin_group_name, access: Hyrax::PermissionTemplateAccess::MANAGE },
+        { agent_type: Hyrax::PermissionTemplateAccess::GROUP, agent_id: Ability.registered_group_name, access: Hyrax::PermissionTemplateAccess::DEPOSIT }
+      ]
     end
 
     def activate_workflow!(workflow:, permission_template:)
