@@ -108,5 +108,5 @@ Rails.application.config.to_prepare do
   end
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
-  AdminSet::STUDENT_WORK_ID = 'admin_set/student_work'
+  AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
 end
