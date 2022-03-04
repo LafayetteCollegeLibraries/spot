@@ -1,20 +1,5 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::StudentWorkForm do
-  before do
-    allow(AdminSet).to receive(:find_or_create_default_admin_set_id).and_return(AdminSet::DEFAULT_ID)
-    allow(Sipity::Workflow)
-      .to receive(:where)
-      .with(name: anything)
-      .and_return(workflow_relation)
-    allow(workflow_relation)
-      .to receive(:order)
-      .with(anything)
-      .and_return(workflow_results)
-  end
-
-  let(:workflow_relation) { instance_double('Sipity::Workflow::ActiveRecord_Relation') }
-  let(:workflow_results) { [] }
-
   it_behaves_like 'a Spot work form'
 
   it_behaves_like 'it handles required fields',
