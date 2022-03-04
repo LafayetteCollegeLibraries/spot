@@ -1,20 +1,5 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::StudentWorkForm do
-  before do
-    allow(AdminSet).to receive(:find_or_create_default_admin_set_id).and_return(AdminSet::DEFAULT_ID)
-    allow(Sipity::Workflow)
-      .to receive(:where)
-      .with(name: anything)
-      .and_return(workflow_relation)
-    allow(workflow_relation)
-      .to receive(:order)
-      .with(anything)
-      .and_return(workflow_results)
-  end
-
-  let(:workflow_relation) { instance_double('Sipity::Workflow::ActiveRecord_Relation') }
-  let(:workflow_results) { [] }
-
   it_behaves_like 'a Spot work form'
 
   it_behaves_like 'it handles required fields',
@@ -98,25 +83,19 @@ RSpec.describe Hyrax::StudentWorkForm do
     end
 
     describe 'admin_set_id' do
-      before do
-        allow(Hyrax::PermissionTemplate)
-          .to receive(:find_by)
-          .with(source_id: admin_set_id)
-          .and_return(permission_template)
-        allow(permission_template)
-          .to receive(:active_workflow)
-          .and_return(workflow)
-      end
-
-      let(:workflow_results) { [workflow] }
-      let(:workflow) { instance_double('Sipity::Workflow', permission_template: permission_template, allows_access_grant?: false) }
-      let(:permission_template) { instance_double('Hyrax::PermissionTemplate', admin_set: admin_set) }
-      let(:admin_set) { instance_double('AdminSet', id: admin_set_id) }
-      let(:admin_set_id) { 'abc123def' }
-
       context 'when a value is present' do
         let(:params) { { 'admin_set_id' => admin_set_id } }
         let(:admin_set_id) { 'admin_set_id_value' }
+        let(:permission_template) { instance_double(Hyrax::PermissionTemplate, active_workflow: workflow) }
+        let(:workflow) { instance_double(Sipity::Workflow, allows_access_grant?: false) }
+
+        # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/forms/hyrax/forms/work_form.rb#L183-L194
+        before do
+          allow(Hyrax::PermissionTemplate)
+            .to receive(:find_by!)
+            .with(source_id: admin_set_id)
+            .and_return(permission_template)
+        end
 
         it 'retains the value' do
           # { 'admin_set_id' => 'admin_set_id_value' }
@@ -125,18 +104,26 @@ RSpec.describe Hyrax::StudentWorkForm do
       end
 
       context 'when a value is not present' do
-        context 'when the expected workflow exists' do
-          it 'uses the admin_set assigned to the workflow' do
-            # { 'admin_set_id' => 'abc123def' }
-            expect(attributes[:admin_set_id]).to eq admin_set.id
+        context 'the StudentWorkAdminSetCreateService is invoked' do
+          before do
+            allow(Spot::StudentWorkAdminSetCreateService)
+              .to receive(:find_or_create_student_work_admin_set_id)
+              .and_return(Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID)
+          end
+
+          it 'uses the StudentWork AdminSet id' do
+            expect(attributes[:admin_set_id]).to eq Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
           end
         end
 
-        context 'when the workflow does not exist' do
-          let(:workflow_results) { [] }
+        context 'when the StudentWork AdminSet no longer exists' do
+          before do
+            allow(Spot::StudentWorkAdminSetCreateService)
+              .to receive(:find_or_create_student_work_admin_set_id)
+              .and_raise(Ldp::Gone)
+          end
 
           it 'uses the default admin_set id' do
-            # { 'admin_set_id' => 'admin_set/default' }
             expect(attributes[:admin_set_id]).to eq AdminSet::DEFAULT_ID
           end
         end
