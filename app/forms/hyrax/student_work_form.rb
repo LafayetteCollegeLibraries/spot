@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 module Hyrax
   class StudentWorkForm < ::Spot::Forms::WorkForm
-    singular_form_fields :title, :description, :date, :date_available, :abstract
+    singular_form_fields :title, :description, :date, :abstract
     transforms_nested_fields_for :academic_department, :division, :language, :advisor
 
     self.model_class = ::StudentWork
     self.required_fields = [
       :title, :creator, :advisor, :academic_department, :division,
-      :description, :date, :date_available, :rights_statement, :resource_type
+      :description, :date, :rights_statement, :resource_type
     ]
 
     self.terms = [
@@ -19,7 +19,6 @@ module Hyrax
       :division,
       :description,
       :date,
-      :date_available,
       :rights_statement,
       :resource_type,
 

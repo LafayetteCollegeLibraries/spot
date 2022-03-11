@@ -4,7 +4,7 @@ RSpec.describe Hyrax::StudentWorkForm do
 
   it_behaves_like 'it handles required fields',
                   :title, :creator, :advisor, :academic_department, :division,
-                  :description, :date, :date_available, :rights_statement, :resource_type
+                  :description, :date, :rights_statement, :resource_type
 
   describe '.terms' do
     subject { described_class.terms }
@@ -33,7 +33,6 @@ RSpec.describe Hyrax::StudentWorkForm do
     it { is_expected.to include(division: []) }
     it { is_expected.to include(:description) }
     it { is_expected.to include(:date) }
-    it { is_expected.to include(:date_available) }
     it { is_expected.to include(:rights_statement) }
     it { is_expected.to include(resource_type: []) }
     it { is_expected.to include(:abstract) }
@@ -50,7 +49,7 @@ RSpec.describe Hyrax::StudentWorkForm do
 
   describe '.multiple?' do
     it 'marks singular fields as false' do
-      [:title, :description, :date, :date_available, :abstract].each do |f|
+      [:title, :description, :date, :abstract].each do |f|
         expect(described_class.multiple?(f)).to be false
       end
     end
