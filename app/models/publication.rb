@@ -2,6 +2,7 @@
 class Publication < ActiveFedora::Base
   include Spot::WorkBehavior
   include Spot::InstitutionalMetadata
+  include Spot::DateAvailable
 
   self.controlled_properties = [:location, :subject]
   self.indexer = PublicationIndexer
@@ -17,10 +18,6 @@ class Publication < ActiveFedora::Base
   end
 
   property :date_issued, predicate: ::RDF::Vocab::DC.issued do |index|
-    index.as :symbol
-  end
-
-  property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
     index.as :symbol
   end
 

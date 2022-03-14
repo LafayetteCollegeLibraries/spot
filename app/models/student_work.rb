@@ -2,6 +2,7 @@
 class StudentWork < ActiveFedora::Base
   include Spot::WorkBehavior
   include Spot::InstitutionalMetadata
+  include Spot::DateAvailable
 
   self.indexer = StudentWorkIndexer
   self.controlled_properties = [:subject]
@@ -23,9 +24,6 @@ class StudentWork < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :date_available, predicate: ::RDF::Vocab::DC.available do |index|
-    index.as :symbol
-  end
-
+  # @see {Spot::WorkBehavior.setup_nested_attributes!}
   setup_nested_attributes!
 end

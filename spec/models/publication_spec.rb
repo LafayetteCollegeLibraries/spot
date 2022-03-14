@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 RSpec.describe Publication do
   it_behaves_like 'it includes Spot::WorkBehavior'
+  it_behaves_like 'it includes Spot::DateAvailable'
 
   # @todo might be useful to turn this into a shared_example?
   [
     [:abstract,               RDF::Vocab::DC.abstract],
     [:academic_department,    'http://vivoweb.org/ontology/core#AcademicDepartment'],
-    [:date_available,         RDF::Vocab::DC.available],
     [:date_issued,            RDF::Vocab::DC.issued],
     [:division,               'http://vivoweb.org/ontology/core#Division'],
     [:editor,                 RDF::Vocab::BIBO.editor],

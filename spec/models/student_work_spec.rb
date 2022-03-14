@@ -3,13 +3,13 @@ RSpec.describe StudentWork do
   subject { described_class.new }
 
   it_behaves_like 'it includes Spot::WorkBehavior'
+  it_behaves_like 'it includes Spot::DateAvailable'
 
   [
     [:abstract,               RDF::Vocab::DC.abstract],
     [:access_note,            RDF::Vocab::DC.accessRights],
     [:advisor,                'http://id.loc.gov/vocabulary/relators/ths'],
-    [:date,                   RDF::Vocab::DC.date],
-    [:date_available,         RDF::Vocab::DC.available]
+    [:date,                   RDF::Vocab::DC.date]
   ].each do |(prop, uri)|
     it { is_expected.to have_editable_property(prop).with_predicate(uri) }
   end

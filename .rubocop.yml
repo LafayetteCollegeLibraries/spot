@@ -14,6 +14,11 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal
 
+Naming/AccessorMethodName:
+  Enabled: true
+  Exclude:
+    - 'app/models/concerns/spot/date_available.rb'
+
 Rails/OutputSafety:
   Enabled: false
 
