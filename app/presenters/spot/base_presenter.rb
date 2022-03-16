@@ -116,5 +116,9 @@ module Spot
       # otherwise, only display the metadata
       true
     end
+
+    def replace_line_breaks(text)
+      text.gsub(/\r?\n/, '<br>').html_safe
+    end
   end
 end

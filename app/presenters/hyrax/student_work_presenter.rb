@@ -3,7 +3,15 @@ module Hyrax
   class StudentWorkPresenter < Spot::BasePresenter
     humanize_date_fields :date, :date_available
 
-    delegate :abstract, :access_note, :advisor, :advisor_label, :bibliographic_citation,
+    delegate :access_note, :advisor, :advisor_label, :bibliographic_citation,
              :academic_department, :division, :organization, to: :solr_document
+
+    def abstract
+      solr_document.abstract.map { |abs| replace_line_breaks(abs) }
+    end
+
+    def description
+      solr_document.description.map { |desc| replace_line_breaks(desc) }
+    end
   end
 end
