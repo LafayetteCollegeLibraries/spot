@@ -1,6 +1,11 @@
-<% if presenter.abstract.present? || presenter.description.present? %>
+<%# render out all of the possible description fields here, instead of building a new
+    template for a different model.
+
+    @todo we could be iterating through each descriptive field and rendering the same
+          template, rather than building it each time around a guard. but this gets
+          the job done for now %>
+<% if presenter.respond_to?(:abstract) && presenter.abstract.present? %>
 <div class="panel panel-default">
-  <% if presenter.abstract.present? %>
   <div class="panel-heading panel-heading-slim">
     <h5>Abstract</h5>
   </div>
@@ -9,9 +14,11 @@
     <li class="list-group-item"><%= abstract %></li>
     <% end %>
   </ul>
-  <% end %>
+</div>
+<% end %>
 
-  <% if presenter.description.present? %>
+<% if presenter.respond_to?(:description) && presenter.description.present? %>
+<div class="panel panel-default">
   <div class="panel-heading panel-heading-slim">
     <h5>Description</h5>
   </div>
@@ -20,6 +27,18 @@
     <li class="list-group-item"><%= description %></li>
     <% end %>
   </ul>
-  <% end %>
+</div>
+<% end %>
+
+<% if presenter.respond_to?(:inscription) && presenter.inscription.present? %>
+<div class="panel panel-default">
+  <div class="panel-heading panel-heading-slim">
+    <h5>Inscription</h5>
+  </div>
+  <ul class="list-group">
+    <% presenter.inscription.each do |inscription| %>
+    <li class="list-group-item"><%= inscription %></li>
+    <% end %>
+  </ul>
 </div>
 <% end %>
