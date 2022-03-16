@@ -77,7 +77,7 @@ RSpec.feature 'Show Student Work page', js: false do
     expect(page.all('.attribute-date').map(&:text)).to eq(['February 11, 2021'])
     expect(page.all('.attribute-date_available').map(&:text)).to eq(['February 11, 2021'])
 
-    expect_field_to_be_faceted  :resource_type
+    expect_field_to_be_faceted :resource_type
 
     expect(page.all('.attribute-language_label').map(&:text)).to eq(['English'])
 
