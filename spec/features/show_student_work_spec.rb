@@ -62,6 +62,9 @@ RSpec.feature 'Show Student Work page', js: false do
     expect(page).to have_content work.title.first
     expect(page.title).to eq "#{work.title.first} // Lafayette Digital Repository"
 
+    expect_field_to_be_rendered :abstract
+    expect_field_to_be_rendered :description
+
     expect_field_to_be_rendered :title
     expect_field_to_be_rendered :creator
 
@@ -69,14 +72,12 @@ RSpec.feature 'Show Student Work page', js: false do
 
     expect_field_to_be_faceted  :academic_department
     expect_field_to_be_faceted  :division
-    expect_field_to_be_rendered :description
 
     # date and date_available are humanized
     expect(page.all('.attribute-date').map(&:text)).to eq(['February 11, 2021'])
     expect(page.all('.attribute-date_available').map(&:text)).to eq(['February 11, 2021'])
 
     expect_field_to_be_faceted  :resource_type
-    expect_field_to_be_rendered :abstract
 
     expect(page.all('.attribute-language_label').map(&:text)).to eq(['English'])
 
