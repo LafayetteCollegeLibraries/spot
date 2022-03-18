@@ -49,8 +49,8 @@ module Spot
     end
 
     def label_for(email:)
-      stored = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
-      return stored.label unless stored.nil?
+      stored = find_local_label_for(email: email)
+      return stored unless stored.nil?
 
       remote = wds_service.person(email: email)
       raise(UserNotFoundError, "No user found with email address: #{email}") if remote == false
@@ -71,6 +71,14 @@ module Spot
 
     def deactivate_entries
       Qa::LocalAuthorityEntry.where(local_authority: local_authority).update_all(active: false)
+    end
+
+    def find_local_label_for(email:)
+      qa = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
+      return qa.label unless qa.nil?
+
+      user = User.find_by(email: email)
+      return user.authority_name unless user.nil?
     end
 
     def find_or_create_entry(label:, value:)
