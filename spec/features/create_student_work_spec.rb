@@ -52,7 +52,6 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in 'student_work_date', with: attrs[:date].first
       expect(page).not_to have_css '.student_work_date .controls-add-text'
 
-
       select 'No Copyright - United States', from: 'student_work_rights_statement'
       expect(page).not_to have_css '.student_work_rights_statement .controls-add-text'
 
