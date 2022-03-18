@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 module Hyrax
   class StudentWorkForm < ::Spot::Forms::WorkForm
+    DEFAULT_RIGHTS_STATEMENT_URI = 'http://rightsstatements.org/vocab/InC-EDU/1.0/'
+
     singular_form_fields :title, :description, :date, :date_available, :abstract
     transforms_nested_fields_for :academic_department, :division, :language, :advisor
+
+    delegate :current_user, to: :current_ability
 
     self.model_class = ::StudentWork
     self.required_fields = [
@@ -71,6 +75,20 @@ module Hyrax
       rescue Ldp::Gone
         AdminSet.find_or_create_default_admin_set_id
       end
+    end
+
+    protected
+
+    # Called at the end of #initialize. We're using this to add some defaults for student users
+    def initialize_fields
+      super
+
+      return unless current_user.student? && model.new_record?
+
+      # not sure if the #blank? checks are necessary, since we're already checking model#new_record?
+      # but juuust in case...
+      self[:creator] = [current_user.authority_name] if self[:creator].all?(&:blank?)
+      self[:rights_statement] = DEFAULT_RIGHTS_STATEMENT_URI if self[:rights_statement].blank?
     end
   end
 end
