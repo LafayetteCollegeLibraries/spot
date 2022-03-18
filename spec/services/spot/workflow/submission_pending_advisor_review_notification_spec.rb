@@ -10,7 +10,7 @@ RSpec.describe Spot::Workflow::SubmissionPendingAdvisorReviewNotification do
         "was submitted and is awaiting your approval. <blockquote>#{workflow_comment_html}</blockquote>" \
         "Please approve or request changes using the form on the work's page."
     end
-    let(:advisor_user) { create(:user, display_name: 'Advisor User') }
+    let(:advisor_user) { create(:user) }
     let(:workflow_object) { create(:student_work, user: depositing_user, advisor: [advisor_user.email]) }
     let(:recipients) { [advisor_user] }
   end

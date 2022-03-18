@@ -3,7 +3,7 @@ module Spot
   # Helper methods used within Spot::WorkflowMessageMailer
   module WorkflowMailerHelper
     def advisor_names
-      @advisor_names ||= User.where(email: @document.advisor.to_a).pluck(:display_name)
+      @advisor_names ||= User.where(email: @document.advisor.to_a).map(&:display_name)
     end
 
     def comment_html

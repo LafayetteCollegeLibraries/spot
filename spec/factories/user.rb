@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:email) { |n| "person-#{n}@lafayette.edu" }
     sequence(:lnumber) { |n| format("L%08d", n) }
     given_name { 'Given-Name' }
-    surname { 'Surname' }
+    sequence(:surname) { |n| "Surname (##{n})" }
     guest { false }
     roles { [] }
 
