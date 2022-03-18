@@ -41,6 +41,8 @@ module Spot
     # @return [Array<Qa::LocalAuthorityEntry>]
     # @todo how should we handle exceptions?
     def load(term:)
+      deactivate_entries
+
       instructors_for(term: term).map do |instructor|
         find_or_create_entry(label: instructor_label(instructor), value: instructor_id(instructor))
       end
@@ -67,9 +69,14 @@ module Spot
 
     attr_reader :api_key
 
+    def deactivate_entries
+      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update_all(active: false)
+    end
+
     def find_or_create_entry(label:, value:)
       entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: value)
       entry.label = label
+      entry.active = true
       entry.save
       entry
     end

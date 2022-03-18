@@ -17,4 +17,19 @@ solr_suggestion_authorities.each do |subauth|
   Qa::Authorities::Local.register_subauthority(subauth, 'Qa::Authorities::SolrSuggest')
 end
 
-Qa::Authorities::Local.register_subauthority('lafayette_instructors', 'Qa::Authorities::Local::TableBasedAuthority')
+# Subclassing QA's TableBasedAuthority to include active entries, something we're reseting
+# with each load of the authority to ensure that only currently active instructors are loaded
+# without deleting previous entries for historical purposes.
+#
+# see {Spot::LafayetteInstructorsAuthorityService#load}
+module Spot
+  class Authorities::Local::TableBasedAuthority < ::Qa::Authorities::Local::TableBasedAuthority
+    private
+
+    def base_relation
+      Qa::LocalAuthorityEntry.where(local_authority: local_authority, active: true)
+    end
+  end
+end
+
+Qa::Authorities::Local.register_subauthority('lafayette_instructors', 'Spot::Authorities::Local::TableBasedAuthority')
