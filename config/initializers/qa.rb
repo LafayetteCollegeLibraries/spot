@@ -23,7 +23,8 @@ end
 #
 # see {Spot::LafayetteInstructorsAuthorityService#load}
 module Spot
-  class Authorities::Local::TableBasedAuthority < ::Qa::Authorities::Local::TableBasedAuthority
+  class LocalTableBasedAuthority < ::Qa::Authorities::Local::TableBasedAuthority
+
     private
 
     def base_relation
@@ -32,4 +33,4 @@ module Spot
   end
 end
 
-Qa::Authorities::Local.register_subauthority('lafayette_instructors', 'Spot::Authorities::Local::TableBasedAuthority')
+Qa::Authorities::Local.register_subauthority('lafayette_instructors', 'Spot::LocalTableBasedAuthority')
