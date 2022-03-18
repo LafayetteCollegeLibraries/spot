@@ -64,6 +64,20 @@ class User < ApplicationRecord
     email
   end
 
+  # Name rendered in an authoritative "Surname, Given-Name" style
+  #
+  # @return [String]
+  def authority_name
+    [surname, given_name].compact.join(', ')
+  end
+
+  # Name rendered in a "Given-Name Surname" style
+  #
+  # @return [String]
+  def display_name
+    "#{given_name} #{surname}".strip
+  end
+
   # Sets up attributes returned from CAS. No need to save the object: that's done
   # via devise_cas_authenticatable.
   #
@@ -72,7 +86,8 @@ class User < ApplicationRecord
   def cas_extra_attributes=(attributes)
     self.username = attributes['uid']
     self.email = attributes['email']
-    self.display_name = "#{attributes['givenName']} #{attributes['surname']}".strip
+    self.given_name = attributes['givenName']
+    self.surname = attributes['surname']
     self.lnumber = attributes['lnumber']
 
     update_roles_from_attributes(attributes)

@@ -49,7 +49,7 @@ RSpec.shared_examples 'a Spot::Workflow notification' do
   let(:workflow_entity) { instance_double('Sipity::Entity', proxy_for: workflow_object, proxy_for_global_id: workflow_object.to_global_id.to_s) }
   let(:workflow_object_factory) { :student_work }
   let(:workflow_object) { create(workflow_object_factory, user: depositing_user) }
-  let(:depositing_user) { create(:user, display_name: 'Depositing User') }
+  let(:depositing_user) { create(:user, given_name: 'Depositing User') }
 
   # comment for the action, passed as a Sipity::Comment
   let(:workflow_sipity_comment) { instance_double('Sipity::Comment', comment: workflow_comment) }
@@ -57,14 +57,14 @@ RSpec.shared_examples 'a Spot::Workflow notification' do
   let(:workflow_comment_html) { workflow_comment.gsub(/\n/, '<br>') }
 
   # user who performed the action
-  let(:workflow_action_user) { create(:user, display_name: 'Workflow Action User') }
-  let(:advisor_user) { create(:user, display_name: 'Advisor User') }
+  let(:workflow_action_user) { create(:user, given_name: 'Workflow Action User') }
+  let(:advisor_user) { create(:user, given_name: 'Advisor') }
 
   # recipients defined outside of the scope of the class (from the workflow definition json, for example)
   # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/services/hyrax/workflow/notification_service.rb#L48-L55
   let(:workflow_recipients) { { 'to' => [workflow_to_user], 'cc' => [workflow_cc_user] } }
-  let(:workflow_to_user) { create(:user, display_name: 'Workflow To: User') }
-  let(:workflow_cc_user) { create(:user, display_name: 'Workflow CC: User') }
+  let(:workflow_to_user) { create(:user, given_name: 'Workflow To User') }
+  let(:workflow_cc_user) { create(:user, given_name: 'Workflow CC User') }
   let(:total_recipients) { workflow_recipients.values.reduce([], :concat).concat(recipients).uniq }
 
   let(:mock_mailer) { instance_double('Spot::WorkflowMessageMailer') }
