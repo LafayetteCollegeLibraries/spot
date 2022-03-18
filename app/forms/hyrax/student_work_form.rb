@@ -6,8 +6,7 @@ module Hyrax
 
     self.model_class = ::StudentWork
     self.required_fields = [
-      :title, :creator, :advisor, :academic_department, :division,
-      :description, :date, :date_available, :rights_statement, :resource_type
+      :title, :creator, :advisor, :academic_department, :description, :date, :rights_statement, :resource_type
     ]
 
     self.terms = [
@@ -40,8 +39,8 @@ module Hyrax
 
     def primary_terms
       [
-        :title, :creator, :advisor, :academic_department, :division, :description,
-        :date, :date_available, :rights_statement, :resource_type
+        :title, :creator, :advisor, :academic_department, :description,
+        :date, :resource_type, :rights_statement
       ]
     end
 

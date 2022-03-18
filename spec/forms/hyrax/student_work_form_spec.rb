@@ -3,8 +3,8 @@ RSpec.describe Hyrax::StudentWorkForm do
   it_behaves_like 'a Spot work form'
 
   it_behaves_like 'it handles required fields',
-                  :title, :creator, :advisor, :academic_department, :division,
-                  :description, :date, :date_available, :rights_statement, :resource_type
+                  :title, :creator, :advisor, :academic_department,
+                  :description, :date, :rights_statement, :resource_type
 
   describe '.terms' do
     subject { described_class.terms }
