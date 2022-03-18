@@ -24,7 +24,6 @@ end
 # see {Spot::LafayetteInstructorsAuthorityService#load}
 module Spot
   class LocalTableBasedAuthority < ::Qa::Authorities::Local::TableBasedAuthority
-
     private
 
     def base_relation

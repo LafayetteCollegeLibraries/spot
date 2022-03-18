@@ -70,7 +70,7 @@ module Spot
     attr_reader :api_key
 
     def deactivate_entries
-      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update_all(active: false)
+      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update(active: false)
     end
 
     def find_local_label_for(email:)

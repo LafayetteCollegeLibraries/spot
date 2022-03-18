@@ -107,12 +107,10 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
     end
 
     context 'when an entry no longer is returned by the api' do
-
       it 'does not mark it as active' do
         entry = Qa::LocalAuthorityEntry.find_or_create_by(local_authority: local_auth,
                                                           uri: 'deactivated@lafayette.edu',
                                                           label: 'Faculty, Retired')
-
         described_class.load(term: term)
 
         expect(entry.reload).not_to be_active
