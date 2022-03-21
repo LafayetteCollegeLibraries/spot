@@ -1,8 +1,10 @@
 version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.2.4
 executors:
   ruby:
     docker:
-      - image: cimg/ruby:2.4.3-stretch-node-browsers
+      - image: cimg/ruby:2.4.3-stretch-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -60,7 +62,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/ruby:2.4.3-stretch-node-browsers
+      - image: cimg/ruby:2.4.3-stretch-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -103,12 +105,10 @@ jobs:
       - attach_workspace:
           at: ~/
 
-      # Update to the latest release of Chrome
-      - run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      - run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-      - run: sudo apt-get update
-      - run: sudo apt-get -y install google-chrome-stable postgresql-9.6
-      - run: google-chrome-stable --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
+      # install chrome via browser-tools orb
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run: google-chrome --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
 
       - run:
           name: Make sure dependencies are valid
@@ -160,7 +160,7 @@ jobs:
 
   upload-coverage:
     docker:
-      - image: cimg/ruby:2.4.3-stretch-node-browsers
+      - image: cimg/ruby:2.4.3-stretch-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
