@@ -78,7 +78,7 @@ module Spot
       return qa.label unless qa.nil?
 
       user = User.find_by(email: email)
-      return user.authority_name unless user.nil?
+      user&.authority_name
     end
 
     def find_or_create_entry(label:, value:)
