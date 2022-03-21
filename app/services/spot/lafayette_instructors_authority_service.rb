@@ -44,7 +44,7 @@ module Spot
       deactivate_entries
 
       instructors_for(term: term).map do |instructor|
-        find_or_create_entry(label: instructor_label(instructor), value: instructor_id(instructor))
+        find_or_create_entry(from: instructor)
       end
     end
 
@@ -55,7 +55,7 @@ module Spot
       remote = wds_service.person(email: email)
       raise(UserNotFoundError, "No user found with email address: #{email}") if remote == false
 
-      find_or_create_entry(label: instructor_label(remote), value: instructor_id(remote)).label
+      find_or_create_entry(from: remote).label
     end
 
     # prevent our api_key from leaking
@@ -81,10 +81,9 @@ module Spot
       user&.authority_name
     end
 
-    def find_or_create_entry(label:, value:)
-      entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: value)
-      entry.label = label
-      entry.active = true
+    def find_or_create_entry(from:)
+      entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: instructor_id(from))
+      entry.label = instructor_label(from)
       entry.save
       entry
     end
@@ -94,11 +93,11 @@ module Spot
     end
 
     def instructor_id(instructor)
-      instructor['EMAIL'].downcase
+      instructor.fetch('EMAIL').downcase
     end
 
     def instructor_label(instructor)
-      "#{instructor['LAST_NAME']}, #{instructor['FIRST_NAME']}"
+      "#{instructor['LAST_NAME']}, #{instructor['PREFERRED_FIRST_NAME'] || instructor['FIRST_NAME']}"
     end
 
     def local_authority
