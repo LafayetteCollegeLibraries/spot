@@ -80,25 +80,35 @@ module Hyrax
 
     protected
 
-    # Called at the end of #initialize. We're using this to add some defaults for student users
-    # when the work is created:
-    #
+    # Called from within `#initialize_fields` which sets up individual fields for the form.
+    # Generally, this is to stuff empty values, but for student users we want to provide
+    # some defaults:
     #   - creator
     #     - user's name, authority style ("Lastname, Firstname")
     #   - rights_statement
     #     - In Copyright, Educational Use Permitted (via DEFAULT_RIGHTS_STATEMENT_URI constant)
     #   - rights_holder
     #     - user's name, authority style
-    def initialize_fields
-      super
+    #
+    # This is only called for `.terms` values that are `#blank?`, so it's safe to assume
+    # that these are empty (no need to further check their `#blank?` status).
+    #
+    # @param [#to_sym]
+    # @return [void]
+    # @see https://github.com/samvera/hydra-editor/blob/v5.0.5/app/forms/hydra_editor/form.rb#L102-L109
+    def initialize_field(key)
+      return super unless current_user.student?
 
-      return unless current_user.student? && model.new_record?
-
-      # not sure if the #blank? checks are necessary, since we're already checking model#new_record?
-      # but juuust in case...
-      self[:creator] = [current_user.authority_name] if self[:creator].all?(&:blank?)
-      self[:rights_statement] = DEFAULT_RIGHTS_STATEMENT_URI if self[:rights_statement].blank?
-      self[:rights_holder] = [current_user.authority_name] if self[:rights_holder].all?(&:blank?)
+      case key.to_sym
+      when :creator
+        self[key] = [current_user.authority_name]
+      when :rights_statement
+        self[key] = DEFAULT_RIGHTS_STATEMENT_URI
+      when :rights_holder
+        self[key] = [current_user.authority_name]
+      else
+        super
+      end
     end
   end
 end

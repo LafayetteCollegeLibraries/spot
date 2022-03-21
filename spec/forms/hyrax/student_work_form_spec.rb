@@ -133,59 +133,35 @@ RSpec.describe Hyrax::StudentWorkForm do
     end
   end
 
-  describe '#initialize_fields' do
+  describe '#initialize_field' do
     let(:form) { described_class.new(work, Ability.new(user), nil) }
     let(:user) { create(:user) }
     let(:student_user) { create(:student_user) }
+    let(:work) { StudentWork.new }
 
-    context 'with a new work' do
-      let(:work) { StudentWork.new }
+    context 'when the user is a student' do
+      let(:user) { student_user }
 
-      context 'when the user is a student' do
-        let(:user) { student_user }
-
-        it 'pre-loads the user#authority_name for #creator' do
-          expect(work.creator).to be_empty
-          expect(form[:creator]).to eq [user.authority_name]
-        end
-
-        it 'uses DEFAULT_RIGHTS_STATEMENT_URI for #rights_statement' do
-          expect(form[:rights_statement]).to eq described_class::DEFAULT_RIGHTS_STATEMENT_URI
-        end
-
-        it 'preloads the user#authority_name for #rights_holder' do
-          expect(work.rights_holder).to be_empty
-          expect(form[:rights_holder]).to eq [user.authority_name]
-        end
+      it 'pre-loads the user#authority_name for #creator' do
+        expect(work.creator).to be_empty
+        expect(form[:creator]).to eq [user.authority_name]
       end
 
-      context 'when the user is not a student' do
-        it 'uses the default new form values' do
-          expect(form[:creator]).to eq ['']
-          expect(form[:rights_statement]).to eq ''
-        end
+      it 'uses DEFAULT_RIGHTS_STATEMENT_URI for #rights_statement' do
+        expect(form[:rights_statement]).to eq described_class::DEFAULT_RIGHTS_STATEMENT_URI
+      end
+
+      it 'preloads the user#authority_name for #rights_holder' do
+        expect(work.rights_holder).to be_empty
+        expect(form[:rights_holder]).to eq [user.authority_name]
       end
     end
 
-    context 'with an existing work' do
-      let(:work) { build(:student_work) }
-
-      before { allow(work).to receive(:new_record?).and_return(false) }
-
-      context 'when the user is a student' do
-        let(:user) { student_user }
-
-        it 'uses the model values' do
-          expect(form[:creator]).to eq work.creator
-          expect(form[:rights_statement]).to eq work.rights_statement
-        end
-      end
-
-      context 'when the user is not a student' do
-        it 'uses the model values' do
-          expect(form[:creator]).to eq work.creator
-          expect(form[:rights_statement]).to eq work.rights_statement
-        end
+    context 'when the user is not a student' do
+      it 'uses the default new form values' do
+        expect(form[:creator]).to eq ['']
+        expect(form[:rights_statement]).to eq ''
+        expect(form[:rights_holder]).to eq ['']
       end
     end
   end
