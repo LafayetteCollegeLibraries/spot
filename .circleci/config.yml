@@ -2,7 +2,7 @@ version: 2.1
 executors:
   ruby:
     docker:
-      - image: circleci/ruby:2.4.3-stretch-node-browsers
+      - image: cimg/ruby:2.4.3-stretch-node-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -60,11 +60,11 @@ jobs:
 
   test:
     docker:
-      - image: circleci/ruby:2.4.3-stretch-node-browsers
+      - image: cimg/ruby:2.4.3-stretch-node-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-      - image: circleci/redis:4
+      - image: cimg/redis:4
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -160,7 +160,7 @@ jobs:
 
   upload-coverage:
     docker:
-      - image: circleci/ruby:2.4.3-stretch-node-browsers
+      - image: cimg/ruby:2.4.3-stretch-node-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
