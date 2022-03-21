@@ -10,7 +10,7 @@ module Hyrax
 
     self.model_class = ::StudentWork
     self.required_fields = [
-      :title, :creator, :advisor, :academic_department, :description, :date, :rights_statement, :resource_type
+      :title, :creator, :advisor, :academic_department, :description, :date, :resource_type, :rights_statement
     ]
 
     self.terms = [
@@ -23,8 +23,9 @@ module Hyrax
       :description,
       :date,
       :date_available,
-      :rights_statement,
       :resource_type,
+      :rights_statement,
+      :rights_holder,
 
       # below the fold
       :abstract,
@@ -44,7 +45,7 @@ module Hyrax
     def primary_terms
       [
         :title, :creator, :advisor, :academic_department, :description,
-        :date, :resource_type, :rights_statement
+        :date, :resource_type, :rights_statement, :rights_holder
       ]
     end
 
@@ -80,6 +81,14 @@ module Hyrax
     protected
 
     # Called at the end of #initialize. We're using this to add some defaults for student users
+    # when the work is created:
+    #
+    #   - creator
+    #     - user's name, authority style ("Lastname, Firstname")
+    #   - rights_statement
+    #     - In Copyright, Educational Use Permitted (via DEFAULT_RIGHTS_STATEMENT_URI constant)
+    #   - rights_holder
+    #     - user's name, authority style
     def initialize_fields
       super
 
@@ -89,6 +98,7 @@ module Hyrax
       # but juuust in case...
       self[:creator] = [current_user.authority_name] if self[:creator].all?(&:blank?)
       self[:rights_statement] = DEFAULT_RIGHTS_STATEMENT_URI if self[:rights_statement].blank?
+      self[:rights_holder] = [current_user.authority_name] if self[:rights_holder].all?(&:blank?)
     end
   end
 end

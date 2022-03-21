@@ -10,6 +10,7 @@ RSpec.describe Hyrax::StudentWorkForm do
     subject { described_class.terms }
 
     describe 'includes optional fields' do
+      it { is_expected.to include :rights_holder }
       it { is_expected.to include :abstract }
       it { is_expected.to include :language }
       it { is_expected.to include :related_resource }
@@ -35,6 +36,7 @@ RSpec.describe Hyrax::StudentWorkForm do
     it { is_expected.to include(:date) }
     it { is_expected.to include(:date_available) }
     it { is_expected.to include(:rights_statement) }
+    it { is_expected.to include(rights_holder: []) }
     it { is_expected.to include(resource_type: []) }
     it { is_expected.to include(:abstract) }
     it { is_expected.to include(language: []) }
@@ -149,6 +151,11 @@ RSpec.describe Hyrax::StudentWorkForm do
 
         it 'uses DEFAULT_RIGHTS_STATEMENT_URI for #rights_statement' do
           expect(form[:rights_statement]).to eq described_class::DEFAULT_RIGHTS_STATEMENT_URI
+        end
+
+        it 'preloads the user#authority_name for #rights_holder' do
+          expect(work.rights_holder).to be_empty
+          expect(form[:rights_holder]).to eq [user.authority_name]
         end
       end
 
