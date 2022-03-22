@@ -21,6 +21,8 @@ module Spot
     config.action_mailer.default_url_options = { host: ENV['URL_HOST'] }
     config.action_mailer.preview_path = Rails.root.join('lib', 'mailer_previews')
 
+    config.rack_cas.server_url = ENV.fetch('CAS_BASE_URL')
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
