@@ -63,9 +63,22 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
       it 'calls the wds_service' do
         expect(wds_service).to have_received(:person).with(email: email)
       end
+
+      context 'when the response contains a preferred name' do
+        let(:wds_response) do
+          {
+            'EMAIL' => email.upcase,
+            'LAST_NAME' => last_name,
+            'PREFERRED_FIRST_NAME' => 'Pref.',
+            'FIRST_NAME' => first_name
+          }
+        end
+
+        it { is_expected.to eq("#{last_name}, Pref.") }
+      end
     end
 
-    context 'when an L-number does not match' do
+    context 'when an email does not match' do
       let(:wds_response) { false }
 
       it 'raises an UserNotFoundError' do
