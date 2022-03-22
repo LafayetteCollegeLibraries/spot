@@ -70,13 +70,6 @@ Devise.setup do |config|
   config.sign_out_via = :get
 
   # ==> Configuration for :cas_authenticatable
-  config.cas_base_url = ENV.fetch('CAS_BASE_URL')
-
-  # you can override these if you need to, but cas_base_url is usually enough
-  # config.cas_login_url = "https://cas.myorganization.com/login"
-  # config.cas_logout_url = "https://cas.myorganization.com/logout"
-  # config.cas_validate_url = "https://cas.myorganization.com/serviceValidate"
-
   # The CAS specification allows for the passing of a follow URL to be displayed when
   # a user logs out on the CAS server. RubyCAS-Server also supports redirecting to a
   # URL via the destination param. Set either of these urls and specify either nil,
@@ -94,9 +87,6 @@ Devise.setup do |config|
   # require user records to already exist locally before they can authenticate via
   # CAS, uncomment the following line.
   # config.cas_create_user = false
-
-  # You can enable Single Sign Out, which by default is disabled.
-  # config.cas_enable_single_sign_out = true
 
   # If you don't want to use the username returned from your CAS server as the unique
   # identifier, but some other field passed in cas_extra_attributes, you can specify

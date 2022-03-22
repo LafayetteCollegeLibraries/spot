@@ -57,7 +57,7 @@ gem 'darlingtonia', '~> 3.0'
 # user management
 gem 'devise', '4.8.1'
 gem 'devise-guests', '0.7.0'
-gem 'devise_cas_authenticatable', '1.10.4'
+gem 'devise_cas_authenticatable', '2.0.2'
 
 # we're using .env files to manage our secrets
 gem 'dotenv-rails', '2.7.6'
