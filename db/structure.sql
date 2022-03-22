@@ -856,7 +856,8 @@ CREATE TABLE public.qa_local_authority_entries (
     label character varying,
     uri character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    active boolean DEFAULT true
 );
 
 
@@ -990,6 +991,39 @@ CREATE SEQUENCE public.searches_id_seq
 --
 
 ALTER SEQUENCE public.searches_id_seq OWNED BY public.searches.id;
+
+
+--
+-- Name: sessions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sessions (
+    id bigint NOT NULL,
+    session_id character varying NOT NULL,
+    cas_ticket character varying,
+    data text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sessions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
@@ -2000,6 +2034,13 @@ ALTER TABLE ONLY public.searches ALTER COLUMN id SET DEFAULT nextval('public.sea
 
 
 --
+-- Name: sessions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
+
+
+--
 -- Name: single_use_links id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2397,6 +2438,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 ALTER TABLE ONLY public.searches
     ADD CONSTRAINT searches_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sessions sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sessions
+    ADD CONSTRAINT sessions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2879,6 +2928,27 @@ CREATE INDEX index_searches_on_user_id ON public.searches USING btree (user_id);
 
 
 --
+-- Name: index_sessions_on_cas_ticket; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_cas_ticket ON public.sessions USING btree (cas_ticket);
+
+
+--
+-- Name: index_sessions_on_session_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_session_id ON public.sessions USING btree (session_id);
+
+
+--
+-- Name: index_sessions_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sessions_on_updated_at ON public.sessions USING btree (updated_at);
+
+
+--
 -- Name: index_sipity_comments_on_agent_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3313,6 +3383,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190327194742'),
 ('20200128221650'),
 ('20211206185043'),
-('20220317170657');
+('20220317170657'),
+('20220318162758'),
+('20220322165644');
 
 
