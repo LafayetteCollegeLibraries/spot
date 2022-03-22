@@ -41,14 +41,16 @@ module Spot
     # @return [Array<Qa::LocalAuthorityEntry>]
     # @todo how should we handle exceptions?
     def load(term:)
+      deactivate_entries
+
       instructors_for(term: term).map do |instructor|
         find_or_create_entry(label: instructor_label(instructor), value: instructor_id(instructor))
       end
     end
 
     def label_for(email:)
-      stored = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
-      return stored.label unless stored.nil?
+      stored = find_local_label_for(email: email)
+      return stored unless stored.nil?
 
       remote = wds_service.person(email: email)
       raise(UserNotFoundError, "No user found with email address: #{email}") if remote == false
@@ -67,9 +69,22 @@ module Spot
 
     attr_reader :api_key
 
+    def deactivate_entries
+      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update(active: false)
+    end
+
+    def find_local_label_for(email:)
+      qa = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
+      return qa.label unless qa.nil?
+
+      user = User.find_by(email: email)
+      user&.authority_name
+    end
+
     def find_or_create_entry(label:, value:)
       entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: value)
       entry.label = label
+      entry.active = true
       entry.save
       entry
     end

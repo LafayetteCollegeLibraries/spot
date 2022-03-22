@@ -6,10 +6,6 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
     allow(Spot::LafayetteWdsService).to receive(:new).with(api_key: api_key).and_return(wds_service)
   end
 
-  after do
-    Qa::LocalAuthorityEntry.destroy_all
-  end
-
   let(:local_auth) { Qa::LocalAuthority.find_or_create_by(name: described_class::SUBAUTHORITY_NAME) }
   let(:api_key) { 'abc123def!' }
   let(:wds_service) { instance_double(Spot::LafayetteWdsService) }
@@ -34,13 +30,25 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
       }
     end
 
-    context 'when an entry exists in the database' do
+    context 'when a QA entry exists in the database' do
       before do
         local_entry
         described_class.label_for(email: email)
       end
 
       it { is_expected.to eq label }
+
+      it 'does not call the wds_service' do
+        expect(wds_service).not_to have_received(:person)
+      end
+    end
+
+    context 'when a QA entry exists in the database' do
+      before { described_class.label_for(email: user.email) }
+
+      let(:user) { create(:user, given_name: first_name, surname: last_name, email: email) }
+
+      it { is_expected.to eq user.authority_name }
 
       it 'does not call the wds_service' do
         expect(wds_service).not_to have_received(:person)
@@ -94,6 +102,21 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
       it 'leaves it be' do
         expect(Qa::LocalAuthorityEntry.where(local_authority: local_auth).count).to eq 1
         expect(described_class.load(term: term).count).to eq instructors.count
+        expect(Qa::LocalAuthorityEntry.where(local_authority: local_auth).count).to eq instructors.count
+      end
+    end
+
+    context 'when an entry no longer is returned by the api' do
+      let!(:entry) do
+        Qa::LocalAuthorityEntry.find_or_create_by(local_authority: local_auth,
+                                                  uri: 'deactivated@lafayette.edu',
+                                                  label: 'Faculty, Retired',
+                                                  active: true)
+      end
+
+      it 'does not mark it as active' do
+        described_class.load(term: term)
+        expect(entry.reload).not_to be_active
       end
     end
   end
