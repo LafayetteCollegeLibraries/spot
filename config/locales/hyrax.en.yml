@@ -64,3 +64,9 @@ en:
         depositor_submits_library_changes: Submit requested changes
         library_approves: Approve
         library_requests_changes: Request changes
+
+    works:
+      form:
+        tab:
+          files: Add Files
+          media: Representative Media
