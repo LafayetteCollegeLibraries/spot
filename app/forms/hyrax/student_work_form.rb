@@ -20,7 +20,6 @@ module Hyrax
       :creator,
       :advisor,
       :academic_department,
-      :division,
       :description,
       :date,
       :date_available,
@@ -29,6 +28,7 @@ module Hyrax
       :rights_holder,
 
       # below the fold
+      :division,
       :abstract,
       :language,
       :related_resource,
@@ -62,7 +62,7 @@ module Hyrax
     # @todo this might be better off in the Spot::Forms::WorkForm base?
     def secondary_terms
       list = super
-      return list unless current_user.admin?
+      return list if current_user.admin?
 
       list - [:note, :access_note]
     end
