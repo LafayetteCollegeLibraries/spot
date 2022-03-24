@@ -46,7 +46,7 @@ RSpec.shared_examples 'it handles identifier form fields' do
   describe 'identifier accessors' do
     let(:work_klass) { described_class.name.split('::').last.gsub(/Form$/, '').constantize }
     let(:work) { work_klass.new(identifier: identifiers) }
-    let(:form) { described_class.new(work, nil, nil) }
+    let(:form) { described_class.new(work, Ability.new(nil), nil) }
 
     let(:identifiers) do
       [

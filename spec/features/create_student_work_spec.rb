@@ -46,17 +46,11 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in_autocomplete '.student_work_academic_department', with: 'Libraries'
       expect(page).to have_css '.student_work_academic_department .controls-add-text'
 
-      fill_in_autocomplete '.student_work_division', with: 'Humanities'
-      expect(page).to have_css '.student_work_division .controls-add-text'
-
       fill_in 'student_work_description', with: attrs[:description].first
       expect(page).not_to have_css '.student_work_description .controls-add-text'
 
       fill_in 'student_work_date', with: attrs[:date].first
       expect(page).not_to have_css '.student_work_date .controls-add-text'
-
-      fill_in 'student_work_date_available', with: attrs[:date_available].first
-      expect(page).not_to have_css '.student_work_date_available .controls-add-text'
 
       select 'No Copyright - United States', from: 'student_work_rights_statement'
       expect(page).not_to have_css '.student_work_rights_statement .controls-add-text'
@@ -68,6 +62,13 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
 
       click_link 'Additional fields'
       sleep 1
+
+      fill_in_autocomplete '.student_work_division', with: 'Humanities'
+      expect(page).to have_css '.student_work_division .controls-add-text'
+
+      # @todo we might be removing this field altogether and stuffing it as part of the workflow
+      fill_in 'student_work_date_available', with: attrs[:date_available].first
+      expect(page).not_to have_css '.student_work_date_available .controls-add-text'
 
       fill_in 'student_work_abstract', with: attrs[:abstract].first
       expect(page).not_to have_css '.student_work_abstract .controls-add-text'
