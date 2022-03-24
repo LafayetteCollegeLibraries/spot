@@ -40,9 +40,15 @@ module Spot
     end
 
     def create_permission_template!(admin_set:)
-      permissions = Hyrax::PermissionTemplate.create!(source_id: admin_set.id, access_grants_attributes: access_grants_attributes)
+      permissions = find_or_create_permission_template(source_id: admin_set.id)
       admin_set.reset_access_controls!
       permissions
+    end
+
+    def find_or_create_permission_template(source_id:)
+      Hyrax::PermissionTemplate.find_or_create_by(source_id: source_id) do |template|
+        template.access_grants_attributes = access_grants_attributes
+      end
     end
 
     def find_or_create_workflow(permission_template:)
