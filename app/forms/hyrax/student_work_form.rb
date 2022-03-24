@@ -10,7 +10,8 @@ module Hyrax
 
     self.model_class = ::StudentWork
     self.required_fields = [
-      :title, :creator, :advisor, :academic_department, :description, :date, :resource_type, :rights_statement
+      :title, :creator, :advisor, :academic_department,
+      :description, :date, :resource_type, :rights_statement
     ]
 
     self.terms = [
@@ -31,22 +32,39 @@ module Hyrax
       :abstract,
       :language,
       :related_resource,
-      :access_note,
-
-      # librarian-added fields, applied during review
       :organization,
       :subject,
       :keyword,
       :bibliographic_citation,
       :standard_identifier,
+      :access_note,
       :note
     ].concat(hyrax_form_fields)
 
+    # Fields to appear above the fold (before the "Additional fields" button).
+    # Generally, this is primarily where the required_fields will be displayed,
+    # but for student users we're pre-filling :rights_statement and :rights_holder
+    # and don't need to have those appear above the fold.
+    #
+    # @return [Array<Symbol>]
     def primary_terms
-      [
-        :title, :creator, :advisor, :academic_department, :description,
-        :date, :resource_type, :rights_statement, :rights_holder
-      ]
+      fields = required_fields
+      return fields unless current_user.student?
+
+      fields - [:rights_statement, :rights_holder]
+    end
+
+    # Fields to appear below the "Additional fields" button. For admin users,
+    # we're showing `terms - primary_fields`, but for the rest of users, we're
+    # hiding the internal note fields.
+    #
+    # @return [Array<Symbol>]
+    # @todo this might be better off in the Spot::Forms::WorkForm base?
+    def secondary_terms
+      list = super
+      return list unless current_user.admin?
+
+      list - [:note, :access_note]
     end
 
     class << self
