@@ -48,7 +48,7 @@ module Hyrax
     #
     # @return [Array<Symbol>]
     def primary_terms
-      fields = required_fields
+      fields = required_fields + [:rights_holder]
       return fields unless current_user.student?
 
       fields - [:rights_statement, :rights_holder]

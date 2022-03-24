@@ -165,4 +165,47 @@ RSpec.describe Hyrax::StudentWorkForm do
       end
     end
   end
+
+  describe '#primary_terms' do
+    subject { described_class.new(work, Ability.new(user), nil).primary_terms }
+
+    let(:work) { StudentWork.new }
+    let(:user) { create(:user) }
+
+    it { is_expected.to include(:rights_statement, :rights_holder) }
+
+    context 'when user is a student' do
+      let(:user) { create(:student_user) }
+
+      it { is_expected.not_to include(:rights_statement, :rights_holder) }
+    end
+  end
+
+  describe '#secondary_terms' do
+    subject { described_class.new(work, Ability.new(user), nil).secondary_terms }
+
+    let(:work) { StudentWork.new }
+
+    context 'for non-admin users' do
+      let(:user) { create(:user) }
+
+      it { is_expected.not_to include(:note, :access_note) }
+    end
+
+    context 'for student users' do
+      let(:user) { create(:student_user) }
+
+      it { is_expected.to include(:rights_statement, :rights_holder) }
+      it { is_expected.not_to include(:note, :access_note) }
+    end
+
+    context 'for admin users' do
+      let(:user) { create(:admin_user) }
+
+      # these are available in #primary_terms
+      it { is_expected.not_to include(:rights_statement, :rights_holder) }
+
+      it { is_expected.to include(:note, :access_note) }
+    end
+  end
 end
