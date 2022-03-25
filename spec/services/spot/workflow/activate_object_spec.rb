@@ -33,7 +33,7 @@ RSpec.describe Spot::Workflow::ActivateObject do
 
     context 'when no embargo is set' do
       before do
-        allow(Time.zone).to receive(:now).and_return(Time.new(2022, 3, 25))
+        allow(Time.zone).to receive(:now).and_return(Time.zone.local(2022, 3, 25))
       end
 
       it 'sets :date_available to Time.zone.now, formatted as YYYY-MM-DD' do
