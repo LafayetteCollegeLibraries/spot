@@ -125,14 +125,11 @@ RSpec.describe Spot::EmbargoLeaseService do
         .to receive(:new)
         .with(publication_double)
         .and_return(leased_actor_double)
-
-      allow(publication_double).to receive(:date_available=)
     end
 
     it 'calls destroy on both the embargo + lease actors' do
       described_class.clear_all_expired
 
-      expect(publication_double).to have_received(:date_available=).with([todays_date])
       expect(embargoed_actor_double).to have_received(:destroy).exactly(1).time
       expect(leased_actor_double).to have_received(:destroy).exactly(1).time
     end
