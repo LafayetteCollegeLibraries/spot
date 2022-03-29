@@ -1,24 +1,24 @@
 # base image
-ARG RUBY_VERSION=2.4.3-alpine3.6
+ARG RUBY_VERSION=2.4.6-alpine3.10
 FROM ruby:$RUBY_VERSION as spot-base
 
 # system dependencies
 # TODO: imagemagick might belong in the worker container instead?
 RUN apk --no-cache upgrade && \
-    apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nodejs=8.9.3-r1 && \
     apk --no-cache add \
         build-base \
         coreutils \
         curl \
-        ruby-dev \
-        imagemagick \
-        tzdata \
-        netcat-openbsd \
-        yarn \
-        zip \
-        postgresql postgresql-dev \
         git \
-        openssl
+        imagemagick \
+        netcat-openbsd \
+        nodejs \
+        openssl \
+        postgresql postgresql-dev \
+        ruby-dev \
+        tzdata \
+        yarn \
+        zip
 
 # let's not run this as root
 # (taken from hyrax's Dockerfile)
@@ -63,9 +63,11 @@ FROM spot-base as spot-app-dev
 
 COPY config/uv config/uv
 
+# run yarn install first so we don't need to always rerun when updating gems
+RUN yarn install
+
 ARG BUNDLE_WITHOUT=""
 RUN bundle install --jobs "$(nproc)"
-RUN yarn install
 
 CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/trustee_minutes/tmp/ssl/application.key&cert=/trustee_minutes/tmp/ssl/application.crt"]
 

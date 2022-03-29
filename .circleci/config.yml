@@ -2,7 +2,7 @@ version: 2.1
 executors:
   ruby:
     docker:
-      - image: circleci/ruby:2.4.3-stretch-node-browsers
+      - image: circleci/ruby:2.4.6-stretch-node-browsers-legacy
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
