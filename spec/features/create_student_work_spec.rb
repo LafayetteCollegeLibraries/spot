@@ -66,10 +66,6 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       fill_in_autocomplete '.student_work_division', with: 'Humanities'
       expect(page).to have_css '.student_work_division .controls-add-text'
 
-      # @todo we might be removing this field altogether and stuffing it as part of the workflow
-      fill_in 'student_work_date_available', with: attrs[:date_available].first
-      expect(page).not_to have_css '.student_work_date_available .controls-add-text'
-
       fill_in 'student_work_abstract', with: attrs[:abstract].first
       expect(page).not_to have_css '.student_work_abstract .controls-add-text'
 

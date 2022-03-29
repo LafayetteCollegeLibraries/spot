@@ -189,14 +189,14 @@ RSpec.describe Hyrax::StudentWorkForm do
     context 'for non-admin users' do
       let(:user) { create(:user) }
 
-      it { is_expected.not_to include(:note, :access_note) }
+      it { is_expected.not_to include(:date_available, :note, :access_note) }
     end
 
     context 'for student users' do
       let(:user) { create(:student_user) }
 
       it { is_expected.to include(:rights_statement, :rights_holder) }
-      it { is_expected.not_to include(:note, :access_note) }
+      it { is_expected.not_to include(:date_available, :note, :access_note) }
     end
 
     context 'for admin users' do
@@ -206,6 +206,28 @@ RSpec.describe Hyrax::StudentWorkForm do
       it { is_expected.not_to include(:rights_statement, :rights_holder) }
 
       it { is_expected.to include(:note, :access_note) }
+
+      context 'when the work is new' do
+        it { is_expected.not_to include(:date_available) }
+      end
+
+      context 'when the work is suppressed (in a workflow)' do
+        before do
+          allow(work).to receive(:new_record?).and_return false
+          allow(work).to receive(:suppressed?).and_return true
+        end
+
+        it { is_expected.not_to include(:date_available) }
+      end
+
+      context 'when the work is not new or suppressed (edit)' do
+        before do
+          allow(work).to receive(:new_record?).and_return false
+          allow(work).to receive(:suppressed?).and_return false
+        end
+
+        it { is_expected.to include(:date_available) }
+      end
     end
   end
 end

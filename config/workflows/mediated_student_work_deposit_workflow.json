@@ -125,7 +125,7 @@
             }
           ],
           "methods": [
-            "Hyrax::Workflow::ActivateObject"
+            "Spot::Workflow::ActivateObject"
           ]
         }
       ]

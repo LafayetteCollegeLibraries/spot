@@ -62,9 +62,13 @@ module Hyrax
     # @todo this might be better off in the Spot::Forms::WorkForm base?
     def secondary_terms
       list = super
-      return list if current_user.admin?
 
-      list - [:note, :access_note]
+      if current_user.admin?
+        list -= [:date_available] if model.new_record? || model.suppressed?
+        list
+      else
+        list - [:date_available, :note, :access_note]
+      end
     end
 
     class << self

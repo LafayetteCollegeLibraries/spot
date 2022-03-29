@@ -12,7 +12,7 @@
                     "transition_to": "deposited",
                     "methods": [
                         "Hyrax::Workflow::GrantEditToDepositor",
-                        "Hyrax::Workflow::ActivateObject"
+                        "Spot::Workflow::ActivateObject"
                     ]
                 }
             ]
