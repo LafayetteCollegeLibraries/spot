@@ -7,5 +7,9 @@ module Spot
       @recent_items = recent_items
       @featured_collections = featured_collections
     end
+
+    def show_senior_honors_thesis_block?
+      Flipflop.enabled?(:show_senior_honors_thesis_block)
+    end
   end
 end

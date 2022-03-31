@@ -70,6 +70,15 @@ en:
       recent_items:
         title: Recently Added Items
 
+      senior_honors_thesis:
+        title: Seniors, submit your Honors Thesis today!
+        blurb: ''
+        button:
+          form: Submit your work now!
+          learn_more:
+            text: Learn more
+            url: https://library.lafayette.edu
+
       splash:
         browse_catalog: Browse the catalog
         browse_collections: View collections
