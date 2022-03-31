@@ -1,5 +1,50 @@
 # changelog
 
+## [2022.2] - 2022-03-31
+
+### updates 🔬 
+- remove LoadLafayetteInstructorAuthorityJob cron instructions until we're ready to go live with the feature (#820)
+- remove patches for subject_label and location_label reindex (#821)
+- store email addresses in `StudentWork#advisor`, instead of L-numbers (#827)
+- workflow updates
+  - send emails to users alongside new messages (#822, #837, #838, #840, #848)
+  - use locales to display verb-ified labels for actions (#828)
+  - validations
+    - prevent workflow form from being submitted without an action selected (#828)
+    - require workflow actions requesting changes include a comment (#835)
+  - remove unused workflow configurations (#842)
+  - deposit StudentWork objects into the admin_set using `mediated_student_work_deposit` workflow by default for all users except admins (#843)
+  - create a "Student Work" admin_set as part of the db/seed process (#850)
+- move Handle identifier minting from the ActorStack to a Hyrax callback (#833)
+- remove unused capistrano task relating to #646 (#844)
+- put "Add new work" button on top of standard user dashboard (#849)
+- use shared `_work_descriptions` partial for all work types (#862)
+- use locales for page_titles (#864)
+- redirect hyrax's /terms page to our terms-of-use (#864)
+- description fields in presenters replace newlines (`/\r?\n/`) with html line breaks (#865)
+- store User `#given_name` and `#surname` separately and add `#display_name` and `#authority_name` methods (#871)
+- add `:active` flag to Qa::LocalAuthorityEntry (and scope to `active: true`) so that we can retain authority entries that are no longer returned from the WDS API (rather than deleting) (#873)
+- use WDS 'PREFERRED_FIRST_NAME' key (where present) in creating labels for instructors (#874)
+- add default values for StudentWorkForm when the user is a student (#872)
+  - `creator` and `rights_holder` are `current_user.authority_name`
+  - `rights_statement` is InC-EDU
+- generate `date_available` as part of the object activation step of our workflows (#881)
+- upgrade rubies to 2.4.6 (#884) 
+- move Representative Media form fields to their own tab (#878)
+
+### bugfixes 🐞 
+- `GrantSipityRoleToAdvisor` needs to provide a `Sipity::WorkflowRole`, not `Sipity::Role` (#818)
+- `StudentWorkForm#rights_statement` will now properly display a previously selected value in the dropdown (#826)
+- AdminSet#show views now render after adding some guard clauses and using an instance variable within collection views (#830)
+- force thumbnails to use sRGB colorspace to prevent bug where some PDF thumbnails were being produced inverted (#832)
+- `Spot::BasePresenter`: delegate metadata_only? checks to a`can?(:read, solr_document)` call (#847)
+
+### dependencies 👩‍👩‍👧‍👧 
+- `devise_cas_authenticatable` to 2.0.2
+  - adds db migration to store Sessions via ActiveRecord
+
+
+
 ## [2022.1] - 2022-01-19
 
 ### updates 🛠️ 
@@ -672,6 +717,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2022.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.2
 [2022.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.1
 [2021.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.6
 [2021.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.5
