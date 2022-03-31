@@ -5,7 +5,7 @@ RSpec.describe Spot::HomepagePresenter do
   let(:featured_collections) { [] }
 
   describe '#show_senior_honors_thesis_block?' do
-    subject { presenter.show_senioor_honors_thesis_block? }
+    subject { presenter.show_senior_honors_thesis_block? }
 
     before do
       allow(Flipflop).to receive(:enabled?).with(:show_senior_honors_thesis_block).and_return(enabled)
