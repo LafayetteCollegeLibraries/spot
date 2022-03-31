@@ -49,7 +49,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
   let(:batch) { [work1.id, work2.id] }
   let(:form) { described_class.new(model, ability, batch) }
   let(:ability) { Ability.new(user) }
-  let(:user) { build(:user, display_name: 'Jill Z. User') }
+  let(:user) { build(:user) }
 
   describe "#terms" do
     subject { form.terms }

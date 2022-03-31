@@ -8,7 +8,9 @@ if ENV['COVERAGE'] || ENV['CI']
   ENV['DISABLE_BOOTSNAP'] = 'true'
 
   require 'simplecov'
-  SimpleCov.start 'rails'
+  SimpleCov.start 'rails' do
+    add_filter 'lib/mailer_previews'
+  end
 end
 
 require File.expand_path('../../config/environment', __FILE__)
@@ -31,6 +33,7 @@ require 'webmock/rspec'
 require 'rspec/matchers'
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
+require 'mail'
 
 # copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
 #
@@ -116,6 +119,7 @@ RSpec.configure do |config|
   config.include StubEnv::Helpers
   config.include ControllerHelpers, type: :helper
   config.include Select2Helpers, type: :feature
+  config.include Mail::Matchers, type: :mailer
 
   config.use_transactional_fixtures = false
   config.render_views = true
@@ -130,7 +134,6 @@ RSpec.configure do |config|
 
   config.before :suite do
     DatabaseCleaner.clean_with(:truncation)
-    ActiveFedora::Cleaner.clean!
 
     Hyrax.config.enable_noids = false
   end
@@ -151,7 +154,6 @@ RSpec.configure do |config|
 
   config.after clean: true do
     DatabaseCleaner.clean
-    ActiveFedora::Cleaner.clean!
   end
 
   config.before(js: true) do

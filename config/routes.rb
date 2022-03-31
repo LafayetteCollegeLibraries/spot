@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   get '/help', to: 'spot/page#help', as: 'help'
   get '/terms-of-use', to: 'spot/page#terms_of_use', as: 'terms_of_use'
 
+  # Hyrax's terms of use page is found at /terms, so we'll just redirect to ours
+  get '/terms', to: redirect('/terms-of-use')
+
   # collections landing page
   get '/collections', to: 'spot/collections#index', as: 'collections'
 

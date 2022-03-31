@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe User do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, **extra_attributes) }
+  let(:extra_attributes) { {} }
 
   describe '#to_s' do
     subject { user.to_s }
@@ -35,16 +36,12 @@ RSpec.describe User do
       expect(user.lnumber).to eq attrs['lnumber']
     end
 
-    it 'constructs #display_name from "surname" + "givenName"' do
-      expect(user.display_name).to eq "#{attrs['givenName']} #{attrs['surname']}"
+    it 'sets the given_name' do
+      expect(user.given_name).to eq attrs['givenName']
     end
 
-    context 'when "givenName" not present' do
-      let(:attrs) { { 'uid' => 'spotapp', 'surname' => 'spot' } }
-
-      it 'uses only the "surname" for #display_name' do
-        expect(user.display_name).to eq attrs['surname']
-      end
+    it 'sets the surname' do
+      expect(user.surname).to eq attrs['surname']
     end
 
     # meta-programming user groups
@@ -56,6 +53,42 @@ RSpec.describe User do
           expect(user.send(:"#{entitlement}?")).to be true
         end
       end
+    end
+  end
+
+  describe '#authority_name' do
+    subject { user.authority_name }
+
+    it { is_expected.to eq "#{user.surname}, #{user.given_name}" }
+
+    context 'when "given_name" not present' do
+      let(:extra_attributes) { { given_name: nil, surname: 'spot' } }
+
+      it { is_expected.to eq 'spot' }
+    end
+
+    context 'when surname not present' do
+      let(:extra_attributes) { { given_name: 'DeposiBot', surname: nil } }
+
+      it { is_expected.to eq 'DeposiBot' }
+    end
+  end
+
+  describe '#display_name' do
+    subject { user.display_name }
+
+    it { is_expected.to eq "#{user.given_name} #{user.surname}" }
+
+    context 'when "given_name" not present' do
+      let(:extra_attributes) { { given_name: nil, surname: 'spot' } }
+
+      it { is_expected.to eq 'spot' }
+    end
+
+    context 'when surname not present' do
+      let(:extra_attributes) { { given_name: 'DeposiBot', surname: nil } }
+
+      it { is_expected.to eq 'DeposiBot' }
     end
   end
 

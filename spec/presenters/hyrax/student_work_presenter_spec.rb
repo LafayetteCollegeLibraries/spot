@@ -9,4 +9,5 @@ RSpec.describe Hyrax::StudentWorkPresenter do
 
   it_behaves_like 'a Spot presenter'
   it_behaves_like 'it humanizes date fields', for: %i[date date_available]
+  it_behaves_like 'it replaces line breaks with HTML', for: %i[abstract description]
 end

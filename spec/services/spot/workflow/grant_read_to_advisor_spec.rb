@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::Workflow::GrantReadToAdvisor do
   let(:workflow_method) { described_class }
-  let(:advisor) { create(:user, lnumber: 'L12341234') }
+  let(:advisor) { create(:user) }
   let(:depositor) { create(:user) }
   let(:work) { build(:student_work, id: 'abc123', advisor: [advisor_key], user: depositor) }
 
@@ -10,28 +10,17 @@ RSpec.describe Spot::Workflow::GrantReadToAdvisor do
 
     allow(Spot::LafayetteInstructorsAuthorityService)
       .to receive(:label_for)
-      .with(lnumber: advisor.lnumber)
+      .with(email: advisor.email)
       .and_return('Advisor, Faculty')
   end
 
   it_behaves_like 'a Hyrax workflow method'
 
-  context 'when "advisor" is an L-number' do
-    let(:advisor_key) { advisor.lnumber }
+  let(:advisor_key) { advisor.email }
 
-    it "adds the advisor to the work's #read_users" do
-      expect { described_class.call(target: work) }
-        .to change { work.read_users }.from([]).to([advisor.user_key])
-    end
-  end
-
-  context 'when "advisor" is an email address' do
-    let(:advisor_key) { advisor.email }
-
-    it "adds the advisor to the work's #read_users" do
-      expect { described_class.call(target: work) }
-        .to change { work.read_users }.from([]).to([advisor.user_key])
-    end
+  it "adds the advisor to the work's #read_users" do
+    expect { described_class.call(target: work) }
+      .to change { work.read_users }.from([]).to([advisor.user_key])
   end
 
   context 'when the work does not have an "advisor" field' do

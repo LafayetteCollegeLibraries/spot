@@ -23,8 +23,7 @@ module Spot
         clear_expired_embargoes(regenerate_thumbnails: regenerate_thumbnails) && clear_expired_leases(regenerate_thumbnails: regenerate_thumbnails)
       end
 
-      # Clears out expired embargoes and sets the +date_available+ property
-      # to today's date.
+      # Clears out expired embargoes
       #
       # @return [void]
       def clear_expired_embargoes(regenerate_thumbnails: false)
@@ -37,7 +36,6 @@ module Spot
 
           next if item.is_a? FileSet
 
-          item.date_available = [Time.zone.now.strftime('%Y-%m-%d')] if item.respond_to?(:date_available=)
           item.copy_visibility_to_files
           item.save!
 

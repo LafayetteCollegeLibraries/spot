@@ -12,6 +12,9 @@ module Hyrax
     before_action :authenticate_user!
     before_action :build_breadcrumbs, only: [:show]
 
+    class_attribute :create_work_presenter_class
+    self.create_work_presenter_class = Hyrax::SelectTypeListPresenter
+
     ##
     # @!attribute [rw] sidebar_partials
     #   @return [Hash]
@@ -20,7 +23,6 @@ module Hyrax
     #   Hyrax::DashboardController.sidebar_partials[:tasks] << "hyrax/dashboard/sidebar/custom_task"
     # class_attribute :sidebar_partials
     # self.sidebar_partials = { activity: [], configuration: [], repository_content: [], tasks: [] }
-
     def show
       if can? :read, :admin_dashboard
         @presenter = Hyrax::Admin::DashboardPresenter.new
@@ -30,6 +32,7 @@ module Hyrax
       # @see {Ability#depositor_abilities}
       elsif can? :read, :dashboard
         @presenter = Dashboard::UserPresenter.new(current_user, view_context, params[:since])
+        @create_work_presenter = create_work_presenter_class.new(current_user)
         render 'show_user'
       else
         redirect_to root_path

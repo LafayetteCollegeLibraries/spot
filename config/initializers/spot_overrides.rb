@@ -13,6 +13,7 @@ Rails.application.config.to_prepare do
   Hyrax::CollectionsController.include Spot::CollectionsControllerBehavior
 
   Hyrax::DerivativeService.services = [
+    ::Spot::PdfDerivativesService,
     ::Spot::ImageDerivativesService,
     ::Hyrax::FileSetDerivativesService
   ]
@@ -105,4 +106,7 @@ Rails.application.config.to_prepare do
     remove_const(:VISIBILITY_LABEL_CLASS) if const_defined?(:VISIBILITY_LABEL_CLASS)
     const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
   end
+
+  # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
+  AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
 end

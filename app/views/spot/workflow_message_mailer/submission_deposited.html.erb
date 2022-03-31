@@ -1,0 +1,10 @@
+<%# TODO: need to add language dependent on the work's visibility (if a work's embargoed or marked as private) %>
+<p>
+  Your submission, <em><%= link_to(document_title, document_url) %></em>, has been approved! Thank you!
+</p>
+
+<% if comment_html.present? %>
+<blockquote>
+  <%= comment_html %>
+</blockquote>
+<% end %>

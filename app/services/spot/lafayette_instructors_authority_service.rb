@@ -14,8 +14,8 @@ module Spot
 
     class UserNotFoundError < StandardError; end
 
-    def self.label_for(lnumber:, api_key: ENV.fetch(API_ENV_KEY))
-      new(api_key: api_key).label_for(lnumber: lnumber)
+    def self.label_for(email: nil, api_key: ENV.fetch(API_ENV_KEY))
+      new(api_key: api_key).label_for(email: email)
     end
 
     # @params [Hash] options
@@ -41,19 +41,21 @@ module Spot
     # @return [Array<Qa::LocalAuthorityEntry>]
     # @todo how should we handle exceptions?
     def load(term:)
+      deactivate_entries
+
       instructors_for(term: term).map do |instructor|
-        find_or_create_entry(label: instructor_label(instructor), value: instructor_id(instructor))
+        find_or_create_entry(from: instructor)
       end
     end
 
-    def label_for(lnumber:)
-      stored = Qa::LocalAuthorityEntry.find_by(uri: lnumber, local_authority: local_authority)
-      return stored.label unless stored.nil?
+    def label_for(email:)
+      stored = find_local_label_for(email: email)
+      return stored unless stored.nil?
 
-      remote = wds_service.person(lnumber: lnumber)
-      raise(UserNotFoundError, "No user found with L-number: #{lnumber}") if remote == false
+      remote = wds_service.person(email: email)
+      raise(UserNotFoundError, "No user found with email address: #{email}") if remote == false
 
-      find_or_create_entry(label: instructor_label(remote), value: instructor_id(remote)).label
+      find_or_create_entry(from: remote).label
     end
 
     # prevent our api_key from leaking
@@ -67,9 +69,21 @@ module Spot
 
     attr_reader :api_key
 
-    def find_or_create_entry(label:, value:)
-      entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: value)
-      entry.label = label
+    def deactivate_entries
+      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update(active: false)
+    end
+
+    def find_local_label_for(email:)
+      qa = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
+      return qa.label unless qa.nil?
+
+      user = User.find_by(email: email)
+      user&.authority_name
+    end
+
+    def find_or_create_entry(from:)
+      entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: instructor_id(from))
+      entry.label = instructor_label(from)
       entry.save
       entry
     end
@@ -79,11 +93,11 @@ module Spot
     end
 
     def instructor_id(instructor)
-      instructor['LNUMBER']
+      instructor.fetch('EMAIL').downcase
     end
 
     def instructor_label(instructor)
-      "#{instructor['LAST_NAME']}, #{instructor['FIRST_NAME']}"
+      "#{instructor['LAST_NAME']}, #{instructor['PREFERRED_FIRST_NAME'] || instructor['FIRST_NAME']}"
     end
 
     def local_authority

@@ -6,19 +6,11 @@ module Spot
       def self.call(target:, **)
         return unless target.respond_to?(:advisor)
 
-        advisor_lnumber = target.advisor.first.to_s
-        advisor_key = case advisor_lnumber
-                      when /^L\d{8}$/
-                        User.find_by(lnumber: advisor_lnumber).user_key
-                      when /^[^@]+@\w+\.\w+$/
-                        advisor_lnumber
-                      end
+        advisor_emails = target.advisor.select { |advisor| advisor =~ /^[A-Za-z0-9\-_\.]+@lafayette.edu$/ }
+        return if advisor_emails.empty?
 
-        return if advisor_key.nil?
-
-        # what do we do if the key is nil?
-        target.read_users += [advisor_key]
-        ::Hyrax::GrantReadToMembersJob.perform_later(target, advisor_key)
+        target.read_users += advisor_emails
+        advisor_emails.each { |email| ::Hyrax::GrantReadToMembersJob.perform_later(target, email) }
       end
     end
   end

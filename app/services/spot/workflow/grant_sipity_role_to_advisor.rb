@@ -11,27 +11,20 @@ module Spot
       end
 
       def grant!
-        Sipity::EntitySpecificResponsibility.find_or_create_by!(workflow_role: workflow_role, entity: entity, agent: agent)
+        sipity_agents.each do |agent|
+          Sipity::EntitySpecificResponsibility.find_or_create_by!(workflow_role: workflow_role,
+                                                                  entity: sipity_entity,
+                                                                  agent: agent)
+        end
       end
 
       private
 
-      def advisor_from_target
-        lnumber = @target.advisor.first.to_s
-
-        case lnumber
-        when /^L\d{8}$/
-          User.find_by(lnumber: lnumber)
-        when /^[^@]+@\w+\.\w+$/
-          User.find_by(email: lnumber)
-        end
+      def sipity_agents
+        @target.advisor.map { |email| User.find_by(email: email).to_sipity_agent }
       end
 
-      def agent
-        advisor_from_target.to_sipity_agent
-      end
-
-      def entity
+      def sipity_entity
         Sipity::Entity.find_or_create_by!(proxy_for_global_id: target_gid)
       end
 
@@ -40,7 +33,7 @@ module Spot
       end
 
       def workflow_role
-        Sipity::Role[:advising]
+        Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: @target.admin_set.active_workflow)
       end
     end
   end

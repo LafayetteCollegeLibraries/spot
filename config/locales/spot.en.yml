@@ -42,6 +42,10 @@ en:
         sidebar: System Status
         title: System Status
 
+    embargoes:
+      index:
+        page_title: 'Manage Embargoes'
+
     error:
       404:
         page_title: 'Page not found // %{name}'
@@ -82,6 +86,10 @@ en:
         issn: ISSN
         isbn: ISBN
 
+    leases:
+      index:
+        page_title: 'Manage Leases'
+
     links:
       department:
         name: Digital Scholarship Services
@@ -100,13 +108,13 @@ en:
     page:
       about:
         header: About %{name}
-        page_title: About // %{name}
+        page_title: About
       help:
         header: Help using %{name}
-        page_title: Help // %{name}
+        page_title: Help
       terms_of_use:
         header: Terms of Use
-        page_title: Terms of Use // %{name}
+        page_title: Terms of Use
 
     work:
       access_message:
@@ -137,3 +145,7 @@ en:
           jsonld: View metadata as JSON-LD
           nt: View metadata as NTriples
           ttl: View metadata as TTL
+
+    workflows:
+      index:
+        page_title: 'Review Submissions'

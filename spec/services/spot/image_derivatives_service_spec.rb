@@ -49,6 +49,7 @@ RSpec.describe Spot::ImageDerivativesService do
     before do
       allow(thumbnail_service).to receive(:create_derivatives)
       allow(access_master_service).to receive(:create_derivatives)
+      allow(FileUtils).to receive(:mkdir_p).with(File.dirname(filename))
     end
 
     it 'calls +#create_derivatives+ on both of the services' do
