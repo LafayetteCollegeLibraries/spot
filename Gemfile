@@ -161,7 +161,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Use Capistrano for deployment
-  gem 'capistrano', '~> 3.16', require: false
+  gem 'capistrano', '~> 3.17', require: false
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.1'
