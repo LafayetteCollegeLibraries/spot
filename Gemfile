@@ -49,7 +49,7 @@ gem 'blacklight_oai_provider', '6.0.0'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '1.9.4', require: false
+gem 'bootsnap', '1.11.1', require: false
 
 # record importer pattern from curationexperts
 gem 'darlingtonia', '~> 3.0'
