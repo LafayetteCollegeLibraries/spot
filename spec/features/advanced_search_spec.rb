@@ -1,9 +1,5 @@
 # frozen_string_literal: true
-RSpec.feature 'Advanced search form', :clean, :js do
-  before do
-    # add some stuff to the index
-  end
-
+RSpec.feature 'Advanced search form' do
   scenario 'the advanced search form' do
     visit '/advanced'
 
