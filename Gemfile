@@ -131,7 +131,7 @@ gem 'linkeddata', '~> 3.0'
 #
 # @todo remove these restriction after aws migration
 gem 'bootstrap_form', '~> 4.4.0'
-gem 'nokogiri', '~> 1.10.10'
+gem 'nokogiri', '~> 1.13.3'
 
 # These are subdependencies that need to be locked tighter to be run on ruby 2.4.3.
 # In theory, we should just be able to remove these entries and run `bundle update`
