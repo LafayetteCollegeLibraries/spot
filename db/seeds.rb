@@ -6,7 +6,6 @@ Rake::Task['hyrax:default_collection_types:create'].invoke
 
 # local set up: create roles, deposit user, + admin_sets
 Rake::Task['spot:roles:default'].invoke
-Rake::Task['spot:create_deposit_user'].invoke
 Rake::Task['spot:student_work_admin_set:create'].invoke
 Rake::Task['spot:create_system_users'].invoke
 
