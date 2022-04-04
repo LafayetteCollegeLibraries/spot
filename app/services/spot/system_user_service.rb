@@ -11,18 +11,18 @@ module Spot
     class << self
       # @return [User]
       def audit_user
-        find_or_create_system_user(display_name: AUDIT_USER_DISPLAY_NAME, email: AUDIT_USER_EMAIL)
+        find_or_create_system_user(name: AUDIT_USER_DISPLAY_NAME, email: AUDIT_USER_EMAIL)
       end
 
       # @return [User]
       def batch_user
-        find_or_create_system_user(display_name: BATCH_USER_DISPLAY_NAME, email: BATCH_USER_EMAIL)
+        find_or_create_system_user(name: BATCH_USER_DISPLAY_NAME, email: BATCH_USER_EMAIL)
       end
 
       private
 
-      def find_or_create_system_user(display_name:, email:)
-        user = User.find_or_create_by(display_name: display_name, email: email)
+      def find_or_create_system_user(name:, email:)
+        user = User.find_or_create_by(given_name: name, email: email)
         return user if user.admin?
 
         admin_role = Role.find_or_create_by(name: Ability.admin_group_name)
