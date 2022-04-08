@@ -1,4 +1,5 @@
 FROM solr:8.11.2
+ARG CORE_NAME="spot"
 
 ENV SOLR_CORES=spot
 ENV SOLR_CORE_CONF_DIR=/spot-config
