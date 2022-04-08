@@ -12,7 +12,7 @@ class StudentWorkIndexer < BaseIndexer
   private
 
   def advisor_label_from(email:)
-    return email unless email.match?(/^[A-Za-z0-9\-_\.]+@lafayette.edu$/)
+    return email unless email.match?(/^[A-Za-z0-9\+\-_\.]+@lafayette.edu$/)
 
     Spot::LafayetteInstructorsAuthorityService.label_for(email: email)
   end
