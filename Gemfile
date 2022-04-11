@@ -136,25 +136,11 @@ gem 'linkeddata', '~> 3.0'
 gem 'bootstrap_form', '~> 4.4.0'
 gem 'nokogiri', '~> 1.10.10'
 
-# Citation parser to extract meta data for google scholar
-gem 'anystyle', '~> 1.4.1'
-
-# These are subdependencies that need to be locked tighter to be run on ruby 2.4.3.
-# In theory, we should just be able to remove these entries and run `bundle update`
-# to get things up to date. (see also `:development, :test` block below)
-gem 'amazing_print', '1.2.1'
-gem 'dry-container', '0.7.2'
-gem 'dry-core', '0.4.9'
-gem 'dry-inflector', '0.2.0'
-gem 'dry-matcher', '~> 0.8.3'
-gem 'dry-schema', '1.5.5'
-gem 'dry-transaction', '0.12.1'
-gem 'dry-validation', '~> 1.5.6'
-gem 'globalid', '~> 0.4.2'
-gem 'parallel', '1.19.2'
-gem 'signet', '~> 0.13.2'
-gem 'simple_form', '~> 5.0.3'
-gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
+# previously stdlib, but now external gem in ruby >= 2.7
+# something is requiring it but it's not installed.
+# @todo try removing this after updating the gems that are
+#       locked to ruby 2.4.6
+gem 'e2mmap'
 
 # development dependencies (not as necessary to
 # lock down versions here)
