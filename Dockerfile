@@ -3,7 +3,7 @@
 # Does the majority of setup for dev/prod images.
 # Use --build-arg BUNDLE_WITHOUT="" to build with dev dependencies
 ##
-FROM ruby:2.4.6-alpine3.10 as spot-base
+FROM ruby:2.7.5-alpine as spot-base
 
 # system dependencies
 RUN apk --no-cache upgrade && \
@@ -28,8 +28,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads
 
 # match our Gemfile.lock version
-# TODO: upgrade the Gemfile bundler version to 2
-RUN gem install bundler:1.13.7
+RUN gem install bundler:2.3.11
 
 ARG BUNDLE_WITHOUT="development:test"
 COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
