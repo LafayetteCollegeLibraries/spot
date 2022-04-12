@@ -70,6 +70,15 @@ en:
       recent_items:
         title: Recently Added Items
 
+      senior_honors_thesis:
+        title: Student Honors Theses Submission
+        blurb: Seniors who have been awarded departmental honors may submit their honors thesis to the LDR with advisor approval.
+        button:
+          form: Submit your work
+          learn_more:
+            text: Learn more
+            url: https://library.lafayette.edu/services-help/services/honors-students/student-honors-theses-ldr/
+
       splash:
         browse_catalog: Browse the catalog
         browse_collections: View collections
