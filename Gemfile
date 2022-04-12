@@ -128,20 +128,6 @@ gem 'mini_magick', '4.11.0'
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.0'
 
-#
-# these are gems that we need to lock until we can upgrade ruby to >= 2.5
-# (on-prem is locked at 2.4.3).
-#
-# @todo remove these restriction after aws migration
-gem 'bootstrap_form', '~> 4.4.0'
-gem 'nokogiri', '~> 1.10.10'
-
-# previously stdlib, but now external gem in ruby >= 2.7
-# something is requiring it but it's not installed.
-# @todo try removing this after updating the gems that are
-#       locked to ruby 2.4.6
-gem 'e2mmap'
-
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
@@ -187,9 +173,4 @@ group :development, :test do
   gem 'rubocop', '~> 0.52.0'
   gem 'rubocop-rspec', '1.22.2'
   gem 'simplecov', '~> 0.17.1', require: false
-
-  # subdependencies that we need to lock for ruby 2.4.3.
-  # (@todo remove these when we're in the cloud)
-  gem 'docile', '~> 1.3.5'
-  gem 'matrix', '0.1.0'
 end
