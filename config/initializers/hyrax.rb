@@ -252,7 +252,7 @@ Hyrax.config do |config|
   # (use the configuration above when you get to the point where you want to use it)
   config.browse_everything = nil
 
-  ## Whitelist all directories which can be used to ingest from the local file
+  ## Register all directories which can be used to ingest from the local file
   # system.
   #
   # Any file, and only those, that is anywhere under one of the specified
@@ -266,7 +266,7 @@ Hyrax.config do |config|
   # ingest files from the file system that are not part of the BrowseEverything
   # mount point.
   #
-  config.whitelisted_ingest_dirs = [
+  config.registered_ingest_dirs = [
     Rails.root.join('tmp', 'ingest').to_s,
 
     # need to use the capistrano root, otherwise a new deployment will
