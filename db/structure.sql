@@ -9,23 +9,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -427,6 +413,37 @@ CREATE SEQUENCE public.hyrax_collection_types_id_seq
 --
 
 ALTER SEQUENCE public.hyrax_collection_types_id_seq OWNED BY public.hyrax_collection_types.id;
+
+
+--
+-- Name: hyrax_default_administrative_set; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.hyrax_default_administrative_set (
+    id bigint NOT NULL,
+    default_admin_set_id character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: hyrax_default_administrative_set_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.hyrax_default_administrative_set_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: hyrax_default_administrative_set_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.hyrax_default_administrative_set_id_seq OWNED BY public.hyrax_default_administrative_set.id;
 
 
 --
@@ -1165,7 +1182,7 @@ ALTER SEQUENCE public.sipity_entities_id_seq OWNED BY public.sipity_entities.id;
 CREATE TABLE public.sipity_entity_specific_responsibilities (
     id bigint NOT NULL,
     workflow_role_id integer NOT NULL,
-    entity_id character varying NOT NULL,
+    entity_id integer NOT NULL,
     agent_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1922,6 +1939,13 @@ ALTER TABLE ONLY public.hyrax_collection_types ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: hyrax_default_administrative_set id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.hyrax_default_administrative_set ALTER COLUMN id SET DEFAULT nextval('public.hyrax_default_administrative_set_id_seq'::regclass);
+
+
+--
 -- Name: hyrax_features id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2302,6 +2326,14 @@ ALTER TABLE ONLY public.file_view_stats
 
 ALTER TABLE ONLY public.hyrax_collection_types
     ADD CONSTRAINT hyrax_collection_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hyrax_default_administrative_set hyrax_default_administrative_set_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.hyrax_default_administrative_set
+    ADD CONSTRAINT hyrax_default_administrative_set_pkey PRIMARY KEY (id);
 
 
 --
@@ -3385,6 +3417,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20211206185043'),
 ('20220317170657'),
 ('20220318162758'),
-('20220322165644');
+('20220322165644'),
+('20220412135003'),
+('20220412135004');
 
 
