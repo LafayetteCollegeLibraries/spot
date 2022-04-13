@@ -6,7 +6,7 @@ module Spot
       def self.call(target:, **)
         return unless target.respond_to?(:advisor)
 
-        advisor_emails = target.advisor.select { |advisor| advisor =~ /^[A-Za-z0-9\-_\.]+@lafayette.edu$/ }
+        advisor_emails = target.advisor.select { |advisor| advisor.end_with?('@lafayette.edu') }
         return if advisor_emails.empty?
 
         target.read_users += advisor_emails
