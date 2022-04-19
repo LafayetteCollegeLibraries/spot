@@ -15,19 +15,31 @@ module Spot
     #
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/helpers/hyrax/work_form_helper.rb#L5-L27
     def form_tabs_for(form:)
-      # custom StudentWorkForm behavior
-      return %w[metadata files] if form.instance_of?(Hyrax::StudentWorkForm) && !current_user.admin?
+      return student_work_form_tabs_for(form: form) if form.instance_of?(Hyrax::StudentWorkForm) && !current_user.admin?
 
       # `super` handles BatchUploadForm's special case, and since we aren't
       # concerned with representative_media in that case, return the results
       fields = super
       return fields if form.instance_of?(Hyrax::Forms::BatchUploadForm)
 
-      # add the form_media tab if the partial will be rendered
+      # if the model has been persisted, load the 'media' partial (if the object has members)
+      # and load the new "comments" panel to display any workflow comments that may exist.
+      #
       # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/views/hyrax/base/_form_media.html.erb
       # @todo maybe take this check out of the partial?
-      fields << 'media' if form.model.persisted? && form.model.member_ids.present?
+      if form.model.persisted?
+        fields << 'media' if form.model.member_ids.present?
+        fields << 'comments'
+      end
+
       fields
+    end
+
+    # @api private
+    def student_work_form_tabs_for(form:)
+      %w[metadata files].tap do |fields|
+        fields << 'comments' if form.model.persisted?
+      end
     end
   end
 end

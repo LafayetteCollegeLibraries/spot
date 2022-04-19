@@ -1,0 +1,22 @@
+<% if @workflow_presenter&.comments.empty? || @workflow_presenter.nil? %>
+  <div class="panel panel-info">
+    <div class="panel-body">
+      <em><%= f.object.title %></em> has no comments to display.
+    </div>
+  </div>
+<% else %>
+  <% @workflow_presenter.comments.includes(:agent).order(created_at: :desc).each do |comment| %>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <%= comment.comment.gsub(/\r?\n/, '<br>').html_safe %>
+    </div>
+
+    <div class="panel-footer">
+      <% commenter = comment.agent.proxy_for %>
+      <em>
+        Commented by <%= commenter.display_name %> (<%= commenter.email %>)
+        on <%= comment.created_at.strftime('%B %-d, %Y') %></em>
+    </div>
+  </div>
+  <% end %>
+<% end %>

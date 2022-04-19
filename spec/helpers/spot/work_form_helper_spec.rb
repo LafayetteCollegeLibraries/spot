@@ -28,7 +28,7 @@ RSpec.describe Spot::WorkFormHelper do
         let(:work_persisted) { true }
         let(:work_member_ids) { ['abc123'] }
 
-        it { is_expected.to eq %w[metadata files relationships media] }
+        it { is_expected.to eq %w[metadata files relationships media comments] }
       end
     end
 
@@ -36,7 +36,15 @@ RSpec.describe Spot::WorkFormHelper do
       let(:form_klass) { 'Hyrax::StudentWorkForm' }
 
       context 'when the user is not an admin' do
-        it { is_expected.to eq %w[metadata files] }
+        context 'when the form is New' do
+          it { is_expected.to eq %w[metadata files] }
+        end
+
+        context 'when the form is Edit' do
+          let(:work_persisted) { true }
+
+          it { is_expected.to eq %w[metadata files comments] }
+        end
       end
 
       context 'when the user is an admin' do

@@ -14,6 +14,10 @@ module Spot
     include ::Hyrax::BreadcrumbsForWorks
     include AdditionalFormatsForController
 
+    included do
+      before_action :load_workflow_presenter, only: :edit
+    end
+
     private
 
     # Overrides Hyrax behavior by using our own IIIF presenter that relies on Blacklight locales
@@ -25,6 +29,10 @@ module Spot
         p.hostname = request.hostname
         p.ability = current_ability
       end
+    end
+
+    def load_workflow_presenter
+      @workflow_presenter = Hyrax::WorkflowPresenter.new(::SolrDocument.find(params[:id]), current_ability)
     end
   end
 end
