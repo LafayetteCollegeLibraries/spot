@@ -35,6 +35,16 @@ module Spot
       fields
     end
 
+    def workflow_comment_attribution(comment)
+      commenter = comment.agent.proxy_for
+      commenter_display = current_user == commenter ? 'You' : "#{commenter.display_name} (#{commenter.email})"
+      "#{commenter_display} commented on #{comment.created_at.strftime('%B %-d, %Y')}"
+    end
+
+    def workflow_comment_content(comment)
+      comment.comment.gsub(/\r?\n/, '<br>').html_safe
+    end
+
     # @api private
     def student_work_form_tabs_for(form:)
       %w[metadata files].tap do |fields|

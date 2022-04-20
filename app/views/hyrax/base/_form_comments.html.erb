@@ -8,14 +8,13 @@
   <% @workflow_presenter.comments.includes(:agent).order(created_at: :desc).each do |comment| %>
   <div class="panel panel-default">
     <div class="panel-body">
-      <%= comment.comment.gsub(/\r?\n/, '<br>').html_safe %>
+      <%= workflow_comment_content(comment) %>
     </div>
 
     <div class="panel-footer">
-      <% commenter = comment.agent.proxy_for %>
       <em>
-        Commented by <%= commenter.display_name %> (<%= commenter.email %>)
-        on <%= comment.created_at.strftime('%B %-d, %Y') %></em>
+        <%= workflow_comment_attribution(comment) %>
+      </em>
     </div>
   </div>
   <% end %>
