@@ -22,6 +22,14 @@ module Spot
         :member_of_collection_ids, :admin_set_id
       ]
 
+      # Putting this here so that we're not limited to the types of Works
+      # than can use the workflow widget from within the work's form.
+      def self.build_permitted_params
+        super.tap do |params|
+          params << { workflow_action: [:name, :comment] }
+        end
+      end
+
       # samvera/hydra-editor uses both the class method (new form) and
       # instance method (edit form) versions of this method, so we need
       # to provide both (otherwise we're head-first down a rabbit hole

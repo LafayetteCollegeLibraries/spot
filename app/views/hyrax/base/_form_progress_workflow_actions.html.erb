@@ -1,0 +1,30 @@
+<% actions = @workflow_presenter&.actions || [] %>
+
+<% unless actions.empty? %>
+<div class="list-group-item">
+  <fieldset>
+    <legend class="legend-save-work">Review and approval</legend>
+    <% actions.each do |(action_name, action_label)| %>
+    <div class="radio">
+      <label>
+        <%= radio_button_tag 'workflow_action[name]', action_name %>
+        <%= action_label %>
+      </label>
+    </div>
+    <% end %>
+    <p>
+      <a href="#" onclick="clear_workflow_actions()">Clear actions</a>
+    </p>
+    <script>
+      function clear_workflow_actions() {
+        $('input[name="workflow_action[name]"]').each(function () { $(this).prop('checked', false) })
+        return false
+      }
+    </script>
+    <div class="form-group">
+      <label for="workflow_action_comment">Review comment:</label>
+      <textarea class="form-control" name="workflow_action[comment]" id="workflow_action_comment"></textarea>
+    </div>
+  </fieldset>
+</div>
+<% end %>

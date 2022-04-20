@@ -20,6 +20,13 @@ module Spot
 
     private
 
+    def after_update_response
+      # @todo what happens if the workflow save fails?
+      workflow_form.save if workflow_action_present?
+
+      super
+    end
+
     # Overrides Hyrax behavior by using our own IIIF presenter that relies on Blacklight locales
     # to generate field labels.
     #
@@ -33,6 +40,22 @@ module Spot
 
     def load_workflow_presenter
       @workflow_presenter = Hyrax::WorkflowPresenter.new(::SolrDocument.find(params[:id]), current_ability)
+    end
+
+    def workflow_form
+      Hyrax::Forms::WorkflowActionForm.new(
+        current_ability: current_ability,
+        work: curation_concern,
+        attributes: workflow_action_params
+      )
+    end
+
+    def workflow_action_present?
+      params.include?(:workflow_action) && workflow_action_params[:name].present?
+    end
+
+    def workflow_action_params
+      @workflow_action_params ||= params.require(:workflow_action).permit(:name, :comment)
     end
   end
 end

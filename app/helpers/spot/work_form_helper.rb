@@ -1,6 +1,26 @@
 # frozen_string_literal: true
 module Spot
   module WorkFormHelper
+    # This provides an array of additional partials to display under the work form's Visibility
+    # widget. We're going to use it to allow users to submit workflow actions from within the
+    # form, rather than requiring the work form to be submitted before the workflow actions form
+    # also needs to be submitted. This workflow still remains, users just have the ability to
+    # do so from the edit screen.
+    #
+    # Since workflows aren't initiated until after the work is created, we'll only need to
+    # pass this partial (found at app/views/hyrax/base/_form_progress_workflow_actions.html.erb)
+    # when the work has been persisted.
+    #
+    # @param [Hash] options
+    # @option [Hyrax::Forms::WorkForm] form
+    # @return [Array<String>]
+    # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/views/hyrax/base/_form_progress.html.erb#L30-L32
+    def form_progress_sections_for(form:)
+      return [] unless form.model.persisted?
+
+      ['workflow_actions']
+    end
+
     # Determines the tabs to render on a work's create/edit form. Partials for the
     # tab bodies are located in `app/views/hyrax/<work_type || 'base'>/_form_<tab>.html.erb`;
     # locales for the tab names are found at `hyrax.works.form.tab.<tab>`.
