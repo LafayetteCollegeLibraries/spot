@@ -15,41 +15,51 @@ module Spot
     #
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/helpers/hyrax/work_form_helper.rb#L5-L27
     def form_tabs_for(form:)
-      return student_work_form_tabs_for(form: form) if form.instance_of?(Hyrax::StudentWorkForm) && !current_user.admin?
-
       # `super` handles BatchUploadForm's special case, and since we aren't
       # concerned with representative_media in that case, return the results
       fields = super
       return fields if form.instance_of?(Hyrax::Forms::BatchUploadForm)
 
-      # if the model has been persisted, load the 'media' partial (if the object has members)
-      # and load the new "comments" panel to display any workflow comments that may exist.
+      persisted = form.model.persisted?
+      return student_work_form_tabs(persisted: persisted) if form.instance_of?(Hyrax::StudentWorkForm) && !current_user.admin?
+
+      # if the model has been persisted, load the "media" partial and the new "comments" panel
+      # to display any workflow comments that may exist.
       #
       # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/views/hyrax/base/_form_media.html.erb
       # @todo maybe take this check out of the partial?
-      if form.model.persisted?
-        fields << 'media' if form.model.member_ids.present?
-        fields << 'comments'
-      end
+      fields += ['media', 'comments'] if persisted
 
       fields
     end
 
+    # Adds text to the footer of the comment's panel: "FirstName LastName commented on April 22, 2022"
+    # or "You commented on April 22, 2022" if the current_user made the comment.
+    #
+    # @param [Sipity::Comment] comment
+    # @return [String]
     def workflow_comment_attribution(comment)
       commenter = comment.agent.proxy_for
       commenter_display = current_user == commenter ? 'You' : "#{commenter.display_name} (#{commenter.email})"
       "#{commenter_display} commented on #{comment.created_at.strftime('%B %-d, %Y')}"
     end
 
+    # Formats the workflow comment content to display line breaks properly.
+    #
+    # @param [Sipity::Comment] comment
+    # @return [String]
     def workflow_comment_content(comment)
       comment.comment.gsub(/\r?\n/, '<br>').html_safe
     end
 
+    # Form fields specifically for student users (removes "relationship" tab)
+    #
+    # @param [Hash] options
+    # @option [true, false] persisted
+    # @return [Array<String>]
     # @api private
-    def student_work_form_tabs_for(form:)
-      %w[metadata files].tap do |fields|
-        fields << 'comments' if form.model.persisted?
-      end
+    def student_work_form_tabs(persisted: false)
+      persisted ? %w[metadata files comments] : %w[metadata files]
     end
   end
 end
