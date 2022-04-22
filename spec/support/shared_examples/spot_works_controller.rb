@@ -32,6 +32,16 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
         expect(response.headers['Location']).to include '/users/sign_in'
       end
     end
+
+    context 'when editing a work' do
+      it 'sets a @workflow_presenter' do
+        get :edit, params: { id: work.id }
+        presenter = assigns(:workflow_presenter)
+
+        expect(presenter).not_to be nil
+        expect(presenter).to be_a Hyrax::WorkflowPresenter
+      end
+    end
   end
 
   describe 'additional formats' do
