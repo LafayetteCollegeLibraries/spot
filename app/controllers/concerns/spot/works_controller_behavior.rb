@@ -16,6 +16,7 @@ module Spot
 
     included do
       before_action :load_workflow_presenter, only: :edit
+      after_action  :update_workflow_flash, only: :update
     end
 
     private
@@ -33,6 +34,16 @@ module Spot
 
     def load_workflow_presenter
       @workflow_presenter = Hyrax::WorkflowPresenter.new(::SolrDocument.find(params[:id]), current_ability)
+    end
+
+    # When the workflow presenter has actions available, append a note to the update flash that the
+    # review form needs to be marked as completed.
+    #
+    # @return [void]
+    def update_workflow_flash
+      return unless flash[:notice].present? && presenter.workflow&.actions.present?
+
+      flash[:notice] += " <strong>Finished making edits? Be sure to mark the review form as complete.</strong>"
     end
   end
 end
