@@ -68,5 +68,6 @@ en:
     works:
       form:
         tab:
+          comments: Comments
           files: Add Files
           media: Representative Media

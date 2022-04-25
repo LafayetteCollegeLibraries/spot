@@ -49,8 +49,8 @@ RUN mkdir -p /spot/config /spot/public && \
     mkdir -p /spot/derivatives /spot/uploads
 
 # c) install dependencies
-ARG BUNDLE_WITHOUT="development test"
-RUN bundle install --jobs "$(nproc)"
+RUN bundle config set --local without "development test" && \
+    bundle install --jobs "$(nproc)"
 
 # d) copy the application files
 # COPY --chown=1001:101 . /spot
@@ -66,8 +66,9 @@ COPY config/uv config/uv
 # run yarn install first so we don't need to always rerun when updating gems
 RUN yarn install
 
-ARG BUNDLE_WITHOUT=""
-RUN bundle install --jobs "$(nproc)"
+RUN bundle config unset --local without && \
+    bundle config set --local with "development test" && \
+    bundle install --jobs "$(nproc)"
 
 CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/trustee_minutes/tmp/ssl/application.key&cert=/trustee_minutes/tmp/ssl/application.crt"]
 
@@ -82,6 +83,7 @@ RUN apk --no-cache upgrade && \
         ghostscript
 
 # USER app
-ARG BUNDLE_WITHOUT=""
-RUN bundle install --jobs "$(nproc)"
+RUN bundle config unset --local without && \
+    bundle install --jobs "$(nproc)"
+
 CMD ["bundle", "exec", "sidekiq"]
