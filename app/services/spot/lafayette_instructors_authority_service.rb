@@ -18,7 +18,7 @@ module Spot
       new(api_key: api_key).label_for(email: email)
     end
 
-    # @params [Hash] options
+    # @param [Hash] options
     # @option [String] term
     #   Termcode to retrieve instructors for (ex. '202130')
     # @option [String] api_key
@@ -28,26 +28,38 @@ module Spot
       new(api_key: api_key).load(term: term)
     end
 
-    # @params [Hash] options
+    # @param [Hash] options
     # @option [String] api_key
     #   API key to use (defaults to LAFAYETTE_WDS_API_KEY environment variable)
     def initialize(api_key: ENV.fetch(API_ENV_KEY))
       @api_key = api_key
     end
 
-    # @params [Hash] options
+    # @param [Hash] options
     # @option [String] term
     #   Termcode to retrieve instructors for (ex. '202130')
     # @return [Array<Qa::LocalAuthorityEntry>]
     # @todo how should we handle exceptions?
     def load(term:)
+      load_from(data: instructors_for(term: term))
+    end
+
+    # Load entries from data source without invoking the WDS service
+    #
+    # @param [Hash] options
+    # @option [Array<Hash>] data
+    # @return [Array<Qa::LocalAuthorityEntry>]
+    def load_from(data:)
       deactivate_entries
 
-      instructors_for(term: term).map do |instructor|
+      data.map do |instructor|
         find_or_create_entry(from: instructor)
       end
     end
 
+    # @param [Hash] options
+    # @option [String] email
+    # @return [String]
     def label_for(email:)
       stored = find_local_label_for(email: email)
       return stored unless stored.nil?
@@ -82,22 +94,23 @@ module Spot
     end
 
     def find_or_create_entry(from:)
-      entry = Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: instructor_id(from))
-      entry.label = instructor_label(from)
-      entry.save
-      entry
+      user = find_or_create_user(from)
+
+      Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: user.email).tap do |entry|
+        entry.label = user.authority_name
+        entry.save
+      end
+    end
+
+    def find_or_create_user(params)
+      User.find_or_create_by(email: params.fetch('EMAIL').downcase) do |user|
+        user.given_name = params['PREFERRED_FIRST_NAME'] || params['FIRST_NAME']
+        user.surname = params['LAST_NAME']
+      end
     end
 
     def instructors_for(term:)
       wds_service.instructors(term: term)
-    end
-
-    def instructor_id(instructor)
-      instructor.fetch('EMAIL').downcase
-    end
-
-    def instructor_label(instructor)
-      "#{instructor['LAST_NAME']}, #{instructor['PREFERRED_FIRST_NAME'] || instructor['FIRST_NAME']}"
     end
 
     def local_authority
