@@ -55,6 +55,35 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
     end
   end
 
+  describe 'updating flash message' do
+    subject(:flash_notice) { response.request.flash[:notice] }
+
+    before do
+      allow(Hyrax::CurationConcern.actor).to receive(:update).and_return true
+      allow(Hyrax::WorkflowPresenter).to receive(:new).and_return(mock_workflow_presenter)
+
+      sign_in admin_user
+    end
+
+    let(:admin_user) { FactoryBot.create(:admin_user) }
+    let(:mock_workflow_presenter) { instance_double('Hyrax::WorkflowPresenter', actions: workflow_actions) }
+    let(:workflow_actions) { [] }
+    let(:response) { put :update, params: { id: work.id } }
+
+    it 'notifies that the work has been updated' do
+      expect(flash_notice).to include('successfully updated')
+      expect(flash_notice).not_to include('Finished making edits?')
+    end
+
+    context 'when workflow_actions exist' do
+      let(:workflow_actions) { [:workflow_action] }
+
+      it 'appends a note to flash[:notice] about the workflow_action form' do
+        expect(flash_notice).to include('Finished making edits?')
+      end
+    end
+  end
+
   describe 'additional formats' do
     context 'when requesting the metadata as csv' do
       let(:disposition)  { response.header.fetch('Content-Disposition') }
