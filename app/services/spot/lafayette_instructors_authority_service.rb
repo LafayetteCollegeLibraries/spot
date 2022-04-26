@@ -28,18 +28,6 @@ module Spot
       new(api_key: api_key).load(term: term)
     end
 
-    # Load authority data from JSON file as a way to circumvent
-    # the WDS service (which has been flaky wrt our code lately).
-    #
-    # @param [Hash]
-    # @option [String] path
-    #   Path to JSON file to load
-    # @option [String] api_key
-    #   API key to use (defaults to LAFAYETTE_WDS_API_KEY environment variable)
-    def self.load_data(data:, api_key: ENV.fetch(API_ENV_KEY))
-      new(api_key: api_key).load_from(data: data)
-    end
-
     # @param [Hash] options
     # @option [String] api_key
     #   API key to use (defaults to LAFAYETTE_WDS_API_KEY environment variable)
