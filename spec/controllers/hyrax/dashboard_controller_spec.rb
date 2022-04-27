@@ -44,7 +44,7 @@ RSpec.describe Hyrax::DashboardController do
       let(:user) { create(:registered_user) }
 
       it 'redirects to the main page' do
-        expect(response).to redirect_to(root_path)
+        expect(response).to render_template('show_user')
       end
     end
 
