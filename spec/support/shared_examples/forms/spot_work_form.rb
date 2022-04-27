@@ -28,17 +28,5 @@ RSpec.shared_examples 'a Spot work form' do
         expect(rights).to be_a String
       end
     end
-
-    context 'when no rights_statement present' do
-      let(:work) { work_klass.constantize.new }
-
-      it do
-        if form.multiple?('rights_statement')
-          expect(rights).to eq []
-        else
-          expect(rights).to eq ''
-        end
-      end
-    end
   end
 end
