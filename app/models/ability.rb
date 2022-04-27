@@ -74,7 +74,6 @@ class Ability
     can(:read, :dashboard)
   end
 
-
   # Delegates abilities for users that have the 'student' role
   #
   # @return [void]
