@@ -135,7 +135,7 @@ RSpec.describe Hyrax::StudentWorkForm do
 
   describe '#initialize_field' do
     let(:form) { described_class.new(work, Ability.new(user), nil) }
-    let(:user) { create(:user) }
+    let(:user) { create(:admin_user) }
     let(:student_user) { create(:student_user) }
     let(:work) { StudentWork.new }
 
@@ -170,7 +170,7 @@ RSpec.describe Hyrax::StudentWorkForm do
     subject { described_class.new(work, Ability.new(user), nil).primary_terms }
 
     let(:work) { StudentWork.new }
-    let(:user) { create(:user) }
+    let(:user) { create(:admin_user) }
 
     it { is_expected.to include(:rights_statement, :rights_holder) }
 
@@ -188,12 +188,6 @@ RSpec.describe Hyrax::StudentWorkForm do
 
     context 'for non-admin users' do
       let(:user) { create(:user) }
-
-      it { is_expected.not_to include(:date_available, :note, :access_note) }
-    end
-
-    context 'for student users' do
-      let(:user) { create(:student_user) }
 
       it { is_expected.to include(:rights_statement, :rights_holder) }
       it { is_expected.not_to include(:date_available, :note, :access_note) }
