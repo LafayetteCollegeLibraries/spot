@@ -49,7 +49,7 @@ module Hyrax
     # @return [Array<Symbol>]
     def primary_terms
       fields = required_fields + [:rights_holder]
-      return fields unless current_user.student?
+      return fields if current_user.admin?
 
       fields - [:rights_statement, :rights_holder]
     end
@@ -119,7 +119,7 @@ module Hyrax
     # @return [void]
     # @see https://github.com/samvera/hydra-editor/blob/v5.0.5/app/forms/hydra_editor/form.rb#L102-L109
     def initialize_field(key)
-      return super unless current_user.student?
+      return super if current_user.admin?
 
       case key.to_sym
       when :creator
