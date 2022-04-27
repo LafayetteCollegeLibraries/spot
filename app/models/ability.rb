@@ -67,7 +67,7 @@ class Ability
     can(:read, :dashboard)
   end
 
-  def regsitered_abilities
+  def registered_abilities
     return unless registered_user?
 
     can(:create, StudentWork)
