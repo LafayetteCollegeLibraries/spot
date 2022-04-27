@@ -13,7 +13,8 @@ class Ability
     :depositor_abilities,
     :admin_abilities,
     :faculty_abilities,
-    :student_abilities
+    :student_abilities,
+    :registered_abilities
   ]
 
   def self.preload_roles!
@@ -65,6 +66,14 @@ class Ability
 
     can(:read, :dashboard)
   end
+
+  def regsitered_abilities
+    return unless registered_user?
+
+    can(:create, StudentWork)
+    can(:read, :dashboard)
+  end
+
 
   # Delegates abilities for users that have the 'student' role
   #
