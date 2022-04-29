@@ -5,5 +5,6 @@ module Hyrax
 
     self.curation_concern_type = ::StudentWork
     self.show_presenter = Hyrax::StudentWorkPresenter
+    self.search_builder_class = ::Spot::StudentWorkSearchBuilder
   end
 end
