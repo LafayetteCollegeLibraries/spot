@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 module Spot
   class StudentWorkSearchBuilder < ::Hyrax::WorkSearchBuilder
-    # Modified from Hyrax::FilteredSuppressedWithRoles search_builder method to
-    # allow users specified in the StudentWork#advisor property to be able to view
-    # the work while it's currently in the workflow process.
+    # Modified from Hyrax::FilteredSuppressedWithRoles search_builder method
+    # to allow users specified in a StudentWork's read_users to view an item,
+    # even if they do not currently have an active workflow role.
     #
-    # Also moves `#user_has_active_workflow_role?` method to after checking `#depositor?`
-    # and `#advisor?`, as those methods don't require database lookups.
+    # As part of the mediated_student_work_deposit workflow, we're granting
+    # read access to users listed in the #advisor field, and want that access
+    # to be prioritized over the user having an active workflow role, which
+    # I believe was causing a redirection loop to occur.
     #
-    # Fixes an issue where advisors would submit a request for changes on a work in progress
-    # using the `mediated_student_work_deposit` workflow, which would advance the work to
-    # the next workflow step, removing their ability view the work (checked via Hyrax::Workflow::PermissionQuery,
-    # via Hyrax::FilteredSuppressedWithRoles search_builder mixin). This would send the user
-    # into a redirect spiral, as the work controller would register the user as :unauthorized
-    # to view the work, send them to CAS to authorize, and then redirect back to the :unauthorized
-    # item.
+    # @todo If we're planning on using workflows for other work types, we might
+    #       want/need to rename this to a generic SearchBuilder and attach it
+    #       in {Spot::WorksControllerBehavior}
     #
+    # @see {Hyrax::StudentWorksController}
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/services/hyrax/workflow/permission_query.rb#L35-L58
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/search_builders/hyrax/filter_suppressed_with_roles.rb#L26-L31
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/search_builders/hyrax/filter_suppressed.rb#L10-L13
     def only_active_works(solr_parameters)
-      return if depositor? || advisor? || user_has_active_workflow_role?
+      # this feels better than calling them all within an OR conditional?
+      return if %i[depositor? read_user? admin? user_has_active_workflow_role?].any? { |m| send(m) }
 
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << '-suppressed_bsi:true'
@@ -28,14 +28,19 @@ module Spot
 
     private
 
-    # Is the user_key (email) of the currently logged in user found in the work's "advisor_ssim" field?
-    #
-    # @return [true, false]
-    def advisor?
-      user_key = current_ability&.current_user&.user_key
-      return false unless user_key && current_work['advisor_ssim'].present?
+    def admin?
+      current_ability&.admin?
+    end
 
-      current_work.fetch('advisor_ssim', []).any? { |advisor| advisor == user_key }
+    def read_user?
+      user_key = current_ability&.current_user&.user_key
+      return false unless user_key && current_work[solr_field].present?
+
+      current_work.fetch(solr_field, []).any? { |person| person == user_key }
+    end
+
+    def solr_field
+      'read_access_person_ssim'
     end
   end
 end

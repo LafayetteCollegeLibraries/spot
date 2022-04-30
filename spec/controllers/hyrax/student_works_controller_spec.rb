@@ -75,5 +75,15 @@ RSpec.describe Hyrax::StudentWorksController do
         expect(response).to be_ok
       end
     end
+
+    context 'when the current_user is an admin' do
+      let(:current_user) { FactoryBot.create(:admin_user) }
+
+      it 'displays the work' do
+        get :show, params: { id: solr_doc['id'] }
+
+        expect(response).to be_ok
+      end
+    end
   end
 end

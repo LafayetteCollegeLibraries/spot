@@ -16,8 +16,8 @@ RSpec.describe Spot::StudentWorkSearchBuilder do
       {
         'depositor_ssim' => [depositor.user_key],
         'title_tesim' => ['A Fabulous Thesis'],
-        'advisor_ssim' => [advisor.user_key],
-        'suppressed_bsi' => true
+        'suppressed_bsi' => true,
+        'read_access_person_ssim' => [depositor.user_key, advisor.user_key]
       }
     end
 
@@ -71,6 +71,12 @@ RSpec.describe Spot::StudentWorkSearchBuilder do
 
     context 'when current_user is an advisor' do
       let(:current_user) { advisor }
+
+      it_behaves_like 'it does not add the hide-suppressed parameter'
+    end
+
+    context 'when current_user is an admin' do
+      let(:current_user) { FactoryBot.create(:admin_user) }
 
       it_behaves_like 'it does not add the hide-suppressed parameter'
     end
