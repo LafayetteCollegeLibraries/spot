@@ -1,5 +1,39 @@
 # changelog
 
+## [2022.3] - 2022-05-01
+
+### updates
+- update workflow specs to ensure that we can handle works with multiple advisors (#900)
+- add toggleable student-work banner on homepage (#886)
+- add panel to work-edit form that displays `Sipity::Comment`s for the work (#911)
+- add text to work#update flash message that reminds user about workflow_actions form, when actions are present (#914)
+- ensure faculty ldr user accounts are created when their `lafayette_instructors` authority entry is (#912)
+- allow a work's read_users to view a work if it is in an workflow (#917)
+
+### accessibility 💻 
+- add "aria-label" and "title" attributes to the iiif viewer's iframe (#887)
+- add empty alt tags for decorative links (ie thumbnails) (#902)
+
+### bugfixes 🐞 
+- revert back to rails cookies for sessions (#906)
+- loosen up regex on @lafayette emails (#909)
+- clean up (and hopefully fix) flaky oai feature spec (#888)
+
+### dependencies 👩‍👧‍👧 
+
+- bootsnap to 1.11.1 (#891)
+- capistrano to 3.17.0 (#897)
+- capistrano-rails to 1.6.2 (#920)
+- capybara-screenshot to 1.0.26 (#924) 
+- devise-guests to 0.8.1 (#893)
+- honeybadger to 4.12.1 (#922)
+- listen to 3.7.1 (#918)
+- okcomputer to 1.18.4 (#896)
+- puma to 5.6.4 (#894)
+- rails to 5.2.7.1 (#919)
+- rspec-rails to 5.1.2  (#921)
+
+
 ## [2022.2] - 2022-03-31
 
 ### updates 🔬 
@@ -717,6 +751,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2022.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.3
 [2022.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.2
 [2022.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.1
 [2021.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2021.6
