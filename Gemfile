@@ -199,5 +199,5 @@ group :development, :test do
   # subdependencies that we need to lock for ruby 2.4.3.
   # (@todo remove these when we're in the cloud)
   gem 'docile', '~> 1.3.5'
-  gem 'matrix', '0.1.0'
+  gem 'matrix', '0.4.2'
 end
