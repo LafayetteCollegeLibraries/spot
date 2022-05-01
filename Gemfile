@@ -67,7 +67,7 @@ gem 'edtf', '3.0.6'
 gem 'edtf-humanize', '2.0.1'
 
 # error trackijng
-gem 'honeybadger', '4.9.0'
+gem 'honeybadger', '4.12.1'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0.3'
