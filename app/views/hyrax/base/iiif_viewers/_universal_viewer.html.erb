@@ -1,7 +1,13 @@
-<%# note: this can be removed after we upgrade to hyrax@3 (part of hyrax core) %>
+<%# note: this is note-for-note the view found in hyrax 3, but with an added "title" attribute
+          for accessibility compliance.
+    see: https://github.com/samvera/hyrax/blob/v3.4.1/app/views/hyrax/base/iiif_viewers/_universal_viewer.html.erb
+    see: https://dequeuniversity.com/rules/axe/4.3/frame-title?application=AxeChrome %>
 <div class="viewer-wrapper">
   <iframe
+    aria-label="image view"
+    title="Image view of <%= presenter.title %>"
     src="<%= universal_viewer_base_url %>#?manifest=<%= main_app.polymorphic_url [main_app, :manifest, presenter], { locale: nil } %>&config=<%= universal_viewer_config_url %>"
     allowfullscreen="true"
-    frameborder="0"></iframe>
+    frameborder="0"
+  ></iframe>
 </div>

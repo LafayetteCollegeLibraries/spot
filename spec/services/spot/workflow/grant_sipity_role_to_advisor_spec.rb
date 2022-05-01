@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
-  # let(:depositor) { create(:user) }
   let(:workflow_role) { Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: permission_template.active_workflow) }
-  let(:advisor) { create(:user) }
+  let(:advisors) { [create(:user), create(:user)] }
   let(:admin_set) { AdminSet.find(AdminSet.find_or_create_default_admin_set_id) }
   let(:default_access_grants) do
     [{ agent_type: 'group', agent_id: ::Ability.admin_group_name, access: Hyrax::PermissionTemplateAccess::MANAGE }]
@@ -11,10 +10,9 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
     build(:student_work,
           id: 'abc123',
           admin_set: admin_set,
-          advisor: [advisor.email])
+          advisor: advisors.map(&:email))
   end
   let(:permission_template) { Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set.id) }
-  let(:sipity_agent) { advisor.to_sipity_agent }
   let(:sipity_entity) { Sipity::Entity.find_or_create_by!(proxy_for_global_id: work.to_global_id.to_s, workflow: permission_template.active_workflow) }
 
   # needed for "Hyrax workflow method" shared_example
@@ -32,7 +30,7 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
     # need to stub so we can test that it's been called
     allow(Sipity::EntitySpecificResponsibility)
       .to receive(:find_or_create_by!)
-      .with(workflow_role: workflow_role, entity: sipity_entity, agent: sipity_agent)
+      .with(workflow_role: workflow_role, entity: sipity_entity, agent: kind_of(Sipity::Agent))
   end
 
   it_behaves_like 'a Hyrax workflow method'
@@ -42,6 +40,7 @@ RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
 
     expect(Sipity::EntitySpecificResponsibility)
       .to have_received(:find_or_create_by!)
-      .with(workflow_role: workflow_role, entity: sipity_entity, agent: sipity_agent)
+      .with(workflow_role: workflow_role, entity: sipity_entity, agent: kind_of(Sipity::Agent))
+      .exactly(advisors.count).times
   end
 end

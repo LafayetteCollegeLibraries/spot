@@ -1,10 +1,13 @@
 <% provide(:page_title) { t('.page_title', name: t('hyrax.product_name')) } %>
 
-<%= displayable_content_block ContentBlock.for(:announcement), class: 'alert alert-warning' %>
-
 <%= render 'splash' %>
 
 <hr />
+
+<% if @presenter.show_senior_honors_thesis_block? %>
+  <%= render 'senior_honors_thesis', presenter: @presenter %>
+  <hr />
+<% end %>
 
 <%= render 'featured_collections', presenter: @presenter %>
 <%= render 'recent_items', presenter: @presenter unless @presenter.recent_items.empty? %>

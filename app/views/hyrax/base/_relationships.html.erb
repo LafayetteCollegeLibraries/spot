@@ -25,8 +25,7 @@
         <% url = polymorphic_url([item_type], id: item.id) %>
         <div class="col-md-3">
           <div class="thumbnail">
-            <%# TODO: add alt text (i believe it's indexed/stored?) %>
-            <img src="<%= item.thumbnail_path %>" />
+            <%= image_tag(item.thumbnail_path, alt: '') %>
             <div class="caption">
               <h3><%= item.title.first %></h3>
               <% if item.description.present? %>

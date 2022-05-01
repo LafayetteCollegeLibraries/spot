@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-sm-12 featured-collection"
+       style="background-image: url(<%= image_path 'honors-thesis.jpg' %>)">
+    <div class="collection-info">
+      <h3 class="collection-title"><%= t('.title') %></h3>
+      <p><%= t('.blurb') %></p>
+
+      <%= link_to t('.button.form'), new_hyrax_student_work_path, class: 'btn btn-primary' %>
+      <%= link_to t('.button.learn_more.text'), t('.button.learn_more.url'), class: 'btn btn-default', target: '_blank' %>
+    </div>
+  </div>
+</div>

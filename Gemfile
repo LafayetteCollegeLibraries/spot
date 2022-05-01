@@ -9,10 +9,10 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '5.2.6'
+gem 'rails', '5.2.7.1'
 
 # use Puma as the app server (dev only, we're using passenger in production)
-gem 'puma', '4.3.10'
+gem 'puma', '5.6.4'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '5.1.0'
@@ -49,14 +49,14 @@ gem 'blacklight_oai_provider', '6.0.0'
 gem 'blacklight_range_limit', '6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '1.9.4', require: false
+gem 'bootsnap', '1.11.1', require: false
 
 # record importer pattern from curationexperts
 gem 'darlingtonia', '~> 3.0'
 
 # user management
 gem 'devise', '4.8.1'
-gem 'devise-guests', '0.7.0'
+gem 'devise-guests', '0.8.1'
 gem 'devise_cas_authenticatable', '2.0.2'
 
 # we're using .env files to manage our secrets
@@ -67,7 +67,7 @@ gem 'edtf', '3.0.6'
 gem 'edtf-humanize', '2.0.1'
 
 # error trackijng
-gem 'honeybadger', '4.9.0'
+gem 'honeybadger', '4.12.1'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '1.0.3'
@@ -79,7 +79,7 @@ gem 'iso-639', '0.3.5'
 gem 'jquery-rails', '4.4.0'
 
 # system monitoring
-gem 'okcomputer', '1.18.2'
+gem 'okcomputer', '1.18.4'
 
 # we're using postgres as our database within rails
 gem 'pg', '1.2.3'
@@ -154,14 +154,14 @@ gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
 # lock down versions here)
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'listen', '>= 3.0.5', '< 3.3'
+  gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1.1'
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Use Capistrano for deployment
-  gem 'capistrano', '~> 3.16', require: false
+  gem 'capistrano', '~> 3.17', require: false
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-ext', '~> 1.2.1'
   gem 'capistrano-passenger', '~> 0.2.1'
@@ -172,8 +172,8 @@ end
 # things used for development + testing (again, not as
 # necessary to lock down versions)
 group :development, :test do
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'capybara-screenshot', '~> 1.0.25'
+  gem 'byebug', '~> 11.1.3'
+  gem 'capybara-screenshot', '~> 1.0.26'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
@@ -181,7 +181,7 @@ group :development, :test do
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.10'
   gem 'rspec-its', '~> 1.1'
-  gem 'rspec-rails', '~> 4.0'
+  gem 'rspec-rails', '~> 5.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'shoulda-matchers', '~> 4'
   gem 'stub_env', '~> 1.0.4'

@@ -106,6 +106,11 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
       expect(described_class.load(term: term).map(&:uri)).to eq(instructors.map { |i| i['EMAIL'].downcase })
     end
 
+    it 'creates User accounts for each entry' do
+      expect(described_class.load(term: term).count)
+        .to eq User.where(email: instructors.map { |i| i['EMAIL'].downcase }).count
+    end
+
     context 'when an entry already exists' do
       before do
         entry = instructors.first

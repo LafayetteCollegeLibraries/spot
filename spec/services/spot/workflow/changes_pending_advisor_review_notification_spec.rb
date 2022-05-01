@@ -10,8 +10,7 @@ RSpec.describe Spot::Workflow::ChangesPendingAdvisorReviewNotification do
       "<blockquote>#{workflow_comment_html}</blockquote>" \
       "Please review and approve or request further edits."
     end
-    let(:workflow_object) { create(:student_work, user: depositing_user, advisor: [advisor_user.email]) }
-    let(:advisor_user) { create(:user) }
-    let(:recipients) { [advisor_user] }
+    let(:workflow_object) { create(:student_work, user: depositing_user, advisor: recipients.map(&:email)) }
+    let(:recipients) { [create(:user), create(:user)] }
   end
 end

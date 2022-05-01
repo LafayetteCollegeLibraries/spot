@@ -1,0 +1,21 @@
+<% if @workflow_presenter&.comments.empty? || @workflow_presenter.nil? %>
+  <div class="panel panel-info">
+    <div class="panel-body">
+      <em><%= f.object.title %></em> has no comments to display.
+    </div>
+  </div>
+<% else %>
+  <% @workflow_presenter.comments.includes(:agent).order(created_at: :desc).each do |comment| %>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <%= workflow_comment_content(comment) %>
+    </div>
+
+    <div class="panel-footer">
+      <em>
+        <%= workflow_comment_attribution(comment) %>
+      </em>
+    </div>
+  </div>
+  <% end %>
+<% end %>
