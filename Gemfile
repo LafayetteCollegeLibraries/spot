@@ -173,7 +173,7 @@ end
 # necessary to lock down versions)
 group :development, :test do
   gem 'byebug', '~> 11.1.3'
-  gem 'capybara-screenshot', '~> 1.0.25'
+  gem 'capybara-screenshot', '~> 1.0.26'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 5', require: false
