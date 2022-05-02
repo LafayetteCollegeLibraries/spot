@@ -97,6 +97,7 @@ RSpec.feature 'Show Student Work page', js: false do
     expect(displayed_id_values).to eq(standard_id_values)
 
     expect_field_to_be_rendered :note
+    expect_field_to_be_rendered :permalink
 
     # @todo test rights statement is rendered correctly
   end
