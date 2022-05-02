@@ -100,7 +100,8 @@ class CatalogController < ApplicationController
     config.add_facet_field 'has_model_ssim', label: :'blacklight.search.fields.has_model', if: false
 
     # Facets from the Work-level that aren't provided in the catalog
-    config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.facets.research_assistance', if: false
+    config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.fields.research_assistance', if: false
+    config.add_facet_field 'advisor_label_ssim', label: :'blacklight.search.fields.advisor_label', if: false
 
     # Blacklight will default a facet's limit to the +blacklight_config.default_facet_limit+ value
     # only if the field config +:limit+ entry is true. This does that.

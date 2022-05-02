@@ -2,7 +2,8 @@ en:
   blacklight:
     search:
       facets:
-        research_assistance: Research Assistance
+        # We don't want to spell out the OCM acronym on the facet labels,
+        # which have limited space available.
         subject_ocm: OCM Classification
         admin:
           title: Admin Facets
