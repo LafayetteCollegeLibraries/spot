@@ -16,15 +16,18 @@ module Spot::Mappers
   #
   class WorkTypeMapper < BaseMapper
     EXCLUDED_PROPERTIES = %w[
-      has_model
+      arkivo_checksum
       create_date
-      modified_date
       date_uploaded
       date_modified
+      has_model
       head
-      tail
-      state
+      modified_date
+      on_behalf_of
       owner
+      proxy_depositor
+      state
+      tail
     ].freeze
 
     # @param [#to_s] type
@@ -34,6 +37,8 @@ module Spot::Mappers
       klass = type.to_s.camelize.constantize
       new(work_type: klass)
     end
+
+    attr_reader :work_type
 
     # @param [Class] work_type
     #   Class of work type to be mapped to
@@ -53,5 +58,13 @@ module Spot::Mappers
     def map_field(key)
       super&.map { |v| v.start_with?('http://', 'https://') ? RDF::URI(v) : v }
     end
+
+    def representative_files
+      file_key = metadata.keys.find { |k| k.to_s =~ /(representative_)?files?/i }
+      return [] if file_key.nil?
+
+      metadata.fetch(file_key, [])
+    end
+    alias representative_file representative_files
   end
 end

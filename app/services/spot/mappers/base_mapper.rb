@@ -66,23 +66,23 @@ module Spot::Mappers
     end
 
     # Copied from Darlingtonia::HashMapper. Ensures that
-    # metadata added is a Hash.
+    # metadata added is a Hash with indifferent access.
     #
     # @param [#to_h] data
     # @return [Hash]
     def metadata=(data)
-      @metadata = data.to_h
+      @metadata = data.to_h.with_indifferent_access
     end
 
     # @return [Array<String>] paths to files of works to be attached
     def representative_files
-      metadata['representative_files']
+      metadata[:representative_files]
     end
     alias representative_file representative_files
 
     # @return [String]
     def visibility
-      return metadata['visibility'] if metadata.include?('visibility')
+      return metadata[:visibility] if metadata.include?(:visibility)
       default_visibility
     end
 
@@ -95,7 +95,7 @@ module Spot::Mappers
 
     # @return [Array<String>]
     def islandora_url_identifiers
-      metadata.fetch('islandora_url', []).map do |value|
+      metadata.fetch(:islandora_url, []).map do |value|
         # force the uri into HTTP
         http_uri = URI.parse(value).tap { |uri| uri.scheme = 'http' }.to_s
 
