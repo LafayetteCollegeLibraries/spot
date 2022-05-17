@@ -3,10 +3,12 @@ module Spot
   class CSVIngestService
     def self.perform(file:,
                      source_path:,
+                     work_type: nil,
                      collection_ids: [],
                      admin_set_id: Spot::Importers::CSV::RecordImporter.default_admin_set_id)
       new(file: file,
           source_path: source_path,
+          work_type: work_type,
           collection_ids: collection_ids,
           admin_set_id: admin_set_id).perform
     end
@@ -36,7 +38,7 @@ module Spot
     end
 
     def record_importer
-      Spot::Importers::CSV::RecordImporter.new(source_directory: @source_path,
+      Spot::Importers::CSV::RecordImporter.new(source_path: @source_path,
                                                collection_ids: @collection_ids,
                                                admin_set_id: @admin_set_id)
     end

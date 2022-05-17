@@ -1,13 +1,13 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Importers::CSV::RecordImporter do
+RSpec.describe Spot::Importers::CSV::RecordImporter, feature: :csv_ingest_service do
   let(:importer) do
-    described_class.new(source_directory: source_directory,
+    described_class.new(source_path: source_path,
                         info_stream: info_stream,
                         error_stream: error_stream,
                         admin_set_id: admin_set_id,
                         collection_ids: collection_ids)
   end
-  let(:source_directory) { '/path/to/source_directory' }
+  let(:source_path) { '/path/to/source_path' }
   let(:info_stream) { File.open(File::NULL, 'w') }
   let(:error_stream) { File.open(File::NULL, 'w') }
   let(:admin_set_id) { 'an_admin_set' }
@@ -29,7 +29,7 @@ RSpec.describe Spot::Importers::CSV::RecordImporter do
         resource_type: ['Report'],
         rights_statement: [RDF::URI.new('http://creativecommons.org/publicdomain/mark/1.0/')],
         visibility: mapper.class.default_visibility,
-        remote_files: [{ url: "file://#{File.join(source_directory, 'files/document.pdf')}", file_name: 'document.pdf' }],
+        remote_files: [{ url: "file://#{File.join(source_path, 'files/document.pdf')}", file_name: 'document.pdf' }],
         admin_set_id: admin_set_id
       }
     end
@@ -88,8 +88,6 @@ RSpec.describe Spot::Importers::CSV::RecordImporter do
         allow(actor_stack_double).to receive(:create).and_raise(error)
 
         importer.import(record: record)
-
-        work.id = 'abc123def'
       end
 
       context 'when an Ldp::Gone error is raised' do

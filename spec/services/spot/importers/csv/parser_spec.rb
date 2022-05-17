@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Importers::CSV::Parser do
+RSpec.describe Spot::Importers::CSV::Parser, feature: :csv_ingest_service do
   let(:csv_file) { StringIO.new(csv_string) }
   let(:csv_string) do
     "title,creator,file\n" \

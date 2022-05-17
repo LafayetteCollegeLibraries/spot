@@ -7,7 +7,7 @@ module Spot::Importers::CSV
   #   source_root = '/imports/new-batch'
   #   csv_file = File.open(File.join(source_root, 'new_works_metadata.csv'), 'r')
   #   parser = Spot::Importers::CSV::Parser.new(file: csv_file)
-  #   record_importer = Spot::Importers::CSV::RecordImporter.new(source_directory: File.join(source_root, 'files'))
+  #   record_importer = Spot::Importers::CSV::RecordImporter.new(source_path: File.join(source_root, 'files'))
   #
   #   parser.records do |record|
   #     record_importer.import(record: record)
@@ -17,16 +17,16 @@ module Spot::Importers::CSV
     self.default_depositor_email = Hyrax.config.batch_user_key
     self.default_admin_set_id = AdminSet::DEFAULT_ID
 
-    attr_reader :source_directory, :admin_set_id, :collection_ids
+    attr_reader :source_path, :admin_set_id, :collection_ids
 
-    def initialize(source_directory:,
+    def initialize(source_path:,
                    info_stream: Darlingtonia.config.default_error_stream,
                    error_stream: Darlingtonia.config.default_error_stream,
                    admin_set_id: default_admin_set_id,
                    collection_ids: [])
       super(info_stream: info_stream, error_stream: error_stream)
 
-      @source_directory = source_directory
+      @source_path = source_path
       @admin_set_id = admin_set_id
       @collection_ids = collection_ids
     end
@@ -85,7 +85,7 @@ module Spot::Importers::CSV
     def create_remote_files_list(record)
       Array.wrap(record.representative_file).map do |filename|
         url = filename if filename.start_with?('file://', 'http://', 'https://')
-        url ||= "file://#{File.join(source_directory, filename)}"
+        url ||= "file://#{File.join(source_path, filename)}"
 
         { url: url, file_name: File.basename(filename) }
       end
