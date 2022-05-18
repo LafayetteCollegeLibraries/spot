@@ -14,7 +14,22 @@ RSpec.describe Spot::Importers::CSV::Parser, feature: :csv_ingest_service do
   end
 
   describe '.match?' do
-    xit 'matches CSV files'
+    subject { described_class.match?(file: file) }
+
+    # File.extname calls #to_path
+    let(:file) { instance_double(File, to_path: "/path/to/new_ingest/#{filename}") }
+
+    context 'when the file is a CSV' do
+      let(:filename) { 'metadata.csv' }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the file is not a CSV' do
+      let(:filename) { 'image.png' }
+
+      it { is_expected.to be false }
+    end
   end
 
   describe '#records' do
