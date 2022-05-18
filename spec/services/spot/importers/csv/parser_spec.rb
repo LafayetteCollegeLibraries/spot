@@ -40,6 +40,12 @@ RSpec.describe Spot::Importers::CSV::Parser, feature: :csv_ingest_service do
 
       it { is_expected.to be false }
     end
+
+    context 'when the value is not a string' do
+      let(:file) { File }
+
+      it { is_expected.to be false }
+    end
   end
 
   describe '#records' do
