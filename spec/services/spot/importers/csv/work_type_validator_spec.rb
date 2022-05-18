@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Validators::WorkTypeValidator, feature: :csv_ingest_service do
+RSpec.describe Spot::Importers::CSV::WorkTypeValidator, feature: :csv_ingest_service do
   subject(:errors) { validator.validate(parser: parser) }
 
   let(:validator) { described_class.new }

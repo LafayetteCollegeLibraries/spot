@@ -19,7 +19,7 @@ module Spot::Importers::CSV
     self.file_field_name = 'file'
 
     DEFAULT_VALIDATORS = [
-      Spot::Validators::WorkTypeValidator.new
+      WorkTypeValidator.new
     ].freeze
 
     # For use with `Darlingtonia::Parser.for(file:)`, which iterates
@@ -59,18 +59,22 @@ module Spot::Importers::CSV
     private
 
     # Creates an InputRecord from the CSV row data. If the row has a value for
-    # the work_type_field_name ('work_type' by default), it will use that for the
-    # mapper, overriding the initialized one.
+    # the work_type_field_name ("work_type" by default), and that value is a valid
+    # work_type, it will prefer that type. If the type provided in the CSV isn't valid,
+    # or no type is provided, the work_type passed to the parser is used.
+    # A RuntimeError will raise if no work_type is found.
     #
-    # We shouldn't need to validate this value, as this field is checked as part
-    # of Spot::Validators::WorkTypeValidator#validate
+    # This is a little overkill, as running `parser.validate` will validate rows
+    # for "work_type", but in the event that validation isn't run, this should
+    # prevent things from breaking further down.
     #
     # @param [#to_h] row
     # @return [Darlingtonia::InputRecord]
+    # @raises [RuntimeError]
+    #   if no work_type found in the CSV or provided to the parser
     def record_from_csv_row(row)
       attributes = row.to_h
       work_type = work_type_from_attributes(attributes)
-
       raise 'No work_type provided to Parser' if work_type.nil?
 
       InputRecord.from(metadata: row.to_h, mapper: Spot::Mappers::WorkTypeMapper.for(work_type))
@@ -79,7 +83,7 @@ module Spot::Importers::CSV
     def valid_work_type?(type)
       return false if type.blank?
 
-      Spot::Validators::WorkTypeValidator.valid?(type)
+      WorkTypeValidator.valid?(type)
     end
 
     # @todo maybe show warning that we're ignoring an invalid work_type?

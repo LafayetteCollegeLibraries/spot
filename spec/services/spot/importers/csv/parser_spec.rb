@@ -13,6 +13,16 @@ RSpec.describe Spot::Importers::CSV::Parser, feature: :csv_ingest_service do
     expect(parser.records.all? { |record| record.mapper.work_type == Publication }).to be true
   end
 
+  describe '.new' do
+    context 'when an invalid work_type is passed' do
+      let(:work_type) { :nope }
+
+      it 'raises an ArgumentError' do
+        expect { parser }.to raise_error(ArgumentError, "Invalid work_type: 'nope'")
+      end
+    end
+  end
+
   describe '.match?' do
     subject { described_class.match?(file: file) }
 

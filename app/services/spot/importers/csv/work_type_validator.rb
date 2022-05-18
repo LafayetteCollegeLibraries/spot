@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Spot::Validators
+module Spot::Importers::CSV
   # Validator for CSV files to ensure that if the file contains a "work_type" field,
   # the values for that field can all be interpreted as valid work types.
   class WorkTypeValidator < ::Darlingtonia::Validator
