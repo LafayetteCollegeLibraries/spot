@@ -1,9 +1,28 @@
 # frozen_string_literal: true
 module Spot::Importers::CSV
   # Responsible for parsing a CSV file and producing `Darlingtonia::InputRecord`s from
-  # the metadata.
+  # the metadata. Also handles validation by passing itself to each validator in the
+  # DEFAULT_VALIDATORS array.
   #
-  # @example
+  # ## Validation
+  #
+  # Validation is performed by calling `#validate`/`#validate!` - the latter raises
+  # a `Darlingtonia::ValidationError` on any errors. The parser stores errors in the
+  # `#error` array, in the form of `Darlingtonia::Validator::Error Struct objects.
+  # These contain the following methods/attributes:
+  #   - #validator
+  #     - class name of validator
+  #   - #name
+  #     - name of the validation error
+  #   - #description
+  #     - description of the problem
+  #   - #lineno
+  #     - line number of the offending object in CSV
+  #
+  # In cases where the validation is caused outside the CSV file, the lineno should
+  # be set to "-1".
+  #
+  # @example Using the Parser and RecordImporter together
   #   source_root = '/imports/new-batch'
   #   csv_file = File.open(File.join(source_root, 'new_works_metadata.csv'), 'r')
   #   parser = Spot::Importers::CSV::Parser.new(file: csv_file)
@@ -13,6 +32,17 @@ module Spot::Importers::CSV
   #     record_importer.import(record: record)
   #   end
   #
+  # @example Validating work
+  #   # raises a `Darlingtonia::ValidationError` if any errors
+  #   parser.validate!
+  #
+  #   # returns false if any errors, which are found in the
+  #   # `parser.errors` array. These err
+  #   parser.validate
+  #   parser.errors.each { |err| puts err }
+  #
+  #
+  # @see https://github.com/curationexperts-deprecated/darlingtonia/blob/v3.2.2/lib/darlingtonia/parser.rb
   class Parser < Darlingtonia::Parser
     class_attribute :work_type_field_name, :file_field_name
     self.work_type_field_name = 'work_type'
@@ -70,14 +100,14 @@ module Spot::Importers::CSV
     #
     # @param [#to_h] row
     # @return [Darlingtonia::InputRecord]
-    # @raises [RuntimeError]
+    # @raise [RuntimeError]
     #   if no work_type found in the CSV or provided to the parser
     def record_from_csv_row(row)
       attributes = row.to_h
       work_type = work_type_from_attributes(attributes)
       raise 'No work_type provided to Parser' if work_type.nil?
 
-      InputRecord.from(metadata: row.to_h, mapper: Spot::Mappers::WorkTypeMapper.for(work_type))
+      InputRecord.from(metadata: row.to_h, mapper: WorkTypeMapper.for(work_type))
     end
 
     def valid_work_type?(type)

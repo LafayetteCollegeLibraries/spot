@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Mappers::WorkTypeMapper, feature: :csv_ingest_service do
+RSpec.describe Spot::Importers::CSV::WorkTypeMapper, feature: :csv_ingest_service do
   let(:mapper) { described_class.new(work_type: work_type) }
   let(:metadata) { {} }
 

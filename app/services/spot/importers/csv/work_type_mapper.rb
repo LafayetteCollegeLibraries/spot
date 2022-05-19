@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Spot::Mappers
+module Spot::Importers::CSV
   # A general purpose mapper to be used for Hyrax models when the attached metadata's
   # keys match properties on the model.
   #
@@ -14,7 +14,7 @@ module Spot::Mappers
   #   mapper.metadata = { 'title' => ['Presque Rien'], 'subject' => ['http://id.worldcat.org/fast/1030904'] }
   #   mapper.subject # => [#<RDF::URI URI:http://id.worldcat.org/fast/1030904>]
   #
-  class WorkTypeMapper < BaseMapper
+  class WorkTypeMapper < ::Darlingtonia::HashMapper
     EXCLUDED_PROPERTIES = %w[
       arkivo_checksum
       create_date
@@ -29,6 +29,11 @@ module Spot::Mappers
       state
       tail
     ].freeze
+
+    class_attribute :fields_map, :default_visibility
+
+    self.fields_map = {}
+    self.default_visibility = ::Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
 
     # @param [#to_s] type
     #   'WorkClass' or :work_class String/Symbol/#to_s value used
@@ -49,22 +54,44 @@ module Spot::Mappers
       self.fields_map = @properties.map { |v| [v.to_sym, v] }.to_h
     end
 
+    def fields
+      fields_map.keys + [:visibility]
+    end
+
     # Uses the fields_map to retrieve properties from the metadata hash,
-    # where present, and converts values starting
+    # where present, and converts values starting with "http://" and
+    # "https://" into RDF::URI objects.
     #
     # @param [String,Symbol] key
     # @return [Array<String,RDF::URI>,nil]
     # @see {Spot::Mappers::BaseMapper#map_field}
     def map_field(key)
-      super&.map { |v| v.start_with?('http://', 'https://') ? RDF::URI(v) : v }
+      return [] unless field?(key)
+      metadata.fetch(key, []).map { |v| v.start_with?('http://', 'https://') ? RDF::URI(v) : v }
     end
 
-    def representative_files
+    def metadata=(value)
+      @metadata = value.to_h.with_indifferent_access
+    end
+
+    # Searches for the following keys in `metadata` to use to attach objects:
+    #   - file
+    #   - files
+    #   - representative_file
+    #   - representative_files
+    #
+    # @return [Array<String>]
+    def representative_file
       file_key = metadata.keys.find { |k| k.to_s =~ /(representative_)?files?/i }
       return [] if file_key.nil?
 
       metadata.fetch(file_key, [])
     end
-    alias representative_file representative_files
+    alias representative_files representative_file
+
+    # @return [String]
+    def visibility
+      metadata.fetch(:visibility, default_visibility)
+    end
   end
 end

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 module Spot::Importers::CSV
   # Service responsible for transforming parsed metadata (via `InputRecord`s)
-  # into individual Hyrax objects.
+  # into individual Hyrax objects. This deals with the monstly non-metadata
+  # side of creating the objects: assigning and attaching files, setting admin_set
+  # and collection info, and kicking off the ingest process.
   #
   # @example
   #   source_root = '/imports/new-batch'

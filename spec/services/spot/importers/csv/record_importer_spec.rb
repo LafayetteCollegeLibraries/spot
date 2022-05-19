@@ -35,7 +35,7 @@ RSpec.describe Spot::Importers::CSV::RecordImporter, feature: :csv_ingest_servic
     end
     let(:parsed_attributes) { _parsed_attributes }
 
-    let(:mapper) { Spot::Mappers::WorkTypeMapper.for(:publication) }
+    let(:mapper) { Spot::Importers::CSV::WorkTypeMapper.for(:publication) }
     let(:work) { mapper.work_type.new }
     let(:depositor) { FactoryBot.create(:depositor_user) }
     let(:ability) { Ability.new(depositor) }
