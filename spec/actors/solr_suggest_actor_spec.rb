@@ -34,7 +34,7 @@ RSpec.describe SolrSuggestActor do
   end
 
   context 'when part of a batch ingest' do
-    let(:attributes) { { :__batch_ingest__ => true } }
+    let(:attributes) { { __batch_ingest__: true } }
 
     describe '#create' do
       it 'does not trigger the update-dictionaries job' do
