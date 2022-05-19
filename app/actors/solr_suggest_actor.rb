@@ -43,6 +43,6 @@ class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
   # @param [Hyrax::Actors::Environment] env
   # @return [void]
   def extract_batch_flag(env)
-    @part_of_batch = env.attributes.delete(:__batch_ingest__)
+    @part_of_batch = env.attributes.delete(Spot::CSVIngestService.batch_key)
   end
 end

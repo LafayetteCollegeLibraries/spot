@@ -48,6 +48,10 @@ module Spot
   # @see {Spot::Importers::CSV::Parser}
   # @see {Spot::Importers::CSV::RecordImporter}
   class CSVIngestService
+    def self.batch_key
+      Spot::Importers::CSV::RecordImporter.batch_key
+    end
+
     # @param [Hash] options
     # @option [IO] file
     # @option [String,Pathname] source_path

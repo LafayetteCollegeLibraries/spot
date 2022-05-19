@@ -15,7 +15,8 @@ module Spot::Importers::CSV
   #     record_importer.import(record: record)
   #   end
   class RecordImporter < ::Darlingtonia::RecordImporter
-    class_attribute :default_depositor_email, :default_admin_set_id
+    class_attribute :batch_key, :default_depositor_email, :default_admin_set_id
+    self.batch_key = :__batch_ingest__
     self.default_depositor_email = Hyrax.config.batch_user_key
     self.default_admin_set_id = AdminSet::DEFAULT_ID
 
@@ -72,6 +73,7 @@ module Spot::Importers::CSV
 
     def attributes_from_record(record)
       record.attributes.tap do |attributes|
+        attributes[batch_key] = true
         attributes[:remote_files] = create_remote_files_list(record)
         attributes[:admin_set_id] ||= admin_set_id
         attributes[:member_of_collections_attributes] = collection_attributes unless collection_ids.empty?
