@@ -120,8 +120,8 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - ./ingest:/ingest
       - derivatives:/spot/derivatives
+      - rails_tmp:/spot/tmp
       - uploads:/spot/uploads
     restart: always
     depends_on:

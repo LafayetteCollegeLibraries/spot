@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Importers::Bag::Parser do
+RSpec.describe Spot::Importers::Bag::Parser, feature: :csv_ingest_seervice do
   subject(:parser) do
     described_class.new(directory: bag_path, mapper: mapper)
   end

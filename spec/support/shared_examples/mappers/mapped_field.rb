@@ -22,12 +22,17 @@
 #
 RSpec.shared_examples 'a mapped field' do
   if method_defined?(:fields)
-    # look, i know this is gross, but this is what i want to accomplish:
+    # This is kind of unsightly, but what I'm trying to accomplish is
+    # create a metadata Hash using the `:fields` array as keys and
+    # a somewhat unique value (if we used the same )
     # - create a metadata object with the +:fields+ as keys,
     # - populate each key in the metadata object with a somewhat unique value
     # - ensure that these values are mapped back to the subject of the block
-    let(:raw_values) { ['one value', 'a second value', 'a third'] }
+    #
+    # resulting in a Hash that, given `fields = [:subject, :title, :contributor]` would look like
+    # `{ subject: ['a'], title: ['b'], contributor: ['c'] }`
     let(:metadata) do
+      raw_values = %w[a b c d e f g h]
       Array.wrap(fields).each_with_index.each_with_object({}) do |(field, idx), obj|
         value_index = idx % raw_values.size
         obj[field] ||= []
