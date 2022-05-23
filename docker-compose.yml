@@ -9,6 +9,7 @@ services:
     volumes:
       - .:/spot
       - derivatives:/spot/derivatives
+      - ./ingest:/spot/ingest
       - rails_public:/spot/public
       - rails_tmp:/spot/tmp
       - uploads:/spot/uploads
@@ -121,6 +122,7 @@ services:
     volumes:
       - .:/spot
       - derivatives:/spot/derivatives
+      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
       - uploads:/spot/uploads
     restart: always
