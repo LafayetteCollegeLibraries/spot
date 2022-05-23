@@ -6,5 +6,86 @@ jobs:
   lint:
     uses: ./.github/workflows/rubocop.yml
   rspec:
-    uses: ./.github/workflows/rspec.yml
-    secrets: inherit
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgresql:9.2-alpine
+        env:
+          POSTGRES_USER: spot_dev_user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: spot_test
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      fcrepo:
+        image: samvera/fcrepo4:4.7.5
+        environment:
+          CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
+        ports:
+          - "8080:8080"
+      redis:
+        image: redis:4
+        ports:
+          - "6379:6379"
+      solr:
+        image: solr:7.5
+        ports:
+          - "8983:8983"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Setup NodeJS + Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12'
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome
+        with:
+          chrome-version: stable
+
+      - name: Load Spot config into Solr
+        run: |
+          cd solr/config
+          zip -1 spot_solr_config.zip ./*
+          curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=spot"
+          curl -H "Content-type: application/json" http://localhost:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
+
+      - name: Run RSpec tests
+        run: |
+          bundle exec rspec --format RspecJunitFormatter \
+                            --out /tmp/test-results/rspec.xml \
+                            --format progress
+        env:
+          CI: true
+          CAS_BASE_HOST: http://localhost
+          FEDORA_TEST_URL: http://localhost:8080/rest
+          IIIF_BASE_URL: http://localhost/iiif/2
+          NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+          PSQL_DATABASE: spot_test
+          PSQL_PASSWORD: password
+          PSQL_USER: spot_dev_user
+          RAILS_ENV: test
+          SOLR_TEST_URL: http://localhost:8983/solr/spot-test
+          URL_HOST: http://localhost
+
+      - name: Upload test coverage
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageLocations: ${{ github.workspace }}/tmp/test-results/rspec.xml:simplecov
