@@ -44,36 +44,37 @@ jobs:
         ports:
           - "8983:8983"
     steps:
-      - name: Checkout code
+      -
+        name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Setup Ruby and install gems
+      -
+        name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-
-      - name: Setup NodeJS + Yarn
+      -
+        name: Setup NodeJS + Yarn
         uses: actions/setup-node@v3
         with:
           node-version: '12'
-
-      - name: Yarn install
+      -
+        name: Yarn install
         run: yarn install
-
-      - name: Setup Chrome
+      -
+        name: Setup Chrome
         uses: browser-actions/setup-chrome
         with:
           chrome-version: stable
-
-      - name: Load Spot config into Solr
+      -
+        name: Load Spot config into Solr
         run: |
           cd solr/config
           zip -1 spot_solr_config.zip ./*
           curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=spot"
           curl -H "Content-type: application/json" http://localhost:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
-
-      - name: Run RSpec tests
+      -
+        name: Run RSpec tests
         env:
           CI: true
           CAS_BASE_HOST: http://localhost
@@ -90,8 +91,8 @@ jobs:
           bundle exec rspec --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress
-
-      - name: Upload test coverage
+      -
+        name: Upload test coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
