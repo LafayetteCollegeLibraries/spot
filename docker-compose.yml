@@ -56,7 +56,7 @@ services:
     image: postgres:9.6-alpine
     volumes:
       - db:/var/lib/postgresql/data
-      - ./bin/create-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-db.sql
+      - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql
     ports:
       - "5432:5432"
     environment:
@@ -80,12 +80,19 @@ services:
       - solr
 
   fedora:
-    image: ghcr.io/samvera/fcrepo4:4.7.5
+    build:
+      context: ./docker/fcrepo
     volumes:
       - fedora:/data:cached
     ports:
       - 8080:8080
+    environment:
+      FCREPO_POSTGRES_HOST: db
+      FCREPO_POSTGRES_USER: spot_fcrepo_dev_user
+      FCREPO_POSTGRES_PASSWORD: spot_fcrepo_dev_pw
     restart: always
+    depends_on:
+      - db
 
   fitsservlet:
     image: harvardlts/fitsservlet_container:1.4.1
