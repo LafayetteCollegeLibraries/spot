@@ -63,7 +63,7 @@ jobs:
         run: yarn install
       -
         name: Setup Chrome
-        uses: browser-actions/setup-chrome
+        uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
       -
