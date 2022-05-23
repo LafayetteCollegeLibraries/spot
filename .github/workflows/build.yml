@@ -43,9 +43,8 @@ jobs:
       solr:
         image: bitnami/solr:8
         env:
-          SOLR_CORES: spot-test
-          SOLR_CORE_CONF_DIR: /spot-test-config
-        options: -v ${{ github.workspace }}/solr/config:/spot-test-config
+          SOLR_CLOUD_BOOTSTRAP: yes
+          SOLR_ENABLE_CLOUD_MODE: yes
         ports:
           - "8983:8983"
     steps:
