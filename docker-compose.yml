@@ -8,7 +8,9 @@ services:
       target: spot-development
     volumes:
       - .:/spot
+      - derivatives:/spot/derivatives
       - ./ingest:/spot/ingest
+      - rails_public:/spot/public
       - rails_tmp:/spot/tmp
     ports:
       - "443:443"
@@ -113,6 +115,7 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
+      - derivatives:/spot/derivatives
       - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     restart: always
