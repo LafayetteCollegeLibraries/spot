@@ -4,12 +4,20 @@ on:
 
 jobs:
   lint:
-    uses: ./.github/workflows/rubocop.yml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - run: bundle exec rubocop --parallel
+
   rspec:
     runs-on: ubuntu-latest
     services:
       db:
-        image: postgresql:9.2-alpine
+        image: postgresql:9.6-alpine
         env:
           POSTGRES_USER: spot_dev_user
           POSTGRES_PASSWORD: password
@@ -23,7 +31,7 @@ jobs:
           --health-retries 5
       fcrepo:
         image: samvera/fcrepo4:4.7.5
-        environment:
+        env:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
         ports:
           - "8080:8080"
@@ -66,10 +74,6 @@ jobs:
           curl -H "Content-type: application/json" http://localhost:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
 
       - name: Run RSpec tests
-        run: |
-          bundle exec rspec --format RspecJunitFormatter \
-                            --out /tmp/test-results/rspec.xml \
-                            --format progress
         env:
           CI: true
           CAS_BASE_HOST: http://localhost
@@ -82,9 +86,13 @@ jobs:
           RAILS_ENV: test
           SOLR_TEST_URL: http://localhost:8983/solr/spot-test
           URL_HOST: http://localhost
+        run: |
+          bundle exec rspec --format RspecJunitFormatter \
+                            --out /tmp/test-results/rspec.xml \
+                            --format progress
 
       - name: Upload test coverage
-        uses: paambaati/codeclimate-action@v3.0.0
+        uses: s
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
