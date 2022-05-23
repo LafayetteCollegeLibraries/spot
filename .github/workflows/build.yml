@@ -16,6 +16,7 @@ jobs:
   rspec:
     needs: [lint]
     runs-on: ubuntu-latest
+    container: ubuntu
     services:
       db:
         image: postgres:13-alpine
