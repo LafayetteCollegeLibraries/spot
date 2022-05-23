@@ -14,6 +14,7 @@ jobs:
       - run: bundle exec rubocop --parallel
 
   rspec:
+    needs: [lint]
     runs-on: ubuntu-latest
     services:
       db:
@@ -40,7 +41,11 @@ jobs:
         ports:
           - "6379:6379"
       solr:
-        image: solr:7.5
+        image: bitnami/solr:8.11
+        env:
+          SOLR_CORES: spot-test
+          SOLR_CORE_CONF_DIR: /spot-test-config
+        options: -v ${{ github.workspace }}/solr/config:/spot-test-config
         ports:
           - "8983:8983"
     steps:
