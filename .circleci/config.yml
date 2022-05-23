@@ -2,9 +2,10 @@ version: 2.1
 jobs:
   noop:
     docker:
-      - image: hello-world
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
+      - image: alpine:3.15
     steps:
-      - run: /hello
+      - run:
+          name: No-op
+          command: |
+            echo "ok"
+
