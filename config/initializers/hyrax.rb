@@ -271,7 +271,9 @@ Hyrax.config do |config|
 
     # need to use the capistrano root, otherwise a new deployment will
     # break uploads from earlier ones.
-    '/var/www/spot'
+    '/var/www/spot',
+
+    Rails.root.join('ingest').to_s
   ]
 end
 
