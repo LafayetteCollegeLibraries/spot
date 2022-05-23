@@ -41,7 +41,7 @@ jobs:
         ports:
           - "6379:6379"
       solr:
-        image: bitnami/solr:8.11
+        image: bitnami/solr:8
         env:
           SOLR_CORES: spot-test
           SOLR_CORE_CONF_DIR: /spot-test-config
