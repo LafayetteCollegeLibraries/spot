@@ -16,7 +16,7 @@ jobs:
   rspec:
     needs: [lint]
     runs-on: ubuntu-latest
-    container: ubuntu
+    container: ubuntu-latest
     services:
       db:
         image: postgres:13-alpine
@@ -58,6 +58,8 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+        env:
+          ImageOS: ubuntu20
       -
         name: Setup NodeJS + Yarn
         uses: actions/setup-node@v3
