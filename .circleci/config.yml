@@ -1,0 +1,10 @@
+version: 2.1
+jobs:
+  noop:
+    docker:
+      - image: hello-world
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - run: /hello
