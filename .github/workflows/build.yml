@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       db:
-        image: postgresql:9.6-alpine
+        image: postgres:13-alpine
         env:
           POSTGRES_USER: spot_dev_user
           POSTGRES_PASSWORD: password
