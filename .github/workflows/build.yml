@@ -4,7 +4,7 @@ on:
 
 jobs:
   lint:
-    uses: ./github/workflows/rubocop.yml
+    uses: ./.github/workflows/rubocop.yml
   rspec:
-    uses: ./github/workflows/rspec.yml
+    uses: ./.github/workflows/rspec.yml
     secrets: inherit
