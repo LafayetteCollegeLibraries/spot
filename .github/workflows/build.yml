@@ -1,0 +1,10 @@
+name: Build and Test
+on:
+  push:
+
+jobs:
+  lint:
+    uses: ./github/workflows/rubocop.yml
+  rspec:
+    uses: ./gitthub/workflows/rspec.yml
+    secrets: inherit
