@@ -55,4 +55,36 @@ RSpec.describe Qa::Authorities::SolrSuggest do
 
     it { is_expected.to eq [] }
   end
+
+  describe '#build_dictionary!' do
+    before do
+      allow(ActiveFedora::SolrService.instance.conn)
+        .to receive(:get)
+        .with('/solr/spot-test/suggest', params: params)
+
+      authority.build_dictionary!
+    end
+
+    context 'when acting on an individual field' do
+      let(:dictionary) { 'keyword' }
+      let(:params) { { 'suggest' => true, 'suggest.dictionary' => dictionary, 'suggest.build' => true } }
+
+      it 'sends individaul dictionary params' do
+        expect(ActiveFedora::SolrService.instance.conn)
+          .to have_received(:get)
+          .with('/solr/spot-test/suggest', params: params)
+      end
+    end
+
+    context 'when building all' do
+      let(:dictionary) { described_class::BUILD_ALL_KEYWORD }
+      let(:params) { { 'suggest' => true, 'suggest.buildAll' => true } }
+
+      it 'sends the build_all params' do
+        expect(ActiveFedora::SolrService.instance.conn)
+          .to have_received(:get)
+          .with('/solr/spot-test/suggest', params: params)
+      end
+    end
+  end
 end

@@ -87,6 +87,14 @@ RSpec.describe Spot::Forms::CollectionForm do
         it { is_expected.to eq [RDF::Literal('A lengthier explanation of a collection', language: :en)] }
       end
     end
+
+    describe 'stores a "slug" identifier' do
+      subject { attributes[:identifier] }
+
+      let(:params) { { 'slug' => 'a-cool-collection' } }
+
+      it { is_expected.to include 'slug:a-cool-collection' }
+    end
   end
 
   describe '#initialize_field' do

@@ -42,8 +42,21 @@ RSpec.describe HandleController do
       it { is_expected.to redirect_to hyrax_image_path(solr_data[:id]) }
     end
 
-    context 'when a Handle exists for a Collection' do
+    context 'when a Handle exists for a StudentWork' do
       let(:handle) { '10385/9012' }
+      let(:solr_data) do
+        {
+          id: 'existing-student_work',
+          has_model_ssim: ['StudentWork'],
+          identifier_ssim: ["hdl:#{handle}"]
+        }
+      end
+
+      it { is_expected.to redirect_to hyrax_student_work_path(solr_data[:id]) }
+    end
+
+    context 'when a Handle exists for a Collection' do
+      let(:handle) { '10385/col123' }
       let(:solr_data) do
         {
           id: 'existing-col',
@@ -56,7 +69,7 @@ RSpec.describe HandleController do
     end
 
     context 'when a handle does not exist for an item' do
-      let(:handle) { '1234/nothere' }
+      let(:handle) { '10385/nothere' }
 
       let(:solr_data) { { id: 'unrelated' } }
 

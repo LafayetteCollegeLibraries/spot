@@ -69,9 +69,9 @@ module Spot
       end
 
       return renderer unless renderer.nil?
-      return super if defined?(:super)
 
-      raise NameError, "unknown renderer type: #{name}"
+      # super will check the Hyrax scope, which is necessary for their renderers
+      super
     end
   end
 end

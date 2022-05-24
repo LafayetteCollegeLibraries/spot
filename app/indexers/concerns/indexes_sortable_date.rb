@@ -45,11 +45,6 @@ module IndexesSortableDate
 
   private
 
-  # @return [String, nil]
-  def raw_date_value
-    object.send(sortable_date_property).sort.first
-  end
-
   # Converts whatever our +date_value+ is to a YYYY-MM-DDT00:00:00Z
   # string for Solr to use in sorting.
   #

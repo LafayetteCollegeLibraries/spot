@@ -58,4 +58,54 @@ RSpec.describe Spot::FacetHelper, type: :helper do
 
     it { is_expected.to eq '<span class="label label-success">Public</span>' }
   end
+
+  describe '#admin_facets?' do
+    subject { helper.admin_facets? }
+
+    let(:user) { create(:user) }
+    let(:admin_user) { create(:admin_user) }
+    let(:current_user) { admin_user }
+
+    before do
+      allow(helper).to receive(:current_user).and_return(current_user)
+    end
+
+    context 'when current_user is not an admin' do
+      let(:current_user) { user }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when no admin_facets are defined' do
+      before do
+        allow(helper).to receive(:admin_facet_names).and_return []
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context 'when facets are in the request' do
+      let(:facet) { double }
+
+      before do
+        allow(helper).to receive(:facets_from_request).and_return([facet])
+      end
+
+      context 'when any of the facets should be rendered' do
+        before do
+          allow(helper).to receive(:should_render_facet?).with(facet).and_return true
+        end
+
+        it { is_expected.to be true }
+      end
+
+      context 'when none of the facets should be rendered' do
+        before do
+          allow(helper).to receive(:should_render_facet?).with(facet).and_return false
+        end
+
+        it { is_expected.to be false }
+      end
+    end
+  end
 end

@@ -33,7 +33,8 @@ Rails.application.routes.draw do
   }
 
   # handle uri catching: ldr.lafayette.edu/handle/:id
-  resources :handle, only: :show, constraints: { id: %r{[0-9]+/[a-zA-Z0-9]+} }
+  # allows slash encoding ('/' => '%2F')
+  resources :handle, only: :show, constraints: { id: %r{10385/[a-zA-Z0-9%]+} }
 
   ##
   # routes for engines + hyrax

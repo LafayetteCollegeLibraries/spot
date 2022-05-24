@@ -120,6 +120,8 @@ RSpec.configure do |config|
   config.include ControllerHelpers, type: :helper
   config.include Select2Helpers, type: :feature
   config.include Mail::Matchers, type: :mailer
+  config.include InputSupport, type: :input
+  config.include Capybara::RSpecMatchers, type: :input
 
   config.use_transactional_fixtures = false
   config.render_views = true

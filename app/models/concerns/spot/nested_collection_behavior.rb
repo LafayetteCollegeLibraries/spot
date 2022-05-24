@@ -32,7 +32,7 @@ module Spot
       collections_to_add = gather_collections_to_add
       collection_ids_to_add = collections_to_add.map(&:id)
 
-      Array(new_member_ids).collect do |member_id|
+      Array.wrap(new_member_ids).collect do |member_id|
         member = member_query_service(member_id)
         message = check_multiple_membership(item: member, collection_ids: collection_ids_to_add)
 

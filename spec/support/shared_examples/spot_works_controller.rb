@@ -99,4 +99,13 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
       end
     end
   end
+
+  describe 'IIIF manifests' do
+    it 'returns a JSON manifest' do
+      get :manifest, params: { id: work.id, format: 'json' }
+
+      expect(response).to be_successful
+      expect(response.header.fetch('Content-Type')).to start_with 'application/json;'
+    end
+  end
 end

@@ -122,6 +122,9 @@ RSpec.describe Collection do
 
   # note: this should fail when we update to hyrax@3 because we'll need to stub +Hyrax.query_service+
   describe '#add_member_objects' do
+    let(:grandparent_collection) { described_class.new(id: 'grandparent-collection') }
+    let(:parent_collection) { described_class.new(id: 'parent-collection') }
+    let(:child_collection) { described_class.new(id: 'child-collection') }
     let(:work) { Publication.new(id: 'publication-to-add-to-collections') }
 
     before do
@@ -139,9 +142,6 @@ RSpec.describe Collection do
     end
 
     context 'with a single parent object' do
-      let(:parent_collection) { described_class.new(id: 'parent-collection') }
-      let(:child_collection) { described_class.new(id: 'child-collection') }
-
       before { child_collection.member_of_collections << parent_collection }
 
       it 'adds the work to the collection + parent' do
@@ -151,10 +151,6 @@ RSpec.describe Collection do
     end
 
     context 'with a deeper tree' do
-      let(:grandparent_collection) { described_class.new(id: 'grandparent-collection') }
-      let(:parent_collection) { described_class.new(id: 'parent-collection') }
-      let(:child_collection) { described_class.new(id: 'child-collection') }
-
       before do
         parent_collection.member_of_collections << grandparent_collection
         child_collection.member_of_collections << parent_collection
@@ -163,6 +159,44 @@ RSpec.describe Collection do
       it 'adds the work to all of the collections downstream' do
         expect(child_collection.add_member_objects(work.id)).to eq [work]
         expect(work.member_of_collections).to eq [child_collection, parent_collection, grandparent_collection]
+      end
+    end
+
+    context 'when the Hyrax.query_service is active' do
+      let(:query_service) { double }
+
+      before do
+        allow(Hyrax).to receive(:query_service).and_return(query_service)
+        allow(query_service)
+          .to receive(:find_by_alternate_id)
+          .with(alternate_id: work.id, use_valkyrie: false)
+          .and_return(work)
+      end
+
+      xit 'uses the service' do
+        expect(child_collection.add_member_objects([work.id])).to eq [work]
+        expect(query_service).to have_received(:find_by_alternate_id)
+      end
+    end
+
+    context 'when a work can not be added to the collection' do
+      let(:checker_double) { instance_double(Hyrax::MultipleMembershipChecker) }
+
+      before do
+        allow(Hyrax::MultipleMembershipChecker)
+          .to receive(:new)
+          .with(item: work)
+          .and_return(checker_double)
+
+        allow(checker_double)
+          .to receive(:check)
+          .with(collection_ids: [child_collection.id], include_current_members: true)
+          .and_return('Can not include work into collection')
+      end
+
+      it 'returns works with errors attached' do
+        expect(child_collection.add_member_objects([work.id]).flat_map { |work| work.errors[:collections] })
+          .to eq ['Can not include work into collection']
       end
     end
   end

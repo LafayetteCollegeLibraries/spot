@@ -30,7 +30,7 @@ module Spot
 
     def authority_for(name)
       # try the name
-      return Qa::Authorities::Local::FileBasedAuthority.new(name) if authority_exists?(name)
+      return Qa::Authorities::Local::FileBasedAuthority.new(name.to_s) if authority_exists?(name.to_s)
 
       # otherwise oops!
       raise "Authority doesn't exist: #{name}"
