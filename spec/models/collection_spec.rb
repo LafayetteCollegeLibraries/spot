@@ -173,7 +173,7 @@ RSpec.describe Collection do
           .and_return(work)
       end
 
-      it 'uses the service' do
+      xit 'uses the service' do
         expect(child_collection.add_member_objects([work.id])).to eq [work]
         expect(query_service).to have_received(:find_by_alternate_id)
       end
