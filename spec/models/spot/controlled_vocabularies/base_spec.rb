@@ -5,9 +5,11 @@ RSpec.describe Spot::ControlledVocabularies::Base do
   let(:label_en) { RDF::Literal('Horror in art', language: :en) }
   let(:label_de) { RDF::Literal('Schrecken <Motiv>', language: :de) }
   let(:labels) { [label_en, label_de] }
+  let(:graph) { RDF::Graph.new.tap { |graph| statements.each { |stmt| graph << stmt } } }
+  let(:statements) { labels.map { |label| RDF::Statement(resource, RDF::Vocab::SKOS.prefLabel, label) } }
 
   before do
-    allow(resource).to receive(:rdf_label).and_return(labels)
+    stub_request(:get, uri.to_s).to_return(status: 200, body: graph.dump(:ttl))
   end
 
   describe '#default_labels' do
@@ -53,6 +55,24 @@ RSpec.describe Spot::ControlledVocabularies::Base do
         expect(RdfLabel.count).to be > 1
       end
     end
+
+    context 'when a label already exists' do
+      before do
+        RdfLabel.create(uri: uri.to_s, value: label_en.to_s)
+        stub_request(:any, uri.to_s)
+
+        resource.fetch
+      end
+
+      after do
+        RdfLabel.find_by(uri: uri.to_s)&.destroy
+      end
+
+      it 'does not make a remote call' do
+        expect(resource.rdf_label).to eq [label_en.to_s]
+        expect(a_request(:get, 'http://id.loc.gov')).not_to have_been_made
+      end
+    end
   end
 
   describe '#preferred_label' do
@@ -63,6 +83,8 @@ RSpec.describe Spot::ControlledVocabularies::Base do
         allow(resource).to receive(:pick_preferred_label)
         # need to trigger first_or_create before checking to see if it exists
         cache
+
+        resource.fetch
       end
 
       after { cache.delete }
@@ -79,6 +101,8 @@ RSpec.describe Spot::ControlledVocabularies::Base do
 
     # this is our public method way of testing +Base#pick_preferred_label+
     context 'when a label has not been cached' do
+      before { resource.fetch }
+
       context 'when an English value exists' do
         it { is_expected.to eq label_en.to_s }
       end
@@ -95,6 +119,10 @@ RSpec.describe Spot::ControlledVocabularies::Base do
     subject { resource.solrize }
 
     let(:generated_label) { "#{label_en}$#{uri}" }
+
+    before do
+      resource.fetch
+    end
 
     it { is_expected.to include uri.to_s }
     it { is_expected.to include(label: generated_label) }
