@@ -30,6 +30,12 @@ RSpec.shared_examples 'it humanizes date fields' do |opts|
 
         it { is_expected.to eq ['1986 to 2020'] }
       end
+
+      context 'when the value is not EDTF parseable' do
+        let(:original_value) { ['Last Year'] }
+
+        it { is_expected.to eq original_value }
+      end
     end
   end
 end
