@@ -13,13 +13,13 @@ RSpec.shared_examples 'it renders an attribute to HTML' do
   end
 
   describe '#attribute_to_html' do
-    subject(:render_attribute!) { presenter.attribute_to_html(field, options) }
+    subject(:render_attribute) { presenter.attribute_to_html(field, options) }
 
     let(:attribute_double) { instance_double(klass.to_s, render: true) }
 
     context 'default mode' do
       it 'calls the AttributeRenderer by default' do
-        render_attribute!
+        render_attribute
 
         expect(attribute_double).to have_received(:render)
       end
@@ -30,7 +30,7 @@ RSpec.shared_examples 'it renders an attribute to HTML' do
       let(:options) { { render_as: :faceted } }
 
       it 'calls the FacetedAttributeRenderer' do
-        render_attribute!
+        render_attribute
 
         expect(attribute_double).to have_received(:render)
       end
@@ -41,7 +41,7 @@ RSpec.shared_examples 'it renders an attribute to HTML' do
       let(:options) { { render_as: :external_authority } }
 
       it 'calls the ExternalAuthorityAttributeRenderer' do
-        render_attribute!
+        render_attribute
 
         expect(attribute_double).to have_received(:render)
       end
@@ -52,7 +52,7 @@ RSpec.shared_examples 'it renders an attribute to HTML' do
       let(:options) { { render_as: :date } }
 
       it 'calls the Hyrax DateAttributeRenderer' do
-        render_attribute!
+        render_attribute
 
         expect(attribute_double).to have_received(:render)
       end
@@ -66,8 +66,16 @@ RSpec.shared_examples 'it renders an attribute to HTML' do
       end
 
       it 'returns nothing and logs a warning' do
-        expect(render_attribute!).to be nil
+        expect(render_attribute).to be nil
         expect(Rails.logger).to have_received(:warn).exactly(1).time
+      end
+    end
+
+    context 'when a renderer does not exist' do
+      let(:options) { { render_as: :something_bad } }
+
+      it 'raises a NameError' do
+        expect { render_attribute }.to raise_error(NameError, 'unknown renderer type `something_bad`')
       end
     end
   end
