@@ -171,8 +171,11 @@ RSpec.describe Collection do
           .to receive(:find_by_alternate_id)
           .with(alternate_id: work.id, use_valkyrie: false)
           .and_return(work)
+      end
 
+      it 'uses the service' do
         expect(child_collection.add_member_objects([work.id])).to eq [work]
+        expect(query_service).to have_received(:find_by_alternate_id)
       end
     end
 
@@ -194,7 +197,6 @@ RSpec.describe Collection do
       it 'returns works with errors attached' do
         expect(child_collection.add_member_objects([work.id]).flat_map { |work| work.errors[:collections] })
           .to eq ['Can not include work into collection']
-
       end
     end
   end

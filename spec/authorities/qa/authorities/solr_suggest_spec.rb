@@ -67,7 +67,7 @@ RSpec.describe Qa::Authorities::SolrSuggest do
 
     context 'when acting on an individual field' do
       let(:dictionary) { 'keyword' }
-      let(:params) { { 'suggest' => true, 'suggest.dictionary' => dictionary, 'suggest.build' => true }}
+      let(:params) { { 'suggest' => true, 'suggest.dictionary' => dictionary, 'suggest.build' => true } }
 
       it 'sends individaul dictionary params' do
         expect(ActiveFedora::SolrService.instance.conn)
@@ -78,7 +78,7 @@ RSpec.describe Qa::Authorities::SolrSuggest do
 
     context 'when building all' do
       let(:dictionary) { described_class::BUILD_ALL_KEYWORD }
-      let(:params) { {'suggest' => true, 'suggest.buildAll' => true } }
+      let(:params) { { 'suggest' => true, 'suggest.buildAll' => true } }
 
       it 'sends the build_all params' do
         expect(ActiveFedora::SolrService.instance.conn)
