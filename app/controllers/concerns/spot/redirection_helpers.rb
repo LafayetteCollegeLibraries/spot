@@ -7,7 +7,7 @@ module Spot
     # collections but not other work types. There's probably something I'm missing, but this will at least
     # allow us to resolve Handles and legacy URLs for collections.
     def redirect_params_for(solr_document:)
-      controller = solr_document['has_model_ssim'].first.downcase.pluralize
+      controller = solr_document['has_model_ssim'].first.underscore.pluralize
       params = { controller: "hyrax/#{controller}", action: 'show', id: solr_document['id'] }
 
       return Hyrax::Engine.routes.url_for(**params, only_path: true) if controller == 'collections'
