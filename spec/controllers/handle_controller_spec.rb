@@ -42,6 +42,32 @@ RSpec.describe HandleController do
       it { is_expected.to redirect_to hyrax_image_path(solr_data[:id]) }
     end
 
+    context 'when a Handle exists for an Image' do
+      let(:handle) { '10385/5678' }
+      let(:solr_data) do
+        {
+          id: 'existing-img',
+          has_model_ssim: ['Image'],
+          identifier_ssim: ["hdl:#{handle}"]
+        }
+      end
+
+      it { is_expected.to redirect_to hyrax_image_path(solr_data[:id]) }
+    end
+
+    context 'when a Handle exists for a StudentWork' do
+      let(:handle) { '10385/9012' }
+      let(:solr_data) do
+        {
+          id: 'existing-student_work',
+          has_model_ssim: ['StudentWork'],
+          identifier_ssim: ["hdl:#{handle}"]
+        }
+      end
+
+      it { is_expected.to redirect_to hyrax_student_work_path(solr_data[:id]) }
+    end
+
     context 'when a Handle exists for a Collection' do
       let(:handle) { '10385/9012' }
       let(:solr_data) do
