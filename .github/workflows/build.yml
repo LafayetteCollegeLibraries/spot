@@ -78,6 +78,7 @@ jobs:
       -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
+        if: ${{ success() }}
         with:
           ruby-version: .ruby-version
           bundler-cache: true
