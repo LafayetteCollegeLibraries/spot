@@ -4,6 +4,7 @@ on:
 
 jobs:
   lint:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,8 +15,6 @@ jobs:
       - run: bundle exec rubocop --parallel
 
   rspec:
-    needs:
-      - lint
     runs-on: ubuntu-latest
     container:
       image: ubuntu:bionic
