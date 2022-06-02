@@ -80,9 +80,6 @@ jobs:
             libyaml-dev \
             postgresql-client
       -
-        name: Check Rubygems SSL
-        run: curl -Lks 'https://git.io/rg-ssl' | ruby
-      -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
         with:
