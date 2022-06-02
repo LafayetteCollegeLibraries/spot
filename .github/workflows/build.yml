@@ -17,9 +17,9 @@ jobs:
   rspec:
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:bionic
+      image: ubuntu:focal
       env:
-        ImageOS: ubuntu18
+        ImageOS: ubuntu20
     services:
       zookeeper:
         image: bitnami/zookeeper:3.8
@@ -80,9 +80,11 @@ jobs:
             libyaml-dev \
             postgresql-client
       -
+        name: Check Rubygems SSL
+        run: curl -Lks 'https://git.io/rg-ssl' | ruby
+      -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
-        if: ${{ success() }}
         with:
           ruby-version: .ruby-version
           bundler-cache: true
