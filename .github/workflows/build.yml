@@ -17,7 +17,10 @@ jobs:
     needs:
       - lint
     runs-on: ubuntu-latest
-    container: ubuntu18
+    container:
+      image: ubuntu:bionic
+      env:
+        ImageOS: ubuntu18
     services:
       zookeeper:
         image: bitnami/zookeeper:3.8
