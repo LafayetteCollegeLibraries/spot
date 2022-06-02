@@ -74,7 +74,11 @@ jobs:
       -
         name: Setup system dependencies
         run: |
-          apt-get update && apt-get install libyaml-dev -y
+          apt-get update && \
+          apt-get install -y \
+            libssl-dev \
+            libyaml-dev \
+            postgresql-client
       -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
