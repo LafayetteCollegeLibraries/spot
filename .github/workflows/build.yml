@@ -57,7 +57,6 @@ jobs:
 
       solr:
         image: bitnami/solr:8
-        network_mode: host
         ports:
           - '8983:8983'
         env:
