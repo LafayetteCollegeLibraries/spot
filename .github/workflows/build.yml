@@ -17,6 +17,7 @@ jobs:
     needs:
       - lint
     runs-on: ubuntu-latest
+    container: ubuntu
     services:
       zookeeper:
         image: bitnami/zookeeper:3.8
@@ -25,7 +26,7 @@ jobs:
         env:
           ZOO_SERVER_ID: '1'
           ALLOW_ANONYMOUS_LOGIN: 'yes'
-          ZOO_SERVERS: 'localhost:2888:3888'
+          ZOO_SERVERS: 'zookeeper:2888:3888'
           ZOO_4LW_COMMANDS_WHITELIST: 'srvr,mntr,conf,ruok'
 
       db:
@@ -62,8 +63,8 @@ jobs:
           SOLR_ENABLE_CLOUD_MODE: 'yes'
           SOLR_CLOUD_BOOTSTRAP: 'yes'
           SOLR_NUMBER_OF_NODES: '1'
-          SOLR_ZK_HOSTS: 'localhost:2181'
-          SOLR_HOST: 'localhost'
+          SOLR_ZK_HOSTS: 'zookeeper:2181'
+          SOLR_HOST: 'solr'
     steps:
       -
         name: Checkout code
