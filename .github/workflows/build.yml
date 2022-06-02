@@ -21,7 +21,7 @@ jobs:
       zookeeper:
         image: bitnami/zookeeper:3.8
         ports:
-          - '2181'
+          - "2181:2181"
         env:
           ZOO_SERVER_ID: '1'
           ALLOW_ANONYMOUS_LOGIN: 'yes'
