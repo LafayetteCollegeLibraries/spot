@@ -74,7 +74,7 @@ jobs:
       -
         name: Setup system dependencies
         run: |
-          apt-get update && apt-get install libyaml-dev
+          apt-get update && apt-get install libyaml-dev -y
       -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
