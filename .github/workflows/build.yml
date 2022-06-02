@@ -79,6 +79,7 @@ jobs:
             build-essential \
             ca-certificates \
             libssl-dev \
+            libxml2-dev \
             libyaml-dev \
             postgresql-client
       -
