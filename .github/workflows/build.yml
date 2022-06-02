@@ -17,7 +17,7 @@ jobs:
     needs:
       - lint
     runs-on: ubuntu-latest
-    container: ubuntu
+    container: ubuntu18
     services:
       zookeeper:
         image: bitnami/zookeeper:3.8
@@ -103,14 +103,14 @@ jobs:
         env:
           CI: true
           CAS_BASE_HOST: http://localhost
-          FEDORA_TEST_URL: http://localhost:8080/rest
+          FEDORA_TEST_URL: http://fedora:8080/rest
           IIIF_BASE_URL: http://localhost/iiif/2
           NOKOGIRI_USE_SYSTEM_LIBRARIES: true
           PSQL_DATABASE: spot_test
           PSQL_PASSWORD: password
           PSQL_USER: spot_dev_user
           RAILS_ENV: test
-          SOLR_TEST_URL: http://localhost:8983/solr/spot-test
+          SOLR_TEST_URL: http://solr:8983/solr/spot-test
           URL_HOST: http://localhost
         run: |
           bundle exec rspec --format RspecJunitFormatter \
