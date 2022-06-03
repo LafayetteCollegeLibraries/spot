@@ -79,7 +79,8 @@ jobs:
             build-essential \
             ca-certificates \
             libpq-dev \
-            ruby-dev
+            ruby-dev \
+            zlib1g-dev
       -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
