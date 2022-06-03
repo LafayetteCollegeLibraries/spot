@@ -78,6 +78,7 @@ jobs:
           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             build-essential \
             ca-certificates \
+            libgmp-dev \
             libssl-dev \
             libxml2-dev \
             libyaml-dev \
