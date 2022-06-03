@@ -78,11 +78,7 @@ jobs:
           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             build-essential \
             ca-certificates \
-            libgmp-dev \
-            libpq-dev \
-            libssl-dev \
-            libxml2-dev \
-            libyaml-dev
+            ruby-dev
       -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
