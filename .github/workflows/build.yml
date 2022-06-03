@@ -78,6 +78,7 @@ jobs:
           DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             build-essential \
             ca-certificates \
+            libpq-dev \
             ruby-dev
       -
         name: Setup Ruby and install gems
