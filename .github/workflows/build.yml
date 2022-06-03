@@ -79,10 +79,10 @@ jobs:
             build-essential \
             ca-certificates \
             libgmp-dev \
+            libpq-dev \
             libssl-dev \
             libxml2-dev \
-            libyaml-dev \
-            postgresql-client
+            libyaml-dev
       -
         name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
