@@ -91,7 +91,8 @@ jobs:
         name: Setup NodeJS + Yarn
         uses: actions/setup-node@v3
         with:
-          node-version: '12'
+          node-version: '14'
+          cache: 'yarn'
       -
         name: Yarn install
         run: yarn install
