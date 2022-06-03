@@ -94,6 +94,9 @@ jobs:
           node-version: '14'
           cache: 'yarn'
       -
+        name: Install Yarn binary
+        run: npm install -g yarn
+      -
         name: Yarn install
         run: yarn install
       -
