@@ -40,21 +40,21 @@ module Spot::Importers::CSV
     #
     #
     def create_for(record:)
-      info_stream << "Creating record #{record&.title || record}"
+      info_stream << "Creating record #{record&.title || record}\n"
 
       created = ingest(record)
 
-      info_stream << "Created work ID=#{created.id}" if created.persisted?
+      info_stream << "Created work ID=#{created.id}\n" if created.persisted?
 
       created.errors.each do |field, message|
-        error_stream << "ERROR [#{work_type(record)}##{field}] #{message}"
+        error_stream << "ERROR [#{work_type(record)}##{field}] #{message}\n"
       end
 
       created
     rescue ::Ldp::Gone
       error_stream << "Ldp::Gone => #{record&.title || record}]\n"
     rescue => e
-      error_stream << "#{e.message}\n"
+      error_stream << "ERROR: #{e.message}\n"
     end
 
     def ingest(record)
