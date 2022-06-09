@@ -26,6 +26,12 @@ RSpec.describe Spot::Importers::CSV::WorkTypeMapper, feature: :csv_ingest_servic
 
           it { is_expected.to eq [RDF::URI(value)] }
         end
+
+        context 'when value is nil' do
+          let(:metadata) { { field.to_s => nil } }
+
+          it { is_expected.to eq [] }
+        end
       end
     end
   end
