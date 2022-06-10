@@ -16,8 +16,6 @@ namespace :spot do
       args.delete_if { |_k, v| v.blank? }
       validate_arguments!(args)
 
-      args[:file] = File.open(args.delete(:metadata_path), 'r')
-
       Spot::IngestCSVJob.perform_later(**args)
     end
 
