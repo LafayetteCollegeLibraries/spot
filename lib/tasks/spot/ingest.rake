@@ -18,7 +18,7 @@ namespace :spot do
 
       args[:file] = File.open(args.delete(:metadata_path), 'r')
 
-      Spot::CSVIngestService.perform(**args)
+      Spot::IngestCSVJob.perform_later(**args)
     end
 
     def args_from_env
