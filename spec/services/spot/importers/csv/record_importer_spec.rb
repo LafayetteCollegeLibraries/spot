@@ -102,7 +102,7 @@ RSpec.describe Spot::Importers::CSV::RecordImporter, feature: :csv_ingest_servic
         let(:error) { RuntimeError }
 
         it 'sends the message to the error_stream' do
-          expect(error_stream).to have_received(:<<).with(/^RuntimeError/)
+          expect(error_stream).to have_received(:<<).with(/^ERROR: RuntimeError/)
         end
       end
     end
@@ -137,7 +137,7 @@ RSpec.describe Spot::Importers::CSV::RecordImporter, feature: :csv_ingest_servic
       end
 
       it 'sends the message to the error_stream' do
-        expect(error_stream).to have_received(:<<).with('ERROR [Publication#rights_statement] Your work must include a Rights Statement')
+        expect(error_stream).to have_received(:<<).with("ERROR [Publication#rights_statement] Your work must include a Rights Statement\n")
       end
     end
 
