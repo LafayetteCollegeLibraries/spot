@@ -1,3 +1,4 @@
+<% unless content_for?(:error_page) %>
 <ul id="user_utility_links" class="nav navbar-nav navbar-right">
   <%#
     hyrax has the available locales hardcoded, as opposed to using the options available.
@@ -38,3 +39,4 @@
     </li>
   <% end %>
 </ul>
+<% end %>

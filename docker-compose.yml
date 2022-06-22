@@ -9,7 +9,6 @@ services:
     volumes:
       - .:/spot
       - derivatives:/spot/derivatives
-      - rails_public:/spot/public
       - rails_tmp:/spot/tmp
       - uploads:/spot/uploads
     ports:
