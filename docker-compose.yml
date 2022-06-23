@@ -5,12 +5,10 @@ services:
     image: lafayette/rails_web
     build:
       context: .
-      target: spot-development
+      target: spot-web-development
     volumes:
       - .:/spot
-      - derivatives:/spot/derivatives
       - ./ingest:/spot/ingest
-      - rails_public:/spot/public
       - rails_tmp:/spot/tmp
     ports:
       - "443:443"
@@ -58,7 +56,10 @@ services:
     restart: always
 
   db_migrate:
-    image: lafayette/rails_web
+    image: lafayettecollegelibraries/spot
+    build:
+      context: .
+      target: spot-web
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -115,7 +116,6 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - derivatives:/spot/derivatives
       - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     restart: always
