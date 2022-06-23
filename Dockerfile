@@ -1,4 +1,7 @@
-# base image
+# Base Image
+# ----------
+# Used as the root for both the application (user-facing) side and worker images.
+# These are the bare essential dependencies for running the application.
 ARG RUBY_VERSION=2.4.6-alpine3.10
 FROM ruby:$RUBY_VERSION as spot-base
 
@@ -10,7 +13,6 @@ RUN apk --no-cache upgrade && \
         coreutils \
         curl \
         git \
-        imagemagick \
         netcat-openbsd \
         nodejs \
         openssl \
@@ -20,14 +22,11 @@ RUN apk --no-cache upgrade && \
         yarn \
         zip
 
-# let's not run this as root
-# (taken from hyrax's Dockerfile)
-# RUN addgroup -S -g 101 app && \
-#     adduser -S -G app -u 1001 -s /bin/sh -h /app app
-# RUN mkdir /spot && chown -R 1001:101 /spot
-# USER app
-
 WORKDIR /spot
+
+ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
+    HYRAX_DERIVATIVES_PATH=/spot/tmp/derivatives \
+    HYRAX_UPLOAD_PATH=/spot/tmp/uploads
 
 # match our Gemfile.lock version
 # TODO: upgrade the Gemfile bundler version to 2
@@ -40,49 +39,66 @@ RUN gem install bundler:1.13.7
 # when rebuilding.
 #
 # a) bundle + yarn files
-# COPY --chown=1001:101 ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
 COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
 
-# b) make directories for installation configuration (`config/`, `public/`, and `vendor/`)
-#    and those for derivatives + uploads
-RUN mkdir -p /spot/config /spot/public && \
-    mkdir -p /spot/derivatives /spot/uploads
+# b) make directories for installation configuration (`config/` and `public/`)
+RUN mkdir -p /spot/config /spot/public
 
-# c) install dependencies
+# c) install production dependencies
 RUN bundle config set --local without "development test" && \
     bundle install --jobs "$(nproc)"
 
 # d) copy the application files
-# COPY --chown=1001:101 . /spot
 COPY . /spot
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
-CMD ["bundle", "exec", "rails", "server", "-b", "tcp://0.0.0.0:3000"]
+CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
-FROM spot-base as spot-app-dev
 
+##
+# TARGET: spot-web
+# Used for the user-facing application. Sets up UV files and installs nodejs/yarn dependencies.
+##
+FROM spot-base as spot-web-base
 COPY config/uv config/uv
 
 # run yarn install first so we don't need to always rerun when updating gems
 RUN yarn install
 
+
+##
+# TARGET: spot-web-development
+# Used for the development version of the user-facing application.
+# Installs Ruby development dependencies
+##
+FROM spot-web-base as spot-web-development
 RUN bundle config unset --local without && \
     bundle config set --local with "development test" && \
     bundle install --jobs "$(nproc)"
 
-CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/trustee_minutes/tmp/ssl/application.key&cert=/trustee_minutes/tmp/ssl/application.crt"]
 
-# precompile assets
-# RUN DATABASE_URL="postgres://fake" SECRET_KEY_BASE="secret-shh" bundle exec rake assets:precompile
+##
+# TARGET: spot-web-production
+# Precompiles assets for production
+##
+FROM spot-web-base as spot-web-production
+RUN RAILS_ENV=production DATABASE_URL="postgres://fake" SECRET_KEY_BASE="secret-shh" bundle exec rake assets:precompile
 
-FROM spot-base as spot-worker-dev
-# USER root
+
+##
+# TARGET: spot-worker
+# Installs dependencies for running background jobs
+##
+FROM spot-base as spot-worker
 RUN apk --no-cache upgrade && \
     apk --no-cache add \
         imagemagick \
         ghostscript
 
-# USER app
+# TODO:
+# - install local FITS cli + set ENV for FITS_PATH
+# - install open office + set ENV
+
 RUN bundle config unset --local without && \
     bundle install --jobs "$(nproc)"
 

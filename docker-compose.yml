@@ -4,15 +4,12 @@ services:
   app:
     image: lafayettecollegelibraries/spot
     build:
-      target: spot-app-dev
       context: .
+      target: spot-web-development
     volumes:
       - .:/spot
-      - derivatives:/spot/derivatives
       - ./ingest:/spot/ingest
-      - rails_public:/spot/public
       - rails_tmp:/spot/tmp
-      - uploads:/spot/uploads
     ports:
       - "443:443"
     env_file:
@@ -69,7 +66,7 @@ services:
     image: lafayettecollegelibraries/spot
     build:
       context: .
-      target: spot-app-dev
+      target: spot-web
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -120,7 +117,7 @@ services:
     image: lafayettecollegelibraries/spot
     build:
       context: .
-      target: spot-worker-dev
+      target: spot-worker
     env_file:
       - .env.local
     ports:
@@ -128,10 +125,8 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - derivatives:/spot/derivatives
       - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
-      - uploads:/spot/uploads
     restart: always
     depends_on:
       - db_migrate
@@ -143,7 +138,6 @@ volumes:
   fedora:
   gem_storage:
   solr:
-  rails_public:
   rails_tmp:
   redis:
   uploads:

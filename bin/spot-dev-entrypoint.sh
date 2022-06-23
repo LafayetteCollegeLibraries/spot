@@ -2,34 +2,13 @@
 set -e
 
 app_root="/spot"
+uv_root="$app_root/public/uv"
 
 # copy the dev UV configuration _after_ running yarn install.
 # previously, i was adding this file with a volume link in the
 # docker-compose#app config, but it was causing the `yarn install`
 # command to fail because the file was unable to be deleted.
-mkdir -p "$app_root/public/uv"
-cp "$app_root/config/uv/uv-config-development.json" "$app_root/public/uv/uv-config.json"
+mkdir -p "$uv_root"
+cp "$app_root/config/uv/uv-config-development.json" "$uv_root/uv-config.json"
 
-# we're not copying over tmp directories, so we need to ensure that
-# they exist on the the docker side, otherwise derivatives etc.
-# won't be generated.
-mkdir -p "$app_root/tmp/export"
-mkdir -p "$app_root/tmp/pids"
-mkdir -p "$HYRAX_DERIVATIVES_PATH"
-mkdir -p "$app_root/tmp/ssl"
-
-# Generate a local SSL certificate so that we can run Rails on 443
-ssl_key="$app_root/tmp/ssl/application.key"
-ssl_cert="$app_root/tmp/ssl/application.crt"
-
-if [[ ! -f $ssl_key && ! -f $ssl_cert ]]; then
-    echo "generating ssl certificate"
-    openssl req -x509 -nodes -newkey rsa:4096 \
-        -keyout "$ssl_key" \
-        -out "$ssl_cert" \
-        -subj "/C=US/ST=Pennsylvania/L=Easton/O=Lafayette College/OU=ITS/CN=${APPLICATION_FQDN}"
-fi
-
-rm -f tmp/pids/server.pid
-
-exec "$@"
+exec "$app_root/bin/spot-entrypoint.sh" "$@"
