@@ -95,11 +95,14 @@ RUN apk --no-cache upgrade && \
         imagemagick \
         ghostscript
 
+# ENV FITS_VERSION=1.5.1
+# RUN https://github.com/harvard-lts/fits/releases/download/$FITS_VERSION/fits-$FITS_VERSION.zip
+
 # TODO:
 # - install local FITS cli + set ENV for FITS_PATH
 # - install open office + set ENV
 
-RUN bundle config unset --local without && \
-    bundle install --jobs "$(nproc)"
+# RUN bundle config unset --local without && \
+    # bundle install --jobs "$(nproc)"
 
 CMD ["bundle", "exec", "sidekiq"]
