@@ -28,6 +28,9 @@ services:
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
+    volumes:
+      - ./config/cantaloupe/delegates.rb:/delegates.rb
+      - rails_tmp:/spot
     ports:
       - "8182:8182"
     environment:
@@ -122,21 +125,9 @@ services:
     depends_on:
       - db
       - fedora
+      - fitsservlet
       - redis
       - solr
-
-  solr:
-    build:
-      context: ./docker/solr
-    volumes:
-      - solr:/var/solr/data
-    ports:
-      - "8983:8983"
-    environment:
-      - SOLR_CORES=spot-development,spot-test
-      - SOLR_HOST=solr
-    restart: always
-
 
 volumes:
   db:
