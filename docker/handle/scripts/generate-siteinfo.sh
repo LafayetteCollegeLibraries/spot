@@ -24,6 +24,12 @@ cat <<-EOINFO > $HANDLE_SERVER_HOME/siteinfo.json
       "interfaces": [
         {
           "query": true,
+          "admin": false,
+          "protocol": "UDP",
+          "port": 2641
+        },
+        {
+          "query": true,
           "admin": true,
           "protocol": "TCP",
           "port": 2641
