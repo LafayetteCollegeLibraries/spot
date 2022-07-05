@@ -1,3 +1,6 @@
+#!/bin/bash
+
+cat <<-EOINFO > $HANDLE_SERVER_HOME/siteinfo.json
 {
   "version": 1,
   "protocolVersion": "2.10",
@@ -7,16 +10,16 @@
   "attributes": [
     {
       "name": "desc",
-      "value": "LHS 1"
+      "value": "${HANDLE_SERVER_DESCRIPTION:-"A containerized Handle.net server"}"
     }
   ],
   "servers": [
     {
       "serverId": 1,
-      "address": "$HANDLE_HOST_IP",
+      "address": "${HANDLE_HOST_IP:-"0.0.0.0"}",
       "publicKey": {
         "format": "base64",
-        "value": "$SERVER_PUBLIC_KEY_DSA_BASE64"
+        "value": "$(base64 -w 0 $HANDLE_SERVER_HOME/pubkey.bin)"
       },
       "interfaces": [
         {
@@ -41,3 +44,4 @@
    }
   ]
 }
+EOINFO
