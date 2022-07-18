@@ -1,5 +1,6 @@
-FROM solr:8
-ARG CORE_NAME="spot"
+ARG SOLR_VERSION_TAG=8
+FROM bitnami/solr:$SOLR_VERSION_TAG
 
-COPY config /spot-config
-RUN precreate-core $CORE_NAME /spot-config
+ENV SOLR_CORES=spot
+ENV SOLR_CORE_CONF_DIR=/spot-config
+COPY --chown=solr:root config $SOLR_CORE_CONF_DIR
