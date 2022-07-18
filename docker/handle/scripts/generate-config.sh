@@ -15,11 +15,6 @@ cat <<-EOCONF > $HANDLE_SERVER_HOME/config.dct
   }
 
   "server_type" = "server"
-  "hdl_udp_config" = {
-    "num_threads" = "15"
-    "bind_port" = "2641"
-    "log_accesses" = "yes"
-  }
 
   "hdl_tcp_config" = {
     "num_threads" = "15"
@@ -34,7 +29,6 @@ cat <<-EOCONF > $HANDLE_SERVER_HOME/config.dct
 
   "no_udp_resolution" = "yes"
   "interfaces" = (
-    "hdl_udp"
     "hdl_tcp"
     "hdl_http"
   )

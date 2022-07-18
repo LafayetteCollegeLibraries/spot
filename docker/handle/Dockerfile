@@ -28,8 +28,9 @@ RUN mkdir -p $HANDLE_SERVER_HOME/logs \
 ENV PATH="$HANDLE_SERVER_HOME/bin:$PATH"
 
 VOLUME /data
-EXPOSE 2641/udp
-EXPOSE 2641/tcp 8000/tcp
+
+EXPOSE 2641/tcp
+EXPOSE 8000/tcp
 
 # deal with scripts after downloading + extracting the handle service
 # so we can rely on the docker cache to prevent redownloading during dev
