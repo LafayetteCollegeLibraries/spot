@@ -2,7 +2,7 @@
 version: '3.7'
 services:
   app:
-    image: lafayette/rails_web
+    image: lafayettecollegelibraries/ldr-web:dev
     build:
       context: .
       target: spot-web-development
@@ -59,10 +59,10 @@ services:
     restart: always
 
   db_migrate:
-    image: lafayettecollegelibraries/spot
+    image: lafayettecollegelibraries/ldr-web:dev
     build:
       context: .
-      target: spot-web
+      target: spot-web-development
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -73,6 +73,7 @@ services:
       - solr
 
   fedora:
+    image: lafayettecollegelibraries/ldr-fcrepo:dev
     build:
       context: ./docker/fcrepo
     volumes:
@@ -104,11 +105,9 @@ services:
     volumes:
       - redis:/data
     restart: always
-    ports:
-      - 6379:6379
 
   sidekiq:
-    image: lafayette/rails_worker:dev
+    image: lafayettecollegelibraries/ldr-worker:dev
     build:
       context: .
       target: spot-worker
@@ -128,6 +127,20 @@ services:
       - fitsservlet
       - redis
       - solr
+
+  solr:
+    image: lafayettecollegelibraries/ldr-solr:dev
+    build:
+      context: ./docker/solr
+    volumes:
+      - solr:/bitnami/solr
+    ports:
+      - "8983:8983"
+    environment:
+      - SOLR_CORES=spot-development,spot-test
+      - BITNAMI_DEBUG=yes
+    restart: always
+
 
 volumes:
   db:
