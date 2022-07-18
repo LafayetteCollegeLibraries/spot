@@ -1,7 +1,6 @@
 FROM solr:8.11.2
 ARG CORE_NAME="spot"
 
-<<<<<<< HEAD
 ENV SOLR_CORES=spot
 ENV SOLR_CORE_CONF_DIR=/spot-config
 ENV SOLR_HOST=localhost
@@ -19,7 +18,3 @@ COPY --chown=solr:root scripts/*.sh /docker-entrypoint-initdb.d/
 COPY --chown=solr:root assets/solr.in.sh $SOLR_INCLUDE
 
 HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
-=======
-COPY config /spot-config
-RUN precreate-core $CORE_NAME /spot-config
->>>>>>> a1bacc87 (move solr config into docker/solr)
