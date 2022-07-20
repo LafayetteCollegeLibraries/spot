@@ -168,7 +168,7 @@ class CatalogController < ApplicationController
         source_tesim abstract_tesim description_tesim note_tesim
         subject_label_tesim identifier_ssim bibliographic_citation_tesim
         english_language_date_teim file_format_tesim
-        extracted_text_tsimv
+        extracted_text_tsimv keyword_tesim date_associated_tesim
       ]
 
       field.solr_parameters = {
