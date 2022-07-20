@@ -109,6 +109,9 @@ en:
       library:
         name: Skillman Library
         url: https://library.lafayette.edu
+      a18y_remediation:
+        name: Accessibility Remediation Request
+        url: https://forms.gle/T8sTupUsxQ8T6kwk6
 
     masthead:
       advanced_search: Advanced Search
