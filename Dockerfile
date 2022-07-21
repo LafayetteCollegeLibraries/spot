@@ -28,7 +28,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads
 
 # match our Gemfile.lock version
-RUN gem install bundler:2.3.11
+RUN gem install bundler:2.1.4
 
 ARG BUNDLE_WITHOUT="development:test"
 COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
