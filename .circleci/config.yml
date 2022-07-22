@@ -1,11 +1,19 @@
 version: 2.1
+<<<<<<< HEAD
+=======
+
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
 orbs:
   browser-tools: circleci/browser-tools@1.4.0
 
 executors:
   ruby:
     docker:
+<<<<<<< HEAD
       - image: cimg/ruby:2.4.10-node
+=======
+      - image: cimg/ruby:2.7.5-browsers
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -15,6 +23,7 @@ executors:
 
   application:
     docker:
+<<<<<<< HEAD
       - image: cimg/ruby:2.4.10-node
         auth:
           username: $DOCKERHUB_USERNAME
@@ -24,6 +33,17 @@ executors:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
       - image: postgres:9.6-alpine
+=======
+      - image: cimg/ruby:2.7.5-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: circleci/redis:4
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: postgres:13-alpine
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -38,6 +58,7 @@ executors:
         command: bin/solr -cloud -noprompt -f -p 8983
     working_directory: ~/spot
     environment:
+<<<<<<< HEAD
       - BUNDLE_PATH=vendor/bundle
       - CAS_BASE_URL=http://localhost
       - CI=1
@@ -50,6 +71,20 @@ executors:
       - PSQL_PASSWORD=password
       - SOLR_TEST_URL=http://localhost:8983/solr/spot-test
       - URL_HOST=http://localhost
+=======
+      CI: true
+      BUNDLE_PATH: vendor/bundle
+      CAS_BASE_URL: http://localhost
+      RAILS_ENV: test
+      FEDORA_TEST_URL: http://localhost:8080/rest
+      IIIF_BASE_URL: http://localhost/iiif/2
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      PSQL_DATABASE: spot_test
+      PSQL_PASSWORD: password
+      PSQL_USER: spot_dev_user
+      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
+      URL_HOST: http://localhost
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
 
 jobs:
   bundle:
@@ -111,36 +146,17 @@ jobs:
   test:
     executor: application
     parallelism: 4
-
-    environment:
-      BUNDLE_PATH: vendor/bundle
-      RAILS_ENV: test
-      FEDORA_TEST_URL: http://localhost:8080/rest
-      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
-      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      PSQL_USER: spot_dev_user
-      PSQL_PASSWORD: password
-      PSQL_DATABASE: spot_test
-      PSQL_HOST: localhost
-      CI: true
-      CAS_BASE_URL: http://localhost
-      URL_HOST: http://localhost
-      IIIF_BASE_URL: http://localhost/iiif/2
-
     steps:
       - attach_workspace:
           at: ~/
 
-      # Update to the latest release of Chrome
-      - run:
-          name: Install + start the latest release of Chrome Headless
-          command: |
-            sudo apt-get update && sudo apt-get install -y fonts-liberation
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-            sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-            sudo apt-get update
-            sudo apt-get -y install google-chrome-stable postgresql-9.6
-            google-chrome-stable --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
+      # install dependencies
+      - run: sudo apt-get update && apt-get -y install postgresql-13
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
+      # start chrome
+      - run: google-chrome --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
 
       - run:
           name: Make sure dependencies are valid
