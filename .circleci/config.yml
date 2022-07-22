@@ -1,11 +1,19 @@
 version: 2.1
+<<<<<<< HEAD
+=======
+
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
 orbs:
   browser-tools: circleci/browser-tools@1.4.0
 
 executors:
   ruby:
     docker:
+<<<<<<< HEAD
       - image: cimg/ruby:2.7.6-browsers
+=======
+      - image: cimg/ruby:2.7.5-browsers
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -15,11 +23,19 @@ executors:
 
   application:
     docker:
+<<<<<<< HEAD
       - image: cimg/ruby:2.7.6-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
       - image: cimg/redis:6.2
+=======
+      - image: cimg/ruby:2.7.5-browsers
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: circleci/redis:4
+>>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
