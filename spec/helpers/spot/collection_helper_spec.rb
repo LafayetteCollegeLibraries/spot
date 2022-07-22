@@ -23,7 +23,7 @@ RSpec.describe Spot::CollectionHelper, type: :helper do
     subject(:rendered_language) { helper.render_related_resource_language(presenter) }
 
     let(:presenter) { instance_double(Spot::CollectionPresenter, related_resource: related_resource) }
-    let(:link_html) { related_resource.map { |url| helper.link_to(url, url, target: '_blank').html_safe }.to_sentence }
+    let(:link_html) { related_resource.map { |url| helper.link_to(url, url, target: '_blank', rel: 'noopener').html_safe }.to_sentence }
     let(:expected_text) { I18n.t(translation_key, link_html: link_html) }
 
     context 'when empty' do
