@@ -25,7 +25,7 @@ module Spot
 
         MiniMagick::Tool::Convert.new do |magick|
           magick << "#{filename}[0]"
-          # note: we need to use an array for each piece of this command;
+          # NOTE: we need to use an array for each piece of this command;
           # using a string will cause an error
           magick.merge! %w[-define tiff:tile-geometry=128x128 -compress jpeg]
           magick << "ptif:#{derivative_path}"
@@ -39,7 +39,7 @@ module Spot
       def derivative_path
         Hyrax::DerivativePath
           .derivative_path_for_reference(file_set, 'access.tif')
-          .to_s.gsub(%r{\.#{'access.tif'}$}, '')
+          .to_s.gsub(/\.access\.tif$/, '')
       end
     end
   end

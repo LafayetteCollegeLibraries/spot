@@ -56,8 +56,8 @@ gem 'darlingtonia', '~> 3.0'
 
 # user management
 gem 'devise', '4.8.1'
-gem 'devise-guests', '0.8.1'
 gem 'devise_cas_authenticatable', '2.0.2'
+gem 'devise-guests', '0.8.1'
 
 # we're using .env files to manage our secrets
 gem 'dotenv-rails', '2.7.6'
@@ -158,8 +158,8 @@ group :development, :test do
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.10'
   gem 'rspec-its', '~> 1.1'
-  gem 'rspec-rails', '~> 5.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
+  gem 'rspec-rails', '~> 5.1'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.21.2', require: false
   gem 'stub_env', '~> 1.0.4'

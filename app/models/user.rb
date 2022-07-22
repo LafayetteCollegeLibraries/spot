@@ -112,7 +112,7 @@ class User < ApplicationRecord
   #
   # @return [void]
   def ensure_username
-    return unless username.blank?
+    return if username.present?
 
     self.username = email.gsub(/@.*$/, '')
   end
