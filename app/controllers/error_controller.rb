@@ -14,7 +14,7 @@ class ErrorController < ApplicationController
     send_honeybadger_notification!
 
     # fallback for statuses that we haven't created a view for
-    render '500', status: 500
+    render '500', status: :internal_server_error
   end
 
   private

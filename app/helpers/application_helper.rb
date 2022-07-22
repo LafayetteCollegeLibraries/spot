@@ -15,7 +15,7 @@ module ApplicationHelper
   end
 
   def site_last_updated
-    @site_last_updated ||= begin
+    @site_last_updated ||=
       if Rails.env.production?
         pwd = File.basename(Dir.pwd)
         date = begin
