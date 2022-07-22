@@ -31,7 +31,7 @@ namespace :spot do
       hyrax:workflow:load
     ]
 
-    task :__clean_repo do
+    task __clean_repo: :environment do
       ActiveFedora::Cleaner.clean!
     end
 
