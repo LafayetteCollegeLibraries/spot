@@ -58,7 +58,6 @@ executors:
         command: bin/solr -cloud -noprompt -f -p 8983
     working_directory: ~/spot
     environment:
-<<<<<<< HEAD
       - BUNDLE_PATH=vendor/bundle
       - CAS_BASE_URL=http://localhost
       - CI=1
@@ -71,38 +70,12 @@ executors:
       - PSQL_PASSWORD=password
       - SOLR_TEST_URL=http://localhost:8983/solr/spot-test
       - URL_HOST=http://localhost
-=======
-      CI: true
-      BUNDLE_PATH: vendor/bundle
-      CAS_BASE_URL: http://localhost
-      RAILS_ENV: test
-      FEDORA_TEST_URL: http://localhost:8080/rest
-      IIIF_BASE_URL: http://localhost/iiif/2
-      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      PSQL_DATABASE: spot_test
-      PSQL_PASSWORD: password
-      PSQL_USER: spot_dev_user
-      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
-      URL_HOST: http://localhost
->>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
 
 jobs:
   bundle:
     executor: ruby
     steps:
       - checkout
-
-      - run:
-          name: Install Postgres dependency
-          command: |
-            sudo apt-get update -y
-            curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-            echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
-            sudo apt-get update -y
-            sudo apt-get install -y postgresql-9.6 libpq-dev
-      - run:
-          name: Use Bundler version specified in Gemfile.lock
-          command: gem install bundler:1.16.1
       - restore_cache:
           name: Restore cached bundle
           key: spot-gems-{{ checksum "Gemfile.lock" }}
