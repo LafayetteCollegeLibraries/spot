@@ -150,7 +150,9 @@ end
 # things used for development + testing (again, not as
 # necessary to lock down versions)
 group :development, :test do
+  gem 'bixby', '~> 5.0.1'
   gem 'byebug', '~> 11.1.3'
+  gem 'capybara', '~> 3.37.1'
   gem 'capybara-screenshot', '~> 1.0.26'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
@@ -162,15 +164,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 5.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'shoulda-matchers', '~> 4'
+  gem 'simplecov', '~> 0.21.2', require: false
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 4.6.1'
   gem 'webmock', '~> 3.8'
-
-  # dependencies we have to lock in order to work with ruby 2.4.3 on prem
-  # (@todo update these when we're in the cloud)
-  gem 'bixby', '1.0.0'
-  gem 'capybara', '~> 3.32.0'
-  gem 'rubocop', '~> 0.52.0'
-  gem 'rubocop-rspec', '1.22.2'
-  gem 'simplecov', '~> 0.17.1', require: false
 end
