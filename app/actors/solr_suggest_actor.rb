@@ -29,16 +29,11 @@ class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
   # @param [Hyrax::Actors::Environment] env
   # @return [void]
   def update_suggest_dictionaries
-    Spot::UpdateSolrSuggestDictionariesJob.perform_now unless part_of_batch?
-  end
-
-  # @return [Symbol]
-  def batch_ingest_key
-    ::Spot::Importers::Base::RecordImporter::BATCH_INGEST_KEY
+    Spot::UpdateSolrSuggestDictionariesJob.perform_now unless part_of_batch_ingest?
   end
 
   # @return [true, false]
-  def part_of_batch?
+  def part_of_batch_ingest?
     @part_of_batch == true
   end
 
@@ -48,6 +43,6 @@ class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
   # @param [Hyrax::Actors::Environment] env
   # @return [void]
   def extract_batch_flag(env)
-    @part_of_batch = env.attributes.delete(batch_ingest_key)
+    @part_of_batch = env.attributes.delete(Spot::CSVIngestService.batch_key)
   end
 end

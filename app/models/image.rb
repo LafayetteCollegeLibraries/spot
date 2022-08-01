@@ -16,7 +16,7 @@ class Image < ActiveFedora::Base
   end
 
   property :date_associated, predicate: ::RDF::URI.new('https://d-nb.info/standards/elementset/gnd#associatedDate') do |index|
-    index.as :symbol
+    index.as :symbol, :stored_searchable
   end
 
   # about the date

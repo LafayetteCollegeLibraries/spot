@@ -21,7 +21,8 @@ RSpec.describe ImageIndexer do
     creator: %w[tesim sim],
     contributor: %w[tesim sim],
     related_resource: %w[tesim sim],
-    subject_ocm: %w[ssim]
+    subject_ocm: %w[ssim],
+    date_associated: %w[ssim tesim]
   }.each_pair do |method, suffixes|
     let(:work_method) { method }
     let(:solr_fields) { suffixes.map { |suffix| "#{method}_#{suffix}" } }

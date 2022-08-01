@@ -57,6 +57,11 @@ Rails.application.config.to_prepare do
   require 'hydra-file_characterization'
 
   Hydra::FileCharacterization::Characterizers::FitsServlet.class_eval do
+    # Wrap the datafile= param in quotes to handle filenames with spaces
+    def command
+      %(curl -k -F datafile=@"#{filename}" #{ENV['FITS_SERVLET_URL']}/examine)
+    end
+
     def output
       super.encode('UTF-8', invalid: :replace)
     end

@@ -24,6 +24,7 @@
       <%= presenter.attribute_to_html(:bibliographic_citation) %>
       <%= presenter.attribute_to_html(:standard_identifier, render_as: :identifier) %>
       <%= presenter.attribute_to_html(:note) %>
+      <%= presenter.attribute_to_html(:permalink) %>
 
       <%= render 'shared/metadata/rights_statement', presenter: presenter %>
     </tbody>
