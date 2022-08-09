@@ -21,9 +21,15 @@ module Spot
     # @return [String]
     # @see https://github.com/samvera/hydra-head/blob/v11.0.0/hydra-access-controls/app/models/concerns/hydra/access_controls/visibility.rb#L20-L28
     def visibility
-      return 'metadata' if !public? && discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
-
-      super
+      if read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC
+      elsif read_groups.include? Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_AUTHENTICATED
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED
+      elsif discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
+        'metadata'
+      else
+        Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+      end
     end
 
     private
