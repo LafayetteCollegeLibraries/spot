@@ -15,10 +15,10 @@ ENV HANDLE_VERSION=$HANDLE_VERSION
 ENV HANDLE_SERVER_HOME=/hdl-server
 WORKDIR $HANDLE_SERVER_HOME
 
-# downloading the source via ADD allows us to avoid installing curl
-ADD https://www.handle.net/hnr-source/handle-$HANDLE_VERSION-distribution.tar.gz $HANDLE_SERVER_HOME/hdl-source.tar.gz
-RUN tar -xz -C $HANDLE_SERVER_HOME --strip-components=1 -f $HANDLE_SERVER_HOME/hdl-source.tar.gz \
-    && rm $HANDLE_SERVER_HOME/hdl-source.tar.gz
+# install curl to download handle dist + perform our healthcheck
+RUN apt-get update && apt-get install -y curl && apt-get clean
+RUN curl -s https://www.handle.net/hnr-source/handle-$HANDLE_VERSION-distribution.tar.gz | \
+    tar -xz -C $HANDLE_SERVER_HOME --strip-components=1
 
 # Redirect log files to stdout/stderr
 RUN mkdir -p $HANDLE_SERVER_HOME/logs \
@@ -39,3 +39,5 @@ RUN chmod +x /hdl-scripts/docker-entrypoint.sh
 
 ENTRYPOINT ["/hdl-scripts/docker-entrypoint.sh"]
 CMD ["/bin/bash", "-c", "hdl-server $HANDLE_SERVER_HOME"]
+
+HEALTHCHECK CMD curl -f http://localhost:8000/ || exit 1
