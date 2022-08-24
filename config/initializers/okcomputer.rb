@@ -46,12 +46,9 @@ redis_config = Rails.application.config_for(:redis)
 sidekiq_config = YAML.load(ERB.new(IO.read(Rails.root.join('config', 'sidekiq.yml'))).result)
 fcrepo_uri = nil
 
-if fcrepo_config['url'].present?
-  parsed = URI.parse(fcrepo_config['url'])
-  parsed.userinfo = "#{fcrepo_config['user']}:#{fcrepo_config['password']}"
-
-  fcrepo_uri = parsed.to_s
-end
+fcrepo_uri = URI.parse(fcrepo_config['url']).tap { |uri|
+  uri.userinfo = "#{fcrepo_config['user']}:#{fcrepo_config['password']}"
+}.to_s if fcrepo_config['url'].present?
 
 # out of the box, "application running?" and "active record working?"
 # checks are run. we need to register the others

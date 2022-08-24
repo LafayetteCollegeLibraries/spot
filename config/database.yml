@@ -3,7 +3,7 @@ default: &default
   pool: <%= ENV.fetch('RAILS_MAX_THREADS', 5) %>
   timeout: 5000
   encoding: unicode
-  url: "postgres://<%= ENV.fetch('PSQL_USER', 'spot_dev_user') %>:<%= ENV.fetch('PSQL_PASSWORD', 'spot_dev_pw') %>@<%= ENV.fetch('PSQL_HOST', 'localhost') %>/<%= ENV.fetch('PSQL_DATABASE', 'spot-development') %>"
+  url: "<%= ENV.fetch('DATABASE_URL') %>"
 
 development:
   <<: *default
@@ -13,6 +13,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  url: "postgres://<%= ENV.fetch('PSQL_USER', 'spot_dev_user') %>:<%= ENV.fetch('PSQL_PASSWORD', 'spot_dev_pw') %>@<%= ENV.fetch('PSQL_HOST', 'localhost') %>/<%= ENV.fetch('PSQL_DATABASE', 'spot-test') %>"
 
 production:
   <<: *default
