@@ -2,10 +2,10 @@
 version: '3.7'
 services:
   app:
-    image: lafayettecollegelibraries/ldr-web:dev
+    image: lafayette/rails_web
     build:
       context: .
-      target: spot-web-development
+      target: spot-base
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -59,7 +59,7 @@ services:
     restart: always
 
   db_migrate:
-    image: lafayettecollegelibraries/ldr-web:dev
+    image: lafayette/rails_web
     build:
       context: .
       target: spot-web-development
@@ -73,7 +73,6 @@ services:
       - solr
 
   fedora:
-    image: lafayettecollegelibraries/ldr-fcrepo:dev
     build:
       context: ./docker/fcrepo
     volumes:
@@ -107,7 +106,7 @@ services:
     restart: always
 
   sidekiq:
-    image: lafayettecollegelibraries/ldr-worker:dev
+    image: lafayette/rails_worker:dev
     build:
       context: .
       target: spot-worker
@@ -129,7 +128,6 @@ services:
       - solr
 
   solr:
-    image: lafayettecollegelibraries/ldr-solr
     build:
       context: ./docker/solr
     volumes:
