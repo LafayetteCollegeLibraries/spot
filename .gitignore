@@ -36,6 +36,9 @@
 /derivatives
 /uploads
 
+# Generated asset files
+/public/assets
+
 # Ignore collection branding items
 /public/branding
 
