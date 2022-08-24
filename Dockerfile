@@ -48,7 +48,8 @@ HEALTHCHECK CMD curl -skf https://localhost || exit 1
 FROM spot-base as spot-production
 ENV RAILS_ENV=production
 
-RUN SECRET_KEY_BASE="$(bin/rake secret)" \
+RUN DATABASE_URL="postgres://fake" \
+    SECRET_KEY_BASE="$(bin/rake secret)" \
     bundle exec rake assets:precompile
 
 
