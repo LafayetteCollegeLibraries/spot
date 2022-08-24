@@ -2,10 +2,10 @@ version: '3.7'
 
 services:
   app:
-    image: lafayettecollegelibraries/ldr-web:dev
+    image: lafayette/rails_web
     build:
       context: .
-      target: spot-web-development
+      target: spot-base
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -14,15 +14,6 @@ services:
       - "443:443"
     env_file:
       - .env.local
-    restart: always
-    entrypoint: ["bin/spot-dev-entrypoint.sh"]
-    command:
-      - "bundle"
-      - "exec"
-      - "rails"
-      - "server"
-      - "-b"
-      - "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"
     depends_on:
       - cantaloupe
       - db
@@ -33,6 +24,8 @@ services:
       - db_migrate
     stdin_open: true
     tty: true
+    entrypoint: ["/spot/bin/spot-dev-entrypoint.sh"]
+    command: ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
@@ -63,7 +56,7 @@ services:
     restart: always
 
   db_migrate:
-    image: lafayettecollegelibraries/ldr-web:dev
+    image: lafayette/rails_web
     build:
       context: .
       target: spot-web-development
@@ -77,7 +70,6 @@ services:
       - solr
 
   fedora:
-    image: lafayettecollegelibraries/ldr-fcrepo:dev
     build:
       context: ./docker/fcrepo
     volumes:
@@ -102,7 +94,7 @@ services:
     restart: always
 
   sidekiq:
-    image: lafayettecollegelibraries/ldr-worker:dev
+    image: lafayette/rails_worker:dev
     build:
       context: .
       target: spot-worker
@@ -124,7 +116,6 @@ services:
       - solr
 
   solr:
-    image: lafayettecollegelibraries/ldr-solr
     build:
       context: ./docker/solr
     volumes:

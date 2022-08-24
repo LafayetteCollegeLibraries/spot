@@ -1,12 +1,11 @@
-# Base Image
-# ----------
-# Used as the root for both the application (user-facing) side and worker images.
-# These are the bare essential dependencies for running the application.
-ARG RUBY_VERSION=2.4.6-alpine3.10
-FROM ruby:$RUBY_VERSION as spot-base
+##
+# TARGET: spot-base
+# Does the majority of setup for dev/prod images.
+# Use --build-arg BUNDLE_WITHOUT="" to build with dev dependencies
+##
+FROM ruby:2.4.6-alpine3.10 as spot-base
 
 # system dependencies
-# TODO: imagemagick might belong in the worker container instead?
 RUN apk --no-cache upgrade && \
     apk --no-cache add \
         build-base \
@@ -32,57 +31,27 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 # TODO: upgrade the Gemfile bundler version to 2
 RUN gem install bundler:1.13.7
 
-# install dependencies
-# ---
-# get installation files copied over first, run installations, _then_ copy
-# the application files over, so that we can rely on docker's cache first
-# when rebuilding.
-#
-# a) bundle + yarn files
+ARG BUNDLE_WITHOUT="development:test"
 COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
+RUN bundle install --jobs "$(nproc)"
 
-# b) make directories for installation configuration (`config/` and `public/`)
-RUN mkdir -p /spot/config /spot/public
-
-# c) install production dependencies
-RUN bundle config set --local without "development test" && \
-    bundle install --jobs "$(nproc)"
-
-# d) copy the application files
 COPY . /spot
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
-CMD ["bundle", "exec", "rails", "server", "-u", "puma", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
-
-##
-# TARGET: spot-web
-# Used for the user-facing application. Sets up UV files and installs nodejs/yarn dependencies.
-##
-FROM spot-base as spot-web-base
-COPY config/uv config/uv
-
-# run yarn install first so we don't need to always rerun when updating gems
-RUN yarn install
-
+HEALTHCHECK CMD curl -skf https://localhost || exit 1
 
 ##
-# TARGET: spot-web-development
-# Used for the development version of the user-facing application.
-# Installs Ruby development dependencies
-##
-FROM spot-web-base as spot-web-development
-RUN bundle config unset --local without && \
-    bundle config set --local with "development test" && \
-    bundle install --jobs "$(nproc)"
-
-
-##
-# TARGET: spot-web-production
+# TARGET: spot-production
 # Precompiles assets for production
 ##
-FROM spot-web-base as spot-web-production
-RUN RAILS_ENV=production DATABASE_URL="postgres://fake" SECRET_KEY_BASE="secret-shh" bundle exec rake assets:precompile
+FROM spot-base as spot-production
+ENV RAILS_ENV=production
+
+RUN DATABASE_URL="postgres://fake" \
+    SECRET_KEY_BASE="$(bin/rake secret)" \
+    bundle exec rake assets:precompile
 
 
 ##
