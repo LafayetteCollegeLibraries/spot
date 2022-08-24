@@ -9,3 +9,6 @@ RUN apt-get update && \
 COPY ./scripts/ldr-fedora-entrypoint.sh /
 
 ENTRYPOINT "/ldr-fedora-entrypoint.sh"
+
+EXPOSE 8080
+HEALTHCHECK CMD curl -f http://localhost:8080/rest/ || exit 1
