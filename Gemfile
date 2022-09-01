@@ -60,7 +60,7 @@ gem 'devise-guests', '0.8.1'
 gem 'devise_cas_authenticatable', '2.0.2'
 
 # we're using .env files to manage our secrets
-gem 'dotenv-rails', '2.7.6'
+gem 'dotenv-rails', '2.8.1'
 
 # extended date formats
 gem 'edtf', '3.0.6'
