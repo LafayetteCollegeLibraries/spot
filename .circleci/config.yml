@@ -111,6 +111,8 @@ jobs:
   test:
     executor: application
     parallelism: 4
+<<<<<<< HEAD
+=======
 
     environment:
       BUNDLE_PATH: vendor/bundle
@@ -127,6 +129,7 @@ jobs:
       URL_HOST: http://localhost
       IIIF_BASE_URL: http://localhost/iiif/2
 
+>>>>>>> b8fd82f5 (revert to using PSQL_* env configs but provide defaults)
     steps:
       - attach_workspace:
           at: ~/
