@@ -111,6 +111,25 @@ jobs:
   test:
     executor: application
     parallelism: 4
+<<<<<<< HEAD
+=======
+
+    environment:
+      BUNDLE_PATH: vendor/bundle
+      RAILS_ENV: test
+      FEDORA_TEST_URL: http://localhost:8080/rest
+      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      PSQL_USER: spot_dev_user
+      PSQL_PASSWORD: password
+      PSQL_DATABASE: spot_test
+      PSQL_HOST: localhost
+      CI: true
+      CAS_BASE_URL: http://localhost
+      URL_HOST: http://localhost
+      IIIF_BASE_URL: http://localhost/iiif/2
+
+>>>>>>> b8fd82f5 (revert to using PSQL_* env configs but provide defaults)
     steps:
       - attach_workspace:
           at: ~/
