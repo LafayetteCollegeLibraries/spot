@@ -3,7 +3,7 @@ set -e
 
 # create the certs using solr guide
 # https://solr.apache.org/guide/8_11/enabling-ssl.html#generate-a-self-signed-certificate-and-a-key
-keystore_folder="/var/ssl"
+keystore_folder="/var/solr/ssl"
 keystore_path="$keystore_folder/solr-ssl.keystore.p12"
 
 mkdir -p "$keystore_folder"
