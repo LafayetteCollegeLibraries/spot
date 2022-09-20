@@ -17,4 +17,11 @@ COPY --chown=solr:root scripts/*.sh /docker-entrypoint-initdb.d/
 # custom env settings
 COPY --chown=solr:root assets/solr.in.sh $SOLR_INCLUDE
 
-HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
+COPY config $SOLR_CORE_CONF_DIR
+COPY scripts/*.sh /docker-entrypoint-initdb.d/
+
+USER root
+RUN mkdir -p /var/ssl && chown ${SOLR_USER:-solr}:${SOLR_GROUP:-solr} /var/ssl
+USER $SOLR_UID
+
+HEALTHCHECK CMD curl https://localhost:8983/solr/ || exit 1
