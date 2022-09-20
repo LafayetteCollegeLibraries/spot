@@ -1,8 +1,15 @@
-ARG SOLR_VERSION_TAG=8
-FROM bitnami/solr:$SOLR_VERSION_TAG
+ARG SOLR_VERSION_TAG=8.11.2
+FROM solr:$SOLR_VERSION_TAG
 
 ENV SOLR_CORES=spot
 ENV SOLR_CORE_CONF_DIR=/spot-config
-COPY --chown=solr:root config $SOLR_CORE_CONF_DIR
+ENV SOLR_HOST=localhost
 
-HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
+COPY config $SOLR_CORE_CONF_DIR
+COPY scripts/*.sh /docker-entrypoint-initdb.d/
+
+USER root
+RUN mkdir -p /var/ssl && chown ${SOLR_USER:-solr}:${SOLR_GROUP:-solr} /var/ssl
+USER $SOLR_UID
+
+HEALTHCHECK CMD curl https://localhost:8983/solr/ || exit 1

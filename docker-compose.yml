@@ -59,7 +59,7 @@ services:
     image: lafayette/rails_web
     build:
       context: .
-      target: spot-web-development
+      target: spot-base
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -86,12 +86,16 @@ services:
 
   fitsservlet:
     image: harvardlts/fitsservlet_container:1.4.1
+    ports:
+      - 8081:8081
 
   redis:
     image: redis:alpine
     volumes:
       - redis:/data
     restart: always
+    ports:
+      - 6379:6379
 
   sidekiq:
     image: lafayette/rails_worker:dev
@@ -119,12 +123,12 @@ services:
     build:
       context: ./docker/solr
     volumes:
-      - solr:/bitnami/solr
+      - solr:/var/solr
     ports:
       - "8983:8983"
     environment:
       - SOLR_CORES=spot-development,spot-test
-      - BITNAMI_DEBUG=yes
+      - SOLR_HOST=solr
     restart: always
 
 

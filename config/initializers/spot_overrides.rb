@@ -114,4 +114,35 @@ Rails.application.config.to_prepare do
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
+
+  # RSolr doesn't pass :ssl options to the Faraday connection it sets up,
+  # so we're adding the opts ourselves here (see line above `Faraday.new` call)
+  RSolr::Client.class_eval do
+    def connection
+      @connection ||= begin
+        conn_opts = { request: {} }
+        conn_opts[:url] = uri.to_s
+        conn_opts[:proxy] = proxy if proxy
+        conn_opts[:request][:open_timeout] = options[:open_timeout] if options[:open_timeout]
+
+        if options[:read_timeout] || options[:timeout]
+          # read_timeout was being passed to faraday as timeout since Rsolr 2.0,
+          # it's now deprecated, just use `timeout` directly.
+          conn_opts[:request][:timeout] = options[:timeout] || options[:read_timeout]
+        end
+
+        conn_opts[:request][:params_encoder] = Faraday::FlatParamsEncoder
+        conn_opts[:ssl] = options[:ssl].symbolize_keys if options[:ssl]
+
+        Faraday.new(conn_opts) do |conn|
+          conn.basic_auth(uri.user, uri.password) if uri.user && uri.password
+          conn.response :raise_error
+          conn.request :retry, max: options[:retry_after_limit], interval: 0.05,
+                               interval_randomness: 0.5, backoff_factor: 2,
+                               exceptions: ['Faraday::Error', 'Timeout::Error'] if options[:retry_503]
+          conn.adapter options[:adapter] || Faraday.default_adapter
+        end
+      end
+    end
+  end
 end
