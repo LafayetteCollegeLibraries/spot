@@ -126,7 +126,7 @@ services:
     build:
       context: ./docker/solr
     volumes:
-      - solr:/var/solr
+      - solr:/var/solr/data
     ports:
       - "8983:8983"
     environment:
