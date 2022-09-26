@@ -76,6 +76,7 @@ services:
       - fedora:/data:cached
     ports:
       - 8080:8080
+      - 8443:8443
     environment:
       FCREPO_POSTGRES_HOST: db
       FCREPO_POSTGRES_USER: spot_fcrepo_dev_user
