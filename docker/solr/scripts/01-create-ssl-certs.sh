@@ -5,6 +5,7 @@ set -e
 # https://solr.apache.org/guide/8_11/enabling-ssl.html#generate-a-self-signed-certificate-and-a-key
 keystore_folder="/var/solr/ssl"
 keystore_path="$keystore_folder/solr-ssl.keystore.p12"
+pass=$(head -c 64 /dev/random | base64 -w0 -)
 
 mkdir -p "$keystore_folder"
 keytool \
@@ -12,8 +13,8 @@ keytool \
   -alias solr-ssl \
   -keyalg RSA \
   -keysize 2048 \
-  -keypass secret \
-  -storepass secret \
+  -keypass "$pass" \
+  -storepass "$pass" \
   -validity 9999 \
   -keystore $keystore_path \
   -storetype PKCS12 \
@@ -23,9 +24,9 @@ keytool \
 # using configuration from https://solr.apache.org/guide/8_11/enabling-ssl.html#set-common-ssl-related-system-properties
 export SOLR_SSL_ENABLED=true
 export SOLR_SSL_KEY_STORE=$keystore_path
-export SOLR_SSL_KEY_STORE_PASSWORD=secret
+export SOLR_SSL_KEY_STORE_PASSWORD=$pass
 export SOLR_SSL_TRUST_STORE=$keystore_path
-export SOLR_SSL_TRUST_STORE_PASSWORD=secret
+export SOLR_SSL_TRUST_STORE_PASSWORD=$pass
 
 # Require clients to authenticate
 export SOLR_SSL_NEED_CLIENT_AUTH=false
