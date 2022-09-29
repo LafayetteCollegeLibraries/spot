@@ -1,5 +1,47 @@
 # changelog
 
+## [2022.5] - 2022-09-29
+
+### updates ✨ 
+- prioritize CollectionPresenter#abstract for collection descriptions on work views (#950)
+- rename "Foreign Languages and Literatures" department to "Languages and Literary Studies" (#954)
+
+### bug fixes 🐞 
+- setting `work.visibility = "authenticated"` will now result in `work.visibility == "authenticated"`, instead of "metadata" (#951)
+
+### notes 🎶 
+after deploying to production, you'll want to update all objects in the "Foreign Languages and Literatures" department to use the new name:
+
+```ruby
+old_dept = 'Foreign Languages & Literatures'
+new_dept = 'Languages and Literary Studies'
+ActiveFedora::Base.where(academic_department_sim: [old_dept]).each do |work|
+  work.academic_department = work.academic_department.map { |department| department == old_dept ? new_dept : department }
+  work.save
+end
+```
+
+
+## [2022.4] - 2022-08-01
+
+### updates 📰 
+- removes solr_suggest autocomplete from StudentWork fields "advisor" and "bibliographic_citation" (#930)
+- add Darlingtonia-based service for ingesting objects via CSV sheet (#932, #944)
+- add link to accessibility remediation request in footer (#945)
+- add `keyword_tesim` and `date_associated_tesim` to all_fields search (see notes) (#946)
+
+### deprecations 💀  
+- removes BagIt ingest infrastructure used for initial migration (#934)
+
+### bug fixes 🐞 
+- add catalog_controller configuration to display "advisor_label_ssim" facets properly (#928)
+- add permalink display to student_work show page (#927)
+- use `String#underscore` to build the parameter key for works in the HandleController (#943)
+
+### notes 📓 
+- requires a reindex of Image works for `date_associated` fields (see #946)
+
+
 ## [2022.3] - 2022-05-01
 
 ### updates
@@ -751,6 +793,8 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2022.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.5
+[2022.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.4
 [2022.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.3
 [2022.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.2
 [2022.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.1
