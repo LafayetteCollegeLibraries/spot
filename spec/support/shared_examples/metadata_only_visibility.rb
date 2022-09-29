@@ -15,6 +15,19 @@ RSpec.shared_examples 'it accepts "metadata" as a visibility' do
 
       it { is_expected.to eq 'metadata' }
     end
+
+    [
+      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_AUTHENTICATED,
+      'metadata',
+      Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE
+    ].each do |viz|
+      context "when visibility is set to \"#{viz}\"" do
+        before { work.visibility = viz }
+
+        it { is_expected.to eq viz }
+      end
+    end
   end
 
   describe '#visibility=' do
