@@ -137,7 +137,7 @@ gem 'nokogiri', '~> 1.10.10'
 # In theory, we should just be able to remove these entries and run `bundle update`
 # to get things up to date. (see also `:development, :test` block below)
 gem 'amazing_print', '1.2.1'
-gem 'dry-container', '0.7.2'
+gem 'dry-container', '0.11.0'
 gem 'dry-core', '0.4.9'
 gem 'dry-inflector', '0.2.0'
 gem 'dry-matcher', '~> 0.8.3'
