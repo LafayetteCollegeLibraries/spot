@@ -8,4 +8,4 @@ ENV SOLR_HOST=localhost
 COPY config $SOLR_CORE_CONF_DIR
 COPY scripts/*.sh /docker-entrypoint-initdb.d/
 
-HEALTHCHECK CMD curl https://localhost:8983/solr/ || exit 1
+HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
