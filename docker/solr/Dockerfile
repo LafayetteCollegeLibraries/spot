@@ -13,7 +13,3 @@ COPY --chown=solr:root config $SOLR_CORE_CONF_DIR/conf
 COPY --chown=solr:root scripts/*.sh /docker-entrypoint-initdb.d/
 
 HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["solr-foreground", "-c"]
-
