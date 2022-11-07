@@ -3,15 +3,19 @@
 # Does the majority of setup for dev/prod images.
 # Use --build-arg BUNDLE_WITHOUT="" to build with dev dependencies
 ##
-FROM ruby:2.7.5-alpine as spot-base
+# FROM --platform=linux/amd64 ruby:2.7.6-alpine as spot-base
+FROM ruby:2.7.6-alpine as spot-base
+
+ARG EXTRA_APK_PACKAGES=""
 
 # system dependencies
-RUN apk --no-cache upgrade && \
-    apk --no-cache add \
+RUN apk upgrade && \
+    apk --update add \
         build-base \
         coreutils \
         curl \
         git \
+        gcompat \
         netcat-openbsd \
         nodejs \
         openssl \
@@ -30,9 +34,13 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 # match our Gemfile.lock version
 RUN gem install bundler:2.1.4
 
-ARG BUNDLE_WITHOUT="development:test"
-COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
-RUN bundle install --jobs "$(nproc)"
+ARG BUNDLE_WITHOUT=""
+ENV BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
+
+COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot/"]
+
+RUN bundle config build.nokogiri --use-system-libraries && \
+    bundle install --jobs "$(nproc)"
 
 COPY . /spot
 
@@ -42,7 +50,6 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 HEALTHCHECK CMD curl -skf https://localhost || exit 1
 
 ##
-<<<<<<< HEAD
 # TARGET: spot-web
 # Used for the user-facing application. Sets up UV files and installs nodejs/yarn dependencies.
 ##
@@ -76,9 +83,6 @@ RUN bundle config unset --local without && \
 
 ##
 # TARGET: spot-web-production
-=======
-# TARGET: spot-production
->>>>>>> 687689af (reconfigure spot Dockerfile)
 # Precompiles assets for production
 ##
 FROM spot-base as spot-production
@@ -94,11 +98,8 @@ RUN DATABASE_URL="postgres://fake" \
 # Installs dependencies for running background jobs
 ##
 FROM spot-base as spot-worker
-RUN apk --no-cache upgrade && \
-    apk --no-cache add \
-        bash \
-        ffmpeg \
-        ghostscript \
+RUN apk update && \
+    apk add \
         imagemagick \
         libreoffice \
         mediainfo \

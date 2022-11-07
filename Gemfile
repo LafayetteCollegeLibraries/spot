@@ -35,7 +35,8 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 3.4.1'
+# gem 'hyrax', '~> 3.4.2'
+gem 'hyrax', github: 'samvera/hyrax', branch: '3.x-stable'
 
 # modularize our javascripts
 gem 'almond-rails', '0.3.0'
@@ -108,8 +109,7 @@ gem 'slack-ruby-client', '0.14.6'
 # we need to compile it in sprockets.
 #
 # note from hyrax source:
-#   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD
-#   in this way:
+#   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD in this way:
 #   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
 gem 'sprockets-es6'
 
@@ -126,7 +126,12 @@ gem 'faraday', '0.17.4'
 gem 'mini_magick', '4.11.0'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
-gem 'linkeddata', '~> 3.0'
+gem 'linkeddata', '~> 2'
+
+# @see https://github.com/samvera/hyrax/pull/5804/files
+# need to set these versions here until the next hyrax version (3.4.3?) pulls them in
+gem 'json-ld', '< 3.2'
+gem 'psych', '~> 3.3'
 
 # development dependencies (not as necessary to
 # lock down versions here)
@@ -166,6 +171,6 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.21.2', require: false
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 4.6.1'
+  gem 'webdrivers', '~> 5'
   gem 'webmock', '~> 3.8'
 end
