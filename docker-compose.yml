@@ -6,6 +6,8 @@ services:
     build:
       context: .
       target: spot-base
+      args:
+        EXTRA_APK_PACKAGES: "chromium-chromedriver"
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -43,7 +45,7 @@ services:
     restart: always
 
   db:
-    image: postgres:9.6-alpine
+    image: postgres:13-alpine
     volumes:
       - db:/var/lib/postgresql/data
       - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql

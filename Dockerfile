@@ -3,23 +3,29 @@
 # Does the majority of setup for dev/prod images.
 # Use --build-arg BUNDLE_WITHOUT="" to build with dev dependencies
 ##
-FROM ruby:2.7.5-alpine as spot-base
+# FROM --platform=linux/amd64 ruby:2.7.6-alpine as spot-base
+FROM ruby:2.7.6-alpine as spot-base
+
+ARG EXTRA_APK_PACKAGES=""
 
 # system dependencies
-RUN apk --no-cache upgrade && \
-    apk --no-cache add \
+RUN apk upgrade && \
+    apk --update add \
         build-base \
         coreutils \
         curl \
         git \
+        gcompat \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql postgresql-dev \
+        postgresql \
+        postgresql-dev \
         ruby-dev \
         tzdata \
         yarn \
-        zip
+        zip \
+        $EXTRA_APK_PACKAGES
 
 WORKDIR /spot
 
@@ -30,9 +36,13 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 # match our Gemfile.lock version
 RUN gem install bundler:2.1.4
 
-ARG BUNDLE_WITHOUT="development:test"
-COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
-RUN bundle install --jobs "$(nproc)"
+ARG BUNDLE_WITHOUT=""
+ENV BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
+
+COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot/"]
+
+RUN bundle config build.nokogiri --use-system-libraries && \
+    bundle install --jobs "$(nproc)"
 
 COPY . /spot
 
@@ -58,8 +68,8 @@ RUN DATABASE_URL="postgres://fake" \
 # Installs dependencies for running background jobs
 ##
 FROM spot-base as spot-worker
-RUN apk --no-cache upgrade && \
-    apk --no-cache add \
+RUN apk update && \
+    apk add \
         imagemagick \
         ghostscript
 
