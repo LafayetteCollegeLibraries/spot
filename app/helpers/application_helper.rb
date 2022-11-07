@@ -14,6 +14,7 @@ module ApplicationHelper
     document.highlight_field('extracted_text_tsimv').reject(&:blank?)
   end
 
+  # Going to need to update this once we're fully in the cloud
   def site_last_updated
     @site_last_updated ||= generate_site_last_updated
   end
@@ -23,11 +24,7 @@ module ApplicationHelper
     return 'Not in production environment' unless Rails.env.production?
 
     pwd = File.basename(Dir.pwd)
-    date = begin
-      Date.parse(pwd)
-    rescue
-      Time.zone.now
-    end
+    date = Date.parse(pwd) rescue Time.zone.now
 
     date.strftime('%B %d, %Y')
   end
