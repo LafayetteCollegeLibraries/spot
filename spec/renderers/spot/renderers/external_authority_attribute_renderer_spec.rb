@@ -19,7 +19,7 @@ RSpec.describe Spot::Renderers::ExternalAuthorityAttributeRenderer do
       '<td itemprop="creator" itemscope itemtype="http://schema.org/Person" class="attribute attribute-creator">' \
       '<span itemprop="name">' \
       "<a href=\"#{search_path}\">Carly Rae Jepsen</a> (" \
-        '<a target="_blank" href="https://www.carlyraemusic.com/">' \
+        '<a target="_blank" rel="noopener" href="https://www.carlyraemusic.com/">' \
         'view authority <span class="fa fa-external-link"></span>' \
       '</a>)</span></td></tr>'
     end

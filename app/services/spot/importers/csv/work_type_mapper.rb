@@ -52,8 +52,6 @@ module Spot::Importers::CSV
       @properties = (@work_type&.properties&.keys || []) - EXCLUDED_PROPERTIES
 
       self.fields_map = @properties.index_by(&:to_sym)
-
-      super # for rubo's sake; HashMapper has no initializer
     end
 
     def fields
