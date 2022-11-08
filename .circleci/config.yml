@@ -1,19 +1,11 @@
 version: 2.1
-<<<<<<< HEAD
-=======
-
->>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
 orbs:
   browser-tools: circleci/browser-tools@1.4.0
 
 executors:
   ruby:
     docker:
-<<<<<<< HEAD
-      - image: cimg/ruby:2.4.10-node
-=======
-      - image: cimg/ruby:2.7.5-browsers
->>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
+      - image: cimg/ruby:2.7.6-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -23,18 +15,7 @@ executors:
 
   application:
     docker:
-<<<<<<< HEAD
-      - image: cimg/ruby:2.4.10-node
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-      - image: cimg/redis:5.0.14
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-      - image: postgres:9.6-alpine
-=======
-      - image: cimg/ruby:2.7.5-browsers
+      - image: cimg/ruby:2.7.6-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -43,7 +24,6 @@ executors:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
       - image: postgres:13-alpine
->>>>>>> 63eff9c3 (try running circleci jobs on ruby 2.7)
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -54,7 +34,7 @@ executors:
       - image: samvera/fcrepo4:4.7.5
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
-      - image: solr:7.5.0-alpine
+      - image: solr:8.11.2-slim
         command: bin/solr -cloud -noprompt -f -p 8983
     working_directory: ~/spot
     environment:
@@ -124,7 +104,7 @@ jobs:
           at: ~/
 
       # install dependencies
-      - run: sudo apt-get update && apt-get -y install postgresql-13
+      - run: sudo apt-get update && sudo apt-get -y install postgresql-13
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
 
