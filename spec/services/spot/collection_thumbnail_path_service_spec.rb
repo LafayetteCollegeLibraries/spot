@@ -5,6 +5,13 @@ RSpec.describe Spot::CollectionThumbnailPathService do
 
     let(:collection) { instance_double(Collection, id: 'colabc123') }
     let(:file_path) { Rails.root.join('spec', 'fixtures', 'work.png').to_s }
+    let(:mock_branding_storage_adapter) { double(delete: true, upload: true) }
+
+    before do
+      # need to block CollectionBrandingInfo from deleting our fixture image
+      allow(Hyrax.config).to receive(:branding_storage_adapter).and_return(mock_branding_storage_adapter)
+      allow(FileUtils).to receive(:remove_file)
+    end
 
     after do
       CollectionBrandingInfo.where(collection_id: collection.id)&.delete_all
@@ -12,9 +19,6 @@ RSpec.describe Spot::CollectionThumbnailPathService do
 
     context 'when a collection has a CollectionBrandingInfo object' do
       before do
-        # need to block CollectionBrandingInfo from deleting our fixture image
-        allow(FileUtils).to receive(:remove_file).with(file_path)
-
         branding = CollectionBrandingInfo.new(
           collection_id: collection.id,
           role: 'logo',
