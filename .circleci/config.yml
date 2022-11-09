@@ -35,10 +35,16 @@ executors:
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
       - image: solr:8.11.2
-        command: bin/solr -cloud -noprompt -f -p 8983
+        command: |
+          bash -c "echo -n "$SOLR_SECURITY_JSON" > /var/solr/security.json && \
+                    bin/solr start -cloud -p 8983 && \
+                    server/scripts/cloud-scripts/zkcli.sh -zkhost localhost:9983 -cmd putfile /security.json /var/solr/security.json && \
+                    bin/solr stop -p 8983 &&
+                    exec solr-foreground -cloud -noprompt -p 8983"
         environment:
-          SOLR_AUTH_TYPE: 'basic'
-          SOLR_AUTHENTICATION_OPTS: '-Dbasicauth=solr:SolrRocks'
+          SOLR_AUTH_TYPE: "basic"
+          SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
+          SOLR_SECURITY_JSON: '{"authentication":{"blockUnknown":true,"class":"solr.BasicAuthPlugin","credentials":{"solr":"2f7429490db4ca6008cc5e79c65e3515c1d73c9a032a7cdd9ac6333b8140b537 rv+pepwoQLnknqn/5MwQRKTbBg/OCbAegsPZzNWfwDQ="},"forwardCredentials": false},"authorization":{"class":"solr.RoleBasedAuthorizationPlugin","permissions":[{"name":"security-edit","role":"admin"}],"user-role":{"solr": "admin"}}}'
     working_directory: ~/spot
     environment:
       - BUNDLE_PATH=vendor/bundle
