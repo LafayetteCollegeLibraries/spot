@@ -2,6 +2,20 @@
 RSpec.describe Hyrax::DashboardController do
   routes { Hyrax::Engine.routes }
 
+  # This test will periodically fail because the page now includes a Work Types count
+  # statistic that collects SolrDocuments and reduces them to just their "human_readable_type_tesim"
+  # property. Our test data doesn't always include that field, so when they're collected
+  # via Hyrax::Statistic.work_types, it will try to call ".join" on what it assumes to be
+  # an array, but is actually nil. So instead, we'll clear out the SolrDocuments beforehand
+  # so that the values it iterates through are empty.
+  #
+  # @see https://github.com/samvera/hyrax/blob/3.x-stable/app/views/hyrax/dashboard/_work_type_graph.html.erb#L7
+  # @see https://github.com/samvera/hyrax/blob/3.x-stable/app/models/hyrax/statistic.rb#L44-L52
+  # @see https://github.com/LafayetteCollegeLibraries/spot/issues/968
+  before :suite do
+    Hyrax::SolrService.instance.conn.delete_by_query('*:*', params: { 'softCommit' => true })
+  end
+
   before do
     sign_in user
     get :show
