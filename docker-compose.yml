@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.9'
 
 services:
   app:
@@ -6,8 +6,6 @@ services:
     build:
       context: .
       target: spot-base
-      args:
-        EXTRA_APK_PACKAGES: "chromium-chromedriver"
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -23,7 +21,6 @@ services:
       - fitsservlet
       - redis
       - solr
-      - db_migrate
     stdin_open: true
     tty: true
     entrypoint: ["/spot/bin/spot-dev-entrypoint.sh"]
@@ -70,6 +67,8 @@ services:
       - db
       - fedora
       - solr
+    profiles:
+      - migrate
 
   fedora:
     build:
