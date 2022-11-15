@@ -60,6 +60,7 @@ ENV RAILS_ENV=production
 
 RUN DATABASE_URL="postgres://fake" \
     SECRET_KEY_BASE="$(bin/rake secret)" \
+    FEDORA_URL="http://localhost" \
     bundle exec rake assets:precompile
 
 
