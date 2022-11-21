@@ -52,6 +52,10 @@ gem 'blacklight_range_limit', '6.3.3'
 # start up the server faster
 gem 'bootsnap', '1.11.1', require: false
 
+# use bulkrax for import/exports
+# @see https://github.com/samvera-labs/bulkrax
+gem 'bulkrax', '~> 4.3.0'
+
 # record importer pattern from curationexperts
 gem 'darlingtonia', '~> 3.0'
 
