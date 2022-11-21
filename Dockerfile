@@ -16,6 +16,7 @@ RUN apk upgrade && \
         curl \
         git \
         gcompat \
+        libxml2-dev \
         netcat-openbsd \
         nodejs \
         openssl \

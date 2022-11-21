@@ -1,10 +1,10 @@
- <% if menu.show_configuration? %>
+<% if menu.show_configuration? %>
     <li class="h5"><%= t('hyrax.admin.sidebar.configuration') %></li>
     <li>
       <%= menu.collapsable_section t('hyrax.admin.sidebar.settings'),
-                                   icon_class: "fa fa-cog",
-                                   id: 'collapseSettings',
-                                   open: menu.settings_section? do %>
+                                      icon_class: "fa fa-cog",
+                                      id: 'collapseSettings',
+                                      open: menu.settings_section? do %>
         <% if can?(:manage, :collection_types) %>
           <%= menu.nav_link(hyrax.admin_collection_types_path) do %>
             <span class="fa fa-folder-open" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.collection_types') %></span>
@@ -43,4 +43,6 @@
         <%= t('spot.dashboard.status.sidebar') %>
       </span>
     <% end %>
+
+    <%= render 'hyrax/dashboard/sidebar/menu_partials', menu: menu, section: :configuration %>
 <% end %>

@@ -7,7 +7,22 @@
   <% end %>
 
   <% end %>
+
+  <%# bulkrax additions
+      @see https://github.com/samvera-labs/bulkrax/blob/v4.3.0/app/views/hyrax/dashboard/sidebar/_repository_content.html.erb %>
   <%= menu.nav_link(hyrax.my_works_path,
                     also_active_for: hyrax.dashboard_works_path) do %>
     <span class="fa fa-file" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.works') %></span>
   <% end %>
+
+  <% if ::Hyrax::DashboardController&.respond_to?(:sidebar_partials) %>
+    <%= render 'hyrax/dashboard/sidebar/menu_partials', menu: menu, section: :repository_content %>
+  <% else %>
+    <%= menu.nav_link(bulkrax.importers_path) do %>
+      <span class="fa fa-cloud-upload" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('bulkrax.admin.sidebar.importers') %></span>
+    <% end %>
+
+    <%= menu.nav_link(bulkrax.exporters_path) do %>
+      <span class="fa fa-cloud-download" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('bulkrax.admin.sidebar.exporters') %></span>
+    <% end %>
+<% end %>
