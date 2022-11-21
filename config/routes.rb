@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   ##
   mount Blacklight::Engine => '/'
   mount BlacklightAdvancedSearch::Engine => '/'
+  mount Bulkrax::Engine, at: '/'
   mount Hydra::RoleManagement::Engine => '/admin'
   mount Hyrax::Engine, at: '/'
   mount Sidekiq::Web => '/sidekiq'

@@ -9,6 +9,8 @@
 :concurrency: 5
 :queues:
   - default
-  - ingest
+  - import
+  - export
+  - ingest # todo: remove
   - mailers
   - low_priority

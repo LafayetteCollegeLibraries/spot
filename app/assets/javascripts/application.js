@@ -26,6 +26,7 @@
 
 //= require openseadragon
 //= require hyrax
+//= require bulkrax
 //= require almond
 
 //= require spot/editor/multi_auth_controlled_vocabulary
