@@ -12,6 +12,8 @@ module Spot
     extend ActiveSupport::Concern
 
     included do
+      after_create :ensure_source_identifier!
+
       # A bibliographic reference for the resource.
       property :bibliographic_citation, predicate: ::RDF::Vocab::DC.bibliographicCitation do |index|
         index.as :stored_searchable
@@ -107,6 +109,15 @@ module Spot
         index.as :stored_searchable, :facetable
       end
 
+      # An identifier that links this record to a Bulkrax import/export record.
+      # For objects created within the Hyrax UI (_not_ Bulkrax), this will be
+      # filled with a default value of ["ldr:#{work.id}"]
+      #
+      # @todo find a better predicate for this field
+      property :source_identifier, predicate: ::RDF::URI('http://ldr.lafayette.edu/ns#source_identifier') do |index|
+        index.as :symbol
+      end
+
       # Stored as OCLC FAST URI, displayed as human-readable prefLabel.
       # @see {Spot::DeepIndexingService} for label indexing details
       property :subject, predicate: ::RDF::Vocab::DC11.subject,
@@ -123,6 +134,15 @@ module Spot
       property :title_alternative, predicate: ::RDF::Vocab::DC.alternative do |index|
         index.as :stored_searchable
       end
+    end
+
+    private
+
+    def ensure_source_identifier!
+      return unless source_identifier.empty?
+
+      self.source_identifier = ["ldr:#{id}"]
+      save!
     end
   end
 end
