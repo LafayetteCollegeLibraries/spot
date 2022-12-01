@@ -67,9 +67,7 @@ jobs:
             sudo apt-get install -y postgresql-9.6 libpq-dev
       - run:
           name: Use Bundler version specified in Gemfile.lock
-          command: |
-            sudo gem update --system
-            sudo gem install -i /usr/local/lib/ruby/gems/2.4.0 bundler -v`(tail -n1 Gemfile.lock | xargs)`
+          command: gem install bundler:1.16.1
       - restore_cache:
           name: Restore cached bundle
           key: spot-gems-{{ checksum "Gemfile.lock" }}
