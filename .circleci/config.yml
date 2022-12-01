@@ -57,6 +57,10 @@ jobs:
     steps:
       - checkout
       - run:
+        name: Install system dependencies
+        command: |
+          sudo apt-get install -y postgresql-9.6
+      - run:
           name: Use Bundler version specified in Gemfile.lock
           command: |
             sudo gem update --system
@@ -105,6 +109,11 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+
+      - run:
+          name: Install system dependencies
+          command: |
+            sudo apt-get install -y postgresql-9.6
 
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
