@@ -133,7 +133,9 @@ jobs:
 
       - run:
           name: Make sure dependencies are valid
-          command: bundle check || bundle install
+          command: |
+            gem install bundler:1.16.1
+            bundle check || bundle install
 
       - run:
           name: Load config into Solr
