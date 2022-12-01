@@ -1,14 +1,55 @@
 version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.4.0
+
 executors:
   ruby:
     docker:
-      - image: circleci/ruby:2.4.6-stretch-node-browsers-legacy
+      - image: cimg/ruby:2.4.10-node
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
     working_directory: ~/spot
     environment:
       BUNDLE_PATH: vendor/bundle
+
+  application:
+    docker:
+      - image: cimg/ruby:2.4.10-node
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: cimg/redis:5.0.14
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: postgres:9.6-alpine
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+        environment:
+          POSTGRES_USER: spot_dev_user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: spot_test
+      - image: samvera/fcrepo4:4.7.5
+        environment:
+          CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
+      - image: solr:7.5.0-alpine
+        command: bin/solr -cloud -noprompt -f -p 8983
+    working_directory: ~/spot
+    environment:
+      - BUNDLE_PATH=vendor/bundle
+      - CAS_BASE_URL=http://localhost
+      - CI=1
+      - FEDORA_TEST_URL=http://localhost:8080/rest
+      - IIIF_BASE_URL=http://localhost/iiif/2
+      - RAILS_ENV=test
+      - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+      - PSQL_DATABASE=spot_test
+      - PSQL_USER=spot_dev_user
+      - PSQL_PASSWORD=password
+      - SOLR_TEST_URL=http://localhost:8983/solr/spot-test
+      - URL_HOST=http://localhost
 
 jobs:
   bundle:
@@ -59,56 +100,18 @@ jobs:
         command: bundle exec rubocop
 
   test:
-    docker:
-      - image: circleci/ruby:2.4.3-stretch-node-browsers
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-      - image: circleci/redis:4
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-      - image: postgres:9.6-alpine
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-        environment:
-          POSTGRES_USER: spot_dev_user
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: spot_test
-      - image: samvera/fcrepo4:4.7.5
-        environment:
-          CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
-      - image: solr:7.5.0-alpine
-        command: bin/solr -cloud -noprompt -f -p 8983
-
-    working_directory: ~/spot
+    executor: application
     parallelism: 4
-
-    environment:
-      BUNDLE_PATH: vendor/bundle
-      RAILS_ENV: test
-      FEDORA_TEST_URL: http://localhost:8080/rest
-      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
-      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      PSQL_USER: spot_dev_user
-      PSQL_PASSWORD: password
-      PSQL_DATABASE: spot_test
-      CI: true
-      CAS_BASE_URL: http://localhost
-      URL_HOST: http://localhost
-      IIIF_BASE_URL: http://localhost/iiif/2
-
     steps:
       - attach_workspace:
           at: ~/
 
-      # Update to the latest release of Chrome
-      - run: wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      - run: sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-      - run: sudo apt-get update
-      - run: sudo apt-get -y install google-chrome-stable postgresql-9.6
-      - run: google-chrome-stable --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
+      - run:
+          name: Start headless Chrome browser in the background
+          command: google-chrome --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
 
       - run:
           name: Make sure dependencies are valid
@@ -135,6 +138,7 @@ jobs:
             mkdir /tmp/test-results
             ./cc-test-reporter before-build
             bundle exec rspec \
+              --backtrace \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
               --format progress\
@@ -159,13 +163,7 @@ jobs:
           destination: test-results
 
   upload-coverage:
-    docker:
-      - image: circleci/ruby:2.4.3-stretch-node-browsers
-        auth:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-    working_directory: ~/spot
-
+    executor: ruby
     steps:
       - attach_workspace:
           at: ~/spot
