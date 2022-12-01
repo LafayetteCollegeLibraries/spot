@@ -102,8 +102,11 @@ jobs:
     - attach_workspace:
         at: ~/
     - run:
+        name: Fine, we'll install bundler again
+        command: gem install bundler:1.16.1
+    - run:
         name: Get 'em Rubocop!
-        command: bundle exec rubocop
+        command: (bundle check || bundle install) && bundle exec rubocop
 
   test:
     executor: application
