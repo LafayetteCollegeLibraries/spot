@@ -36,8 +36,8 @@ executors:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
       - image: solr:8.11.2
         environment:
-          SOLR_AUTH_TYPE: basic
-          SOLR_AUTHENTICATION_OPTS: -Dbasicauth=solr:SolrRocks
+          - SOLR_AUTH_TYPE=basic
+          - SOLR_AUTHENTICATION_OPTS="-Dbasicauth=solr:SolrRocks"
         command: |
           bash -c 'bin/solr start -cloud -p 8983 && bin/solr auth enable -credentials solr:SolrRocks && bin/solr stop && solr-foreground -cloud -p 8983'
     working_directory: ~/spot
@@ -52,7 +52,7 @@ executors:
       - PSQL_DATABASE=spot_test
       - PSQL_USER=spot_dev_user
       - PSQL_PASSWORD=password
-      - SOLR_TEST_URL=http://localhost:8983/solr/spot-test
+      - SOLR_TEST_URL=http://solr:SolrRocks@localhost:8983/solr/spot-test
       - URL_HOST=http://localhost
 
 jobs:
