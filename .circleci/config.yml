@@ -116,9 +116,13 @@ jobs:
           at: ~/
 
       - run:
-          name: Install system dependencies
+          name: Install Postgres dependency
           command: |
-            sudo apt-get install -y postgresql-9.6
+            sudo apt-get update -y
+            curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+            echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
+            sudo apt-get update -y
+            sudo apt-get install -y postgresql-9.6 libpq-dev
 
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
