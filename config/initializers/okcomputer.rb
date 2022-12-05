@@ -50,7 +50,7 @@ if fcrepo_config['url'].present?
   parsed = URI.parse(fcrepo_config['url'])
   parsed.userinfo = "#{fcrepo_config['user']}:#{fcrepo_config['password']}"
 
-  fcrepo_uri = parsed
+  fcrepo_uri = parsed.to_s
 end
 
 # out of the box, "application running?" and "active record working?"
