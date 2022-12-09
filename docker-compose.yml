@@ -5,7 +5,7 @@ services:
     image: lafayette/rails_web
     build:
       context: .
-      target: spot-base
+      target: spot-development
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -18,7 +18,6 @@ services:
       - cantaloupe
       - db
       - fedora
-      - fitsservlet
       - redis
       - solr
       - db_migrate
@@ -57,9 +56,6 @@ services:
 
   db_migrate:
     image: lafayette/rails_web
-    build:
-      context: .
-      target: spot-base
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -83,11 +79,6 @@ services:
     restart: always
     depends_on:
       - db
-
-  fitsservlet:
-    image: harvardlts/fitsservlet_container:1.4.1
-    ports:
-      - 8081:8081
 
   redis:
     image: redis:alpine
@@ -115,7 +106,6 @@ services:
     depends_on:
       - db
       - fedora
-      - fitsservlet
       - redis
       - solr
 
