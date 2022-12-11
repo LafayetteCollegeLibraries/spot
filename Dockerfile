@@ -1,10 +1,10 @@
 ##
 # TARGET: spot-base
-# Does the majority of setup for dev/prod images.
+# !! This is a builder image. Not for general use !!
+# Use this as the base image for the Rails / Sidekiq services.
 ##
 FROM ruby:2.4.6-alpine3.10 as spot-base
 
-# system dependencies
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
@@ -27,8 +27,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_DERIVATIVES_PATH=/spot/tmp/derivatives \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads
 
-# match our Gemfile.lock version
-# TODO: upgrade the Gemfile bundler version to 2
+# @todo upgrade the Gemfile bundler version to 2 to remove version constraint
 RUN gem install bundler:1.13.7
 
 ARG BUNDLE_WITHOUT="development:test"
@@ -40,6 +39,18 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 
 HEALTHCHECK CMD curl -skf https://localhost || exit 1
 
+
+##
+#  Target: spot-asset-builder
+#  !! This is a builder image, do not use !!
+##
+FROM spot-base as spot-asset-builder
+ENV RAILS_ENV=production
+COPY . /spot
+RUN SECRET_KEY_BASE="$(bin/rake secret)" \
+    bundle exec rake assets:precompile
+
+
 ##
 # TARGET: spot-development
 # Base container for local development. Reruns bundle install for dev gems
@@ -49,6 +60,7 @@ ENV RAILS_ENV=development
 RUN bundle install --jobs "$(nproc)" --with="development test"
 COPY . /spot
 
+
 ##
 # TARGET: spot-production
 # Precompiles assets for production
@@ -56,8 +68,8 @@ COPY . /spot
 FROM spot-base as spot-production
 ENV RAILS_ENV=production
 COPY . /spot
-RUN SECRET_KEY_BASE="$(bin/rake secret)" \
-    bundle exec rake assets:precompile
+COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+
 
 ##
 # TARGET: spot-worker
@@ -70,9 +82,7 @@ ENV FITS_VERSION=${FITS_VERSION}
 
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 ENV MALLOC_ARENA_MAX=2
-
 # We don't need the entrypoint script to generate an SSL cert
-# for Sidekiq, as it's not world-readable.
 ENV SKIP_SSL_CERT=true
 
 RUN apk --no-cache update && \
@@ -86,7 +96,6 @@ RUN apk --no-cache update && \
         openjdk11-jre \
         perl
 
-# Install FITS
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
     cd /usr/local/fits && \
@@ -97,7 +106,15 @@ RUN mkdir -p /usr/local/fits && \
 
 ENV PATH="${PATH}:/usr/local/fits"
 
-# Copy last so we can cache the other steps
 COPY . /spot
-
 CMD ["bundle", "exec", "sidekiq"]
+EXPOSE 3000
+
+
+##
+# Target: spot-worker-production
+# Copies compiled assets for use in production.
+##
+FROM spot-worker as spot-worker-production
+ENV RAILS_ENV=production
+COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
