@@ -25,5 +25,5 @@
 # don't copy over generated files
 public/assets
 public/branding
+!public/uv/.keep
 public/uv
-public/web
