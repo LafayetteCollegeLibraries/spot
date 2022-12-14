@@ -986,6 +986,7 @@ PLATFORMS
 DEPENDENCIES
   almond-rails (= 0.3.0)
   amazing_print (= 1.2.1)
+  aws-sdk-s3
   bagit (= 0.4.4)
   bixby (= 1.0.0)
   blacklight_advanced_search (= 6.4.1)
@@ -1072,4 +1073,4 @@ DEPENDENCIES
   webmock (~> 3.8)
 
 BUNDLED WITH
-   1.16.1
+   1.17.3

@@ -14,6 +14,9 @@ services:
       - "443:443"
     env_file:
       - .env.local
+    environment:
+      AWS_ACCESS_KEY_ID: localstack_access_key
+      AWS_SECRET_ACCESS_KEY: localstack_secret_access_key
     depends_on:
       - cantaloupe
       - db
@@ -80,6 +83,21 @@ services:
     depends_on:
       - db
 
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      AWS_ACCESS_KEY_ID: localstack_access_key
+      AWS_SECRET_ACCESS_KEY: localstack_secret_access_key
+      AWS_DEFAULT_REGION: us-east-1
+      EDGE_PORT: 4566
+      SERVICES: s3
+      S3_DIR: /tmp/s3-buckets
+    volumes:
+      - localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - '4566-4583:4566-4583'
+
   redis:
     image: redis:alpine
     volumes:
@@ -123,11 +141,9 @@ services:
 
 
 volumes:
-  derivatives:
   db:
   fedora:
-  gem_storage:
+  localstack:
   solr:
   rails_tmp:
   redis:
-  uploads:
