@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'aws-sdk-s3'
 require 'digest/md5'
+require 'fileutils'
 
 module Spot
   module Derivatives
@@ -64,8 +65,7 @@ module Spot
 
         return unless use_s3?
 
-        upload_derivative_to_s3
-        cleanup_derivatives_local
+        upload_derivative_to_s3 && cleanup_local_derivatives
       end
 
       # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
