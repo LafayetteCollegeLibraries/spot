@@ -36,6 +36,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
     allow(File).to receive(:exist?).with(derivative_path).and_return true
     allow(File).to receive(:open).with(derivative_path, 'r')
     allow(File).to receive(:size).with(derivative_path).and_return(file_size)
+    allow(File).to receive(:directory?).with(File.dirname(derivative_path)).and_return(true)
     allow(FileUtils).to receive(:rm_f).with(derivative_path)
 
     allow(MiniMagick::Tool::Convert).to receive(:new).and_yield(magick_commands)
