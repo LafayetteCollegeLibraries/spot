@@ -1,0 +1,82 @@
+
+Skip to content
+Pull requests
+Issues
+Codespaces
+Marketplace
+Explore
+@jwellnit
+samvera /
+hyrax
+Public
+
+Code
+Issues 451
+Pull requests 20
+Actions
+Projects 6
+Wiki
+Security
+
+    Insights
+
+hyrax/app/views/shared/_citations.html.erb
+@jcoyne
+jcoyne Run erb lint
+Latest commit eb17166 Mar 28, 2018
+History
+5 contributors
+@jcoyne
+@mjgiarlo
+@hectorcorrea
+@cbeer
+@barmintor
+32 lines (31 sloc) 1.66 KB
+<% content_for(:twitter_meta) do %>
+  <meta name="twitter:card" content="product" />
+  <meta name="twitter:site" content="<%= t('hyrax.product_twitter_handle') %>" />
+  <meta name="twitter:creator" content="<%= @presenter.tweeter %>" />
+  <meta property="og:site_name" content="<%= application_name %>" />
+  <meta property="og:type" content="object" />
+  <meta property="og:title" content="<%= @presenter.title.first %>" />
+  <meta property="og:description" content="<%= @presenter.description.first.truncate(200) rescue @presenter.title.first %>" />
+  <meta property="og:image" content="<%= @presenter.download_url %>" />
+  <meta property="og:url" content="<%= polymorphic_url([main_app, @presenter]) %>" />
+  <meta name="twitter:data1" content="<%= @presenter.keyword.join(', ') %>" />
+  <meta name="twitter:label1" content="Keywords" />
+  <meta name="twitter:data2" content="<%= @presenter.rights_statement.first %>" />
+  <meta name="twitter:label2" content="Rights Statement" />
+<% end %>
+<% content_for(:gscholar_meta) do %>
+  <meta name="citation_title" content="<%= @presenter.title.first %>" />
+  <% @presenter.creator.each do |creator| %>
+  <meta name="citation_author" content="<%= creator %>" />
+  <% end %>
+  <meta name="citation_publication_date" content="<%= @presenter.date_created.first %>" />
+  <meta name="citation_pdf_url" content="<%= @presenter.download_url %>" />
+  <!-- Hyrax does not yet support these metadata -->
+  <!--
+    <meta name="citation_journal_title" content=""/>
+    <meta name="citation_volume" content=""/>
+    <meta name="citation_issue" content=""/>
+    <meta name="citation_firstpage" content=""/>
+    <meta name="citation_lastpage" content=""/>
+  -->
+<% end %>
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+
+    Terms
+    Privacy
+    Security
+    Status
+    Docs
+    Contact GitHub
+    Pricing
+    API
+    Training
+    Blog
+    About
+
+hyrax/_citations.html.erb at v2.9.6 · samvera/hyrax
