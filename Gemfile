@@ -150,6 +150,12 @@ gem 'signet', '~> 0.13.2'
 gem 'simple_form', '~> 5.0.3'
 gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
 
+# bulkrax
+# gem 'minitest', '5.17.0'
+# gem 'rake-compiler', '1.2.1'
+# gem 'libxml-ruby', '3.1.0'
+# gem 'bulkrax'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
