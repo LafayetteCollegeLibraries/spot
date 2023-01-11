@@ -3,7 +3,7 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.6-alpine3.10 as spot-base
+FROM ruby:2.4.6-alpine3.10 as spot-base
 
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
