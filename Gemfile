@@ -151,7 +151,7 @@ gem 'simple_form', '~> 5.0.3'
 gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
 
 # bulkrax
-# gem 'bulkrax'
+gem 'bulkrax'
 
 # development dependencies (not as necessary to
 # lock down versions here)
