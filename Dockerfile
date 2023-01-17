@@ -57,6 +57,18 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" \
 ##
 FROM spot-base as spot-development
 ENV RAILS_ENV=development
+
+# install awscli the hard way (via python) bc our base image is
+# too old to include it in the alpine 3.10 apk
+#
+# @ see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
+RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
+    && python3 -m ensurepip --upgrade \
+    && pip3 install --upgrade pip \
+    && pip3 install --upgrade awscli \
+    && pip3 uninstall --yes pip \
+    && apk del python3-dev gcc musl-dev
+
 RUN bundle install --jobs "$(nproc)" --with="development test"
 COPY . /spot
 

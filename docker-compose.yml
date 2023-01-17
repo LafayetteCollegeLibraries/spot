@@ -28,17 +28,18 @@ services:
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
-    volumes:
-      - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - rails_tmp:/spot
     ports:
       - "8182:8182"
     environment:
-      CANTALOUPE_DELEGATE_SCRIPT_ENABLED: "true"
-      CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
-      CANTALOUPE_FILESYSTEMSOURCE_LOOKUP_STRATEGY: ScriptLookupStrategy
       CANTALOUPE_BASE_URI: 'http://localhost:8182'
-      DERIVATIVES_PATH: "/spot/derivatives"
+      CANTALOUPE_SOURCE_STATIC: S3Source
+      CANTALOUPE_S3SOURCE_ACCESS_KEY_ID: minio_root_user
+      CANTALOUPE_S3SOURCE_SECRET_KEY: minio_root_password
+      CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: iiif-derivatives
+      CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_PATH_SUFFIX: "-access.tif"
+      CANTALOUPE_S3SOURCE_ENDPOINT: "http://minio:9000"
+      CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
+      CANTALOUPE_LOG_APPLICATION_LEVEL: trace
     restart: always
 
   db:
@@ -79,6 +80,18 @@ services:
     restart: always
     depends_on:
       - db
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: minio_root_user
+      MINIO_ROOT_PASSWORD: minio_root_password
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
 
   redis:
     image: redis:alpine
@@ -123,11 +136,9 @@ services:
 
 
 volumes:
-  derivatives:
   db:
   fedora:
-  gem_storage:
+  minio:
   solr:
   rails_tmp:
   redis:
-  uploads:

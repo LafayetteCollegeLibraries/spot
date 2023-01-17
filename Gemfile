@@ -40,6 +40,9 @@ gem 'hyrax', '~> 2.9.0'
 # modularize our javascripts
 gem 'almond-rails', '0.3.0'
 
+# interact with assets in s3 buckets
+gem 'aws-sdk-s3'
+
 # parse + build bagit-compliant files
 gem 'bagit', '0.4.4'
 
