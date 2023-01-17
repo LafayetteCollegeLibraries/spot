@@ -73,9 +73,8 @@ module Spot
       #
       # @return [String]
       def derivative_path
-        Hyrax::DerivativePath
-          .derivative_path_for_reference(file_set, 'access.tif')
-          .to_s.gsub(%r{\.#{'access.tif'}$}, '')
+        @derivative_path ||=
+          Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access.tif').to_s.gsub(/\.access\.tif$/, '')
       end
 
       private
@@ -98,7 +97,7 @@ module Spot
           key: s3_derivative_key,
           body: File.open(derivative_path, 'r'),
           content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).to_s
+          content_md5: Digest::MD5.file(derivative_path).base64digest
         )
       end
 
