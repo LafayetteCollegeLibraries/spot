@@ -14,9 +14,6 @@ services:
       - "443:443"
     env_file:
       - .env.local
-    environment:
-      AWS_ACCESS_KEY_ID: localstack_access_key
-      AWS_SECRET_ACCESS_KEY: localstack_secret_access_key
     depends_on:
       - cantaloupe
       - db
@@ -31,17 +28,18 @@ services:
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
-    volumes:
-      - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - rails_tmp:/spot
     ports:
       - "8182:8182"
     environment:
-      CANTALOUPE_DELEGATE_SCRIPT_ENABLED: "true"
-      CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
-      CANTALOUPE_FILESYSTEMSOURCE_LOOKUP_STRATEGY: ScriptLookupStrategy
       CANTALOUPE_BASE_URI: 'http://localhost:8182'
-      DERIVATIVES_PATH: "/spot/derivatives"
+      CANTALOUPE_SOURCE_STATIC: S3Source
+      CANTALOUPE_S3SOURCE_ACCESS_KEY_ID: minio_root_user
+      CANTALOUPE_S3SOURCE_SECRET_KEY: minio_root_password
+      CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: iiif-derivatives
+      CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_PATH_SUFFIX: "-access.tif"
+      CANTALOUPE_S3SOURCE_ENDPOINT: "http://minio:9000"
+      CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
+      CANTALOUPE_LOG_APPLICATION_LEVEL: trace
     restart: always
 
   db:
@@ -83,20 +81,17 @@ services:
     depends_on:
       - db
 
-  localstack:
-    image: localstack/localstack:latest
+  minio:
+    image: minio/minio:latest
     environment:
-      AWS_ACCESS_KEY_ID: localstack_access_key
-      AWS_SECRET_ACCESS_KEY: localstack_secret_access_key
-      AWS_DEFAULT_REGION: us-east-1
-      EDGE_PORT: 4566
-      SERVICES: s3
-      S3_DIR: /tmp/s3-buckets
+      MINIO_ROOT_USER: minio_root_user
+      MINIO_ROOT_PASSWORD: minio_root_password
+    command: server --console-address ":9001" /data
     volumes:
-      - localstack:/var/lib/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
+      - minio:/data
     ports:
-      - '4566-4583:4566-4583'
+      - 9000:9000
+      - 9001:9001
 
   redis:
     image: redis:alpine
@@ -143,7 +138,7 @@ services:
 volumes:
   db:
   fedora:
-  localstack:
+  minio:
   solr:
   rails_tmp:
   redis:
