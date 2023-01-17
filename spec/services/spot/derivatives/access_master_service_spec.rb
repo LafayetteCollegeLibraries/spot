@@ -6,8 +6,9 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
   let(:derivative_path) { '/rails/tmp/derivatives/ab/c1/23/de/f-access.tif' }
   let(:src_path) { '/original/path/to/src/file.tif' }
   let(:file_size) { 0 }
-  let(:file_digest) { '<MD5 hash>' }
+  let(:file_digest) { 'base64digest' }
   let(:stringio) { StringIO.new('hi') }
+  let(:mock_digest) { instance_double(Digest::MD5, base64digest: file_digest) }
 
   let(:magick_commands) do
     [].tap do |arr|
@@ -42,7 +43,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
     allow(MiniMagick::Tool::Convert).to receive(:new).and_yield(magick_commands)
     allow(FileUtils).to receive(:rm_f).with(File.dirname(derivative_path))
     allow(File).to receive(:open).with(derivative_path, "r").and_return(stringio)
-    allow(Digest::MD5).to receive(:file).with(derivative_path).and_return(file_digest)
+    allow(Digest::MD5).to receive(:file).with(derivative_path).and_return(mock_digest)
   end
 
   after do
