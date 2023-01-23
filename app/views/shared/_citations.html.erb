@@ -5,8 +5,8 @@
   <meta property="og:site_name" content="<%= application_name %>" />
   <meta property="og:type" content="object" />
   <meta property="og:title" content="<%= @presenter.title.first %>" />
-  <meta property="og:description" content="<%= @presenter.description.first.truncate(200) rescue @presenter.title.first %>" />
-  <meta property="og:image" content="<%= @presenter.thumbnail_url %>" />
+  <meta property="og:description" content="<%= @presenter.abstract.first.truncate(200) rescue @presenter.description.first.truncate(200) rescue "View this item in the LDR" %>" />
+  <meta property="og:image" content="<%= @presenter.download_url + "?file=thumbnail" %>" />
   <meta property="og:url" content="<%= polymorphic_url([main_app, @presenter]) %>" />
   <meta name="twitter:data1" content="<%= @presenter.keyword.join(', ') %>" />
   <meta name="twitter:label1" content="Keywords" />
