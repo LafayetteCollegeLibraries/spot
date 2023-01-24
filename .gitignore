@@ -36,11 +36,15 @@
 /derivatives
 /uploads
 
+# Generated asset files
+/public/assets
+
 # Ignore collection branding items
 /public/branding
 
 # universalviewer target directory
 /public/uv/*
+!/public/uv/.keep
 
 # vendor files
 /vendor/*

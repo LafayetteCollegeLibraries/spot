@@ -3,6 +3,8 @@ development:
   password: fedoraAdmin
   url: <%= ENV['FEDORA_URL'] || "http://127.0.0.1:#{ENV.fetch('FCREPO_DEVELOPMENT_PORT', 8984)}/rest" %>
   base_path: /dev
+  ssl:
+    verify: false
 test:
   url: <%= ENV['FEDORA_TEST_URL'] || "http://127.0.0.1:#{ENV.fetch('FCREPO_TEST_PORT', 8984)}/rest" %>
   base_path: /test
@@ -11,3 +13,5 @@ production:
   password: <%= ENV['FEDORA_PASSWORD'] %>
   url: <%= ENV['FEDORA_URL'] %>
   base_path: /ldr
+  ssl:
+    verify: false
