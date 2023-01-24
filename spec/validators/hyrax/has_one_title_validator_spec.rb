@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.describe Hyrax::HasOneTitleValidator do
   let(:validator) { described_class.new }
 
