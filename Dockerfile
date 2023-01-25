@@ -129,4 +129,4 @@ EXPOSE 3000
 ##
 FROM spot-worker as spot-worker-production
 ENV RAILS_ENV=production
-COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+COPY --from=spot-asset-builder /spot/public /spot/public
