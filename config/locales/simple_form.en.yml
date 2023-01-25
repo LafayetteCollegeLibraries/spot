@@ -16,9 +16,9 @@ en:
         bibliographic_citation: A bibliographic reference for the resource.
         contributor: A person or group you want to recognize for playing a role in the creation of the work, but not the primary role.
         creator: The person or group responsible for the work. Usually this is the author of the content. Personal names should be entered with the last name first, e.g. &quot;Smith, John.&quot;.
-        date: A point or period of time associated with an event in the lifecycle of the resource.
-        date_associated: The date range of of the event documented in the photographic image, and later reproduced in an album or postcard.
-        date_available: Date that the resource became or will become available.
+        date: A point or period of time associated with an event in the lifecycle of the resource. Use YYYY-MM-DD or YYYY-MM format.
+        date_associated: The date range of of the event documented in the photographic image, and later reproduced in an album or postcard. Use YYYY-MM-DD or YYYY-MM format.
+        date_available: Date that the resource became or will become available. Use YYYY-MM-DD or YYYY-MM format.
         date_issued: Date of formal issuance (e.g., publication) of the resource. Use YYYY-MM-DD or YYYY-MM format.
         date_scope_note: Commentary as to how the date was derived.
         description: A free-text account of the resource.
