@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   mount Hyrax::Engine, at: '/'
   mount Sidekiq::Web => '/sidekiq'
   mount Qa::Engine => '/authorities'
+  mount Bulkrax::Engine, at: '/'
 
   concern :exportable, Blacklight::Routes::Exportable.new
   concern :oai_provider, BlacklightOaiProvider::Routes.new
