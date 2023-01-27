@@ -9,6 +9,8 @@
 :concurrency: 5
 :queues:
   - default
+  - import # bulkrax
+  - export # bulkrax
   - ingest
   - mailers
   - low_priority

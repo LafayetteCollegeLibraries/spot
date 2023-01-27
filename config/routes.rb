@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   mount OkComputer::Engine, at: '/healthcheck'
   mount Sidekiq::Web => '/sidekiq'
   mount Qa::Engine => '/authorities'
+  mount Bulkrax::Engine, at: '/'
 
   concern :exportable, Blacklight::Routes::Exportable.new
   concern :oai_provider, BlacklightOaiProvider::Routes.new

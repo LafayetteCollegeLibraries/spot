@@ -22,6 +22,7 @@ RUN apt update && \
         ruby-dev \
         tzdata \
         zip
+RUN apk update && apk add g++ gcc libxml2 libxslt-dev
 
 WORKDIR /spot
 
