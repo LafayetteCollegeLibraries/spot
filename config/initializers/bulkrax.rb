@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# config/initializers/bulkrax.rb
 Bulkrax.setup do |config|
   # If the work type isn't provided during import, use Image
   config.default_work_type = 'Image'
