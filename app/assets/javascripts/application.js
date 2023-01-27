@@ -28,6 +28,9 @@
 //= require hyrax
 //= require almond
 
+// Bulkrax
+//= require bulkrax/application
+
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require language-tagged-autocomplete-setup
 //= require multi-auth-input
