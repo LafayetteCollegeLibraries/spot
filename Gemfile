@@ -153,6 +153,9 @@ gem 'signet', '~> 0.13.2'
 gem 'simple_form', '~> 5.0.3'
 gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
 
+# bulkrax
+gem 'bulkrax', '= 4.3.0'
+
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
