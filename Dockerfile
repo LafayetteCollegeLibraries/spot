@@ -21,12 +21,9 @@ RUN apt update && \
         postgresql-13 libpq-dev \
         ruby-dev \
         tzdata \
-        zip \
-        g++ \
-        gcc \
-        libxml2 \
-        libxml2-dev \
-        libxslt-dev
+        yarn \
+        zip
+RUN apk update && apk add g++ gcc libxml2 libxslt-dev
 
 WORKDIR /spot
 
