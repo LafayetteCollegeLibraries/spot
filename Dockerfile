@@ -20,6 +20,7 @@ RUN apk --no-cache update && \
         tzdata \
         yarn \
         zip
+RUN apk update && apk add g++ gcc libxml2 libxslt-dev
 
 WORKDIR /spot
 
