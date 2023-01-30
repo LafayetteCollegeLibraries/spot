@@ -18,7 +18,6 @@ RUN apk --no-cache update && \
         postgresql postgresql-dev \
         ruby-dev \
         tzdata \
-        yarn \
         zip
 
 WORKDIR /spot
@@ -46,7 +45,10 @@ HEALTHCHECK CMD curl -skf https://localhost || exit 1
 ##
 FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
+
+RUN apk add yarn
 COPY . /spot
+
 RUN SECRET_KEY_BASE="$(bin/rake secret)" \
     bundle exec rake assets:precompile
 
@@ -57,6 +59,7 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" \
 ##
 FROM spot-base as spot-development
 ENV RAILS_ENV=development
+RUN apk add --no-cache --update add yarn
 
 # install awscli the hard way (via python) bc our base image is
 # too old to include it in the alpine 3.10 apk
