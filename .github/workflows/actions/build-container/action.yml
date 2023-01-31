@@ -1,0 +1,73 @@
+name: Build Spot containers
+inputs:
+  version_id:
+    required: true
+    description: "Version identifier for release"
+  username:
+    required: true
+    description: "Username value for container repository"
+  password:
+    required: true
+    description: "Password/token value for container repository"
+  registry:
+    required: false
+    description: "URL for container repository (default: DockerHub)"
+    default: "docker.io"
+  fcrepo_container_id:
+    required: false
+    description: "Name to use for FCRepo container"
+    default: "lafayette/fcrepo"
+  solr_container_id:
+    required: false
+    description: "Name to use for Solr container"
+    default: "lafayette/solr"
+  application_container_id:
+    required: false
+    description: "Name to use for application container"
+    default: "lafayette/rails"
+  worker_container_id:
+    required: false
+    description: "Name to use for worker container"
+    default: "lafayette/sidekiq"
+  handle_container_id:
+    required: false
+    description: "Name to use for Handle server container"
+    default: "lafayette/handle"
+runs:
+  using: composite
+  steps:
+    -
+      name: Log into Docker
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+    -
+      name: Build and push FCRepo container
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        tags: ${{ inputs.fcrepo_container_id }}:${{ inputs.version_id }}
+        context: ./docker/fcrepo
+    -
+      name: Build and push Solr container
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        tags: ${{ inputs.solr_container_id }}:${{ inputs.version_id }}
+        context: ./docker/solr
+    -
+      name: Build and push application container
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        tags: ${{ inputs.application_container_id }}:${{ inputs.version_id }}
+        target: spot-production
+    -
+      name: Build and push worker container
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        tags: ${{ inputs.worker_container_id }}:${{ inputs.version_id }}
+        target: spot-worker-production

@@ -1,0 +1,24 @@
+name: Build release containers
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Build and publish release containers
+        uses: ./.github/actions/build-containers
+        with:
+          registry: ${{ secrets.DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          version_id: ${{ github.event.release.name }}
+          application_container_id: malantonio/ldr-application
+          worker_container_id: malantonio/ldr-worker
+          fcrepo_container_id: malantonio/ldr-fcrepo
+          handle_container_id: malantonio/ldr-handle
+          solr_container_id: malantonio/ldr-solr
+
