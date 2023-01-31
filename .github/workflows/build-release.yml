@@ -8,6 +8,8 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
       -
         name: Build and publish release containers
         uses: ./.github/actions/build-containers
