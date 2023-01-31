@@ -1,38 +1,41 @@
 name: Build Spot containers
 inputs:
-  version_id:
-    required: true
-    description: "Version identifier for release"
   username:
     required: true
     description: "Username value for container repository"
   password:
     required: true
     description: "Password/token value for container repository"
-  registry:
-    required: false
-    description: "URL for container repository (default: DockerHub)"
-    default: "docker.io"
-  fcrepo_container_id:
-    required: false
-    description: "Name to use for FCRepo container"
-    default: "lafayette/fcrepo"
-  solr_container_id:
-    required: false
-    description: "Name to use for Solr container"
-    default: "lafayette/solr"
+  version_id:
+    required: true
+    description: "Version identifier for release"
   application_container_id:
     required: false
     description: "Name to use for application container"
     default: "lafayette/rails"
-  worker_container_id:
+  environment:
     required: false
-    description: "Name to use for worker container"
-    default: "lafayette/sidekiq"
+    description: GitHub environment to use for variables
+  fcrepo_container_id:
+    required: false
+    description: "Name to use for FCRepo container"
+    default: "lafayette/fcrepo"
   handle_container_id:
     required: false
     description: "Name to use for Handle server container"
     default: "lafayette/handle"
+  registry:
+    required: false
+    description: "URL for container repository (default: DockerHub)"
+    default: "docker.io"
+  solr_container_id:
+    required: false
+    description: "Name to use for Solr container"
+    default: "lafayette/solr"
+  worker_container_id:
+    required: false
+    description: "Name to use for worker container"
+    default: "lafayette/sidekiq"
 runs:
   using: composite
   steps:
