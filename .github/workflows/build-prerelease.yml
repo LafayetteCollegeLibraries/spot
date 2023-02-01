@@ -2,7 +2,7 @@ name: Build prerelease containers
 on:
   release:
     types:
-      - prerelease
+      - prereleased
 
 jobs:
   docker:
