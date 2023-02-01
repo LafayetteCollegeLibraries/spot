@@ -25,11 +25,12 @@ jobs:
           fcrepo_container_id: ${{ vars.FCREPO_CONTAINER_ID }}
           handle_container_id: ${{ vars.HANDLE_CONTAINER_ID }}
           solr_container_id: ${{ vars.SOLR_CONTAINER_ID }}
+
   publish_release_containers_production:
     runs-on: ubuntu-latest
     environment: production
     steps:
-     -
+      -
         name: Check out repo
         uses: actions/checkout@v3
       -
