@@ -5,8 +5,9 @@ on:
       - prereleased
 
 jobs:
-  docker:
+  publish_prerelease_containers:
     runs-on: ubuntu-latest
+    environment: stage
     steps:
       -
         name: Check out repo
@@ -15,7 +16,6 @@ jobs:
         name: Build and publish prerelease containers in stage environment
         uses: ./.github/actions/build-containers
         with:
-          environment: stage
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}

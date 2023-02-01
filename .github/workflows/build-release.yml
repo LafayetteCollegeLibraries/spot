@@ -5,8 +5,9 @@ on:
       - released
 
 jobs:
-  docker:
+  publish_release_containers_stage:
     runs-on: ubuntu-latest
+    environment: stage
     steps:
       -
         name: Check out repo
@@ -15,7 +16,6 @@ jobs:
         name: Build and publish release containers in stage environment
         uses: ./.github/actions/build-containers
         with:
-          environment: stage
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
@@ -25,11 +25,17 @@ jobs:
           fcrepo_container_id: ${{ vars.FCREPO_CONTAINER_ID }}
           handle_container_id: ${{ vars.HANDLE_CONTAINER_ID }}
           solr_container_id: ${{ vars.SOLR_CONTAINER_ID }}
+  publish_release_containers_production:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+     -
+        name: Check out repo
+        uses: actions/checkout@v3
       -
         name: Build and publish release containers in production environment
         uses: ./.github/actions/build-containers
         with:
-          environment: production
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
