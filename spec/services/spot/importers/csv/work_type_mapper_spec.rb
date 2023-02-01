@@ -32,6 +32,12 @@ RSpec.describe Spot::Importers::CSV::WorkTypeMapper, feature: :csv_ingest_servic
 
           it { is_expected.to eq [] }
         end
+
+        context 'when uri has a space' do
+          let(:metadata) { { field.to_s => '  http://example.org' } }
+
+          it { is_expected.to eq [RDF::URI('http://example.org')] }
+        end
       end
     end
   end

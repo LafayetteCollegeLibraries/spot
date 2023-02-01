@@ -67,7 +67,7 @@ module Spot::Importers::CSV
     # @see {Spot::Mappers::BaseMapper#map_field}
     def map_field(key)
       return [] unless field?(key)
-      Array.wrap(metadata[key]).map { |v| v.start_with?('http://', 'https://') ? RDF::URI(v) : v }
+      Array.wrap(metadata[key]).map { |v| v.strip.start_with?('http://', 'https://') ? RDF::URI(v.strip) : v }
     end
 
     def metadata=(value)
