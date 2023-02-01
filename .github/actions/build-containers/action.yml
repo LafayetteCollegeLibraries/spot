@@ -19,7 +19,7 @@ inputs:
   fcrepo_container_id:
     required: false
     description: "Name to use for FCRepo container"
-    default: "lafayette/fcrepo"
+    default: "lafayette/fc"
   handle_container_id:
     required: false
     description: "Name to use for Handle server container"
