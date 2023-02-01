@@ -54,7 +54,8 @@ runs:
       uses: docker/build-push-action@v4
       with:
         push: true
-        tags: ${{ inputs.fcrepo_container_id }}:${{ inputs.version_id }}
+        tags:
+          - ${{ inputs.registry }}/${{ inputs.fcrepo_container_id }}:${{ inputs.version_id }}
         context: ./docker/fcrepo
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -63,7 +64,8 @@ runs:
       uses: docker/build-push-action@v4
       with:
         push: true
-        tags: ${{ inputs.solr_container_id }}:${{ inputs.version_id }}
+        tags:
+          - ${{ inputs.registry }}/${{ inputs.solr_container_id }}:${{ inputs.version_id }}
         context: ./docker/solr
         cache-from: type=gh a
         cache-to: type=gha,mode=max
@@ -72,7 +74,8 @@ runs:
       uses: docker/build-push-action@v4
       with:
         push: true
-        tags: ${{ inputs.application_container_id }}:${{ inputs.version_id }}
+        tags:
+          - ${{ inputs.registry }}/${{ inputs.application_container_id }}:${{ inputs.version_id }}
         context: .
         target: spot-production
         cache-from: type=gha
@@ -82,7 +85,8 @@ runs:
       uses: docker/build-push-action@v4
       with:
         push: true
-        tags: ${{ inputs.worker_container_id }}:${{ inputs.version_id }}
+        tags:
+          - ${{ inputs.registry }}/${{ inputs.worker_container_id }}:${{ inputs.version_id }}
         context: .
         target: spot-worker-production
         cache-from: type=gha
