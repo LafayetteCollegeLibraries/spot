@@ -19,6 +19,7 @@ RSpec.shared_examples 'it includes Spot::CoreMetadata' do
     [:rights_holder,          RDF::Vocab::DC.rightsHolder],
     [:rights_statement,       RDF::Vocab::EDM.rights],
     [:source,                 RDF::Vocab::DC.source],
+    [:source_identifier,      RDF::URI('http://ldr.lafayette.edu/ns#source_identifier')],
     [:subject,                RDF::Vocab::DC11.subject],
     [:subtitle,               RDF::URI.new('http://purl.org/spar/doco/Subtitle')],
     [:title_alternative,      RDF::Vocab::DC.alternative]
