@@ -6,21 +6,21 @@ inputs:
   password:
     required: true
     description: "Password/token value for container repository"
-  version_id:
+  tag_name:
     required: true
     description: "Version identifier for release"
-  application_container_id:
+  application_image_name:
     required: false
     description: "Name to use for application container"
     default: "lafayette/rails"
   environment:
     required: false
     description: GitHub environment to use for variables
-  fcrepo_container_id:
+  fcrepo_image_name:
     required: false
     description: "Name to use for FCRepo container"
     default: "lafayette/fc"
-  handle_container_id:
+  handle_image_name:
     required: false
     description: "Name to use for Handle server container"
     default: "lafayette/handle"
@@ -28,11 +28,11 @@ inputs:
     required: false
     description: "URL for container repository (default: DockerHub)"
     default: "docker.io"
-  solr_container_id:
+  solr_image_name:
     required: false
     description: "Name to use for Solr container"
     default: "lafayette/solr"
-  worker_container_id:
+  worker_image_name:
     required: false
     description: "Name to use for worker container"
     default: "lafayette/sidekiq"
@@ -51,39 +51,35 @@ runs:
         uses: docker/setup-buildx-action@v2
     -
       name: Build and push FCRepo container
-      uses: docker/build-push-action@v4
+      uses: ./.github/actions/build-container
       with:
-        push: true
-        tags: ${{ inputs.registry }}/${{ inputs.fcrepo_container_id }}:${{ inputs.version_id }}
+        image_name: ${{ inputs.fcrepo_image_name }}
         context: ./docker/fcrepo
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        registry: ${{ inputs.registry }}
+        tag: ${{ tag_name }}
     -
       name: Build and push Solr container
-      uses: docker/build-push-action@v4
+      uses: ./.github/actions/build-container
       with:
-        push: true
-        tags: ${{ inputs.registry }}/${{ inputs.solr_container_id }}:${{ inputs.version_id }}
+        image_name: ${{ inputs.solr_image_name }}
         context: ./docker/solr
-        cache-from: type=gh a
-        cache-to: type=gha,mode=max
+        registry: ${{ inputs.registry }}
+        tag: ${{ tag_name }}
     -
       name: Build and push application container
-      uses: docker/build-push-action@v4
+      uses: ./.github/actions/build-container
       with:
-        push: true
-        tags: ${{ inputs.registry }}/${{ inputs.application_container_id }}:${{ inputs.version_id }}
+        image_name: ${{ inputs.application_image_name }}
         context: .
+        registry: ${{ inputs.registry }}
+        tag: ${{ tag_name }}
         target: spot-production
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
     -
       name: Build and push worker container
-      uses: docker/build-push-action@v4
+      uses: ./.github/actions/build-container
       with:
-        push: true
-        tags: ${{ inputs.registry }}/${{ inputs.worker_container_id }}:${{ inputs.version_id }}
+        image_name: ${{ inputs.worker_image_name }}
         context: .
+        registry: ${{ inputs.registry }}
+        tag: ${{ tag_name }}
         target: spot-worker-production
-        cache-from: type=gha
-        cache-to: type=gha,mode=max

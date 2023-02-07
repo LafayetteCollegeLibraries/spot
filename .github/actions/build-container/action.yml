@@ -1,0 +1,32 @@
+name: Build Spot container
+inputs:
+  image_name:
+    required: true
+    description: "Name for Docker image (ex. 'lafayette/rails')"
+  tag:
+    required: true
+    description: "Version identifier for release (ex. '2023.1')"
+  context:
+    required: false
+    default: '.'
+    description: "Context for Docker image"
+  registry:
+    required: false
+    default: "docker.io"
+    description: "Registry tag (default is 'docker.io')"
+  target:
+    required: false
+    description: "Docker target to build"
+runs:
+  using: composite
+  steps:
+    -
+      name: Build and push ${{ inputs.image_name }} container
+      uses: docker/build-push-action@v4
+      with:
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        context: ${{ inputs.context }}
+        push: true
+        tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ inputs.tag }}
+        target: ${{ inputs.target }}
