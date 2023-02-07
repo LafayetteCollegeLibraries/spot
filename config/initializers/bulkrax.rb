@@ -3,11 +3,11 @@ Bulkrax.setup do |config|
     # If the work type isn't provided during import, use Image 
     config.default_work_type = 'Image' 
  
-    # Setup a field mapping for the OaiDcParser 
+    # Setup a field mapping for the CsvParser 
     # Your application metadata fields are the key 
     #   from: fields in the incoming source data 
     config.field_mappings = { 
-        "Bulkrax::OaiDcParser" => {      
+        "Bulkrax::CsvParser" => {      
             "admin_set" => { from: ["admin_set"], split: '\|' }, 
             "date_uploaded" => { from: ["date_uploaded"], split: '\|' }, 
             "depositor" => { from: ["depositor"], split: '\|' }, 
@@ -23,7 +23,7 @@ Bulkrax.setup do |config|
             "physical_medium" => { from: ["physical_medium"], split: '\|' }, 
             "publisher" => { from: ["publisher"], split: '\|' }, 
             "related_resource" => { from: ["related_resource"], split: '\|' }, 
-            "resource_type" => { from: ["resource_type"] }, 
+            "resource_type" => { from: ["resource_type"], split: '\|' }, 
             "rights_holder" => { from: ["rights_holder"], split: '\|' }, 
             "rights_statement" => { from: ["rights_statement"], split: '\|' }, 
             "source" => { from: ["source"], split: '\|' }, 
