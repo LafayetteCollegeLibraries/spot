@@ -31,7 +31,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 RUN gem install bundler:1.13.7
 
 ARG BUNDLE_WITHOUT="development:test"
-COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
+COPY ["Gemfile", "Gemfile.lock", "/spot/"]
 RUN bundle install --jobs "$(nproc)"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
@@ -81,6 +81,7 @@ FROM spot-base as spot-production
 ENV RAILS_ENV=production
 COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 
 
 ##
@@ -88,7 +89,6 @@ COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 # Installs dependencies for running background jobs
 ##
 FROM spot-base as spot-worker
-
 ARG FITS_VERSION=1.5.1
 ENV FITS_VERSION=${FITS_VERSION}
 
