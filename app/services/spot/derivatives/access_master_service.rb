@@ -91,13 +91,18 @@ module Spot
         "#{file_set.id}-access.tif"
       end
 
+      #
       def upload_derivative_to_s3
         s3_client.put_object(
           bucket: s3_bucket,
           key: s3_derivative_key,
           body: File.open(derivative_path, 'r'),
           content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).base64digest
+          content_md5: Digest::MD5.file(derivative_path).base64digest,
+          metadata: {
+            'height': file_set.height.first,
+            'width': file_set.width.first,
+          }
         )
       end
 
