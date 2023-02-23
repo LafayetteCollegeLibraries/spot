@@ -2,7 +2,7 @@
 RSpec.describe Spot::Derivatives::AccessMasterService do
   subject(:service) { described_class.new(file_set) }
 
-  let(:file_set) { build(:file_set, id: 'abc123def', height: ['100'], height: ['100']) }
+  let(:file_set) { build(:file_set, id: 'abc123def', height: ['100'], width: ['100']) }
   let(:derivative_path) { '/rails/tmp/derivatives/ab/c1/23/de/f-access.tif' }
   let(:src_path) { '/original/path/to/src/file.tif' }
   let(:file_size) { 0 }
@@ -113,7 +113,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
             content_length: file_size,
             metadata: {
               width: fs_width,
-              height: fs_height,
+              height: fs_height
             }
           )
 

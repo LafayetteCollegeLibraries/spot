@@ -100,8 +100,8 @@ module Spot
           content_length: File.size(derivative_path),
           content_md5: Digest::MD5.file(derivative_path).base64digest,
           metadata: {
-            'height': file_set.height.first,
-            'width': file_set.width.first,
+            'height' => file_set.height.first,
+            'width' => file_set.width.first
           }
         )
       end
