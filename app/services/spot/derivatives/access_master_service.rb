@@ -54,7 +54,7 @@ module Spot
 
         MiniMagick::Tool::Convert.new do |magick|
           magick << "#{filename}[0]"
-          # NOTE: we need to use an array for each piece of this command;
+          # note: we need to use an array for each piece of this command;
           # using a string will cause an error
           magick.merge! %w[-define tiff:tile-geometry=128x128 -compress jpeg]
           magick << "ptif:#{derivative_path}"
@@ -88,24 +88,16 @@ module Spot
         "#{file_set.id}-access.tif"
       end
 
-      #
       def upload_derivative_to_s3
         s3_client.put_object(
           bucket: s3_bucket,
           key: s3_derivative_key,
           body: File.open(derivative_path, 'r'),
           content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).base64digest,
-          metadata: {
-            'height' => file_set.height.first,
-            'width' => file_set.width.first
-          }
+          content_md5: Digest::MD5.file(derivative_path).base64digest
         )
       end
 
-      # We're using AWS credentials stored within the App/Sidekiq services for authentication,
-      # so the Aws::S3::Client will pick them up ambiently. To confirm that we're using S3,
-      # we'll just check to confirm that the bucket is defined in ENV.
       def use_s3?
         s3_bucket.present?
       end
