@@ -1,28 +1,25 @@
 ##
 # TARGET: spot-base
-# Does the majority of setup for dev/prod images.
-# Use --build-arg BUNDLE_WITHOUT="" to build with dev dependencies
+# !! This is a builder image. Not for general use !!
+# Use this as the base image for the Rails / Sidekiq services.
 ##
-# FROM --platform=linux/amd64 ruby:2.7.6-alpine as spot-base
-FROM ruby:2.7.6-alpine as spot-base
+FROM ruby:2.7.7-alpine as spot-base
 
-ARG EXTRA_APK_PACKAGES=""
-
-# system dependencies
-RUN apk upgrade && \
-    apk --update add \
+RUN apk --no-cache update && \
+    apk --no-cache upgrade && \
+    apk --no-cache add \
+        aws-cli \
         build-base \
         coreutils \
         curl \
         git \
-        gcompat \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql \
-        postgresql-dev \
+        postgresql postgresql-dev \
         ruby-dev \
         tzdata \
+        yarn \
         zip
 
 WORKDIR /spot
@@ -31,23 +28,39 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_DERIVATIVES_PATH=/spot/tmp/derivatives \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads
 
-# match our Gemfile.lock version
-RUN gem install bundler:2.1.4
+# @todo upgrade the Gemfile bundler version to 2 to remove version constraint
+RUN gem install bundler
 
-ARG BUNDLE_WITHOUT=""
-ENV BUNDLE_WITHOUT="${BUNDLE_WITHOUT}"
-
-COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot/"]
-
-RUN bundle config build.nokogiri --use-system-libraries && \
-    bundle install --jobs "$(nproc)"
-
-COPY . /spot
+ARG BUNDLE_WITHOUT="development:test"
+COPY ["Gemfile", "Gemfile.lock", "/spot/"]
+RUN bundle install --jobs "$(nproc)"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
 HEALTHCHECK CMD curl -skf https://localhost || exit 1
+
+
+##
+#  Target: spot-asset-builder
+#  !! This is a builder image, do not use !!
+##
+FROM spot-base as spot-asset-builder
+ENV RAILS_ENV=production
+COPY . /spot
+RUN SECRET_KEY_BASE="$(bin/rake secret)" \
+    bundle exec rake assets:precompile
+
+
+##
+# TARGET: spot-development
+# Base container for local development. Reruns bundle install for dev gems
+##
+FROM spot-base as spot-development
+ENV RAILS_ENV=development
+RUN bundle install --jobs "$(nproc)" --with="development test"
+COPY . /spot
+
 
 ##
 # TARGET: spot-web
@@ -87,11 +100,8 @@ RUN bundle config unset --local without && \
 ##
 FROM spot-base as spot-production
 ENV RAILS_ENV=production
-
-RUN DATABASE_URL="postgres://fake" \
-    SECRET_KEY_BASE="$(bin/rake secret)" \
-    FEDORA_URL="http://localhost" \
-    bundle exec rake assets:precompile
+COPY . /spot
+COPY --from=spot-asset-builder /spot/public/* /spot/public
 
 
 ##
@@ -99,23 +109,32 @@ RUN DATABASE_URL="postgres://fake" \
 # Installs dependencies for running background jobs
 ##
 FROM spot-base as spot-worker
-RUN apk update && \
-    apk add \
+ARG FITS_VERSION=1.5.1
+ENV FITS_VERSION=${FITS_VERSION}
+
+# @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
+ENV MALLOC_ARENA_MAX=2
+# We don't need the entrypoint script to generate an SSL cert
+ENV SKIP_SSL_CERT=true
+
+RUN apk --no-cache update && \
+    apk --no-cache add \
+        bash \
+        ffmpeg \
+        ghostscript \
         imagemagick \
         libreoffice \
         mediainfo \
         openjdk11-jre \
         perl
 
-# ENV FITS_VERSION=1.5.1
-# RUN https://github.com/harvard-lts/fits/releases/download/$FITS_VERSION/fits-$FITS_VERSION.zip
-
-# TODO:
-# - install local FITS cli + set ENV for FITS_PATH
-# - install open office + set ENV
-
-# RUN bundle config unset --local without && \
-    # bundle install --jobs "$(nproc)"
+# (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
+RUN mkdir -p /usr/local/fits && \
+    cd /usr/local/fits && \
+    wget "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" -O fits.zip && \
+    unzip fits.zip && \
+    rm fits.zip && \
+    chmod a+x /usr/local/fits/fits.sh
 
 ENV PATH="${PATH}:/usr/local/fits"
 
@@ -130,4 +149,4 @@ EXPOSE 3000
 ##
 FROM spot-worker as spot-worker-production
 ENV RAILS_ENV=production
-COPY --from=spot-asset-builder /spot/public /spot/public
+COPY --from=spot-asset-builder /spot/public/* /spot/public/

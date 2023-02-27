@@ -126,12 +126,7 @@ gem 'faraday', '0.17.4'
 gem 'mini_magick', '4.11.0'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
-gem 'linkeddata', '~> 2'
-
-# @see https://github.com/samvera/hyrax/pull/5804/files
-# need to set these versions here until the next hyrax version (3.4.3?) pulls them in
-gem 'json-ld', '< 3.2'
-gem 'psych', '~> 3.3'
+gem 'linkeddata'
 
 # development dependencies (not as necessary to
 # lock down versions here)
