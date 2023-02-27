@@ -35,8 +35,7 @@ gem 'tzinfo-data', '~> 1.2018', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 #
 # the hyrax/spot stack
 #
-# gem 'hyrax', '~> 3.4.2'
-gem 'hyrax', github: 'samvera/hyrax', branch: '3.x-stable'
+gem 'hyrax', '~> 3.5.0'
 
 # modularize our javascripts
 gem 'almond-rails', '0.3.0'
@@ -70,6 +69,10 @@ gem 'dotenv-rails', '2.7.6'
 gem 'edtf', '3.0.6'
 gem 'edtf-humanize', '2.0.1'
 
+# a bunch of samvera gems rely on Faraday already, but we'll
+# require it as we're explicitly using it.
+gem 'faraday'
+
 # error trackijng
 gem 'honeybadger', '4.12.1'
 
@@ -82,6 +85,17 @@ gem 'iso-639', '0.3.5'
 # install jquery with rails (no longer the default)
 gem 'jquery-rails', '4.4.0'
 
+# Blacklight/Hyrax use Kaminari for pagination, but since we're
+# using it in other instances, we should require it just in case.
+gem 'kaminari', '1.2.2'
+
+# mini_magick is a dependency of hydra-derivatives, but since we're
+# calling it explicitly, we should require it.
+gem 'mini_magick', '4.11.0'
+
+# manually add this gem to enable questioning_authority to parse linked-data results
+gem 'linkeddata'
+
 # system monitoring
 gem 'okcomputer', '1.18.4'
 
@@ -90,7 +104,7 @@ gem 'pg', '1.2.3'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '3.1.4'
+gem 'rdf-vocab'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '2.4.0'
@@ -112,21 +126,6 @@ gem 'slack-ruby-client', '0.14.6'
 #   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD in this way:
 #   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
 gem 'sprockets-es6'
-
-# Blacklight/Hyrax use Kaminari for pagination, but since we're
-# using it in other instances, we should require it just in case.
-gem 'kaminari', '1.2.2'
-
-# a bunch of samvera gems rely on Faraday already, but we'll
-# require it as we're explicitly using it.
-gem 'faraday', '0.17.4'
-
-# mini_magick is a dependency of hydra-derivatives, but since we're
-# calling it explicitly, we should require it.
-gem 'mini_magick', '4.11.0'
-
-# manually add this gem to enable questioning_authority to parse linked-data results
-gem 'linkeddata'
 
 # development dependencies (not as necessary to
 # lock down versions here)

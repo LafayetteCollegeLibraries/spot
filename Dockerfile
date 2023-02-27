@@ -101,7 +101,7 @@ RUN bundle config unset --local without && \
 FROM spot-base as spot-production
 ENV RAILS_ENV=production
 COPY . /spot
-COPY --from=spot-asset-builder /spot/public/* /spot/public
+COPY --from=spot-asset-builder /spot/public/* /spot/public/
 
 
 ##
