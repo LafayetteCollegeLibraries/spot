@@ -5,7 +5,7 @@ orbs:
 executors:
   ruby:
     docker:
-      - image: cimg/ruby:2.7.6-browsers
+      - image: cimg/ruby:2.7.7-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -15,7 +15,7 @@ executors:
 
   application:
     docker:
-      - image: cimg/ruby:2.7.6-browsers
+      - image: cimg/ruby:2.7.7-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -95,7 +95,7 @@ jobs:
         at: ~/
     - run:
         name: Fine, we'll install bundler again
-        command: gem install bundler:1.16.1
+        command: gem install bundler
     - run:
         name: Get 'em Rubocop!
         command: (bundle check || bundle install) && bundle exec rubocop
