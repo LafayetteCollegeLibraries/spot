@@ -115,8 +115,8 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
             content_md5: file_digest,
             content_length: file_size,
             metadata: {
-              width: fs_width,
-              height: fs_height
+              'width' => fs_width,
+              'height' => fs_height
             }
           )
 
