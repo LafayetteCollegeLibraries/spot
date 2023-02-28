@@ -10,7 +10,7 @@ RSpec.describe Spot::CollectionThumbnailPathService do
     before do
       # need to block CollectionBrandingInfo from deleting our fixture image
       allow(Hyrax.config).to receive(:branding_storage_adapter).and_return(mock_branding_storage_adapter)
-      allow(FileUtils).to receive(:remove_file)
+      allow(FileUtils).to receive(:remove_file).with(file_path).and_return(true)
     end
 
     after do
