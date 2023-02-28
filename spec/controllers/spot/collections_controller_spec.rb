@@ -5,6 +5,11 @@ RSpec.describe Spot::CollectionsController do
     ActiveFedora::SolrService.commit
   end
 
+  after do
+    objects.each { |obj| ActiveFedora::SolrService.delete(id: obj[:id]) }
+    ActiveFedora::SolrService.commit
+  end
+
   describe '#index' do
     before { get :index }
 

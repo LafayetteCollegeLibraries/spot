@@ -155,20 +155,6 @@ RSpec.configure do |config|
   config.before js: true do
     DatabaseCleaner.strategy = :truncation
   end
-
-  # Fix for feature tests periodically failing. This is occuring because the Dashboard now
-  # has a Work Types count statistic that collects SolrDocuments and reduces them to their
-  # "human_readable_type_tesim" value, which some of our test data doesn't include. When
-  # Hyrax::Statistic.work_types is called, this will occasionally and spottily raise a
-  # NoMethodError. So for feature specs, we'll just empty out all of the SolrDocuments
-  # and start from scratch.
-  #
-  # @see https://github.com/samvera/hyrax/blob/3.x-stable/app/views/hyrax/dashboard/_work_type_graph.html.erb#L7
-  # @see https://github.com/samvera/hyrax/blob/3.x-stable/app/models/hyrax/statistic.rb#L44-L52
-  # @see https://github.com/LafayetteCollegeLibraries/spot/issues/968
-  config.before type: :feature do
-    Hyrax::SolrService.instance.conn.delete_by_query('*:*', params: { 'softCommit' => true })
-  end
 end
 
 WebMock.disable_net_connect!(
