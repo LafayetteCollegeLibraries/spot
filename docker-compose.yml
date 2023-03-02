@@ -4,7 +4,7 @@ services:
     image: lafayette/rails_web
     build:
       context: .
-      target: spot-base
+      target: spot-development
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -19,6 +19,7 @@ services:
       - fedora
       - redis
       - solr
+      - db_migrate
     stdin_open: true
     tty: true
     entrypoint: ["/spot/bin/spot-dev-entrypoint.sh"]
@@ -26,9 +27,6 @@ services:
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
-    volumes:
-      - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - rails_tmp:/spot
     ports:
       - "8182:8182"
     environment:
@@ -58,9 +56,6 @@ services:
 
   db_migrate:
     image: lafayette/rails_web
-    build:
-      context: .
-      target: spot-base
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -69,8 +64,6 @@ services:
       - db
       - fedora
       - solr
-    profiles:
-      - migrate
 
   fedora:
     build:
@@ -87,10 +80,17 @@ services:
     depends_on:
       - db
 
-  fitsservlet:
-    image: harvardlts/fitsservlet_container:1.4.1
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: minio_root_user
+      MINIO_ROOT_PASSWORD: minio_root_password
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio:/data
     ports:
-      - 8081:8081
+      - 9000:9000
+      - 9001:9001
 
   redis:
     image: redis:alpine
@@ -118,7 +118,6 @@ services:
     depends_on:
       - db
       - fedora
-      - fitsservlet
       - redis
       - solr
 
