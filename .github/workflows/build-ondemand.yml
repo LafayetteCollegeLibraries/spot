@@ -16,7 +16,7 @@ on:
       environment:
         description: 'Container repository to push to'
         required: true
-        default: 'Both'
+        default: 'both'
         type: choice
         options:
           - both
