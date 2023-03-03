@@ -10,7 +10,7 @@
 !/ingest/.keep
 !/lib
 !/log/.keep
-!/public
+!/public/.keep
 !/tmp/.keep
 !/vendor/.keep
 
