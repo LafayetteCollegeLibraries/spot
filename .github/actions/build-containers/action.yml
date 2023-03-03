@@ -6,7 +6,7 @@ inputs:
   password:
     required: true
     description: "Password/token value for container repository"
-  tag_name:
+  tag:
     required: true
     description: "Version identifier for release"
   application_image_name:
@@ -56,7 +56,7 @@ runs:
         image_name: ${{ inputs.fcrepo_image_name }}
         context: ./docker/fcrepo
         registry: ${{ inputs.registry }}
-        tag: ${{ tag_name }}
+        tag: ${{ tag }}
     -
       name: Build and push Solr container
       uses: ./.github/actions/build-container
@@ -64,7 +64,7 @@ runs:
         image_name: ${{ inputs.solr_image_name }}
         context: ./docker/solr
         registry: ${{ inputs.registry }}
-        tag: ${{ tag_name }}
+        tag: ${{ tag }}
     -
       name: Build and push application container
       uses: ./.github/actions/build-container
@@ -72,7 +72,7 @@ runs:
         image_name: ${{ inputs.application_image_name }}
         context: .
         registry: ${{ inputs.registry }}
-        tag: ${{ tag_name }}
+        tag: ${{ tag }}
         target: spot-production
     -
       name: Build and push worker container
@@ -81,5 +81,5 @@ runs:
         image_name: ${{ inputs.worker_image_name }}
         context: .
         registry: ${{ inputs.registry }}
-        tag: ${{ tag_name }}
+        tag: ${{ tag }}
         target: spot-worker-production
