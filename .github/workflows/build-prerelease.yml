@@ -19,10 +19,9 @@ jobs:
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
-          version_id: ${{ github.event.release.name }}
-          application_container_id: ${{ vars.APPLICATION_CONTAINER_ID }}
-          worker_container_id: ${{ vars.WORKER_CONTAINER_ID }}
-          fcrepo_container_id: ${{ vars.FCREPO_CONTAINER_ID }}
-          handle_container_id: ${{ vars.HANDLE_CONTAINER_ID }}
-          solr_container_id: ${{ vars.SOLR_CONTAINER_ID }}
+          version_name: ${{ github.event.release.name }}
+          application_container_name: ${{ vars.APPLICATION_CONTAINER_ID }}
+          worker_container_name: ${{ vars.WORKER_CONTAINER_ID }}
+          fcrepo_container_name: ${{ vars.FCREPO_CONTAINER_ID }}
+          solr_container_name: ${{ vars.SOLR_CONTAINER_ID }}
 

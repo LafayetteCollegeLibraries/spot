@@ -12,7 +12,6 @@ on:
           - Rails/Sidekiq
           - Fedora Commons Repository
           - Solr
-          - Handle
       environment:
         description: 'Container repository to push to'
         required: true
@@ -139,27 +138,3 @@ jobs:
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
           context: ./docker/solr
-  build_handle:
-    if: ${{ inputs.service == 'Handle' }}
-    strategy:
-      matrix:
-        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
-    runs-on: ubuntu-latest
-    environment: ${{ matrix.environment }}
-    steps:
-      -
-        name: Check out repository
-        uses: actions/checkout@v3
-      -
-        name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-      -
-        name: Build Solr container
-        uses: ./.github/actions/build-container
-        with:
-          image_name: ${{ inputs.HANDLE_CONTAINER_ID }}
-          registry: ${{ secrets.CONTAINER_REGISTRY }}
-          tag: ${{ steps.extract_branch.outputs.branch }}
-          context: ./docker/handle
