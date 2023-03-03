@@ -67,9 +67,9 @@ class CatalogController < ApplicationController
     config.add_facet_field 'resource_type_sim',          label: :'blacklight.search.fields.resource_type'
     config.add_facet_field 'creator_sim',                label: :'blacklight.search.fields.creator'
     config.add_facet_field 'publisher_sim',              label: :'blacklight.search.fields.publisher'
-    config.add_facet_field 'organization_sim',           label: :'blacklight.search.fields.organization'
     config.add_facet_field 'division_sim',               label: :'blacklight.search.fields.division'
     config.add_facet_field 'academic_department_sim',    label: :'blacklight.search.fields.academic_department'
+    config.add_facet_field 'advisor_label_ssim',         label: :'blacklight.search.fields.advisor_label'
     config.add_facet_field 'subject_label_sim',          label: :'blacklight.search.fields.subject'
     config.add_facet_field 'keyword_sim',                label: :'blacklight.search.fields.keyword'
     config.add_facet_field 'language_label_ssim',        label: :'blacklight.search.fields.language'
@@ -101,7 +101,7 @@ class CatalogController < ApplicationController
 
     # Facets from the Work-level that aren't provided in the catalog
     config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.fields.research_assistance', if: false
-    config.add_facet_field 'advisor_label_ssim', label: :'blacklight.search.fields.advisor_label', if: false
+    config.add_facet_field 'organization_sim', label: :'blacklight.search.fields.organization', if: false
 
     # Blacklight will default a facet's limit to the +blacklight_config.default_facet_limit+ value
     # only if the field config +:limit+ entry is true. This does that.
