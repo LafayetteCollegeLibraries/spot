@@ -20,8 +20,8 @@ jobs:
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
           tag: ${{ github.event.release.tag_name }}
-          application_container_name: ${{ vars.APPLICATION_CONTAINER_ID }}
-          worker_container_name: ${{ vars.WORKER_CONTAINER_ID }}
-          fcrepo_container_name: ${{ vars.FCREPO_CONTAINER_ID }}
-          solr_container_name: ${{ vars.SOLR_CONTAINER_ID }}
+          application_image_name: ${{ vars.APPLICATION_CONTAINER_ID }}
+          worker_image_name: ${{ vars.WORKER_CONTAINER_ID }}
+          fcrepo_image_name: ${{ vars.FCREPO_CONTAINER_ID }}
+          solr_image_name: ${{ vars.SOLR_CONTAINER_ID }}
 
