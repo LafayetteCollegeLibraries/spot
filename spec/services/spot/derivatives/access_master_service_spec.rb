@@ -44,6 +44,9 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
     allow(FileUtils).to receive(:rm_f).with(File.dirname(derivative_path))
     allow(File).to receive(:open).with(derivative_path, "r").and_return(stringio)
     allow(Digest::MD5).to receive(:file).with(derivative_path).and_return(mock_digest)
+
+    allow(file_set).to receive(:width).and_return(['150'])
+    allow(file_set).to receive(:height).and_return(['150'])
   end
 
   after do
@@ -97,6 +100,9 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
     end
 
     describe '#create_derivatives' do
+      let(:fs_width) { file_set.width.first }
+      let(:fs_height) { file_set.height.first }
+
       it 'puts the object into S3' do
         service.create_derivatives(derivative_path)
 
@@ -107,7 +113,11 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
             key: s3_key,
             body: stringio,
             content_md5: file_digest,
-            content_length: file_size
+            content_length: file_size,
+            metadata: {
+              'width' => fs_width,
+              'height' => fs_height
+            }
           )
 
         expect(FileUtils).to have_received(:rm_f).with(derivative_path)
