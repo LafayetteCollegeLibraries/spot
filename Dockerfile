@@ -26,7 +26,8 @@ WORKDIR /spot
 
 ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_DERIVATIVES_PATH=/spot/tmp/derivatives \
-    HYRAX_UPLOAD_PATH=/spot/tmp/uploads
+    HYRAX_UPLOAD_PATH=/spot/tmp/uploads \
+    BUNDLE_FORCE_RUBY_PLATFORM=1
 
 # @todo upgrade the Gemfile bundler version to 2 to remove version constraint
 RUN gem install bundler

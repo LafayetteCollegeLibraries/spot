@@ -49,7 +49,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: spot_dev
+      POSTGRES_DB: spot_development
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
     restart: always
