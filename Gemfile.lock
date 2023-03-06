@@ -74,6 +74,12 @@ GEM
     almond-rails (0.3.0)
       rails (>= 4.2)
     amazing_print (1.2.1)
+    anystyle (1.4.1)
+      anystyle-data (~> 1.3)
+      bibtex-ruby (~> 6.0)
+      namae (~> 1.0)
+      wapiti (~> 2.1)
+    anystyle-data (1.3.0)
     arel (9.0.0)
     ast (2.4.2)
     autoprefixer-rails (10.3.3.0)
@@ -106,6 +112,8 @@ GEM
     bcp47 (0.3.3)
       i18n
     bcrypt (3.1.17)
+    bibtex-ruby (6.0.0)
+      latex-decode (~> 0.0)
     bindex (0.8.1)
     bixby (1.0.0)
       rubocop (~> 0.50, <= 0.52.1)
@@ -535,6 +543,7 @@ GEM
     kaminari-core (1.2.2)
     kaminari_route_prefix (0.1.1)
       kaminari (~> 1.0)
+    latex-decode (0.4.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     ld-patch (3.1.3)
@@ -613,6 +622,7 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    namae (1.1.1)
     nest (3.2.0)
       redic
     net-http-persistent (4.0.1)
@@ -957,6 +967,9 @@ GEM
     unicode-display_width (1.8.0)
     unicode-types (1.7.0)
     validatable (1.6.7)
+    wapiti (2.1.0)
+      builder (~> 3.2)
+      rexml (~> 3.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (3.7.0)
@@ -986,6 +999,7 @@ PLATFORMS
 DEPENDENCIES
   almond-rails (= 0.3.0)
   amazing_print (= 1.2.1)
+  anystyle
   aws-sdk-s3
   bagit (= 0.4.4)
   bixby (= 1.0.0)
