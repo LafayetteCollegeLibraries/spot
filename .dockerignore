@@ -10,7 +10,7 @@
 !/ingest/.keep
 !/lib
 !/log/.keep
-!/public/.keep
+!/public
 !/tmp/.keep
 !/vendor/.keep
 
@@ -25,5 +25,4 @@
 # don't copy over generated files
 public/assets
 public/branding
-!public/uv/.keep
 public/uv

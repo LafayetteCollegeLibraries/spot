@@ -3,11 +3,11 @@
   "private": true,
   "scripts": {
     "postinstall": "yarn run uv-install && yarn run uv-config",
-    "uv-install": "mkdir -p ./public/uv && cp -r ./node_modules/universalviewer/uv/. ./public/uv",
+    "uv-install": "mkdir -p ./public/uv && cp -r ./node_modules/universalviewer/dist/. ./public/uv",
     "uv-config": "cp ./config/uv/uv.html ./public/uv/uv.html && cp ./config/uv/uv-config.json ./public/uv/"
   },
   "dependencies": {
-    "universalviewer": "3.0.16"
+    "universalviewer": "3.1.1"
   },
   "version": "0.0.0"
 }

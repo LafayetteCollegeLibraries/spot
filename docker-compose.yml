@@ -1,5 +1,5 @@
-version: '3.7'
 
+version: '3.7'
 services:
   app:
     image: lafayette/rails_web
@@ -27,7 +27,7 @@ services:
     command: ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
   cantaloupe:
-    image: uclalibrary/cantaloupe:4.1.5
+    image: uclalibrary/cantaloupe:4.1.7-3
     ports:
       - "8182:8182"
     environment:
@@ -37,20 +37,21 @@ services:
       CANTALOUPE_S3SOURCE_SECRET_KEY: minio_root_password
       CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: iiif-derivatives
       CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_PATH_SUFFIX: "-access.tif"
+      CANTALOUPE_S3SOURCE_CHUNKING_ENABLED: 'false'
       CANTALOUPE_S3SOURCE_ENDPOINT: "http://minio:9000"
       CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
       CANTALOUPE_LOG_APPLICATION_LEVEL: trace
     restart: always
 
   db:
-    image: postgres:9.6-alpine
+    image: postgres:13
     volumes:
       - db:/var/lib/postgresql/data
       - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: spot_dev
+      POSTGRES_DB: spot_development
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
     restart: always

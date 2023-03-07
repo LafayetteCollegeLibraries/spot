@@ -15,7 +15,8 @@ RUN apk --no-cache update && \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql postgresql-dev \
+        postgresql \
+        postgresql-dev \
         ruby-dev \
         tzdata \
         zip
@@ -59,12 +60,14 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" \
 ##
 FROM spot-base as spot-development
 ENV RAILS_ENV=development
-RUN apk add --no-cache --update add yarn
+RUN apk add --no-cache --update yarn
 
 # install awscli the hard way (via python) bc our base image is
 # too old to include it in the alpine 3.10 apk
 #
-# @ see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
+# @see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
+# @todo replace this by adding `aws-cli` to the above `RUN apk add`
+#       command, after upgrading the Ruby container
 RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
     && python3 -m ensurepip --upgrade \
     && pip3 install --upgrade pip \
@@ -73,6 +76,11 @@ RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
     && apk del python3-dev gcc musl-dev
 
 RUN bundle install --jobs "$(nproc)" --with="development test"
+
+COPY config/uv /spot/config/uv
+COPY ["package.json", "yarn.lock", "/spot/"]
+RUN yarn install
+
 COPY . /spot
 
 
