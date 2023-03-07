@@ -59,7 +59,7 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" \
 ##
 FROM spot-base as spot-development
 ENV RAILS_ENV=development
-RUN apk add --no-cache --update add yarn
+RUN apk add --no-cache --update yarn
 
 # install awscli the hard way (via python) bc our base image is
 # too old to include it in the alpine 3.10 apk
