@@ -6,6 +6,11 @@ services:
     build:
       context: .
       target: spot-development
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '4G'
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -27,7 +32,7 @@ services:
     command: ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
   cantaloupe:
-    image: uclalibrary/cantaloupe:4.1.7-3
+    image: uclalibrary/cantaloupe:4.1.5
     ports:
       - "8182:8182"
     environment:
@@ -44,7 +49,7 @@ services:
     restart: always
 
   db:
-    image: postgres:13
+    image: postgres:9.6-alpine
     volumes:
       - db:/var/lib/postgresql/data
       - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql
@@ -107,6 +112,11 @@ services:
     build:
       context: .
       target: spot-worker
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '4G'
     env_file:
       - .env.local
     ports:
