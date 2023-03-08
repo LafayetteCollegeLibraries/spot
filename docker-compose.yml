@@ -6,11 +6,6 @@ services:
     build:
       context: .
       target: spot-development
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: '4G'
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -56,7 +51,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: spot_development
+      POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
     restart: always
@@ -112,11 +107,6 @@ services:
     build:
       context: .
       target: spot-worker
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: '4G'
     env_file:
       - .env.local
     ports:
