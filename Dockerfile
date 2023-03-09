@@ -110,9 +110,6 @@ COPY --from=spot-asset-builder /spot/public/* /spot/public/
 # Installs dependencies for running background jobs
 ##
 FROM spot-base as spot-worker
-ARG FITS_VERSION=1.5.1
-ENV FITS_VERSION=${FITS_VERSION}
-
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
@@ -128,6 +125,9 @@ RUN apk --no-cache update && \
         mediainfo \
         openjdk11-jre \
         perl
+
+ARG FITS_VERSION=1.6.0
+ENV FITS_VERSION=${FITS_VERSION}
 
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
