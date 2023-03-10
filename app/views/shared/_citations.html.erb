@@ -21,12 +21,13 @@
   <% end %>
   <meta name="citation_publication_date" content="<%= @presenter.date_created.first %>" />
   <meta name="citation_pdf_url" content="<%= @presenter.download_url %>" />
-  <!-- Hyrax does not yet support these metadata -->
-  <!--
-    <meta name="citation_journal_title" content=""/>
-    <meta name="citation_volume" content=""/>
-    <meta name="citation_issue" content=""/>
-    <meta name="citation_firstpage" content=""/>
-    <meta name="citation_lastpage" content=""/>
-  -->
+  <meta name="citation_journal_title" content="<%= @presenter.citation_journal_title %>" />
+  <meta name="citation_volume" content="<%= @presenter.citation_volume %>" />
+  <meta name="citation_issue" content="<%= @presenter.citation_issue %>" />
+  <meta name="citation_firstpage" content="<%= @presenter.citation_firstpage %>" />
+  <meta name="citation_lastpage" content="<%= @presenter.citation_lastpage %>" />
+  <% if @presenter.resource_type.first == "student_work" -%>
+  <meta name="citation_dissertation_institution" content="Lafayette College" />
+  <% end %>
+  
 <% end %>
