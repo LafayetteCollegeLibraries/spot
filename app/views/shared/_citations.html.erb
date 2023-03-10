@@ -26,7 +26,7 @@
   <meta name="citation_issue" content="<%= @presenter.citation_issue %>" />
   <meta name="citation_firstpage" content="<%= @presenter.citation_firstpage %>" />
   <meta name="citation_lastpage" content="<%= @presenter.citation_lastpage %>" />
-  <% if @presenter.resource_type.first == "student_work" -%>
+  <% if @presenter.model.first == "StudentWork" -%>
   <meta name="citation_dissertation_institution" content="Lafayette College" />
   <% end %>
   
