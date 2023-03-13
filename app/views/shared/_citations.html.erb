@@ -21,11 +21,6 @@
   <% end %>
   <meta name="citation_publication_date" content="<%= @presenter.date_created.first %>" />
   <meta name="citation_pdf_url" content="<%= @presenter.download_url %>" />
-  <meta name="citation_journal_title" content="<%= puts @presenter.citation_journal_title if presenter.respond_to?(:citation_journal_title) %>" />
-  <meta name="citation_volume" content="<%= puts @presenter.citation_volume if presenter.respond_to?(:citation_volume) %>" />
-  <meta name="citation_issue" content="<%= puts @presenter.citation_issue if presenter.respond_to?(:citation_issue) %>" />
-  <meta name="citation_firstpage" content="<%= puts @presenter.citation_firstpage if presenter.respond_to?(:citation_firstpage) %>" />
-  <meta name="citation_lastpage" content="<%= puts @presenter.citation_lastpage if presenter.respond_to?(:citation_lastpage) %>" />
   <% if @presenter.model == "StudentWork" -%>
   <meta name="citation_dissertation_institution" content="Lafayette College" />
   <% end %>
