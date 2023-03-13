@@ -21,8 +21,5 @@
   <% end %>
   <meta name="citation_publication_date" content="<%= @presenter.date_created.first %>" />
   <meta name="citation_pdf_url" content="<%= @presenter.download_url %>" />
-  <% if @presenter.model == "StudentWork" -%>
-  <meta name="citation_dissertation_institution" content="Lafayette College" />
-  <% end %>
-  
+  <meta name="citation_dissertation_institution" content="<%= puts "Lafayette College" if presenter.respond_to?(:advisor) %>" />
 <% end %>

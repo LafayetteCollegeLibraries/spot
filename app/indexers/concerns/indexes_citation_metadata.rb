@@ -3,7 +3,7 @@ module IndexesCitationMetadata
 
     def generate_solr_document
         super.tap do |doc|
-            break doc if object.bibliographic_citation.empty?
+            next doc if object.bibliographic_citation.empty?
 
             @citation = AnyStyle.parse(object.bibliographic_citation.first)
 
