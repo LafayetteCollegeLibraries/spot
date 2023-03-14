@@ -4,9 +4,9 @@ module Hyrax
     humanize_date_fields :date, :date_available
 
     delegate :access_note, :advisor, :advisor_label, :bibliographic_citation,
-             :academic_department, :division, :organization, 
+             :academic_department, :division, :organization,
              :citation_journal_title, :citation_volume, :citation_issue,
-             :citation_firstpage, :citation_lastpage, 
+             :citation_firstpage, :citation_lastpage,
              to: :solr_document
 
     def abstract
