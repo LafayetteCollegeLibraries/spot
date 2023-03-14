@@ -21,4 +21,17 @@ export JAVA_OPTIONS="${JAVA_OPTIONS} \
   -Dfcrepo.postgresql.host=${db_host} \
   -Dfcrepo.postgresql.port=${db_port}"
 
+# JAVA_OPTIONS from our on-campus deploy, as recommended by FCRepo wiki
+export JAVA_OPTIONS="${JAVA_OPTIONS} \
+  -server \
+  -Dfile.encoding=UTF-8 \
+  -Xms${FCREPO_MIN_MEMORY:-512m} \
+  -Xmx${FCREPO_MAX_MEMORY:-2048m} \
+  -XX:NewSize=256m \
+  -XX:MaxNewSize=256m \
+  -XX:MetaspaceSize=64m \
+  -XX:MaxMetaspaceSize=256m \
+  -XX:+UseG1GC \
+  -XX:+DisableExplicitGC"
+
 exec /fedora-entrypoint.sh "$@"
