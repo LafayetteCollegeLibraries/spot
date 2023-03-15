@@ -8,11 +8,14 @@ module IndexesCitationMetadata
       @citation = AnyStyle.parse(object.bibliographic_citation.first)
 
       next doc if @citation.blank?
-      doc['citation_journal_title_ss'] = @citation.first[:"container-title"].blank? ? "" : @citation.first[:"container-title"].first.to_s
-      doc['citation_volume_ss'] = @citation.first[:"volume"].blank? ? "" : @citation.first[:"volume"].first.to_s
-      doc['citation_issue_ss'] = @citation.first[:"issue"].blank? ? "" : @citation.first[:"issue"].first.to_s
-      doc['citation_firstpage_ss'] = @citation.first[:"pages"].blank? ? "" : @citation.first[:"pages"].first.to_s.split('–', 2).first
-      doc['citation_lastpage_ss'] = @citation.first[:"pages"].blank? ? "" : @citation.first[:"pages"].first.to_s.split('–', 2).last
+
+      entry = @citation.first
+
+      doc['citation_journal_title_ss'] = entry[:"container-title"].blank? ? "" : entry[:"container-title"].first.to_s
+      doc['citation_volume_ss'] = entry[:"volume"].blank? ? "" : entry[:"volume"].first.to_s
+      doc['citation_issue_ss'] = entry[:"issue"].blank? ? "" : entry[:"issue"].first.to_s
+      doc['citation_firstpage_ss'] = entry[:"pages"].blank? ? "" : entry[:"pages"].first.to_s.split('–', 2).first
+      doc['citation_lastpage_ss'] = entry[:"pages"].blank? ? "" : entry[:"pages"].first.to_s.split('–', 2).last
     end
   end
 end
