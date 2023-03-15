@@ -10,15 +10,13 @@ module IndexesCitationMetadata
 
       next doc if citation.blank?
 
-      citaton = citation.first
+      entry = citation.first
 
-      entry = citation[:"container-title"].blank? ? [""] : entry[:"container-title"]
-
-      doc['citation_journal_title_ss'] = entry.first
-      doc['citation_volume_ss'] = citation[:"volume"].blank? ? "" : citation[:"volume"].first
-      doc['citation_issue_ss'] = citation[:"issue"].blank? ? "" : citation[:"issue"].first
-      doc['citation_firstpage_ss'] = citation[:"pages"].blank? ? "" : citation[:"pages"].first.split('–', 2).first
-      doc['citation_lastpage_ss'] = citation[:"pages"].blank? ? "" : citation[:"pages"].first.split('–', 2).last
+      doc['citation_journal_title_ss'] = entry[:"container-title"].blank? ? "" : entry[:"container-title"].first
+      doc['citation_volume_ss'] = entry[:"volume"].blank? ? "" : entry[:"volume"].first
+      doc['citation_issue_ss'] = entry[:"issue"].blank? ? "" : entry[:"issue"].first
+      doc['citation_firstpage_ss'] = entry[:"pages"].blank? ? "" : entry[:"pages"].first.split('–', 2).first
+      doc['citation_lastpage_ss'] = entry[:"pages"].blank? ? "" : entry[:"pages"].first.split('–', 2).last
     end
   end
 end
