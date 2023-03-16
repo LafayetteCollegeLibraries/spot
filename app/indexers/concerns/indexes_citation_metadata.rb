@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 module IndexesCitationMetadata
-  extend ActiveSupport::Concern
-
   def generate_solr_document
     super.tap do |doc|
-      next doc if object.bibliographic_citation.empty?
+      # bibliographic_citation is a part of Spot::CoreMetadata, which is included on all works,
+      # but this should safeguard in the event that's not the case in the future
+      next doc unless object.respond_to?(:bibliographic_citation) && object.bibliographic_citation.present?
 
-      citation = AnyStyle.parse(object.bibliographic_citation.first)
+      # exit early if the citation parses incorrectly
+      citation = AnyStyle.parse(object.bibliographic_citation.first)&.first
+      next doc if citation.blank? || citation[:type].nil?
 
-      next doc if citation.blank?
+      doc['citation_journal_title_ss'] = citation[:"container-title"]&.first
+      doc['citation_volume_ss'] = citation[:volume]&.first
+      doc['citation_issue_ss'] = citation[:issue]&.first
 
-      entry = citation.first
-
-      doc['citation_journal_title_ss'] ||= entry[:"container-title"]&.first
-      doc['citation_volume_ss'] ||= entry[:"volume"]&.first
-      doc['citation_issue_ss'] ||= entry[:"issue"]&.first
-      doc['citation_firstpage_ss'] ||= entry[:"pages"]&.first&.split('–', 2)&.first
-      doc['citation_lastpage_ss'] ||= entry[:"pages"]&.first&.split('–', 2)&.last
+      # split pages on any type of hyphen (*waves fist at em and en dashes*)
+      first_page, last_page = citation[:pages]&.first&.split(/[-–—]/, 2)
+      doc['citation_firstpage_ss'] = first_page
+      doc['citation_lastpage_ss'] = last_page
     end
   end
 end
