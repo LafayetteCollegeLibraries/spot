@@ -39,7 +39,12 @@ RSpec.describe PublicationIndexer do
     'organization' => %w[tesim sim],
     'related_resource' => %w[tesim sim],
     'keyword' => %w[tesim sim],
-    'license' => %w[tsm]
+    'license' => %w[tsm],
+    'citation_journal_title' => %w[ss],
+    'citation_volume' => %w[ss],
+    'citation_issue' => %w[ss],
+    'citation_firstpage' => %w[ss],
+    'citation_lastpage' => %w[ss]
   }.each_pair do |method, suffixes|
     describe method do
       let(:work_method) { method.to_sym }
