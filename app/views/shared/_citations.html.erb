@@ -26,5 +26,5 @@
   <meta name="citation_issue" content="<%= @presenter.citation_issue if @presenter.respond_to?(:citation_issue) %>" /> 
   <meta name="citation_firstpage" content="<%= @presenter.citation_firstpage if @presenter.respond_to?(:citation_firstpage) %>" /> 
   <meta name="citation_lastpage" content="<%= @presenter.citation_lastpage if @presenter.respond_to?(:citation_lastpage) %>" /> 
-  <meta name="citation_dissertation_institution" content="<%= "Lafayette College" if @presenter.respond_to?(:advisor) %>" />
+  <meta name="citation_dissertation_institution" content="<%= "Lafayette College" if @presenter.model_name == 'StudentWork' %>" />
 <% end %>

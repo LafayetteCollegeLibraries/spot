@@ -999,7 +999,7 @@ PLATFORMS
 DEPENDENCIES
   almond-rails (= 0.3.0)
   amazing_print (= 1.2.1)
-  anystyle
+  anystyle (~> 1.4.1)
   aws-sdk-s3
   bagit (= 0.4.4)
   bixby (= 1.0.0)

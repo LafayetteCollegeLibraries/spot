@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class StudentWorkIndexer < BaseIndexer
-  include IndexesCitationMetadata
   self.sortable_date_property = :date
 
   def generate_solr_document
