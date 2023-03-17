@@ -5,8 +5,6 @@ module Hyrax
 
     delegate :access_note, :advisor, :advisor_label, :bibliographic_citation,
              :academic_department, :division, :organization,
-             :citation_journal_title, :citation_volume, :citation_issue,
-             :citation_firstpage, :citation_lastpage,
              to: :solr_document
 
     def abstract

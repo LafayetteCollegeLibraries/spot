@@ -187,7 +187,7 @@ RSpec.shared_examples 'a Spot presenter' do
 
     let(:solr_data) do
       {
-        'citation_journal_ss' => 'Journal'
+        'citation_journal_title_ss' => 'Journal'
       }
     end
 
