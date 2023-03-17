@@ -11,6 +11,8 @@ SET row_security = off;
 
 SET default_tablespace = '';
 
+SET default_table_access_method = heap;
+
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
@@ -1047,9 +1049,9 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 CREATE TABLE public.single_use_links (
     id bigint NOT NULL,
-    "downloadKey" character varying,
+    download_key character varying,
     path character varying,
-    "itemId" character varying,
+    item_id character varying,
     expires timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -3417,6 +3419,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220318162758'),
 ('20220322165644'),
 ('20220412135003'),
-('20220412135004');
+('20220412135004'),
+('20230309145101');
 
 
