@@ -118,7 +118,7 @@ RSpec.shared_examples 'a Spot indexer' do
     let(:work) { build(:publication, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000): 1-2.']) }
 
     it 'extracts metadata' do
-      # expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
+      expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
       expect(solr_doc['citation_volume_ss']).to eq '1'
       expect(solr_doc['citation_issue_ss']).to eq '2'
       expect(solr_doc['citation_firstpage_ss']).to eq '1'
@@ -130,9 +130,9 @@ RSpec.shared_examples 'a Spot indexer' do
     let(:work) { build(:publication, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000)']) }
 
     it 'extracts metadata' do
-      # expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
-      # expect(solr_doc['citation_volume_ss']).to eq '1'
-      # expect(solr_doc['citation_issue_ss']).to eq '2'
+      expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
+      expect(solr_doc['citation_volume_ss']).to eq '1'
+      expect(solr_doc['citation_issue_ss']).to eq '2'
       expect(solr_doc['citation_firstpage_ss']).to eq nil
       expect(solr_doc['citation_lastpage_ss']).to eq nil
     end
