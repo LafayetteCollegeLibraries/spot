@@ -113,7 +113,7 @@ RSpec.shared_examples 'a Spot indexer' do
       expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{thumbnail_path}"
     end
   end
-  
+
   describe 'extracting citation metadata' do
     let(:work) { build(:publication, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000): 1-2.']) }
 

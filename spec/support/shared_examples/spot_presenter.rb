@@ -191,7 +191,7 @@ RSpec.shared_examples 'a Spot presenter' do
       }
     end
 
-    it {is_expected.to eq 'Journal'}
+    it { is_expected.to eq 'Journal' }
   end
 
   describe '#citation_volume' do
@@ -203,7 +203,7 @@ RSpec.shared_examples 'a Spot presenter' do
       }
     end
 
-    it {is_expected.to eq '1'}
+    it { is_expected.to eq '1' }
   end
 
   describe '#citation_issue' do
@@ -215,7 +215,7 @@ RSpec.shared_examples 'a Spot presenter' do
       }
     end
 
-    it {is_expected.to eq '2'}
+    it { is_expected.to eq '2' }
   end
 
   describe '#citation_firstpage' do
@@ -227,7 +227,7 @@ RSpec.shared_examples 'a Spot presenter' do
       }
     end
 
-    it {is_expected.to eq '1'}
+    it { is_expected.to eq '1' }
   end
 
   describe '#citation_lastpage' do
@@ -239,6 +239,6 @@ RSpec.shared_examples 'a Spot presenter' do
       }
     end
 
-    it {is_expected.to eq '2'}
+    it { is_expected.to eq '2' }
   end
 end
