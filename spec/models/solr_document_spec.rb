@@ -65,11 +65,11 @@ RSpec.describe SolrDocument do
     subtitle: { type: Array, suffix: 'tesim' },
     title: { type: Array, suffix: 'tesim' },
     title_alternative: { type: Array, suffix: 'tesim' },
-    citation_journal_title: { type: String, 'ss' },
-    citation_volume: { type: String, 'ss' },
-    citation_issue: { type: String, 'ss' },
-    citation_firstpage: { type: String, 'ss' },
-    citation_lastpage: { type: String, 'ss' }
+    citation_journal_title: { type: String, suffix: 'ss' },
+    citation_volume: { type: String, suffix: 'ss' },
+    citation_issue: { type: String, suffix: 'ss' },
+    citation_firstpage: { type: String, suffix: 'ss' },
+    citation_lastpage: { type: String, suffix: 'ss' }
   }.each_pair do |key, config|
     describe "##{key}" do
       subject { document.send(key) }
