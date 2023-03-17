@@ -115,7 +115,7 @@ RSpec.shared_examples 'a Spot indexer' do
   end
 
   describe 'extracting citation metadata' do
-    let(:work) { build(:publication, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000): 1-2.']) }
+    let(:work) { build(work_klass, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000): 1-2.']) }
 
     it 'extracts metadata' do
       expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
@@ -127,7 +127,7 @@ RSpec.shared_examples 'a Spot indexer' do
   end
 
   describe 'incomplete citation metadata' do
-    let(:work) { build(:publication, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000)']) }
+    let(:work) { build(work_klass, bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000)']) }
 
     it 'extracts metadata' do
       expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
@@ -139,7 +139,7 @@ RSpec.shared_examples 'a Spot indexer' do
   end
 
   describe 'no citation metadata' do
-    let(:work) { build(:publication, bibliographic_citation: ['']) }
+    let(:work) { build(work_klass, bibliographic_citation: ['']) }
 
     it 'extracts metadata' do
       expect(solr_doc['citation_journal_title_ss']).to eq nil
