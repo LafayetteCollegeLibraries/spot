@@ -70,7 +70,6 @@ RSpec.describe SolrDocument do
     citation_issue: { type: String, 'ss' },
     citation_firstpage: { type: String, 'ss' },
     citation_lastpage: { type: String, 'ss' }
-    
   }.each_pair do |key, config|
     describe "##{key}" do
       subject { document.send(key) }
