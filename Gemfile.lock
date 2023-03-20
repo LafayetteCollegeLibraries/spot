@@ -1030,8 +1030,16 @@ GEM
     uber (0.1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
+<<<<<<< HEAD
     unicode-display_width (2.4.2)
     unicode-types (1.8.0)
+=======
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8.2)
+    unicode-display_width (1.8.0)
+    unicode-types (1.7.0)
+>>>>>>> 6fbca656 (add minio and browse gems)
     validatable (1.6.7)
     valkyrie (2.2.0)
       activemodel
@@ -1095,7 +1103,11 @@ DEPENDENCIES
   bootsnap (= 1.11.1)
   bootstrap_form (~> 4.4.0)
 <<<<<<< HEAD
+<<<<<<< HEAD
   browse-everything (= 1.1.2)
+=======
+  browse-everything
+>>>>>>> 6fbca656 (add minio and browse gems)
   bulkrax (= 4.3.0)
 >>>>>>> not successfully installed
 =======
@@ -1126,11 +1138,23 @@ DEPENDENCIES
   kaminari (~> 1.2.2)
   linkeddata (~> 3.1.6)
   listen (>= 3.0.5, < 3.8)
+<<<<<<< HEAD
   mini_magick (~> 4.11)
   okcomputer (~> 1.18.4)
   pg (~> 1.2.3)
   puma (~> 6.1.1)
   rails (~> 5.2.7)
+=======
+  matrix (= 0.1.0)
+  mini_magick (= 4.11.0)
+  minio-ruby
+  nokogiri (~> 1.10.10)
+  okcomputer (= 1.18.4)
+  parallel (= 1.19.2)
+  pg (= 1.2.3)
+  puma (= 5.6.4)
+  rails (= 5.2.7.1)
+>>>>>>> 6fbca656 (add minio and browse gems)
   rails-controller-testing (~> 1.0.5)
   rdf-vocab (~> 3.2.3)
   redlock (>= 0.1.2, < 2.0)
