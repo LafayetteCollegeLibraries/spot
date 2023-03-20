@@ -23,7 +23,7 @@ RUN apt update && \
         tzdata \
         yarn \
         zip
-RUN apk update && apk add g++ gcc libxml2 libxslt-dev
+RUN apk update && apk add g++ gcc libxml2 libxml2-dev libxslt-dev
 
 WORKDIR /spot
 
