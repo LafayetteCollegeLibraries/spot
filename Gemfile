@@ -206,4 +206,8 @@ group :development, :test do
   # (@todo remove these when we're in the cloud)
   gem 'docile', '~> 1.3.5'
   gem 'matrix', '0.1.0'
+
+  # s3 Dependencies
+  gem 'minio-ruby'
+  gem 'browse-everything'
 end
