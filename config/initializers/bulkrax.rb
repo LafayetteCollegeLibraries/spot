@@ -3,7 +3,7 @@
 Bulkrax.setup do |config|
   # If the work type isn't provided during import, use Image
   config.default_work_type = 'Image'
- 
+
   # Setup a field mapping for the CsvParser
   # Your application metadata fields are the key
   #   from: fields in the incoming source data
@@ -20,7 +20,7 @@ Bulkrax.setup do |config|
       "keyword" => { from: ["keyword"], split: '\|' },
       "language" => { from: ["language"], split: '\|' },
       "location" => { from: ["location"], split: '\|' },
-      "note" => { from: ["note"], split: '\|' }, 
+      "note" => { from: ["note"], split: '\|' },
       "physical_medium" => { from: ["physical_medium"], split: '\|' },
       "publisher" => { from: ["publisher"], split: '\|' },
       "related_resource" => { from: ["related_resource"], split: '\|' },
