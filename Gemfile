@@ -208,6 +208,6 @@ group :development, :test do
   gem 'matrix', '0.1.0'
 
   # s3 Dependencies
-  gem 'minio-ruby'
   gem 'browse-everything'
+  gem 'minio-ruby'
 end
