@@ -66,6 +66,11 @@ jobs:
             sudo apt-get update -y
             sudo apt-get install -y postgresql-9.6 libpq-dev
       - run:
+          name: Install Libxml2 dependency
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y g++ gcc libxml2 libxml2-dev libxslt-dev
+      - run:
           name: Use Bundler version specified in Gemfile.lock
           command: gem install bundler:1.16.1
       - restore_cache:
