@@ -53,3 +53,5 @@
 # our deployed version file (shouldn't actually appear in dev,
 # but you never know i guess)
 VERSION
+
+cap

@@ -22,7 +22,8 @@ module Spot
              :language_label, :location, :note, :permalink, :physical_medium,
              :publisher, :registered?, :related_resource, :resource_type, :rights_holder, :rights_statement,
              :source, :subject, :subtitle, :title_alternative, :title,
-             :visibility,
+             :visibility, :citation_journal_title, :citation_volume, :citation_issue,
+             :citation_firstpage, :citation_lastpage,
              to: :solr_document
 
     delegate :public?, to: :solr_document
