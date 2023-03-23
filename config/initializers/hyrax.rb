@@ -14,13 +14,17 @@ Hyrax.config do |config|
   # When an admin set is created, we need to activate a workflow.
   # The :default_active_workflow_name is the name of the workflow we will activate.
   # @see Hyrax::Configuration for additional details and defaults.
-  # config.default_active_workflow_name = 'default'
-  # Hyrax.config.default_active_workflow_name = 'spot_one_step_process'
+  config.default_active_workflow_name = 'spot_one_step_process'
 
   # Which RDF term should be used to relate objects to an admin set?
   # If this is a new repository, you may want to set a custom predicate term here to
   # avoid clashes if you plan to use the default (dct:isPartOf) for other relations.
   # config.admin_set_predicate = ::RDF::DC.isPartOf
+
+  # Which RDF term should be used to relate objects to a rendering?
+  # If this is a new repository, you may want to set a custom predicate term here to
+  # avoid clashes if you plan to use the default (dct:hasFormat) for other relations.
+  # config.rendering_predicate = ::RDF::DC.hasFormat
 
   # Email recipient of messages sent via the contact form
   config.contact_email = "dss@lafayette.edu"
@@ -40,19 +44,6 @@ Hyrax.config do |config|
   #   maxNumberOfFiles: 100,
   #   maxFileSize: 500.megabytes
   # }
-
-  # Enable displaying usage statistics in the UI
-  # Defaults to false
-  # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
-  # config.analytics = false
-
-  # Google Analytics tracking ID to gather usage statistics
-  config.google_analytics_id = ENV.fetch('GOOGLE_ANALYTICS_ID', nil)
-
-  # Date you wish to start collecting Google Analytic statistics for
-  # Leaving it blank will set the start date to when ever the file was uploaded by
-  # NOTE: if you have always sent analytics to GA for downloads and page views leave this commented out
-  # config.analytic_start_date = DateTime.new(2014, 9, 10)
 
   # Enables a link to the citations page for a work
   # Default is false
@@ -75,7 +66,7 @@ Hyrax.config do |config|
   # config.noid_template = ".reeddeeddk"
 
   # Use the database-backed minter class
-  # config.noid_minter_class = ActiveFedora::Noid::Minter::Db
+  # config.noid_minter_class = Noid::Rails::Minter::Db
 
   # Store identifier minter's state in a file for later replayability
   # config.minter_statefile = '/tmp/minter-state'
@@ -117,8 +108,12 @@ Hyrax.config do |config|
   # The default is true.
   # config.work_requires_files = true
 
+  # How many rows of items should appear on the work show view?
+  # The default is 10
+  # config.show_work_item_rows = 10
+
   # Enable IIIF image service. This is required to use the
-  # UniversalViewer-ified show page
+  # IIIF viewer enabled show page
   #
   # If you have run the riiif generator, an embedded riiif service
   # will be used to deliver images via IIIF. If you have not, you will
@@ -145,15 +140,35 @@ Hyrax.config do |config|
   # Returns a IIIF image size default
   config.iiif_image_size_default = Spot::IiifService::DEFAULT_SIZE
 
-  # Fields to display in the IIIF metadata section
-  config.iiif_metadata_fields = %i[
-    title subtitle title_alternative creator contributor date date_issued
-    abstract description inscription subject_label subject_ocm keyword language_label
-    location_label standard_identifier rights_holder rights_statement_label
+  # Fields to display in the IIIF metadata section; default is the required fields
+  config.iiif_metadata_fields = [
+    :title,
+    :subtitle,
+    :title_alternative,
+    :creator,
+    :contributor,
+    :date,
+    :date_issued,
+    :abstract,
+    :description,
+    :inscription,
+    :subject_label,
+    :subject_ocm,
+    :keyword,
+    :language_label,
+    :location_label,
+    :standard_identifier,
+    :rights_holder,
+    :rights_statement_label
   ]
 
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
   # config.display_share_button_when_not_logged_in = true
+
+  # This user is logged as the acting user for jobs and other processes that
+  # run without being attributed to a specific user (e.g. creation of the
+  # default admin set).
+  # config.system_user_key = 'systemuser@example.com'
 
   # The user who runs batch jobs. Update this if you aren't using emails
   config.batch_user_key = 'dss@lafayette.edu'
@@ -183,7 +198,6 @@ Hyrax.config do |config|
   # Location on local file system where uploaded files will be staged
   # prior to being ingested into the repository or having derivatives generated.
   # If you use a multi-server architecture, this MUST be a shared volume.
-  # config.working_path = Rails.root.join( 'tmp', 'uploads')
   config.working_path = Pathname.new(ENV.fetch('HYRAX_UPLOAD_PATH', Rails.root.join('tmp', 'uploads')))
 
   # Should the media display partial render a download link?
@@ -192,9 +206,6 @@ Hyrax.config do |config|
   # A configuration point for changing the behavior of the license service
   #   @see Hyrax::LicenseService for implementation details
   # config.license_service_class = Hyrax::LicenseService
-
-  # A configuration point for changing the behavior of the rights statement service.
-  config.rights_statement_service_class = Spot::RightsStatementService
 
   # Labels for display of permission levels
   # config.permission_levels = { "View/Download" => "read", "Edit access" => "edit" }
@@ -225,8 +236,31 @@ Hyrax.config do |config|
   # config.lock_time_to_live = 60_000
 
   ## Do not alter unless you understand how ActiveFedora handles URI/ID translation
-  # config.translate_id_to_uri = ActiveFedora::Noid.config.translate_id_to_uri
-  # config.translate_uri_to_id = ActiveFedora::Noid.config.translate_uri_to_id
+  # config.translate_id_to_uri = lambda do |uri|
+  #                                baseparts = 2 + [(Noid::Rails::Config.template.gsub(/\.[rsz]/, '').length.to_f / 2).ceil, 4].min
+  #                                uri.to_s.sub(baseurl, '').split('/', baseparts).last
+  #                              end
+  # config.translate_uri_to_id = lambda do |id|
+  #                                "#{ActiveFedora.fedora.host}#{ActiveFedora.fedora.base_path}/#{Noid::Rails.treeify(id)}"
+  #                              end
+
+  # Identify the model class name that will be used for Collections in your app
+  # (i.e. ::Collection for ActiveFedora, Hyrax::PcdmCollection for Valkyrie)
+  # config.collection_model = '::Collection'
+  # config.collection_model = 'Hyrax::PcdmCollection'
+
+  # Identify the model class name that will be used for Admin Sets in your app
+  # (i.e. AdminSet for ActiveFedora, Hyrax::AdministrativeSet for Valkyrie)
+  # config.admin_set_model = 'AdminSet'
+  # config.admin_set_model = 'Hyrax::AdministrativeSet'
+
+  # When your application is ready to use the valkyrie index instead of the one
+  # maintained by active fedora, you will need to set this to true. You will
+  # also need to update your Blacklight configuration.
+  # config.query_index_from_valkyrie = false
+
+  ## Configure index adapter for Valkyrie::Resources to use solr readonly indexer
+  # config.index_adapter = :solr_index
 
   ## Fedora import/export tool
   #
@@ -237,20 +271,15 @@ Hyrax.config do |config|
   # config.bagit_dir = "tmp/descriptions"
 
   # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
-  # begin
-  #   if defined? BrowseEverything
-  #     config.browse_everything = BrowseEverything.config
-  #   else
-  #     Rails.logger.warn "BrowseEverything is not installed"
-  #   end
-  # rescue Errno::ENOENT
-  #   config.browse_everything = nil
-  # end
-
-  # Until we actually use it, force BrowseEverything not to load.
-  # Otherwise it may just return an empty Hash which is truth-y.
-  # (use the configuration above when you get to the point where you want to use it)
-  config.browse_everything = nil
+  begin
+    if defined? BrowseEverything
+      config.browse_everything = BrowseEverything.config
+    else
+      Rails.logger.warn "BrowseEverything is not installed"
+    end
+  rescue Errno::ENOENT
+    config.browse_everything = nil
+  end
 
   ## Register all directories which can be used to ingest from the local file
   # system.
@@ -268,13 +297,18 @@ Hyrax.config do |config|
   #
   config.registered_ingest_dirs = [
     Rails.root.join('tmp', 'ingest').to_s,
-
-    # need to use the capistrano root, otherwise a new deployment will
-    # break uploads from earlier ones.
     '/var/www/spot',
-
     Rails.root.join('ingest').to_s
   ]
+
+  ##
+  # Set the system-wide virus scanner
+  config.virus_scanner = Hyrax::VirusScanner
+
+  ## Remote identifiers configuration
+  # Add registrar implementations by uncommenting and adding to the hash below.
+  # See app/services/hyrax/identifier/registrar.rb for the registrar interface
+  # config.identifier_registrars = {}
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
 end
