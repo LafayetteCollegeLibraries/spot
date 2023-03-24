@@ -1,8 +1,9 @@
 #!/bin/bash
 
 if [[ ! -z "$AWS_IIIF_ASSET_BUCKET" ]]; then
-  echo "creating s3 bucket"
+  echo "creating s3 buckets"
   aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_IIIF_ASSET_BUCKET}"
+  aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_BULKRAX_IMPORT_BUCKET}"
 fi
 
 script_root="$(dirname $0)"
