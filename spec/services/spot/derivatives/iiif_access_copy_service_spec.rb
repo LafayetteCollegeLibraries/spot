@@ -102,4 +102,21 @@ RSpec.describe Spot::Derivatives::IiifAccessCopyService, derivatives: true do
         )
     end
   end
+
+  describe '#valid?' do
+    subject { described_class.new(file_set).valid? }
+
+    context 'when no S3 bucket name set in environment' do
+      let(:aws_iiif_asset_bucket) { nil }
+
+      before do
+        allow(Rails.logger).to receive(:warn)
+      end
+
+      it 'logs a warning and returns false' do
+        expect(described_class.new(file_set).valid?).to be false
+        expect(Rails.logger).to have_received(:warn).with(/AWS_IIIF_ASSET_BUCKET environment variable is not defined/)
+      end
+    end
+  end
 end

@@ -75,6 +75,8 @@ module Spot
         ENV['AWS_IIIF_ASSET_BUCKET']
       end
 
+      # We're using AWS credentials stored within the App/Sidekiq services for authentication,
+      # so the Aws::S3::Client will pick them up ambiently.
       def s3_client
         @s3_client ||= Aws::S3::Client.new
       end
@@ -95,10 +97,6 @@ module Spot
             'height' => file_set.height.first
           }
         )
-      end
-
-      def use_s3?
-        s3_bucket.present?
       end
     end
   end

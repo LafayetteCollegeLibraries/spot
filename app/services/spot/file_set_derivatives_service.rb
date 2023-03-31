@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 module Spot
   # Hacking the derivatives creation process to be more of a pipeline rather than per mime-type.
+  # Individual service classes are stored within the `.derivative_services` class_attribute, and
+  # when Spot::FileSetDerivativesService#create_derivatives or `#cleanup_derivatives`` is invoked,
+  # each sub-service receives the same call (if it responds true to `#valid?`).
   class FileSetDerivativesService < ::Hyrax::DerivativeService
-    class_attribute :derivative_services
+    class_attribute :derivative_services, :supported_mime_types
     self.derivative_services = [
       ::Spot::Derivatives::ThumbnailService,
       ::Spot::Derivatives::IiifAccessCopyService,
       ::Spot::Derivatives::TextExtractionService
     ]
+
+    self.supported_mime_types = (FileSet.pdf_mime_types + FileSet.image_mime_types)
 
     def cleanup_derivatives
       services.each do |service|
@@ -26,10 +31,6 @@ module Spot
     end
 
     private
-
-    def supported_mime_types
-      file_set.class.pdf_mime_types + file_set.class.image_mime_types
-    end
 
     def services
       derivative_services.map { |service| service.new(file_set) }

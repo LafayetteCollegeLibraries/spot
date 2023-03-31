@@ -58,4 +58,26 @@ RSpec.describe Spot::Derivatives::ThumbnailService, derivatives: true do
       expect(magick_commands).to eq(expected_commands)
     end
   end
+
+  describe '#valid?' do
+    subject { service.valid? }
+
+    # valid mime_types
+    ['audio/wav'].each do |mime_type|
+      context "when mime_type is #{mime_type}" do
+        let(:fs_mime_type) { mime_type }
+
+        it { is_expected.to be true }
+      end
+    end
+
+    # invalid mime_types
+    ['image/tiff', 'application/vnd.ms-excel', 'video/mpeg', 'application/pdf'].each do |mime_type|
+      context "when mime_type is #{mime_type}" do
+        let(:fs_mime_type) { mime_type }
+
+        it { is_expected.to be false }
+      end
+    end
+  end
 end
