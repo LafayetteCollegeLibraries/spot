@@ -62,6 +62,8 @@ RSpec.describe Spot::Derivatives::ThumbnailService, derivatives: true do
   describe '#valid?' do
     subject { service.valid? }
 
+    before { allow(file_set).to receive(:mime_type).and_return(fs_mime_type) }
+
     # valid mime_types
     ['image/tiff', 'application/vnd.ms-excel', 'video/mpeg', 'application/pdf'].each do |mime_type|
       context "when mime_type is #{mime_type}" do
