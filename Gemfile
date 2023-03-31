@@ -172,6 +172,6 @@ group :development, :test do
   gem 'webmock', '~> 3.8'
   
   # s3 Dependencies
-  gem 'browse-everything'
+  # gem 'browse-everything'
   gem 'minio-ruby'
 end
