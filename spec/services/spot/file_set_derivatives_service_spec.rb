@@ -24,12 +24,14 @@ RSpec.describe Spot::FileSetDerivativesService, derivatives: true do
     allow(derivative_service_2).to receive(:cleanup_derivatives)
     allow(derivative_service_2).to receive(:create_derivatives)
 
+    # rubocop:disable RSpec/InstanceVariable
     @original_services = described_class.derivative_services
     described_class.derivative_services = services
   end
 
   after do
     described_class.derivative_services = @original_services
+    # rubocop:enable RSpec/InstanceVariable
   end
 
   it_behaves_like 'a Hyrax::DerivativeService' do

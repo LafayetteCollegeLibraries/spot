@@ -37,12 +37,14 @@ module Spot
         FileUtils.mkdir_p(output_dirname) unless File.directory?(output_dirname)
 
         MiniMagick::Tool::Convert.new do |convert|
-          convert.merge!([
-            "${filename}[0]",
-            "-define", "tiff:tile-geometry=128x128",
-            "-compress", "jpeg",
-            "ptif:#{derivative_path}"
-          ])
+          convert.merge!(
+            [
+              "#{filename}[0]",
+              "-define", "tiff:tile-geometry=128x128",
+              "-compress", "jpeg",
+              "ptif:#{derivative_path}"
+            ]
+          )
         end
 
         upload_derivative_to_s3

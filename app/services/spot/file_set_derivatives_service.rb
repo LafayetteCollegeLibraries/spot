@@ -12,8 +12,6 @@ module Spot
       ::Spot::Derivatives::TextExtractionService
     ]
 
-    self.supported_mime_types = (FileSet.pdf_mime_types + FileSet.image_mime_types)
-
     def cleanup_derivatives
       services.each do |service|
         service.cleanup_derivatives if service.valid?
@@ -27,7 +25,7 @@ module Spot
     end
 
     def valid?
-      supported_mime_types.include? mime_type
+      services.any?(&:valid?)
     end
 
     private
