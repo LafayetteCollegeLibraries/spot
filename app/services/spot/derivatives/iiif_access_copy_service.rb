@@ -9,16 +9,6 @@ module Spot
     # layers at different resolutions which makes their use in a deep-zooming IIIF application
     # (ie. UniversalViewer) more efficient.
     #
-<<<<<<< HEAD:app/services/spot/derivatives/access_master_service.rb
-    # When the AWS_IIIF_ASSET_BUCKET environment variable is present, this will
-    # write the file to a defined S3 bucket and remove the local copy.
-    #
-    # @example usage
-    #   file_set = FileSet.find(id: 'abc123def')
-    #   src_path = Rails.root.join('tmp', 'uploads', more_path, 'original-file.tif')
-    #   Spot::Derivatives::AccessMasterService.new(file_set).create_derivatives(src_path)
-    class AccessMasterService < BaseDerivativesService
-=======
     # This generates the file locally and then uploads to an S3 bucket defined by the
     # AWS_IIIF_ASSET_BUCKET environment variable. The local copy is deleted afterwards.
     #
@@ -28,21 +18,6 @@ module Spot
     class IiifAccessCopyService < BaseDerivativeService
       class_attribute :derivative_key_template
       self.derivative_key_template = '%s-access.tif'
-
->>>>>>> 583a6216 (refactor derivatives services):app/services/spot/derivatives/iiif_access_copy_service.rb
-      # Determines which cleanup method to use based on whether or not AWS related
-      # variables are present in ENV
-      #
-      # @return [void]
-      def cleanup_derivatives
-        use_s3? ? cleanup_s3_derivatives : cleanup_local_derivatives
-      end
-
-      # Deletes the local access_master derivative if it exists
-      #
-      # @return [void]
-      def cleanup_local_derivatives
-      end
 
       # Deletes the derivative from the S3 bucket
       # @todo maybe we should hang onto these when we delete + put them in a glacier grave?
@@ -61,13 +36,6 @@ module Spot
         output_dirname = File.dirname(derivative_path)
         FileUtils.mkdir_p(output_dirname) unless File.directory?(output_dirname)
 
-<<<<<<< HEAD:app/services/spot/derivatives/access_master_service.rb
-        MiniMagick::Tool::Convert.new do |magick|
-          magick << "#{filename}[0]"
-          # we need to use an array for each piece of this command; using a string will cause an error
-          magick.merge! %w[-define tiff:tile-geometry=128x128 -compress jpeg]
-          magick << "ptif:#{derivative_path}"
-=======
         MiniMagick::Tool::Convert.new do |convert|
           convert.merge!([
             "${filename}[0]",
@@ -75,7 +43,6 @@ module Spot
             "-compress", "jpeg",
             "ptif:#{derivative_path}"
           ])
->>>>>>> 583a6216 (refactor derivatives services):app/services/spot/derivatives/iiif_access_copy_service.rb
         end
 
         upload_derivative_to_s3

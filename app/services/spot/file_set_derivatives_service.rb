@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Spot
   # Hacking the derivatives creation process to be more of a pipeline rather than per mime-type.
   class FileSetDerivativesService < ::Hyrax::DerivativeService
@@ -5,7 +6,7 @@ module Spot
     self.derivative_services = [
       ::Spot::Derivatives::ThumbnailService,
       ::Spot::Derivatives::IiifAccessCopyService,
-      ::Spot::Derivatives::TextExtractionService,
+      ::Spot::Derivatives::TextExtractionService
     ]
 
     def cleanup_derivatives

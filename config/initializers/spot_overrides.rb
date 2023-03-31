@@ -30,7 +30,7 @@ Rails.application.config.to_prepare do
   # for formats we don't currently handle uniquely.
   Hyrax::DerivativeService.services = [
     ::Spot::FileSetDerivativesService,
-    ::Hyrax::FileSetDerivativesService,
+    ::Hyrax::FileSetDerivativesService
   ]
 
   # Change the layout used for pages and the contact form

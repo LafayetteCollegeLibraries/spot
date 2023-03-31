@@ -6,7 +6,7 @@ module Spot
     # @example
     #   working_copy = Hyrax::WorkingDirectory.find_or_retrieve(file_set)
     #   Spot::Derivatives::ThumbnailServkce.new(file_set).create_derivatives(working_copy)
-    class ThumbnailService < BaseDerivativesService
+    class ThumbnailService < BaseDerivativeService
       # @return [void]
       def cleanup_derivatives
         FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
@@ -24,14 +24,16 @@ module Spot
         FileUtils.mkdir_p(output_dirname) unless File.directory?(output_dirname)
 
         MiniMagick::Tool::Convert.new do |convert|
-          convert.merge!([
-            "#{src_path}[0]",
-            "-colorspace", "sRGB",
-            "-flatten",
-            "-resize", "200x150>",
-            "-format", "jpg",
-            derivative_path
-          ])
+          convert.merge!(
+            [
+              "#{src_path}[0]",
+              "-colorspace", "sRGB",
+              "-flatten",
+              "-resize", "200x150>",
+              "-format", "jpg",
+              derivative_path
+            ]
+          )
         end
       end
 
