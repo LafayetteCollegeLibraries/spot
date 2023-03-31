@@ -1,21 +1,14 @@
 # frozen_string_literal: true
 module Spot
   module Derivatives
-    # Abstract class that other derivative services can inherit from
-    class BaseDerivativesService
-      attr_reader :file_set
-
-      def initialize(file_set)
-        @file_set = file_set
-      end
-
-      def cleanup_derivatives
-        raise NotImplementedError, '#create_derivatives should be implemented by a child class of BaseDerivativesService'
-      end
-
-      def create_derivatives(_filename)
-        raise NotImplementedError, '#create_derivatives should be implemented by a child class of BaseDerivativesService'
-      end
+    # Base class that other derivative services can inherit from
+    class BaseDerivativesService < ::Hyrax::DerivativeService
+      delegate :audio_mime_types,
+               :image_mime_types,
+               :pdf_mime_types,
+               :office_document_mime_types,
+               :video_mime_types,
+               to: :FileSet
     end
   end
 end
