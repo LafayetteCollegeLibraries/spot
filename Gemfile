@@ -134,7 +134,7 @@ gem 'linkeddata', '~> 3.0'
 #
 # @todo remove these restriction after aws migration
 gem 'bootstrap_form', '~> 4.4.0'
-gem 'nokogiri', '~> 1.10.10'
+gem 'nokogiri', '~> 1.14.2'
 
 # Citation parser to extract meta data for google scholar
 gem 'anystyle', '~> 1.4.1'
