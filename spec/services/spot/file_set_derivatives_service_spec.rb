@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::FileSetDerivativesService, derivatives: true do
   let(:service) { described_class.new(file_set) }
-  let(:_file_set) { build(:file_set) }
-  let(:file_set) { _file_set }
+  let(:file_set) { build(:file_set) }
   let(:fs_mime_type) { 'image/tiff' }
   let(:derivative_service_1) { instance_double('Hyrax::DerivativeService') }
   let(:derivative_service_2) { instance_double('Hyrax::DerivativeService') }
@@ -15,6 +14,7 @@ RSpec.describe Spot::FileSetDerivativesService, derivatives: true do
     ]
   end
 
+  # rubocop:disable RSpec/InstanceVariable
   before do
     allow(file_set).to receive(:mime_type).and_return(fs_mime_type)
     allow(derivative_service_1).to receive(:valid?).and_return(service_1_valid)
@@ -24,18 +24,18 @@ RSpec.describe Spot::FileSetDerivativesService, derivatives: true do
     allow(derivative_service_2).to receive(:cleanup_derivatives)
     allow(derivative_service_2).to receive(:create_derivatives)
 
-    # rubocop:disable RSpec/InstanceVariable
     @original_services = described_class.derivative_services
     described_class.derivative_services = services
   end
 
   after do
     described_class.derivative_services = @original_services
-    # rubocop:enable RSpec/InstanceVariable
   end
+  # rubocop:enable RSpec/InstanceVariable
 
   it_behaves_like 'a Hyrax::DerivativeService' do
-    let(:valid_file_set) { _file_set }
+    let(:valid_file_set) { build(:file_set) }
+    let(:service_1_valid) { true } # required for service.valid?
   end
 
   describe '#cleanup_derivatives' do
@@ -94,20 +94,18 @@ RSpec.describe Spot::FileSetDerivativesService, derivatives: true do
     describe '#valid?' do
       subject { described_class.new(file_set).valid? }
 
-      # valid mime_types
-      ['image/tiff', 'application/pdf'].each do |mime_type|
-        context "when mime_type is #{mime_type}" do
-          let(:fs_mime_type) { mime_type }
-          it { is_expected.to be true }
-        end
+      context 'when any of the services are valid' do
+        let(:service_1_valid) { true }
+        let(:service_2_valid) { false }
+
+        it { is_expected.to be true }
       end
 
-      # invalid mime_types
-      ['application/vnd.ms-excel', 'video/mpeg', 'audio/wav'].each do |mime_type|
-        context "when mime_type is #{mime_type}" do
-          let(:fs_mime_type) { mime_type }
-          it { is_expected.to be false }
-        end
+      context 'when none of the services are valid' do
+        let(:service_1_valid) { false }
+        let(:service_2_valid) { false }
+
+        it { is_expected.to be false }
       end
     end
   end
