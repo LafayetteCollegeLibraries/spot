@@ -15,5 +15,7 @@ class StudentWorkIndexer < BaseIndexer
     return email unless email.end_with?('@lafayette.edu')
 
     Spot::LafayetteInstructorsAuthorityService.label_for(email: email)
+  rescue ::KeyError, ::Spot::LafayetteInstructorsAuthorityService::UserNotFoundError
+    email
   end
 end
