@@ -9,12 +9,12 @@ module Spot
   #   Spot::LafayetteInstructorsAuthorityService.load(term: '202130', api_key: ENV.fetch('LAFAYETTE_WDS_API_KEY'))
   #   # => [#<Qa::LocalAuthorityEntry id: 1, local_authority_id: 1...>...]
   class LafayetteInstructorsAuthorityService
-    API_ENV_KEY = 'LAFAYETTE_WDS_API_KEY'
+    API_ENV_KEY =
     SUBAUTHORITY_NAME = 'lafayette_instructors'
 
     class UserNotFoundError < StandardError; end
 
-    def self.label_for(email: nil, api_key: ENV.fetch(API_ENV_KEY))
+    def self.label_for(email:, api_key: ENV['LAFAYETTE_WDS_API_KEY'])
       new(api_key: api_key).label_for(email: email)
     end
 
@@ -24,14 +24,14 @@ module Spot
     # @option [String] api_key
     #   API key to use
     # @return [Array<Qa::LocalAuthorityEntry>]
-    def self.load(term:, api_key: ENV.fetch(API_ENV_KEY))
+    def self.load(term:, api_key: ENV['LAFAYETTE_WDS_API_KEY'])
       new(api_key: api_key).load(term: term)
     end
 
     # @param [Hash] options
     # @option [String] api_key
     #   API key to use (defaults to LAFAYETTE_WDS_API_KEY environment variable)
-    def initialize(api_key: ENV.fetch(API_ENV_KEY))
+    def initialize(api_key: ENV['LAFAYETTE_WDS_API_KEY'])
       @api_key = api_key
     end
 
@@ -53,7 +53,7 @@ module Spot
       deactivate_entries
 
       data.map do |instructor|
-        find_or_create_entry(from: instructor)
+        auth_entry_from_user(user_from_wds_data(instructor))
       end
     end
 
@@ -61,13 +61,7 @@ module Spot
     # @option [String] email
     # @return [String]
     def label_for(email:)
-      stored = find_local_label_for(email: email)
-      return stored unless stored.nil?
-
-      remote = wds_service.person(email: email)
-      raise(UserNotFoundError, "No user found with email address: #{email}") if remote == false
-
-      find_or_create_entry(from: remote).label
+      find_or_create_from_email(email).label
     end
 
     # prevent our api_key from leaking
@@ -81,32 +75,35 @@ module Spot
 
     attr_reader :api_key
 
-    def deactivate_entries
-      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update(active: false)
-    end
-
-    def find_local_label_for(email:)
-      qa = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
-      return qa.label unless qa.nil?
-
-      user = User.find_by(email: email)
-      user&.authority_name
-    end
-
-    def find_or_create_entry(from:)
-      user = find_or_create_user(from)
-
+    def auth_entry_from_user(user)
       Qa::LocalAuthorityEntry.find_or_initialize_by(local_authority: local_authority, uri: user.email).tap do |entry|
         entry.label = user.authority_name
         entry.save
       end
     end
 
-    def find_or_create_user(params)
-      User.find_or_create_by(email: params.fetch('EMAIL').downcase) do |user|
-        user.given_name = params['PREFERRED_FIRST_NAME'] || params['FIRST_NAME']
-        user.surname = params['LAST_NAME']
-      end
+    def blank_wds_response(email)
+      Rails.logger.warn("Creating empty authority label for #{email}")
+      { 'LAST_NAME' => email, 'FIRST_NAME' => '', 'EMAIL' => email }
+    end
+
+    def deactivate_entries
+      Qa::LocalAuthorityEntry.where(local_authority: local_authority).update(active: false)
+    end
+
+    def find_or_create_from_email(email)
+      # 1. check local authority
+      auth_entry = Qa::LocalAuthorityEntry.find_by(uri: email, local_authority: local_authority)
+      return auth_entry if auth_entry.present?
+
+      # 2. check local users
+      local_user = User.find_by(email: email)
+      return auth_entry_from_user(local_user) if local_user.present?
+
+      # 3. query wds
+      wds_data = wds_user_data_from_email(email)
+      wds_user = user_from_wds_data(wds_data)
+      auth_entry_from_user(wds_user)
     end
 
     def instructors_for(term:)
@@ -117,8 +114,22 @@ module Spot
       @local_authority ||= Qa::LocalAuthority.find_or_create_by(name: SUBAUTHORITY_NAME)
     end
 
+    def user_from_wds_data(data)
+      User.find_or_create_by(email: data.fetch('EMAIL').downcase) do |user|
+        user.given_name = data['PREFERRED_FIRST_NAME'] || data['FIRST_NAME']
+        user.surname = data['LAST_NAME']
+      end
+    end
+
     def wds_service
       Spot::LafayetteWdsService.new(api_key: api_key)
+    end
+
+    def wds_user_data_from_email(email)
+      wds_service.person(email: email) || blank_wds_response(email)
+    rescue => e
+      Rails.logger.warn("WDS returned the following error: #{e.message}")
+      blank_wds_response(email)
     end
   end
 end
