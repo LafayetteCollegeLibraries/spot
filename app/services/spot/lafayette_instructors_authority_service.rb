@@ -9,7 +9,6 @@ module Spot
   #   Spot::LafayetteInstructorsAuthorityService.load(term: '202130', api_key: ENV.fetch('LAFAYETTE_WDS_API_KEY'))
   #   # => [#<Qa::LocalAuthorityEntry id: 1, local_authority_id: 1...>...]
   class LafayetteInstructorsAuthorityService
-    API_ENV_KEY =
     SUBAUTHORITY_NAME = 'lafayette_instructors'
 
     class UserNotFoundError < StandardError; end
