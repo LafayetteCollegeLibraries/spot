@@ -2,6 +2,8 @@
 #
 # Following along with +Hyrax::HomepageController+, but leaving out
 # the bits we're not using.
+#
+# @todo update this to inherit from Hyrax::HomepageController + when upgrading to Hyrax v3
 module Spot
   class HomepageController < ApplicationController
     # adding Blacklight behavior (so that we can search the catalog easily)
@@ -19,7 +21,7 @@ module Spot
 
     # @return [Array<SolrDocument>]
     def recent_works
-      _, docs = search_results(q: recent_items_query, sort: 'date_uploaded_dtsi desc', rows: 6)
+      _, docs = search_results(q: '', sort: 'date_uploaded_dtsi desc', rows: 6)
       docs
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
@@ -40,10 +42,6 @@ module Spot
     # @return [Class]
     def presenter_class
       Spot::HomepagePresenter
-    end
-
-    def recent_items_query
-      "{!terms f=has_model_ssim}#{Hyrax.config.curation_concerns.join(',')}"
     end
   end
 end
