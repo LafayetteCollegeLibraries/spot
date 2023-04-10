@@ -275,6 +275,8 @@ Hyrax.config do |config|
 
     Rails.root.join('ingest').to_s
   ]
+
+  config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
