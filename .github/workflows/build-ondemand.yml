@@ -1,0 +1,140 @@
+name: Build and push containers on demand
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service container(s) to build'
+        required: true
+        default: 'All'
+        type: choice
+        options:
+          - All
+          - Rails/Sidekiq
+          - Fedora Commons Repository
+          - Solr
+      environment:
+        description: 'Container repository to push to'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - stage
+          - production
+jobs:
+  build_all:
+    if: ${{ inputs.service == 'All' }}
+    strategy:
+      matrix:
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    steps:
+      -
+        name: Check out repository
+        uses: actions/checkout@v3
+      -
+        name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      -
+        name: Build all containers
+        uses: ./.github/actions/build-containers
+        with:
+          registry: ${{ secrets.CONTAINER_REGISTRY }}
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+          tag: ${{ steps.extract_branch.outputs.branch }}
+          application_image_name: ${{ vars.APPLICATION_CONTAINER_ID }}
+          worker_image_name: ${{ vars.WORKER_CONTAINER_ID }}
+          fcrepo_image_name: ${{ vars.FCREPO_CONTAINER_ID }}
+          handle_image_name: ${{ vars.HANDLE_CONTAINER_ID }}
+          solr_image_name: ${{ vars.SOLR_CONTAINER_ID }}
+  build_app:
+    if: ${{ inputs.service == 'Rails/Sidekiq' }}
+    strategy:
+      matrix:
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    steps:
+      -
+        name: Check out repository
+        uses: actions/checkout@v3
+      -
+        name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      -
+        name: Log into Docker
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.CONTAINER_REGISTRY }}
+          username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+      -
+        name: Build Rails container
+        uses: ./.github/actions/build-container
+        with:
+          image_name: ${{ inputs.APPLICATION_CONTAINER_ID }}
+          registry: ${{ secrets.CONTAINER_REGISTRY }}
+          tag: ${{ steps.extract_branch.outputs.branch }}
+          target: spot-production
+      -
+        name: Build worker container
+        uses: ./.github/actions/build-container
+        with:
+          image_name: ${{ inputs.WORKER_CONTAINER_ID }}
+          registry: ${{ secrets.CONTAINER_REGISTRY }}
+          tag: ${{ steps.extract_branch.outputs.branch }}
+          target: spot-production
+  build_fcrepo:
+    if: ${{ inputs.service == 'Fedora Commons Repository' }}
+    strategy:
+      matrix:
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    steps:
+      -
+        name: Check out repository
+        uses: actions/checkout@v3
+      -
+        name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      -
+        name: Build FCRepo container
+        uses: ./.github/actions/build-container
+        with:
+          image_name: ${{ inputs.FCREPO_CONTAINER_ID }}
+          registry: ${{ secrets.CONTAINER_REGISTRY }}
+          tag: ${{ steps.extract_branch.outputs.branch }}
+          context: ./docker/fcrepo
+  build_solr:
+    if: ${{ inputs.service == 'Solr' }}
+    strategy:
+      matrix:
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+    steps:
+      -
+        name: Check out repository
+        uses: actions/checkout@v3
+      -
+        name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      -
+        name: Build Solr container
+        uses: ./.github/actions/build-container
+        with:
+          image_name: ${{ inputs.SOLR_CONTAINER_ID }}
+          registry: ${{ secrets.CONTAINER_REGISTRY }}
+          tag: ${{ steps.extract_branch.outputs.branch }}
+          context: ./docker/solr

@@ -181,4 +181,64 @@ RSpec.shared_examples 'a Spot presenter' do
 
     it { is_expected.to be false }
   end
+
+  describe '#citation_journal_title' do
+    subject { presenter.citation_journal_title }
+
+    let(:solr_data) do
+      {
+        'citation_journal_title_ss' => 'Journal'
+      }
+    end
+
+    it { is_expected.to eq 'Journal' }
+  end
+
+  describe '#citation_volume' do
+    subject { presenter.citation_volume }
+
+    let(:solr_data) do
+      {
+        'citation_volume_ss' => '1'
+      }
+    end
+
+    it { is_expected.to eq '1' }
+  end
+
+  describe '#citation_issue' do
+    subject { presenter.citation_issue }
+
+    let(:solr_data) do
+      {
+        'citation_issue_ss' => '2'
+      }
+    end
+
+    it { is_expected.to eq '2' }
+  end
+
+  describe '#citation_firstpage' do
+    subject { presenter.citation_firstpage }
+
+    let(:solr_data) do
+      {
+        'citation_firstpage_ss' => '1'
+      }
+    end
+
+    it { is_expected.to eq '1' }
+  end
+
+  describe '#citation_lastpage' do
+    subject { presenter.citation_lastpage }
+
+    let(:solr_data) do
+      {
+        'citation_lastpage_ss' => '2'
+      }
+    end
+
+    it { is_expected.to eq '2' }
+  end
 end

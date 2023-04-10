@@ -15,10 +15,10 @@ RUN apk --no-cache update && \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql postgresql-dev \
+        postgresql \
+        postgresql-dev \
         ruby-dev \
         tzdata \
-        yarn \
         zip
 RUN apk update && apk add g++ gcc libxml2 libxml2-dev libxslt-dev
 
@@ -32,7 +32,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 RUN gem install bundler:1.13.7
 
 ARG BUNDLE_WITHOUT="development:test"
-COPY ["Gemfile", "Gemfile.lock", "package.json", "yarn.lock", "/spot"]
+COPY ["Gemfile", "Gemfile.lock", "/spot/"]
 RUN bundle install --jobs "$(nproc)"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
@@ -47,7 +47,10 @@ HEALTHCHECK CMD curl -skf https://localhost || exit 1
 ##
 FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
+
+RUN apk add yarn
 COPY . /spot
+
 RUN SECRET_KEY_BASE="$(bin/rake secret)" \
     bundle exec rake assets:precompile
 
@@ -58,11 +61,14 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" \
 ##
 FROM spot-base as spot-development
 ENV RAILS_ENV=development
+RUN apk add --no-cache --update yarn
 
 # install awscli the hard way (via python) bc our base image is
 # too old to include it in the alpine 3.10 apk
 #
-# @ see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
+# @see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
+# @todo replace this by adding `aws-cli` to the above `RUN apk add`
+#       command, after upgrading the Ruby container
 RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
     && python3 -m ensurepip --upgrade \
     && pip3 install --upgrade pip \
@@ -71,6 +77,11 @@ RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
     && apk del python3-dev gcc musl-dev
 
 RUN bundle install --jobs "$(nproc)" --with="development test"
+
+COPY config/uv /spot/config/uv
+COPY ["package.json", "yarn.lock", "/spot/"]
+RUN yarn install
+
 COPY . /spot
 
 
@@ -82,6 +93,7 @@ FROM spot-base as spot-production
 ENV RAILS_ENV=production
 COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 
 
 ##
@@ -89,7 +101,6 @@ COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 # Installs dependencies for running background jobs
 ##
 FROM spot-base as spot-worker
-
 ARG FITS_VERSION=1.5.1
 ENV FITS_VERSION=${FITS_VERSION}
 
@@ -130,4 +141,4 @@ EXPOSE 3000
 ##
 FROM spot-worker as spot-worker-production
 ENV RAILS_ENV=production
-COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+COPY --from=spot-asset-builder /spot/public /spot/public

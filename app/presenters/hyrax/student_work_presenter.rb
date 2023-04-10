@@ -4,7 +4,8 @@ module Hyrax
     humanize_date_fields :date, :date_available
 
     delegate :access_note, :advisor, :advisor_label, :bibliographic_citation,
-             :academic_department, :division, :organization, to: :solr_document
+             :academic_department, :division, :organization,
+             to: :solr_document
 
     def abstract
       solr_document.abstract.map { |abs| replace_line_breaks(abs) }

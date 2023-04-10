@@ -50,7 +50,7 @@ class Image < ActiveFedora::Base
 
   # @note The URI provided is the landing page for the OCM, as a predicate doesn't exist
   property :subject_ocm, predicate: ::RDF::URI('https://hraf.yale.edu/resources/reference/outline-of-cultural-materials') do |index|
-    index.as :symbol
+    index.as :symbol, :stored_searchable
   end
 
   # see {Spot::WorkBehavior.setup_nested_attributes!}

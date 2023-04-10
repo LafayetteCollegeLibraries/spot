@@ -10,11 +10,8 @@ module Spot
     # and needs to respond to :cleanup_derivatives and :create_derivatives (the
     # latter receives a source filename as a parameter).
     #
-    # When the following AWS-related environment variables are present, this will
-    # write the file to a defined S3 bucket and remove the local copy:
-    #   - AWS_ACCESS_KEY_ID
-    #   - AWS_SECRET_ACCESS_KEY
-    #   - AWS_IIIF_ASSET_BUCKET
+    # When the AWS_IIIF_ASSET_BUCKET environment variable is present, this will
+    # write the file to that location and delete the local working copy.
     #
     # @example
     #   file_set = FileSet.find(id: 'abc123def')
@@ -91,22 +88,26 @@ module Spot
         "#{file_set.id}-access.tif"
       end
 
+      #
       def upload_derivative_to_s3
         s3_client.put_object(
           bucket: s3_bucket,
           key: s3_derivative_key,
           body: File.open(derivative_path, 'r'),
           content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).base64digest
+          content_md5: Digest::MD5.file(derivative_path).base64digest,
+          metadata: {
+            'height' => file_set.height.first,
+            'width' => file_set.width.first
+          }
         )
       end
 
+      # We're using AWS credentials stored within the App/Sidekiq services for authentication,
+      # so the Aws::S3::Client will pick them up ambiently. To confirm that we're using S3,
+      # we'll just check to confirm that the bucket is defined in ENV.
       def use_s3?
-        %w[
-          AWS_ACCESS_KEY_ID
-          AWS_SECRET_ACCESS_KEY
-          AWS_IIIF_ASSET_BUCKET
-        ].all? { |k| ENV[k].present? }
+        s3_bucket.present?
       end
     end
   end
