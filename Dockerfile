@@ -80,9 +80,10 @@ RUN bundle install --jobs "$(nproc)" --with="development test"
 
 COPY config/uv /spot/config/uv
 COPY ["package.json", "yarn.lock", "/spot/"]
-RUN yarn install
 
 COPY . /spot
+WORKDIR /spot
+RUN yarn install
 
 
 ##
@@ -92,8 +93,7 @@ COPY . /spot
 FROM spot-base as spot-production
 ENV RAILS_ENV=production
 COPY . /spot
-COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
-COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
+COPY --from=spot-asset-builder /spot/public/* /spot/public/*
 
 
 ##
@@ -141,4 +141,4 @@ EXPOSE 3000
 ##
 FROM spot-worker as spot-worker-production
 ENV RAILS_ENV=production
-COPY --from=spot-asset-builder /spot/public /spot/public
+COPY --from=spot-asset-builder /spot/public/* /spot/public/*
