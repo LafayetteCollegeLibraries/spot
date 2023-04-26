@@ -14,20 +14,9 @@ module Bulkrax
     def records(_opts = {})
       return @records if @records.present?
 
-      Rails.logger.info 'HELLO???'
-      client = Aws::S3::Client.new()
-      if client
-        Rails.logger.info 'AWS S3 Client'
-      else
-        Rails.logger.info 'AWS S3 Client FAIL'
       file_for_import = only_updates ? parser_fields['partial_import_file_path'] : import_file_path
-      resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
-      if resp
-        Rails.logger.info 'AWS S3 Response'
-      else
-        Rails.logger.info 'AWS S3 Response FAIL'
       # data for entry does not need source_identifier for csv, because csvs are read sequentially and mapped after raw data is read.
-      csv_data = entry_class.read_data('/spot/tmp/import/'+file_for_import)
+      csv_data = entry_class.read_data(file_for_import)
       importer.parser_fields['total'] = csv_data.count
       importer.save
 
