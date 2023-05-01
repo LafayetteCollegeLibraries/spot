@@ -67,7 +67,7 @@ gem 'dotenv-rails', '2.7.6'
 
 # extended date formats
 gem 'edtf', '3.0.6'
-gem 'edtf-humanize', '2.0.1'
+gem 'edtf-humanize', '2.1.0'
 
 # error trackijng
 gem 'honeybadger', '4.12.1'
