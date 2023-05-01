@@ -200,7 +200,7 @@ group :development, :test do
   gem 'capybara', '~> 3.32.0'
   gem 'rubocop', '~> 0.52.0'
   gem 'rubocop-rspec', '1.22.2'
-  gem 'simplecov', '~> 0.17.1', require: false
+  gem 'simplecov', '~> 0.22.0', require: false
 
   # subdependencies that we need to lock for ruby 2.4.3.
   # (@todo remove these when we're in the cloud)
