@@ -12,12 +12,14 @@ Bundler.require(*Rails.groups)
 module Spot
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 5.2
 
     # use sidekiq for async jobs
     config.active_job.queue_adapter = :sidekiq
 
     config.active_record.schema_format = :sql
+
+    config.action_controller.default_url_options = { protocol: 'https://' } if config.force_ssl
 
     config.action_mailer.default_url_options = { host: ENV['URL_HOST'] }
     config.action_mailer.preview_path = Rails.root.join('lib', 'mailer_previews')
