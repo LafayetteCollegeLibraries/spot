@@ -6,7 +6,8 @@ RSpec.shared_examples 'it exports image derivatives' do
   let(:solr_document) { SolrDocument.new(work.to_solr) }
   let(:work) { build(work_klass.underscore.to_sym, id: 'work-id') }
   let(:work_klass) { described_class.name.split('::').last.gsub(/Presenter$/, '') }
-  let(:url_builder) { ->(size, label) { "http://localhost/iiif/2/representative/full/#{size}/0/default.jpg?response-content-disposition=attachment%3B%20work-id-#{label}.jpg" } }
+  let(:base_url) { ENV['IIIF_BASE_URL'] || 'http://localhost/iiif/2' }
+  let(:url_builder) { ->(size, label) { "#{base_url}/representative/full/#{size}/0/default.jpg?response-content-disposition=attachment%3B%20work-id-#{label}.jpg" } }
 
   before do
     allow(presenter).to receive(:representative_id).and_return('representative')
