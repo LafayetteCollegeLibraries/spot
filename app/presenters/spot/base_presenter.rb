@@ -28,6 +28,16 @@ module Spot
 
     delegate :public?, to: :solr_document
 
+    # Copying this locally to force download URLs to be https.
+    # This method doesn't appear to change through Hyrax 4.0.
+    #
+    # @return [String]
+    # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0.rc2/app/presenters/hyrax/work_show_presenter.rb#L58-L62
+    def download_url
+      return '' if representative_presenter.nil?
+      Hyrax::Engine.routes.url_helpers.download_url(representative_presenter, host: request.host, protocol: 'https://')
+    end
+
     # @return [String]
     def export_all_text
       I18n.t("spot.work.export.download_work_and_metadata_#{multiple_members? ? 'multiple' : 'single'}")

@@ -30,6 +30,30 @@ RSpec.shared_examples 'a Spot presenter' do
     end
   end
 
+  describe '#download_url' do
+    subject { presenter.download_url }
+
+    let(:presenter) { described_class.new(solr_doc, ability, mock_request) }
+    let(:member_id) { 'fsa123bcd' }
+    let(:member_presenter) { instance_double(Hyrax::FileSetPresenter, id: member_id, to_param: member_id) }
+    let(:mock_request) { Struct.new(:host).new('localhost')  }
+
+    context 'when a representative exists' do
+      before do
+        allow(solr_doc).to receive(:representative_id).and_return(member_id)
+        allow_any_instance_of(Hyrax::MemberPresenterFactory).to receive(:member_presenters).with([member_id]).and_return([member_presenter])
+      end
+
+      it { is_expected.to eq "https://localhost/downloads/#{member_id}" }
+    end
+
+    context 'when a representative does not exist' do
+      let(:member_id) { nil }
+
+      it { is_expected.to eq '' }
+    end
+  end
+
   describe '#export_formats' do
     subject { presenter.export_formats }
 
