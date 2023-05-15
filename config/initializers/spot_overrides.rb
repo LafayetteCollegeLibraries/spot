@@ -114,9 +114,11 @@ Rails.application.config.to_prepare do
 
   # Adding support for cloud files in importers
   Bulkrax::ImportersController.class_eval do
+    private
+
     def files_for_import(file, cloud_files)
       return if file.blank? && cloud_files.blank?
-      @importer[:parser_fields]['import_file_path'] = @importer.parser.write_import_file(file) if file.present?
+      @importer[:parser_fields]['import_file_path'] = @importer.parser.write_import_file(file)
       if cloud_files.present?
         # For BagIt, there will only be one bag, so we get the file_path back and set import_file_path
         # For CSV, we expect only file uploads, so we won't get the file_path back
@@ -125,6 +127,23 @@ Rails.application.config.to_prepare do
         @importer[:parser_fields]['import_file_path'] = target if target.present?
       end
       @importer.save
+    end
+  end
+
+  Bulkrax::CsvParser.class_eval do
+    def records(_opts = {})
+      return @records if @records.present?
+
+      # client = Aws::S3::Client.new()
+      file_for_import = only_updates ? parser_fields['partial_import_file_path'] : import_file_path
+      # resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
+      # data for entry does not need source_identifier for csv, because csvs are read sequentially and mapped after raw data is read.
+      # +file_for_import
+      csv_data = entry_class.read_data('/spot/tmp/import/test.csv')
+      importer.parser_fields['total'] = csv_data.count
+      importer.save
+
+      @records = csv_data.map { |record_data| entry_class.data_for_entry(record_data, nil, self) }
     end
   end
 

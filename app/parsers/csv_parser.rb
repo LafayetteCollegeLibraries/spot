@@ -14,9 +14,12 @@ module Bulkrax
     def records(_opts = {})
       return @records if @records.present?
 
+      # client = Aws::S3::Client.new()
       file_for_import = only_updates ? parser_fields['partial_import_file_path'] : import_file_path
+      # resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
       # data for entry does not need source_identifier for csv, because csvs are read sequentially and mapped after raw data is read.
-      csv_data = entry_class.read_data(file_for_import)
+      # +file_for_import
+      csv_data = entry_class.read_data('/spot/tmp/import/test.csv')
       importer.parser_fields['total'] = csv_data.count
       importer.save
 
