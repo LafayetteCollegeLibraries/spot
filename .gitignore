@@ -16,6 +16,8 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+!/tmp/import/.keep
+!/tmp/import/files/.keep
 **/*.log
 .byebug_history
 
