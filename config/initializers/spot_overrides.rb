@@ -125,32 +125,6 @@ Rails.application.config.to_prepare do
       importer.save
 
       @records = csv_data.map { |record_data| entry_class.data_for_entry(record_data, nil, self) }
-
-      # file_directory = File.dirname(file_for_import)
-      # resp = client.list_objects({bucket: "bulkrax-imports", prefix: file_directory, })
-
-      # for entry in csv_data do
-      #   for i in 1..10 do
-      #     if entry.has_key('file_'+i.to_s)
-      #       break
-      #     else
-      #       client.get_object(response_target: '/spot/tmp/import/files/'+entry.fetch('file_'+i.to_s), bucket: 'bulkrax-imports', key: file_directory+"/files/"+entry.fetch('file_'+i.to_s))
-      #     end
-      #   end
-      # end
-    end
-
-    # Retrieve the path where we expect to find the files
-    def path_to_files(**args)
-      filename = args.fetch(:filename, '')
-
-      return @path_to_files if @path_to_files.present? && filename.blank?
-      @path_to_files = File.join(
-          zip? ? importer_unzip_path : File.dirname(import_file_path), 'files', filename
-        )
-      # client = Aws::S3::Client.new()
-      # Rails.logger.info 'AWS S3 Response: '+filename
-      # resp = client.get_object(response_target: '/spot/tmp/import/files/'+filename, bucket: 'bulkrax-imports', key: 'files/'+filename)
     end
   end
 
