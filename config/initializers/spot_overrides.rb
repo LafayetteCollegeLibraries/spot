@@ -121,6 +121,12 @@ Rails.application.config.to_prepare do
       resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
       # data for entry does not need source_identifier for csv, because csvs are read sequentially and mapped after raw data is read.
       csv_data = entry_class.read_data('/spot/tmp/import/'+file_for_import)
+      file_directory = File.dirname(file_for_import)
+      resp2 = client.list_objects(bucket: "bulkrax-imports", prefix: file_directory)
+      # resp2 = client.list_objects(bucket: "bulkrax-imports")
+      for entry in resp2.contents do
+        client.get_object(response_target: '/spot/tmp/import/'+entry.key, bucket: 'bulkrax-imports', key: entry.key)
+      end
       importer.parser_fields['total'] = csv_data.count
       importer.save
 
