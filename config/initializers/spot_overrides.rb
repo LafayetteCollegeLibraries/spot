@@ -124,7 +124,8 @@ Rails.application.config.to_prepare do
       file_directory = File.dirname(file_for_import)
       resp2 = client.list_objects(bucket: "bulkrax-imports", prefix: file_directory)
       # resp2 = client.list_objects(bucket: "bulkrax-imports")
-      for entry in resp2.contents do
+      resp2.contents.each do |entry|
+        puts '/spot/tmp/import/'+entry.key
         client.get_object(response_target: '/spot/tmp/import/'+entry.key, bucket: 'bulkrax-imports', key: entry.key)
       end
       importer.parser_fields['total'] = csv_data.count
