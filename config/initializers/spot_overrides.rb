@@ -113,8 +113,6 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::CsvParser.class_eval do
-    private 
-    
     def records(_opts = {})
       return @records if @records.present?
 
@@ -137,14 +135,15 @@ Rails.application.config.to_prepare do
       @records = csv_data.map { |record_data| entry_class.data_for_entry(record_data, nil, self) }
     end
 
-    # def path_to_files(**args)
-    #   filename = args.fetch(:filename, '')
+    # Retrieve the path where we expect to find the files
+    def path_to_files(**args)
+      filename = args.fetch(:filename, '')
 
-    #   return @path_to_files if @path_to_files.present? && filename.blank?
-    #   @path_to_files = File.join(
-    #       zip? ? importer_unzip_path : File.dirname(import_file_path), 'file', filename
-    #     )
-    # end
+      return @path_to_files if @path_to_files.present? && filename.blank?
+      @path_to_files = File.join(
+          zip? ? importer_unzip_path : File.join('/spot/tmp/import/', File.dirname(import_file_path)), 'files', filename
+        )
+    end
   end
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
