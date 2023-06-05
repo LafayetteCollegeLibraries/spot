@@ -120,11 +120,20 @@ Rails.application.config.to_prepare do
       file_for_import = only_updates ? parser_fields['partial_import_file_path'] : import_file_path
       file_directory = File.dirname(file_for_import)
       FileUtils.mkdir_p('/spot/tmp/import/'+file_directory+'/files')
-      resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
+      resp = client.head_object(bucket: 'bulkrax-imports', key: file_for_import)
+      if resp.nil? 
+        raise StandardError, "Key: '#{file_for_import}' not found in bucket: 'bulkrax-imports'"
+        return
+      else
+        resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
+      end
       # data for entry does not need source_identifier for csv, because csvs are read sequentially and mapped after raw data is read.
       csv_data = entry_class.read_data('/spot/tmp/import/'+file_for_import)
       resp2 = client.list_objects(bucket: "bulkrax-imports", prefix: file_directory)
-      # resp2 = client.list_objects(bucket: "bulkrax-imports")
+      # if resp2.nil? 
+      #   raise "No keys found with prefix '#{file_directory}'"
+      #   return
+      # end
       resp2.contents.each do |entry|
         puts '/spot/tmp/import/'+entry.key
         client.get_object(response_target: '/spot/tmp/import/'+entry.key, bucket: 'bulkrax-imports', key: entry.key)
