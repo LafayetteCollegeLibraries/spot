@@ -83,5 +83,5 @@ Bulkrax.setup do |config|
   config.parsers -= [{ name: "CSV - Comma Separated Values", class_name: "Bulkrax::CsvParser", partial: "csv_fields" }]
 
   # Add custom CSV parser
-  config.parsers += [{ name: "CSV - Lafayette", class_name: "Bulkrax::CsvSpotParser", partial: "csv_fields" }]
+  config.parsers += [{ name: "CSV - Lafayette", class_name: "Bulkrax::CsvSpotParser", partial: "csv_spot_fields" }]
 end
