@@ -96,7 +96,7 @@ module Spot
           content_md5: Digest::MD5.file(derivative_path).base64digest,
           metadata: {
             'width' => file_set.width.first,
-            'height' => file_set.height.first,
+            'height' => file_set.height.first
           }
         )
       end
