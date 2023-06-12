@@ -5,10 +5,11 @@ module Bulkrax
   class CsvSpotParser < CsvParser # rubocop:disable Metrics/ClassLength
     def records(_opts = {})
       return @records if @records.present?
-
+      
       client = Aws::S3::Client.new()
       file_for_import = only_updates ? parser_fields['partial_import_file_path'] : import_file_path
       file_directory = File.dirname(file_for_import)
+      FileUtils.rm_r(['/spot/tmp/import/'])
       FileUtils.mkdir_p('/spot/tmp/import/'+file_directory+'/files')
       resp = client.get_object(response_target: '/spot/tmp/import/'+file_for_import, bucket: 'bulkrax-imports', key: file_for_import)
       # data for entry does not need source_identifier for csv, because csvs are read sequentially and mapped after raw data is read.
