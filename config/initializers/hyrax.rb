@@ -14,7 +14,8 @@ Hyrax.config do |config|
   # When an admin set is created, we need to activate a workflow.
   # The :default_active_workflow_name is the name of the workflow we will activate.
   # @see Hyrax::Configuration for additional details and defaults.
-  # config.default_active_workflow_name = 'spot_one_step_process'
+  # config.default_active_workflow_name = 'default'
+  # Hyrax.config.default_active_workflow_name = 'spot_one_step_process'
 
   # Which RDF term should be used to relate objects to an admin set?
   # If this is a new repository, you may want to set a custom predicate term here to
@@ -45,6 +46,19 @@ Hyrax.config do |config|
   #   maxFileSize: 500.megabytes
   # }
 
+  # Enable displaying usage statistics in the UI
+  # Defaults to false
+  # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
+  # config.analytics = false
+
+  # Google Analytics tracking ID to gather usage statistics
+  config.google_analytics_id = ENV.fetch('GOOGLE_ANALYTICS_ID', nil)
+
+  # Date you wish to start collecting Google Analytic statistics for
+  # Leaving it blank will set the start date to when ever the file was uploaded by
+  # NOTE: if you have always sent analytics to GA for downloads and page views leave this commented out
+  # config.analytic_start_date = DateTime.new(2014, 9, 10)
+
   # Enables a link to the citations page for a work
   # Default is false
   # config.citations = false
@@ -66,7 +80,7 @@ Hyrax.config do |config|
   # config.noid_template = ".reeddeeddk"
 
   # Use the database-backed minter class
-  # config.noid_minter_class = Noid::Rails::Minter::Db
+  # config.noid_minter_class = ActiveFedora::Noid::Minter::Db
 
   # Store identifier minter's state in a file for later replayability
   # config.minter_statefile = '/tmp/minter-state'
@@ -108,12 +122,8 @@ Hyrax.config do |config|
   # The default is true.
   # config.work_requires_files = true
 
-  # How many rows of items should appear on the work show view?
-  # The default is 10
-  # config.show_work_item_rows = 10
-
   # Enable IIIF image service. This is required to use the
-  # IIIF viewer enabled show page
+  # UniversalViewer-ified show page
   #
   # If you have run the riiif generator, an embedded riiif service
   # will be used to deliver images via IIIF. If you have not, you will
@@ -140,26 +150,11 @@ Hyrax.config do |config|
   # Returns a IIIF image size default
   config.iiif_image_size_default = Spot::IiifService::DEFAULT_SIZE
 
-  # Fields to display in the IIIF metadata section; default is the required fields
-  config.iiif_metadata_fields = [
-    :title,
-    :subtitle,
-    :title_alternative,
-    :creator,
-    :contributor,
-    :date,
-    :date_issued,
-    :abstract,
-    :description,
-    :inscription,
-    :subject_label,
-    :subject_ocm,
-    :keyword,
-    :language_label,
-    :location_label,
-    :standard_identifier,
-    :rights_holder,
-    :rights_statement_label
+  # Fields to display in the IIIF metadata section
+  config.iiif_metadata_fields = %i[
+    title subtitle title_alternative creator contributor date date_issued
+    abstract description inscription subject_label subject_ocm keyword language_label
+    location_label standard_identifier rights_holder rights_statement_label
   ]
 
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
@@ -206,6 +201,9 @@ Hyrax.config do |config|
   # A configuration point for changing the behavior of the license service
   #   @see Hyrax::LicenseService for implementation details
   # config.license_service_class = Hyrax::LicenseService
+
+  # A configuration point for changing the behavior of the rights statement service.
+  config.rights_statement_service_class = Spot::RightsStatementService
 
   # Labels for display of permission levels
   # config.permission_levels = { "View/Download" => "read", "Edit access" => "edit" }
@@ -271,17 +269,22 @@ Hyrax.config do |config|
   # config.bagit_dir = "tmp/descriptions"
 
   # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
-  begin
-    if defined? BrowseEverything
-      config.browse_everything = BrowseEverything.config
-    else
-      Rails.logger.warn "BrowseEverything is not installed"
-    end
-  rescue Errno::ENOENT
-    config.browse_everything = nil
-  end
+  # begin
+  #   if defined? BrowseEverything
+  #     config.browse_everything = BrowseEverything.config
+  #   else
+  #     Rails.logger.warn "BrowseEverything is not installed"
+  #   end
+  # rescue Errno::ENOENT
+  #   config.browse_everything = nil
+  # end
 
-  ## Register all directories which can be used to ingest from the local file
+  # Until we actually use it, force BrowseEverything not to load.
+  # Otherwise it may just return an empty Hash which is truth-y.
+  # (use the configuration above when you get to the point where you want to use it)
+  config.browse_everything = nil
+
+  ## Whitelist all directories which can be used to ingest from the local file
   # system.
   #
   # Any file, and only those, that is anywhere under one of the specified
@@ -295,20 +298,13 @@ Hyrax.config do |config|
   # ingest files from the file system that are not part of the BrowseEverything
   # mount point.
   #
-  config.registered_ingest_dirs = [
+  config.whitelisted_ingest_dirs = [
     Rails.root.join('tmp', 'ingest').to_s,
-    '/var/www/spot',
-    Rails.root.join('ingest').to_s
+
+    # need to use the capistrano root, otherwise a new deployment will
+    # break uploads from earlier ones.
+    '/var/www/spot'
   ]
-
-  ##
-  # Set the system-wide virus scanner
-  config.virus_scanner = Hyrax::VirusScanner
-
-  ## Remote identifiers configuration
-  # Add registrar implementations by uncommenting and adding to the hash below.
-  # See app/services/hyrax/identifier/registrar.rb for the registrar interface
-  # config.identifier_registrars = {}
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
 end
