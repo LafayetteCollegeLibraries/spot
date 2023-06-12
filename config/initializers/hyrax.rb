@@ -14,7 +14,7 @@ Hyrax.config do |config|
   # When an admin set is created, we need to activate a workflow.
   # The :default_active_workflow_name is the name of the workflow we will activate.
   # @see Hyrax::Configuration for additional details and defaults.
-  config.default_active_workflow_name = 'spot_one_step_process'
+  # config.default_active_workflow_name = 'spot_one_step_process'
 
   # Which RDF term should be used to relate objects to an admin set?
   # If this is a new repository, you may want to set a custom predicate term here to
