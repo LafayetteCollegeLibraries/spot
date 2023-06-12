@@ -34,6 +34,9 @@ gem 'hyrax', '~> 3.5.0'
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
 
+# Citation parser to extract meta data for google scholar
+gem 'anystyle', '~> 1.4.1'
+
 # interact with assets in s3 buckets
 gem 'aws-sdk-s3', '~> 1.119.1'
 

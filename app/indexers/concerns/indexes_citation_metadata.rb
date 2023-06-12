@@ -7,7 +7,7 @@ module IndexesCitationMetadata
       next doc unless object.respond_to?(:bibliographic_citation) && object.bibliographic_citation.present?
 
       # exit early if the citation parses incorrectly
-      citation = AnyStyle.parse(object.bibliographic_citation.first)&.first
+      citation = ::AnyStyle.parse(object.bibliographic_citation.first)&.first
       next doc if citation.blank? || citation[:type].nil?
 
       add_citation_to_solr_document(document: doc, citation: citation)

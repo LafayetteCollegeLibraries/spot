@@ -70,6 +70,12 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     almond-rails (0.3.0)
       rails (>= 4.2)
+    anystyle (1.4.2)
+      anystyle-data (~> 1.3)
+      bibtex-ruby (~> 6.0)
+      namae (~> 1.0)
+      wapiti (~> 2.1)
+    anystyle-data (1.3.0)
     arel (9.0.0)
     ast (2.4.2)
     autoprefixer-rails (10.4.13.0)
@@ -102,6 +108,8 @@ GEM
     bcp47 (0.3.3)
       i18n
     bcrypt (3.1.18)
+    bibtex-ruby (6.0.0)
+      latex-decode (~> 0.0)
     bixby (5.0.2)
       rubocop (= 1.28.2)
       rubocop-ast
@@ -527,6 +535,7 @@ GEM
     kaminari-core (1.2.2)
     kaminari_route_prefix (0.1.1)
       kaminari (~> 1.0)
+    latex-decode (0.4.0)
     launchy (2.5.2)
       addressable (~> 2.8)
     ld-patch (3.2.0)
@@ -610,6 +619,7 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.3.0)
+    namae (1.1.1)
     nest (3.2.0)
       redic
     net-http-persistent (4.0.1)
@@ -1009,6 +1019,9 @@ GEM
       reform (~> 2.2)
       reform-rails
     version_gem (1.1.1)
+    wapiti (2.1.0)
+      builder (~> 3.2)
+      rexml (~> 3.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     webdrivers (5.2.0)
@@ -1033,6 +1046,7 @@ PLATFORMS
 
 DEPENDENCIES
   almond-rails (~> 0.3.0)
+  anystyle (~> 1.4.1)
   aws-sdk-s3 (~> 1.119.1)
   bagit (~> 0.4.5)
   bixby (~> 5.0.1)

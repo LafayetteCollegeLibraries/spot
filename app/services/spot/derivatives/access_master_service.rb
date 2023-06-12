@@ -93,7 +93,11 @@ module Spot
           key: s3_derivative_key,
           body: File.open(derivative_path, 'r'),
           content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).base64digest
+          content_md5: Digest::MD5.file(derivative_path).base64digest,
+          metadata: {
+            'width' => file_set.width.first,
+            'height' => file_set.height.first,
+          }
         )
       end
 
