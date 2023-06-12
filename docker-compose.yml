@@ -39,7 +39,7 @@ services:
       CANTALOUPE_S3SOURCE_ENDPOINT: "http://minio:9000"
       CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
       CANTALOUPE_LOG_APPLICATION_LEVEL: trace
-    restart: always
+    restart: unless-stopped
 
   db:
     image: postgres:13-alpine
@@ -52,7 +52,7 @@ services:
       POSTGRES_DB: spot_development
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
-    restart: always
+    restart: unless-stopped
 
   db_migrate:
     image: lafayette/rails_web
@@ -76,7 +76,7 @@ services:
       FCREPO_POSTGRES_HOST: db
       FCREPO_POSTGRES_USER: spot_fcrepo_dev_user
       FCREPO_POSTGRES_PASSWORD: spot_fcrepo_dev_pw
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
 
@@ -96,7 +96,7 @@ services:
     image: redis:alpine
     volumes:
       - redis:/data
-    restart: always
+    restart: unless-stopped
     ports:
       - 6379:6379
 
@@ -114,7 +114,7 @@ services:
       - .:/spot
       - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
       - fedora
@@ -131,7 +131,7 @@ services:
     environment:
       - SOLR_CORES=spot-development,spot-test
       - SOLR_HOST=solr
-    restart: always
+    restart: unless-stopped
 
 
 volumes:
