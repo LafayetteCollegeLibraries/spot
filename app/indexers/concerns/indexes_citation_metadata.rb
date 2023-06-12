@@ -10,14 +10,18 @@ module IndexesCitationMetadata
       citation = AnyStyle.parse(object.bibliographic_citation.first)&.first
       next doc if citation.blank? || citation[:type].nil?
 
-      doc['citation_journal_title_ss'] = citation[:"container-title"]&.first
-      doc['citation_volume_ss'] = citation[:volume]&.first
-      doc['citation_issue_ss'] = citation[:issue]&.first
-
-      # split pages on any type of hyphen (*waves fist at em and en dashes*)
-      first_page, last_page = citation[:pages]&.first&.split(/[-–—]/, 2)
-      doc['citation_firstpage_ss'] = first_page
-      doc['citation_lastpage_ss'] = last_page
+      add_citation_to_solr_document(document: doc, citation: citation)
     end
+  end
+
+  def add_citation_to_solr_document(document:, citation:)
+    document['citation_journal_title_ss'] = citation[:"container-title"]&.first
+    document['citation_volume_ss'] = citation[:volume]&.first
+    document['citation_issue_ss'] = citation[:issue]&.first
+
+    # split pages on any type of hyphen (*waves fist at em and en dashes*)
+    first_page, last_page = citation[:pages]&.first&.split(/[-–—]/, 2)
+    document['citation_firstpage_ss'] = first_page
+    document['citation_lastpage_ss'] = last_page
   end
 end
