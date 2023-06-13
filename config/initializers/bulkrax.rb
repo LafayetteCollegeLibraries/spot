@@ -8,7 +8,7 @@ Bulkrax.setup do |config|
   # Your application metadata fields are the key
   #   from: fields in the incoming source data
   config.field_mappings = {
-    "Bulkrax::CsvSpotParser" => {
+    "Bulkrax::CsvParser" => {
       "admin_set" => { from: ["admin_set"], split: '\|' },
       "date_uploaded" => { from: ["date_uploaded"], split: '\|' },
       "depositor" => { from: ["depositor"], split: '\|' },
@@ -78,10 +78,4 @@ Bulkrax.setup do |config|
 
   # Remove the XML parser
   config.parsers -= [{ name: "XML", class_name: "Bulkrax::XmlParser", partial: "xml_fields" }]
-
-  # Remove the original CSV parser
-  config.parsers -= [{ name: "CSV - Comma Separated Values", class_name: "Bulkrax::CsvParser", partial: "csv_fields" }]
-
-  # Add custom CSV parser
-  config.parsers += [{ name: "CSV - Lafayette", class_name: "Bulkrax::CsvSpotParser", partial: "csv_spot_fields" }]
 end
