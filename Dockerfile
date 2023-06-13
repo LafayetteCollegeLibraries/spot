@@ -4,7 +4,6 @@
 # Use this as the base image for the Rails / Sidekiq services.
 ##
 FROM ruby:2.7.7-alpine as spot-base
-
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
@@ -41,7 +40,6 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 
 HEALTHCHECK CMD curl -skf https://localhost || exit 1
 
-
 ##
 #  Target: spot-asset-builder
 #  !! This is a builder image, do not use !!
@@ -49,18 +47,11 @@ HEALTHCHECK CMD curl -skf https://localhost || exit 1
 FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
 COPY . /spot
+
+# Need to put in a fake FEDORA_URL variable so Wings can initialize
 RUN SECRET_KEY_BASE="$(bin/rake secret)" \
+    FEDORA_URL="http://fakehost:8080/rest" \
     bundle exec rake assets:precompile
-
-
-##
-# TARGET: spot-development
-# Base container for local development. Reruns bundle install for dev gems
-##
-FROM spot-base as spot-development
-ENV RAILS_ENV=development
-RUN bundle install --jobs "$(nproc)" --with="development test"
-COPY . /spot
 
 
 ##
@@ -69,20 +60,6 @@ COPY . /spot
 ##
 FROM spot-base as spot-web-base
 COPY config/uv config/uv
-
-##
-#  Target: spot-asset-builder
-#  !! This is a builder image, do not use !!
-##
-FROM spot-base as spot-asset-builder
-ENV RAILS_ENV=production
-
-RUN apk add yarn
-COPY . /spot
-
-RUN SECRET_KEY_BASE="$(bin/rake secret)" \
-    bundle exec rake assets:precompile
-
 
 ##
 # TARGET: spot-web-development
@@ -99,10 +76,11 @@ RUN bundle config unset --local without && \
 # TARGET: spot-web-production
 # Precompiles assets for production
 ##
-FROM spot-base as spot-production
+FROM spot-base as spot-web-production
 ENV RAILS_ENV=production
 COPY . /spot
-COPY --from=spot-asset-builder /spot/public/* /spot/public/
+COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
+COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
 
 
 ##
@@ -115,6 +93,11 @@ ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
+# Version of FITS to install (stored in ENV as a troubleshooting measure)
+# see: https://github.com/harvard-lts/fits
+ARG FITS_VERSION=1.6.0
+ENV FITS_VERSION=${FITS_VERSION}
+
 RUN apk --no-cache update && \
     apk --no-cache add \
         bash \
@@ -124,10 +107,10 @@ RUN apk --no-cache update && \
         libreoffice \
         mediainfo \
         openjdk11-jre \
-        perl
+        perl \
+        python3
 
-ARG FITS_VERSION=1.6.0
-ENV FITS_VERSION=${FITS_VERSION}
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
@@ -150,4 +133,5 @@ EXPOSE 3000
 ##
 FROM spot-worker as spot-worker-production
 ENV RAILS_ENV=production
-COPY --from=spot-asset-builder /spot/public/* /spot/public/
+COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
+COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/

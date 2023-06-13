@@ -1,7 +1,6 @@
 version: '3.9'
 services:
   app:
-    image: lafayette/rails_web
     build:
       context: .
       target: spot-development
@@ -101,7 +100,6 @@ services:
       - 6379:6379
 
   sidekiq:
-    image: lafayette/rails_worker:dev
     build:
       context: .
       target: spot-worker
