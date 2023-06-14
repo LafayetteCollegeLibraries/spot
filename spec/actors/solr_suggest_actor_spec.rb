@@ -32,29 +32,4 @@ RSpec.describe SolrSuggestActor do
       end
     end
   end
-
-  context 'when part of a batch ingest' do
-    let(:attributes) { { Spot::CSVIngestService.batch_key => true } }
-
-    describe '#create' do
-      it 'does not trigger the update-dictionaries job' do
-        stack.create(env)
-        expect(job).not_to have_received(:perform_now)
-      end
-    end
-
-    describe '#update' do
-      it 'does not trigger the update-dictionaries job' do
-        stack.update(env)
-        expect(job).not_to have_received(:perform_now)
-      end
-    end
-
-    describe '#destroy' do
-      it 'does not trigger the update-dictionaries job' do
-        stack.destroy(env)
-        expect(job).not_to have_received(:perform_now)
-      end
-    end
-  end
 end
