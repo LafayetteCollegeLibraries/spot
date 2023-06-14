@@ -158,6 +158,7 @@ gem 'sprockets-rails', '~> 3.2.2', require: 'sprockets/railtie'
 
 # bulkrax
 gem 'bulkrax', '= 4.3.0'
+gem 'browse-everything', '= 1.1.2'
 
 # development dependencies (not as necessary to
 # lock down versions here)
