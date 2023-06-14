@@ -1089,6 +1089,7 @@ PLATFORMS
 DEPENDENCIES
   almond-rails (~> 0.3.0)
   anystyle (~> 1.4.1)
+<<<<<<< refs/remotes/origin/develop
   aws-sdk-s3 (~> 1.119.1)
   bagit (~> 0.4.5)
   bixby (~> 5.0.1)
@@ -1096,8 +1097,18 @@ DEPENDENCIES
   blacklight_oai_provider (~> 6.0.0)
   blacklight_range_limit (~> 6.3.3)
   bootsnap (~> 1.16)
-  browse-everything (~> 1.1.2)
-  bulkrax (~> 5.3.0)
+=======
+  aws-sdk-s3
+  bagit (= 0.4.4)
+  bixby (= 1.0.0)
+  blacklight_advanced_search (= 6.4.1)
+  blacklight_oai_provider (= 6.0.0)
+  blacklight_range_limit (= 6.3.3)
+  bootsnap (= 1.11.1)
+  bootstrap_form (~> 4.4.0)
+  browse-everything (= 1.1.2)
+  bulkrax (= 4.3.0)
+>>>>>>> not successfully installed
   byebug (~> 11.1.3)
   capybara (~> 3.38)
   capybara-screenshot (~> 1.0.26)
