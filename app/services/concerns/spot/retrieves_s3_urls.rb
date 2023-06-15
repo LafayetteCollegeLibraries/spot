@@ -14,67 +14,52 @@ module Spot
   #   BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
   #
   module RetrievesS3Urls
-    extend ActiveSupport::Concern
+    def self.can_retrieve?(uri, headers = {})
+      uri_parsed = ::Addressable::URI.parse(uri)
 
-    module ClassMethods
-      # :nocov:
-      def can_retrieve?(uri, headers = {})
-        uri_parsed = ::Addressable::URI.parse(uri)
-
-        case uri_parsed.scheme
-        when "s3"
-          client = Aws::S3::Client.new
-          resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
-          return true unless resp.nil?
-          false
-        else
-          super(uri, headers)
-        end
+      case uri_parsed.scheme
+      when "s3"
+        client = Aws::S3::Client.new()
+        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+        return true unless resp.nil?
+      else
+        super(uri, headers = {})
       end
-      # :nocov:
     end
 
-    # :nocov:
     def retrieve(options, &block)
       download_options = extract_download_options(options)
       url = download_options[:url]
 
       case url.scheme
       when "s3"
-        file_size = download_options[:file_size]
+        file_size = options.fetch(:file_size)
         retrieved = 0
 
-        client = Aws::S3::Client.new
-        begin
-          client.get_object(bucket: url.host, key: url.path[1..-1]) do |chunk|
-            retrieved += chunk.bytesize
-            yield(chunk, retrieved, file_size)
-          end
-        rescue Aws::S3::Errors::ServiceError => e
-          raise BrowseEverything::DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
+        client = Aws::S3::Client.new()
+        client.get_object(bucket: url.host, key: url.path) do |chunk|
+          retrieved += chunk.bytesize
+          yield(chunk, retrieved, file_size)
         end
       else
-        super(options, &block)
+        super(options)
       end
     end
-    # :nocov:
 
     private
 
-    # :nocov:
     def get_file_size(options)
       uri = options.fetch(:url)
       uri_parsed = ::Addressable::URI.parse(uri)
 
       case uri_parsed.scheme
       when "s3"
-        client = Aws::S3::Client.new
-        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
-        resp.content_length
+        client = Aws::S3::Client.new()
+        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+        return resp.content_length
       else
         super(options)
       end
     end
-    # :nocov:
   end
 end
