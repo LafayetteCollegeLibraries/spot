@@ -147,4 +147,7 @@ Rails.application.config.to_prepare do
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
+
+  # Override the Browse-Everything Retreiver to take S3 URIs
+  BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
 end
