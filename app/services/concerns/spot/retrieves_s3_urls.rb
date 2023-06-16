@@ -33,7 +33,7 @@ module Spot
 
       case url.scheme
       when "s3"
-        file_size = options.fetch(:file_size)
+        file_size = download_options[:file_size]
         retrieved = 0
 
         client = Aws::S3::Client.new()
