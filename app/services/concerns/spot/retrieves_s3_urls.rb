@@ -23,7 +23,7 @@ module Spot
         resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
         return true unless resp.nil?
       else
-        super(uri, headers = {})
+        super(uri, _headers = {})
       end
     end
 
