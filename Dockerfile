@@ -77,13 +77,10 @@ RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
     && apk del python3-dev gcc musl-dev
 
 RUN bundle install --jobs "$(nproc)" --with="development test"
+COPY . /spot/
 
-COPY config/uv /spot/config/uv
-COPY ["package.json", "yarn.lock", "/spot/"]
-
-COPY . /spot
-WORKDIR /spot
-RUN yarn install
+ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
 
 ##
