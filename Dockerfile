@@ -70,6 +70,24 @@ FROM spot-web-base as spot-web-development
 RUN bundle config unset --local without && \
     bundle config set --local with "development test" && \
     bundle install --jobs "$(nproc)"
+# install awscli the hard way (via python) bc our base image is
+# too old to include it in the alpine 3.10 apk
+#
+# @see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
+# @todo replace this by adding `aws-cli` to the above `RUN apk add`
+#       command, after upgrading the Ruby container
+RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
+    && python3 -m ensurepip --upgrade \
+    && pip3 install --upgrade pip \
+    && pip3 install --upgrade awscli \
+    && pip3 uninstall --yes pip \
+    && apk del python3-dev gcc musl-dev
+
+RUN bundle install --jobs "$(nproc)" --with="development test"
+COPY . /spot/
+
+ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
 
 ##

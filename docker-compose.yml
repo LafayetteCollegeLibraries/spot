@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   app:
+    image: lafayette/spot-web
     build:
       context: .
       target: spot-development
@@ -21,8 +22,6 @@ services:
       - db_migrate
     stdin_open: true
     tty: true
-    entrypoint: ["/spot/bin/spot-dev-entrypoint.sh"]
-    command: ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
@@ -54,7 +53,7 @@ services:
     restart: unless-stopped
 
   db_migrate:
-    image: lafayette/rails_web
+    image: lafayette/spot-web
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -100,6 +99,7 @@ services:
       - 6379:6379
 
   sidekiq:
+    image: lafayette/spot-worker
     build:
       context: .
       target: spot-worker
