@@ -14,7 +14,7 @@ module Spot
   #   BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
   #
   module RetrievesS3Urls
-    def self.can_retrieve?(uri, headers = {})
+    def self.can_retrieve?(uri, _headers = {})
       uri_parsed = ::Addressable::URI.parse(uri)
 
       case uri_parsed.scheme
@@ -27,7 +27,7 @@ module Spot
       end
     end
 
-    def retrieve(options, &block)
+    def retrieve(options, &_block)
       download_options = extract_download_options(options)
       url = download_options[:url]
 
