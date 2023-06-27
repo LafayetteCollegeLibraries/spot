@@ -26,9 +26,5 @@
 
 # don't copy over generated files
 public/assets
-!public/assets/.keep
-
 public/branding
-!public/branding/.keep
-
 public/uv
