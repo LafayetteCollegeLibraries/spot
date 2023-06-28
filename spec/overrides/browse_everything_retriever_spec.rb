@@ -33,7 +33,7 @@ RSpec.describe BrowseEverything::Retriever do
           :head, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
         ).and_return(
           headers: {
-            'Content-Length' => '1234'
+            'Content-Length' => '8'
           }
         )
 
@@ -41,7 +41,7 @@ RSpec.describe BrowseEverything::Retriever do
           :get, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
         ).and_return(
           headers: {
-            'Content-Length' => '1234'
+            'Content-Length' => '8'
           },
           body: 'contents'
         )
