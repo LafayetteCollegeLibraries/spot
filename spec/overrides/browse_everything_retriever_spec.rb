@@ -60,7 +60,7 @@ RSpec.describe BrowseEverything::Retriever do
       let(:url) { 'http://bulkrax-imports.s3.amazonaws.com/' }
       before do
         stub_request(
-          :get, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
+          :get, "http://bulkrax-imports.s3.amazonaws.com/"
         ).to_return(
           status: 206,
           body: '%'
