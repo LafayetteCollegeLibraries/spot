@@ -24,7 +24,7 @@ RSpec.describe BrowseEverything::Retriever do
 
       before do
         stub_env('AWS_REGION', 'us-east-1')
-        
+
         stub_request(
           :head, "http://bulkrax-imports.s3.amazonaws.com/"
         ).and_return(
