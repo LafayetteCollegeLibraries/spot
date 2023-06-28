@@ -20,6 +20,8 @@ RSpec.describe BrowseEverything::Retriever do
     end
 
     before do
+      ENV['AWS_ACCESS_KEY_ID'] = 'test_user'
+      ENV['AWS_SECRET_ACCESS_KEY'] = 'test_password'
       ENV['AWS_REGION'] = 'us-east-1'
     end
 
