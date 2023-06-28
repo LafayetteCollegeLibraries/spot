@@ -41,9 +41,28 @@ RSpec.describe BrowseEverything::Retriever do
 
     context 'when can retrieve S3' do
       before do
+<<<<<<< HEAD
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
         allow(mock_s3_client).to receive(:head_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
         allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
+=======
+        stub_request(
+          :head, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
+        ).and_return(
+          headers: {
+            'Content-Length' => '1234'
+          }
+        )
+
+        stub_request(
+          :get, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
+        ).and_return(
+          headers: {
+            'Content-Length' => '1234'
+          },
+          body: 'contents'
+        )
+>>>>>>> 79435045 (proof of concept)
       end
 
       it 'says it can' do
