@@ -57,7 +57,7 @@ RSpec.describe BrowseEverything::Retriever do
 
   describe '.can_retrieve?' do
     context 'when can retrieve S3' do
-      let(:url) { 'http://bulkrax-imports.s3.amazonaws.com/' }
+      let(:url) { 's3://bulkrax-imports/test.csv' }
       before do
         stub_request(
           :get, "http://bulkrax-imports.s3.amazonaws.com/"
