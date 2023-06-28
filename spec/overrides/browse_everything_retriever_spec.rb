@@ -5,10 +5,6 @@
 RSpec.describe BrowseEverything::Retriever do
   subject(:retriever) { described_class.new }
 
-  before do
-    stub_env('AWS_REGION', 'us-east-1')
-  end
-
   describe '#get_file_size' do
     subject(:computed_file_size) { retriever.file_size(options) }
 
@@ -27,6 +23,8 @@ RSpec.describe BrowseEverything::Retriever do
       let(:url) { URI.parse('s3://bulkrax-imports/test.csv') }
 
       before do
+        stub_env('AWS_REGION', 'us-east-1')
+        
         stub_request(
           :head, "http://bulkrax-imports.s3.amazonaws.com/"
         ).and_return(
