@@ -5,6 +5,10 @@
 RSpec.describe BrowseEverything::Retriever do
   subject(:retriever) { described_class.new }
 
+  before do
+    stub_env('AWS_REGION', 'us-east-1')
+  end
+
   describe '#get_file_size' do
     subject(:computed_file_size) { retriever.file_size(options) }
 
