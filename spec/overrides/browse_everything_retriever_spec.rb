@@ -3,7 +3,7 @@
 # Test format is copied from original Browse Everything tests
 #
 RSpec.describe BrowseEverything::Retriever do
-  subject(:service) { described_class.new }
+  subject(:retriever) { described_class.new }
 
   describe '#get_file_size' do
     subject(:computed_file_size) { retriever.file_size(options) }
