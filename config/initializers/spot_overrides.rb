@@ -150,53 +150,9 @@ Rails.application.config.to_prepare do
 
   # Override the Browse-Everything Retreiver to take S3 URIs
   BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
-
   BrowseEverything::Retriever.class_eval do
     class << self
       prepend Spot::RetrievesS3Urls::ClassMethods
     end
   end
-
-  # Our own Characterization Service subclass that uses :fits_servlet by default
-  CharacterizeJob.characterization_service = Spot::CharacterizationService
-
-  # Override the Browse-Everything Retreiver to take S3 URIs
-  BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
-  BrowseEverything::Retriever.class_eval do
-    class << self
-      prepend Spot::RetrievesS3Urls::ClassMethods
-    end
-  end
-
-  Bulkrax::ExportBehavior.class_eval do
-    # Prepend the file_set id to ensure a unique filename and also one that is not longer than 255 characters
-    def filename(file_set)
-      return if file_set.original_file.blank?
-      fn = file_set.original_file.file_name.first
-      mime = ::Marcel::MimeType.for(file_set.original_file.mime_type)
-      ext_mime = ::Marcel::MimeType.for(file_set.original_file.file_name)
-      filename = "#{fn}.#{mime.to_sym}"
-      filename = fn.to_s if mime.to_s == ext_mime.to_s
-      # Remove extention truncate and reattach
-      ext = File.extname(filename)
-      "#{File.basename(filename, ext)[0...(220 - ext.length)]}#{ext}"
-    end
-  end
-
-  Bulkrax::CsvEntry.class_eval do
-    def build_files_metadata
-      # attaching files to the FileSet row only so we don't have duplicates when importing to a new tenant
-      if hyrax_record.work?
-        build_thumbnail_files
-      end
-
-      file_mapping = key_for_export('file')
-      file_sets = hyrax_record.file_set? ? Array.wrap(hyrax_record) : hyrax_record.file_sets
-      filenames = map_file_sets(file_sets)
-
-      handle_join_on_export(file_mapping, filenames, mapping['file']&.[]('join')&.present?)
-    end
-  end
-
-  Bulkrax::CsvParser.prepend(Spot::SpotCsvParser)
 end
