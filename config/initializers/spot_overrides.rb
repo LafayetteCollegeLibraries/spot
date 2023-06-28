@@ -150,13 +150,9 @@ Rails.application.config.to_prepare do
 
   # Override the Browse-Everything Retreiver to take S3 URIs
   BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
-
   BrowseEverything::Retriever.class_eval do
     class << self
       prepend Spot::RetrievesS3Urls::ClassMethods
     end
   end
-
-  # Our own Characterization Service subclass that uses :fits_servlet by default
-  CharacterizeJob.characterization_service = Spot::CharacterizationService
 end
