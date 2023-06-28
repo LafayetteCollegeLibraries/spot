@@ -43,7 +43,7 @@ RSpec.describe BrowseEverything::Retriever do
           headers: {
             'Content-Length' => '1234'
           },
-          body: 'content'
+          body: 'contents'
         )
       end
 
