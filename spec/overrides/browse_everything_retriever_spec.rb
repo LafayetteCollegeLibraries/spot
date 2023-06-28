@@ -110,4 +110,3 @@ RSpec.describe BrowseEverything::Retriever do
       end
     end
   end
-end
