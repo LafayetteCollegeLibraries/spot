@@ -67,22 +67,6 @@ COPY config/uv config/uv
 # Installs Ruby development dependencies
 ##
 FROM spot-web-base as spot-web-development
-RUN bundle config unset --local without && \
-    bundle config set --local with "development test" && \
-    bundle install --jobs "$(nproc)"
-# install awscli the hard way (via python) bc our base image is
-# too old to include it in the alpine 3.10 apk
-#
-# @see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
-# @todo replace this by adding `aws-cli` to the above `RUN apk add`
-#       command, after upgrading the Ruby container
-RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
-    && python3 -m ensurepip --upgrade \
-    && pip3 install --upgrade pip \
-    && pip3 install --upgrade awscli \
-    && pip3 uninstall --yes pip \
-    && apk del python3-dev gcc musl-dev
-
 RUN bundle install --jobs "$(nproc)" --with="development test"
 COPY . /spot/
 
@@ -105,7 +89,7 @@ COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
 # TARGET: spot-worker
 # Installs dependencies for running background jobs
 ##
-FROM spot-base as spot-worker
+FROM spot-base as spot-worker-development
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert

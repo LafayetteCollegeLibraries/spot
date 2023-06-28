@@ -4,7 +4,7 @@ services:
     image: lafayette/spot-web
     build:
       context: .
-      target: spot-development
+      target: spot-web-development
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -47,7 +47,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: spot_development
+      POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
     restart: unless-stopped
@@ -102,7 +102,7 @@ services:
     image: lafayette/spot-worker
     build:
       context: .
-      target: spot-worker
+      target: spot-worker-development
     env_file:
       - .env.local
     ports:
