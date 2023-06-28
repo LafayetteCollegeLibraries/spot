@@ -19,12 +19,14 @@ RSpec.describe BrowseEverything::Retriever do
       }.with_indifferent_access
     end
 
+    before do
+      ENV['AWS_REGION'] = 'us-east-1'
+    end
+
     context 'when retrieving a resource from Amazon s3' do
       let(:url) { URI.parse('s3://bulkrax-imports/test.csv') }
 
       before do
-        stub_env('AWS_REGION', 'us-east-1')
-
         stub_request(
           :head, "http://bulkrax-imports.s3.amazonaws.com/"
         ).and_return(
