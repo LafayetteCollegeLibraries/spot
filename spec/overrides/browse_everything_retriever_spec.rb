@@ -5,10 +5,6 @@
 RSpec.describe BrowseEverything::Retriever do
   subject(:retriever) { described_class.new }
 
-  before do
-    stub_env('AWS_REGION', 'us-east-1')
-  end
-
   describe '#get_file_size' do
     let(:s3_bucket) { 'bulkrax-imports-bucket' }
     let(:s3_key) { '/project-name/files/file01.tif' }
