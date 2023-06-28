@@ -10,7 +10,7 @@ RSpec.describe BrowseEverything::Retriever do
     let(:uri) { 's3://bulkrax-imports/test.csv' }
 
     it 'evaluates a url' do
-      expect(service.can_retrieve?(:uri, headers = {})).to be true
+      expect(service.can_retrieve?(:uri, _headers = {})).to be true
     end
   end
 end
