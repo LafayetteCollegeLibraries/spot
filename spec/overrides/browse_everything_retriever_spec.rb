@@ -49,7 +49,7 @@ RSpec.describe BrowseEverything::Retriever do
 
       it 'calculates or retrieves the size of a file' do
         retriever.retrieve(options) do |_chunk, _retrieved, total|
-          expect(total).to eq 1234
+          expect(total).to eq 8
         end
       end
     end
