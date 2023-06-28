@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 # Tests to make sure that browse everything can read s3 urls
+# Test format is copied from original Browse Everything tests 
 #
 RSpec.describe BrowseEverything::Retriever do
   subject(:service) { described_class.new }
@@ -47,3 +48,4 @@ RSpec.describe BrowseEverything::Retriever do
       end
     end
   end
+end
