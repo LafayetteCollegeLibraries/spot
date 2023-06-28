@@ -41,28 +41,9 @@ RSpec.describe BrowseEverything::Retriever do
 
     context 'when can retrieve S3' do
       before do
-<<<<<<< HEAD
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
         allow(mock_s3_client).to receive(:head_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
         allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
-=======
-        stub_request(
-          :head, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
-        ).and_return(
-          headers: {
-            'Content-Length' => '8'
-          }
-        )
-
-        stub_request(
-          :get, "https://s3.amazonaws.com/bulkrax-imports//test.csv"
-        ).and_return(
-          headers: {
-            'Content-Length' => '8'
-          },
-          body: 'contents'
-        )
->>>>>>> 79435045 (proof of concept)
       end
 
       it 'says it can' do
@@ -126,24 +107,6 @@ RSpec.describe BrowseEverything::Retriever do
 
       it 'raises a DownloadError' do
         expect { retriever.retrieve(retrieve_options) }.to raise_error(BrowseEverything::DownloadError)
-      end
-    end
-  end
-
-  describe '.can_retrieve?' do
-    context 'when can retrieve S3' do
-      let(:url) { 'http://bulkrax-imports.s3.amazonaws.com/' }
-      before do
-        stub_request(
-          :get, "http://bulkrax-imports.s3.amazonaws.com/"
-        ).to_return(
-          status: 206,
-          body: '%'
-        )
-      end
-
-      it 'says it can' do
-        expect(described_class).to be_can_retrieve(url)
       end
     end
   end
