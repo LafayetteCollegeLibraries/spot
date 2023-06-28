@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Tests to make sure that browse everything can read s3 urls
-# Test format is copied from original Browse Everything tests 
+# Test format is copied from original Browse Everything tests
 #
 RSpec.describe BrowseEverything::Retriever do
   subject(:service) { described_class.new }
@@ -45,6 +45,24 @@ RSpec.describe BrowseEverything::Retriever do
         retriever.retrieve(options) do |_chunk, _retrieved, total|
           expect(total).to eq 1234
         end
+      end
+    end
+  end
+
+  describe '.can_retrieve?' do
+    context 'when can retrieve S3' do
+      let(:url) { 'http://bulkrax-imports.s3.amazonaws.com/' }
+      before do
+        stub_request(
+          :get, "http://bulkrax-imports.s3.amazonaws.com/"
+        ).to_return(
+          status: 206,
+          body: '%'
+        )
+      end
+
+      it 'says it can' do
+        expect(described_class).to be_can_retrieve(url)
       end
     end
   end
