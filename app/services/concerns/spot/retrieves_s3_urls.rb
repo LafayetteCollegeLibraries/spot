@@ -42,7 +42,7 @@ module Spot
         rescue Aws::S3::Errors::ServiceError => e
           raise DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
         else 
-          do |chunk|
+          resp.body do |chunk|
             retrieved += chunk.bytesize
             yield(chunk, retrieved, file_size)
           end
