@@ -71,5 +71,20 @@ RSpec.describe BrowseEverything::Retriever do
         expect(described_class).to be_can_retrieve(url)
       end
     end
+
+    context 'when can not retrieve S3' do
+      let(:url) { 's3://bulkrax-imports/test.csv' }
+      before do
+        stub_request(
+          :get, "http://bulkrax-imports.s3.amazonaws.com/"
+        ).to_return(
+          status: 403,
+          body: '%'
+        )
+      end
+
+      it 'says it can not' do
+        expect(described_class).not_to be_can_retrieve(url)
+      end
   end
 end

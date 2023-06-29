@@ -37,9 +37,15 @@ module Spot
         retrieved = 0
 
         client = Aws::S3::Client.new
-        client.get_object(bucket: url.host, key: url.path) do |chunk|
-          retrieved += chunk.bytesize
-          yield(chunk, retrieved, file_size)
+        begin
+          resp = client.get_object(bucket: url.host, key: url.path) 
+        rescue Aws::S3::Errors::ServiceError => e
+          raise DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
+        else 
+          do |chunk|
+            retrieved += chunk.bytesize
+            yield(chunk, retrieved, file_size)
+          end
         end
       else
         super(options)
