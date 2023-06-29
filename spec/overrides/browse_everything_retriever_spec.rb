@@ -86,5 +86,6 @@ RSpec.describe BrowseEverything::Retriever do
       it 'says it can not' do
         expect(described_class).not_to be_can_retrieve(url)
       end
+    end
   end
 end
