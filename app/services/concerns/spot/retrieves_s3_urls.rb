@@ -38,10 +38,10 @@ module Spot
 
         client = Aws::S3::Client.new
         begin
-          resp = client.get_object(bucket: url.host, key: url.path) 
+          resp = client.get_object(bucket: url.host, key: url.path)
         rescue Aws::S3::Errors::ServiceError => e
           raise DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
-        else 
+        else
           resp.body do |chunk|
             retrieved += chunk.bytesize
             yield(chunk, retrieved, file_size)
