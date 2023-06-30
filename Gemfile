@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 3.5.0'
+gem 'hyrax', '~> 3.6.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
