@@ -59,7 +59,7 @@ RSpec.describe BrowseEverything::Retriever do
       end
 
       it 'says it can not' do
-        expect(described_class.can_retrieve?(23_url)).to be false
+        expect(described_class.can_retrieve?(s3_url)).to be false
       end
     end
   end
