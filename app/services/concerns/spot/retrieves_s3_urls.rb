@@ -20,7 +20,8 @@ module Spot
       case uri_parsed.scheme
       when "s3"
         client = Aws::S3::Client.new
-        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+        #resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+        resp = nil
         return true unless resp.nil?
       else
         super(uri, _headers = {})
