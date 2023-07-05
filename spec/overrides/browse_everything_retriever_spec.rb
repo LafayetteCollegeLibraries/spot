@@ -28,7 +28,7 @@ RSpec.describe BrowseEverything::Retriever do
     end
 
     it 'returns the correct size' do
-      expect retriever.send(:get_file_size, options).to eq file_size
+      expect retriever.send(:get_file_size, options).to_eq file_size
     end
   end
 
