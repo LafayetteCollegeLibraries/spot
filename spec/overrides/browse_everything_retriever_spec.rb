@@ -43,6 +43,7 @@ RSpec.describe BrowseEverything::Retriever do
       before do
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
         allow(mock_s3_client).to receive(:head_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
+        allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
       end
 
       it 'says it can' do
@@ -54,6 +55,7 @@ RSpec.describe BrowseEverything::Retriever do
       before do
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
         allow(mock_s3_client).to receive(:head_object).with(bucket: s3_bucket, key: s3_key).and_return(nil)
+        allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_return(mock_s3_response)
       end
 
       it 'says it can not' do
