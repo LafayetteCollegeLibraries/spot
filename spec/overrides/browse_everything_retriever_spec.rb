@@ -67,10 +67,10 @@ RSpec.describe BrowseEverything::Retriever do
     let(:s3_key) { '/project-name/files/file01.tif' }
     let(:s3_url) { "s3://#{s3_bucket}#{s3_key}" }
     let(:mock_s3_client) { instance_double(Aws::S3::Client) }
-    let(:mock_chunk) { spy(bytesize: chunk_size) }
+    let(:mock_chunk) { instance_double(String, bytesize: chunk_size) }
     let(:chunk_size) { 5 }
     let(:file_size) { 1234 }
-    
+
     # even though we're not using it in our s3 implementation,
     # defining a file_size in the options allows us to bypass
     # the get_file_size call
