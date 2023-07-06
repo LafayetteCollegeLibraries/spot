@@ -25,6 +25,7 @@ module Spot
           client = Aws::S3::Client.new
           resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
           return true unless resp.nil?
+          return false
         else
           super(uri, _headers = {})
         end
