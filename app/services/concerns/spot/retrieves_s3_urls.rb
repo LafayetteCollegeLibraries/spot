@@ -14,16 +14,20 @@ module Spot
   #   BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
   #
   module RetrievesS3Urls
-    def self.can_retrieve?(uri, _headers = {})
-      uri_parsed = ::Addressable::URI.parse(uri)
+    extend ActiveSupport::Concern
+ 
+    module ClassMethods
+      def self.can_retrieve?(uri, _headers = {})
+        uri_parsed = ::Addressable::URI.parse(uri)
 
-      case uri_parsed.scheme
-      when "s3"
-        client = Aws::S3::Client.new
-        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
-        return true unless resp.nil?
-      else
-        super(uri, _headers = {})
+        case uri_parsed.scheme
+        when "s3"
+          client = Aws::S3::Client.new
+          resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+          return true unless resp.nil?
+        else
+          super(uri, _headers = {})
+        end
       end
     end
 
