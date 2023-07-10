@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.feature 'the bulkrax importers and exporters dashboard page' do
+RSpec.feature 'the fixity status dashboard page' do
   before do
     login_as user
   end
@@ -10,17 +10,17 @@ RSpec.feature 'the bulkrax importers and exporters dashboard page' do
     scenario do
       visit '/dashboard'
 
-      expect(page).to have_content 'Importers'
+      expect(page).to have_content 'importers'
 
-      click_link 'Importers'
+      click_link 'importers'
 
       expect(page).to have_content 'No importers have been created.'
 
       visit '/dashboard'
 
-      expect(page).to have_content 'Exporters'
+      expect(page).to have_content 'exporters'
 
-      click_link 'Exporters'
+      click_link 'exporters'
 
       expect(page).to have_content 'No exporters have been created.'
     end
@@ -32,8 +32,8 @@ RSpec.feature 'the bulkrax importers and exporters dashboard page' do
     scenario do
       visit '/dashboard'
 
-      expect(page).not_to have_content 'Importers'
-      expect(page).not_to have_content 'Exporters'
+      expect(page).not_to have_content 'importers'
+      expect(page).not_to have_content 'exporters'
     end
   end
 end
