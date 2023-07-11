@@ -34,7 +34,7 @@ RSpec.shared_examples 'it locates a collection with a slug identifier' do |optio
     end
 
     context 'when a collection does not have a slug' do
-      it 'returns not found' do
+      it 'redirects to the home page with a permission error' do
         expect { get :show, params: { id: 'nonesuch-collection' } }.to raise_error(ActiveFedora::ObjectNotFoundError)
       end
     end

@@ -13,7 +13,7 @@ module RightsStatementHelper
         image_tag(image_path, alt: label, class: 'rights-statement-icon')
       end
 
-    link_to(link_content, uri, target: '_blank')
+    link_to(link_content, uri, target: '_blank', rel: 'noopener')
   end
 
   private

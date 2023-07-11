@@ -31,16 +31,14 @@ namespace :spot do
       hyrax:workflow:load
     ]
 
-    task :__clean_repo do
+    task __clean_repo: :environment do
       ActiveFedora::Cleaner.clean!
     end
 
     task __clear_redis: :environment do
-      begin
-        Redis.current.keys.map { |key| Redis.current.del(key) }
-      rescue => e
-        Logger.new(STDOUT).warn "WARNING: Redis might be down: #{e}"
-      end
+      Redis.current.keys.map { |key| Redis.current.del(key) }
+    rescue => e
+      Logger.new(STDOUT).warn "WARNING: Redis might be down: #{e}"
     end
 
     task __reset_directories: :environment do

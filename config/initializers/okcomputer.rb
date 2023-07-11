@@ -47,10 +47,9 @@ sidekiq_config = YAML.load(ERB.new(IO.read(Rails.root.join('config', 'sidekiq.ym
 fcrepo_uri = nil
 
 if fcrepo_config['url'].present?
-  parsed = URI.parse(fcrepo_config['url'])
-  parsed.userinfo = "#{fcrepo_config['user']}:#{fcrepo_config['password']}"
-
-  fcrepo_uri = parsed.to_s
+  fcrepo_uri = URI.parse(fcrepo_config['url']).tap do |uri|
+    uri.userinfo = "#{fcrepo_config['user']}:#{fcrepo_config['password']}"
+  end.to_s
 end
 
 # out of the box, "application running?" and "active record working?"

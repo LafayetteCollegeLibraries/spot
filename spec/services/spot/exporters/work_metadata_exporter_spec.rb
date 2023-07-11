@@ -9,11 +9,9 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
   let(:destination) { "/tmp/#{work_id}" }
   let(:solr_document) { SolrDocument.find(work.id) }
   let(:work) do
-    begin
-      Publication.find(work_id)
-    rescue ActiveFedora::ObjectNotFoundError
-      create(:publication, id: work_id, title: ['ok cool'])
-    end
+    Publication.find(work_id)
+  rescue ActiveFedora::ObjectNotFoundError
+    create(:publication, id: work_id, title: ['ok cool'])
   end
 
   before { FileUtils.mkdir_p(destination) }
