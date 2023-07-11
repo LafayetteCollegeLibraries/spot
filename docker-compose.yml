@@ -1,61 +1,52 @@
-version: '3.7'
 
+version: '3.7'
 services:
   app:
-    image: lafayettecollegelibraries/spot
+    image: lafayette/rails_web
     build:
-      target: spot-app-dev
       context: .
+      target: spot-development
     volumes:
       - .:/spot
-      - derivatives:/spot/derivatives
-      - rails_public:/spot/public
+      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
-      - uploads:/spot/uploads
     ports:
       - "443:443"
     env_file:
       - .env.local
-    restart: always
-    entrypoint: ["bin/spot-dev-entrypoint.sh"]
-    command:
-      - "bundle"
-      - "exec"
-      - "rails"
-      - "server"
-      - "-b"
-      - "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"
     depends_on:
       - cantaloupe
       - db
       - fedora
-      - fitsservlet
       - redis
       - solr
       - db_migrate
     stdin_open: true
     tty: true
+    entrypoint: ["/spot/bin/spot-dev-entrypoint.sh"]
+    command: ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
-    volumes:
-      - ./config/cantaloupe/delegates.rb:/delegates.rb
-      - derivatives:/spot/derivatives
     ports:
       - "8182:8182"
     environment:
-      CANTALOUPE_DELEGATE_SCRIPT_ENABLED: "true"
-      CANTALOUPE_DELEGATE_SCRIPT_PATHNAME: /delegates.rb
-      CANTALOUPE_FILESYSTEMSOURCE_LOOKUP_STRATEGY: ScriptLookupStrategy
       CANTALOUPE_BASE_URI: 'http://localhost:8182'
-      DERIVATIVES_PATH: "/spot/derivatives"
+      CANTALOUPE_SOURCE_STATIC: S3Source
+      CANTALOUPE_S3SOURCE_ACCESS_KEY_ID: minio_root_user
+      CANTALOUPE_S3SOURCE_SECRET_KEY: minio_root_password
+      CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: iiif-derivatives
+      CANTALOUPE_S3SOURCE_BASICLOOKUPSTRATEGY_PATH_SUFFIX: "-access.tif"
+      CANTALOUPE_S3SOURCE_ENDPOINT: "http://minio:9000"
+      CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
+      CANTALOUPE_LOG_APPLICATION_LEVEL: trace
     restart: always
 
   db:
     image: postgres:9.6-alpine
     volumes:
       - db:/var/lib/postgresql/data
-      - ./bin/create-test-db.sql:/docker-entrypoint-initdb.d/10-create-test-db.sql
+      - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql
     ports:
       - "5432:5432"
     environment:
@@ -65,10 +56,7 @@ services:
     restart: always
 
   db_migrate:
-    image: lafayettecollegelibraries/spot
-    build:
-      context: .
-      target: spot-app-dev
+    image: lafayette/rails_web
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -79,40 +67,45 @@ services:
       - solr
 
   fedora:
-    image: ghcr.io/samvera/fcrepo4:4.7.5
+    build:
+      context: ./docker/fcrepo
     volumes:
       - fedora:/data:cached
     ports:
       - 8080:8080
+    environment:
+      FCREPO_POSTGRES_HOST: db
+      FCREPO_POSTGRES_USER: spot_fcrepo_dev_user
+      FCREPO_POSTGRES_PASSWORD: spot_fcrepo_dev_pw
     restart: always
+    depends_on:
+      - db
 
-  fitsservlet:
-    image: harvardlts/fitsservlet_container:1.4.1
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: minio_root_user
+      MINIO_ROOT_PASSWORD: minio_root_password
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
 
   redis:
     image: redis:alpine
     volumes:
       - redis:/data
     restart: always
-
-  solr:
-    image: solr:7.5-alpine
-    volumes:
-      - ./solr/config:/spot-config
-      - solr:/opt/solr/server/solr
     ports:
-      - "8983:8983"
-    entrypoint:
-      - bash
-      - "-c"
-      - "precreate-core spot-test /spot-config; precreate-core spot-development /spot-config; exec solr -f"
-    restart: always
+      - 6379:6379
 
   sidekiq:
-    image: lafayettecollegelibraries/spot
+    image: lafayette/rails_worker:dev
     build:
       context: .
-      target: spot-worker-dev
+      target: spot-worker
     env_file:
       - .env.local
     ports:
@@ -120,21 +113,32 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - derivatives:/spot/derivatives
+      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
-      - uploads:/spot/uploads
     restart: always
     depends_on:
-      - db_migrate
-      - app
+      - db
+      - fedora
+      - redis
+      - solr
+
+  solr:
+    build:
+      context: ./docker/solr
+    volumes:
+      - solr:/var/solr/data
+    ports:
+      - "8983:8983"
+    environment:
+      - SOLR_CORES=spot-development,spot-test
+      - SOLR_HOST=solr
+    restart: always
+
 
 volumes:
-  derivatives:
   db:
   fedora:
-  gem_storage:
+  minio:
   solr:
-  rails_public:
   rails_tmp:
   redis:
-  uploads:

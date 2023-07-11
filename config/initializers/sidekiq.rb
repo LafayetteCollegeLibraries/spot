@@ -5,10 +5,10 @@ Sidekiq.configure_server do |config|
   ActiveJob::Base.logger = Sidekiq::Logging.logger
 
   # tell Sidekiq about our redis customizations
-  if ENV['REDIS_URL'] || ENV['REDIS_PASSWORD']
+  if ENV['REDIS_URL'].present? || ENV['REDIS_PASSWORD'].present?
     config.redis = {}.tap do |redis|
-      redis[:url] = ENV['REDIS_URL'] if ENV['REDIS_URL']
-      redis[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD']
+      redis[:url] = ENV['REDIS_URL'] if ENV['REDIS_URL'].present?
+      redis[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD'].present?
     end
   end
 
@@ -19,10 +19,10 @@ end
 
 Sidekiq.configure_client do |config|
   # tell Sidekiq about our redis customizations
-  if ENV['REDIS_URL'] || ENV['REDIS_PASSWORD']
+  if ENV['REDIS_URL'].present? || ENV['REDIS_PASSWORD'].present?
     config.redis = {}.tap do |redis|
-      redis[:url] = ENV['REDIS_URL'] if ENV['REDIS_URL']
-      redis[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD']
+      redis[:url] = ENV['REDIS_URL'] if ENV['REDIS_URL'].present?
+      redis[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD'].present?
     end
   end
 end

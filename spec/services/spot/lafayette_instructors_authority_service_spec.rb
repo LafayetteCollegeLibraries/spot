@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 RSpec.describe Spot::LafayetteInstructorsAuthorityService do
   before do
-    stub_env(described_class::API_ENV_KEY, api_key)
+    stub_env('LAFAYETTE_WDS_API_KEY', api_key)
 
+    allow(Spot::LafayetteWdsService).to receive(:new).with(api_key: nil).and_return(wds_service)
     allow(Spot::LafayetteWdsService).to receive(:new).with(api_key: api_key).and_return(wds_service)
   end
 
@@ -81,9 +82,8 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
     context 'when an email does not match' do
       let(:wds_response) { false }
 
-      it 'raises an UserNotFoundError' do
-        expect { described_class.label_for(email: email) }
-          .to raise_error(described_class::UserNotFoundError, "No user found with email address: #{email}")
+      it 'creates a label with just the email address' do
+        expect(described_class.label_for(email: email)).to eq(email)
       end
     end
   end

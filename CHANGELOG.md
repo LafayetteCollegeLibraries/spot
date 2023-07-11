@@ -1,5 +1,36 @@
 # changelog
 
+## [2023.1] - 2023-07-11
+
+Spot is moving to AWS-based infrastructure and this release is the first pass at getting it running in the cloud. Spot 2.0 if you will! (see #947 for PR)
+
+## Cloud Changes ☁️ 
+- IIIF derivatives are stored in an S3 bucket and accessed via Samvera's [`serverless-iiif`](https://github.com/samvera/serverless-iiif) project
+  - Minio (for S3) and Cantaloupe (for IIIF serving) are used for local development
+- FCRepo, Handle, and Solr services are now Dockerized locally
+- Rails now uses Redis for caching
+- Sidekiq service now uses FITS CLI instead of the FITS servlet
+- Containers are built using GitHub Actions on demand, pre-release, and release
+
+## Enhancements ✨
+- Embargo/release date HTML elements now have a `min="YYYY-MM-DD"` value (today for embargoes, tomorrow for leases), which should prevent accidentally setting a date in the past (#975, @jwellnit)
+- Twitter cards now display work thumbnails and descriptive text (Abstract -> Description -> placeholder text) (#983, @jwellnit)
+- Browse Collections view per_page limit increased to 12 to improve grid display (#981, @jwellnit)
+- About page splash image now includes Alt. Text (#982, @jwellnit)
+- `subject_ocm` values are now indexed as full-text (in addition to facets) (#994, @jwellnit)
+- Facet added for `advisor`, replacing `organization` (#991, @jwellnit)
+- Google Scholar `<meta/>` tags added to work displays (#1005, @jwellnit)
+
+## Bugfixes 🐞 
+- Replace out of date containers in CircleCI (#972)
+- `Hyrax::HasOneTitleValidator` now accepts language-tagged literals as valid titles (#980)
+- `Spot::Importers::CSV::WorkTypeMapper` strips spaces from URI values (#987, @jwellnit)
+- Date fields now all have hint text specifying YYYY-MM-DD and YYYY-MM formats (#986, @jwellnit)
+- Site masthead now has `aria-label` applied (#995, @jwellnit)
+- Check WDS last when generating `StudentWork#advisor` label and fall back to storing the email address if the service is unreachable (#1020)
+- Use updated query for populating recent works on homepage (#1006)
+
+
 ## [2022.5] - 2022-09-29
 
 ### updates ✨ 
@@ -793,6 +824,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2023.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1
 [2022.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.5
 [2022.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.4
 [2022.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.3

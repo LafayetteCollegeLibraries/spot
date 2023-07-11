@@ -271,8 +271,12 @@ Hyrax.config do |config|
 
     # need to use the capistrano root, otherwise a new deployment will
     # break uploads from earlier ones.
-    '/var/www/spot'
+    '/var/www/spot',
+
+    Rails.root.join('ingest').to_s
   ]
+
+  config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"

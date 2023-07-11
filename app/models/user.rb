@@ -68,7 +68,7 @@ class User < ApplicationRecord
   #
   # @return [String]
   def authority_name
-    [surname, given_name].compact.join(', ')
+    [surname, given_name].reject(&:blank?).join(', ')
   end
 
   # Name rendered in a "Given-Name Surname" style
