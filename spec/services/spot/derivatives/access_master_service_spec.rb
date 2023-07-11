@@ -24,10 +24,8 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
 
   # rubocop:disable RSpec/InstanceVariable
   before do
-    @aws_access_key_id = ENV['AWS_ACCESS_KEY_ID']
-    @aws_secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
     @aws_iiif_asset_bucket = ENV['AWS_IIIF_ASSET_BUCKET']
-    %w[AWS_ACCESS_KEY_ID AWS_SECRET_ACESS_KEY AWS_IIIF_ASSET_BUCKET].each { |k| ENV.delete(k) }
+    ENV.delete('AWS_IIIF_ASSET_BUCKET')
 
     allow(Hyrax::DerivativePath)
       .to receive(:derivative_path_for_reference)
@@ -50,9 +48,7 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
   end
 
   after do
-    ENV['AWS_ACCESS_KEY_ID'] = @aws_access_key_id unless @aws_access_key_id.blank?
-    ENV['AWS_SECRET_ACCESS_KEY'] = @aws_secret_access_key unless @aws_secret_access_key.blank?
-    ENV['AWS_IIIF_ASSET_BUCKET'] = @aws_iiif_asset_bucket unless @aws_iiif_asset_bucket.blank?
+    ENV['AWS_IIIF_ASSET_BUCKET'] = @aws_iiif_asset_bucket if @aws_iiif_asset_bucket.present?
   end
   # rubocop:enable RSpec/InstanceVariable
 
@@ -73,15 +69,11 @@ RSpec.describe Spot::Derivatives::AccessMasterService do
   end
 
   context 'when AWS environment variables are available' do
-    let(:aws_access_key_id) { 'AWS-access_key-id' }
-    let(:aws_secret_access_key) { 'AWS-secret-access_key' }
     let(:aws_iiif_asset_bucket) { 'iiif-assets' }
     let(:mock_s3_client) { instance_double(Aws::S3::Client, delete_object: {}, put_object: {}) }
     let(:s3_key) { "#{file_set.id}-access.tif" }
 
     before do
-      stub_env('AWS_ACCESS_KEY_ID', aws_access_key_id)
-      stub_env('AWS_SECRET_ACCESS_KEY', aws_secret_access_key)
       stub_env('AWS_IIIF_ASSET_BUCKET', aws_iiif_asset_bucket)
 
       allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)

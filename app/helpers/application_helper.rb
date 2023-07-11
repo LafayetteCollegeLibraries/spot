@@ -10,23 +10,22 @@ module ApplicationHelper
   # @param [SolrDocument] document
   # @return [Array<String>]
   def extracted_text_highlight_values_for(document)
-    return [] unless document.has_highlight_field? 'extracted_text_tsimv'
+    return [] unless document.has_highlight_field?('extracted_text_tsimv')
     document.highlight_field('extracted_text_tsimv').reject(&:blank?)
   end
 
+  # Going to need to update this once we're fully in the cloud
   def site_last_updated
-    @site_last_updated ||= begin
-      if Rails.env.production?
-        pwd = File.basename(Dir.pwd)
-        date = begin
-                 Date.parse(pwd)
-               rescue
-                 Time.zone.now
-               end
-        date.strftime('%B %d, %Y')
-      else
-        'Not in production environment'
-      end
-    end
+    @site_last_updated ||= generate_site_last_updated
+  end
+
+  # @api private
+  def generate_site_last_updated
+    return 'Not in production environment' unless Rails.env.production?
+
+    pwd = File.basename(Dir.pwd)
+    date = Date.parse(pwd) rescue Time.zone.now
+
+    date.strftime('%B %d, %Y')
   end
 end

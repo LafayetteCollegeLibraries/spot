@@ -33,7 +33,7 @@ Rails.application.config.to_prepare do
     klass.class_eval do
       def self.update_facet_labels!
         blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-        blacklight_config.facet_fields[Collection.collection_type_gid_document_field_name].label = :'hyrax.dashboard.my.heading.collection_type'
+        blacklight_config.facet_fields[Hyrax.config.collection_type_index_field].label = :'hyrax.dashboard.my.heading.collection_type'
         blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
       end
       update_facet_labels!
@@ -114,4 +114,7 @@ Rails.application.config.to_prepare do
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
+
+  # Our own Characterization Service subclass that uses :fits_servlet by default
+  CharacterizeJob.characterization_service = Spot::CharacterizationService
 end

@@ -8,9 +8,7 @@ RSpec.feature 'the fixity status dashboard page' do
 
   context 'when no fixity errors are found' do
     scenario do
-      visit '/dashboard'
-
-      click_link 'Fixity Checks'
+      visit '/admin/fixity_checks'
 
       expect(page).to have_content 'Fixity Checks'
       expect(page).to have_content 'The most recent round of fixity checks found 0 errors.'
@@ -33,8 +31,7 @@ RSpec.feature 'the fixity status dashboard page' do
     let(:expected_result) { 'lololololol' }
 
     scenario do
-      visit '/dashboard'
-      click_link 'Fixity Checks'
+      visit '/admin/fixity_checks'
 
       expect(page).to have_content 'Fixity Checks'
       expect(page).to have_content 'The most recent round of fixity checks found 1 error.'

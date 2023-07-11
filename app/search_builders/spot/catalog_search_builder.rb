@@ -20,7 +20,7 @@ module Spot
     # @params [Blacklight::Solr::Request] solr_parameters
     # @return [void]
     def add_full_text_context(params)
-      return unless blacklight_params[:q].present?
+      return if blacklight_params[:q].blank?
 
       params['hl'] = true
       params['hl.fl'] ||= []

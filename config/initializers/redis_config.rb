@@ -2,7 +2,7 @@
 require 'redis'
 
 config = Rails.application.config_for(:redis).with_indifferent_access
-config[:password] = ENV['REDIS_PASSWORD'] unless ENV['REDIS_PASSWORD'].blank?
+config[:password] = ENV['REDIS_PASSWORD'] if ENV['REDIS_PASSWORD'].present?
 
 if config[:url].present?
   config.delete(:host)

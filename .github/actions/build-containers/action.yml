@@ -73,7 +73,7 @@ runs:
         context: .
         registry: ${{ inputs.registry }}
         tag: ${{ inputs.tag }}
-        target: spot-production
+        target: spot-web-production
     -
       name: Build and push worker container
       uses: ./.github/actions/build-container

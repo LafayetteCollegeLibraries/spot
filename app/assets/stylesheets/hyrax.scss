@@ -1,6 +1,7 @@
 // our own overrides are called _before_ we import hyrax/bootstrap
 @import "spot/variables";
 
+@import "bootstrap-compass";
 @import "bootstrap-sprockets";
 @import "bootstrap-default-overrides";
 @import 'bootstrap';
