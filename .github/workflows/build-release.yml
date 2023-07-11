@@ -22,7 +22,7 @@ jobs:
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
-          tag_name: ${{ github.event.release.tag_name }}
+          tag: ${{ github.event.release.tag_name }}
           application_image_name: ${{ vars.APPLICATION_CONTAINER_ID }}
           worker_image_name: ${{ vars.WORKER_CONTAINER_ID }}
           fcrepo_image_name: ${{ vars.FCREPO_CONTAINER_ID }}
