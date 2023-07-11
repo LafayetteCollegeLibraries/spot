@@ -83,7 +83,6 @@ ENV RAILS_ENABLE_CONTROLLER_CACHING="0"
 ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
-
 ##
 # TARGET: spot-web-production
 # Precompiles assets for production
