@@ -1,6 +1,4 @@
 ---
-file_system:
-  home: /spot/tmp/import
 s3:
   bucket: <%= ENV.fetch('AWS_BULKRAX_IMPORTS_BUCKET') %>
   app_key: <%= ENV.fetch('AWS_ACCESS_KEY_ID') %>
