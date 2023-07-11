@@ -1,8 +1,9 @@
 # seed the application w/ some essentials
 
 # essential hyrax setup
-Rake::Task['hyrax:default_admin_set:create'].invoke
+Rake::Task['hyrax:workflow:load'].invoke
 Rake::Task['hyrax:default_collection_types:create'].invoke
+Rake::Task['hyrax:default_admin_set:create'].invoke
 
 # local set up: create roles, deposit user, + admin_sets
 Rake::Task['spot:roles:default'].invoke

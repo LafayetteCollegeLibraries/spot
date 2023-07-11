@@ -19,8 +19,12 @@ module Spot
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/search_builders/hyrax/filter_suppressed_with_roles.rb#L26-L31
     # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/search_builders/hyrax/filter_suppressed.rb#L10-L13
     def only_active_works(solr_parameters)
-      # this feels better than calling them all within an OR conditional?
-      return if %i[depositor? read_user? admin? user_has_active_workflow_role?].any? { |m| send(m) }
+      current_work = SolrDocument.find(blacklight_params[:id])
+
+      return if depositor?(current_work: current_work) ||
+                read_user?(current_work: current_work) ||
+                admin? ||
+                user_has_active_workflow_role?(current_work: current_work)
 
       solr_parameters[:fq] ||= []
       solr_parameters[:fq] << '-suppressed_bsi:true'
@@ -32,7 +36,7 @@ module Spot
       current_ability&.admin?
     end
 
-    def read_user?
+    def read_user?(current_work:)
       user_key = current_ability&.current_user&.user_key
       return false unless user_key && current_work[solr_field].present?
 

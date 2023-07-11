@@ -22,6 +22,11 @@ Hyrax.config do |config|
   # avoid clashes if you plan to use the default (dct:isPartOf) for other relations.
   # config.admin_set_predicate = ::RDF::DC.isPartOf
 
+  # Which RDF term should be used to relate objects to a rendering?
+  # If this is a new repository, you may want to set a custom predicate term here to
+  # avoid clashes if you plan to use the default (dct:hasFormat) for other relations.
+  # config.rendering_predicate = ::RDF::DC.hasFormat
+
   # Email recipient of messages sent via the contact form
   config.contact_email = "dss@lafayette.edu"
 
@@ -155,6 +160,11 @@ Hyrax.config do |config|
   # Should a button with "Share my work" show on the front page to all users (even those not logged in)?
   # config.display_share_button_when_not_logged_in = true
 
+  # This user is logged as the acting user for jobs and other processes that
+  # run without being attributed to a specific user (e.g. creation of the
+  # default admin set).
+  # config.system_user_key = 'systemuser@example.com'
+
   # The user who runs batch jobs. Update this if you aren't using emails
   config.batch_user_key = 'dss@lafayette.edu'
 
@@ -183,7 +193,6 @@ Hyrax.config do |config|
   # Location on local file system where uploaded files will be staged
   # prior to being ingested into the repository or having derivatives generated.
   # If you use a multi-server architecture, this MUST be a shared volume.
-  # config.working_path = Rails.root.join( 'tmp', 'uploads')
   config.working_path = Pathname.new(ENV.fetch('HYRAX_UPLOAD_PATH', Rails.root.join('tmp', 'uploads')))
 
   # Should the media display partial render a download link?
@@ -225,8 +234,31 @@ Hyrax.config do |config|
   # config.lock_time_to_live = 60_000
 
   ## Do not alter unless you understand how ActiveFedora handles URI/ID translation
-  # config.translate_id_to_uri = ActiveFedora::Noid.config.translate_id_to_uri
-  # config.translate_uri_to_id = ActiveFedora::Noid.config.translate_uri_to_id
+  # config.translate_id_to_uri = lambda do |uri|
+  #                                baseparts = 2 + [(Noid::Rails::Config.template.gsub(/\.[rsz]/, '').length.to_f / 2).ceil, 4].min
+  #                                uri.to_s.sub(baseurl, '').split('/', baseparts).last
+  #                              end
+  # config.translate_uri_to_id = lambda do |id|
+  #                                "#{ActiveFedora.fedora.host}#{ActiveFedora.fedora.base_path}/#{Noid::Rails.treeify(id)}"
+  #                              end
+
+  # Identify the model class name that will be used for Collections in your app
+  # (i.e. ::Collection for ActiveFedora, Hyrax::PcdmCollection for Valkyrie)
+  # config.collection_model = '::Collection'
+  # config.collection_model = 'Hyrax::PcdmCollection'
+
+  # Identify the model class name that will be used for Admin Sets in your app
+  # (i.e. AdminSet for ActiveFedora, Hyrax::AdministrativeSet for Valkyrie)
+  # config.admin_set_model = 'AdminSet'
+  # config.admin_set_model = 'Hyrax::AdministrativeSet'
+
+  # When your application is ready to use the valkyrie index instead of the one
+  # maintained by active fedora, you will need to set this to true. You will
+  # also need to update your Blacklight configuration.
+  # config.query_index_from_valkyrie = false
+
+  ## Configure index adapter for Valkyrie::Resources to use solr readonly indexer
+  # config.index_adapter = :solr_index
 
   ## Fedora import/export tool
   #
@@ -271,9 +303,7 @@ Hyrax.config do |config|
 
     # need to use the capistrano root, otherwise a new deployment will
     # break uploads from earlier ones.
-    '/var/www/spot',
-
-    Rails.root.join('ingest').to_s
+    '/var/www/spot'
   ]
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))

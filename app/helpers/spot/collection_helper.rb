@@ -2,7 +2,7 @@
 module Spot
   module CollectionHelper
     def collection_banner_file_path(presenter)
-      image_path(presenter.banner_file.present? ? presenter.banner_file : 'default-collection-background.jpg')
+      image_path(presenter.banner_file.presence || 'default-collection-background.jpg')
     end
 
     # Responsible for generating the text that preceeds a collection's
@@ -16,7 +16,7 @@ module Spot
       is_multiple = presenter.related_resource.count > 1
       translation_key = "spot.collections.show.related_resource_#{is_multiple ? 'multiple' : 'single'}"
 
-      links = presenter.related_resource.map { |url| link_to(url, url, target: '_blank').html_safe }
+      links = presenter.related_resource.map { |url| link_to(url, url, target: '_blank', rel: 'noopener').html_safe }
       t(translation_key, link_html: links.to_sentence).html_safe
     end
   end

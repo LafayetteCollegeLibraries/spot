@@ -7,11 +7,9 @@ module Spot
     # @return [String]
     def humanize_edtf_values(args)
       Array.wrap(args[:value]).map do |value|
-        begin
-          Date.edtf(value).humanize
-        rescue
-          value
-        end
+        Date.edtf(value).humanize
+      rescue
+        value
       end.to_sentence
     end
 

@@ -3,11 +3,11 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.4.6-alpine3.10 as spot-base
-
+FROM ruby:2.7.7-alpine as spot-base
 RUN apk --no-cache update && \
     apk --no-cache upgrade && \
     apk --no-cache add \
+        aws-cli \
         build-base \
         coreutils \
         curl \
@@ -15,20 +15,21 @@ RUN apk --no-cache update && \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql \
-        postgresql-dev \
+        postgresql postgresql-dev \
         ruby-dev \
         tzdata \
+        yarn \
         zip
 
 WORKDIR /spot
 
 ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_DERIVATIVES_PATH=/spot/tmp/derivatives \
-    HYRAX_UPLOAD_PATH=/spot/tmp/uploads
+    HYRAX_UPLOAD_PATH=/spot/tmp/uploads \
+    BUNDLE_FORCE_RUBY_PLATFORM=1
 
 # @todo upgrade the Gemfile bundler version to 2 to remove version constraint
-RUN gem install bundler:1.13.7
+RUN gem install bundler
 
 ARG BUNDLE_WITHOUT="development:test"
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
@@ -39,74 +40,65 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 
 HEALTHCHECK CMD curl -skf https://localhost || exit 1
 
-
 ##
 #  Target: spot-asset-builder
 #  !! This is a builder image, do not use !!
 ##
 FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
-
-RUN apk add yarn
 COPY . /spot
 
+# Need to put in a fake FEDORA_URL variable so Wings can initialize
 RUN SECRET_KEY_BASE="$(bin/rake secret)" \
+    FEDORA_URL="http://fakehost:8080/rest" \
     bundle exec rake assets:precompile
 
 
 ##
-# TARGET: spot-development
-# Base container for local development. Reruns bundle install for dev gems
+# TARGET: spot-web
+# Used for the user-facing application. Sets up UV files and installs nodejs/yarn dependencies.
 ##
-FROM spot-base as spot-development
-ENV RAILS_ENV=development
-RUN apk add --no-cache --update yarn
+FROM spot-base as spot-web-base
+COPY config/uv config/uv
 
-# install awscli the hard way (via python) bc our base image is
-# too old to include it in the alpine 3.10 apk
-#
-# @see https://gist.github.com/gmoon/3800dd80498d242c4c6137860fe410fd
-# @todo replace this by adding `aws-cli` to the above `RUN apk add`
-#       command, after upgrading the Ruby container
-RUN apk --no-cache --update add musl-dev gcc python3 python3-dev \
-    && python3 -m ensurepip --upgrade \
-    && pip3 install --upgrade pip \
-    && pip3 install --upgrade awscli \
-    && pip3 uninstall --yes pip \
-    && apk del python3-dev gcc musl-dev
-
+##
+# TARGET: spot-web-development
+# Used for the development version of the user-facing application.
+# Installs Ruby development dependencies
+##
+FROM spot-web-base as spot-web-development
 RUN bundle install --jobs "$(nproc)" --with="development test"
+COPY . /spot/
 
-COPY config/uv /spot/config/uv
-COPY ["package.json", "yarn.lock", "/spot/"]
-RUN yarn install
-
-COPY . /spot
+ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
 
 ##
-# TARGET: spot-production
+# TARGET: spot-web-production
 # Precompiles assets for production
 ##
-FROM spot-base as spot-production
+FROM spot-base as spot-web-production
 ENV RAILS_ENV=production
 COPY . /spot
-COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
-COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
+COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
+COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
 
 
 ##
 # TARGET: spot-worker
 # Installs dependencies for running background jobs
 ##
-FROM spot-base as spot-worker
-ARG FITS_VERSION=1.5.1
-ENV FITS_VERSION=${FITS_VERSION}
-
+FROM spot-base as spot-worker-development
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
+
+# Version of FITS to install (stored in ENV as a troubleshooting measure)
+# see: https://github.com/harvard-lts/fits
+ARG FITS_VERSION=1.6.0
+ENV FITS_VERSION=${FITS_VERSION}
 
 RUN apk --no-cache update && \
     apk --no-cache add \
@@ -117,7 +109,10 @@ RUN apk --no-cache update && \
         libreoffice \
         mediainfo \
         openjdk11-jre \
-        perl
+        perl \
+        python3
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
@@ -140,4 +135,5 @@ EXPOSE 3000
 ##
 FROM spot-worker as spot-worker-production
 ENV RAILS_ENV=production
-COPY --from=spot-asset-builder /spot/public /spot/public
+COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
+COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/

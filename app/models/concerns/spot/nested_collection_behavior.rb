@@ -75,11 +75,7 @@ module Spot
     # @todo replace with just a call to +find_by_alternate_id+ after we upgrade to hyrax@3
     #       and start switching to Wings
     def member_query_service(id)
-      if Hyrax.respond_to?(:query_service)
-        Hyrax.query_service.find_by_alternate_id(alternate_id: id, use_valkyrie: false)
-      else
-        ActiveFedora::Base.find(id)
-      end
+      Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id, use_valkyrie: false)
     end
 
     # just a wrapper to clean up +#add_member_objects+

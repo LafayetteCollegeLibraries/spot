@@ -28,7 +28,7 @@ module Spot
       transforms_language_tags_for :title, :abstract, :description
       transforms_nested_fields_for :language
 
-      # note: we can't use :slug here, as it's _technically_ not a property
+      # NOTE: we can't use :slug here, as it's _technically_ not a property
       # but rather a glorified identifier
       singular_form_fields :title, :abstract, :description
 
@@ -139,7 +139,7 @@ module Spot
           tuples.map do |(value, language)|
             # need to skip blank entries here, otherwise we get a blank literal
             # (""@"") which LDP doesn't like
-            next unless value.present?
+            next if value.blank?
 
             language = language.present? ? language.to_sym : nil
             RDF::Literal(value, language: language)

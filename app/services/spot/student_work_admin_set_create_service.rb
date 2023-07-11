@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module Spot
+  # @todo do we need this service anymore?
   class StudentWorkAdminSetCreateService
     ADMIN_SET_ID = 'admin_set/student_work'
     DEFAULT_TITLE = ['Student Work'].freeze
@@ -41,7 +42,7 @@ module Spot
 
     def create_permission_template!(admin_set:)
       permissions = find_or_create_permission_template(source_id: admin_set.id)
-      admin_set.reset_access_controls!
+      permissions.reset_access_controls_for(collection: admin_set)
       permissions
     end
 

@@ -98,8 +98,8 @@ module Spot
 
     # @return [String]
     def permalink_url
-      # need to use URI.decode as the slashes in our handle_id will be encoded by +handle_url+
-      URI.decode(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
+      # need to use CGI.unescape as the slashes in our handle_id will be encoded by +handle_url+
+      CGI.unescape(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
     end
 
     # @param [Hash] options
