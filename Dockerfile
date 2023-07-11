@@ -92,8 +92,8 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 FROM spot-base as spot-web-production
 ENV RAILS_ENV=production
 COPY . /spot
-COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
-COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
+COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
+COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
 
 
 ##
