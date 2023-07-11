@@ -44,7 +44,7 @@ module Spot::ControlledVocabularies
 
     # @return [String]
     def geonames_id
-      URI.parse(rdf_subject.to_s).path.gsub(/\//, '')
+      URI.parse(rdf_subject.to_s).path.delete('/')
     end
 
     # Replacement for QA::Authorities::Geonames.label method that removes duplicate

@@ -5,7 +5,7 @@ orbs:
 executors:
   ruby:
     docker:
-      - image: cimg/ruby:2.4.10-node
+      - image: cimg/ruby:2.7.7-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -15,15 +15,15 @@ executors:
 
   application:
     docker:
-      - image: cimg/ruby:2.4.10-node
+      - image: cimg/ruby:2.7.7-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-      - image: cimg/redis:5.0.14
+      - image: cimg/redis:6.2
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-      - image: postgres:9.6-alpine
+      - image: postgres:13-alpine
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -34,40 +34,32 @@ executors:
       - image: samvera/fcrepo4:4.7.5
         environment:
           CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
-      - image: solr:7.5.0-alpine
-        command: bin/solr -cloud -noprompt -f -p 8983
+      - image: solr:8.11.2
+        environment:
+          SOLR_AUTH_TYPE: basic
+          SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
+        command: |
+          bash -c 'bin/solr start -cloud -p 8983 && bin/solr auth enable -credentials solr:SolrRocks && bin/solr stop && solr-foreground -cloud -p 8983'
     working_directory: ~/spot
     environment:
-      - BUNDLE_PATH=vendor/bundle
-      - CAS_BASE_URL=http://localhost
-      - CI=1
-      - FEDORA_TEST_URL=http://localhost:8080/rest
-      - IIIF_BASE_URL=http://localhost/iiif/2
-      - RAILS_ENV=test
-      - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-      - PSQL_DATABASE=spot_test
-      - PSQL_USER=spot_dev_user
-      - PSQL_PASSWORD=password
-      - SOLR_TEST_URL=http://localhost:8983/solr/spot-test
-      - URL_HOST=http://localhost
+      BUNDLE_PATH: vendor/bundle
+      CAS_BASE_URL: http://localhost
+      CI: 1
+      FEDORA_TEST_URL: http://localhost:8080/rest
+      IIIF_BASE_URL: http://localhost/iiif/2
+      RAILS_ENV: test
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      PSQL_DATABASE: spot_test
+      PSQL_USER: spot_dev_user
+      PSQL_PASSWORD: password
+      SOLR_TEST_URL: http://solr:SolrRocks@localhost:8983/solr/spot-test
+      URL_HOST: http://localhost
 
 jobs:
   bundle:
     executor: ruby
     steps:
       - checkout
-
-      - run:
-          name: Install Postgres dependency
-          command: |
-            sudo apt-get update -y
-            curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-            echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
-            sudo apt-get update -y
-            sudo apt-get install -y postgresql-9.6 libpq-dev
-      - run:
-          name: Use Bundler version specified in Gemfile.lock
-          command: gem install bundler:1.16.1
       - restore_cache:
           name: Restore cached bundle
           key: spot-gems-{{ checksum "Gemfile.lock" }}
@@ -103,7 +95,7 @@ jobs:
         at: ~/
     - run:
         name: Fine, we'll install bundler again
-        command: gem install bundler:1.16.1
+        command: gem install bundler
     - run:
         name: Get 'em Rubocop!
         command: (bundle check || bundle install) && bundle exec rubocop
@@ -111,45 +103,26 @@ jobs:
   test:
     executor: application
     parallelism: 4
-
-    environment:
-      BUNDLE_PATH: vendor/bundle
-      RAILS_ENV: test
-      FEDORA_TEST_URL: http://localhost:8080/rest
-      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
-      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
-      PSQL_USER: spot_dev_user
-      PSQL_PASSWORD: password
-      PSQL_DATABASE: spot_test
-      PSQL_HOST: localhost
-      CI: true
-      CAS_BASE_URL: http://localhost
-      URL_HOST: http://localhost
-      IIIF_BASE_URL: http://localhost/iiif/2
-
     steps:
       - attach_workspace:
           at: ~/
 
+      # install dependencies
       - run:
-          name: Install Postgres dependency
+          name: Install Postgres 13
           command: |
-            sudo apt-get update -y
+            sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
             curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-            echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
-            sudo apt-get update -y
-            sudo apt-get install -y postgresql-9.6 libpq-dev
-
-      # Update to the latest release of Chrome
-      - run:
-          name: Install + start the latest release of Chrome Headless
-          command: |
-            sudo apt-get update && sudo apt-get install -y fonts-liberation
-            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-            sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
             sudo apt-get update
-            sudo apt-get -y install google-chrome-stable
-            google-chrome-stable --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
+            sudo apt-get -y install postgresql-13
+
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
+      # start chrome
+      - run:
+          name: Start headless Chrome browser
+          command: google-chrome --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
 
       - run:
           name: Make sure dependencies are valid
@@ -162,8 +135,8 @@ jobs:
           command: |
             cd docker/solr/config
             zip -1 spot_solr_config.zip ./*
-            curl -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=spot"
-            curl -H "Content-type: application/json" http://localhost:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
+            curl --user solr:SolrRocks -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://localhost:8983/solr/admin/configs?action=UPLOAD&name=spot"
+            curl --user solr:SolrRocks -H "Content-type: application/json" http://localhost:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
 
       - run:
           name: Install Code Climate Test Reporter

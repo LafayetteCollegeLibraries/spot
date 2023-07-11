@@ -67,7 +67,7 @@ class Collection < ActiveFedora::Base
   # @return [String]
   def to_param
     slug = identifier.find { |id| id.start_with? 'slug:' }
-    return super unless slug.present?
+    return super if slug.blank?
 
     Spot::Identifier.from_string(slug).value
   end

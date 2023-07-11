@@ -35,7 +35,8 @@ module Spot
       def external_authority_link(uri)
         link_to('view authority <span class="fa fa-external-link"></span>'.html_safe,
                 uri,
-                target: '_blank')
+                target: '_blank',
+                rel: 'noopener')
       end
     end
   end

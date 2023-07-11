@@ -7,6 +7,11 @@ RSpec.describe CatalogController, clean: true do
       ActiveFedora::SolrService.commit
     end
 
+    after do
+      objects.each { |obj| ActiveFedora::SolrService.delete(id: obj[:id]) }
+      ActiveFedora::SolrService.commit
+    end
+
     context 'all_fields search field' do
       let(:objects) { [all_1, all_2, all_3, all_4] }
 

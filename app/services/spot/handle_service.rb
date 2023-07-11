@@ -52,7 +52,7 @@ module Spot
     end
 
     def handle_certificate
-      raise "No HANDLE_CLIENT_CERT ENV value provided" unless ENV['HANDLE_CLIENT_CERT'].present?
+      raise "No HANDLE_CLIENT_CERT ENV value provided" if ENV['HANDLE_CLIENT_CERT'].blank?
       raise "HANDLE_CLIENT_CERT path does not exist" unless cert_exist?
 
       OpenSSL::X509::Certificate.new(cert_contents)
@@ -64,7 +64,7 @@ module Spot
     end
 
     def handle_key
-      raise "No HANDLE_CLIENT_KEY ENV value provided" unless ENV['HANDLE_CLIENT_KEY'].present?
+      raise "No HANDLE_CLIENT_KEY ENV value provided" if ENV['HANDLE_CLIENT_KEY'].blank?
       raise "HANDLE_CLIENT_KEY path does not exist" unless key_exist?
 
       OpenSSL::PKey.read(key_contents)
@@ -106,8 +106,8 @@ module Spot
 
     # @return [String]
     def permalink_url
-      # need to use URI.decode as the slashes in our handle_id will be encoded by +handle_url+
-      URI.decode(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
+      # need to use CGI.unescape as the slashes in our handle_id will be encoded by +handle_url+
+      CGI.unescape(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
     end
 
     # @return [String]

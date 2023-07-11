@@ -97,7 +97,7 @@ module LanguageTaggedFormFields
       tuples.map do |(value, language)|
         # need to skip blank entries here, otherwise we get a blank literal
         # (""@"") which LDP doesn't like
-        next unless value.present?
+        next if value.blank?
 
         language = language.present? ? language.to_sym : nil
         serializer.serialize(RDF::Literal(value, language: language))

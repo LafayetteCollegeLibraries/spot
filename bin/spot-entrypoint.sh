@@ -29,7 +29,7 @@ export HYRAX_DERIVATIVE_PATH=$HYRAX_DERIVATIVES_PATH
 ssl_key="$app_root/tmp/ssl/application.key"
 ssl_cert="$app_root/tmp/ssl/application.crt"
 
-if [[ ! -f "$ssl_key" && ! -f "$ssl_cert" && -z "$SKIP_SSL_CERT" ]]; then
+if [[ ! -f "$ssl_key" && ! -f "$ssl_cert" ]]; then
     echo "generating ssl certificate"
 
     # @todo should these be ENV variables so we can reference them in the CMD?

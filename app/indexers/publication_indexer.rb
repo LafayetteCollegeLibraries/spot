@@ -7,7 +7,7 @@ class PublicationIndexer < BaseIndexer
   # @return [Hash]
   def generate_solr_document
     super.tap do |solr_doc|
-      solr_doc['license_tsm'] = object.license unless object.license.blank?
+      solr_doc['license_tsm'] = object.license if object.license.present?
 
       store_full_text_content(solr_doc)
       store_years_encompassed(solr_doc)

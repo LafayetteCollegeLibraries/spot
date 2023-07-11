@@ -23,27 +23,27 @@ module Spot
     class << self
       private
 
-        # Overriding Qa::Services::RDFAuthorityParser to prefer a language tag.
-        # If a statement makes it through our checks, it's passed to Qa to create
-        # a +Qa::LocalAuthorityEntry+ object.
-        #
-        # @param [RDF::Statement] statement
-        # @param [String] predicate
-        # @param [Qa::Authorities::Local]
-        # @return [Qa::LocalAuthorityEntry]
-        def parse_statement(statement, predicate, authority)
-          return unless statement.predicate == predicate
-          return unless object_has_preferred_language?(statement.object)
+      # Overriding Qa::Services::RDFAuthorityParser to prefer a language tag.
+      # If a statement makes it through our checks, it's passed to Qa to create
+      # a +Qa::LocalAuthorityEntry+ object.
+      #
+      # @param [RDF::Statement] statement
+      # @param [String] predicate
+      # @param [Qa::Authorities::Local]
+      # @return [Qa::LocalAuthorityEntry]
+      def parse_statement(statement, predicate, authority)
+        return unless statement.predicate == predicate
+        return unless object_has_preferred_language?(statement.object)
 
-          super
-        end
+        super
+      end
 
-        # @param [RDF::Term] object
-        # @return [true, false]
-        def object_has_preferred_language?(object)
-          return false unless object.has_language?
-          object.language == preferred_language
-        end
+      # @param [RDF::Term] object
+      # @return [true, false]
+      def object_has_preferred_language?(object)
+        return false unless object.has_language?
+        object.language == preferred_language
+      end
     end
   end
 end
