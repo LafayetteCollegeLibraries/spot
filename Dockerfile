@@ -82,10 +82,6 @@ RUN bundle config unset with &&\
     bundle install --jobs "$(nproc)"
 COPY . /spot/
 
-ENV RAILS_ENV=development
-ENV RAILS_CONSIDER_ALL_REQUESTS_LOCAL="1"
-ENV RAILS_ENABLE_CONTROLLER_CACHING="0"
-
 ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
@@ -123,8 +119,6 @@ RUN apt update && apt install -y --no-install-recommends \
         unzip
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
-
-RUN bundle install --jobs "$(nproc)" --with="development test"
 
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
