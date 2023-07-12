@@ -17,7 +17,7 @@ module Spot
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def can_retrieve?(uri, _headers = {})
+      def can_retrieve?(uri, headers = {})
         uri_parsed = ::Addressable::URI.parse(uri)
 
         case uri_parsed.scheme
@@ -34,7 +34,7 @@ module Spot
       end
     end
 
-    def retrieve(options, &_block)
+    def retrieve(options, &block)
       download_options = extract_download_options(options)
       url = download_options[:url]
 
@@ -54,7 +54,7 @@ module Spot
         end
       else
         # :nocov:
-        super(options, &_block)
+        super(options, &block)
         # :nocov:
       end
     end
