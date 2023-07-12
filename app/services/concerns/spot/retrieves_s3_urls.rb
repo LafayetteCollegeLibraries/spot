@@ -28,7 +28,7 @@ module Spot
           return false
         else
           # :nocov:
-          super(uri, _headers)
+          super(uri, _headers = {})
           # :nocov:
         end
       end
