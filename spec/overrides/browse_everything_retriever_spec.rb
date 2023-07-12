@@ -80,14 +80,14 @@ RSpec.describe BrowseEverything::Retriever do
       { 'url' => s3_url, 'file_size' => file_size, 'headers' => {} }
     end
 
-    # if the args passed to mock_s3_client don't match the ones explicitly defined
-    # by the "allow()" call below, the test will fail.
-    before do
-      allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
-      allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_yield(mock_chunk)
-    end
-
     context 'when passed an s3 url' do
+      # if the args passed to mock_s3_client don't match the ones explicitly defined
+      # by the "allow()" call below, the test will fail.
+      before do
+        allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
+        allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_yield(mock_chunk)
+      end
+
       it 'retrieves and yields a chunk of the object to the block' do
         retriever.retrieve(retrieve_options) do |chunk, current_size, total_size|
           expect(chunk).to be mock_chunk         # yields the chunk from s3_client.get_object
@@ -96,6 +96,17 @@ RSpec.describe BrowseEverything::Retriever do
         end
 
         expect(mock_chunk).to have_received(:bytesize)
+      end
+    end
+
+    context 'when passed a bad url' do
+      before do
+        allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
+        allow(mock_s3_service).to receive(:get_object).and_raise Aws::S3::ServiceError
+      end
+
+      it 'raises a DownloadError' do
+        expect{ retriever.retrieve(retrieve_options) }.to raise_error(DownloadError)
       end
     end
   end
