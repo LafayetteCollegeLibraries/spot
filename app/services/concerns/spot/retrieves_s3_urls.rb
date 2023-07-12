@@ -17,7 +17,8 @@ module Spot
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def can_retrieve?(uri, _headers = {})
+      # rubocop:disable Lint/UnusedMethodArgument
+      def can_retrieve?(uri, headers = {})
         uri_parsed = ::Addressable::URI.parse(uri)
 
         case uri_parsed.scheme
@@ -28,10 +29,11 @@ module Spot
           return false
         else
           # :nocov:
-          super(uri, _headers = {})
+          super(uri, headers)
           # :nocov:
         end
       end
+      # rubocop:enable Lint/UnusedMethodArgument
     end
 
     def retrieve(options, &block)
