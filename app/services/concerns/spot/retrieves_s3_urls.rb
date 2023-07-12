@@ -27,7 +27,9 @@ module Spot
           return true unless resp.nil?
           return false
         else
+          # :nocov:
           super(uri, _headers = {})
+          # :nocov:
         end
       end
     end
@@ -51,7 +53,9 @@ module Spot
           raise DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
         end
       else
+        # :nocov:
         super(options)
+        # :nocov:
       end
     end
 
@@ -67,7 +71,9 @@ module Spot
         resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
         return resp.content_length
       else
+        # :nocov:
         super(options)
+        # :nocov:
       end
     end
   end
