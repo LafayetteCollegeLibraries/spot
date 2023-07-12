@@ -106,7 +106,7 @@ RSpec.describe BrowseEverything::Retriever do
       end
 
       it 'raises a DownloadError' do
-        expect{ retriever.retrieve(retrieve_options) }.to raise_error(DownloadError)
+        expect { retriever.retrieve(retrieve_options) }.to raise_error(DownloadError)
       end
     end
   end
