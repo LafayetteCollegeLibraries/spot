@@ -17,7 +17,7 @@ module Spot
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def can_retrieve?(uri, headers = {})
+      def can_retrieve?(uri, _headers = {})
         uri_parsed = ::Addressable::URI.parse(uri)
 
         case uri_parsed.scheme
