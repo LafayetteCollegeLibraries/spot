@@ -73,14 +73,14 @@ RSpec.describe BrowseEverything::Retriever do
     let(:chunk_size) { 5 }
     let(:file_size) { 1234 }
 
-    context 'when passed an s3 url' do
-      # even though we're not using it in our s3 implementation,
-      # defining a file_size in the options allows us to bypass
-      # the get_file_size call
-      let(:retrieve_options) do
-        { 'url' => s3_url, 'file_size' => file_size, 'headers' => {} }
-      end
+    # even though we're not using it in our s3 implementation,
+    # defining a file_size in the options allows us to bypass
+    # the get_file_size call
+    let(:retrieve_options) do
+      { 'url' => s3_url, 'file_size' => file_size, 'headers' => {} }
+    end
 
+    context 'when passed an s3 url' do
       # if the args passed to mock_s3_client don't match the ones explicitly defined
       # by the "allow()" call below, the test will fail.
       before do
@@ -100,16 +100,9 @@ RSpec.describe BrowseEverything::Retriever do
     end
 
     context 'when passed a bad url' do
-      # even though we're not using it in our s3 implementation,
-      # defining a file_size in the options allows us to bypass
-      # the get_file_size call
-      let(:retrieve_options) do
-        { 'url' => s3_url, 'file_size' => file_size, 'headers' => {} }
-      end
-
       before do
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
-        allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_raise(Aws::S3::Errors::ServiceError)
+        allow(mock_s3_client).to receive(:get_object).and_raise(new Aws::S3::Errors::ServiceError(nil, "message"))
       end
 
       it 'raises a DownloadError' do
