@@ -73,7 +73,6 @@ RSpec.describe BrowseEverything::Retriever do
     let(:chunk_size) { 5 }
     let(:file_size) { 1234 }
 
-
     context 'when passed an s3 url' do
       # even though we're not using it in our s3 implementation,
       # defining a file_size in the options allows us to bypass
