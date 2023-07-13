@@ -50,7 +50,7 @@ module Spot
             yield(chunk, retrieved, file_size)
           end
         rescue Aws::S3::Errors::ServiceError => e
-          raise DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
+          raise BrowseEverything::DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
         end
       else
         # :nocov:
