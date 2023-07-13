@@ -109,7 +109,7 @@ RSpec.describe BrowseEverything::Retriever do
 
       before do
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
-        allow(mock_s3_client).to receive(:get_object).and_raise(Aws::S3::Errors::ServiceError)
+        allow(mock_s3_client).to receive(:get_object).with(bucket: s3_bucket, key: s3_key).and_raise(Aws::S3::Errors::ServiceError)
       end
 
       it 'raises a DownloadError' do
