@@ -17,6 +17,7 @@ module Spot
     extend ActiveSupport::Concern
 
     module ClassMethods
+      # :nocov:
       def can_retrieve?(uri, headers = {})
         uri_parsed = ::Addressable::URI.parse(uri)
 
@@ -27,13 +28,13 @@ module Spot
           return true unless resp.nil?
           return false
         else
-          # :nocov:
           super(uri, headers)
-          # :nocov:
         end
       end
+      # :nocov:
     end
 
+    # :nocov:
     def retrieve(options, &block)
       download_options = extract_download_options(options)
       url = download_options[:url]
@@ -53,14 +54,14 @@ module Spot
           raise BrowseEverything::DownloadError.new("#{self.class}: Failed to download #{url}: Status Code: #{e.code}", e)
         end
       else
-        # :nocov:
         super(options, &block)
-        # :nocov:
       end
     end
+    # :nocov:
 
     private
 
+    # :nocov:
     def get_file_size(options)
       uri = options.fetch(:url)
       uri_parsed = ::Addressable::URI.parse(uri)
@@ -71,10 +72,9 @@ module Spot
         resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
         return resp.content_length
       else
-        # :nocov:
         super(options)
-        # :nocov:
       end
     end
+    # :nocov:
   end
 end
