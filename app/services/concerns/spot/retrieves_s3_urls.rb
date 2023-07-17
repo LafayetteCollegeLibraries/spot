@@ -26,7 +26,7 @@ module Spot
           client = Aws::S3::Client.new
           resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
           return true unless resp.nil?
-          return false
+          false
         else
           super(uri, headers)
         end
@@ -70,7 +70,7 @@ module Spot
       when "s3"
         client = Aws::S3::Client.new
         resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
-        return resp.content_length
+        resp.content_length
       else
         super(options)
       end
