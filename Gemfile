@@ -171,7 +171,7 @@ group :development, :test do
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 5'
   gem 'webmock', '~> 3.8'
-  
+
   # s3 Dependencies
   # gem 'browse-everything'
   gem 'minio-ruby'
