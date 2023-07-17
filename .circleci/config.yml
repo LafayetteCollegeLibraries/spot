@@ -60,23 +60,6 @@ jobs:
     executor: ruby
     steps:
       - checkout
-
-      - run:
-          name: Install Postgres dependency
-          command: |
-            sudo apt-get update -y
-            curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-            echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/postgresql-pgdg.list > /dev/null
-            sudo apt-get update -y
-            sudo apt-get install -y postgresql-9.6 libpq-dev
-      - run:
-          name: Install Libxml2 dependency
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y g++ gcc libxml2 libxml2-dev libxslt-dev
-      - run:
-          name: Use Bundler version specified in Gemfile.lock
-          command: gem install bundler:1.16.1
       - restore_cache:
           name: Restore cached bundle
           key: spot-gems-{{ checksum "Gemfile.lock" }}
