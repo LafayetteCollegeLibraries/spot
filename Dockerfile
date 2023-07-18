@@ -70,6 +70,8 @@ FROM spot-web-base as spot-web-development
 RUN bundle install --jobs "$(nproc)" --with="development test"
 COPY . /spot/
 
+ENV RAILS_ENV=development
+
 ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
@@ -114,6 +116,8 @@ RUN apk --no-cache update && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
+RUN bundle install --jobs "$(nproc)" --with="development test"
+
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
     cd /usr/local/fits && \
@@ -123,6 +127,7 @@ RUN mkdir -p /usr/local/fits && \
     chmod a+x /usr/local/fits/fits.sh
 
 ENV PATH="${PATH}:/usr/local/fits"
+ENV RAILS_ENV=development
 
 COPY . /spot
 CMD ["bundle", "exec", "sidekiq"]
