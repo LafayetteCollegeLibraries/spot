@@ -138,9 +138,8 @@ gem 'sprockets-es6', '~> 0.9.2'
 gem 'redlock', '>= 0.1.2', '< 2.0'
 
 # bulkrax
-gem 'bulkrax', '= 4.3.0'
-gem 'browse-everything', '= 1.1.2'
-gem 'bulkrax', '= 4.3.0'
+gem 'browse-everything', '~> 1.1.2'
+gem 'bulkrax', '~> 5.2.1'
 
 # development dependencies (not as necessary to
 # lock down versions here)
