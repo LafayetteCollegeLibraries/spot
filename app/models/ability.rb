@@ -27,11 +27,13 @@ class Ability
   def custom_permissions; end
 
   def can_import_works?
-    current_user.admin? || current_user.depositor?
+    return false unless current_user.admin? || current_user.depositor?
+    return true
   end
 
   def can_export_works?
-    current_user.admin? || current_user.depositor?
+    return false unless current_user.admin? || current_user.depositor?
+    return true
   end
 
   private
@@ -99,15 +101,5 @@ class Ability
       destroy
       manage
     ]
-  end
-
-  def can_import_works?
-    return false unless current_user.admin? || current_user.depositor?
-    return true
-  end
-
-  def can_export_works?
-    return false unless current_user.admin? || current_user.depositor?
-    return true
   end
 end
