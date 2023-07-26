@@ -27,11 +27,11 @@ class Ability
   def custom_permissions; end
 
   def can_import_works?
-    return false unless current_user.admin? || current_user.depositor?
+    return true if current_user.admin? || current_user.depositor?
   end
 
   def can_export_works?
-    return false unless current_user.admin? || current_user.depositor?
+    return true if current_user.admin? || current_user.depositor?
   end
 
   private
