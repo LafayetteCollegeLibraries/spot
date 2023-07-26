@@ -26,6 +26,16 @@ class Ability
   # @return [void]
   def custom_permissions; end
 
+  def can_import_works?
+    return false unless current_user.admin? || current_user.depositor?
+    return true
+  end
+
+  def can_export_works?
+    return false unless current_user.admin? || current_user.depositor?
+    return true
+  end
+
   private
 
   # Delegates abilities for users that have the 'admin' role
@@ -91,15 +101,5 @@ class Ability
       destroy
       manage
     ]
-  end
-
-  def can_import_works?
-    return false unless current_user.admin? || current_user.depositor?
-    return true
-  end
-
-  def can_export_works?
-    return false unless current_user.admin? || current_user.depositor?
-    return true
   end
 end
