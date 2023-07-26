@@ -28,12 +28,10 @@ class Ability
 
   def can_import_works?
     return false unless current_user.admin? || current_user.depositor?
-    return true
   end
 
   def can_export_works?
     return false unless current_user.admin? || current_user.depositor?
-    return true
   end
 
   private
