@@ -89,7 +89,7 @@ jobs:
           image_name: ${{ inputs.WORKER_CONTAINER_ID }}
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
-          target: spot-production
+          target: spot-worker-production
   build_fcrepo:
     if: ${{ inputs.service == 'Fedora Commons Repository' }}
     strategy:
