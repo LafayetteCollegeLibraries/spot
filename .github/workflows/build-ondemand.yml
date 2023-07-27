@@ -55,7 +55,7 @@ jobs:
     if: ${{ inputs.service == 'Rails/Sidekiq' }}
     strategy:
       matrix:
-        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment)) }}
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
     steps:
@@ -118,7 +118,7 @@ jobs:
     if: ${{ inputs.service == 'Solr' }}
     strategy:
       matrix:
-        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment)) }}
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
     steps:
