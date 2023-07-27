@@ -94,7 +94,7 @@ jobs:
     if: ${{ inputs.service == 'Fedora Commons Repository' }}
     strategy:
       matrix:
-        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment) }}
+        environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment)) }}
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
     steps:
