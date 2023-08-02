@@ -91,7 +91,7 @@ COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
 # TARGET: spot-worker
 # Installs dependencies for running background jobs
 ##
-FROM spot-base as spot-worker-development
+FROM spot-base as spot-worker-base
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
@@ -116,8 +116,6 @@ RUN apk --no-cache update && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-RUN bundle install --jobs "$(nproc)" --with="development test"
-
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
     cd /usr/local/fits && \
@@ -127,18 +125,22 @@ RUN mkdir -p /usr/local/fits && \
     chmod a+x /usr/local/fits/fits.sh
 
 ENV PATH="${PATH}:/usr/local/fits"
-ENV RAILS_ENV=development
-
-COPY . /spot
 CMD ["bundle", "exec", "sidekiq"]
 EXPOSE 3000
 
+FROM spot-worker-base as spot-worker-development
+ENV RAILS_ENV=development
+
+RUN bundle install --jobs "$(nproc)" --with="development test"
+COPY . /spot/
 
 ##
 # Target: spot-worker-production
 # Copies compiled assets for use in production.
 ##
-FROM spot-worker as spot-worker-production
+FROM spot-worker-base as spot-worker-production
 ENV RAILS_ENV=production
+
+COPY . /spot/
 COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
 COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
