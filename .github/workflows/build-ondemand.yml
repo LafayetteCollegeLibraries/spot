@@ -84,7 +84,7 @@ jobs:
           image_name: ${{ vars.APPLICATION_CONTAINER_ID }}
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
-          target: spot-production
+          target: spot-web-production
       -
         name: Build worker container
         uses: ./.github/actions/build-container
