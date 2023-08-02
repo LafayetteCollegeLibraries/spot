@@ -81,7 +81,7 @@ jobs:
         name: Build Rails container
         uses: ./.github/actions/build-container
         with:
-          image_name: ${{ inputs.APPLICATION_CONTAINER_ID }}
+          image_name: ${{ vars.APPLICATION_CONTAINER_ID }}
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
           target: spot-production
@@ -89,7 +89,7 @@ jobs:
         name: Build worker container
         uses: ./.github/actions/build-container
         with:
-          image_name: ${{ inputs.WORKER_CONTAINER_ID }}
+          image_name: ${{ vars.WORKER_CONTAINER_ID }}
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
           target: spot-worker-production
@@ -113,7 +113,7 @@ jobs:
         name: Build FCRepo container
         uses: ./.github/actions/build-container
         with:
-          image_name: ${{ inputs.FCREPO_CONTAINER_ID }}
+          image_name: ${{ vars.FCREPO_CONTAINER_ID }}
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
           context: ./docker/fcrepo
@@ -137,7 +137,7 @@ jobs:
         name: Build Solr container
         uses: ./.github/actions/build-container
         with:
-          image_name: ${{ inputs.SOLR_CONTAINER_ID }}
+          image_name: ${{ vars.SOLR_CONTAINER_ID }}
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           tag: ${{ steps.extract_branch.outputs.branch }}
           context: ./docker/solr
