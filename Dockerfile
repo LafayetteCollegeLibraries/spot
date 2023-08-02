@@ -125,8 +125,6 @@ RUN apk --no-cache update && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-RUN bundle install --jobs "$(nproc)" --with="development test"
-
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
     cd /usr/local/fits && \
