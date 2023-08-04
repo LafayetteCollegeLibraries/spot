@@ -31,9 +31,11 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 # @todo upgrade the Gemfile bundler version to 2 to remove version constraint
 RUN gem install bundler
 
-ARG BUNDLE_WITHOUT="development:test"
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
-RUN bundle install --jobs "$(nproc)"
+RUN bundle config unset with && \
+    bundle config unset without && \
+    bundle config set without "development:test" && \
+    bundle install --jobs "$(nproc)"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
@@ -67,7 +69,10 @@ COPY config/uv config/uv
 # Installs Ruby development dependencies
 ##
 FROM spot-web-base as spot-web-development
-RUN bundle install --jobs "$(nproc)" --with="development test"
+RUN bundle config unset with &&\
+    bundle config unset without && \
+    bundle config set with "development:test" && \
+    bundle install --jobs "$(nproc)"
 COPY . /spot/
 
 ENV RAILS_ENV=development
@@ -83,8 +88,8 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 FROM spot-base as spot-web-production
 ENV RAILS_ENV=production
 COPY . /spot
-COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
-COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
+COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 
 
 ##
@@ -131,7 +136,10 @@ EXPOSE 3000
 FROM spot-worker-base as spot-worker-development
 ENV RAILS_ENV=development
 
-RUN bundle install --jobs "$(nproc)" --with="development test"
+RUN bundle config unset with &&\
+    bundle config unset without && \
+    bundle config set with "development:test" && \
+    bundle install --jobs "$(nproc)"
 COPY . /spot/
 
 ##
@@ -142,5 +150,5 @@ FROM spot-worker-base as spot-worker-production
 ENV RAILS_ENV=production
 
 COPY . /spot/
-COPY --from=spot-asset-builder /spot/public/assets/* /spot/public/assets/
-COPY --from=spot-asset-builder /spot/public/uv/* /spot/public/uv/
+COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
+COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
