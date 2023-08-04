@@ -30,8 +30,10 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 
 # @todo upgrade the Gemfile bundler version to 2 to remove version constraint
 RUN gem install bundler
+
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
 RUN bundle config unset with && \
+    bundle config unset without && \
     bundle config set without "development:test" && \
     bundle install --jobs "$(nproc)"
 
@@ -69,7 +71,7 @@ COPY config/uv config/uv
 FROM spot-web-base as spot-web-development
 RUN bundle config unset with &&\
     bundle config unset without && \
-    bundle config set with 'development:test' && \
+    bundle config set with "development:test" && \
     bundle install --jobs "$(nproc)"
 COPY . /spot/
 
