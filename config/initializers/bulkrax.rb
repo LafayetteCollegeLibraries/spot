@@ -78,4 +78,8 @@ Bulkrax.setup do |config|
 
   # Remove the XML parser
   config.parsers -= [{ name: "XML", class_name: "Bulkrax::XmlParser", partial: "xml_fields" }]
+
+  config.fill_in_blank_source_identifiers = lambda do |obj, index|
+    "#{obj.importerexporter.id}-#{index}"
+  end
 end
