@@ -1,7 +1,5 @@
 ---
 s3:
   bucket: <%= ENV.fetch('AWS_BULKRAX_IMPORTS_BUCKET') %>
-  app_key: <%= ENV.fetch('AWS_ACCESS_KEY_ID') %>
-  app_secret: <%= ENV.fetch('AWS_SECRET_ACCESS_KEY') %>
-  region: <%= ENV.fetch('AWS_REGION') %>
+  region: <%= ENV.fetch('AWS_REGION') { 'us-east-1' } %>
   response_type: s3_uri
