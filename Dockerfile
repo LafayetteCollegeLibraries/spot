@@ -21,8 +21,13 @@ RUN apt update && \
         postgresql-13 libpq-dev \
         ruby-dev \
         tzdata \
-        zip
-RUN apk update && apk add g++ gcc libxml2 libxml2-dev libxslt-dev
+        yarn \
+        zip \
+        g++ \
+        gcc \
+        libxml2 \
+        libxml2-dev \
+        libxslt-dev 
 
 WORKDIR /spot
 
@@ -118,8 +123,6 @@ RUN apt update && apt install -y --no-install-recommends \
         unzip
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
-
-RUN bundle install --jobs "$(nproc)" --with="development test"
 
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
