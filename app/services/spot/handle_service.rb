@@ -4,10 +4,27 @@ module Spot
   class HandleService
     attr_reader :work
 
-    # @return [true, false]
-    def self.env_values_defined?
-      (ENV['HANDLE_SERVER_URL'].present? && ENV['HANDLE_PREFIX'].present? &&
-        ENV['HANDLE_CLIENT_CERT'].present? && ENV['HANDLE_CLIENT_KEY'].present?)
+    class << self
+      # @return [true, false]
+      def env_values_defined?
+        [handle_server_url, handle_prefix, handle_client_cert, handle_client_key].all?(&:present?)
+      end
+
+      def handle_client_cert
+        ENV['HANDLE_CLIENT_CERT_PEM']
+      end
+
+      def handle_client_key
+        ENV['HANDLE_CLIENT_KEY_PEM']
+      end
+
+      def handle_prefix
+        ENV['HANDLE_PREFIX']
+      end
+
+      def handle_server_url
+        ENV['HANDLE_SERVER_URL']
+      end
     end
 
     def initialize(work)
@@ -36,26 +53,22 @@ module Spot
     # @return [Faraday::Client]
     def client
       @client ||=
-        Faraday::Connection.new(handle_server_url,
-                                ssl: {
-                                  client_cert: handle_certificate,
-                                  client_key: handle_key,
-                                  verify: false
-                                })
+        Faraday::Connection.new(self.class.handle_server_url,
+                                ssl: { client_cert: handle_certificate, client_key: handle_key, verify: false })
     end
 
     def find_handle_id
       stored = work.identifier.find { |id| id.start_with? 'hdl:' }
-      return "#{prefix}/#{work.id}" unless stored
+      return "#{self.class.handle_prefix}/#{work.id}" unless stored
 
       Spot::Identifier.from_string(stored).value
     end
 
     def handle_certificate
-      raise "No HANDLE_CLIENT_CERT ENV value provided" unless ENV['HANDLE_CLIENT_CERT'].present?
-      raise "HANDLE_CLIENT_CERT path does not exist" unless cert_exist?
+      cert_pem = self.class.handle_client_cert
+      raise "HANDLE_CLIENT_CERT_PEM isn't present" unless cert_pem.present?
 
-      OpenSSL::X509::Certificate.new(cert_contents)
+      OpenSSL::X509::Certificate.new(cert_pem)
     end
 
     # @return [String]
@@ -64,31 +77,10 @@ module Spot
     end
 
     def handle_key
-      raise "No HANDLE_CLIENT_KEY ENV value provided" unless ENV['HANDLE_CLIENT_KEY'].present?
-      raise "HANDLE_CLIENT_KEY path does not exist" unless key_exist?
+      handle_key = self.class.handle_client_key
+      raise "HANDLE_CLIENT_KEY_PEM isn't present" unless handle_key.present?
 
-      OpenSSL::PKey.read(key_contents)
-    end
-
-    def cert_contents
-      File.read(ENV['HANDLE_CLIENT_CERT'])
-    end
-
-    def cert_exist?
-      File.exist?(ENV['HANDLE_CLIENT_CERT'])
-    end
-
-    def key_contents
-      File.read(ENV['HANDLE_CLIENT_KEY'])
-    end
-
-    def key_exist?
-      File.exist?(ENV['HANDLE_CLIENT_KEY'])
-    end
-
-    # @return [String]
-    def handle_server_url
-      ENV['HANDLE_SERVER_URL']
+      OpenSSL::PKey.read(handle_key)
     end
 
     # @return [String]
@@ -110,11 +102,6 @@ module Spot
       URI.decode(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
     end
 
-    # @return [String]
-    def prefix
-      ENV['HANDLE_PREFIX']
-    end
-
     # @param [Hash] options
     # @option [Boolean] update_only
     # @return [void]
@@ -127,7 +114,7 @@ module Spot
         req.body = JSON.dump(payload)
       end
 
-      # this isn't where we want to stop we still need to
+      # this isn't where we want to stop, we still need to
       # deal with the response: did everything go ok?
       # if so, update the item
       JSON.parse(response.body)

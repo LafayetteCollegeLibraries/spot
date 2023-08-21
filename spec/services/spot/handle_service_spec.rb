@@ -6,8 +6,10 @@ RSpec.describe Spot::HandleService do
   let(:identifiers) { [] }
   let(:handle_server_url) { 'http://handle-service:8000' }
   let(:handle_prefix) { '10385' }
-  let(:cert_path) { '/path/to/client/cert' }
-  let(:key_path) { '/path/to/client/key' }
+
+  before do
+    stub_env('URL_HOST', 'http://localhost')
+  end
 
   describe '.env_values_defined?' do
     subject { described_class.env_values_defined? }
@@ -16,8 +18,8 @@ RSpec.describe Spot::HandleService do
       before do
         stub_env('HANDLE_SERVER_URL', handle_server_url)
         stub_env('HANDLE_PREFIX', handle_prefix)
-        stub_env('HANDLE_CLIENT_CERT', cert_path)
-        stub_env('HANDLE_CLIENT_KEY', key_path)
+        stub_env('HANDLE_CLIENT_CERT_PEM', 'client_cert')
+        stub_env('HANDLE_CLIENT_KEY_PEM', 'client_key')
       end
 
       it { is_expected.to be true }
@@ -50,16 +52,11 @@ RSpec.describe Spot::HandleService do
     before do
       stub_env('HANDLE_SERVER_URL', handle_server_url)
       stub_env('HANDLE_PREFIX', handle_prefix)
-      stub_env('HANDLE_CLIENT_CERT', cert_path)
-      stub_env('HANDLE_CLIENT_KEY', key_path)
+      stub_env('HANDLE_CLIENT_CERT_PEM', :client_cert_pem)
+      stub_env('HANDLE_CLIENT_KEY_PEM', :client_key_pem)
 
-      allow(service).to receive(:cert_exist?).and_return(true)
-      allow(service).to receive(:cert_contents).and_return(:cert_data)
-      allow(service).to receive(:key_exist?).and_return(true)
-      allow(service).to receive(:key_contents).and_return(:key_data)
-
-      allow(OpenSSL::X509::Certificate).to receive(:new).with(:cert_data).and_return(cert_double)
-      allow(OpenSSL::PKey).to receive(:read).with(:key_data).and_return(key_double)
+      allow(OpenSSL::X509::Certificate).to receive(:new).with(:client_cert_pem).and_return(cert_double)
+      allow(OpenSSL::PKey).to receive(:read).with(:client_key_pem).and_return(key_double)
 
       allow(work).to receive(:identifier=)
       allow(work).to receive(:save!)
