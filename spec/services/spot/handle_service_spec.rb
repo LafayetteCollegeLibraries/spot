@@ -6,7 +6,7 @@ RSpec.describe Spot::HandleService do
   let(:identifiers) { [] }
   let(:handle_server_url) { 'http://handle-service:8000' }
   let(:handle_prefix) { '10385' }
-  
+
   before do
     stub_env('URL_HOST', 'http://localhost')
   end
