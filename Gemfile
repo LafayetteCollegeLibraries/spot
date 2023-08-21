@@ -189,9 +189,9 @@ group :development, :test do
   gem 'rspec-its', '~> 1.1'
   gem 'rspec-rails', '~> 5.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4'
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 4.6.1'
   gem 'webmock', '~> 3.8'
 
   # dependencies we have to lock in order to work with ruby 2.4.3 on prem
