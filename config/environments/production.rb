@@ -74,7 +74,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:   ENV['RAILS_SMTP_URL'],
+    address: ENV['RAILS_SMTP_URL'],
     user_name: ENV['RAILS_SMTP_USER'],
     password: ENV['RAILS_SMTP_PASSWORD'],
     port: 587
