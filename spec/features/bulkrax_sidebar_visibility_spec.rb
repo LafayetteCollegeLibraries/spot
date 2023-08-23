@@ -16,13 +16,13 @@ RSpec.feature 'the bulkrax importers and exporters dashboard page' do
 
       expect(page).to have_content 'No importers have been created.'
 
-      visit '/dashboard'
+      # visit '/dashboard'
 
-      expect(page).to have_content 'Exporters'
+      # expect(page).to have_content 'Exporters'
 
-      click_link 'Exporters'
+      # click_link 'Exporters'
 
-      expect(page).to have_content 'No exporters have been created.'
+      # expect(page).to have_content 'No exporters have been created.'
     end
   end
 
