@@ -48,7 +48,7 @@ RSpec.describe ApplicationHelper do
     # is in a testing environment; otherwise we're not expecting it to change
     # while application is running
     before do
-      ApplicationHelper.class_variable_set(:@@site_last_updated, nil)
+      ApplicationHelper.class_variable_set(:@@site_last_updated, nil) # rubocop:disable Style/ClassVars
     end
 
     context 'when $SPOT_BUILD_DATE is present and a date' do
