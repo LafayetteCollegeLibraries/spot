@@ -44,6 +44,13 @@ RSpec.describe ApplicationHelper do
   describe '#site_last_updated' do
     subject { helper.site_last_updated }
 
+    # this is hacky, but the only time this class_variable should need to be different
+    # is in a testing environment; otherwise we're not expecting it to change
+    # while application is running
+    before do
+      ApplicationHelper.class_variable_set(:@@site_last_updated, nil)
+    end
+
     context 'when $SPOT_BUILD_DATE is present and a date' do
       before do
         stub_env('SPOT_BUILD_DATE', '20230828')
