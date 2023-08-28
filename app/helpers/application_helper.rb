@@ -17,13 +17,15 @@ module ApplicationHelper
   # rubocop:disable Style/ClassVars
   # @return [String, nil]
   def site_last_updated
-    @@site_last_updated ||=
-      begin
-        break if ENV['SPOT_BUILD_DATE'].blank?
-        Date.parse(ENV['SPOT_BUILD_DATE']).strftime('%B %d, %Y')
-      rescue
-        ENV['SPOT_BUILD_DATE']
-      end
+    @@site_last_updated ||= generate_site_last_updated
   end
   # rubocop:enable Style/ClassVars
+
+  # @api private
+  def generate_site_last_updated
+    return if ENV['SPOT_BUILD_DATE'].blank?
+    Date.parse(ENV['SPOT_BUILD_DATE']).strftime('%B %d, %Y')
+  rescue
+    ENV['SPOT_BUILD_DATE']
+  end
 end
