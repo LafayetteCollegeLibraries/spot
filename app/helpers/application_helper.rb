@@ -22,7 +22,7 @@ module ApplicationHelper
         break if ENV['SPOT_BUILD_DATE'].blank?
         Date.parse(ENV['SPOT_BUILD_DATE']).strftime('%B %d, %Y')
       rescue
-        nil
+        ENV['SPOT_BUILD_DATE']
       end
   end
   # rubocop:enable Style/ClassVars

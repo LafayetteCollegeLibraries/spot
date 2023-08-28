@@ -57,7 +57,7 @@ RSpec.describe ApplicationHelper do
         stub_env('SPOT_BUILD_DATE', 'Late last night (or the night before)')
       end
 
-      it { is_expected.to be nil }
+      it { is_expected.to eq 'Late last night (or the night before)' }
     end
 
     context 'when $SPOT_BUILD_DATE is not present' do
