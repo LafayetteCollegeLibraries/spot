@@ -81,7 +81,7 @@ Bulkrax.setup do |config|
 
   config.fill_in_blank_source_identifiers = lambda do |parser, index|
     metadata = parser.records(index)
-    filename = File.basename(metadata[0][:file_1], '.*')
+    filename = File.basename(metadata[index][:file_1], '.*')
     "#{filename}-#{parser.importerexporter.id}-#{index}"
   end
 end
