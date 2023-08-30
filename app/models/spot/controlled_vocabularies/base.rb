@@ -58,6 +58,16 @@ module Spot
         RdfLabel.where(uri: rdf_subject.to_s).first_or_create(&block)
       end
 
+      # Temporarily patching - I'd like to revisit this and Spot::ControlledVocabularies::Location
+      # and see if we can strip out some of these customizations.
+      #
+      # @return [String]
+      # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/lib/hyrax/controlled_vocabularies/location.rb#L16-L18
+      # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/app/inputs/controlled_vocabulary_input.rb#L70
+      def full_label
+        rdf_label.first
+      end
+
       # Does this value have a label or is it just an URI?
       #
       # @return [TrueClass,FalseClass]
