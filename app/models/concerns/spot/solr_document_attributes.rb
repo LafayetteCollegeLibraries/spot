@@ -98,6 +98,9 @@ module Spot
       attribute :citation_issue,         ::Blacklight::Types::String, 'citation_issue_ss'
       attribute :citation_firstpage,     ::Blacklight::Types::String, 'citation_firstpage_ss'
       attribute :citation_lastpage,      ::Blacklight::Types::String, 'citation_lastpage_ss'
+
+      # Bulkrax properties
+      attribute :source_identifier, ::Blacklight::Types::String, 'source_identifier_ssim'
     end
 
     module ClassMethods
