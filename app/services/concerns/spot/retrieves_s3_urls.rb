@@ -24,7 +24,7 @@ module Spot
         case uri_parsed.scheme
         when "s3"
           client = Aws::S3::Client.new
-          resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+          resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
           return true unless resp.nil?
           false
         else
@@ -46,7 +46,7 @@ module Spot
 
         client = Aws::S3::Client.new
         begin
-          client.get_object(bucket: url.host, key: url.path) do |chunk|
+          client.get_object(bucket: url.host, key: url.path[1..-1]) do |chunk|
             retrieved += chunk.bytesize
             yield(chunk, retrieved, file_size)
           end
@@ -69,7 +69,7 @@ module Spot
       case uri_parsed.scheme
       when "s3"
         client = Aws::S3::Client.new
-        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path)
+        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
         resp.content_length
       else
         super(options)
