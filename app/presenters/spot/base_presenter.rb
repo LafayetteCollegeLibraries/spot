@@ -28,6 +28,16 @@ module Spot
 
     delegate :public?, to: :solr_document
 
+    # Does the same thing it does in Hyrax::WorkShowPresenter but explicitly adds https:// support
+    #
+    # @return [String]
+    # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/app/presenters/hyrax/work_show_presenter.rb#L58-L62
+    # :nocov:
+    def download_url
+      return '' if representative_presenter.blank?
+      Hyrax::Engine.routes.url_helpers.download_url(representative_presenter, host: request.host, protocol: 'https://')
+    end
+
     # @return [String]
     def export_all_text
       I18n.t("spot.work.export.download_work_and_metadata_#{multiple_members? ? 'multiple' : 'single'}")
