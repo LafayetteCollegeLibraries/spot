@@ -7,8 +7,8 @@ RSpec.describe BrowseEverything::Retriever do
 
   describe '#get_file_size' do
     let(:s3_bucket) { 'bulkrax-imports-bucket' }
-    let(:s3_key) { '/project-name/files/file01.tif' }
-    let(:url) { "s3://#{s3_bucket}#{s3_key}" }
+    let(:s3_key) { 'project-name/files/file01.tif' }
+    let(:url) { "s3://#{s3_bucket}/#{s3_key}" }
     let(:mock_s3_client) { instance_double(Aws::S3::Client) }
     let(:mock_s3_response) { instance_double(Aws::S3::Types::HeadObjectOutput) }
     let(:file_size) { 1234 }
@@ -34,8 +34,8 @@ RSpec.describe BrowseEverything::Retriever do
 
   describe '.can_retrieve?' do
     let(:s3_bucket) { 'bulkrax-imports-bucket' }
-    let(:s3_key) { '/project-name/files/file01.tif' }
-    let(:s3_url) { "s3://#{s3_bucket}#{s3_key}" }
+    let(:s3_key) { 'project-name/files/file01.tif' }
+    let(:s3_url) { "s3://#{s3_bucket}/#{s3_key}" }
     let(:mock_s3_client) { instance_double(Aws::S3::Client) }
     let(:mock_s3_response) { instance_double(Aws::S3::Types::HeadObjectOutput) }
 
@@ -66,8 +66,8 @@ RSpec.describe BrowseEverything::Retriever do
 
   describe '#retrieve' do
     let(:s3_bucket) { 'bulkrax-imports-bucket' }
-    let(:s3_key) { '/project-name/files/file01.tif' }
-    let(:s3_url) { "s3://#{s3_bucket}#{s3_key}" }
+    let(:s3_key) { 'project-name/files/file01.tif' }
+    let(:s3_url) { "s3://#{s3_bucket}/#{s3_key}" }
     let(:mock_s3_client) { instance_double(Aws::S3::Client) }
     let(:mock_chunk) { instance_double(String, bytesize: chunk_size) }
     let(:chunk_size) { 5 }
