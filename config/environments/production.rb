@@ -106,4 +106,7 @@ Rails.application.configure do
   # use our error_controller to render error pages
   # (see: https://stackoverflow.com/a/24239490)
   config.exceptions_app = ->(env) { ErrorController.action(:show).call(env) }
+
+  # use ssl for everything
+  config.force_ssl = true
 end
