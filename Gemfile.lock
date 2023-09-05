@@ -1088,7 +1088,7 @@ DEPENDENCIES
   linkeddata (~> 3.1.6)
   listen (>= 3.0.5, < 3.8)
   mini_magick (~> 4.11)
-  non-digest-assets
+  non-digest-assets (~> 2.2.0)
   okcomputer (~> 1.18.4)
   pg (~> 1.2.3)
   puma (~> 6.1.1)
@@ -1118,4 +1118,4 @@ DEPENDENCIES
   webmock (~> 3.8)
 
 BUNDLED WITH
-   2.4.19
+   2.4.7

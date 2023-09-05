@@ -97,9 +97,9 @@ gem 'mini_magick', '~> 4.11'
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.1.6'
 
-# Generate non-digested copies of application.css and application.js 
+# Generate non-digested copies of application.css and application.js
 # (allows us to reference assets in the static error pages)
-gem 'non-digest-assets'
+gem 'non-digest-assets', '~> 2.2.0'
 
 # system monitoring
 gem 'okcomputer', '~> 1.18.4'
