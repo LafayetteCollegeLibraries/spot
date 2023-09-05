@@ -1,66 +1,107 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>We're sorry, but something went wrong (500)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>
-  .rails-default-error-page {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
+<html lang="en" prefix="og:http://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+    <!-- added for use on small devices like phones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="resourcesync" href="https://ldr.lafayette.edu/capabilitylist" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <title>Something went wrong! // Lafayette Digital Repository</title>
+    
+    <!-- application css -->
+    <link rel="stylesheet" media="screen" href="/assets/application.css" />
+    <script src="/assets/application.js"></script>
+  </head>
+  <body>
+    <div class="skip-to-content"><a href="#skip-to-content">Skip to Content</a></div>
+    <header>
+      <nav id="masthead" class="navbar navbar-inverse navbar-static-top" role="navigation" aria-label="masthead">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-collapse" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a id="logo" class="ldr-logo" href="/" data-no-turbolink="true">
+              <img alt="Lafayette Digital Repository logo" src="/assets/logo.png" />
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
 
-  .rails-default-error-page div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container-fluid">
+      <div class="row">
+        <ul class="nav navbar-nav col-sm-5">
+          <li><a href="/about">About</a></li>
+          <li><a href="/help">Help</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/advanced">Advanced Search</a></li>
+        </ul>
 
-  .rails-default-error-page div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+      <div class="searchbar-right navbar-right col-sm-7">
+        <form class="form-horizontal search-form" id="search-form-header" role="search" action="/catalog" accept-charset="UTF-8" method="get">
+          <input name="utf8" type="hidden" value="&#x2713;" />
+          <input type="hidden" name="search_field" id="search_field" value="all_fields" />
+          
+          <div class="form-group">
+            <label class="control-label col-sm-3" for="search-field-header">Search LDR</label>
 
-  .rails-default-error-page h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
+            <div class="input-group">
+              <input type="text" name="q" id="search-field-header" class="q form-control" placeholder="Enter search terms" />
 
-  .rails-default-error-page div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-  </style>
-</head>
-
-<body class="rails-default-error-page">
-  <!-- This file lives in public/500.html -->
-  <div class="dialog">
-    <div>
-      <h1>We're sorry, but something went wrong.</h1>
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary" id="search-submit-header">
+                  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Go
+                </button>
+              </div><!-- /.input-group-btn -->
+            </div><!-- /.input-group -->
+          </div><!-- /.form-group -->
+        </form>
+      </div>
+    </nav>
+  </div>    
+  
+  <div id="content-wrapper" class="container" role="main">
+    <a name="skip-to-content" id="skip-to-content"></a>
+    <img class="img-responsive" src="/assets/500-splash.jpg" />
+    <div class="page-header">
+      <h1>Something went wrong!</h1>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
-  </div>
-</body>
+    
+    <p class="lead">
+      Well this is embarrassing!  We've encountered an error with your request.
+    </p>
+  </div><!-- /#content-wrapper -->
+
+  <footer class="site-footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-4">
+          <h4>Lafayette Digital Repository</h4>
+        </div>
+        <div class="col-sm-5 col-sm-offset-3">
+          <div class="col-sm-6">
+            <ul>
+              <li><a href="/about">Learn more about the repository</a></li>
+              <li><a href="/help">Get help using the repository</a></li>
+              <li><a href="/contact">Contact us</a></li>
+              <li><a href="/terms-of-use">Terms of Use</a></li>
+            </ul>
+          </div>
+          <div class="col-sm-6">
+            <ul>
+              <li><a href="https://dss.lafayette.edu">Digital Scholarship Services</a></li>
+              <li><a href="https://library.lafayette.edu">Skillman Library</a></li>
+              <li><a href="https://www.lafayette.edu">Lafayette College</a></li>
+              <li><a href="https://forms.gle/T8sTupUsxQ8T6kwk6">Accessibility Remediation Request</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>

@@ -81,6 +81,10 @@ gem 'iso-639', '0.3.5'
 # install jquery with rails (no longer the default)
 gem 'jquery-rails', '4.4.0'
 
+# Generate non-digested copies of application.css and application.js
+# (allows us to reference assets in the static error pages)
+gem 'non-digest-assets', '~> 1.1.0'
+
 # system monitoring
 gem 'okcomputer', '1.18.4'
 
