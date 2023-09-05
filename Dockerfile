@@ -37,7 +37,7 @@ RUN bundle install --jobs "$(nproc)"
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
-HEALTHCHECK CMD curl -skf https://localhost || exit 1
+HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
 
 
 ##
