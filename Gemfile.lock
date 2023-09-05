@@ -642,8 +642,9 @@ GEM
     nokogiri (1.15.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.15.3-arm64-darwin)
-      racc (~> 1.4)
+    non-digest-assets (2.2.0)
+      activesupport (>= 5.2, < 7.1)
+      sprockets (>= 2.0, < 5.0)
     oai (0.4.0)
       builder (>= 3.1.0)
       faraday
@@ -1087,6 +1088,7 @@ DEPENDENCIES
   linkeddata (~> 3.1.6)
   listen (>= 3.0.5, < 3.8)
   mini_magick (~> 4.11)
+  non-digest-assets (~> 2.2.0)
   okcomputer (~> 1.18.4)
   pg (~> 1.2.3)
   puma (~> 6.1.1)
@@ -1116,4 +1118,4 @@ DEPENDENCIES
   webmock (~> 3.8)
 
 BUNDLED WITH
-   2.4.14
+   2.4.7
