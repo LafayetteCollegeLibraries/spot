@@ -4,18 +4,15 @@ services:
     image: lafayette/spot-web
     build:
       context: .
-      # target: spot-web-development
-      target: spot-web-production
+      target: spot-web-development
     volumes:
-      # - .:/spot
-      # - ./ingest:/spot/ingest
+      - .:/spot
+      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     ports:
       - "443:443"
     env_file:
       - .env.local
-    environment:
-      - RAILS_ENV=production
     depends_on:
       - cantaloupe
       - db
@@ -57,9 +54,6 @@ services:
 
   db_migrate:
     image: lafayette/spot-web
-    build:
-      context: .
-      target: spot-web-production
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -108,12 +102,9 @@ services:
     image: lafayette/spot-worker
     build:
       context: .
-      # target: spot-worker-development
-      target: spot-worker-production
+      target: spot-worker-development
     env_file:
       - .env.local
-    environment:
-      - RAILS_ENV=production  
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
