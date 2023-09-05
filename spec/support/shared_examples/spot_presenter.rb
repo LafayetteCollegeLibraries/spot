@@ -16,7 +16,8 @@ RSpec.shared_examples 'a Spot presenter' do
     [
       :contributor, :creator, :description, :identifier, :keyword, :note, :permalink,
       :physical_medium, :publisher, :related_resource, :resource_type, :rights_holder,
-      :rights_statement, :source, :subtitle, :title_alternative, :title, :visibility
+      :rights_statement, :source, :subtitle, :title_alternative, :title, :visibility,
+      :source_identifier
     ].each do |method_name|
       describe "##{method_name}" do
         subject { presenter.public_send(method_name) }
