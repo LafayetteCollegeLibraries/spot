@@ -10,6 +10,7 @@ module Spot
   module SolrDocumentAttributes
     extend ActiveSupport::Concern
 
+    # rubocop:disable Metrics/BlockLength
     included do
       # Hyrax properties
       attribute :admin_set,              ::Blacklight::Types::String, 'admin_set_tesim'
