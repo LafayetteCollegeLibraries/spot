@@ -32,8 +32,8 @@ runs:
       name: Build and push ${{ inputs.image_name }} container
       uses: docker/build-push-action@v4
       with:
-        build-args:
-          - build_date=$BUILD_DATE
+        build-args: |
+          build_date=$BUILD_DATE
         cache-from: type=gha
         cache-to: type=gha,mode=max
         context: ${{ inputs.context }}
