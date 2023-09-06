@@ -14,18 +14,18 @@ module ApplicationHelper
     document.highlight_field('extracted_text_tsimv').reject(&:blank?)
   end
 
-  # Going to need to update this once we're fully in the cloud
+  # rubocop:disable Style/ClassVars
+  # @return [String, nil]
   def site_last_updated
-    @site_last_updated ||= generate_site_last_updated
+    @@site_last_updated ||= generate_site_last_updated
   end
+  # rubocop:enable Style/ClassVars
 
   # @api private
   def generate_site_last_updated
-    return 'Not in production environment' unless Rails.env.production?
-
-    pwd = File.basename(Dir.pwd)
-    date = Date.parse(pwd) rescue Time.zone.now
-
-    date.strftime('%B %d, %Y')
+    return if ENV['SPOT_BUILD_DATE'].blank?
+    Date.parse(ENV['SPOT_BUILD_DATE']).strftime('%B %d, %Y')
+  rescue
+    ENV['SPOT_BUILD_DATE']
   end
 end
