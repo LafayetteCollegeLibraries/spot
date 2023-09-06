@@ -85,6 +85,6 @@ Bulkrax.setup do |config|
     "#{filename}-#{parser.importerexporter.id}-#{index}"
   end
 
-  config.import_path = 'tmp/uploads/bulkrax/imports'
-  config.export_path = 'tmp/uploads/bulkrax/exports'
+  config.import_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'imports')
+  config.export_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'exports')
 end
