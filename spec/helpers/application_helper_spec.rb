@@ -44,44 +44,35 @@ RSpec.describe ApplicationHelper do
   describe '#site_last_updated' do
     subject { helper.site_last_updated }
 
+    # this is hacky, but the only time this class_variable should need to be different
+    # is in a testing environment; otherwise we're not expecting it to change
+    # while application is running
     before do
-      allow(Rails.env).to receive(:production?).and_return(production_env)
+      described_class.class_variable_set(:@@site_last_updated, nil)
     end
 
-    context 'when in production' do
+    context 'when $SPOT_BUILD_DATE is present and a date' do
       before do
-        allow(Dir).to receive(:pwd).and_return(directory)
+        stub_env('SPOT_BUILD_DATE', '20230828')
       end
 
-      let(:production_env) { true }
-
-      context 'when in a capistrano directory' do
-        let(:directory) { '/var/www/spot/releases/20211125133725' }
-
-        it { is_expected.to eq 'November 25, 2021' }
-      end
-
-      context 'when not in a capistrano directory' do
-        before do
-          allow(Time.zone).to receive(:now).and_return(date_mock)
-          allow(date_mock)
-            .to receive(:strftime)
-            .with('%B %d, %Y')
-            .and_return(expected_date)
-        end
-
-        let(:directory) { '/var/www/spot' }
-        let(:date_mock) { instance_double('Date') }
-        let(:expected_date) { 'November 29, 2021' }
-
-        it { is_expected.to eq expected_date }
-      end
+      it { is_expected.to eq 'August 28, 2023' }
     end
 
-    context 'when in development' do
-      let(:production_env) { false }
+    context 'when $SPOT_BUILD_DATE is not a date' do
+      before do
+        stub_env('SPOT_BUILD_DATE', 'Late last night (or the night before)')
+      end
 
-      it { is_expected.to eq 'Not in production environment' }
+      it { is_expected.to eq 'Late last night (or the night before)' }
+    end
+
+    context 'when $SPOT_BUILD_DATE is not present' do
+      before do
+        stub_env('SPOT_BUILD_DATE', '')
+      end
+
+      it { is_expected.to be nil }
     end
   end
 end
