@@ -84,4 +84,7 @@ Bulkrax.setup do |config|
     filename = File.basename(metadata[index][:file_1], '.*')
     "#{filename}-#{parser.importerexporter.id}-#{index}"
   end
+
+  config.import_path = 'tmp/uploads/bulkrax/imports'
+  config.export_path = 'tmp/uploads/bulkrax/exports'
 end
