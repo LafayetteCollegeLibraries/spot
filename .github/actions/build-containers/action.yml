@@ -74,7 +74,6 @@ runs:
       uses: ./.github/actions/build-container
       with:
         image_name: ${{ inputs.application_image_name }}
-        build_args_json: "[\"build_date=$build_date\"]"
         context: .
         registry: ${{ inputs.registry }}
         tag: ${{ inputs.tag }}
