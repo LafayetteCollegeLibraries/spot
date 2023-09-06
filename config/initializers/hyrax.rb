@@ -300,10 +300,7 @@ Hyrax.config do |config|
   #
   config.whitelisted_ingest_dirs = [
     Rails.root.join('tmp', 'ingest').to_s,
-
-    # need to use the capistrano root, otherwise a new deployment will
-    # break uploads from earlier ones.
-    '/var/www/spot'
+    Rails.root.to_s
   ]
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
