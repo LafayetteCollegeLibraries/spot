@@ -25,10 +25,16 @@ runs:
   using: composite
   steps:
     -
+      id: build_date
+      name: Generate build_date variable for Image
+      shell: bash
+      run: echo "date=$(date +'%Y%m%d')" >> "${GITHUB_OUTPUT}"
+    -
       name: Build and push ${{ inputs.image_name }} container
       uses: docker/build-push-action@v4
       with:
-        build-args: ${{ fromJSON(inputs.build_args_json) }}
+        build-args: |
+          build_date=${{ steps.build_date.outputs.date }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         context: ${{ inputs.context }}
