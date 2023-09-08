@@ -31,7 +31,7 @@ class Ability
   end
 
   def can_export_works?
-    false
+    current_user.admin? || current_user.depositor?
   end
 
   private
