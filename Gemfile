@@ -139,7 +139,7 @@ gem 'redlock', '>= 0.1.2', '< 2.0'
 
 # bulkrax
 gem 'browse-everything', '~> 1.1.2'
-gem 'bulkrax', '~> 5.2.1'
+gem 'bulkrax', '~> 5.3.0'
 
 # development dependencies (not as necessary to
 # lock down versions here)

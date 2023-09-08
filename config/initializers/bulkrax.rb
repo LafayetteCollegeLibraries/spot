@@ -63,7 +63,9 @@ Bulkrax.setup do |config|
       "local_identifier" => { from: ["local_identifier"], split: '\|' },
       "permalink" => { from: ["permalink"], split: '\|' },
       "standard_identifier" => { from: ["standard_identifier"], split: '\|' },
-      "date_modified" => { from: ["date_modified"], split: '\|' }
+      "date_modified" => { from: ["date_modified"], split: '\|' },
+      "member_ids" => { from: ["member_ids"], split: '\|', related_children_field_mapping: true },
+      "member_of_collection_ids" => { from: ["member_of_collection_ids"], split: '\|', related_parents_field_mapping: true }
     }
   }
 
