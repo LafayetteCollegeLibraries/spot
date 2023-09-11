@@ -13,7 +13,7 @@ on:
           - Fedora Commons Repository
           - Solr
       environment:
-        description: 'Container repository to push to'
+        description: 'Container repository environment'
         required: true
         default: 'both'
         type: choice
@@ -36,7 +36,7 @@ jobs:
       -
         name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "${GITHUB_OUTPUT}"
         id: extract_branch
       -
         name: Build all containers
@@ -65,7 +65,7 @@ jobs:
       -
         name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "${GITHUB_OUTPUT}"
         id: extract_branch
       -
         name: Log into Docker
@@ -107,7 +107,7 @@ jobs:
       -
         name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "${GITHUB_OUTPUT}"
         id: extract_branch
       -
         name: Log into Docker
@@ -141,7 +141,7 @@ jobs:
       -
         name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> "${GITHUB_OUTPUT}"
         id: extract_branch
       -
         name: Log into Docker
