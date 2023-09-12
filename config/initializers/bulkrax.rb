@@ -89,4 +89,6 @@ Bulkrax.setup do |config|
 
   config.import_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'imports')
   config.export_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'exports')
+
+  config.multi_value_element_join_on = ' | '
 end
