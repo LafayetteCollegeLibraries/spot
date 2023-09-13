@@ -38,6 +38,7 @@ runs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         context: ${{ inputs.context }}
+        provenance: false
         push: true
         tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ inputs.tag }}
         target: ${{ inputs.target }}
