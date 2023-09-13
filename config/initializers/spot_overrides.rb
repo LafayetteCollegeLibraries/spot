@@ -125,4 +125,24 @@ Rails.application.config.to_prepare do
       prepend Spot::RetrievesS3Urls::ClassMethods
     end
   end
+
+  Bulkrax::ExportBehavior.class_eval do
+    # Prepend the file_set id to ensure a unique filename and also one that is not longer than 255 characters
+    def filename(file_set)
+      return if file_set.original_file.blank?
+      fn = file_set.original_file.file_name.first
+      mime = ::Marcel::MimeType.for(file_set.original_file.mime_type)
+      ext_mime = ::Marcel::MimeType.for(file_set.original_file.file_name)
+      if fn.include?(file_set.id) || importerexporter.metadata_only?
+        filename = "#{fn}.#{mime.to_sym}"
+        filename = fn if mime.to_s == ext_mime.to_s
+      else
+        filename = "#{fn}.#{mime.to_sym}"
+        filename = "#{fn}" if mime.to_s == ext_mime.to_s
+      end
+      # Remove extention truncate and reattach
+      ext = File.extname(filename)
+      "#{File.basename(filename, ext)[0...(220 - ext.length)]}#{ext}"
+    end
+  end
 end
