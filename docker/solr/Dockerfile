@@ -1,5 +1,9 @@
 FROM solr:8.11.2
 
+USER root
+RUN apt-get update && apt-get upgrade -y
+USER $SOLR_UID
+
 ENV SOLR_CORES=spot
 ENV SOLR_CORE_CONF_DIR=/spot-config
 ENV SOLR_HOST=localhost
