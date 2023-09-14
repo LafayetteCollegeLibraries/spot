@@ -35,7 +35,6 @@ module Spot
         super
       end
 
-
       # @param [Hyrax::Actors::Environment] env
       # @return [DateTime]
       def get_date_uploaded_value(env)
