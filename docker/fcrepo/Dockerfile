@@ -3,6 +3,7 @@ FROM ghcr.io/samvera/fcrepo4:4.7.5
 # install netcat so we can wait for the postgres db to be up
 # before starting fedora
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends netcat && \
     apt-get clean
 
