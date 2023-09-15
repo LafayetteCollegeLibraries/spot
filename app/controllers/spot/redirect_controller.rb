@@ -12,8 +12,6 @@ module Spot
   #   RewriteEngine on
   #   RewriteRule ^collections\/[a-z0-9\-]+/[a-z0-9\-]+ https://ldr.lafayette.edu/redirect?url=http://digital.lafayette.edu%{REQUEST_URI} [L,QSA]
   #
-  # @todo This should be abstracted out, as the {IdentifierController}
-  #       (soon to be HandleController) follows (almost) the same  logic.
   class RedirectController < ApplicationController
     include ::Hydra::Catalog
     include ::Spot::RedirectionHelpers
@@ -24,10 +22,14 @@ module Spot
       result, _documents = repository.search(query)
 
       raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
-
       document = result.response['docs'].first
 
       redirect_to redirect_params_for(solr_document: document)
+    rescue => error
+      Rails.logger.debug(%([Spot::RedirectController] Received an #{error.class} while parsing url "#{params[:url]}" => "#{error.message}")) \
+        unless error.is_a?(Blacklight::Exceptions::RecordNotFound)
+
+      raise Blacklight::Exceptions::RecordNotFound
     end
 
     private
