@@ -9,6 +9,7 @@ RUN apk --no-cache update && \
     apk --no-cache add \
         aws-cli \
         build-base \
+        clamav \
         coreutils \
         curl \
         git \
@@ -28,7 +29,6 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads \
     BUNDLE_FORCE_RUBY_PLATFORM=1
 
-# @todo upgrade the Gemfile bundler version to 2 to remove version constraint
 RUN gem install bundler
 
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
