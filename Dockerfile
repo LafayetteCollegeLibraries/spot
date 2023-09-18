@@ -62,8 +62,11 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" \
 # Base container for local development. Reruns bundle install for dev gems
 ##
 FROM spot-base as spot-development
-ENV RAILS_ENV=development
 RUN apk add --no-cache --update yarn
+
+ENV RAILS_ENV=development
+ENV RAILS_CONSIDER_ALL_REQUESTS_LOCAL="1"
+ENV RAILS_ENABLE_CONTROLLER_CACHING="0"
 
 # install awscli the hard way (via python) bc our base image is
 # too old to include it in the alpine 3.10 apk
