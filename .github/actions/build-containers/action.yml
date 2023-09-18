@@ -47,10 +47,6 @@ runs:
         username: ${{ inputs.username }}
         password: ${{ inputs.password }}
     -
-      name: Set current build date
-      run: |
-        echo "build_date=$(date +'%Y%m%d')" >> $GITHUB_ENV
-    -
       name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     -
