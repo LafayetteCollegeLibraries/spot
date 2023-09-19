@@ -307,7 +307,7 @@ Hyrax.config do |config|
   ]
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
-  config.virus_scanner = Spot::VirusScanner
+  config.virus_scanner = Rails.env.test? ? nil : Spot::VirusScanner
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
