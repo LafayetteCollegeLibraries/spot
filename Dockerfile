@@ -80,6 +80,8 @@ RUN bundle config unset with &&\
 COPY . /spot/
 
 ENV RAILS_ENV=development
+ENV RAILS_CONSIDER_ALL_REQUESTS_LOCAL="1"
+ENV RAILS_ENABLE_CONTROLLER_CACHING="0"
 
 ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
