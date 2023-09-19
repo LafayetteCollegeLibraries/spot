@@ -51,6 +51,8 @@ gem 'blacklight_range_limit', '~> 6.3.3'
 # start up the server faster
 gem 'bootsnap', '~> 1.16', require: false
 
+gem 'clamby', '1.6.8'
+
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
 gem 'coffee-rails', '~> 5.0.0'
