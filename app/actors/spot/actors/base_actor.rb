@@ -62,9 +62,9 @@ module Spot
       # @return [void]
       def transform_controlled_properties(env)
         env.curation_concern.class.controlled_properties.map(&:to_s).each do |property|
-          next if env.attributes[property].blank?
-
           values = env.attributes.delete(property)
+          next if values.blank?
+
           env.attributes[:"#{property}_attributes"] = Array.wrap(values).map { |value| { id: value } }
         end
       end
