@@ -16,23 +16,25 @@ module Spot
     include ::Hydra::Catalog
     include ::Spot::RedirectionHelpers
 
+    # Send the user to the object if we can find one, otherwise sned a :not_found response
+    # via Blacklight::Exceptions::RecordNotFound
     def show
-      # all that we need for this controller are the object's ID + Hydra Model
-      query = solr_query_for_identifier.merge(fl: ['id', 'has_model_ssim'])
-      result, _documents = repository.search(query)
-
-      raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
-      document = result.response['docs'].first
-
-      redirect_to redirect_params_for(solr_document: document)
+      redirect_to document_params
     rescue => error
-      Rails.logger.debug(%([Spot::RedirectController] Received an #{error.class} while parsing url "#{params[:url]}" => "#{error.message}")) \
-        unless error.is_a?(Blacklight::Exceptions::RecordNotFound)
-
+      log_error(error) unless error.is_a?(Blacklight::Exceptions::RecordNotFound)
       raise Blacklight::Exceptions::RecordNotFound
     end
 
     private
+
+    def document_params
+      # The only fields we'll need to generate a URL (or url_helper params) is are id and has_model_ssim.
+      result, _documents = repository.search(q: "{!terms f=identifier_ssim}url:#{http_uri}", fl: ['id', 'has_model_ssim'], defType: 'lucene')
+      document = result.response['docs']&.first
+
+      raise Blacklight::Exceptions::RecordNotFound if document.nil?
+      redirect_params_for(solr_document: document)
+    end
 
     # Ensures that the URL we're searching for is http (and not https)
     #
@@ -41,9 +43,8 @@ module Spot
       URI.parse(params[:url]).tap { |url| url.scheme = 'http' }.to_s
     end
 
-    # @return [Hash<Symbol => String>]
-    def solr_query_for_identifier
-      { defType: 'lucene', q: "{!terms f=identifier_ssim}url:#{http_uri}" }
+    def log_error(error)
+      Rails.logger.debug(%([Spot::RedirectController] Received an #{error.class} while parsing url "#{params[:url]}" => "#{error.message}")) \
     end
   end
 end
