@@ -119,7 +119,7 @@ gem 'rubyzip', '~> 2.3.2'
 
 # our jobs server
 gem 'sidekiq', '~> 5.2.9'
-gem 'sidekiq-cron', '~> 1.2.0'
+gem 'sidekiq-cron', '~> 1.9.1'
 
 # using Slack for some of our messaging
 gem 'slack-ruby-client', '~> 0.14.6'
