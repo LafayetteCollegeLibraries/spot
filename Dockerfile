@@ -3,19 +3,17 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.7.7-alpine as spot-base
-RUN apk --no-cache update && \
-    apk --no-cache upgrade && \
-    apk --no-cache add \
-        aws-cli \
-        build-base \
+FROM ruby:2.7.8-slim-bullseye as spot-base
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        awscli \
+        build-essential \
         coreutils \
         curl \
         git \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql postgresql-dev \
+        postgresql-13 libpq-dev \
         ruby-dev \
         tzdata \
         yarn \
@@ -29,9 +27,9 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     BUNDLE_FORCE_RUBY_PLATFORM=1
 
 # @todo upgrade the Gemfile bundler version to 2 to remove version constraint
-RUN gem install bundler
 
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
+RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
 RUN bundle config unset with && \
     bundle config unset without && \
     bundle config set without "development:test" && \
@@ -147,15 +145,14 @@ ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
-RUN apk --no-cache update && \
-    apk --no-cache add \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         bash \
         ffmpeg \
         ghostscript \
         imagemagick \
         libreoffice \
         mediainfo \
-        openjdk11-jre \
+        openjdk-11-jre \
         perl \
         python3
 
