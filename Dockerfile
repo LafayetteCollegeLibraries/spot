@@ -97,6 +97,45 @@ COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 
+##
+# TARGET: fits-builder
+# Downloads the .zip file found at $FITS_URL and extracts the files into `/output` for copying
+# in the Sidekiq container. If the URL provided is a .zip of a Git branch (rather than a release),
+# the files are extracted, built, and moved to the `/output` directory.
+#
+# By default this uses the release version defined by FITS_VERSION.
+##
+FROM maven:3.9-sapmachine-11 as fits-builder
+
+# need bash shell to use compgen function below
+SHELL ["/bin/bash", "-c"]
+ENV SHELL=/bin/bash
+
+RUN apt-get update && apt-get install -y unzip
+
+# Version of FITS to install (stored in ENV as a troubleshooting measure)
+# see: https://github.com/harvard-lts/fits
+ARG FITS_VERSION="1.6.0"
+ENV FITS_VERSION="${FITS_VERSION}"
+ARG FITS_URL="https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip"
+ENV FITS_URL="${FITS_URL}"
+
+# Downloads the .zip file found at $FITS_URL and extracts the files into `/output` for copying
+# in the Sidekiq container. If the URL provided is a .zip of a Git branch (rather than a release),
+# the files are extracted, built, and moved to the `/output` directory.
+RUN shopt -s dotglob; \
+    mkdir /build /output; \
+    curl -Ls -o /build/fits.zip "${FITS_URL}"; \
+    unzip -d /build -qq /build/fits.zip; \
+    if find /build -maxdepth 1 -type d -name "fits-*" | grep . > /dev/null; \
+    then \
+        mv /build/* /build; \
+        cd /build && mvn clean package -DskipTests; \
+        unzip -d /output -qq $(compgen -G "/build/target/fits-*.zip" | head -n 1); \
+    else \
+        mv /build/* /output; \
+    fi; \
+    chmod a+x /output/fits.sh
 
 ##
 # TARGET: spot-worker
@@ -107,11 +146,6 @@ FROM spot-base as spot-worker-base
 ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
-
-# Version of FITS to install (stored in ENV as a troubleshooting measure)
-# see: https://github.com/harvard-lts/fits
-ARG FITS_VERSION=1.6.0
-ENV FITS_VERSION=${FITS_VERSION}
 
 RUN apk --no-cache update && \
     apk --no-cache add \
@@ -127,15 +161,9 @@ RUN apk --no-cache update && \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
-RUN mkdir -p /usr/local/fits && \
-    cd /usr/local/fits && \
-    wget "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" -O fits.zip && \
-    unzip fits.zip && \
-    rm fits.zip && \
-    chmod a+x /usr/local/fits/fits.sh
-
+COPY --from=fits-builder /output /usr/local/fits
 ENV PATH="${PATH}:/usr/local/fits"
+
 CMD ["bundle", "exec", "sidekiq"]
 EXPOSE 3000
 
