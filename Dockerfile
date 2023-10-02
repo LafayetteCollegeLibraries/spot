@@ -95,45 +95,6 @@ COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 
-##
-# TARGET: fits-builder
-# Downloads the .zip file found at $FITS_URL and extracts the files into `/output` for copying
-# in the Sidekiq container. If the URL provided is a .zip of a Git branch (rather than a release),
-# the files are extracted, built, and moved to the `/output` directory.
-#
-# By default this uses the release version defined by FITS_VERSION.
-##
-FROM maven:3.9-sapmachine-11 as fits-builder
-
-# need bash shell to use compgen function below
-SHELL ["/bin/bash", "-c"]
-ENV SHELL=/bin/bash
-
-RUN apt-get update && apt-get install -y unzip
-
-# Version of FITS to install (stored in ENV as a troubleshooting measure)
-# see: https://github.com/harvard-lts/fits
-ARG FITS_VERSION="1.6.0"
-ENV FITS_VERSION="${FITS_VERSION}"
-ARG FITS_URL="https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip"
-ENV FITS_URL="${FITS_URL}"
-
-# Downloads the .zip file found at $FITS_URL and extracts the files into `/output` for copying
-# in the Sidekiq container. If the URL provided is a .zip of a Git branch (rather than a release),
-# the files are extracted, built, and moved to the `/output` directory.
-RUN shopt -s dotglob; \
-    mkdir /build /output; \
-    curl -Ls -o /build/fits.zip "${FITS_URL}"; \
-    unzip -d /build -qq /build/fits.zip; \
-    if find /build -maxdepth 1 -type d -name "fits-*" | grep . > /dev/null; \
-    then \
-        mv /build/* /build; \
-        cd /build && mvn clean package -DskipTests; \
-        unzip -d /output -qq $(compgen -G "/build/target/fits-*.zip" | head -n 1); \
-    else \
-        mv /build/* /output; \
-    fi; \
-    chmod a+x /output/fits.sh
 
 ##
 # TARGET: spot-worker
@@ -154,11 +115,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         mediainfo \
         openjdk-11-jre \
         perl \
-        python3
+        python3 \
+        unzip
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-COPY --from=fits-builder /output /usr/local/fits
+# fix for ImageMagick to remove security policy for PDFs (and other ghostscript types)
+# @see https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion#comment110879511_59193253
+RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+
+# Install FITS based on Hyrax's Dockerfile
+#
+# @see https://github.com/harvard-lts/fits
+# @see https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65
+ARG FITS_VERSION="1.6.0"
+ENV FITS_VERSION="${FITS_VERSION}"
+
+RUN mkdir -p /usr/local/fits; \
+    cd /usr/local/fits; \
+    curl -Lso fits.zip "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip"; \
+    unzip fits.zip; \
+    rm fits.zip; \
+    chmod a+x /usr/local/fits/fits.sh
+
 ENV PATH="${PATH}:/usr/local/fits"
 
 CMD ["bundle", "exec", "sidekiq"]
