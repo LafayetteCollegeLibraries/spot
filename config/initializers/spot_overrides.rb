@@ -140,4 +140,21 @@ Rails.application.config.to_prepare do
       "#{File.basename(filename, ext)[0...(220 - ext.length)]}#{ext}"
     end
   end
+
+  Bulkrax::CsvEntry.class_eval do
+    def build_files_metadata
+      # attaching files to the FileSet row only so we don't have duplicates when importing to a new tenant
+      if hyrax_record.work?
+        build_thumbnail_files
+      end
+
+      file_mapping = key_for_export('file')
+      file_sets = hyrax_record.file_set? ? Array.wrap(hyrax_record) : hyrax_record.file_sets
+      filenames = map_file_sets(file_sets)
+
+      handle_join_on_export(file_mapping, filenames, mapping['file']&.[]('join')&.present?)
+    end
+  end
+
+  Bulkrax::CsvParser.prepend(Spot::SpotCsvParser)
 end
