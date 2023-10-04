@@ -144,9 +144,7 @@ Rails.application.config.to_prepare do
   Bulkrax::CsvEntry.class_eval do
     def build_files_metadata
       # attaching files to the FileSet row only so we don't have duplicates when importing to a new tenant
-      if hyrax_record.work?
-        build_thumbnail_files
-      end
+      build_thumbnail_files if hyrax_record.work?
 
       file_mapping = key_for_export('file')
       file_sets = hyrax_record.file_set? ? Array.wrap(hyrax_record) : hyrax_record.file_sets
@@ -157,7 +155,7 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::ParserExportRecordSet::All.class_eval do
-    # Uncomment if you don't want to include collections metadata in your exports
+    # Uncomment if you don't want to include collections metadata in the 'All' exports
     #
     # def collections
     #   []
