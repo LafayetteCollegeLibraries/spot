@@ -156,5 +156,15 @@ Rails.application.config.to_prepare do
     end
   end
 
-  Bulkrax::CsvParser.prepend(Spot::SpotCsvParser)
+  Bulkrax::ParserExportRecordSet::All.class_eval do
+    # Uncomment if you don't want to include collections metadata in your exports
+    #
+    # def collections
+    #   []
+    # end
+
+    def file_sets
+      []
+    end
+  end
 end

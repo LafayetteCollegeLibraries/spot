@@ -69,23 +69,19 @@ Bulkrax.setup do |config|
     }
   }
 
-  # Remove the QualifiedDC parser
-  config.parsers -= [{ name: "OAI - Qualified Dublin Core", class_name: "Bulkrax::OaiQualifiedDcParser", partial: "oai_fields" }]
+  # # Remove the QualifiedDC parser
+  # config.parsers -= [{ name: "OAI - Qualified Dublin Core", class_name: "Bulkrax::OaiQualifiedDcParser", partial: "oai_fields" }]
 
-  # Remove the DC parser
-  config.parsers -= [{ name: "OAI - Dublin Core", class_name: "Bulkrax::OaiDcParser", partial: "oai_fields" }]
+  # # Remove the DC parser
+  # config.parsers -= [{ name: "OAI - Dublin Core", class_name: "Bulkrax::OaiDcParser", partial: "oai_fields" }]
 
-  # Remove the Bagit parser
-  config.parsers -= [{ name: "Bagit", class_name: "Bulkrax::BagitParser", partial: "bagit_fields" }]
+  # # Remove the Bagit parser
+  # config.parsers -= [{ name: "Bagit", class_name: "Bulkrax::BagitParser", partial: "bagit_fields" }]
 
-  # Remove the XML parser
-  config.parsers -= [{ name: "XML", class_name: "Bulkrax::XmlParser", partial: "xml_fields" }]
+  # # Remove the XML parser
+  # config.parsers -= [{ name: "XML", class_name: "Bulkrax::XmlParser", partial: "xml_fields" }]
 
-  # Remove the original CSV parser
-  config.parsers -= [{ name: "CSV - Comma Separated Values", class_name: "Bulkrax::CsvParser", partial: "csv_fields" }]
-
-  # Add custom CSV parser
-  config.parsers += [{ name: "CSV - Lafayette", class_name: "Bulkrax::CsvSpotParser", partial: "csv_fields" }]
+  config.parsers = [{ name: "CSV - Comma Separated Values", class_name: "Bulkrax::CsvSpotParser", partial: "csv_fields" }]
 
   config.fill_in_blank_source_identifiers = lambda do |parser, index|
     metadata = parser.records(index)
