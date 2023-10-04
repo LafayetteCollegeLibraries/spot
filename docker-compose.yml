@@ -103,8 +103,6 @@ services:
     build:
       context: .
       target: spot-worker-development
-      # args:
-        # - FITS_SRC_URL=https://github.com/harvard-lts/fits/archive/refs/heads/main.zip
     env_file:
       - .env.local
     ports:
