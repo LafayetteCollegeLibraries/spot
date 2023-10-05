@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 Hyrax.config do |config|
-  config.register_curation_concern :publication
-  config.register_curation_concern :image
-  config.register_curation_concern :student_work
+  config.register_curation_concern :publication, :image, :student_work, :audio_visual
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
@@ -120,7 +118,7 @@ Hyrax.config do |config|
   # Should work creation require file upload, or can a work be created first
   # and a file added at a later time?
   # The default is true.
-  # config.work_requires_files = true
+  config.work_requires_files = false
 
   # Enable IIIF image service. This is required to use the
   # UniversalViewer-ified show page

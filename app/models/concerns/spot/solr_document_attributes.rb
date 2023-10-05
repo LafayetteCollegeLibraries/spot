@@ -72,6 +72,9 @@ module Spot
       attribute :advisor,                ::Blacklight::Types::Array,  'advisor_ssim'
       attribute :advisor_label,          ::Blacklight::Types::Array,  'advisor_label_ssim'
 
+      # AudioVisual properties
+      attribute :embed_url,              ::Blacklight::Types::Array, 'embed_url_ssim'
+
       # FileSet properties
       attribute :file_set_ids,           ::Blacklight::Types::Array,  'file_set_ids_ssim'
       attribute :file_size,              ::Blacklight::Types::String, 'file_size_lts'

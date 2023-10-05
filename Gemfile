@@ -114,6 +114,8 @@ gem 'rdf-vocab', '~> 3.2.3'
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '~> 2.4.0'
 
+gem 'ruby-oembed', '~> 0.16.1', require: 'oembed'
+
 # used in conjunction with our importers to zip/unzip files
 gem 'rubyzip', '~> 2.3.2'
 

@@ -1,0 +1,8 @@
+<%# @todo what happens when an AudioVisual work doesn't have an embed_url? %>
+
+<% if presenter.embed_url.present? %>
+  <% resource = OEmbed::Providers.get(presenter.embed_url.first) rescue nil %>
+  <% if resource %>
+    <%= resource.html.html_safe %>
+  <% end %>
+<% end %>

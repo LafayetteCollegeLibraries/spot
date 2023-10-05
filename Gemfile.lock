@@ -879,6 +879,7 @@ GEM
       json
       multipart-post
       oauth2
+    ruby-oembed (0.16.1)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -1101,6 +1102,7 @@ DEPENDENCIES
   rspec-its (~> 1.1)
   rspec-rails (~> 5.1)
   rspec_junit_formatter (~> 0.4.1)
+  ruby-oembed (~> 0.16.1)
   rubyzip (~> 2.3.2)
   sass-rails (~> 5.1.0)
   shoulda-matchers (~> 4)
