@@ -8,7 +8,7 @@ Bulkrax.setup do |config|
   # Your application metadata fields are the key
   #   from: fields in the incoming source data
   config.field_mappings = {
-    "Bulkrax::CsvSpotParser" => {
+    "Bulkrax::CsvParser" => {
       "admin_set" => { from: ["admin_set"], split: '\|', join: '|' },
       "date_uploaded" => { from: ["date_uploaded"], split: '\|', join: '|' },
       "depositor" => { from: ["depositor"], split: '\|', join: '|' },
