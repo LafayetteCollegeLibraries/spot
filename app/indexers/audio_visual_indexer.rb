@@ -10,7 +10,7 @@ class AudioVisualIndexer < BaseIndexer
 
   private
 
-  def add_oembed_index_data(solr_doc)
+  def add_oembed_index_data(_solr_doc)
     return if oembed_url.nil?
 
     # do some processing

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Register valid OEmbed endpoints
 #
 # @todo Should we clear out the existing providers so that only ours will apply?

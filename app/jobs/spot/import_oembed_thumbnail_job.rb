@@ -11,9 +11,6 @@ module Spot
       oembed_data = OEmbed::Providers.get(work.embed_url.first)
       return if oembed_data.try(:thumbnail_url).blank?
 
-      url = oembed_data.thumbnail_url
-      remote_file_data = { url: oembed_data.thumbnail_url }
-
       user = nil
       user = User.find(user_id) if user_id.present?
 
