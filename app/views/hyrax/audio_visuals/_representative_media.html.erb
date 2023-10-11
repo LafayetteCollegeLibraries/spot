@@ -3,6 +3,8 @@
 <% if presenter.embed_url.present? %>
   <% resource = OEmbed::Providers.get(presenter.embed_url.first) rescue nil %>
   <% if resource %>
+  <div class="embed-responsive embed-responsive-16by9">
     <%= resource.html.html_safe %>
+  </div>
   <% end %>
 <% end %>
