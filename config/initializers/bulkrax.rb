@@ -28,7 +28,7 @@ Bulkrax.setup do |config|
       "rights_holder" => { from: ["rights_holder"], split: '\|', join: '|' },
       "rights_statement" => { from: ["rights_statement"], split: '\|', join: '|' },
       "source" => { from: ["source"], split: '\|', join: '|' },
-      "source_identifier" => { from: ["source_identifier"], join: '|' },
+      "source_identifier" => { from: ["source_identifier"], join: '|', source_identifier: true },
       "subject" => { from: ["subject"], split: '\|', join: '|' },
       "subtitle" => { from: ["subtitle"], split: '\|', join: '|' },
       "title" => { from: ["title"], split: '\|', join: '|' },
