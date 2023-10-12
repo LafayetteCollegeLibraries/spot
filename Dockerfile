@@ -4,11 +4,16 @@
 # Use this as the base image for the Rails / Sidekiq services.
 ##
 FROM ruby:2.7.8-slim-bullseye as spot-base
-RUN apt-get update && apt-get install -y --no-install-recommends \
+
+RUN apt update && \
+    apt install -y --no-install-recommends ca-certificates curl gnupg && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt update && apt install -y --no-install-recommends \
         awscli \
         build-essential \
         coreutils \
-        curl \
         git \
         netcat-openbsd \
         nodejs \
@@ -16,7 +21,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         postgresql-13 libpq-dev \
         ruby-dev \
         tzdata \
-        yarn \
         zip
 
 WORKDIR /spot
@@ -52,11 +56,8 @@ FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
 COPY . /spot
 
-# Need to put in a fake FEDORA_URL variable so Wings can initialize
-RUN SECRET_KEY_BASE="$(bin/rake secret)" \
-    FEDORA_URL="http://fakehost:8080/rest" \
-    bundle exec rake assets:precompile
-
+RUN corepack enable && \
+    SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
 
 ##
 # TARGET: spot-web
@@ -106,7 +107,7 @@ ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt update && apt install -y --no-install-recommends \
         bash \
         ffmpeg \
         ghostscript \
