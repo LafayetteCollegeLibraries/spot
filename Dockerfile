@@ -3,19 +3,17 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.7.7-alpine as spot-base
-RUN apk --no-cache update && \
-    apk --no-cache upgrade && \
-    apk --no-cache add \
-        aws-cli \
-        build-base \
+FROM ruby:2.7.8-slim-bullseye as spot-base
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        awscli \
+        build-essential \
         coreutils \
         curl \
         git \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql postgresql-dev \
+        postgresql-13 libpq-dev \
         ruby-dev \
         tzdata \
         yarn \
@@ -29,9 +27,9 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     BUNDLE_FORCE_RUBY_PLATFORM=1
 
 # @todo upgrade the Gemfile bundler version to 2 to remove version constraint
-RUN gem install bundler
 
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
+RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
 RUN bundle config unset with && \
     bundle config unset without && \
     bundle config set without "development:test" && \
@@ -108,34 +106,40 @@ ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
-# Version of FITS to install (stored in ENV as a troubleshooting measure)
-# see: https://github.com/harvard-lts/fits
-ARG FITS_VERSION=1.6.0
-ENV FITS_VERSION=${FITS_VERSION}
-
-RUN apk --no-cache update && \
-    apk --no-cache add \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         bash \
         ffmpeg \
         ghostscript \
         imagemagick \
         libreoffice \
         mediainfo \
-        openjdk11-jre \
+        openjdk-11-jre \
         perl \
-        python3
+        python3 \
+        unzip
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
-RUN mkdir -p /usr/local/fits && \
-    cd /usr/local/fits && \
-    wget "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" -O fits.zip && \
-    unzip fits.zip && \
-    rm fits.zip && \
+# fix for ImageMagick to remove security policy for PDFs (and other ghostscript types)
+# @see https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion#comment110879511_59193253
+RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+
+# Install FITS based on Hyrax's Dockerfile
+#
+# @see https://github.com/harvard-lts/fits
+# @see https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65
+ARG FITS_VERSION="1.6.0"
+ENV FITS_VERSION="${FITS_VERSION}"
+
+RUN mkdir -p /usr/local/fits; \
+    cd /usr/local/fits; \
+    curl -Lso fits.zip "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip"; \
+    unzip fits.zip; \
+    rm fits.zip; \
     chmod a+x /usr/local/fits/fits.sh
 
 ENV PATH="${PATH}:/usr/local/fits"
+
 CMD ["bundle", "exec", "sidekiq"]
 EXPOSE 3000
 

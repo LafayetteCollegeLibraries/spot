@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ ! -z "$AWS_IIIF_ASSET_BUCKET" ]]; then
   echo "creating s3 bucket"

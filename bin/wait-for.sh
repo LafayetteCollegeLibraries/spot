@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # copied from hyrax core. waits for connection to be available
 # before executing passed code.

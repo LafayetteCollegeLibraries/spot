@@ -5,7 +5,7 @@ orbs:
 executors:
   ruby:
     docker:
-      - image: cimg/ruby:2.7.7-browsers
+      - image: cimg/ruby:2.7.8-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -15,7 +15,7 @@ executors:
 
   application:
     docker:
-      - image: cimg/ruby:2.7.7-browsers
+      - image: cimg/ruby:2.7.8-browsers
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
