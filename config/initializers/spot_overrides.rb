@@ -155,14 +155,48 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::ParserExportRecordSet::All.class_eval do
-    # Uncomment if you don't want to include collections metadata in the 'All' exports
-    #
-    # def collections
-    #   []
-    # end
+    def collections
+      if importerexporter.export_type == 'round_trip'
+        @collections ||= ParserExportRecordSet.in_batches(complete_entry_identifiers) do |ids|
+          ActiveFedora::SolrService.query(
+            "has_model_ssim:Collection #{extra_filters}",
+            **query_kwargs.merge(
+              fq: [
+                %(#{solr_name(work_identifier)}:("#{ids.join('" OR "')}")),
+                "has_model_ssim:Collection"
+              ],
+              fl: "id"
+            )
+          )
+        end
+      else
+        []
+      end
+    end
 
     def file_sets
-      []
+      if importerexporter.export_type == 'round_trip'
+        @file_sets ||= ParserExportRecordSet.in_batches(candidate_file_set_ids) do |batch_of_ids|
+          fsq = "has_model_ssim:#{Bulkrax.file_model_class} AND id:(\"" + batch_of_ids.join('" OR "') + "\")"
+          fsq += extra_filters if extra_filters.present?
+          ActiveFedora::SolrService.query(
+            fsq,
+            { fl: "id", method: :post, rows: batch_of_ids.size }
+          )
+        end
+      else
+        []
+      end
+    end
+  end
+
+  Bulkrax::Exporter.class_eval do
+    def export_type_list
+      [
+        [I18n.t('bulkrax.exporter.labels.metadata'), 'metadata'],
+        [I18n.t('bulkrax.exporter.labels.full'), 'full'],
+        [I18n.t('bulkrax.exporter.labels.round_trip'), 'round_trip']
+      ]
     end
   end
 end
