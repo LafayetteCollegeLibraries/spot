@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.feature 'Create an Image', :clean, :js do
+RSpec.feature 'Create an Image', :js do
   before do
     stub_request(:get, subject_uri)
     # Only enqueue the ingest job, not charactarization.

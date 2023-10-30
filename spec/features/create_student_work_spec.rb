@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.feature 'Create a StudentWork', :clean, :js do
+RSpec.feature 'Create a StudentWork', :js do
   before do
     stub_request(:get, subject_uri)
 
