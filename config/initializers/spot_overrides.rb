@@ -155,37 +155,30 @@ Rails.application.config.to_prepare do
   end
 
   Bulkrax::ParserExportRecordSet::All.class_eval do
-    def collections
-      if importerexporter.export_type == 'round_trip'
-        @collections ||= ParserExportRecordSet.in_batches(complete_entry_identifiers) do |ids|
-          ActiveFedora::SolrService.query(
-            "has_model_ssim:Collection #{extra_filters}",
-            **query_kwargs.merge(
-              fq: [
-                %(#{solr_name(work_identifier)}:("#{ids.join('" OR "')}")),
-                "has_model_ssim:Collection"
-              ],
-              fl: "id"
-            )
-          )
-        end
-      else
-        []
-      end
-    end
+    # def collections
+    #   if importerexporter.export_type == 'round_trip'
+    #     @collections ||= ParserExportRecordSet.in_batches(complete_entry_identifiers) do |ids|
+    #       ActiveFedora::SolrService.query(
+    #         "has_model_ssim:Collection #{extra_filters}",
+    #         **query_kwargs.merge(
+    #           fq: [
+    #             %(#{solr_name(work_identifier)}:("#{ids.join('" OR "')}")),
+    #             "has_model_ssim:Collection"
+    #           ],
+    #           fl: "id"
+    #         )
+    #       )
+    #     end
+    #   else
+    #     []
+    #   end
+    # end
 
     def file_sets
       if importerexporter.export_type == 'round_trip'
-        @file_sets ||= ParserExportRecordSet.in_batches(candidate_file_set_ids) do |batch_of_ids|
-          fsq = "has_model_ssim:#{Bulkrax.file_model_class} AND id:(\"" + batch_of_ids.join('" OR "') + "\")"
-          fsq += extra_filters if extra_filters.present?
-          ActiveFedora::SolrService.query(
-            fsq,
-            { fl: "id", method: :post, rows: batch_of_ids.size }
-          )
-        end
-      else
         []
+      else
+        super
       end
     end
   end
