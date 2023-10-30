@@ -120,7 +120,7 @@ RSpec.describe Collection do
     end
   end
 
-  # note: this should fail when we update to hyrax@3 because we'll need to stub +Hyrax.query_service+
+  # NOTE: this should fail when we update to hyrax@3 because we'll need to stub +Hyrax.query_service+
   describe '#add_member_objects' do
     let(:work) { Publication.new(id: 'publication-to-add-to-collections') }
 

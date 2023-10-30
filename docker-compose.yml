@@ -1,11 +1,10 @@
-
-version: '3.7'
+version: '3.9'
 services:
   app:
-    image: lafayette/rails_web
+    image: lafayette/spot-web
     build:
       context: .
-      target: spot-development
+      target: spot-web-development
     volumes:
       - .:/spot
       - ./ingest:/spot/ingest
@@ -23,8 +22,6 @@ services:
       - db_migrate
     stdin_open: true
     tty: true
-    entrypoint: ["/spot/bin/spot-dev-entrypoint.sh"]
-    command: ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
   cantaloupe:
     image: uclalibrary/cantaloupe:4.1.5
@@ -40,10 +37,10 @@ services:
       CANTALOUPE_S3SOURCE_ENDPOINT: "http://minio:9000"
       CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
       CANTALOUPE_LOG_APPLICATION_LEVEL: trace
-    restart: always
+    restart: unless-stopped
 
   db:
-    image: postgres:9.6-alpine
+    image: postgres:13-alpine
     volumes:
       - db:/var/lib/postgresql/data
       - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql
@@ -53,10 +50,10 @@ services:
       POSTGRES_DB: spot_dev
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
-    restart: always
+    restart: unless-stopped
 
   db_migrate:
-    image: lafayette/rails_web
+    image: lafayette/spot-web
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
@@ -77,7 +74,7 @@ services:
       FCREPO_POSTGRES_HOST: db
       FCREPO_POSTGRES_USER: spot_fcrepo_dev_user
       FCREPO_POSTGRES_PASSWORD: spot_fcrepo_dev_pw
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
 
@@ -97,15 +94,15 @@ services:
     image: redis:alpine
     volumes:
       - redis:/data
-    restart: always
+    restart: unless-stopped
     ports:
       - 6379:6379
 
   sidekiq:
-    image: lafayette/rails_worker:dev
+    image: lafayette/spot-worker
     build:
       context: .
-      target: spot-worker
+      target: spot-worker-development
     env_file:
       - .env.local
     ports:
@@ -115,7 +112,7 @@ services:
       - .:/spot
       - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
-    restart: always
+    restart: unless-stopped
     depends_on:
       - db
       - fedora
@@ -132,7 +129,7 @@ services:
     environment:
       - SOLR_CORES=spot-development,spot-test
       - SOLR_HOST=solr
-    restart: always
+    restart: unless-stopped
 
 
 volumes:

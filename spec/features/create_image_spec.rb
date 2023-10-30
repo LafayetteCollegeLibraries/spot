@@ -28,7 +28,7 @@ RSpec.feature 'Create an Image', :clean, :js do
       scenario do
         visit '/dashboard'
         click_link 'Works'
-        click_link 'Add new work'
+        click_link 'Add New Work'
 
         sleep 1
 
@@ -151,7 +151,7 @@ RSpec.feature 'Create an Image', :clean, :js do
         click_link 'Files'
         expect(page).to have_content 'Add files'
 
-        within('span#addfiles') do
+        within('#add-files') do
           attach_file('files[]', "#{::Rails.root}/spec/fixtures/document.pdf", visible: false)
         end
 

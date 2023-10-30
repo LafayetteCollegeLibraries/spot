@@ -66,7 +66,7 @@ module Spot
 
     def handle_certificate
       cert_pem = self.class.handle_client_cert
-      raise "HANDLE_CLIENT_CERT_PEM isn't present" unless cert_pem.present?
+      raise "HANDLE_CLIENT_CERT_PEM isn't present" if cert_pem.blank?
 
       OpenSSL::X509::Certificate.new(cert_pem)
     end
@@ -78,7 +78,7 @@ module Spot
 
     def handle_key
       handle_key = self.class.handle_client_key
-      raise "HANDLE_CLIENT_KEY_PEM isn't present" unless handle_key.present?
+      raise "HANDLE_CLIENT_KEY_PEM isn't present" if handle_key.blank?
 
       OpenSSL::PKey.read(handle_key)
     end
@@ -98,8 +98,8 @@ module Spot
 
     # @return [String]
     def permalink_url
-      # need to use URI.decode as the slashes in our handle_id will be encoded by +handle_url+
-      URI.decode(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
+      # need to use CGI.unescape as the slashes in our handle_id will be encoded by +handle_url+
+      CGI.unescape(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
     end
 
     # @param [Hash] options

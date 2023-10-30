@@ -21,10 +21,12 @@ module Spot
     # @param [String] file_id
     # @param [String] _base_url
     # @param [String] size
+    # @param [String] format
     # @return [String]
     # @see config/initializers/hyrax.rb
-    def self.image_url(file_id, _base_url, size)
-      new(file_id: file_id, base_url: ENV['IIIF_BASE_URL']).image_url(size: size)
+    def self.image_url(file_id, _base_url, size, format:)
+      kwargs = { size: size, format: format }.compact
+      new(file_id: file_id, base_url: ENV['IIIF_BASE_URL']).image_url(**kwargs)
     end
 
     # Class method to be used via Hyrax initializer for generating an info.json URL.

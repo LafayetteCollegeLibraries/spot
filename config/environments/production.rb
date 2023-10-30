@@ -11,9 +11,11 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
-  # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
+  # Full error reports are disabled and caching is turned on,
+  # but both are toggleable from ENV variables to ease development
+  # on Stage environments (which are run in Prod env)
+  config.consider_all_requests_local = ActiveModel::Type::Boolean.new.cast(ENV.fetch('RAILS_CONSIDER_ALL_REQUESTS_LOCAL', false))
+  config.action_controller.perform_caching = ActiveModel::Type::Boolean.new.cast(ENV.fetch('RAILS_ENABLE_CONTROLLER_CACHING', true))
 
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
   # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
@@ -74,7 +76,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:   ENV['RAILS_SMTP_URL'],
+    address: ENV['RAILS_SMTP_URL'],
     user_name: ENV['RAILS_SMTP_USER'],
     password: ENV['RAILS_SMTP_PASSWORD'],
     port: 587
@@ -103,7 +105,6 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # use our error_controller to render error pages
-  # (see: https://stackoverflow.com/a/24239490)
-  config.exceptions_app = ->(env) { ErrorController.action(:show).call(env) }
+  # use ssl for everything
+  config.force_ssl = true
 end

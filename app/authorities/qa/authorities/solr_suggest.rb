@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Qa::Authorities
-  # An base class for building out local authorities to use Solr's
+  # A base class for building out local authorities to use Solr's
   # suggestion engine for autocomplete-options for fields.
   # This is a more flexible approach than using Blacklight's
   # suggestion search, which appears to only work for a single field.
@@ -33,7 +33,7 @@ module Qa::Authorities
   #     <str name="field">keyword_suggest_ssim</str>
   #   </lst>
   #
-  class SolrSuggest < Qa::Authorities::Base
+  class SolrSuggest
     BUILD_ALL_KEYWORD = :__all__
 
     attr_reader :dictionary
@@ -70,8 +70,13 @@ module Qa::Authorities
       {}
     end
 
+    # @see https://github.com/samvera/questioning_authority/blob/main/lib/qa/authorities/base.rb
     def all
       []
+    end
+
+    def find(_id)
+      {}
     end
 
     private

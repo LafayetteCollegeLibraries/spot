@@ -55,6 +55,13 @@ RSpec.describe Spot::ControlledVocabularies::Base do
     end
   end
 
+  describe '#full_label' do
+    it 'uses the first value of :rdf_label' do
+      expect(resource.full_label).to eq labels.first
+      expect(resource).to have_received(:rdf_label).exactly(1).times
+    end
+  end
+
   describe '#preferred_label' do
     subject(:pref_label) { resource.preferred_label }
 

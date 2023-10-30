@@ -5,7 +5,7 @@
 RSpec.describe Spot::CollectionIndexer do
   subject(:solr_doc) { indexer.generate_solr_document }
 
-  # note: we're using 'work' here as the 'indexes ISO language and label'
+  # NOTE: we're using 'work' here as the 'indexes ISO language and label'
   # shared example requires that variable.
   let(:work) { Collection.new(metadata) }
   let(:indexer) { described_class.new(work) }
