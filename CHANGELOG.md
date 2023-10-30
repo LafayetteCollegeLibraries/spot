@@ -1,10 +1,54 @@
 # changelog
 
+## [2023.2] - 2023-10-30
+
+### Enhancements ✨
+
+- Upgrade Ruby to 2.7.8, Hyrax to 3.6.0, and various gems + code fixes (#997, #1043, #1045, #1049, #1051, #1081)
+- Upgrade NodeJS to v20 (#1084)
+- Reinstate `/healthcheck` endpoint (#1054)
+- Generate "Last Updated" value from ENV when present (#1050, #1061)
+- Run `apt-get upgrade` on Fedora and Solr containers to update system dependencies (#1063)
+
+### Bug fixes 🐞
+
+- New collections shouldn't find their way into the homepage's "Recent Works" array (#1062)
+
+
+## [2023.1.3] - 2023-09-21
+
+more bugfixes and backports while we prepare the 2023.2 upgrade release
+
+- GitHub Actions fixes (d1a41c1, #1057)
+- force `Spot::BasePresenter#download_url` to be https:// (#1057)
+- configure rails to `force_ssl` (#1057)
+- add /healthcheck endpoint (#1054)
+- backport reverting back to static error pages (older version of `non-digest-assets` gem) (41616c1, #1053)
+- allow error report rendering and controller caching to be toggled via ENV (7590c61, #1066)
+- use updated Google Analytics GA4 partial (d38442a, #1068)
+
+
+## [2023.1.2] - 2023-08-22
+
+### Bug fixes 🐞
+
+- Correct Rails mail configuration for AWS (#1047)
+
+
+## [2023.1.1] - 2023-08-21
+
+Some last updates for the initial AWS migration.
+
+## updates
+- ActionMailer configured to pull SMTP config values from environment (f856ae7561fd80ebb853f515fe65d1d260c119cf)
+- `Spot::HandleService` now pulls cert values from the environment, rather than files (19235794fa0e0f5e3e73e8c96728ad232efdf7d3)
+
+
 ## [2023.1] - 2023-07-11
 
 Spot is moving to AWS-based infrastructure and this release is the first pass at getting it running in the cloud. Spot 2.0 if you will! (see #947 for PR)
 
-## Cloud Changes ☁️ 
+## Cloud Changes ☁️
 - IIIF derivatives are stored in an S3 bucket and accessed via Samvera's [`serverless-iiif`](https://github.com/samvera/serverless-iiif) project
   - Minio (for S3) and Cantaloupe (for IIIF serving) are used for local development
 - FCRepo, Handle, and Solr services are now Dockerized locally
@@ -21,7 +65,7 @@ Spot is moving to AWS-based infrastructure and this release is the first pass at
 - Facet added for `advisor`, replacing `organization` (#991, @jwellnit)
 - Google Scholar `<meta/>` tags added to work displays (#1005, @jwellnit)
 
-## Bugfixes 🐞 
+## Bugfixes 🐞
 - Replace out of date containers in CircleCI (#972)
 - `Hyrax::HasOneTitleValidator` now accepts language-tagged literals as valid titles (#980)
 - `Spot::Importers::CSV::WorkTypeMapper` strips spaces from URI values (#987, @jwellnit)
@@ -33,14 +77,14 @@ Spot is moving to AWS-based infrastructure and this release is the first pass at
 
 ## [2022.5] - 2022-09-29
 
-### updates ✨ 
+### updates ✨
 - prioritize CollectionPresenter#abstract for collection descriptions on work views (#950)
 - rename "Foreign Languages and Literatures" department to "Languages and Literary Studies" (#954)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - setting `work.visibility = "authenticated"` will now result in `work.visibility == "authenticated"`, instead of "metadata" (#951)
 
-### notes 🎶 
+### notes 🎶
 after deploying to production, you'll want to update all objects in the "Foreign Languages and Literatures" department to use the new name:
 
 ```ruby
@@ -55,21 +99,21 @@ end
 
 ## [2022.4] - 2022-08-01
 
-### updates 📰 
+### updates 📰
 - removes solr_suggest autocomplete from StudentWork fields "advisor" and "bibliographic_citation" (#930)
 - add Darlingtonia-based service for ingesting objects via CSV sheet (#932, #944)
 - add link to accessibility remediation request in footer (#945)
 - add `keyword_tesim` and `date_associated_tesim` to all_fields search (see notes) (#946)
 
-### deprecations 💀  
+### deprecations 💀
 - removes BagIt ingest infrastructure used for initial migration (#934)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - add catalog_controller configuration to display "advisor_label_ssim" facets properly (#928)
 - add permalink display to student_work show page (#927)
 - use `String#underscore` to build the parameter key for works in the HandleController (#943)
 
-### notes 📓 
+### notes 📓
 - requires a reindex of Image works for `date_associated` fields (see #946)
 
 
@@ -83,21 +127,21 @@ end
 - ensure faculty ldr user accounts are created when their `lafayette_instructors` authority entry is (#912)
 - allow a work's read_users to view a work if it is in an workflow (#917)
 
-### accessibility 💻 
+### accessibility 💻
 - add "aria-label" and "title" attributes to the iiif viewer's iframe (#887)
 - add empty alt tags for decorative links (ie thumbnails) (#902)
 
-### bugfixes 🐞 
+### bugfixes 🐞
 - revert back to rails cookies for sessions (#906)
 - loosen up regex on @lafayette emails (#909)
 - clean up (and hopefully fix) flaky oai feature spec (#888)
 
-### dependencies 👩‍👧‍👧 
+### dependencies 👩‍👧‍👧
 
 - bootsnap to 1.11.1 (#891)
 - capistrano to 3.17.0 (#897)
 - capistrano-rails to 1.6.2 (#920)
-- capybara-screenshot to 1.0.26 (#924) 
+- capybara-screenshot to 1.0.26 (#924)
 - devise-guests to 0.8.1 (#893)
 - honeybadger to 4.12.1 (#922)
 - listen to 3.7.1 (#918)
@@ -109,7 +153,7 @@ end
 
 ## [2022.2] - 2022-03-31
 
-### updates 🔬 
+### updates 🔬
 - remove LoadLafayetteInstructorAuthorityJob cron instructions until we're ready to go live with the feature (#820)
 - remove patches for subject_label and location_label reindex (#821)
 - store email addresses in `StudentWork#advisor`, instead of L-numbers (#827)
@@ -136,17 +180,17 @@ end
   - `creator` and `rights_holder` are `current_user.authority_name`
   - `rights_statement` is InC-EDU
 - generate `date_available` as part of the object activation step of our workflows (#881)
-- upgrade rubies to 2.4.6 (#884) 
+- upgrade rubies to 2.4.6 (#884)
 - move Representative Media form fields to their own tab (#878)
 
-### bugfixes 🐞 
+### bugfixes 🐞
 - `GrantSipityRoleToAdvisor` needs to provide a `Sipity::WorkflowRole`, not `Sipity::Role` (#818)
 - `StudentWorkForm#rights_statement` will now properly display a previously selected value in the dropdown (#826)
 - AdminSet#show views now render after adding some guard clauses and using an instance variable within collection views (#830)
 - force thumbnails to use sRGB colorspace to prevent bug where some PDF thumbnails were being produced inverted (#832)
 - `Spot::BasePresenter`: delegate metadata_only? checks to a`can?(:read, solr_document)` call (#847)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 - `devise_cas_authenticatable` to 2.0.2
   - adds db migration to store Sessions via ActiveRecord
 
@@ -154,7 +198,7 @@ end
 
 ## [2022.1] - 2022-01-19
 
-### updates 🛠️ 
+### updates 🛠️
 - merge work_type locales into a single file (per language), remove locales we're not currently supporting (#786)
 - index controlled vocabulary labels as searchable text as well as strings (#791, #810, #813, #815)
 - rubocop updates (#788)
@@ -165,42 +209,42 @@ end
 - add `User#lnumber` attribute and determine user roles from CAS authentication entitlement URIs (#783, #797)
 - add StudentWork submission Sipity workflow (still experimental! but functional) (#782)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - use the string '202110' in `Spot::LoadLafayetteInstructorsAuthorityJob` , instead of dynamically generating one based on the current date (which was causing tests to fail in the new year) (#811)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 - bootsnap to 1.9.4 (#812)
 - devise to 4.8.1 (#801)
 - dotenv-rails to 2.7.6 (#772)
-- edtf to 3.0.6 (#781) 
+- edtf to 3.0.6 (#781)
 - jbuilder to 2.11.5 (#805)
 - puma to 4.3.10 (#816)
 - kaminari to 1.2.2 (#809)
 - rails to 5.2.6 (#776)
-- rsolr to 2.4.0 (#802) 
+- rsolr to 2.4.0 (#802)
 
 
 
 ## [2021.6] - 2021-12-06
 
-### enhancements 🛠️ 
+### enhancements 🛠️
 - update repository_librarian_email address (abfc7ba)
 - add Athletics and College Archives to Lafayette Divisions authority (#751)
 - reconfigure Dockerfile + local docker-compose setup (#762, #763, #770)
 - add StudentWork model (#753) and switch to using Ability to determine what work types are presented to the user
 - add lafayette_instructors local authority endpoint and use it for `StudentWork#advisor` (#764)
-- removes broken version number from site footer (#766) 
+- removes broken version number from site footer (#766)
 - switches to running rails on port 443 within the container, generating a self-signed ssl certificate as part of the docker entrypoint (#768)
 - removes FlipFlop option for contextual search results, leaving them on all the time (#771)
 - fixes for a couple of long out-standing "code complexity" issues
 
-### dependencies 👩‍👩‍👧‍👧 
-- updates hyrax to 2.9.6 and locks down dependencies needed to continue running locally on our on-prem version of ruby (#765). 
+### dependencies 👩‍👩‍👧‍👧
+- updates hyrax to 2.9.6 and locks down dependencies needed to continue running locally on our on-prem version of ruby (#765).
 - bootsnap to 1.9.1 (#760)
 - capistrano-bundler to 2.0.1 (#736)
 - capistrano-passenger to 0.2.1 (#756)
 - faraday to 0.17.4 (#731)
-- rubyzip to 2.3.2 (#759) 
+- rubyzip to 2.3.2 (#759)
 - uglifier to 4.2.0 (#757)
 
 
@@ -210,7 +254,7 @@ end
 ### updates
 - update email address + links for reproduction requests on About page (thanks @noraegloff!)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 
 - bagit to 0.4.4 (#732)
 - capybara-screenshot to 1.0.25 (#735)
@@ -227,14 +271,14 @@ end
 - adds a job to sync a Collection's permission_template with its members (#714)
 - updates to Docker setup for better local testing (#729)
 
-### features 😎 
+### features 😎
 - add "Board of Trustees" to divisions (#699)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - call `CGI.escape` and `CGI.unescape` on OAI setSpec values for valid identifiers (#713)
 - `HandleController` and `Spot::RedirectController` will now successfully redirect to Collections with matching identifiers (#726)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 - byebug to 11.1.3 (#718)
 - capistrano to 3.16.0 (#722)
 - carrierwave to 1.3.2 (#697)
@@ -250,13 +294,13 @@ end
 
 ## [2021.3] - 2021-02-05
 
-### enhancements 🔧 
+### enhancements 🔧
 - adds a locale for custom language labels (`"iso_639_1.<2 letter code>"`) (#693)
 - creates a `Spot::WorksControllerBehavior` mixin for common mixins/behavior (#694)
   - adds .csv handling to `Hyrax::ImagesController`, which was causing a bunch of honeybadger reports
 - add "Center for the Integration of Teaching, Learning, and Scholarship" academic department option (#695)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 - capistrano to 3.15.0 (#687)
 - nokogiri locked at `~> "1.10.10"` until we can upgrade ruby (#688)
 - okcomputer to 1.18.2 (#685)
@@ -266,34 +310,34 @@ end
 
 ## [2021.2] - 2021-01-21
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - ensure bookmark toggles aren't displayed on _any_ controller (#670)
 - point CollectionPresenter to the correct related_resource key (#674)
 - add link to LDR submission form on about page (#679)
 - add partials for Publication and Image json responses (fixes a "stack level too deep" error that would pop up) (#680)
 
-### features 🧑‍🏭 
+### features 🧑‍🏭
 - split common work-model behavior into `Spot::CoreMetadata` and `Spot::WorkBehavior` mixins (#676)
 - catalog_controller updates (#677)
   - facet limit defined globally (rather than per-facet)
   - added OCM Classification facet to sidebar
-  - fixed field keys for #index views 
-  - humanize edtf date values 
+  - fixed field keys for #index views
+  - humanize edtf date values
 
 
 ## [2021.1] - 2021-01-04
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - add `<link>` tag for favicon (#654)
 - use `hyrax/1_column` layout for `Hyrax::PagesController` pages (#667)
 
-### enhancements 💪 
+### enhancements 💪
 - add disallow routes to robots.txt (#652)
 - remove blacklight's bookmark feature from routes (#653)
 - only conduct passenger capistrano tasks on `:web` servers (#668)
-- use `bundle exec rails s` as command for docker-compose main app to allow for better debugging (#669) 
+- use `bundle exec rails s` as command for docker-compose main app to allow for better debugging (#669)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 - capistrano-rails to 1.6.1 (#666)
 - jquery-rails to 4.4.0 (#663)
 - shoulda-matchers to 4.4.1 (#665)
@@ -301,12 +345,12 @@ end
 
 ## [2020.13] - 2020-12-04
 
-### features ✨ 
+### features ✨
 - adds `/collections` landing page, displaying collection branding + summaries (#638)
 - note about collections content added to `/about` page (#631)
 
-### dependencies 👩‍👩‍👧‍👧 
-- capistrano to 3.14.1 (#640) 
+### dependencies 👩‍👩‍👧‍👧
+- capistrano to 3.14.1 (#640)
 - hydra-role-management to 1.0.3 (#644)
 - rubyzip to 2.3.0 (#641)
 - slack-ruby-client to 0.14.6 (#643)
@@ -317,26 +361,26 @@ end
 ### updates
 - Image batch 5 mappers added (#616)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - `ImageForm#date` should not be a required field (#634)
 
-### dependencies 👩‍👩‍👧‍👧 
+### dependencies 👩‍👩‍👧‍👧
 - remove `xray-rails` (#636)
 
 
 ## [2020.11] - 2020-11-10
 
-### features 👩‍🔬 
+### features 👩‍🔬
 - refactor docker environment for development (#607)
 - use authenticated docker pulls for circleci (#615)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - ensure that fields are provided when calling OaiCollectionSolrSet.sets_for (#608)
 - add resource_type to mammana-postcards mapper (#610)
 - use correct subject field for mdl-prints mapper (#611)
 - updates missing dashboard (collections/works) translations (#612)
 
-### dependency updates 👩‍👩‍👧‍👧 
+### dependency updates 👩‍👩‍👧‍👧
 - honeybadger to 4.7.2 (#626)
 - coffee-rails to 5.0.0 (#627)
 - sidekiq-cron to 1.2.0 (#628)
@@ -346,14 +390,14 @@ end
 
 ## [2020.10] - 2020-09-17
 
-### features 🥼 
+### features 🥼
 - add mixin to pass presenter date fields through `edtf-humanize` (#604)
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - be more lenient with error handling in original_create_date mapper (#586)
 - add `resource_type` to LewisPostcardsMapper (#588), PaKoshitsuMapper (#589), and GeologySlideEsiMapper (#602)
 - add `research_assistance` to PaTsubokuraMapper (#596)
-- add `subject` to MammanaPostcardsMapper (#603) 
+- add `subject` to MammanaPostcardsMapper (#603)
 - fix typo for `Image#repository_location` in `_metadata` partial (#601)
 - index `Image#source` similarly to `Publication#source` (#601)
 - use the right ENV value for IIIF in docker (77ac980)
@@ -362,7 +406,7 @@ end
 
 ## [2020.9] - 2020-08-27
 
-### features 🏖️  
+### features 🏖️
 - works added to subcollections will now be added to any parent collections (#561)
 - switch to using an external cantaloupe iiif server instead of riiif (#569, #583)
 - adds jpg derivative download options to images (#575)
@@ -371,7 +415,7 @@ end
   - war-casualties
   - tjwar-postcards
 
-### bug fixes 🐞 
+### bug fixes 🐞
 - subclasses Hyrax::IiifManifestPresenter to retain our iiif manifest metadata generation with the new hyrax patterns (#576, #584)
 - fixes permission errors that arose from collections not being fetched properly (#585)
 
@@ -381,7 +425,7 @@ end
 - hyrax to 2.9.0 (#573)
 - rdf-vocab to 3.1.4 (#581)
 - webdrivers to 4.4.1 (#557)
- 
+
 
 ## [2020.8] - 2020-07-24
 
@@ -824,6 +868,10 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2023.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.2
+[2023.1.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1.3
+[2023.1.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1.2
+[2023.1.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1.1
 [2023.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1
 [2022.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.5
 [2022.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2022.4
