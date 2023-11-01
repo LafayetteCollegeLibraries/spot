@@ -24,7 +24,7 @@ module Spot
 
     def featured_collections
       FeaturedCollection.all.map do |c|
-        collection_presenter_class.new(SolrDocument.new(c.collection_id), current_ability, request)
+        collection_presenter_class.new(SolrDocument.find(Collection.find(c.collection_id).id), current_ability, request)
       end
     end
 
