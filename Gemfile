@@ -118,7 +118,7 @@ gem 'rsolr', '~> 2.4.0'
 gem 'rubyzip', '~> 2.3.2'
 
 # our jobs server
-gem 'sidekiq', '~> 5.2.9'
+gem 'sidekiq', '~> 7.2.0'
 gem 'sidekiq-cron', '~> 1.2.0'
 
 # using Slack for some of our messaging
