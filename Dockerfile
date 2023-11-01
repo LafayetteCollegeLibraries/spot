@@ -21,7 +21,6 @@ RUN apt update && \
         postgresql-13 libpq-dev \
         ruby-dev \
         tzdata \
-        yarn \
         zip \
         g++ \
         gcc \
