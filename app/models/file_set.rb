@@ -12,6 +12,6 @@ class FileSet < ActiveFedora::Base
   #
   # @todo find a better predicate for this field
   property :source_identifier, predicate: ::RDF::URI('http://ldr.lafayette.edu/ns#source_identifier') do |index|
-    index.as :symbol
+    index.as :symbol, :stored_searchable
   end
 end
