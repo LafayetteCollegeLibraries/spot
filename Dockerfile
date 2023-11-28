@@ -23,6 +23,9 @@ RUN apt update && \
         tzdata \
         zip
 
+# Use NodeJS's new tooling to enable the yarn executable
+RUN corepack enable
+
 WORKDIR /spot
 
 ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
@@ -56,8 +59,7 @@ FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
 COPY . /spot
 
-RUN corepack enable && \
-    SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
+RUN SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
 
 ##
 # TARGET: spot-web
