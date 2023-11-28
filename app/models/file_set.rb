@@ -15,5 +15,4 @@ class FileSet < ActiveFedora::Base
   # using our own FileSetIndexer that doesn't index full-text content
   self.indexer = Spot::FileSetIndexer
 
-  
 end
