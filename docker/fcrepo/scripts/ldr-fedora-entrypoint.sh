@@ -11,7 +11,6 @@ do
   sleep 1
 done
 
-
 # JAVA_OPTIONS from our on-campus deploy, as recommended by FCRepo wiki,
 # with pathways in for changing the min/max memory allotted to fcrepo.
 # Metadata is stored in a PostgreSQL database named "fcrepo" (not configurable)
@@ -34,19 +33,14 @@ export JAVA_OPTIONS="${JAVA_OPTIONS} \
   -Dfcrepo.postgresql.host=${db_host} \
   -Dfcrepo.postgresql.port=${db_port}"
 
-# This block + the next (jetty-overrides) are copied from the NULib source.
-# see: https://github.com/nulib/docker-fcrepo/blob/master/assets/fedora-entrypoint.sh#L3-L4
 echo "Changing ownership of /data as $(whoami)"
 chown jetty:jetty /data
 
-# see: https://github.com/nulib/docker-fcrepo/blob/master/assets/fedora-entrypoint.sh#L20-L24
 if [[ -d /jetty-overrides ]]; then
   cd /jetty-overrides
   for file in $(find . -type f); do cp $file ${JETTY_BASE}/$file; done
   cd -
 fi
 
-su -s /bin/bash -c "echo $JAVA_OPTIONS" jetty
-
-# see: https://github.com/nulib/docker-fcrepo/blob/master/assets/fedora-entrypoint.sh#L40
-su -s /bin/bash -c "exec /docker-entrypoint.sh $@" jetty
+# see: https://github.com/scientist-softserv/docker-fcrepo/blob/c8b4774da76a6f74fd3df965f1a006ab031ad4c8/assets/fedora-entrypoint.sh#L39
+su -s /bin/bash -c "JAVA_HOME=/opt/java/openjdk; PATH=$PATH:/usr/local/jetty/bin:/opt/java/openjdk/bin; exec /docker-entrypoint.sh $@" jetty
