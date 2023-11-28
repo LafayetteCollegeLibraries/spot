@@ -7,7 +7,6 @@ services:
       target: spot-web-development
     volumes:
       - .:/spot
-      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     ports:
       - "443:443"
@@ -19,7 +18,6 @@ services:
       - fedora
       - redis
       - solr
-      - db_migrate
     stdin_open: true
     tty: true
 
@@ -51,17 +49,6 @@ services:
       POSTGRES_USER: spot_dev_user
       POSTGRES_PASSWORD: spot_dev_pw
     restart: unless-stopped
-
-  db_migrate:
-    image: lafayette/spot-web
-    env_file:
-      - .env.local
-    entrypoint: ["sh", "-c"]
-    command: bin/migrate-and-seed-db.sh
-    depends_on:
-      - db
-      - fedora
-      - solr
 
   fedora:
     build:
@@ -131,6 +118,19 @@ services:
       - SOLR_HOST=solr
     restart: unless-stopped
 
+  # service profiles / special cases
+  migrate-and-seed:
+    image: lafayette/spot-web
+    env_file:
+      - .env.local
+    entrypoint: ["sh", "-c"]
+    command: bin/migrate-and-seed-db.sh
+    profiles:
+      - migrate-and-seed
+    depends_on:
+      - db
+      - fedora
+      - solr
 
 volumes:
   db:
