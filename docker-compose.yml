@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   app:
-    image: lafayette/spot-web
+    image: lafayette/spot-web:development
     build:
       context: .
       target: spot-web-development
@@ -11,7 +11,9 @@ services:
     ports:
       - "443:443"
     env_file:
-      - .env.local
+      - .env.development
+      - .env.development.local
+    restart: unless-stopped
     depends_on:
       - cantaloupe
       - db
@@ -73,6 +75,7 @@ services:
     command: server --console-address ":9001" /data
     volumes:
       - minio:/data
+    restart: unless-stopped
     ports:
       - 9000:9000
       - 9001:9001
@@ -86,18 +89,18 @@ services:
       - 6379:6379
 
   sidekiq:
-    image: lafayette/spot-worker
+    image: lafayette/spot-worker:development
     build:
       context: .
       target: spot-worker-development
     env_file:
-      - .env.local
+      - .env.development
+      - .env.development.local
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     restart: unless-stopped
     depends_on:
@@ -118,19 +121,23 @@ services:
       - SOLR_HOST=solr
     restart: unless-stopped
 
-  # service profiles / special cases
+  # docker compose run migrate-and-seed
+  #
+  # Use to run DB migrations and set up AdminSets, users/roles, workflows, etc
   migrate-and-seed:
     image: lafayette/spot-web
     env_file:
-      - .env.local
+      - .env.development
+      - .env.development.local
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
-    profiles:
-      - migrate-and-seed
+    restart: no
     depends_on:
       - db
       - fedora
       - solr
+    profiles:
+      - migrate-and-seed
 
 volumes:
   db:
