@@ -64,8 +64,8 @@ Bulkrax.setup do |config|
       "permalink" => { from: ["permalink"], split: '\|', join: '|' },
       "standard_identifier" => { from: ["standard_identifier"], split: '\|', join: '|' },
       "date_modified" => { from: ["date_modified"], split: '\|', join: '|' },
-      "member_ids" => { from: ["member_ids"], split: '\|', join: '|', related_children_field_mapping: true },
-      "member_of_collection_ids" => { from: ["member_of_collection_ids"], split: '\|', join: '|', related_parents_field_mapping: true }
+      "children" => { from: ["children"], split: '\|', join: '|', related_children_field_mapping: true },
+      "parents" => { from: ["parents"], split: '\|', join: '|', related_parents_field_mapping: true }
     }
   }
 
@@ -81,11 +81,8 @@ Bulkrax.setup do |config|
   # Remove the XML parser
   config.parsers -= [{ name: "XML", class_name: "Bulkrax::XmlParser", partial: "xml_fields" }]
 
-  config.fill_in_blank_source_identifiers = lambda do |parser, index|
-    metadata = parser.records(index)
-    filename = File.basename(metadata[index][:file_1], '.*')
-    "#{filename}-#{parser.importerexporter.id}-#{index}"
-  end
+  # You can use any available arguments, not just 'obj' and 'index'
+  config.fill_in_blank_source_identifiers = ->(obj, index) { "#{obj.importerexporter.name}-#{obj.importerexporter.id}-#{index}" }
 
   config.import_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'imports')
   config.export_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'exports')
