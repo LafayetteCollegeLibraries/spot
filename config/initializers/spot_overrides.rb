@@ -153,43 +153,4 @@ Rails.application.config.to_prepare do
       handle_join_on_export(file_mapping, filenames, mapping['file']&.[]('join')&.present?)
     end
   end
-
-  Bulkrax::ParserExportRecordSet::All.class_eval do
-    # def collections
-    #   if importerexporter.export_type == 'round_trip'
-    #     @collections ||= ParserExportRecordSet.in_batches(complete_entry_identifiers) do |ids|
-    #       ActiveFedora::SolrService.query(
-    #         "has_model_ssim:Collection #{extra_filters}",
-    #         **query_kwargs.merge(
-    #           fq: [
-    #             %(#{solr_name(work_identifier)}:("#{ids.join('" OR "')}")),
-    #             "has_model_ssim:Collection"
-    #           ],
-    #           fl: "id"
-    #         )
-    #       )
-    #     end
-    #   else
-    #     []
-    #   end
-    # end
-
-    def file_sets
-      if importerexporter.export_type == 'round_trip'
-        []
-      else
-        super
-      end
-    end
-  end
-
-  Bulkrax::Exporter.class_eval do
-    def export_type_list
-      [
-        [I18n.t('bulkrax.exporter.labels.metadata'), 'metadata'],
-        [I18n.t('bulkrax.exporter.labels.full'), 'full'],
-        [I18n.t('bulkrax.exporter.labels.round_trip'), 'round_trip']
-      ]
-    end
-  end
 end
