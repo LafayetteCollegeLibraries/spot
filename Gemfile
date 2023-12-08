@@ -112,7 +112,7 @@ gem 'pg', '~> 1.2.3'
 gem 'rdf-vocab', '~> 3.2.3'
 
 # solr client for interacting with rails (installed w/ hyrax)
-gem 'rsolr', '~> 2.4.0'
+gem 'rsolr', '~> 2.5.0'
 
 # used in conjunction with our importers to zip/unzip files
 gem 'rubyzip', '~> 2.3.2'
