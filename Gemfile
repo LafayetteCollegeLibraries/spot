@@ -109,7 +109,7 @@ gem 'pg', '~> 1.2.3'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '~> 3.2.3'
+gem 'rdf-vocab', '~> 3.2.7'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '~> 2.4.0'
