@@ -105,7 +105,7 @@ gem 'non-digest-assets', '~> 2.2.0'
 gem 'okcomputer', '~> 1.18.4'
 
 # we're using postgres as our database within rails
-gem 'pg', '~> 1.2.3'
+gem 'pg', '~> 1.5.4'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
