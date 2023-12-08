@@ -166,5 +166,5 @@ group :development, :test do
   gem 'simplecov', '~> 0.21.2', require: false
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 5'
-  gem 'webmock', '~> 3.8'
+  gem 'webmock', '~> 3.19'
 end
