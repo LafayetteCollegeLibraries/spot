@@ -676,7 +676,7 @@ GEM
     power_converter (0.1.2)
     psych (3.3.4)
     public_suffix (5.0.3)
-    puma (6.1.1)
+    puma (6.4.0)
       nio4r (~> 2.0)
     qa (5.10.0)
       activerecord-import
@@ -1091,7 +1091,7 @@ DEPENDENCIES
   non-digest-assets (~> 2.2.0)
   okcomputer (~> 1.18.4)
   pg (~> 1.2.3)
-  puma (~> 6.1.1)
+  puma (~> 6.4.0)
   rails (~> 5.2.7)
   rails-controller-testing (~> 1.0.5)
   rdf-vocab (~> 3.2.3)
