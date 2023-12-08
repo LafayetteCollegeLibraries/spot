@@ -6,6 +6,7 @@ RSpec.describe Spot::RedirectController do
     subject { get :show, params: { url: url } }
 
     let(:solr_service) { ActiveFedora::SolrService }
+    let(:solr_data) { { id: 'solr-object' } }
 
     before do
       solr_service.add(solr_data)
@@ -67,6 +68,12 @@ RSpec.describe Spot::RedirectController do
       end
 
       it { is_expected.to redirect_to Hyrax::Engine.routes.url_helpers.collection_path(solr_data[:id]) }
+    end
+
+    context 'when the URL is an old Islandora search' do
+      let(:url) { 'http://digital.lafayette.edu/collections/browsef[0]=cdm.Relation.IsPartOf%3A%22East%20Asia%20Image%20Collection%22&f[1]=cdm.Relation.IsPartOf%3A%22Japanese%20History%20Study%20Cards%22&f[2]=eastasia.Subject.OCM%3A%22870%20EDUCATION%22' }
+
+      it { is_expected.to have_http_status :not_found }
     end
   end
 end
