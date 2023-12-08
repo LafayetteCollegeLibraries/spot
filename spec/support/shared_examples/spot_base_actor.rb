@@ -5,7 +5,7 @@ RSpec.shared_examples 'a Spot actor' do
   let(:work) { work_klass.new }
   let(:user) { create(:user) }
   let(:ability) { Ability.new(user) }
-  let(:attributes) { attributes_for(work_klass.to_s.underscore.to_sym) }
+  let(:attributes) { { title: ['Cool Beans'] } }
   let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
 
   describe '#apply_deposit_date' do
@@ -67,6 +67,34 @@ RSpec.shared_examples 'a Spot actor' do
 
       it 'converts rights_statement uri strings to RDF::URI objects' do
         expect(env.attributes).to eq expected
+      end
+    end
+  end
+
+  work_klass = described_class.name.split('::').last.gsub(/Actor$/, '').constantize
+  properties = work_klass.try(:controlled_properties) || []
+
+  properties.each do |property|
+    describe "converts incoming #{property} values into #{property}_attributes values" do
+      let(:attributes) { { property.to_sym => ['http://example.org'] } }
+      let(:expected_value) { { "#{property}_attributes": [{ id: 'http://example.org' }] }.with_indifferent_access }
+
+      context 'when creating' do
+        it do
+          expect { actor.create(env) }
+            .to change { env.attributes }
+            .from(attributes)
+            .to(expected_value)
+        end
+      end
+
+      context 'when updating' do
+        it do
+          expect { actor.update(env) }
+            .to change { env.attributes }
+            .from(attributes)
+            .to(expected_value)
+        end
       end
     end
   end

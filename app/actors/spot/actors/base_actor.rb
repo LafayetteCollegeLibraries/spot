@@ -24,13 +24,13 @@ module Spot
         env.curation_concern.date_uploaded = get_date_uploaded_value(env)
       end
 
-      # if we've been passed attributes with a :rights_statement value, convert it
-      # to an RDF::URI object for storage
+      # Allows for modifying env.attributes properties before the work is saved.
       #
       # @param [Hyrax::Actors::Environment] env
       # @return [void]
       def apply_save_data_to_curation_concern(env)
         transform_rights_statement(env) if env.attributes.key?(:rights_statement)
+        transform_controlled_properties(env) if env.curation_concern.class.respond_to?(:controlled_properties)
 
         super
       end
@@ -55,6 +55,23 @@ module Spot
         end
       end
 
+      # We may need to convert controlled_properties form their string value
+      # to their nested_attribute values (this came up with Bulkrax)
+      #
+      # @param [Hyrax::Actors::Environment] env
+      # @return [void]
+      def transform_controlled_properties(env)
+        env.curation_concern.class.controlled_properties.map(&:to_s).each do |property|
+          values = env.attributes.delete(property)
+          next if values.blank?
+
+          env.attributes[:"#{property}_attributes"] = Array.wrap(values).map { |value| { id: value } }
+        end
+      end
+
+      # if we've been passed attributes with a :rights_statement value, convert it
+      # to an RDF::URI object for storage
+      #
       # @param [Hyrax::Actors::Environment] env
       # @return [void]
       def transform_rights_statement(env)
