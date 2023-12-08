@@ -27,8 +27,8 @@ module Spot
     end
 
     def featured_collections
-      FeaturedCollection.all.pluck(:collection_id).map do |c|
-        collection_presenter_class.new(SolrDocument.find(Collection.find(c.collection_id).id), current_ability, request)
+      FeaturedCollection.all.pluck(:collection_id).map do |cid|
+        collection_presenter_class.new(SolrDocument.find(Collection.find(cid).id), current_ability, request)
       end
     end
 
