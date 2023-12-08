@@ -84,7 +84,7 @@ gem 'hydra-role-management', '~> 1.1.0'
 gem 'iso-639', '~> 0.3.6'
 
 # install jquery with rails (no longer the default)
-gem 'jquery-rails', '~> 4.5.1'
+gem 'jquery-rails', '~> 4.6.0'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
