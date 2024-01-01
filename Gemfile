@@ -59,7 +59,7 @@ gem 'coffee-rails', '~> 5.0.0'
 gem 'darlingtonia', '~> 3.2.2'
 
 # user management
-gem 'devise', '~> 4.9.0'
+gem 'devise', '~> 4.9.3'
 gem 'devise_cas_authenticatable', '~> 2.0.2'
 gem 'devise-guests', '~> 0.8.1'
 
