@@ -102,7 +102,7 @@ gem 'linkeddata', '~> 3.1.6'
 gem 'non-digest-assets', '~> 2.2.0'
 
 # system monitoring
-gem 'okcomputer', '~> 1.18.4'
+gem 'okcomputer', '~> 1.18.5'
 
 # we're using postgres as our database within rails
 gem 'pg', '~> 1.5.4'
