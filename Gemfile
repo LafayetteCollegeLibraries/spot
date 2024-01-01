@@ -38,7 +38,7 @@ gem 'almond-rails', '~> 0.3.0'
 gem 'anystyle', '~> 1.4.1'
 
 # interact with assets in s3 buckets
-gem 'aws-sdk-s3', '~> 1.141.0'
+gem 'aws-sdk-s3', '~> 1.142.0'
 
 # parse + build bagit-compliant files
 gem 'bagit', '~> 0.4.5'
