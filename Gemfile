@@ -144,6 +144,9 @@ gem 'bulkrax', '~> 5.3.0'
 # development dependencies (not as necessary to
 # lock down versions here)
 group :development do
+  # Seed data
+  gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
+
   gem 'listen', '>= 3.0.5', '< 3.8'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1.1'
