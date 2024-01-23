@@ -1,10 +1,22 @@
 # frozen_string_literal: true
 #
-# Class attribute updates + monkey-patching required to get Hyrax/etc
-# acting like we'd like them to. Try to leave some comments to help
-# yourself out. Sincerely, you from the future.
+# Class attribute updates + monkey-patching customizations for Hyrax.
 Rails.application.config.to_prepare do
-  # Spot overrides Hyrax
+  # Bump start the Noid minter in development:
+  # Using Bulkrax on a brand-new Hyrax application will wreak havoc with
+  # multiple async jobs running MinterState.create! with the same "unique"
+  # parameters, done as part of the database-backed minting process.
+  # Initializing the minter class via private method :instance
+  # will create the state if it's missing. Note: this needs to be wrapped
+  # in a begin/rescue block because Noid::Rails::Minter::File doesn't have
+  # an :instance method and will yell about it.
+  #
+  # @see https://github.com/samvera/noid-rails/blob/v3.1.0/lib/noid/rails/minter/db.rb#L67-L78
+  begin
+    Hyrax.config.noid_minter_class.new.send(:instance) if Rails.env.development?
+  rescue
+  end
+
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
   Hyrax::Dashboard::CollectionsController.include Spot::CollectionsControllerBehavior
