@@ -15,15 +15,17 @@ RUN apt update && \
         build-essential \
         coreutils \
         git \
+        libpq-dev \
+        libxml2 \
+        libxml2-dev \
+        libxslt-dev \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql-13 libpq-dev \
+        postgresql-13 \
         ruby-dev \
         tzdata \
-        yarn \
         zip
-RUN apk update && apk add g++ gcc libxml2 libxslt-dev
 
 WORKDIR /spot
 
@@ -34,8 +36,10 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 
 RUN corepack enable
 
-COPY ["Gemfile", "Gemfile.lock", "/spot/"]
+COPY Gemfile.lock /spot/
 RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
+
+COPY Gemfile /spot/
 RUN bundle config unset with && \
     bundle config unset without && \
     bundle config set without "development:test" && \
@@ -59,19 +63,13 @@ COPY . /spot
 
 RUN SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
 
-##
-# TARGET: spot-web
-# Used for the user-facing application. Sets up UV files and installs nodejs/yarn dependencies.
-##
-FROM spot-base as spot-web-base
-COPY config/uv config/uv
 
 ##
 # TARGET: spot-web-development
 # Used for the development version of the user-facing application.
 # Installs Ruby development dependencies
 ##
-FROM spot-web-base as spot-web-development
+FROM spot-base as spot-web-development
 RUN bundle config unset with &&\
     bundle config unset without && \
     bundle config set with "development:test" && \

@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/LafayetteCollegeLibraries/ldr-development-seeds.git
-  revision: e834dac3656acd20e8e564a8eb34638b8c5e82ce
+  revision: 0341725c91de6ddea377f15a046467fe6cec215f
   branch: main
   specs:
     ldr-development-seeds (0.0.0)
