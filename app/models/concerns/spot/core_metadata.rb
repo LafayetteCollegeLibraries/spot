@@ -112,7 +112,7 @@ module Spot
       # filled with a default value of ["ldr:#{work.id}"]
       #
       # @todo find a better predicate for this field
-      property :source_identifier, predicate: ::RDF::URI('http://ldr.lafayette.edu/ns#source_identifier') do |index|
+      property :source_identifier, predicate: ::RDF::URI.new('http://ldr.lafayette.edu/#source_identifier') do |index|
         index.as :symbol, :stored_searchable
       end
 
