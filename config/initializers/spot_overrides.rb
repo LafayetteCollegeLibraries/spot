@@ -14,7 +14,7 @@ Rails.application.config.to_prepare do
   # @see https://github.com/samvera/noid-rails/blob/v3.1.0/lib/noid/rails/minter/db.rb#L67-L78
   begin
     Hyrax.config.noid_minter_class.new.send(:instance) if Rails.env.development?
-  rescue
+  rescue # rubocop:disable Lint/SuppressedException
   end
 
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
