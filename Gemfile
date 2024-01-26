@@ -49,7 +49,7 @@ gem 'blacklight_oai_provider', '~> 6.0.0'
 gem 'blacklight_range_limit', '~> 6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '~> 1.16', require: false
+gem 'bootsnap', '~> 1.17', require: false
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
