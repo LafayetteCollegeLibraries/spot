@@ -1,5 +1,32 @@
 # changelog
 
+## [2024.1] - 2024-01-30
+
+### updates 🚀
+- fcrepo container to 4.7.6 release (#1087)
+- transform controlled_properties fields into nested_attributes (#1065)
+- treat errors in redirect_controller as :not_found (#1069)
+- add support for Google Analytics GA4 (#1091)
+
+### bug fixes 🪲
+- explicitly limit recent items display to 6 (#1088, #1094)
+
+### upgrades 📈
+- aws-sdk-s3 -> 1.142.0 (#1092, #1097)
+- bootsnap -> 1.17.0 (#1098)
+- factory_bot_rails -> 6.4.3 (#1099)
+- jquery-rails -> 4.6.0 (#1075)
+- json-canonicalization -> 0.4.0 (82a8e37)
+- okcomputer -> 1.18.5 (#1103)
+- pg -> 1.5.4 (#1079)
+- puma -> 6.4.0 (#1080)
+- rdf-vocab -> 3.2.7 (#1102)
+- rsolr -> 2.5.0 (#1076)
+- sidekiq-cron -> 1.9.1 (#1077)
+- webdrivers -> 5.3.1 (#1104)
+- webmock -> 3.19.1 (#1078)
+
+
 ## [2023.2] - 2023-10-30
 
 ### Enhancements ✨
@@ -868,6 +895,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.1
 [2023.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.2
 [2023.1.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1.3
 [2023.1.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1.2
