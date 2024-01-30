@@ -34,8 +34,7 @@ RUN corepack enable
 
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
 RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
-RUN bundle config set deployment true && \
-    bundle config unset with && \
+RUN bundle config unset with && \
     bundle config unset without && \
     bundle config set without "development:test" && \
     bundle install --jobs "$(nproc)"
