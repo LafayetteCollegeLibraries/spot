@@ -1,3 +1,8 @@
 analytics:
   ga4:
     analytics_id: <%= ENV['GOOGLE_ANALYTICS_ID'] %>
+    app_name: <%= ENV.fetch('GOOGLE_OAUTH_APP_NAME', 'ldr-analytics') %>
+    app_version: <%= ENV.fetch('GOOGLE_OAUTH_APP_VERSION', '1.0') %>
+    privkey_path: <%= ENV['GOOGLE_OAUTH_PRIVATE_KEY_PATH'] %>
+    privkey_secret: <%= ENV['GOOGLE_OAUTH_PRIVATE_KEY_SECRET'] %>
+    client_email: <%= ENV['GOOGLE_OAUTH_CLIENT_EMAIL'] %>

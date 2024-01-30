@@ -1,0 +1,16 @@
+<%# Analytics tag as from Hyrax, but adds in the option for us to define
+    a separate ID for the general Lafayette analytics account %>
+<% analytics_ids = [Hyrax::Analytics.config.analytics_id, ENV['GOOGLE_ANALYTICS_ID_LAFAYETTE']].compact %>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<%= analytics_ids.first %>"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    <% analytics_ids.each do |id| %>
+    gtag('config', '<%= id %>');
+    <% end %>
+</script>
+<meta name="analytics-provider" content="ga4">

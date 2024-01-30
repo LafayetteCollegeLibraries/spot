@@ -12,7 +12,7 @@ end
 gem 'rails', '~> 5.2.7'
 
 # use Puma as the app server
-gem 'puma', '~> 6.1.1'
+gem 'puma', '~> 6.4.0'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.1.0'
@@ -38,7 +38,7 @@ gem 'almond-rails', '~> 0.3.0'
 gem 'anystyle', '~> 1.4.1'
 
 # interact with assets in s3 buckets
-gem 'aws-sdk-s3', '~> 1.119.1'
+gem 'aws-sdk-s3', '~> 1.142.0'
 
 # parse + build bagit-compliant files
 gem 'bagit', '~> 0.4.5'
@@ -49,7 +49,7 @@ gem 'blacklight_oai_provider', '~> 6.0.0'
 gem 'blacklight_range_limit', '~> 6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '~> 1.16', require: false
+gem 'bootsnap', '~> 1.17', require: false
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -84,7 +84,7 @@ gem 'hydra-role-management', '~> 1.1.0'
 gem 'iso-639', '~> 0.3.6'
 
 # install jquery with rails (no longer the default)
-gem 'jquery-rails', '~> 4.5.1'
+gem 'jquery-rails', '~> 4.6.0'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
@@ -102,24 +102,24 @@ gem 'linkeddata', '~> 3.1.6'
 gem 'non-digest-assets', '~> 2.2.0'
 
 # system monitoring
-gem 'okcomputer', '~> 1.18.4'
+gem 'okcomputer', '~> 1.18.5'
 
 # we're using postgres as our database within rails
-gem 'pg', '~> 1.2.3'
+gem 'pg', '~> 1.5.4'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '~> 3.2.3'
+gem 'rdf-vocab', '~> 3.2.7'
 
 # solr client for interacting with rails (installed w/ hyrax)
-gem 'rsolr', '~> 2.4.0'
+gem 'rsolr', '~> 2.5.0'
 
 # used in conjunction with our importers to zip/unzip files
 gem 'rubyzip', '~> 2.3.2'
 
 # our jobs server
 gem 'sidekiq', '~> 5.2.9'
-gem 'sidekiq-cron', '~> 1.2.0'
+gem 'sidekiq-cron', '~> 1.9.1'
 
 # using Slack for some of our messaging
 gem 'slack-ruby-client', '~> 0.14.6'
@@ -136,6 +136,8 @@ gem 'sprockets-es6', '~> 0.9.2'
 # @see https://github.com/samvera/hyrax/pull/5961
 # @todo remove when Hyrax 3.5.1 or 3.6 (whichever includes it) drops
 gem 'redlock', '>= 0.1.2', '< 2.0'
+
+gem 'nokogiri', '< 1.16.0'
 
 # development dependencies (not as necessary to
 # lock down versions here)
@@ -155,7 +157,7 @@ group :development, :test do
   gem 'capybara-screenshot', '~> 1.0.26'
   gem 'database_cleaner', '~> 2.0.1'
   gem 'equivalent-xml', '~> 0.6.0', require: false
-  gem 'factory_bot_rails', '~> 5', require: false
+  gem 'factory_bot_rails', '~> 6', require: false
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.10'
@@ -166,5 +168,5 @@ group :development, :test do
   gem 'simplecov', '~> 0.21.2', require: false
   gem 'stub_env', '~> 1.0.4'
   gem 'webdrivers', '~> 5'
-  gem 'webmock', '~> 3.8'
+  gem 'webmock', '~> 3.19'
 end

@@ -30,7 +30,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads \
     BUNDLE_FORCE_RUBY_PLATFORM=1
 
-# @todo upgrade the Gemfile bundler version to 2 to remove version constraint
+RUN corepack enable
 
 COPY ["Gemfile", "Gemfile.lock", "/spot/"]
 RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
@@ -39,14 +39,13 @@ RUN bundle config unset with && \
     bundle config set without "development:test" && \
     bundle install --jobs "$(nproc)"
 
-ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
-CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
-
 ARG build_date=""
 ENV SPOT_BUILD_DATE="$build_date"
 
-HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
+ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
 
+HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
 
 ##
 #  Target: spot-asset-builder
@@ -56,8 +55,7 @@ FROM spot-base as spot-asset-builder
 ENV RAILS_ENV=production
 COPY . /spot
 
-RUN corepack enable && \
-    SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
+RUN SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
 
 ##
 # TARGET: spot-web

@@ -54,4 +54,4 @@
 # but you never know i guess)
 VERSION
 
-cap
+config/credentials/*

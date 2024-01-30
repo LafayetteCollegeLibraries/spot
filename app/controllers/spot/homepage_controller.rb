@@ -16,15 +16,19 @@ module Spot
     #
     # @return [Array<SolrDocument>]
     def recent_works
-      _, docs = search_service.search_results
+      (_, docs) = search_service.search_results do |builder|
+        builder.rows(6)
+        builder.merge(sort: 'date_uploaded_dtsi desc')
+      end
+
       docs
     rescue Blacklight::Exceptions::ECONNREFUSED, Blacklight::Exceptions::InvalidRequest
       []
     end
 
     def featured_collections
-      FeaturedCollection.all.map do |c|
-        collection_presenter_class.new(SolrDocument.find(Collection.find(c.collection_id).id), current_ability, request)
+      FeaturedCollection.all.pluck(:collection_id).map do |cid|
+        collection_presenter_class.new(SolrDocument.find(Collection.find(cid).id), current_ability, request)
       end
     end
 

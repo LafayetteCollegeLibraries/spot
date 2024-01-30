@@ -12,7 +12,6 @@
 !/log/.keep
 !/public
 !/tmp/.keep
-!/vendor/.keep
 
 # allow files @ app root
 !config.ru
