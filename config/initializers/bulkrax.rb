@@ -13,7 +13,7 @@ Bulkrax.setup do |config|
   config.import_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'imports')
   config.export_path = Rails.root.join('tmp', 'uploads', 'bulkrax', 'exports')
 
-  # Updates the default_field_mapping to default to splitting and joining with bars (|).
+  # Updates the default_field_mapping to default to splitting with bars (|).
   # Because the :split value is cast to a Regexp, the bar character needs to be escaped,
   # otherwise the value will be split on each character.
   #
@@ -35,7 +35,7 @@ Bulkrax.setup do |config|
   # @see https://github.com/samvera/bulkrax/wiki/Configuring-Bulkrax#field-mappings
   config.field_mappings = {
     'Bulkrax::CsvParser' => {
-      'source_identifier' => { from: ['source_identifier'], source_identifier: true, split: false, join: false },
+      'source_identifier' => { from: ['source_identifier'], source_identifier: true, split: false },
       'model' => { from: ['model', 'work_type'], split: false },
 
       # Descriptive metadata
@@ -58,7 +58,7 @@ Bulkrax.setup do |config|
       'physical_medium' => { from: ['physical_medium'] },
       'publisher' => { from: ['publisher'] },
       'related_resource' => { from: ['related_resource'] },
-      'resource_type' => { from: ['resource_type'] },
+      'resource_type' => { from: ['resource_type'], parsed: false },
       'rights_holder' => { from: ['rights_holder'] },
       'rights_statement' => { from: ['rights_statement'], parsed: false },
       'source' => { from: ['source'] },
@@ -104,11 +104,24 @@ Bulkrax.setup do |config|
       'parents' => { from: ['parents'], related_parents_field_mapping: true }
     }
   }
+
+  # Not sure if it's a bug or intentional, but the way Bulkrax generates default field_configs
+  # will overwrite the default with the configured value (if one exists). What we want instead
+  # is to use the default_field_mapping value as the base for every field and merge the parser
+  # config on top.
+  #
+  # @see https://github.com/samvera/bulkrax/blob/v5.4.0/app/models/bulkrax/importer.rb#L58-L70
+  Bulkrax.field_mappings.each do |klass, config_hash|
+    Bulkrax.field_mappings[klass] = config_hash.map do |key, config|
+      field_mapping = config.default_field_mapping.call(key).fetch(key)
+      [key, field_mapping.merge(config)]
+    end.to_h
+  end
 end
 
-# Modify ExportBehavior to _not_ include the file_set ID as part of the file name
-# @see https://github.com/samvera/bulkrax/blob/v5.4.1/app/models/concerns/bulkrax/export_behavior.rb#L28-L44
 Rails.application.config.to_prepare do
+  # Modify ExportBehavior to _not_ include the file_set ID as part of the file name
+  # @see https://github.com/samvera/bulkrax/blob/v5.4.1/app/models/concerns/bulkrax/export_behavior.rb#L28-L44
   Bulkrax::ExportBehavior.class_eval do
     def filename(file_set)
       original_file = file_set.original_file
