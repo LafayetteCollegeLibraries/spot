@@ -2,7 +2,7 @@
 file_system:
   home: /spot/tmp/import
 s3:
-  bucket: bulkrax-imports
-  app_key: minio_root_user
-  app_secret: minio_root_password
+  bucket: <%= ENV['AWS_BULKRAX_IMPORTS_BUCKET'] %>
+  app_key: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  app_secret: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
   region: us-east-1

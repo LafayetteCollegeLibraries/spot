@@ -170,7 +170,7 @@ Hyrax.config do |config|
 
   # The user who runs fixity check jobs. Update this if you aren't using emails
   # config.audit_user_key = 'audituser@example.com'
-  #
+
   # The banner image. Should be 5000px wide by 1000px tall
   config.banner_image = '/assets/skillman-banner.jpg'
 
@@ -307,8 +307,3 @@ Hyrax.config do |config|
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
-
-# set bulkrax default work type to first curation_concern if it isn't already set
-if Bulkrax.default_work_type.blank?
-  Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s
-end
