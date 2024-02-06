@@ -26,7 +26,7 @@ RUN apt update && \
         gcc \
         libxml2 \
         libxml2-dev \
-        libxslt-dev 
+        libxslt-dev
 
 WORKDIR /spot
 
@@ -121,10 +121,21 @@ RUN apt update && apt install -y --no-install-recommends \
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
+# fix for ImageMagick to remove security policy for PDFs (and other ghostscript types)
+# @see https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion#comment110879511_59193253
+RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+
+# Install FITS based on Hyrax's Dockerfile
+#
+# @see https://github.com/harvard-lts/fits
+# @see https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65
+ARG FITS_VERSION="1.6.0"
+ENV FITS_VERSION="${FITS_VERSION}"
+
 # (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
 RUN mkdir -p /usr/local/fits && \
     cd /usr/local/fits && \
-    wget "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" -O fits.zip && \
+    curl -Ls -o fits.zip "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" && \
     unzip fits.zip && \
     rm fits.zip && \
     chmod a+x /usr/local/fits/fits.sh
