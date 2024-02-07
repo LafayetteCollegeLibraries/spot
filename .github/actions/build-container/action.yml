@@ -26,6 +26,7 @@ runs:
   steps:
     -
       id: build_date
+      shell: bash
       name: Generate build date variable for Image
       run: echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
     -
