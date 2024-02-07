@@ -138,9 +138,7 @@ gem 'sprockets-es6', '~> 0.9.2'
 # @todo remove when Hyrax 3.5.1 or 3.6 (whichever includes it) drops
 gem 'redlock', '>= 0.1.2', '< 2.0'
 
-
-# development dependencies (not as necessary to
-# lock down versions here)
+# development dependencies (not as necessary to lock down versions here)
 group :development do
   # Seed data
   gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
@@ -151,8 +149,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-# things used for development + testing (again, not as
-# necessary to lock down versions)
+# things used for development + testing (again, not as necessary to lock down versions)
 group :development, :test do
   gem 'bixby', '~> 5.0.1'
   gem 'byebug', '~> 11.1.3'

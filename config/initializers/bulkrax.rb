@@ -110,11 +110,18 @@ Bulkrax.setup do |config|
   # is to use the default_field_mapping value as the base for every field and merge the parser
   # config on top.
   #
+  # before:
+  #   config.field_mappings['Bulkrax::CsvParser']['resource_type']
+  #   #=> { from: ['resource_type'], parsed: false }
+  # after
+  #   config.field_mappings['Bulkrax::CsvParser']['resource_type']
+  #   #=> { from: ['resource_type'], parsed: false, join: '\|', if: nil, excluded: false }
+  #
   # @see https://github.com/samvera/bulkrax/blob/v5.4.0/app/models/bulkrax/importer.rb#L58-L70
-  Bulkrax.field_mappings.each do |klass, config_hash|
-    Bulkrax.field_mappings[klass] = config_hash.map do |key, config|
+  Bulkrax.field_mappings.each do |klass, fm_config_hash|
+    Bulkrax.field_mappings[klass] = fm_config_hash.map do |key, fm_config|
       field_mapping = config.default_field_mapping.call(key).fetch(key)
-      [key, field_mapping.merge(config)]
+      [key, field_mapping.merge(fm_config)]
     end.to_h
   end
 end
