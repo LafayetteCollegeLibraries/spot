@@ -6,10 +6,6 @@ inputs:
   tag:
     required: true
     description: "Version identifier for release (ex. '2023.1')"
-  build_args_json:
-    required: false
-    default: "[]"
-    description: "JSON stringified array of build-args options (ex. '[\"some-arg=some_value\"]')"
   context:
     required: false
     default: '.'
@@ -31,7 +27,7 @@ runs:
       run: |
         build_date="$(date +'%Y%m%d')"
         echo "date=$build_date" >> "GITHUB_OUTPUT"
-        echo "Build Date: \`${build_date}\`" >> "$GITHUB_STEP_SUMMARY"
+        echo "::debug::BUILD DATE: $build_date"
     -
       name: Build and push ${{ inputs.image_name }} container
       uses: docker/build-push-action@v5
