@@ -28,7 +28,10 @@ runs:
       id: build_date
       shell: bash
       name: Generate build date variable for Image
-      run: echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+      run: |
+        build_date="$(date +'%Y%m%d')"
+        echo "date=$build_date" >> "GITHUB_OUTPUT"
+        echo "Build Date: \`${build_date}\`" >> "$GITHUB_STEP_SUMMARY"
     -
       name: Build and push ${{ inputs.image_name }} container
       uses: docker/build-push-action@v5
