@@ -6,7 +6,7 @@ module PdfViewerHelper
   # @param [String] path
   # @return [String] URL to the viewer
   def viewer_url(path)
-    "/web/viewer.html?file=#{path}##{query_param}"
+    "/pdf/web/viewer.html?file=#{path}##{query_param}"
   end
 
   # The search param used by PDFjs to prepopulate the search bar

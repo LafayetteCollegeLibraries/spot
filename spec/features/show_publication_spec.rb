@@ -114,7 +114,7 @@ RSpec.feature 'Show Publication page', js: false do
     scenario 'the PDF viewer is displayed' do
       iframe = page.find('iframe')
       expect(iframe).to be_present
-      expect(iframe[:src]).to include "/web/viewer.html?file=/downloads/#{pub.file_sets.first.id}"
+      expect(iframe[:src]).to include "/pdf/web/viewer.html?file=/downloads/#{pub.file_sets.first.id}"
     end
   end
 

@@ -1,4 +1,32 @@
 ##
+# Target: pdfjs-installer
+# !! This is a builder image, do not use directly !!
+##
+FROM alpine:3 as pdfjs-installer
+ARG PDFJS_VERSION="4.0.379"
+ENV PDFJS_VERSION="${PDFJS_VERSION}"
+ADD https://github.com/mozilla/pdf.js/releases/download/v${PDFJS_VERSION}/pdfjs-${PDFJS_VERSION}-legacy-dist.zip /tmp/pdfjs.zip
+RUN unzip -d /tmp/pdfjs /tmp/pdfjs.zip
+COPY config/pdfjs/viewer.html /tmp/pdfjs/web/viewer.html
+
+
+##
+# Target: fits-installer
+# !! This is a builder image, do not use directly !!
+#
+# @see https://github.com/harvard-lts/fits
+# @see https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65
+##
+FROM alpine:3 as fits-installer
+ARG FITS_VERSION="1.6.0"
+ENV FITS_VERSION="${FITS_VERSION}"
+ADD https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip /tmp/fits.zip
+
+RUN unzip -d /tmp/fits /tmp/fits.zip && \
+    chmod a+x /tmp/fits/fits.sh
+
+
+##
 # TARGET: spot-base
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
@@ -75,6 +103,9 @@ RUN bundle config unset with &&\
     bundle config set with "development:test" && \
     bundle install --jobs "$(nproc)"
 COPY . /spot/
+COPY --from=pdfjs-installer /tmp/pdfjs/build /spot/public/pdf/build
+COPY --from=pdfjs-installer /tmp/pdfjs/web /spot/public/pdf/web
+COPY config/pdfjs/viewer.html /spot/public/pdf/web/viewer.html
 
 ENV RAILS_ENV=development
 
@@ -90,6 +121,9 @@ ENV RAILS_ENV=production
 COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
+COPY --from=pdfjs-installer /tmp/pdfjs/build /spot/public/pdf/build
+COPY --from=pdfjs-installer /tmp/pdfjs/web /spot/public/pdf/web
+COPY config/pdfjs/viewer.html /spot/public/pdf/web/viewer.html
 
 
 ##
@@ -120,21 +154,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # @see https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion#comment110879511_59193253
 RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
-# Install FITS based on Hyrax's Dockerfile
-#
-# @see https://github.com/harvard-lts/fits
-# @see https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65
-ARG FITS_VERSION="1.6.0"
-ENV FITS_VERSION="${FITS_VERSION}"
-
-# (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
-RUN mkdir -p /usr/local/fits && \
-    cd /usr/local/fits && \
-    curl -Ls -o fits.zip "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" && \
-    unzip fits.zip && \
-    rm fits.zip && \
-    chmod a+x /usr/local/fits/fits.sh
-
+COPY --from=fits-installer /tmp/fits /usr/local/fits
 ENV PATH="${PATH}:/usr/local/fits"
 
 CMD ["bundle", "exec", "sidekiq"]
