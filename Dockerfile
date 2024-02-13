@@ -103,9 +103,7 @@ RUN bundle config unset with &&\
     bundle config set with "development:test" && \
     bundle install --jobs "$(nproc)"
 COPY . /spot/
-COPY --from=pdfjs-installer /tmp/pdfjs/build /spot/public/pdf/build
-COPY --from=pdfjs-installer /tmp/pdfjs/web /spot/public/pdf/web
-COPY config/pdfjs/viewer.html /spot/public/pdf/web/viewer.html
+COPY --from=pdfjs-installer /tmp/pdfjs /spot/public/pdf
 
 ENV RAILS_ENV=development
 
@@ -121,9 +119,7 @@ ENV RAILS_ENV=production
 COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
-COPY --from=pdfjs-installer /tmp/pdfjs/build /spot/public/pdf/build
-COPY --from=pdfjs-installer /tmp/pdfjs/web /spot/public/pdf/web
-COPY config/pdfjs/viewer.html /spot/public/pdf/web/viewer.html
+COPY --from=pdfjs-installer /tmp/pdfjs /spot/public/pdf
 
 
 ##
