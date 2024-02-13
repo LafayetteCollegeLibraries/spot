@@ -15,19 +15,19 @@ cd spot
 docker compose build
 ```
 
-In a brand new environment, database migrations and seeds will need to be called with the `db_migrate` service:
+To bring up the site (and its service dependencies) and watch local files
+for syncing with containers:
+
+```bash
+docker compose watch
+```
+
+**Note:** In a brand new environment, database migrations and seeds will need to be called with the `db_migrate` service:
 
 ```bash
 docker compose run --rm db_migrate
 ```
 
-To bring up the site and its service dependencies:
-
-```bash
-docker compose up -d
-```
-
-To keep files sync'd between this project and the containers, use `docker compose watch`.
 
 [Hyrax]: https://hyrax.samvera.org
 [Lafayette College Libraries' Digital Repository (LDR)]: https://ldr.lafayette.edu
