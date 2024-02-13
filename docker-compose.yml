@@ -6,20 +6,30 @@ services:
       context: .
       target: spot-web-development
     volumes:
-      - .:/spot
-      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     ports:
       - "443:443"
     env_file:
       - .env.local
+    develop: &rails_app_watch_config
+      watch:
+        - action: sync
+          path: ./
+          target: /spot
+          ignore:
+            - node_modules/
+            - public/pdf/
+            - public/uv/
+            - tmp/
+        - action: sync+restart
+          path: ./config
+          target: /spot/config
     depends_on:
       - cantaloupe
       - db
       - fedora
       - redis
       - solr
-      - db_migrate
     stdin_open: true
     tty: true
 
@@ -57,11 +67,13 @@ services:
     env_file:
       - .env.local
     entrypoint: ["sh", "-c"]
-    command: bin/migrate-and-seed-db.sh
+    command: ["bin/migrate-and-seed-db.sh"]
     depends_on:
       - db
       - fedora
       - solr
+    profiles:
+      - migrate_and_seed
 
   fedora:
     build:
@@ -74,6 +86,10 @@ services:
       FCREPO_POSTGRES_HOST: db
       FCREPO_POSTGRES_USER: spot_fcrepo_dev_user
       FCREPO_POSTGRES_PASSWORD: spot_fcrepo_dev_pw
+    develop:
+      watch:
+        - action: rebuild
+          path: ./docker/fcrepo
     restart: unless-stopped
     depends_on:
       - db
@@ -105,12 +121,12 @@ services:
       target: spot-worker-development
     env_file:
       - .env.local
+    develop:
+      <<: *rails_app_watch_config
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
     volumes:
-      - .:/spot
-      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     restart: unless-stopped
     depends_on:
@@ -129,8 +145,11 @@ services:
     environment:
       - SOLR_CORES=spot-development,spot-test
       - SOLR_HOST=solr
+    develop:
+      watch:
+        - action: rebuild
+          path: ./docker/solr
     restart: unless-stopped
-
 
 volumes:
   db:
