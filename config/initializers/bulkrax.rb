@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 Bulkrax.setup do |config|
-  config.default_work_type = Hyrax.config.curation_concerns.first
-
   # Called when importing if no source_identifier found in the metadata
   config.fill_in_blank_source_identifiers = ->(obj, index) { "#{obj.importerexporter.name}-#{obj.importerexporter.id}-#{index}" }
 

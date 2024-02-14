@@ -4,6 +4,9 @@ Hyrax.config do |config|
   config.register_curation_concern :image
   config.register_curation_concern :student_work
 
+  # Can't define this within the Bulkrax initializer as it runs _before_ this
+  Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
+
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
