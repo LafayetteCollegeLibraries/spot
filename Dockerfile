@@ -15,10 +15,14 @@ RUN apt update && \
         build-essential \
         coreutils \
         git \
+        libpq-dev \
+        libxml2 \
+        libxml2-dev \
+        libxslt-dev \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql-13 libpq-dev \
+        postgresql-13 \
         ruby-dev \
         tzdata \
         zip
@@ -32,8 +36,10 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 
 RUN corepack enable
 
-COPY ["Gemfile", "Gemfile.lock", "/spot/"]
+COPY Gemfile.lock /spot/
 RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
+
+COPY Gemfile /spot/
 RUN bundle config unset with && \
     bundle config unset without && \
     bundle config set without "development:test" && \
@@ -57,19 +63,13 @@ COPY . /spot
 
 RUN SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
 
-##
-# TARGET: spot-web
-# Used for the user-facing application. Sets up UV files and installs nodejs/yarn dependencies.
-##
-FROM spot-base as spot-web-base
-COPY config/uv config/uv
 
 ##
 # TARGET: spot-web-development
 # Used for the development version of the user-facing application.
 # Installs Ruby development dependencies
 ##
-FROM spot-web-base as spot-web-development
+FROM spot-base as spot-web-development
 RUN bundle config unset with &&\
     bundle config unset without && \
     bundle config set with "development:test" && \
@@ -77,12 +77,9 @@ RUN bundle config unset with &&\
 COPY . /spot/
 
 ENV RAILS_ENV=development
-ENV RAILS_CONSIDER_ALL_REQUESTS_LOCAL="1"
-ENV RAILS_ENABLE_CONTROLLER_CACHING="0"
 
 ENTRYPOINT ["/spot/bin/spot-dev-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
-
 
 ##
 # TARGET: spot-web-production
@@ -130,11 +127,12 @@ RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xm
 ARG FITS_VERSION="1.6.0"
 ENV FITS_VERSION="${FITS_VERSION}"
 
-RUN mkdir -p /usr/local/fits; \
-    cd /usr/local/fits; \
-    curl -Lso fits.zip "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip"; \
-    unzip fits.zip; \
-    rm fits.zip; \
+# (from https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65)
+RUN mkdir -p /usr/local/fits && \
+    cd /usr/local/fits && \
+    curl -Ls -o fits.zip "https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip" && \
+    unzip fits.zip && \
+    rm fits.zip && \
     chmod a+x /usr/local/fits/fits.sh
 
 ENV PATH="${PATH}:/usr/local/fits"

@@ -1,10 +1,22 @@
 # frozen_string_literal: true
 #
-# Class attribute updates + monkey-patching required to get Hyrax/etc
-# acting like we'd like them to. Try to leave some comments to help
-# yourself out. Sincerely, you from the future.
+# Class attribute updates + monkey-patching customizations for Hyrax.
 Rails.application.config.to_prepare do
-  # Spot overrides Hyrax
+  # Bump start the Noid minter in development:
+  # Using Bulkrax on a brand-new Hyrax application will wreak havoc with
+  # multiple async jobs running MinterState.create! with the same "unique"
+  # parameters, done as part of the database-backed minting process.
+  # Initializing the minter class via private method :instance
+  # will create the state if it's missing. Note: this needs to be wrapped
+  # in a begin/rescue block because Noid::Rails::Minter::File doesn't have
+  # an :instance method and will yell about it.
+  #
+  # @see https://github.com/samvera/noid-rails/blob/v3.1.0/lib/noid/rails/minter/db.rb#L67-L78
+  begin
+    Hyrax.config.noid_minter_class.new.send(:instance) if Rails.env.development?
+  rescue # rubocop:disable Lint/SuppressedException
+  end
+
   Hyrax::Dashboard::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::Dashboard::CollectionsController.form_class = Spot::Forms::CollectionForm
   Hyrax::Dashboard::CollectionsController.include Spot::CollectionsControllerBehavior
@@ -112,9 +124,35 @@ Rails.application.config.to_prepare do
     const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
   end
 
+  # Adding support for cloud files in importers
+  Bulkrax::ImportersController.class_eval do
+    private
+
+    def files_for_import(file, cloud_files)
+      return if file.blank? && cloud_files.blank?
+      @importer[:parser_fields]['import_file_path'] = @importer.parser.write_import_file(file)
+      if cloud_files.present?
+        # For BagIt, there will only be one bag, so we get the file_path back and set import_file_path
+        # For CSV, we expect only file uploads, so we won't get the file_path back
+        # and we expect the import_file_path to be set already
+        target = @importer.parser.retrieve_cloud_files(cloud_files)
+        @importer[:parser_fields]['import_file_path'] = target if target.present?
+      end
+      @importer.save
+    end
+  end
+
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
 
   # Our own Characterization Service subclass that uses :fits_servlet by default
   CharacterizeJob.characterization_service = Spot::CharacterizationService
+
+  # Override the Browse-Everything Retreiver to take S3 URIs
+  BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
+  BrowseEverything::Retriever.class_eval do
+    class << self
+      prepend Spot::RetrievesS3Urls::ClassMethods
+    end
+  end
 end

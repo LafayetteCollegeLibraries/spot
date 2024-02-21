@@ -4,6 +4,9 @@ Hyrax.config do |config|
   config.register_curation_concern :image
   config.register_curation_concern :student_work
 
+  # Can't define this within the Bulkrax initializer as it runs _before_ this
+  Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
+
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
@@ -170,7 +173,7 @@ Hyrax.config do |config|
 
   # The user who runs fixity check jobs. Update this if you aren't using emails
   # config.audit_user_key = 'audituser@example.com'
-  #
+
   # The banner image. Should be 5000px wide by 1000px tall
   config.banner_image = '/assets/skillman-banner.jpg'
 
@@ -300,10 +303,7 @@ Hyrax.config do |config|
   #
   config.whitelisted_ingest_dirs = [
     Rails.root.join('tmp', 'ingest').to_s,
-
-    # need to use the capistrano root, otherwise a new deployment will
-    # break uploads from earlier ones.
-    '/var/www/spot'
+    Rails.root.to_s
   ]
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))

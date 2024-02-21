@@ -1,0 +1,74 @@
+en:
+  bulkrax:
+    admin:
+      sidebar:
+        exporters: Exporters
+        importers: Importers
+    exporter:
+      labels:
+        all: All
+        collection: Collection
+        export_format: Export Format
+        export_from: Export From
+        export_source: Export Source
+        export_type: Type of Export
+        field_mapping: Field Mapping
+        filter_by_date: Filter By Date
+        finish_date: End Date
+        full: Metadata and Files
+        include_thumbnails: Include Thumbnails?
+        generated_metadata: Include Generated Metadata?
+        round_trip: Metadata and Files (for re-import)
+        importer: Importer
+        limit: Limit
+        metadata: Metadata Only
+        name: Name
+        parser_fields: Parser Fields
+        parser_klass: Parser
+        start_date: Start Date
+        status: Status
+        total_work_entries: Total Works
+        total_entries: Total Entries
+        user: User
+        worktype: Work Type
+        work_entries: Work Entries
+        collection_entries: Collection Entries
+        file_set_entries: File Set Entries
+        workflow_status:
+          approved: "Approved"
+          deleted: "Deleted"
+          in_process: "In Process"
+          broken_url: "Broken Url"
+          ingested: "Ingested"
+          unapproved: "Unapproved"
+          needs_repair: "Needs Repair"
+      hints:
+        include_thumbnails: "These exported fields currently cannot be imported."
+        generated_metadata: "These exported fields currently cannot be imported."
+    importer:
+      labels:
+        admin_set: Admin set
+        collection_entries: Collection Entries
+        entry_id: Entry ID
+        exporter: Exporter
+        file_set_entries: File Set Entries
+        frequency: Frequency
+        identifier: Identifier
+        importer: Importer
+        limit: Limit
+        name: Name
+        parser_klass: Parser klass
+        total_collections: Total Collections
+        total_file_sets: Total File Sets
+        total_work_entries: Total Works
+        type: Type
+        user: User
+        work_entries: Work Entries
+    table_header:
+      labels:
+        identifier: Identifier
+        entry_id: Entry ID
+        status: Status
+        errors: Errors
+        status_set_at: Status Set At
+        actions: Actions

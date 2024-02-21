@@ -26,6 +26,14 @@ class Ability
   # @return [void]
   def custom_permissions; end
 
+  def can_import_works?
+    current_user.admin? || current_user.depositor?
+  end
+
+  def can_export_works?
+    current_user.admin? || current_user.depositor?
+  end
+
   private
 
   # Delegates abilities for users that have the 'admin' role

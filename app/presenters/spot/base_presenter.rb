@@ -23,7 +23,7 @@ module Spot
              :publisher, :registered?, :related_resource, :resource_type, :rights_holder, :rights_statement,
              :source, :subject, :subtitle, :title_alternative, :title,
              :visibility, :citation_journal_title, :citation_volume, :citation_issue,
-             :citation_firstpage, :citation_lastpage,
+             :citation_firstpage, :citation_lastpage, :source_identifier,
              to: :solr_document
 
     delegate :public?, to: :solr_document
