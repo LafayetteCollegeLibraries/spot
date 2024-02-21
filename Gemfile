@@ -51,12 +51,13 @@ gem 'blacklight_range_limit', '~> 6.3.3'
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
 
+# Bulkrax for batch ingesting objects
+gem 'browse-everything', '~> 1.1.2'
+gem 'bulkrax', '~> 5.3.0'
+
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
 gem 'coffee-rails', '~> 5.0.0'
-
-# record importer pattern from curationexperts
-gem 'darlingtonia', '~> 3.2.2'
 
 # user management
 gem 'devise', '~> 4.9.0'
@@ -137,21 +138,18 @@ gem 'sprockets-es6', '~> 0.9.2'
 # @todo remove when Hyrax 3.5.1 or 3.6 (whichever includes it) drops
 gem 'redlock', '>= 0.1.2', '< 2.0'
 
-# bulkrax
-gem 'browse-everything', '~> 1.1.2'
-gem 'bulkrax', '~> 5.3.0'
-
-# development dependencies (not as necessary to
-# lock down versions here)
+# development dependencies (not as necessary to lock down versions here)
 group :development do
+  # Seed data
+  gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
+
   gem 'listen', '>= 3.0.5', '< 3.8'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1.1'
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-# things used for development + testing (again, not as
-# necessary to lock down versions)
+# things used for development + testing (again, not as necessary to lock down versions)
 group :development, :test do
   gem 'bixby', '~> 5.0.1'
   gem 'byebug', '~> 11.1.3'

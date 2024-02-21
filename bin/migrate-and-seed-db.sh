@@ -1,27 +1,12 @@
 #!/bin/bash
 
 if [[ ! -z "$AWS_IIIF_ASSET_BUCKET" ]]; then
-  echo "creating s3 buckets"
+  echo "creating IIIF asset bucket"
   aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_IIIF_ASSET_BUCKET}"
 fi
 
 if [[ ! -z "$AWS_BULKRAX_IMPORTS_BUCKET" ]]; then
-  echo "creating s3 buckets"
-  aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_BULKRAX_IMPORTS_BUCKET}"
-fi
-
-if [[ ! -z "$AWS_BULKRAX_IMPORTS_BUCKET" ]]; then
-  echo "creating s3 buckets"
-  aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_BULKRAX_IMPORTS_BUCKET}"
-fi
-
-if [[ ! -z "$AWS_BULKRAX_IMPORTS_BUCKET" ]]; then
-  echo "creating s3 buckets"
-  aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_BULKRAX_IMPORTS_BUCKET}"
-fi
-
-if [[ ! -z "$AWS_BULKRAX_IMPORTS_BUCKET" ]]; then
-  echo "creating s3 buckets"
+  echo "creating Bulkrax import bucket"
   aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_BULKRAX_IMPORTS_BUCKET}"
 fi
 

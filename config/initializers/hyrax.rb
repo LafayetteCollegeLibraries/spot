@@ -4,6 +4,9 @@ Hyrax.config do |config|
   config.register_curation_concern :image
   config.register_curation_concern :student_work
 
+  # Can't define this within the Bulkrax initializer as it runs _before_ this
+  Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
+
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
@@ -170,7 +173,7 @@ Hyrax.config do |config|
 
   # The user who runs fixity check jobs. Update this if you aren't using emails
   # config.audit_user_key = 'audituser@example.com'
-  #
+
   # The banner image. Should be 5000px wide by 1000px tall
   config.banner_image = '/assets/skillman-banner.jpg'
 
@@ -307,6 +310,3 @@ Hyrax.config do |config|
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
-
-# set bulkrax default work type to first curation_concern if it isn't already set
-Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.to_s if Bulkrax.default_work_type.blank?

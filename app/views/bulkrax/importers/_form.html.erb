@@ -1,0 +1,35 @@
+<div class="panel-body">
+  <% if importer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(importer.errors.count, "error") %> prohibited this importer from being saved:</h2>
+
+      <ul>
+        <% importer.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.input :name, input_html: { class: 'form-control' } %>
+
+  <%= form.input :admin_set_id, collection: available_admin_sets if defined?(::Hyrax) %>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+
+  <%= form.input :frequency, collection: form.object.class.frequency_enums, input_html: { class: 'form-control' } %>
+
+  <%= form.input :limit, as: :integer, hint: 'leave blank or 0 for all records', input_html: { class: 'form-control'} %>
+
+  <%= form.input :parser_klass, collection: Bulkrax.parsers.map {|p| [p[:name], p[:class_name], {'data-partial' => p[:partial], 'selected' => Bulkrax.parsers.count == 1}]}, label: "Parser", input_html: { class: 'form-control' } %>
+
+  <%= form.fields_for :parser_fields do |fi| %>
+    <div class='parser_fields'>
+      <p>Specific fields for each parser are available only when a parser is selected</p>
+      <% Bulkrax.parsers.map {|p| p[:partial]}.uniq.each do |partial| %>
+        <%= render partial: partial, locals: {form: form, fi: fi, importer: importer} %>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>
