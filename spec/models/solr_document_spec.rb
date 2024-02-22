@@ -56,6 +56,12 @@ RSpec.describe SolrDocument do
     rights_holder: { type: Array, suffix: 'tesim' },
     rights_statement: { type: Array, suffix: 'ssim' },
     rights_statement_label: { type: Array, suffix: 'ssim' },
+    sort_date: {
+      type: Date,
+      suffix: 'dtsi',
+      value: '2019-02-28T00:00:00Z',
+      expected: Date.parse('2019-02-28T00:00:00Z')
+    },
     source: { type: Array, suffix: 'tesim' },
     sponsor: { type: Array, suffix: 'tesim' },
     standard_identifier: { type: Array, key: 'identifier_standard_ssim' },
