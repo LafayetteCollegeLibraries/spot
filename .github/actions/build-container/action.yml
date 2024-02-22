@@ -27,13 +27,12 @@ runs:
       run: |
         build_date="$(date +'%Y%m%d')"
         echo "date=$build_date" >> "GITHUB_OUTPUT"
-        echo "::debug::BUILD DATE: $build_date"
     -
       name: Build and push ${{ inputs.image_name }} container
       uses: docker/build-push-action@v5
       with:
         build-args: |
-          build_date="${{ steps.build_date.outputs.date }}"
+          build_date=${{ steps.build_date.outputs.date }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         context: ${{ inputs.context }}
