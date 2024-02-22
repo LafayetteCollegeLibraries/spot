@@ -155,4 +155,16 @@ Rails.application.config.to_prepare do
       prepend Spot::RetrievesS3Urls::ClassMethods
     end
   end
+
+  # To be honest, I'm not sure why the Hyrax code doesn't work as-is,
+  # but rewriting the solr_params[:sort] assignment to this kinda
+  # wonky one-liner seems to preserve user-selected sorting. ¯\_(ツ)_/¯
+  #
+  # @see https://github.com/samvera/hyrax/blob/main/app/search_builders/hyrax/collection_search_builder.rb#L36-L42
+  Hyrax::CollectionMemberSearchBuilder.class_eval do
+    def add_sorting_to_solr(solr_parameters)
+      return if solr_parameters[:q]
+      solr_parameters[:sort] ||= (sort || "title_sort_si asc")
+    end
+  end
 end

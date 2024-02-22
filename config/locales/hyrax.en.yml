@@ -28,6 +28,7 @@ en:
           collection_type: Collection Type
           model_type: Model
           visibility: Visibility
+          date_uploaded: Date
 
     footer:
       copyright_html: "<strong>Copyright &copy; 2017 Samvera</strong> Licensed under the Apache License, Version 2.0"

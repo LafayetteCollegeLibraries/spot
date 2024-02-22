@@ -91,6 +91,7 @@ module Spot
 
       # dates
       attribute :date_modified,          ::Blacklight::Types::Date,   'date_modified_dtsi'
+      attribute :sort_date,              ::Blacklight::Types::Date,   'date_sort_dtsi'
 
       # Solr fields for Google Scholar citation
       attribute :citation_journal_title, ::Blacklight::Types::String, 'citation_journal_title_ss'
