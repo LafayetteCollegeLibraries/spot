@@ -58,7 +58,7 @@ RSpec.describe SolrDocument do
     rights_statement_label: { type: Array, suffix: 'ssim' },
     sort_date: {
       type: Date,
-      suffix: 'dtsi',
+      key: 'date_sort_dtsi',
       value: '2019-02-28T00:00:00Z',
       expected: Date.parse('2019-02-28T00:00:00Z')
     },
