@@ -10,7 +10,10 @@ services:
     ports:
       - "443:443"
     env_file:
-      - .env.local
+      - path: .env.development
+        required: true
+      - path: .env.development.local
+        required: false
     develop: &rails_app_watch_config
       watch:
         - action: sync
@@ -65,7 +68,10 @@ services:
   db_migrate:
     image: lafayette/spot-web
     env_file:
-      - .env.local
+      - path: .env.development
+        required: true
+      - path: .env.development.local
+        required: false
     entrypoint: ["sh", "-c"]
     command: ["bin/migrate-and-seed-db.sh"]
     depends_on:
@@ -120,7 +126,10 @@ services:
       context: .
       target: spot-worker-development
     env_file:
-      - .env.local
+      - path: .env.development
+        required: true
+      - path: .env.development.local
+        required: false
     develop:
       <<: *rails_app_watch_config
     ports:
