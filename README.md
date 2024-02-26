@@ -15,14 +15,22 @@ cd spot
 docker compose build
 ```
 
-To bring up the site (and its service dependencies) and watch local files
-for syncing with containers:
+# Development environment
+
+For development, we're using docker compose's [`watch`] functionality
+to sync files and restart containers where appropriate. To bring up
+the site (and its service dependencies) and watch for changes, run:
 
 ```bash
 docker compose watch
 ```
 
-**Note:** In a brand new environment, database migrations and seeds will need to be called with the `db_migrate` service:
+Canned environment variables for development are stored in `.env.development`.
+For sensitive values, a `.env.development.local` file is used (an sample file
+is provided at the project root: `.env.development.local.sample`).
+
+**Note:** When deploying for the first time, database migrations and seeds will
+need to be called with the `db_migrate` service:
 
 ```bash
 docker compose run --rm db_migrate
