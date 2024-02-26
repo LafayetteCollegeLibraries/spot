@@ -43,4 +43,8 @@ if [[ -d /jetty-overrides ]]; then
 fi
 
 # see: https://github.com/scientist-softserv/docker-fcrepo/blob/c8b4774da76a6f74fd3df965f1a006ab031ad4c8/assets/fedora-entrypoint.sh#L39
-su -s /bin/bash -c "JAVA_HOME=/opt/java/openjdk; PATH=$PATH:/usr/local/jetty/bin:/opt/java/openjdk/bin; exec /docker-entrypoint.sh $@" jetty
+su -s /bin/bash jetty <<'EOSCRIPT'
+JAVA_HOME=/opt/java/openjdk; \
+PATH=$PATH:/usr/local/jetty/bin:/opt/java/openjdk/bin; \
+exec /docker-entrypoint.sh $@
+EOSCRIPT
