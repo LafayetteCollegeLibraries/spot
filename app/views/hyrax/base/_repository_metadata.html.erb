@@ -13,6 +13,7 @@
       <%= presenter.attribute_to_html(:embargo_release_date) %>
       <%= presenter.attribute_to_html(:lease_expiration_date) %>
       <%= presenter.attribute_to_html(:local_identifier, render_as: :identifier, local: true) %>
+      <%= presenter.attribute_to_html(:source_identifier) %>
       <%= presenter.attribute_to_html(:depositor, render_as: :faceted, search_field: :depositor_ssim) %>
       <%= presenter.attribute_to_html(:date_created) %>
       <%= presenter.attribute_to_html(:date_uploaded) %>

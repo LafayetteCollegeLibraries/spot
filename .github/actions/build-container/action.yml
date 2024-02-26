@@ -6,10 +6,6 @@ inputs:
   tag:
     required: true
     description: "Version identifier for release (ex. '2023.1')"
-  build_args_json:
-    required: false
-    default: "[]"
-    description: "JSON stringified array of build-args options (ex. '[\"some-arg=some_value\"]')"
   context:
     required: false
     default: '.'
@@ -26,15 +22,17 @@ runs:
   steps:
     -
       id: build_date
-      name: Generate build_date variable for Image
       shell: bash
-      run: echo "date=$(date +'%Y%m%d')" >> "${GITHUB_OUTPUT}"
+      name: Generate build date variable for Image
+      run: |
+        build_date="$(date +'%Y%m%d')"
+        echo "date=$build_date" >> "$GITHUB_OUTPUT"
     -
       name: Build and push ${{ inputs.image_name }} container
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         build-args: |
-          build_date=${{ steps.build_date.outputs.date }}
+          build_date="${{ steps.build_date.outputs.date }}"
         cache-from: type=gha
         cache-to: type=gha,mode=max
         context: ${{ inputs.context }}

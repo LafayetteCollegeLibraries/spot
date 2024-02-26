@@ -10,6 +10,7 @@ module Spot
   module SolrDocumentAttributes
     extend ActiveSupport::Concern
 
+    # rubocop:disable Metrics/BlockLength
     included do
       # Hyrax properties
       attribute :admin_set,              ::Blacklight::Types::String, 'admin_set_tesim'
@@ -41,6 +42,7 @@ module Spot
       attribute :subtitle,               ::Blacklight::Types::Array,  'subtitle_tesim'
       attribute :title,                  ::Blacklight::Types::Array,  'title_tesim'
       attribute :title_alternative,      ::Blacklight::Types::Array,  'title_alternative_tesim'
+      attribute :source_identifier,      ::Blacklight::Types::String, 'source_identifier_ssim'
 
       # Spot::InstitutionalMetadata mixin properties
       attribute :academic_department,    ::Blacklight::Types::Array,  'academic_department_tesim'
@@ -89,6 +91,7 @@ module Spot
 
       # dates
       attribute :date_modified,          ::Blacklight::Types::Date,   'date_modified_dtsi'
+      attribute :sort_date,              ::Blacklight::Types::Date,   'date_sort_dtsi'
 
       # Solr fields for Google Scholar citation
       attribute :citation_journal_title, ::Blacklight::Types::String, 'citation_journal_title_ss'

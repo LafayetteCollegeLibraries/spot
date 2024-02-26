@@ -1,5 +1,14 @@
 # changelog
 
+## [2024.2] - 2024-02-26
+
+### features 🚀
+- introducing Bulkrax! (#1007)
+
+### bug fixes 🪲
+- fix member object sorting on Collection pages (#1109)
+
+
 ## [2024.1] - 2024-01-30
 
 ### updates 🚀
@@ -895,6 +904,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.2
 [2024.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.1
 [2023.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.2
 [2023.1.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.1.3

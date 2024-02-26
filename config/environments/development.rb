@@ -11,8 +11,10 @@ Rails.application.configure do
 
   Rails.logger.debug 'starting with classes cached' if ENV['ENABLE_CLASS_CACHE'] == 'true'
 
-  # Do not eager load code on boot.
-  config.eager_load = false
+  # Rails' default is to not eager_load in development for speed's sake (I think?)
+  # but we were encountering a lot of Missing Constant errors in our Sidekiq logs
+  # and eager_loding classes seemed to help fix that.
+  config.eager_load = true
 
   # Show full error reports.
   config.consider_all_requests_local = true

@@ -12,6 +12,9 @@
 !/log/.keep
 !/public
 !/tmp/.keep
+!/tmp/import/.keep
+!/tmp/import/files/.keep
+!/vendor/.keep
 
 # allow files @ app root
 !config.ru
@@ -23,9 +26,5 @@
 
 # don't copy over generated files
 public/assets
-!public/assets/.keep
-
 public/branding
-!public/branding/.keep
-
 public/uv

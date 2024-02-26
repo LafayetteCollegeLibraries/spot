@@ -3,7 +3,7 @@ RSpec.describe Spot::IiifService do
   subject(:service) { described_class.new(file_id: file_id) }
 
   before do
-    stub_env('IIIF_URL_BASE', 'http://localhost/iiif/2')
+    stub_env('IIIF_BASE_URL', 'http://localhost/iiif/2')
   end
 
   let(:file_id) { 'abc123def/files/00000000-0000-0000-0000-000000000000' }
