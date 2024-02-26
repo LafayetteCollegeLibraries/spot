@@ -31,6 +31,7 @@ services:
       - cantaloupe
       - db
       - fedora
+      - minio
       - redis
       - solr
     stdin_open: true
@@ -51,6 +52,8 @@ services:
       CANTALOUPE_S3SOURCE_LOOKUP_STRATEGY: BasicLookupStrategy
       CANTALOUPE_LOG_APPLICATION_LEVEL: trace
     restart: unless-stopped
+    depends_on:
+      - minio
 
   db:
     image: postgres:13-alpine
@@ -77,6 +80,8 @@ services:
     depends_on:
       - db
       - fedora
+      - minio
+      - redis
       - solr
     profiles:
       - migrate_and_seed
