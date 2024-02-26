@@ -32,13 +32,12 @@ executors:
           POSTGRES_PASSWORD: password
           POSTGRES_DB: spot_test
       - image: ghcr.io/samvera/fcrepo:4.7.6-s3-streaming
-        # @see https://discuss.circleci.com/t/how-can-i-escape-the-pipeline-variable-characters-in-a-run-step/42206
-        entrypoint: |
-          /bin/su -s /bin/bash -c "\
-            CATALINA_OPTS='-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'; \
-            JAVA_HOME=/opt/java/openjdk; \
-            PATH=\$PATH:/usr/local/jetty/bin:\$JAVA_HOME/bin; \
-            exec /docker-entrypoint.sh \$@" jetty
+        entrypoint: /docker-entrypoint.sh
+        user: jetty
+        environment:
+          JAVA_OPTIONS: $JAVA_OPTIONS -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC -Dfcrepo.modeshape.configuration=classpath:/config/file-simple/repository.json
+          JAVA_HOME: /opt/java/openjdk
+          PATH: $PATH:/usr/local/jetty/bin:/opt/java/openjdk/bin
       - image: solr:8.11.2
         environment:
           SOLR_AUTH_TYPE: basic
