@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 Hyrax.config do |config|
-  config.register_curation_concern :publication
-  config.register_curation_concern :image
-  config.register_curation_concern :student_work
+  config.register_curation_concern :publication, :image, :student_work, :audio_visual
 
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
@@ -123,7 +121,7 @@ Hyrax.config do |config|
   # Should work creation require file upload, or can a work be created first
   # and a file added at a later time?
   # The default is true.
-  # config.work_requires_files = true
+  config.work_requires_files = false
 
   # Enable IIIF image service. This is required to use the
   # UniversalViewer-ified show page
