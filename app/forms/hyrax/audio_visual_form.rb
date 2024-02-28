@@ -9,6 +9,7 @@ module Hyrax
     self.terms = [
       :title,
       :date,
+      :embed_url,
       :rights_statement
     ].concat(hyrax_form_fields)
   end

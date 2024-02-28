@@ -8,6 +8,11 @@ class AudioVisual < ActiveFedora::Base
     index.as :symbol
   end
 
+  # @todo is there a predicate for this?
+  property :embed_url, predicate: ::RDF::URI.new('http://ldr.lafayette.edu/ns#embed_url') do |index|
+    index.as :symbol
+  end
+
   def validate_resource_type?
     false
   end
