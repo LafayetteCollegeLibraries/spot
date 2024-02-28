@@ -22,14 +22,26 @@ module Spot
 
       # validations for CoreMetadata fields. it should be safe to include these here
       # rather than at the individual model level
-      validates :title, presence: { message: 'Your work must include a Title.' }
-      validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }
-      validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }
+      validates :title, presence: { message: 'Your work must include a Title.' }, if: :validate_title?
+      validates :resource_type, presence: { message: 'Your work must include a Resource Type.' }, if: :validate_resource_type?
+      validates :rights_statement, presence: { message: 'Your work must include a Rights Statement.' }, if: :validate_rights_statement?
 
       validates_with ::Spot::RequiredLocalAuthorityValidator,
                      field: :resource_type, authority: 'resource_types'
       validates_with ::Spot::RequiredLocalAuthorityValidator,
                      field: :rights_statement, authority: 'rights_statements'
+    end
+
+    def validate_resource_type?
+      true
+    end
+
+    def validate_rights_statement?
+      true
+    end
+
+    def validate_title?
+      true
     end
 
     module ClassMethods
