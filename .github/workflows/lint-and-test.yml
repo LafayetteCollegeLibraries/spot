@@ -12,7 +12,7 @@ jobs:
       -
         name: Run Rubocop
         run: >-
-          docker compose version
+          docker compose version;
           docker compose run --rm --build --entrypoint '' -v $(pwd):/spot app bundle exec rubocop --parallel --format junit -o rubocop-$(date +'%Y%m%d')
       -
         name: Publish Rubo report
