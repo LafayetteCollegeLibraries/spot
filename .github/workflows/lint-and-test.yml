@@ -6,14 +6,11 @@ jobs:
   lint_and_rspec:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
       -
         name: Run Rubocop
-        run: >-
-          docker compose version;
-          docker compose run --rm --build --entrypoint '' -v $(pwd):/spot app bundle exec rubocop --parallel --format junit -o rubocop-$(date +'%Y%m%d')
+        run: bundle exec rubocop --format junit --out rubocop-$(date +'%Y%m%md').xml
       -
         name: Publish Rubo report
         uses: mikepenz/action-junit-report@v3
