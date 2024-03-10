@@ -11,6 +11,8 @@ jobs:
       -
         name: Run Rubocop
         run: bundle exec rubocop --format junit --out rubocop-$(date +'%Y%m%md').xml
+        env:
+          BUNDLE_WITH: test
       -
         name: Publish Rubo report
         uses: mikepenz/action-junit-report@v3
