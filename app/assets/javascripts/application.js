@@ -33,7 +33,7 @@
 //= require browse_everything
 
 // Video.js
-//= require video-js
+//= require video
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require language-tagged-autocomplete-setup

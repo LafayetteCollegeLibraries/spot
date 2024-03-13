@@ -56,7 +56,7 @@ gem 'browse-everything', '~> 1.1.2'
 gem 'bulkrax', '~> 5.3.0'
 
 # Audio-Video content
-gem 'video-js-rails', '~> 4.3'
+gem 'videojs-ng'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
