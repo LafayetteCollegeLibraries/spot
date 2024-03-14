@@ -167,4 +167,21 @@ Rails.application.config.to_prepare do
       solr_parameters[:sort] ||= (sort || "title_sort_si asc")
     end
   end
+
+  # Override to fix Hyrax bug where calling Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+  # will try to load an AdminSet's entire set of members when called.
+  #
+  # @see https://github.com/samvera/hyrax/issues/6171
+  # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
+  module Spot
+    module AdminSetCreateServiceDecorator
+      private
+
+      def find_default_admin_set
+        AdminSet.find('admin_set/default')
+      end
+    end
+  end
+
+  Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
 end
