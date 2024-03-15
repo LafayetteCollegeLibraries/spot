@@ -53,7 +53,7 @@ gem 'bootsnap', '~> 1.17', require: false
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.1.2'
-gem 'bulkrax', '~> 5.3.0'
+gem 'bulkrax', '~> 5.5.1'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
