@@ -1,5 +1,11 @@
 # changelog
 
+## [2024.3] - 2024-03-15
+
+### bug fixes 🐞
+- workaround patch for Hyrax bug that hasn't been backported to v3 yet ([Wings - Hyrax::AdminstrativeSet loads member_ids whenever it is loaded and should not #6171](https://github.com/samvera/hyrax/issues/6171)) (#1111)
+
+
 ## [2024.2] - 2024-02-26
 
 ### features 🚀
@@ -904,6 +910,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.3
 [2024.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.2
 [2024.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.1
 [2023.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2023.2
