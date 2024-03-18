@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 module Spot
   module Derivatives
-    # Thumbnail creation abstracted out from +Hyrax::FileSetDerivativesServices+.
-    # Intended to be run as part of a subset within {Spot::ImageDerivativesService}
-    # and needs to respond to :cleanup_derivatives and :create_derivatives (the
-    # latter receives a source filename as a parameter).
-    class ThumbnailService < BaseDerivativesService
+    # Thumbnail creation for file_sets (except audio mime-types).
+    #
+    # @example
+    #   working_copy = Hyrax::WorkingDirectory.find_or_retrieve(file_set)
+    #   Spot::Derivatives::ThumbnailServkce.new(file_set).create_derivatives(working_copy)
+    class ThumbnailService < BaseDerivativeService
       # @return [void]
       def cleanup_derivatives
         FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
@@ -18,15 +19,29 @@ module Spot
       # @param [String, Pathname] filename
       # @return [void]
       # @see https://github.com/LafayetteCollegeLibraries/spot/issues/831
-      def create_derivatives(filename)
+      def create_derivatives(src_path)
         output_dirname = File.dirname(derivative_path)
         FileUtils.mkdir_p(output_dirname) unless File.directory?(output_dirname)
 
         MiniMagick::Tool::Convert.new do |convert|
-          convert << "#{filename}[0]"
-          convert.merge! %w[-colorspace sRGB -flatten -resize 200x150> -format jpg]
-          convert << derivative_path
+          convert.merge!(
+            [
+              "#{src_path}[0]",
+              "-colorspace", "sRGB",
+              "-flatten",
+              "-resize", "200x150>",
+              "-format", "jpg",
+              derivative_path
+            ]
+          )
         end
+      end
+
+      # Audio formats are the only ones we can't create a thumbnail for
+      #
+      # @return [true, false]
+      def valid?
+        !audio_mime_types.include?(mime_type)
       end
 
       private
