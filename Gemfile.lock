@@ -685,10 +685,8 @@ GEM
     noid-rails (3.0.3)
       actionpack (>= 5.0.0, < 7)
       noid (~> 0.9)
-    nokogiri (1.15.5)
+    nokogiri (1.15.6)
       mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
-    nokogiri (1.15.5-arm64-darwin)
       racc (~> 1.4)
     non-digest-assets (2.2.0)
       activesupport (>= 5.2, < 7.1)
@@ -979,7 +977,7 @@ GEM
       faraday (>= 0.17.5, < 3.a)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
-    simple_form (5.3.0)
+    simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
     simplecov (0.21.2)
@@ -1097,7 +1095,6 @@ GEM
     zeitwerk (2.6.13)
 
 PLATFORMS
-  arm64-darwin-22
   ruby
 
 DEPENDENCIES
@@ -1156,6 +1153,7 @@ DEPENDENCIES
   shoulda-matchers (~> 4)
   sidekiq (~> 5.2.9)
   sidekiq-cron (~> 1.9.1)
+  simple_form (< 5.2)
   simplecov (~> 0.21.2)
   slack-ruby-client (~> 0.14.6)
   spring (~> 2.1.1)
