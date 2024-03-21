@@ -9,7 +9,7 @@ RSpec.describe PdfViewerHelper do
       allow(helper).to receive(:search).and_return search_double
     end
 
-    let(:base) { '/web/viewer.html' }
+    let(:base) { '/pdf/web/viewer.html' }
     let(:path) { '/downloads/abc123' }
     let(:params) { {} }
     let(:search_double) { instance_double(Search, query_params: params) }
