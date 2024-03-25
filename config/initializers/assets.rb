@@ -11,6 +11,7 @@ Rails.application.config.assets.version = '1.0'
 Sprockets::ES6.configuration = { 'modules' => 'amd', 'moduleIds' => true }
 
 Rails.application.config.assets.precompile += %w[*.js *.es6]
+Rails.application.config.assets.precompile += %w( VideoJS.eot VideoJS.svg VideoJS.ttf VideoJS.woff )
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
