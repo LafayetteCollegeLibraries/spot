@@ -24,7 +24,7 @@ module Spot
 
     config.rack_cas.server_url = ENV['CAS_BASE_URL']
     config.rack_cas.service = '/users/service'
-    config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
+    config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber]
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
