@@ -55,6 +55,9 @@ gem 'bootsnap', '~> 1.17', require: false
 gem 'browse-everything', '~> 1.1.2'
 gem 'bulkrax', '~> 5.5.1'
 
+# Audio-Video content
+gem 'videojs-ng'
+
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
 gem 'coffee-rails', '~> 5.0.0'
