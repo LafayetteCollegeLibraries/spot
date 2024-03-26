@@ -1,0 +1,35 @@
+name: Lint and Run Tests
+on:
+  push:
+
+jobs:
+  lint_and_rspec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+        env:
+          BUNDLE_WITH: test
+      -
+        name: Run Rubocop
+        run: bundle exec rubocop --format junit --out rubocop-$(date +'%Y%m%md').xml
+      -
+        name: Publish Rubo report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: 'rubocop*.xml'
+        id: rubocop_results
+      -
+        name: Write job summary
+        run: >-
+          echo "total cases | passed | failed | skipped" >> $GITHUB_STEP_SUMMARY
+          echo "------------|--------|--------|--------" >> $GITHUB_STEP_SUMMARY
+          echo "${TOTAL}   |${PASSED}|${FAILED}|${SKIPPED}" >> $GITHUB_STEP_SUMMARY
+        env:
+          TOTAL: ${{ steps.rubocop_results.outputs.total }}
+          PASSED: ${{ steps.rubocop_results.outputs.passed }}
+          FAILED: ${{ steps.rubocop_results.outputs.failed }}
+          SKIPPED: ${{ steps.rubocop_results.outputs.skipped }}

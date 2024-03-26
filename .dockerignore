@@ -17,6 +17,11 @@
 !/vendor/.keep
 
 # allow files @ app root
+!.env.development
+!.rspec
+!.rubocop.yml
+!.rubocop_todo.yml
+!.scss-lint.yml
 !config.ru
 !Gemfile
 !Gemfile.lock
