@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Derivatives::ThumbnailService do
+RSpec.describe Spot::Derivatives::ThumbnailService, derivatives: true do
   subject(:service) { described_class.new(file_set) }
 
   let(:file_set) { FileSet.new }
@@ -56,6 +56,30 @@ RSpec.describe Spot::Derivatives::ThumbnailService do
       service.create_derivatives(filename)
 
       expect(magick_commands).to eq(expected_commands)
+    end
+  end
+
+  describe '#valid?' do
+    subject { service.valid? }
+
+    before { allow(file_set).to receive(:mime_type).and_return(fs_mime_type) }
+
+    # valid mime_types
+    ['image/tiff', 'application/vnd.ms-excel', 'video/mpeg', 'application/pdf'].each do |mime_type|
+      context "when mime_type is #{mime_type}" do
+        let(:fs_mime_type) { mime_type }
+
+        it { is_expected.to be true }
+      end
+    end
+
+    # invalid mime_types
+    ['audio/wav'].each do |mime_type|
+      context "when mime_type is #{mime_type}" do
+        let(:fs_mime_type) { mime_type }
+
+        it { is_expected.to be false }
+      end
     end
   end
 end

@@ -1,5 +1,18 @@
 # changelog
 
+## [2024.4] - 2024-03-26
+
+### enhancements ✨
+- Refactored derivatives code to ensure PDFs are being OCR'd (and generally make the process a bit more legible) (#1010)
+
+### updates 📈
+- Bulkrax to 5.5.1 (#1113)
+
+### bug fixes 🐞
+- **All works / My works** dashboard navtabs work again (#1113)
+- Removed `eduPersonEntitlement` values from cookied CAS attributes (#1115)
+
+
 ## [2024.3] - 2024-03-15
 
 ### bug fixes 🐞
@@ -910,6 +923,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.4
 [2024.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.3
 [2024.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.2
 [2024.1]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.1

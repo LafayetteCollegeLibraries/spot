@@ -53,7 +53,7 @@ gem 'bootsnap', '~> 1.17', require: false
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.1.2'
-gem 'bulkrax', '~> 5.3.0'
+gem 'bulkrax', '~> 5.5.1'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -137,6 +137,10 @@ gem 'sprockets-es6', '~> 0.9.2'
 # @see https://github.com/samvera/hyrax/pull/5961
 # @todo remove when Hyrax 3.5.1 or 3.6 (whichever includes it) drops
 gem 'redlock', '>= 0.1.2', '< 2.0'
+
+# This is locked in hydra_editor > v6 to prevent an update
+# that throws off how forms are built in Hyrax.
+gem 'simple_form', '< 5.2'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do

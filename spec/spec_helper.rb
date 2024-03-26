@@ -163,7 +163,9 @@ WebMock.disable_net_connect!(
   # let webdrivers gem fetch the chrome browser and
   # account for our aliased services via docker
   allow: %w[
+    googlechromelabs.github.io
     chromedriver.storage.googleapis.com
+    storage.googleapis.com
     db
     fedora
     fitsservlet

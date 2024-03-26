@@ -24,14 +24,16 @@ Rails.application.config.to_prepare do
   Hyrax::CollectionsController.presenter_class = Spot::CollectionPresenter
   Hyrax::CollectionsController.include Spot::CollectionsControllerBehavior
 
+  Hyrax::CurationConcern.actor_factory.swap(Hyrax::Actors::CollectionsMembershipActor, Spot::Actors::CollectionsMembershipActor)
+
+  # Use our own FileSetDerivativesService first and fall back to the Hyrax services
+  # for formats we don't currently handle uniquely.
   Hyrax::DerivativeService.services = [
-    ::Spot::PdfDerivativesService,
-    ::Spot::ImageDerivativesService,
+    ::Spot::FileSetDerivativesService,
     ::Hyrax::FileSetDerivativesService
   ]
 
-  Hyrax::CurationConcern.actor_factory.swap(Hyrax::Actors::CollectionsMembershipActor, Spot::Actors::CollectionsMembershipActor)
-
+  # Change the layout used for pages and the contact form
   Hyrax::ContactFormController.class_eval { layout 'hyrax/1_column' }
   Hyrax::PagesController.class_eval { layout 'hyrax/1_column' }
 
