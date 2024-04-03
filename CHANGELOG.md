@@ -1,5 +1,11 @@
 # changelog
 
+## [2024.5] - 2024-04-03
+
+### bug fixes 🐞
+
+- set log_level via env (#1117)
+
 ## [2024.4] - 2024-03-26
 
 ### enhancements ✨
@@ -923,6 +929,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.5
 [2024.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.4
 [2024.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.3
 [2024.2]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.2
