@@ -9,21 +9,31 @@ module PdfViewerHelper
     "/pdf/web/viewer.html?file=#{path}##{query_param}"
   end
 
-  # The search param used by PDFjs to prepopulate the search bar
+  # The search/page params used by PDFjs to prepopulate the search bar
   #
   # @return [String]
   def query_param
-    return unless search_query || params[:page]&.to_i
-    base = ""
-    base += "page=#{params[:page]}&" if params[:page]
-    base +="search=#{search_query}&phrase=true"
+    return unless search_query || page_param
+    qp = {}
+    qp[:page] = page_param if page_param
+
+    if search_query
+      qp[:search] = search_query
+      qp[:phrase] = true
+    end
+
+    URI.encode_www_form(qp)
   end
 
   private
 
+  def page_param
+    search&.query_params && search&.query_params&.try(:[], :page)
+  end
+
   # @return [String]
   def search_query
-    search&.query_params && search.query_params[:q]
+    search&.query_params && search.query_params&.try(:[], :q)
   end
 
   def search
