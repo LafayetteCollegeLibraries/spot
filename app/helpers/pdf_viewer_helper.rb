@@ -25,15 +25,13 @@ module PdfViewerHelper
     URI.encode_www_form(qp)
   end
 
-  private
-
   def page_param
-    search&.query_params && search&.query_params&.try(:[], :page)
+    search&.query_params&.try(:[], :page)
   end
 
   # @return [String]
   def search_query
-    search&.query_params && search.query_params&.try(:[], :q)
+    search&.query_params&.try(:[], :q)
   end
 
   def search
