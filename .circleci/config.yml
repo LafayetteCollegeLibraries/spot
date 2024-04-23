@@ -2,6 +2,7 @@ version: 2.1
 
 jobs:
   noop:
-    docker: cimg/base
+    docker:
+      - image: cimg/base
     steps:
       - echo "skipping circleci tests"
