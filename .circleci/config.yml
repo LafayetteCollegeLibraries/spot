@@ -1,8 +1,15 @@
 version: 2.1
 
 jobs:
-  noop:
+  echo_skip:
     docker:
       - image: cimg/base
     steps:
-      - echo "skipping circleci tests"
+      - run:
+          command: echo "skipping circleci tests"
+
+workflows:
+  version: 2
+  noop:
+    jobs:
+      - echo_skip
