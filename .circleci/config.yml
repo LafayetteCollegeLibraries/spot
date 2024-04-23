@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   echo_skip:
     docker:
-      - image: cimg/base
+      - image: cimg/base:current
     steps:
       - run:
           command: echo "skipping circleci tests"
