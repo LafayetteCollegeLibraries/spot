@@ -35,6 +35,7 @@ Bulkrax.setup do |config|
     'Bulkrax::CsvParser' => {
       'source_identifier' => { from: ['source_identifier'], source_identifier: true, split: false },
       'model' => { from: ['model', 'work_type'], split: false },
+      'premade_derivatives' => { from: ['premade_derivatives'] },
 
       # Descriptive metadata
       'title' => { from: ['title'] },
