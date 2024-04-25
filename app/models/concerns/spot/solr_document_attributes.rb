@@ -69,6 +69,9 @@ module Spot
       attribute :research_assistance,    ::Blacklight::Types::Array,  'research_assistance_ssim'
       attribute :subject_ocm,            ::Blacklight::Types::Array,  'subject_ocm_ssim'
 
+      # AudioVisual properties
+      attribute :premade_derivatives,    ::Blacklight::Types::Array,  'premade_derivatives_ssim'
+
       # StudentWork properties
       attribute :access_note,            ::Blacklight::Types::Array,  'access_note_tesim'
       attribute :advisor,                ::Blacklight::Types::Array,  'advisor_ssim'
