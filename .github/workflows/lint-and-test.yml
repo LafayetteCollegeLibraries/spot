@@ -22,14 +22,13 @@ jobs:
         with:
           report_paths: 'rubocop*.xml'
         id: rubocop_results
-      -
-        name: Write job summary
-        run: >-
-          echo "total cases | passed | failed | skipped" >> $GITHUB_STEP_SUMMARY
-          echo "------------|--------|--------|--------" >> $GITHUB_STEP_SUMMARY
-          echo "${TOTAL}   |${PASSED}|${FAILED}|${SKIPPED}" >> $GITHUB_STEP_SUMMARY
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+            bundler-cache: true
         env:
-          TOTAL: ${{ steps.rubocop_results.outputs.total }}
-          PASSED: ${{ steps.rubocop_results.outputs.passed }}
-          FAILED: ${{ steps.rubocop_results.outputs.failed }}
-          SKIPPED: ${{ steps.rubocop_results.outputs.skipped }}
+          BUNDLE_WITH: test
