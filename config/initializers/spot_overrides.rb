@@ -188,4 +188,22 @@ Rails.application.config.to_prepare do
   end
 
   Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
+
+  # Only store entitlements related to us in the session to prevent a cookie overflow
+  require 'rack/cas'
+  Rack::CAS.class_eval do
+    def store_session(request, user, ticket, extra_attrs = {})
+      if RackCAS.config.extra_attributes_filter?
+        extra_attrs.select! { |key, val| RackCAS.config.extra_attributes_filter.map(&:to_s).include? key.to_s }
+      end
+
+      if extra_attrs['eduPersonEntitlement'].present?
+        extra_attrs['eduPersonEntitlement'].select! do |val|
+          URI.parse(val).host == Spot::CasUserRolesService.entitlement_host
+        end
+      end
+
+      request.session['cas'] = { 'user' => user, 'ticket' => ticket, 'extra_attributes' => extra_attrs }
+    end
+  end
 end

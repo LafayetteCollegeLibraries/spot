@@ -16,11 +16,10 @@ module Spot
   #   user.save
   class CasUserRolesService
     # URI host for valid entitlements
-    ENTITLEMENT_HOST = 'ldr.lafayette.edu'
+    class_attribute :entitlement_host, default: 'ldr.lafayette.edu'
 
     # Roles/Groups that we handle via CAS attributes
-    class_attribute :group_names_from_cas
-    self.group_names_from_cas = [
+    class_attribute :group_names_from_cas, default: [
       Ability.alumni_group_name,
       Ability.faculty_group_name,
       Ability.staff_group_name,
@@ -65,7 +64,7 @@ module Spot
     # @return [String]
     def role_name_from_entitlement(value)
       parsed = URI.parse(value)
-      return unless parsed.host == ENTITLEMENT_HOST
+      return unless parsed.host == entitlement_host
 
       case parsed.path
       when '/alumni'  then Ability.alumni_group_name
