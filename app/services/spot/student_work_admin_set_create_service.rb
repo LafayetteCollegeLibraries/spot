@@ -2,12 +2,12 @@
 module Spot
   # @todo do we need this service anymore?
   class StudentWorkAdminSetCreateService
-    ADMIN_SET_ID = 'admin_set/student_work'
-    DEFAULT_TITLE = ['Student Work'].freeze
-    WORKFLOW_NAME = 'mediated_student_work_deposit'
+    class_attribute :admin_set_id,  default: 'admin_set/student_work'
+    class_attribute :default_title, default: ['Student Work'].freeze
+    class_attribute :workflow_name, default: 'mediated_student_work_deposit'
 
     def self.find_or_create_student_work_admin_set_id
-      return ADMIN_SET_ID if AdminSet.exists?(ADMIN_SET_ID)
+      return admin_set_id if AdminSet.exists?(admin_set_id)
 
       new.create_student_work_admin_set.id
     end
@@ -37,7 +37,7 @@ module Spot
     end
 
     def create_admin_set
-      AdminSet.create(id: ADMIN_SET_ID, title: DEFAULT_TITLE)
+      AdminSet.create(id: admin_set_id, title: default_title)
     end
 
     def create_permission_template!(admin_set:)
@@ -53,14 +53,14 @@ module Spot
     end
 
     def find_or_create_workflow(permission_template:)
-      workflow = Sipity::Workflow.find_by(name: WORKFLOW_NAME, permission_template: permission_template)
+      workflow = Sipity::Workflow.find_by(name: workflow_name, permission_template: permission_template)
       return workflow unless workflow.nil?
 
       Hyrax::Workflow::WorkflowImporter.generate_from_json_file(path: workflow_json_path, permission_template: permission_template).first
     end
 
     def workflow_json_name
-      "#{WORKFLOW_NAME}_workflow.json"
+      "#{workflow_name}_workflow.json"
     end
 
     def workflow_json_path

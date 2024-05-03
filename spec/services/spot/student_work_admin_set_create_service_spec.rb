@@ -5,10 +5,10 @@ RSpec.describe Spot::StudentWorkAdminSetCreateService do
 
     context 'when the admin_set exists' do
       before do
-        allow(AdminSet).to receive(:exists?).with(described_class::ADMIN_SET_ID).and_return(true)
+        allow(AdminSet).to receive(:exists?).with(described_class.admin_set_id).and_return(true)
       end
 
-      it { is_expected.to eq described_class::ADMIN_SET_ID }
+      it { is_expected.to eq described_class.admin_set_id }
     end
 
     context 'when the admin_set does not exist' do
@@ -27,7 +27,7 @@ RSpec.describe Spot::StudentWorkAdminSetCreateService do
         # We're only loading the 'mediated_student_work_deposit' workflow,
         # but we need to make sure it's activated.
         expect(admin_set.active_workflow).to be_persisted
-        expect(admin_set.active_workflow.name).to eq described_class::WORKFLOW_NAME
+        expect(admin_set.active_workflow.name).to eq described_class.workflow_name
 
         expect(admin_set.read_groups).not_to include('public')
         expect(admin_set.edit_groups).to eq ['admin']
@@ -38,7 +38,7 @@ RSpec.describe Spot::StudentWorkAdminSetCreateService do
       before do
         allow(File)
           .to receive(:exist?)
-          .with(Rails.root.join('config', 'workflows', "#{described_class::WORKFLOW_NAME}_workflow.json"))
+          .with(Rails.root.join('config', 'workflows', "#{described_class.workflow_name}_workflow.json"))
           .and_return(false)
       end
 

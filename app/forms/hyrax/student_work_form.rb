@@ -96,7 +96,7 @@ module Hyrax
       def admin_set_id
         Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id
       rescue Ldp::Gone
-        AdminSet.find_or_create_default_admin_set_id
+        'admin_set/default'
       end
     end
 

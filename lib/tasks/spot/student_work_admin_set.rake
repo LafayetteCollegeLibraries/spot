@@ -7,7 +7,7 @@ namespace :spot do
       begin
         admin_set = AdminSet.find(Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id)
       rescue Ldp::Gone
-        puts "AdminSet(ID=#{Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID}) has been deleted."
+        puts "AdminSet(ID=#{Spot::StudentWorkAdminSetCreateService.admin_set_id}) has been deleted."
         next
       end
 

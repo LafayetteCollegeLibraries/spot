@@ -145,7 +145,7 @@ Rails.application.config.to_prepare do
   end
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
-  AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
+  AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService.admin_set_id
 
   # Our own Characterization Service subclass that uses :fits_servlet by default
   CharacterizeJob.characterization_service = Spot::CharacterizationService

@@ -110,11 +110,11 @@ RSpec.describe Hyrax::StudentWorkForm do
           before do
             allow(Spot::StudentWorkAdminSetCreateService)
               .to receive(:find_or_create_student_work_admin_set_id)
-              .and_return(Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID)
+              .and_return(Spot::StudentWorkAdminSetCreateService.admin_set_id)
           end
 
           it 'uses the StudentWork AdminSet id' do
-            expect(attributes[:admin_set_id]).to eq Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
+            expect(attributes[:admin_set_id]).to eq Spot::StudentWorkAdminSetCreateService.admin_set_id
           end
         end
 
