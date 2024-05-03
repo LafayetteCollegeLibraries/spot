@@ -93,9 +93,16 @@ module Hyrax
       # fall back to the default set if the student one is gone
       #
       # @return [String]
+      # @todo replace AdminSet.find_or_create_default_admin_set_id call with whatever
+      #       the modern Valkyrie-based way is to prevent loading all of the admin_set
+      #       objects at once.
+      # @see https://github.com/LafayetteCollegeLibraries/spot/pull/1111/files
+      # @see https://github.com/samvera/hyrax/issues/6171
+      # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
       def admin_set_id
         Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id
       rescue Ldp::Gone
+        # AdminSet.find_or_create_default_admin_set_id
         'admin_set/default'
       end
     end
