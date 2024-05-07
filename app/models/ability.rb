@@ -51,7 +51,7 @@ class Ability
   end
 
   def authenticated_users_can_deposit_student_works
-    return unless current_user.registered?
+    return unless registered_user?
 
     can(:create, StudentWork)
   end
