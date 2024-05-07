@@ -14,7 +14,7 @@ class Ability
     :admin_abilities,
     :faculty_abilities,
     :student_abilities,
-    :authenticated_users_can_deposit_student_works,
+    :authenticated_users_can_deposit_student_works
   ]
 
   def self.preload_roles!
