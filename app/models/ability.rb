@@ -13,7 +13,8 @@ class Ability
     :depositor_abilities,
     :admin_abilities,
     :faculty_abilities,
-    :student_abilities
+    :student_abilities,
+    :authenticated_users_can_deposit_student_works,
   ]
 
   def self.preload_roles!
@@ -47,6 +48,12 @@ class Ability
 
     # admins can create everything
     can(:create, curation_concerns_models)
+  end
+
+  def authenticated_users_can_deposit_student_works
+    return unless current_user.registered?
+
+    can(:create, StudentWork)
   end
 
   # Delegates abilities for users that have the 'depositor' role
