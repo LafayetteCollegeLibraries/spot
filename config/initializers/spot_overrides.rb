@@ -180,9 +180,7 @@ Rails.application.config.to_prepare do
       private
 
       def find_default_admin_set
-        AdminSet.find('admin_set/default')
-      rescue ActiveFedora::ObjectNotFoundError
-        nil
+        AdminSet.first
       end
     end
   end

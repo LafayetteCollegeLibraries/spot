@@ -7,8 +7,8 @@ services:
       target: spot-web-development
     volumes:
       - .:/spot
-      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
+      - /spot/public/pdf
     ports:
       - "443:443"
     env_file:
@@ -110,7 +110,6 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - ./ingest:/spot/ingest
       - rails_tmp:/spot/tmp
     restart: unless-stopped
     depends_on:

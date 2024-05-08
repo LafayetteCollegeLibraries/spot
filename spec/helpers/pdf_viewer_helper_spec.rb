@@ -9,7 +9,7 @@ RSpec.describe PdfViewerHelper do
       allow(helper).to receive(:search).and_return search_double
     end
 
-    let(:base) { '/web/viewer.html' }
+    let(:base) { '/pdf/web/viewer.html' }
     let(:path) { '/downloads/abc123' }
     let(:params) { {} }
     let(:search_double) { instance_double(Search, query_params: params) }
@@ -20,8 +20,15 @@ RSpec.describe PdfViewerHelper do
 
     context 'when query_param is present' do
       let(:params) { { q: 'search term' } }
+      let(:encoded_q) { URI.encode_www_form_component(params[:q]) }
 
-      it { is_expected.to eq "#{base}?file=#{path}#search=#{params[:q]}&phrase=true" }
+      it { is_expected.to eq "#{base}?file=#{path}#search=#{encoded_q}&phrase=true" }
+    end
+
+    context 'when page param is present' do
+      let(:params) { { page: '5' } }
+
+      it { is_expected.to eq "#{base}?file=#{path}#page=5" }
     end
   end
 end
