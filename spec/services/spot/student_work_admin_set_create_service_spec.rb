@@ -12,7 +12,7 @@ RSpec.describe Spot::StudentWorkAdminSetCreateService do
     end
 
     context 'when the admin_set does not exist' do
-      let(:admin_set!) { AdminSet.find(described_class.find_or_create_student_work_admin_set_id) }
+      let!(:admin_set) { AdminSet.find(described_class.find_or_create_student_work_admin_set_id) }
 
       # This is going to be expensive, so I'm just going to test everything in the one block
       it 'creates an AdminSet, Hyrax::PermissionTemplates, Sipity::Workflow and activates the workflow' do
