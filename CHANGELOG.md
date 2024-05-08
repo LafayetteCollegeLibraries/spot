@@ -1,10 +1,22 @@
 # changelog
 
+## [2024.6] - 2024-05-08
+
+### updates 🚀
+- ignore deprecation warnings in production environments (#1121)
+- upgrade pdf.js and install via Docker builder targets (#1119)
+- open up StudentWork deposits to authenticated users (#1126)
+
+### bug fixes 🐞
+- bump .ruby-version file to match container ruby (2.7.8) (#1120)
+
 ## [2024.5] - 2024-04-03
+
 
 ### bug fixes 🐞
 
 - set log_level via env (#1117)
+
 
 ## [2024.4] - 2024-03-26
 
@@ -929,6 +941,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.6
 [2024.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.5
 [2024.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.4
 [2024.3]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.3
