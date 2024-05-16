@@ -9,7 +9,8 @@ module Hyrax
     self.terms = [
       :title,
       :date,
-      :rights_statement
+      :rights_statement,
+      :premade_derivatives
     ].concat(hyrax_form_fields)
   end
 end

@@ -35,11 +35,19 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        create_video_derivatives(filename)
+        premade_derivatives = file_set.parent.premade_derivatives.to_a
 
-        upload_derivative_to_s3
+        if !premade_derivatives.empty?
+          premade_derivatives.each do |derivative|
+            transfer_s3_derivative(derivative)
+          end
+        else
+          create_video_derivatives(filename)
 
-        FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
+          upload_derivative_to_s3
+
+          FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
+        end
       end
 
       # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
@@ -57,6 +65,7 @@ module Spot
 
       # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
       def valid?
+        #throw mime_type.to_s
         if s3_bucket.blank?
           Rails.logger.warn('Skipping IIIF Access Copy generation because the AWS_IIIF_ASSET_BUCKET environment variable is not defined.')
           return false
@@ -76,6 +85,10 @@ module Spot
         ENV['AWS_AUDIO_VISUAL_BUCKET']
       end
 
+      def s3_source
+        ENV['AWS_BULKRAX_IMPORTS_BUCKET']
+      end
+
       # We're using AWS credentials stored within the App/Sidekiq services for authentication,
       # so the Aws::S3::Client will pick them up ambiently.
       def s3_client
@@ -93,10 +106,16 @@ module Spot
           body: File.open(derivative_path, 'r'),
           content_length: File.size(derivative_path),
           content_md5: Digest::MD5.file(derivative_path).base64digest,
-          metadata: {
-            'width' => file_set.width.first,
-            'height' => file_set.height.first
-          }
+          metadata: {}
+        )
+      end
+
+      def transfer_s3_derivative(derivative)
+        src = "/" + s3_source + "/" + derivative
+        s3_client.copy_object(
+          bucket: s3_bucket,
+          copy_source: src,
+          key: s3_derivative_key
         )
       end
     end
