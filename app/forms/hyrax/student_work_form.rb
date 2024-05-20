@@ -95,7 +95,7 @@ module Hyrax
       # @return [String]
       def admin_set_id
         Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id
-      rescue Ldp::Gone
+      rescue Ldp::Gone, Hyrax::ObjectNotFoundError
         AdminSet.find_or_create_default_admin_set_id
       end
     end

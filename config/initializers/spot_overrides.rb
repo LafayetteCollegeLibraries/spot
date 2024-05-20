@@ -190,6 +190,7 @@ Rails.application.config.to_prepare do
   # Only store entitlements related to us in the session to prevent a cookie overflow.
   #
   # @see https://github.com/biola/rack-cas/blob/v0.16.1/lib/rack/cas.rb#L96-L102
+  # rubocop:disable Style/IfUnlessModifier
   require 'rack/cas'
   Rack::CAS.class_eval do
     def store_session(request, user, ticket, extra_attrs = {})
@@ -197,7 +198,6 @@ Rails.application.config.to_prepare do
         extra_attrs.select! { |key, _val| RackCAS.config.extra_attributes_filter.map(&:to_s).include?(key.to_s) }
       end
 
-      # rubocop:disable Style/IfUnlessModifier
       if extra_attrs['eduPersonEntitlement'].present?
         extra_attrs['eduPersonEntitlement'] = Array.wrap(extra_attrs['eduPersonEntitlement']).select do |val|
           URI.parse(val).host == Spot::CasUserRolesService.entitlement_host
