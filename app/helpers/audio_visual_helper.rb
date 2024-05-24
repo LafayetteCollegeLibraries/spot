@@ -6,7 +6,7 @@ module AudioVisualHelper
     # @return [String] presigned URL 
     def s3_url(key)
         client = Aws::S3::Client.new()
-        obj = Aws::S3::Object.new(bucket_name: ENV['AWS_AUDIO_VISUAL_BUCKET'], key: key, client: client)
+        obj = Aws::S3::Object.new(bucket_name: ENV['AWS_BULKRAX_IMPORTS_BUCKET'], key: key, client: client)
         url = obj.presigned_url(:get, expires_in: 3600)
         return url
     end
