@@ -82,7 +82,7 @@ module Spot
       end
 
       def s3_bucket
-        ENV['AWS_AUDIO_VISUAL_BUCKET']
+        ENV['AWS_BULKRAX_IMPORTS_BUCKET']
       end
 
       def s3_source
