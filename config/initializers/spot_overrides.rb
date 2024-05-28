@@ -208,7 +208,7 @@ Rails.application.config.to_prepare do
     end
   end
 
-  # Modifying Bulkrax DownloadCloudFiles job to be perform_later 
+  # Modifying Bulkrax DownloadCloudFiles job to be perform_later
   # so as not to overwhelm the system with large ingests
   #
   # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
@@ -228,7 +228,7 @@ Rails.application.config.to_prepare do
         # Problematic for a large upload
         Bulkrax::DownloadCloudFileJob.perform_later(file, target_file)
       end
-      return nil
+      nil
     end
   end
 end
