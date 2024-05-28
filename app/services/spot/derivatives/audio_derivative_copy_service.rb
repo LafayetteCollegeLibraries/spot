@@ -5,12 +5,12 @@ require 'fileutils'
 
 module Spot
   module Derivatives
-    # Checks the 'premade_derivatives' property on the associated work. If the property is empty, 
-    # generates derivatives (mp3 and mp4 for audio and video) and sends them to an s3 bucket. If 
-    # the 'premade_derivatives' field is not empty, then moves the associated derivative to the 
+    # Checks the 'premade_derivatives' property on the associated work. If the property is empty,
+    # generates derivatives (mp3 and mp4 for audio and video) and sends them to an s3 bucket. If
+    # the 'premade_derivatives' field is not empty, then moves the associated derivative to the
     # correct bucket with a new name.
     #
-    # Derivatives are either generated locally and then posted to the s3 bucet defined by 
+    # Derivatives are either generated locally and then posted to the s3 bucet defined by
     # the AWS_AUDIO_VISUAL_BUCKET environment variable, or they exist already and are moved from
     # the AWS_BULKRAX_IMPORTS_BUCKET to the AWS_AUDIO_VISUAL_BUCKET. Local copies are deleted afterwards.
     #
@@ -66,7 +66,7 @@ module Spot
       # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
       def valid?
         if s3_bucket.blank?
-          Rails.logger.warn('Skipping IIIF Access Copy generation because the AWS_IIIF_ASSET_BUCKET environment variable is not defined.')
+          Rails.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
           return false
         end
 
