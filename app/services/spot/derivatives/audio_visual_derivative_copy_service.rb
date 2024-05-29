@@ -37,13 +37,15 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        if !check_premade_derivatives
-          create_audio_derivatives(filename) if audio_mime_types.include?(mime_type)
-          create_video_derivatives(filename) if video_mime_types.include?(mime_type)
+        return if !check_premade_derivatives
 
+        if audio_mime_types.include?(mime_type)
+          create_audio_derivatives(filename)
           upload_derivative_to_s3
-
           FileUtils.rm_f(audio_derivative_path) if File.exist?(audio_derivative_path)
+        else
+          create_video_derivatives(filename)
+          upload_derivative_to_s3
           FileUtils.rm_f(video_derivative_path) if File.exist?(video_derivative_path)
         end
       end
