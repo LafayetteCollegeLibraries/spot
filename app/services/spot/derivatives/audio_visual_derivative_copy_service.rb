@@ -44,6 +44,9 @@ module Spot
         else
           create_video_derivatives(filename)
         end
+
+        upload_derivative_to_s3
+        FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
       end
 
       # Check to see if any premade derivatives exist, process them if so.
@@ -59,6 +62,14 @@ module Spot
         end
 
         true
+      end
+
+      def derivative_path
+        if audio_mime_types.include?(mime_type)
+          audio_derivative_path
+        else
+          video_derivative_path
+        end
       end
 
       # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
@@ -80,11 +91,7 @@ module Spot
       end
 
       def derivative_url
-        if audio_mime_types.include?(mime_type)
-          URI("file://#{audio_derivative_path}").to_s
-        else
-          URI("file://#{video_derivative_path}").to_s
-        end
+        URI("file://#{derivative_path}").to_s
       end
 
       # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
@@ -102,15 +109,11 @@ module Spot
       def create_audio_derivatives(filename)
         Hydra::Derivatives::AudioDerivatives.create(filename,
                                                     outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url }])
-        upload_derivative_to_s3
-        FileUtils.rm_f(audio_derivative_path) if File.exist?(audio_derivative_path)
       end
 
       def create_video_derivatives(filename)
         Hydra::Derivatives::VideoDerivatives.create(filename,
                                                     outputs: [{ label: 'mp4', format: 'mp4', url: derivative_url }])
-        upload_derivative_to_s3
-        FileUtils.rm_f(video_derivative_path) if File.exist?(video_derivative_path)
       end
 
       def s3_bucket
@@ -136,25 +139,14 @@ module Spot
       end
 
       def upload_derivative_to_s3
-        if audio_mime_types.include?(mime_type)
-          s3_client.put_object(
-            bucket: s3_bucket,
-            key: s3_derivative_key,
-            body: File.open(audio_derivative_path, 'r'),
-            content_length: File.size(audio_derivative_path),
-            content_md5: Digest::MD5.file(audio_derivative_path).base64digest,
-            metadata: {}
-          )
-        else
-          s3_client.put_object(
-            bucket: s3_bucket,
-            key: s3_derivative_key,
-            body: File.open(video_derivative_path, 'r'),
-            content_length: File.size(video_derivative_path),
-            content_md5: Digest::MD5.file(video_derivative_path).base64digest,
-            metadata: {}
-          )
-        end
+        s3_client.put_object(
+          bucket: s3_bucket,
+          key: s3_derivative_key,
+          body: File.open(derivative_path, 'r'),
+          content_length: File.size(derivative_path),
+          content_md5: Digest::MD5.file(derivative_path).base64digest,
+          metadata: {}
+        )
       end
 
       def transfer_s3_derivative(derivative)
