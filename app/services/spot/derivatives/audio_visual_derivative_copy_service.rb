@@ -37,16 +37,12 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        return if !check_premade_derivatives
+        return if check_premade_derivatives
 
         if audio_mime_types.include?(mime_type)
           create_audio_derivatives(filename)
-          upload_derivative_to_s3
-          FileUtils.rm_f(audio_derivative_path) if File.exist?(audio_derivative_path)
         else
           create_video_derivatives(filename)
-          upload_derivative_to_s3
-          FileUtils.rm_f(video_derivative_path) if File.exist?(video_derivative_path)
         end
       end
 
@@ -106,11 +102,15 @@ module Spot
       def create_audio_derivatives(filename)
         Hydra::Derivatives::AudioDerivatives.create(filename,
                                                     outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url }])
+        upload_derivative_to_s3
+        FileUtils.rm_f(audio_derivative_path) if File.exist?(audio_derivative_path)
       end
 
       def create_video_derivatives(filename)
         Hydra::Derivatives::VideoDerivatives.create(filename,
                                                     outputs: [{ label: 'mp4', format: 'mp4', url: derivative_url }])
+        upload_derivative_to_s3
+        FileUtils.rm_f(video_derivative_path) if File.exist?(video_derivative_path)
       end
 
       def s3_bucket
