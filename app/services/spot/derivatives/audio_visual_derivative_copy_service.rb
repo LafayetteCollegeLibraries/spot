@@ -37,7 +37,7 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        if check_premade_derivatives
+        if !check_premade_derivatives
           create_audio_derivatives(filename) if audio_mime_types.include?(mime_type)
           create_video_derivatives(filename) if video_mime_types.include?(mime_type)
 
