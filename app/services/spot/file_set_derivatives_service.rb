@@ -10,8 +10,7 @@ module Spot
       ::Spot::Derivatives::ThumbnailService,
       ::Spot::Derivatives::IiifAccessCopyService,
       ::Spot::Derivatives::TextExtractionService,
-      ::Spot::Derivatives::AudioDerivativeCopyService,
-      ::Spot::Derivatives::VideoDerivativeCopyService
+      ::Spot::Derivatives::AudioVisualDerivativeCopyService
     ]
 
     def cleanup_derivatives
