@@ -37,13 +37,7 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        premade_derivatives = file_set.parent.premade_derivatives.to_a
-
-        if !premade_derivatives.empty?
-          premade_derivatives.each do |derivative|
-            transfer_s3_derivative(derivative)
-          end
-        else
+        if check_premade_derivatives
           create_audio_derivatives(filename) if audio_mime_types.include?(mime_type)
           create_video_derivatives(filename) if video_mime_types.include?(mime_type)
 
@@ -52,6 +46,21 @@ module Spot
           FileUtils.rm_f(audio_derivative_path) if File.exist?(audio_derivative_path)
           FileUtils.rm_f(video_derivative_path) if File.exist?(video_derivative_path)
         end
+      end
+
+      # Check to see if any premade derivatives exist, process them if so.
+      #
+      # @return [Boolean]
+      def check_premade_derivatives
+        premade_derivatives = file_set.parent.premade_derivatives.to_a
+
+        return false if premade_derivatives.empty?
+
+        premade_derivatives.each do |derivative|
+          transfer_s3_derivative(derivative)
+        end
+
+        true
       end
 
       # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
@@ -73,7 +82,7 @@ module Spot
       end
 
       def derivative_url
-        if audio_mime_types.include?(mime_type) 
+        if audio_mime_types.include?(mime_type)
           URI("file://#{audio_derivative_path}").to_s
         else
           URI("file://#{video_derivative_path}").to_s
@@ -117,7 +126,7 @@ module Spot
       end
 
       def s3_derivative_key
-        if audio_mime_types.include?(mime_type) 
+        if audio_mime_types.include?(mime_type)
           audio_derivative_key_template % file_set.id
         else
           video_derivative_key_template % file_set.id
@@ -125,7 +134,7 @@ module Spot
       end
 
       def upload_derivative_to_s3
-        if audio_mime_types.include?(mime_type) 
+        if audio_mime_types.include?(mime_type)
           s3_client.put_object(
             bucket: s3_bucket,
             key: s3_derivative_key,
