@@ -186,4 +186,49 @@ Rails.application.config.to_prepare do
   end
 
   Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
+
+  # Only store entitlements related to us in the session to prevent a cookie overflow.
+  #
+  # @see https://github.com/biola/rack-cas/blob/v0.16.1/lib/rack/cas.rb#L96-L102
+  # rubocop:disable Style/IfUnlessModifier
+  require 'rack/cas'
+  Rack::CAS.class_eval do
+    def store_session(request, user, ticket, extra_attrs = {})
+      if RackCAS.config.extra_attributes_filter?
+        extra_attrs.select! { |key, _val| RackCAS.config.extra_attributes_filter.map(&:to_s).include?(key.to_s) }
+      end
+
+      if extra_attrs['eduPersonEntitlement'].present?
+        extra_attrs['eduPersonEntitlement'] = Array.wrap(extra_attrs['eduPersonEntitlement']).select do |val|
+          URI.parse(val).host == Spot::CasUserRolesService.entitlement_host
+        end
+      end
+
+      request.session['cas'] = { 'user' => user, 'ticket' => ticket, 'extra_attributes' => extra_attrs }
+    end
+  end
+
+  # Modifying Bulkrax DownloadCloudFiles job to be perform_later
+  # so as not to overwhelm the system with large ingests
+  #
+  # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
+  Bulkrax::CsvParser.class_eval do
+    def retrieve_cloud_files(files)
+      files_path = File.join(path_for_import, 'files')
+      FileUtils.mkdir_p(files_path) unless File.exist?(files_path)
+      files.each_pair do |_key, file|
+        # fixes bug where auth headers do not get attached properly
+        if file['auth_header'].present?
+          file['headers'] ||= {}
+          file['headers'].merge!(file['auth_header'])
+        end
+        # this only works for uniquely named files
+        target_file = File.join(files_path, file['file_name'].tr(' ', '_'))
+        # Now because we want the files in place before the importer runs
+        # Problematic for a large upload
+        Bulkrax::DownloadCloudFileJob.perform_later(file, target_file)
+      end
+      nil
+    end
+  end
 end
