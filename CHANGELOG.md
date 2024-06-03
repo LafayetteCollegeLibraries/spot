@@ -1,5 +1,18 @@
 # changelog
 
+## [2024.7] - 2024-06-03
+
+### enhancements ✨
+- add Integrative Engineering to list of Academic Departments (f3b5c6f)
+
+### patches 🪡
+- Perform `Bulkrax::DownloadCloudFileJob` asynchronously (#1129)
+
+### bug fixes 🐞
+- restore ldr-related cas entitlements to session (but remove non-LDR ones) (#1124)
+- skip flaky StudentWorkForm test (dbdbed4)
+
+
 ## [2024.6] - 2024-05-08
 
 ### updates 🚀
@@ -941,6 +954,7 @@ fixes:
 
 Initial pre-release (live on ldr.stage.lafayette.edu)
 
+[2024.7]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.7
 [2024.6]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.6
 [2024.5]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.5
 [2024.4]: https://github.com/LafayetteCollegeLibraries/spot/releases/tag/2024.4
