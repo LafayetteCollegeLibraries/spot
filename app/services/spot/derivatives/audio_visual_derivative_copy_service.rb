@@ -116,7 +116,8 @@ module Spot
                                                     outputs: [{ label: 'mp4',
                                                                 format: 'mp4',
                                                                 url: derivative_url,
-                                                                size: '640x480' }])
+                                                                size: '640x480>',
+                                                                bitrate: "2500k" }])
       end
 
       def s3_bucket
