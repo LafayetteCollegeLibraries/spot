@@ -115,9 +115,7 @@ module Spot
         Hydra::Derivatives::VideoDerivatives.create(filename,
                                                     outputs: [{ label: 'mp4',
                                                                 format: 'mp4',
-                                                                url: derivative_url,
-                                                                size: '640x480>',
-                                                                bitrate: "2500k" }])
+                                                                url: derivative_url }])
       end
 
       def s3_bucket
