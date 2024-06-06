@@ -115,7 +115,7 @@ module Spot
         Hydra::Derivatives::VideoDerivatives.create(filename,
                                                     outputs: [{ label: 'mp4',
                                                                 format: 'mp4',
-                                                                size:"640x480>"
+                                                                size:"640x480>",
                                                                 url: derivative_url }])
       end
 
