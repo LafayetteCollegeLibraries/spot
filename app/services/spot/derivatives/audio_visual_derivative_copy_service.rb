@@ -19,16 +19,20 @@ module Spot
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
     class AudioVisualDerivativeCopyService < BaseDerivativeService
       class_attribute :audio_derivative_key_template
-      class_attribute :video_derivative_key_template
+      class_attribute :video_derivative_key_high_template
+      class_attribute :video_derivative_key_low_template
       self.audio_derivative_key_template = '%s-access.mp3'
-      self.video_derivative_key_template = '%s-access.mp4'
+      self.video_derivative_key_high_template = '%s-access-high.mp4'
+      self.video_derivative_key_low_template = '%s-access-low.mp4'
 
       # Deletes the derivative from the S3 bucket
       # @todo maybe we should hang onto these when we delete + put them in a glacier grave?
       # @return [void]
       # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
-        s3_client.delete_object(bucket: s3_bucket, key: s3_derivative_key)
+        s3_derivative_key.each do |key|
+          s3_client.delete_object(bucket: s3_bucket, key: key)
+        end
       end
 
       # Generates a pyramidal TIFF using ImageMagick (via MiniMagick gem)
@@ -46,7 +50,9 @@ module Spot
         end
 
         upload_derivative_to_s3
-        FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
+        derivative_path.each do |path|
+          FileUtils.rm_f(path) if File.exist?(path)
+        end
       end
 
       # Check to see if any premade derivatives exist, process them if so.
@@ -57,8 +63,8 @@ module Spot
 
         return false if premade_derivatives.empty?
 
-        premade_derivatives.each do |derivative|
-          transfer_s3_derivative(derivative)
+        premade_derivatives.each_with_index do |derivative, index|
+          transfer_s3_derivative(derivative, index)
         end
 
         true
@@ -66,9 +72,9 @@ module Spot
 
       def derivative_path
         if audio_mime_types.include?(mime_type)
-          audio_derivative_path
+          [audio_derivative_path]
         else
-          video_derivative_path
+          [video_derivative_path_high, video_derivative_path_low]
         end
       end
 
@@ -85,13 +91,26 @@ module Spot
       # but modifies the filename it writes out to.
       #
       # @return [String]
-      def video_derivative_path
-        @video_derivative_path ||=
-          Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access.mp4').to_s.gsub(/\.access\.mp4$/, '')
+      def video_derivative_path_high
+        @video_derivative_path_high ||=
+          Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access-high.mp4').to_s.gsub(/\.access-high\.mp4$/, '')
+      end
+
+      # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
+      # but modifies the filename it writes out to.
+      #
+      # @return [String]
+      def video_derivative_path_low
+        @video_derivative_path_low ||=
+          Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access-low.mp4').to_s.gsub(/\.access-low\.mp4$/, '')
       end
 
       def derivative_url
-        URI("file://#{derivative_path}").to_s
+        ret = []
+        derivative_path.each do |path|
+          ret.push(URI("file://#{path}").to_s)
+        end
+        ret
       end
 
       # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
@@ -108,16 +127,24 @@ module Spot
 
       def create_audio_derivatives(filename)
         Hydra::Derivatives::AudioDerivatives.create(filename,
-                                                    outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url }])
+                                                    outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url[0] }])
       end
 
       def create_video_derivatives(filename)
         Hydra::Derivatives::VideoDerivatives.create(filename,
-                                                    outputs: [{ label: 'mp4',
+                                                    outputs: [{ label: 'high',
                                                                 format: 'mp4',
-                                                                url: derivative_url, size: "1080x720", 
+                                                                url: derivative_url[0], 
+                                                                size: "1920x1080", 
                                                                 input_options: "-t 10 -ss 1", 
-                                                                video: "-g 30 -b:v 4000k", 
+                                                                video: "-g 30 -b:v 8000k", 
+                                                                audio: "-b:a 256k -ar 44100" },
+                                                              { label: 'low',
+                                                                format: 'mp4',
+                                                                url: derivative_url[1], 
+                                                                size: "640x480", 
+                                                                input_options: "-t 10 -ss 1", 
+                                                                video: "-g 30 -b:v 2500k", 
                                                                 audio: "-b:a 256k -ar 44100" }])
       end
 
@@ -137,29 +164,32 @@ module Spot
 
       def s3_derivative_key
         if audio_mime_types.include?(mime_type)
-          audio_derivative_key_template % file_set.id
+          [audio_derivative_key_template % file_set.id]
         else
-          video_derivative_key_template % file_set.id
+          [video_derivative_key_high_template % file_set.id,
+          video_derivative_key_low_template % file_set.id]
         end
       end
 
       def upload_derivative_to_s3
-        s3_client.put_object(
-          bucket: s3_bucket,
-          key: s3_derivative_key,
-          body: File.open(derivative_path, 'r'),
-          content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).base64digest,
-          metadata: {}
-        )
+        derivative_path.each_with_index do |path, index|
+          s3_client.put_object(
+            bucket: s3_bucket,
+            key: s3_derivative_key[index],
+            body: File.open(path, 'r'),
+            content_length: File.size(path),
+            content_md5: Digest::MD5.file(path).base64digest,
+            metadata: {}
+          )
+        end
       end
 
-      def transfer_s3_derivative(derivative)
+      def transfer_s3_derivative(derivative, index)
         src = "/" + s3_source + "/" + derivative
         s3_client.copy_object(
           bucket: s3_bucket,
           copy_source: src,
-          key: s3_derivative_key
+          key: s3_derivative_key[index]
         )
       end
     end
