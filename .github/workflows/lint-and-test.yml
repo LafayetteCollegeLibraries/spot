@@ -25,6 +25,52 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    services:
+      database:
+        image: postgres:13-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: spot_test
+          POSTGRES_USER: spot_test_user
+          POSTGRES_PASSWORD: spot_test_pw
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      fedora:
+        image: samvera/fcrepo4:4.7.5
+        ports:
+          - 8080:8080
+        env:
+          CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
+      redis:
+        image: redis:6.2-alpine
+        ports:
+          - 6379:6379
+      solr:
+        image: bitnami/solr:8.11.2
+        ports:
+          - 8983:8983
+        env:
+          SOLR_CORE_CONF_DIR: /opt/spot-config
+          SOLR_CORES: spot-test
+          SOLR_HOST: solr
+        volumes:
+          - ${{ github.workspace }}/docker/solr/config:/opt/spot-config
+        options: --name solr
+    env:
+      CAS_BASE_URL: ''
+      FEDORA_TEST_URL: http://fedora:8080/rest
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      PSQL_PASSWORD: spot_test_pw
+      PSQL_USER: spot_test_user
+      PSQL_DATABASE: spot_test
+      RAILS_ENV: test
+      SOLR_TEST_URL: http://solr:8983/solr/spot-test
+      URL: http://localhost:3000
+
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -32,3 +78,26 @@ jobs:
             bundler-cache: true
         env:
           BUNDLE_WITH: test
+      -
+        name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+      -
+        # see: https://github.com/orgs/community/discussions/42127#discussioncomment-7591609
+        name: Restart Solr service to discover configs
+        uses: docker://docker
+        with:
+          args: docker restart solr
+      -
+        name: Run migrations
+        run: bundle exec rake db:migrate
+      -
+        name: Run tests
+        run: |
+          mkdir /tmp/test-results
+          bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+      -
+        name: Publish RSpec report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: /tmp/test-results/*.xml
