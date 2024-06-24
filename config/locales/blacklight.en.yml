@@ -45,6 +45,7 @@ en:
         page_count: Page Count
         permalink: Permalink
         physical_medium: Physical Medium
+        premade_derivatives: Premade Derivative
         proxy_depositor: Proxy Depositor
         publisher: Publisher
         related_resource: Related Resource
