@@ -1,8 +1,8 @@
 <%# app/views/hyrax/file_sets/media_display/_video.html.erb %>
 <div>
     <video id="video" controls class="video-js vjs-default-skin" style="width:100%" data-setup="{}" preload="auto">
-        <source src="<%= s3_url(file_set.id.to_s + '-access-high.mp4') %>" type="video/mp4" label='HD' res='1080' />
-        <source src="<%= s3_url(file_set.id.to_s + '-access-low.mp4') %>" type="video/mp4" label='SD' res='480'/>
+        <source src="<%= s3_url(file_set.id.to_s + '-access-1080.mp4') %>" type="video/mp4" label='HD' res='1080' />
+        <source src="<%= s3_url(file_set.id.to_s + '-access-480.mp4') %>" type="video/mp4" label='SD' res='480'/>
         <%= t('hyrax.file_set.show.downloadable_content.video_tag_not_supported') %>
     </video>
     <script>
