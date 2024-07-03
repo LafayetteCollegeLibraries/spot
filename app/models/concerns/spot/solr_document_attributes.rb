@@ -71,6 +71,7 @@ module Spot
 
       # AudioVisual properties
       attribute :premade_derivatives,    ::Blacklight::Types::Array,  'premade_derivatives_ssim'
+      attribute :stored_derivatives,     ::Blacklight::Types::Array,  'stored_derivatives_ssim'
 
       # StudentWork properties
       attribute :access_note,            ::Blacklight::Types::Array,  'access_note_tesim'

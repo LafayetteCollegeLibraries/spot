@@ -12,6 +12,10 @@ class AudioVisual < ActiveFedora::Base
     index.as :symbol
   end
 
+  property :stored_derivatives, predicate: ::RDF::URI.new('http://ldr.lafayette.edu/ns#stored_derivatives') do |index|
+    index.as :symbol
+  end
+
   def validate_resource_type?
     false
   end
