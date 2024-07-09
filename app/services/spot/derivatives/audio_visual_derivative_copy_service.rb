@@ -24,8 +24,9 @@ module Spot
       # @return [void]
       # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
-        s3_derivative_key.each do |key|
-          s3_client.delete_object(bucket: s3_bucket, key: key)
+        stored_derivatives = file_set.parent.stored_derivatives.to_a
+        stored_derivatives.each do |derivative|
+          s3_client.delete_object(bucket: s3_bucket, key: derivative)
         end
       end
 
@@ -159,7 +160,10 @@ module Spot
       end
 
       def upload_derivatives_to_s3(keys, paths)
+        parent = file_set.parent
+        stored_derivatives = []
         paths.each_with_index do |path, index|
+          stored_derivatives.push(keys[index])
           s3_client.put_object(
             bucket: s3_bucket,
             key: keys[index],
@@ -169,9 +173,16 @@ module Spot
             metadata: {}
           )
         end
+        parent.stored_derivatives = stored_derivatives
+        parent.save
       end
 
       def transfer_s3_derivative(derivative, key)
+        parent = file_set.parent
+        stored_derivatives = parent.stored_derivatives.to_a
+        stored_derivatives.push(key)
+        parent.stored_derivatives = stored_derivatives
+        parent.save
         src = "/" + s3_source + "/" + derivative
         s3_client.copy_object(
           bucket: s3_bucket,
