@@ -187,7 +187,7 @@ module Spot
         s3_client.copy_object(
           bucket: s3_bucket,
           copy_source: src,
-          key: s3_derivative_key[index]
+          key: key
         )
       end
     end
