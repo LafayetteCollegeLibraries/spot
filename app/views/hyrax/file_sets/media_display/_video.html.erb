@@ -1,7 +1,7 @@
 <%# app/views/hyrax/file_sets/media_display/_video.html.erb %>
 <div class="viewer-wrapper">
     <video id="video" controls class="video-js vjs-default-skin vjs-fill" style="width:100%;height:100%" preload="auto">
-        <% get_derivative_list(file_set).each_with_index do |derivative, index| %>
+        <% @presenter.stored_derivatives.each_with_index do |derivative, index| %>
             <source src="<%= s3_url(derivative) %>" type="video/mp4" label="<%= get_derivative_res(index) %>" />
         <% end %>
         <%= t('hyrax.file_set.show.downloadable_content.video_tag_not_supported') %>
