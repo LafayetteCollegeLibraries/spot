@@ -14,4 +14,12 @@ module AudioVisualHelper
     url = obj.presigned_url(:get, expires_in: 3600)
     url
   end
+
+  def get_derivative_list(file_set)
+    file_set.parent.stored_derivatives.to_a
+  end
+
+  def get_derivative_res(derivative)
+    derivative.to_s
+  end
 end
