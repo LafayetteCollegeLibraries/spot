@@ -58,11 +58,11 @@ module Spot
 
         return false if premade_derivatives.empty?
 
-        premade_derivatives.each do |derivative|
-          key = '%s-access.mp3' % file_set.id
+        premade_derivatives.each_with_index do |derivative, index|
+          key = '%s-%d-access.mp3' % [file_set.id, index]
           if video_mime_types.include?(mime_type)
             res = get_video_resolution(filename)
-            key = '%s-access-%d.mp4' % [file_set.id, res[1]]
+            key = '%s-%d-access-%d.mp4' % [file_set.id, index, res[1]]
           end
           transfer_s3_derivative(derivative, key)
         end
