@@ -1,6 +1,6 @@
 <div>
     <audio controls="controls" class="audiojs" style="width:100%" controlsList="nodownload" preload="auto">
-        <% get_derivative_list(file_set).each_with_index do |derivative, index| %>
+        <% @presenter.stored_derivatives.each_with_index do |derivative, index| %>
             <source src="<%= s3_url(derivative) %>" type="audio/mp3" />
         <% end %>    
         <%= t('hyrax.file_set.show.downloadable_content.audio_tag_not_supported') %>
