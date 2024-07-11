@@ -21,10 +21,10 @@ jobs:
         if: always()
         with:
           report_paths: 'rubocop*.xml'
-        id: rubocop_results
 
   test:
     runs-on: ubuntu-latest
+    needs: lint
     services:
       database:
         image: postgres:13-alpine
@@ -54,11 +54,8 @@ jobs:
         ports:
           - 8983:8983
         env:
-          SOLR_CORE_CONF_DIR: /opt/spot-config
-          SOLR_CORES: spot-test
-          SOLR_HOST: solr
-        volumes:
-          - ${{ github.workspace }}/docker/solr/config:/opt/spot-config
+          SOLR_ADMIN_USERNAME: solr_admin
+          SOLR_ADMIN_PASSWORD: solr_password
         options: --name solr
     env:
       CAS_BASE_URL: ''
@@ -82,11 +79,23 @@ jobs:
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
       -
-        # see: https://github.com/orgs/community/discussions/42127#discussioncomment-7591609
-        name: Restart Solr service to discover configs
-        uses: docker://docker
+        name: "Restore Solr config.zip from cache"
+        id: solr-config-cache
+        uses: actions/cache@v4
         with:
-          args: docker restart solr
+          path: /tmp/spot_solr_config.zip
+          key: spot-solr-${{ hashFiles('docker/solr/config') }}
+      -
+        name: "Build Solr config.zip"
+        if: steps.solr-config-cache.outputs.cache-hit != 'true'
+        run: |
+          cd docker/solr/config
+          zip -1 /tmp/spot_solr_config.zip ./*
+      -
+        name: Setup Solr core with local configs
+        run: |
+          curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
+          curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
       -
         name: Run migrations
         run: bundle exec rake db:migrate
