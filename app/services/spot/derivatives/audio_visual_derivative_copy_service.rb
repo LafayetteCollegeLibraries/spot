@@ -24,10 +24,14 @@ module Spot
       # @return [void]
       # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
-        stored_derivatives = file_set.parent.stored_derivatives.to_a
-        stored_derivatives.each do |derivative|
-          s3_client.delete_object(bucket: s3_bucket, key: derivative)
+        object_list = s3_client.list_objects(bucket: s3_bucket).to_h[:contents]
+        delete = {objects: [], quiet: false}
+        object_list.each do |object|
+          if object[:key].include? file_set.id + "-"
+            delete[:objects].push({key: object[:key]})
+          end
         end
+        s3_client.delete_objects(bucket: s3_bucket, delete: delete)
       end
 
       # Generates a pyramidal TIFF using ImageMagick (via MiniMagick gem)
