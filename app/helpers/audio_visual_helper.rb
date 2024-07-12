@@ -20,6 +20,8 @@ module AudioVisualHelper
   end
 
   def get_derivative_res(derivative)
-    derivative.to_s
+    ret = derivative.split('-').last
+    ret = ret.split('.')[0]
+    ret
   end
 end

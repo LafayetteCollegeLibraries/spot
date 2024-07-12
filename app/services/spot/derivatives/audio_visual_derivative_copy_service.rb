@@ -63,10 +63,13 @@ module Spot
         return false if premade_derivatives.empty?
 
         premade_derivatives.each_with_index do |derivative, index|
+          file_path = "/tmp/"+derivative
+          file = s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
           key = '%s-%d-access.mp3' % [file_set.id, index]
           if video_mime_types.include?(mime_type)
-            res = get_video_resolution(filename)
+            res = get_video_resolution(file_path)
             key = '%s-%d-access-%d.mp4' % [file_set.id, index, res[1]]
+            FileUtils.rm_f(file_path) if File.exist?(file_path)
           end
           transfer_s3_derivative(derivative, key)
         end
@@ -156,10 +159,10 @@ module Spot
 
       def s3_derivative_keys
         if audio_mime_types.include?(mime_type)
-          ['%s-access.mp3' % file_set.id]
+          ['%s-0-access.mp3' % file_set.id]
         else
-          ['%s-access-1080.mp4' % file_set.id,
-          '%s-access-480.mp4' % file_set.id]
+          ['%s-0-access-1080.mp4' % file_set.id,
+          '%s-1-access-480.mp4' % file_set.id]
         end
       end
 
