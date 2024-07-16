@@ -25,11 +25,9 @@ module Spot
       # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
         object_list = s3_client.list_objects(bucket: s3_bucket).to_h[:contents]
-        delete = {objects: [], quiet: false}
+        delete = { objects: [], quiet: false }
         object_list.each do |object|
-          if object[:key].include? file_set.id + "-"
-            delete[:objects].push({key: object[:key]})
-          end
+          delete[:objects].push({ key: object[:key] }) if object[:key].include? file_set.id + "-"
         end
         s3_client.delete_objects(bucket: s3_bucket, delete: delete)
       end
@@ -40,7 +38,7 @@ module Spot
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        return if check_premade_derivatives(filename)
+        return if check_premade_derivatives()
 
         if audio_mime_types.include?(mime_type)
           create_audio_derivatives(filename)
@@ -57,14 +55,14 @@ module Spot
       # Check to see if any premade derivatives exist, process them if so.
       #
       # @return [Boolean]
-      def check_premade_derivatives(filename)
+      def check_premade_derivatives()
         premade_derivatives = file_set.parent.premade_derivatives.to_a
 
         return false if premade_derivatives.empty?
 
         premade_derivatives.each_with_index do |derivative, index|
           file_path = "/tmp/"+derivative
-          file = s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
+          s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
           key = '%s-%d-access.mp3' % [file_set.id, index]
           if video_mime_types.include?(mime_type)
             res = get_video_resolution(file_path)
