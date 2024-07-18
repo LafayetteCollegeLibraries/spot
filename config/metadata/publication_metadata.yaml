@@ -1,0 +1,42 @@
+attributes:
+  abstract:
+    predicate: http://purl.org/dc/terms/abstract
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - abstract_tesim
+  date_issued:
+    predicate: http://purl.org/dc/terms/issued
+    type: string
+    multiple: true
+    form:
+      multiple: true
+      required: true
+    index_keys:
+      - date_issued_ssim
+  # @todo should this be a date field?
+  date_available:
+    predicate: http://purl.org/dc/terms/available
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - date_available_ssim
+  editor:
+    predicate: http://purl.org/ontology/bibo/editor
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - editor_sim
+      - editor_tesim
+  license:
+    predicate: http://purl.org/dc/terms/license
+    type: string
+    multiple: true
+    index_keys:
+      - license_tsm
