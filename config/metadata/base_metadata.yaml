@@ -1,0 +1,163 @@
+attributes:
+  bibliographic_citation:
+    predicate: http://purl.org/dc/terms/bibliographicCitation
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - bibliographic_citation_tesim
+  contributor:
+    predicate: http://purl.org/dc/elements/1.1/contributor
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - contributor_tesim
+      - contributor_sim
+  creator:
+    predicate: http://purl.org/dc/elements/1.1/creator
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - creator_tesim
+      - creator_sim
+  description:
+    predicate: http://purl.org/dc/elements/1.1/description
+    type: string
+    multiple: true
+    form:
+      multiple: true
+      primary: true
+    index_keys:
+      - description_tesim
+  identifier:
+    predicate: http://purl.org/dc/terms/identifier
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - identifier_ssim
+  keyword:
+    predicate: http://schema.org/keywords
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - keyword_tesim
+      - keyword_sim
+  # @see IndexesLanguageAndLabel mixin for indexing info
+  language:
+    predicate: http://purl.org/dc/elements/1.1/language
+    type: string
+    multiple: true
+    form:
+      multiple: true
+  # @todo Details about indexing
+  #       how are we gonna handled the RDF of it all?
+  location:
+    predicate: http://purl.org/dc/terms/spatial
+    type: uri
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - location_ssim
+  note:
+    predicate: http://www.w3.org/2004/02/skos/core#note
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - note_tesim
+  physical_medium:
+    predicate: http://purl.org/dc/terms/PhysicalMedium
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - physical_medium_tesim
+      - physical_medium_sim
+  publisher:
+    predicate: http://purl.org/dc/elements/1.1/publisher
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - publisher_tesim
+      - publisher_sim
+  related_resource:
+    predicate: http://www.w3.org/2000/01/rdf-schema#seeAlso
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - related_resource_tesim
+      - related_resource_sim
+  rights_holder:
+    predicate: http://purl.org/dc/terms/rightsHolder
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - rights_holder_tesim
+      - rights_holder_sim
+  rights_statement:
+    predicate: http://www.europeana.eu/schemas/edm/rights
+    type: uri
+    form:
+      multiple: false
+    index_keys:
+      - rights_statement_ssim
+  source:
+    predicate: http://purl.org/dc/terms/source
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - source_tesim
+      - source_sim
+  source_identifier:
+    predicate: http://ldr.lafayette.edu/ns#source_identifier
+    type: string
+    multiple: true
+    index_keys:
+      - source_identifier_ssim
+  subject:
+    predicate: http://purl.org/dc/elements/1.1/subject
+    type: uri
+    multiple: true
+    form:
+      multiple: true
+      primary: true
+    index_keys:
+      - subject_ssim
+  subtitle:
+    predicate: http://purl.org/spar/doco/Subtitle
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - subtitle_tesim
+      - subtitle_sim
+  title_alternative:
+    predicate: http://purl.org/dc/terms/alternative
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - title_alternative_tesim
+      - title_alternative_sim
