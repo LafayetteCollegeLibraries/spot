@@ -1,0 +1,84 @@
+attributes:
+  # @todo date type? edtf type?
+  date:
+    predicate: http://purl.org/dc/terms/date
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - date_ssim
+  date_associated:
+    predicate: https://d-nb.info/standards/elementset/gnd#associatedDate
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - date_ssim
+      - date_tesim
+  date_scope_note:
+    predicate: http://www.w3.org/2004/02/skos/core#scopeNote
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - date_scope_note_tesim
+  donor:
+    predicate: http://purl.org/dc/terms/provenance
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - donor_ssim
+  inscription:
+    predicate: http://dbpedia.org/ontology/inscription
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - inscription_tesim
+  original_item_extent:
+    predicate: http://purl.org/dc/terms/extent
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - original_item_extent_tesim
+  repository_location:
+    predicate: http://purl.org/vra/placeOfRepository
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - repository_location_ssim
+  requested_by:
+    predicate: http://rdf.myexperiment.org/ontologies/base/has-requester
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - requested_by_ssim
+  research_assistance:
+    predicate: http://www.rdaregistry.info/Elements/a/#P50265
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - research_assistance_ssim
+  subject_ocm:
+    predicate: https://hraf.yale.edu/resources/reference/outline-of-cultural-materials
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - subject_ocm_tesim
+      - subject_ocm_ssim
