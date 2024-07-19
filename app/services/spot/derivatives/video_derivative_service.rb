@@ -24,7 +24,7 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        return if check_premade_derivatives()
+        return if check_premade_derivatives
 
         create_derivative_files(filename)
         upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
@@ -65,10 +65,10 @@ module Spot
       # @return [String] string format of pair of two numbers representing the video's width and height
       def get_derivative_resolution(filename, height)
         res = get_video_resolution(filename)
-        width = res[0]*height
-        width = width/res[1]
+        width = res[0] * height
+        width /= res[1]
         if width % 16 > 0
-          width = width - width % 16 + 16
+          width = width - width % 16 + 16 if (width % 16).positive?
         end
         format('%dx%d', width, height)
       end

@@ -24,7 +24,7 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        return if check_premade_derivatives()
+        return if check_premade_derivatives
 
         create_derivative_files(filename)
         upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
@@ -39,7 +39,7 @@ module Spot
       # @param [Integer] index, index of premade derivative in array
       # @return [void]
       def rename_premade_derivative(derivative, index)
-        file_path = "/tmp/"+derivative
+        file_path = "/tmp/" + derivative
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         # add any other checks to the file here
         key = format('%s-%d-access.mp3', file_set.id, index)
