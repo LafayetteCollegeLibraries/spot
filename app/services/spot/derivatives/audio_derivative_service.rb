@@ -19,11 +19,6 @@ module Spot
     #
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
     class AudioDerivativeService < AudioVisualBaseDerivativeService
-      # calls the base case of cleanup_derivatives
-      def cleanup_derivatives
-        super.cleanup_derivatives
-      end
-      
       # Checks for premade derivatives, calls for derivative generation if none exist.
       #
       # @param [String,Pathname] filename, the src path of the file
@@ -47,7 +42,7 @@ module Spot
         file_path = "/tmp/"+derivative
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         # add any other checks to the file here
-        key = '%s-%d-access.mp3' % [file_set.id, index]
+        key = format('%s-%d-access.mp3', file_set.id, index)
         FileUtils.rm_f(file_path) if File.exist?(file_path)
         transfer_s3_derivative(derivative, key)
       end
@@ -80,7 +75,7 @@ module Spot
 
       # Keys for generated derivatives.
       def s3_derivative_keys
-        ['%s-0-access.mp3' % file_set.id]
+        [format('%s-0-access.mp3', file_set.id)]
       end
     end
   end

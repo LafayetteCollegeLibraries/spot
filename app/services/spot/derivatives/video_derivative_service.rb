@@ -19,11 +19,6 @@ module Spot
     #
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
     class VideoDerivativeService < AudioVisualBaseDerivativeService
-      # calls the base case of cleanup_derivatives
-      def cleanup_derivatives
-        super.cleanup_derivatives
-      end
-
       # Checks for premade derivatives, calls for derivative generation if none exist.
       #
       # @param [String,Pathname] filename, the src path of the file
@@ -44,11 +39,11 @@ module Spot
       # @param [Integer] index, index of premade derivative in array
       # @return [void]
       def rename_premade_derivative(derivative, index)
-        file_path = "/tmp/"+derivative
+        file_path = "/tmp/" + derivative
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         res = get_video_resolution(file_path)
         # add any other checks to the file here
-        key = '%s-%d-access-%d.mp4' % [file_set.id, index, res[1]]
+        key = format('%s-%d-access-%d.mp4', file_set.id, index, res[1])
         FileUtils.rm_f(file_path) if File.exist?(file_path)
         transfer_s3_derivative(derivative, key)
       end
@@ -72,16 +67,16 @@ module Spot
         res = get_video_resolution(filename)
         width = res[0]*height
         width = width/res[1]
-        if width%16 > 0 
-          width = width - width%16 + 16 
+        if width % 16 > 0
+          width = width - width % 16 + 16
         end
-        '%dx%d' % [width, height]
+        format('%dx%d', width, height)
       end
 
       # paths for generated derivatives
       def derivative_paths
-        [Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access-high.mp4').to_s.gsub(/\.access-high\.mp4$/, ''), 
-        Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access-low.mp4').to_s.gsub(/\.access-low\.mp4$/, '')]
+        [Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access-high.mp4').to_s.gsub(/\.access-high\.mp4$/, ''),
+         Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access-low.mp4').to_s.gsub(/\.access-low\.mp4$/, '')]
       end
 
       # only run service if bucket is defined and file includes video mime types
@@ -95,6 +90,7 @@ module Spot
       end
 
       private
+
       # Uses Hydra to create two derivatives of the original file,
       # both mp4s with one at 480p and one at 1080p.
       #
@@ -104,24 +100,24 @@ module Spot
         Hydra::Derivatives::VideoDerivatives.create(filename,
                                                     outputs: [{ label: 'high',
                                                                 format: 'mp4',
-                                                                url: derivative_urls[0], 
-                                                                size: get_derivative_resolution(filename, 1080), 
-                                                                input_options: "-t 10 -ss 1", 
-                                                                video: "-g 30 -b:v 8000k", 
+                                                                url: derivative_urls[0],
+                                                                size: get_derivative_resolution(filename, 1080),
+                                                                input_options: "-t 10 -ss 1",
+                                                                video: "-g 30 -b:v 8000k",
                                                                 audio: "-b:a 256k -ar 44100" },
                                                               { label: 'low',
                                                                 format: 'mp4',
-                                                                url: derivative_urls[1], 
-                                                                size: get_derivative_resolution(filename, 480), 
-                                                                input_options: "-t 10 -ss 1", 
-                                                                video: "-g 30 -b:v 2500k", 
+                                                                url: derivative_urls[1],
+                                                                size: get_derivative_resolution(filename, 480),
+                                                                input_options: "-t 10 -ss 1",
+                                                                video: "-g 30 -b:v 2500k",
                                                                 audio: "-b:a 256k -ar 44100" }])
       end
 
       # Keys for generated derivatives.
       def s3_derivative_keys
-        ['%s-0-access-1080.mp4' % file_set.id,
-        '%s-1-access-480.mp4' % file_set.id]
+        [format('%s-0-access-1080.mp4', file_set.id),
+         format('%s-1-access-480.mp4', file_set.id)]
       end
     end
   end
