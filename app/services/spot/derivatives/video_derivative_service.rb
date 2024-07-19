@@ -67,9 +67,7 @@ module Spot
         res = get_video_resolution(filename)
         width = res[0] * height
         width /= res[1]
-        if width % 16 > 0
-          width = width - width % 16 + 16 if (width % 16).positive?
-        end
+        width = width - width % 16 + 16 if (width % 16).positive?
         format('%dx%d', width, height)
       end
 
