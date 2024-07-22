@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Hyrax::ImageForm do
+RSpec.describe Hyrax::AudioVisualForm do
   it_behaves_like 'a Spot work form'
   it_behaves_like 'it handles required fields', :title, :rights_statement
 

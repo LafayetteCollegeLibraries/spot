@@ -10,9 +10,9 @@ if [[ ! -z "$AWS_BULKRAX_IMPORTS_BUCKET" ]]; then
   aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_BULKRAX_IMPORTS_BUCKET}"
 fi
 
-if [[ ! -z "$AWS_AUDIO_VISUAL_BUCKET" ]]; then
+if [[ ! -z "$AWS_AV_ASSET_BUCKET" ]]; then
   echo "creating AV asset bucket"
-  aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_AUDIO_VISUAL_BUCKET}"
+  aws --endpoint-url="${AWS_ENDPOINT_URL:-"http://localhost:9000"}" s3 mb "s3://${AWS_AV_ASSET_BUCKET}"
 fi
 
 script_root="$(dirname $0)"
