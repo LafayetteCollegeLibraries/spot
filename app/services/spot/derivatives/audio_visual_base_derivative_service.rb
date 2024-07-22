@@ -78,7 +78,7 @@ module Spot
 
       # destination for av derivatives
       def s3_bucket
-        ENV['AWS_BULKRAX_IMPORTS_BUCKET']
+        ENV['AWS_AV_ASSET_BUCKET']
       end
 
       # source for premade derivatives
