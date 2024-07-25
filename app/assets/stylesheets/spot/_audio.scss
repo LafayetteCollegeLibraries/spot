@@ -1,0 +1,34 @@
+.play-list {
+  display: block;
+  margin: 0 auto 20px auto;
+  width: 100%;
+  .play-list-row {
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+    .track-title {
+      .playlist-track {
+        &:hover {
+          text-decoration: underline;
+        }
+        color: #000;
+        text-decoration: none;
+      }
+    }
+    .track-number {
+      display: inline-block;
+    }
+    .track-title {
+      display: inline-block;
+      .playlist-track {
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    .track-title.active-track {
+      font-weight: bold;
+    }
+  }
+}
