@@ -1,4 +1,5 @@
-# Included in Hyrax::Work
+# Included in Hyrax::Work + copied from Hyrax source
+# @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/config/metadata/core_metadata.yaml
 attributes:
   title:
     predicate: http://purl.org/dc/terms/title
@@ -8,9 +9,8 @@ attributes:
       - "title_sim"
       - "title_tesim"
     form:
-      required: true
-      primary: true
       multiple: true
+      required: true
   date_modified:
     predicate: http://purl.org/dc/terms/modified
     type: date_time
