@@ -103,6 +103,14 @@ attributes:
     index_keys:
       - related_resource_tesim
       - related_resource_sim
+  resource_type:
+    predicate: ''
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - resource_type_ssim
   rights_holder:
     predicate: http://purl.org/dc/terms/rightsHolder
     type: string

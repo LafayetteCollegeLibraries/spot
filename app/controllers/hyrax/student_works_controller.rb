@@ -3,7 +3,8 @@ module Hyrax
   class StudentWorksController < ApplicationController
     include Spot::WorksControllerBehavior
 
-    self.curation_concern_type = ::StudentWork
+    # self.curation_concern_type = ::StudentWork
+    self.curation_concern_type = StudentWorkResource
     self.show_presenter = Hyrax::StudentWorkPresenter
 
     # Modifying the search_builder_class to our subclass which allows
