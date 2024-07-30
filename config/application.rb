@@ -3,6 +3,7 @@ require_relative 'boot'
 
 require 'rails/all'
 require 'sprockets/es6'
+
 require 'rack-cas/session_store/active_record'
 
 # Some gems in the Samvera stack use the 'deprecation' gem instead of
