@@ -48,12 +48,13 @@ class Ability
 
     # admins can create everything
     can(:create, curation_concerns_models)
+    can(:create, [PublicationResource, ImageResource, StudentWorkResource])
   end
 
   def authenticated_users_can_deposit_student_works
     return unless registered_user?
 
-    can(:create, StudentWork)
+    can(:create, [StudentWork, StudentWorkResource])
   end
 
   # Delegates abilities for users that have the 'depositor' role
@@ -63,7 +64,7 @@ class Ability
   def depositor_abilities
     return unless current_user.depositor?
 
-    can(:create, Publication)
+    can(:create, [Publication, PublicationResource])
 
     # can view the user dashboard
     can(:read, :dashboard)
@@ -87,7 +88,7 @@ class Ability
   def student_abilities
     return unless current_user.student?
 
-    can(:create, StudentWork)
+    can(:create, [StudentWork, StudentWorkResource])
     can(:read, :dashboard)
   end
 
