@@ -247,7 +247,7 @@ Rails.application.config.to_prepare do
 
         {
           fast_id: fast_id,
-          id: "http://id.worldcat.org/fast/#{fast_id.gsub(/^fst0/, '')}",
+          id: "http://id.worldcat.org/fast/#{fast_id.gsub(/^fst/, '')}",
           label: term,
           value: doc['auth']
         }
