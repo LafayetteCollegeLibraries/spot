@@ -6,25 +6,11 @@ module Hyrax
     include Hyrax::FormFields(:institutional_metadata)
     include Hyrax::FormFields(:publication_metadata)
 
-    include Spot::Forms::LanguageTaggedFormFields(:title, :title_alternative)
+    include Spot::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :abstract, :description)
+    include Spot::AttributeFormFields(:subject, :language, :academic_department, :division)
 
-    property :subject_attributes, virtual: true, populator: :subject_populator
-    # validates_with Spot::EdtfDateValidator, fields: [:date_issued]
+    # property :subject_attributes, virtual: true, populator: :subject_populator
 
-    def subject_populator(fragment:, **_options)
-      adds = []
-      deletes = []
-
-      fragment.each do |_, h|
-        if h['destroy'] == 'true'
-          deletes << Valkyrie::ID.new(h['id'])
-        else
-          adds << Valkyrie::ID.new(h['id'])
-        end
-      end
-
-      self.subject = ((subject + adds) - deletes).uniq
-      self
-    end
+    validates_with Spot::EdtfDateValidator, fields: [:date_issued]
   end
 end
