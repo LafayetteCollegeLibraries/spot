@@ -5,7 +5,7 @@ module Spot
   class FileSetIndexer < Hyrax::FileSetIndexer
     def generate_solr_document
       super.reject { |k, _v| k == 'all_text_timv' }.tap do |solr_document|
-        solr_document['original_filenames_ssim'] = files.map { |file| file.original_name }
+        solr_document['original_filenames_ssim'] = object.files.map { |file| file.original_name }
       end
     end
   end
