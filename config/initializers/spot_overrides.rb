@@ -279,4 +279,11 @@ Rails.application.config.to_prepare do
       Spot::VideoProcessor
     end
   end
+
+  # Add original file names to presenter for file sets
+  #
+  # @see https://github.com/samvera/hyrax/blob/e4f8a06aaf1c9ec378f87764da59f73a8adf06d7/app/presenters/hyrax/file_set_presenter.rb
+  Hyrax::FileSetPresenter.class_eval do
+    delegate :original_filenames, to: :solr_document
+  end
 end
