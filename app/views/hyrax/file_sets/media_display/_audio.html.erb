@@ -16,9 +16,17 @@
                 <tr class = "play-list-row" data-track-row="<%= index %>">
                     <th>Track <%= index+1 %></th>
                     <% if index == 0 %>
-                    <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= derivative %></a></td>
+                        <% if @presenter.premade_derivatives.length == 0 %>
+                        <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.original_filenames[0] %></a></td>
+                        <% else %>
+                        <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.premade_derivatives[index] %></a></td>
+                        <% end %>
                     <% else %>
-                    <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= derivative %></a></td>
+                        <% if @presenter.premade_derivatives.length == 0 %>
+                        <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.original_filenames[0] %></a></td>
+                        <% else %>
+                        <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.premade_derivatives[index] %></a></td>
+                        <% end %>
                     <% end %>
                 </tr>
             <% end %>
