@@ -35,6 +35,22 @@ module Spot
 
       # Check to see if any premade derivatives exist, process them if so.
       #
+      # @return [Boolean]
+      def check_premade_derivatives
+        premade_derivatives = file_set.parent.premade_derivatives.to_a
+        stored_derivatives = file_set.parent.stored_derivatives.to_a
+
+        return true if !stored_derivatives.empty?
+        return false if premade_derivatives.empty?
+
+        premade_derivatives.each_with_index do |derivative, index|
+          rename_premade_derivative(derivative, index)
+        end
+        true
+      end
+
+      # Check to see if any premade derivatives exist, process them if so.
+      #
       # @param [String] derivative, the s3 key of a premade derivative
       # @param [Integer] index, index of premade derivative in array
       # @return [void]
