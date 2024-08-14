@@ -35,23 +35,6 @@ module Spot
         s3_client.delete_objects(bucket: s3_bucket, delete: delete)
       end
 
-      # Check to see if any premade derivatives exist, process them if so.
-      #
-      # @return [Boolean]
-      def check_premade_derivatives
-        premade_derivatives = file_set.parent.premade_derivatives.to_a
-
-        return false if premade_derivatives.empty?
-
-        premade_derivatives.each_with_index do |derivative, index|
-          rename_premade_derivative(derivative, index)
-        end
-        true
-      end
-
-      # Placeholder for rename function in children
-      def rename_premade_derivative(derivative, index); end
-
       # Placeholder for file specific paths in children
       def derivative_paths; end
 
@@ -99,7 +82,7 @@ module Spot
       # keys to the s3 bucket. Adds all uploaded keys to the stored_derivatives metadata field
       def upload_derivatives_to_s3(keys, paths)
         parent = file_set.parent
-        stored_derivatives = []
+        stored_derivatives = parent.stored_derivatives.to_a
         paths.each_with_index do |path, index|
           stored_derivatives.push(keys[index])
           s3_client.put_object(

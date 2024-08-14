@@ -15,6 +15,15 @@ module AudioVisualHelper
     url
   end
 
+  def get_original_name(presenters, derivative)
+    presenters.each do |presenter|
+      if presenter.id.to_s == derivative.split("-")[0]
+        return presenter.original_filenames[0]
+      end
+    end
+    return ""
+  end
+
   def get_derivative_list(file_set)
     file_set.parent.stored_derivatives.to_a
   end
