@@ -41,7 +41,7 @@ module Spot
         stored_derivatives = file_set.parent.stored_derivatives.to_a
 
         return false if premade_derivatives.empty?
-        return true if !stored_derivatives.empty?
+        return true unless stored_derivatives.empty?
 
         premade_derivatives.each_with_index do |derivative, index|
           rename_premade_derivative(derivative, index)
