@@ -16,7 +16,7 @@ module AudioVisualHelper
   end
 
   def get_original_name(presenters, derivative)
-    presenters.each do |presenter|      
+    presenters.each do |presenter|
       return presenter.original_filenames[0] if presenter.id.to_s == derivative.split("-")[0]
     end
     ""
