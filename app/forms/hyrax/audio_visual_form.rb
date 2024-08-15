@@ -12,5 +12,14 @@ module Hyrax
       :rights_statement,
       :premade_derivatives
     ].concat(hyrax_form_fields)
+
+    class << self
+      def build_permitted_params
+        super.tap do |params|
+          params << { location_attributes: [:id, :_destroy] }
+          params << { subject_attributes: [:id, :_destroy] }
+        end
+      end
+    end
   end
 end
