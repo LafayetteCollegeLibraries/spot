@@ -40,7 +40,7 @@ module Spot
         premade_derivatives = file_set.parent.premade_derivatives.to_a
         stored_derivatives = file_set.parent.stored_derivatives.to_a
 
-        return true if !stored_derivatives.empty?
+        return true unless stored_derivatives.empty?
         return false if premade_derivatives.empty?
 
         premade_derivatives.each_with_index do |derivative, index|
