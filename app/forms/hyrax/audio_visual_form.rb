@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module Hyrax
   class AudioVisualForm < ::Spot::Forms::WorkForm
-    singular_form_fields :title, :embed_url
+    singular_form_fields :title
     transforms_language_tags_for :title
 
     self.model_class = ::AudioVisual
