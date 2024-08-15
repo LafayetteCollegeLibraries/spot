@@ -85,7 +85,6 @@ module Spot
       attribute :page_count,             ::Blacklight::Types::String, 'page_count_tesim'
       attribute :original_filenames,     ::Blacklight::Types::Array,  'original_filenames_ssim'
 
-
       # Collection properties
       attribute :collection_slug,        ::Blacklight::Types::String, 'collection_slug_ssi'
       attribute :sponsor,                ::Blacklight::Types::Array,  'sponsor_tesim'
