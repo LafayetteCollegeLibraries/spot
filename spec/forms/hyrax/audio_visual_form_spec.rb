@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::AudioVisualForm do
   it_behaves_like 'a Spot work form'
-  it_behaves_like 'it handles required fields', :title, :rights_statement
+  it_behaves_like 'it handles required fields', :title, :resource_type, :rights_statement
 
   describe '.terms' do
     subject(:terms) { described_class.terms }
@@ -16,8 +16,9 @@ RSpec.describe Hyrax::AudioVisualForm do
     subject(:params) { described_class.build_permitted_params }
 
     it { is_expected.to include(:title) }
-    it { is_expected.to include(date: []) }
+    it { is_expected.to include(resource_type: []) }
     it { is_expected.to include(:rights_statement) }
+    it { is_expected.to include(date: []) }
     it { is_expected.to include(premade_derivatives: []) }
   end
 end
