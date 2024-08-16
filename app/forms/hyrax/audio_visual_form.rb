@@ -5,11 +5,14 @@ module Hyrax
     transforms_language_tags_for :title
 
     self.model_class = ::AudioVisual
-    self.required_fields = [:title, :rights_statement]
+    self.required_fields = [:title, :resource_type, :rights_statement]
     self.terms = [
       :title,
-      :date,
+      :resource_type,
       :rights_statement,
+
+      # non-required fields
+      :date,
       :premade_derivatives
     ].concat(hyrax_form_fields)
   end
