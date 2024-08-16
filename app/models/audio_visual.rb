@@ -19,4 +19,7 @@ class AudioVisual < ActiveFedora::Base
   def validate_resource_type?
     false
   end
+
+  # see {Spot::WorkBehavior.setup_nested_attributes!}
+  setup_nested_attributes!
 end
