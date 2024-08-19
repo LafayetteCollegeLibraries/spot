@@ -77,11 +77,11 @@ services:
     depends_on:
       - db
 
-  fits_servlet:
+  fits-servlet:
     build:
       context: ./docker/fits_servlet
     ports:
-      - 8000:8000
+      - 8000:8080
     restart: unless-stopped
 
   minio:
@@ -112,7 +112,7 @@ services:
     env_file:
       - .env.local
     environment:
-      - FITS_SERVLET_URL=http://fits_servlet:8000/fits
+      - FITS_SERVLET_URL=http://fits-servlet:8080/fits
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
@@ -123,7 +123,7 @@ services:
     depends_on:
       - db
       - fedora
-      - fits_servlet
+      - fits-servlet
       - redis
       - solr
 

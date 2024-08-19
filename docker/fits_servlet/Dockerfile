@@ -2,7 +2,7 @@
 # Target: fits-installer
 # !! Not for general consumption !!
 ##
-FROM alpine:3 as fits-installer
+FROM alpine:3 AS fits-installer
 ARG FITS_VERSION="1.6.0"
 ENV FITS_VERSION="${FITS_VERSION}"
 WORKDIR /tmp
@@ -13,11 +13,16 @@ RUN unzip -d /tmp/fits /tmp/fits-${FITS_VERSION}.zip && \
     chmod a+x /tmp/fits/fits.sh && \
     rm /tmp/fits-${FITS_VERSION}.zip
 
+# Remove bundled version of mediainfo in favor of system
+# @see https://github.com/harvard-lts/fits?tab=readme-ov-file#system-requirements
+RUN rm -r /tmp/fits/tools/mediainfo
+
+
 ##
 # Target: servlet-installer
 # !! Not for general consumption !!
 ##
-FROM alpine:3 as servlet-installer
+FROM alpine:3 AS servlet-installer
 ARG FITS_SERVLET_VERSION="2.1.0"
 ENV FITS_SERVLET_VERSION="${FITS_SERVLET_VERSION}"
 ADD https://github.com/harvard-lts/FITSservlet/releases/download/${FITS_SERVLET_VERSION}/fits-service-${FITS_SERVLET_VERSION}.war /tmp/fits-service.war
@@ -50,6 +55,7 @@ RUN apt-get update && \
     make \
     gcc \
     # mediainfo dependencies
+    mediainfo \
     libmms0 \
     libcurl3-gnutls \
     && rm -rf /var/lib/apt/lists/*
@@ -60,9 +66,14 @@ COPY --from=servlet-installer /tmp/fits-service.war $CATALINA_HOME/webapps/fits.
 
 # Copy config, scripts, etc
 COPY assets/catalina.properties $CATALINA_HOME/conf/catalina.properties
+COPY assets/log4j2.xml $CATALINA_HOME/conf/log4j2.xml
 COPY scripts/fits-servlet-entrypoint.sh /opt/fits-servlet-entrypoint.sh
 
 # Bind the current working directory here so that FITS can access files on the host
 WORKDIR /work
 
 ENTRYPOINT ["/opt/fits-servlet-entrypoint.sh"]
+
+# need to explictly provide a CMD when adding a custom ENTRYPOINT
+# @see https://github.com/docker-library/tomcat/blob/master/9.0/jre21/temurin-jammy/Dockerfile#L47
+CMD ["catalina.sh", "run"]
