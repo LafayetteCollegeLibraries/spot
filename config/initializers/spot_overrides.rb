@@ -231,4 +231,27 @@ Rails.application.config.to_prepare do
       nil
     end
   end
+
+  # Modifying how Questiong Authority returns AssignFAST results by
+  # converting fst ids into URLs
+  require 'qa/authorities/assign_fast'
+  Qa::Authorities::AssignFast::GenericAuthority.class_eval do
+    private
+
+    def parse_authority_response(raw_response)
+      raw_response['response']['docs'].map do |doc|
+        index = Qa::Authorities::AssignFast.index_for_authority(subauthority)
+        term = doc[index].first
+        term += " (USE #{doc['auth']})" if doc['type'] == 'alt'
+        fast_id = Array.wrap(doc['idroot']).first
+
+        {
+          fast_id: fast_id,
+          id: "http://id.worldcat.org/fast/#{fast_id.gsub(/^fst/, '')}",
+          label: term,
+          value: doc['auth']
+        }
+      end
+    end
+  end
 end
