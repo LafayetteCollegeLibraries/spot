@@ -3,7 +3,7 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.7.8-slim-bullseye as spot-base
+FROM ruby:2.7.8-slim-bullseye AS spot-base
 
 RUN apt-get clean && \
     apt-get update && \
@@ -59,7 +59,7 @@ HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
 #  Target: spot-asset-builder
 #  !! This is a builder image, do not use !!
 ##
-FROM spot-base as spot-asset-builder
+FROM spot-base AS spot-asset-builder
 ENV RAILS_ENV=production
 COPY . /spot
 
@@ -69,7 +69,7 @@ RUN SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" 
 # TARGET: pdfjs-installer
 # !! This is a builder image. Not for general use !!
 ##
-FROM alpine:3 as pdfjs-installer
+FROM alpine:3 AS pdfjs-installer
 ARG PDFJS_VERSION="4.0.379"
 ENV PDFJS_VERSION="${PDFJS_VERSION}"
 ADD https://github.com/mozilla/pdf.js/releases/download/v${PDFJS_VERSION}/pdfjs-${PDFJS_VERSION}-legacy-dist.zip /tmp/pdfjs.zip
@@ -83,7 +83,7 @@ COPY config/pdfjs/web/lafayette-viewer-enhancements.js /tmp/pdfjs/web
 # Used for the development version of the user-facing application.
 # Installs Ruby development dependencies
 ##
-FROM spot-base as spot-web-development
+FROM spot-base AS spot-web-development
 RUN bundle config unset with &&\
     bundle config unset without && \
     bundle config set with "development:test" && \
@@ -101,7 +101,7 @@ CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp
 # TARGET: spot-web-production
 # Precompiles assets for production
 ##
-FROM spot-base as spot-web-production
+FROM spot-base AS spot-web-production
 ENV RAILS_ENV=production
 COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
@@ -116,7 +116,7 @@ COPY --from=pdfjs-installer /tmp/pdfjs /spot/public/pdf
 # @see https://github.com/harvard-lts/fits
 # @see https://github.com/samvera/hyrax/blob/3.x-stable/Dockerfile#L59-L65
 ##
-FROM alpine:3 as fits-installer
+FROM alpine:3 AS fits-installer
 ARG FITS_VERSION="1.6.0"
 ENV FITS_VERSION="${FITS_VERSION}"
 ADD https://github.com/harvard-lts/fits/releases/download/${FITS_VERSION}/fits-${FITS_VERSION}.zip /tmp/fits.zip
@@ -129,7 +129,7 @@ RUN unzip -d /tmp/fits /tmp/fits.zip && \
 # TARGET: spot-worker
 # Installs dependencies for running background jobs
 ##
-FROM spot-base as spot-worker-base
+FROM spot-base AS spot-worker-base
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
@@ -159,7 +159,7 @@ ENV PATH="${PATH}:/usr/local/fits"
 CMD ["bundle", "exec", "sidekiq"]
 EXPOSE 3000
 
-FROM spot-worker-base as spot-worker-development
+FROM spot-worker-base AS spot-worker-development
 ENV RAILS_ENV=development
 
 RUN bundle config unset with &&\
@@ -173,7 +173,7 @@ COPY . /spot/
 # Target: spot-worker-production
 # Copies compiled assets for use in production.
 ##
-FROM spot-worker-base as spot-worker-production
+FROM spot-worker-base AS spot-worker-production
 ENV RAILS_ENV=production
 
 COPY . /spot/
