@@ -85,6 +85,7 @@ jobs:
         name: Install dependencies
         run: |
           apt-get update -y && apt-get install --yes \
+            git \
             pandoc \
             nodejs \
             pkg-config \
