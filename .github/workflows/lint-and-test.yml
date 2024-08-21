@@ -8,10 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-        env:
-          BUNDLE_WITH: lint
+      - name: Install :lint gems
+        run: bundle install --with lint
       -
         name: Run Rubocop
         run: bundle exec rubocop --format junit --out rubocop-$(date +'%Y%m%md').xml
