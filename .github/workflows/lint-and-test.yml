@@ -89,18 +89,7 @@ jobs:
           echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
           apt-get update -y && apt-get install -y --no-install-recommends \
             awscli build-essential coreutils git libpq-dev libxml2 libxml2-dev libxslt-dev \
-            netcat-openbsd nodejs openssl ruby-dev tzdata zip
-      -
-        name: Restore installed Gems
-        uses: actions/cache@v4
-        with:
-          path: vendor/bundle
-          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
-      -
-        name: Install gem dependencies
-        run: |
-          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
-          BUNDLE_WITH=test BUNDLE_PATH=vendor/bundle bundle install
+            netcat-openbsd nodejs openssl ruby-dev tzdata unzip zip
       -
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
