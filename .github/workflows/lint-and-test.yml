@@ -3,19 +3,8 @@ on:
   push:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-        env:
-          BUNDLE_WITH: test
-
   lint:
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -35,8 +24,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    container: ubuntu
-    needs: [build,lint]
+    container: ruby:2.7.8-slim-bullseye
+    needs: lint
     services:
       database:
         image: postgres:13-alpine
@@ -84,19 +73,18 @@ jobs:
       -
         name: Install dependencies
         run: |
-          apt-get update -y && apt-get install --yes \
-            git \
-            pandoc \
-            nodejs \
-            pkg-config \
-            libxml2-dev \
-            libxslt-dev \
-            libyaml-dev
-
+          apt-get clean && apt-get update && \
+          apt-get install -y --no-install-recommends ca-certificates curl gnupg && \
+          mkdir -p /etc/apt/keyrings && \
+          curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+          echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+          apt-get update -y && apt-get install -y --no-install-recommends \
+            awscli build-essential coreutils git libpq-dev libxml2 libxml2-dev libxslt-dev \
+            netcat-openbsd nodejs openssl ruby-dev tzdata zip
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-            bundler-cache: true
+          bundler-cache: true
         env:
           BUNDLE_WITH: test
       -
