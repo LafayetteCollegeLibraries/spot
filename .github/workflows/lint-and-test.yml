@@ -59,6 +59,15 @@ jobs:
         image: redis:6.2-alpine
         ports:
           - 6379:6379
+      zookeeper:
+        image: bitnami/zookeeper:3.9
+        ports:
+          - 2181:2181
+        env:
+          ZOO_SERVER_ID: 1
+          ALLOW_ANONYMOUS_LOGIN: yes
+          ZOO_SERVERS: zookeeper:2888:3888
+          ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       solr:
         image: bitnami/solr:8.11.2
         ports:
@@ -71,15 +80,6 @@ jobs:
           SOLR_ENABLE_CLOUD_MODE: yes
           SOLR_HOST: solr
           SOLR_ZK_HOSTS: zookeeper:2181
-      zookeeper:
-          image: bitnami/zookeeper:3.9
-          ports:
-            - 2181:2181
-          env:
-            ZOO_SERVER_ID: 1
-            ALLOW_ANONYMOUS_LOGIN: yes
-            ZOO_SERVERS: zookeeper:2888:3888
-            ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
     env:
       BUNDLE_WITH: test
       BUNDLE_PATH: vendor/bundle
