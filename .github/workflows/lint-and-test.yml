@@ -85,7 +85,7 @@ jobs:
         name: Install system dependencies from Dockerfile
         run: |
           apt-get update -y && apt-get install -y --no-install-recommends \
-            build-essential coreutils git libpq-dev libxml2 libxml2-dev libxslt-dev \
+            build-essential coreutils curl git libpq-dev libxml2 libxml2-dev libxslt-dev \
             netcat-openbsd openssl ruby-dev tzdata unzip zip
       -
         name: Setup Chrome
