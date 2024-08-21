@@ -65,6 +65,7 @@ jobs:
         env:
           SOLR_ADMIN_USERNAME: solr_admin
           SOLR_ADMIN_PASSWORD: solr_password
+          SOLR_ENABLE_CLOUD_MODE: yes
         options: --name solr
     env:
       BUNDLE_WITH: test
