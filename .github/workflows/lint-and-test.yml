@@ -5,11 +5,21 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_WITH: lint
+      BUNDLE_PATH: vendor/bundle
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
-      - name: Install :lint gems
-        run: bundle install --with lint
+      -
+        name: Restore installed Gems
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: spot-bundle-lint-${{ hashFiles('Gemfile.lock') }}
+      -
+        name: Install gems
+        run: bundle install
       -
         name: Run Rubocop
         run: bundle exec rubocop --format junit --out rubocop-$(date +'%Y%m%md').xml
