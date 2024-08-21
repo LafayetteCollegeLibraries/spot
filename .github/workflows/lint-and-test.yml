@@ -83,13 +83,14 @@ jobs:
     steps:
       -
         name: Install dependencies
-        run: apt-get install --yes \
-               pandoc \
-               nodejs \
-               pkg-config \
-               libxml2-dev \
-               libxslt-dev \
-               libyaml-dev
+        run: |
+          apt-get update -y && apt-get install --yes \
+            pandoc \
+            nodejs \
+            pkg-config \
+            libxml2-dev \
+            libxslt-dev \
+            libyaml-dev
 
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
