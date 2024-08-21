@@ -84,7 +84,9 @@ jobs:
       BUNDLE_WITH: test
       BUNDLE_PATH: vendor/bundle
       CAS_BASE_URL: ''
+      CI: 1
       FEDORA_TEST_URL: http://fedora:8080/rest
+      IIIF_BASE_URL: http://localhost/iiif/2
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       PSQL_PASSWORD: spot_test_pw
       PSQL_USER: spot_test_user
@@ -92,7 +94,7 @@ jobs:
       PSQL_HOST: database
       RAILS_ENV: test
       SOLR_TEST_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
-      URL: http://localhost:3000
+      URL_HOST: http://localhost:3000
 
     steps:
       -
@@ -108,9 +110,15 @@ jobs:
       -
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
         with:
           install-dependencies: true
           install-chromedriver: true
+      -
+        name: Get Chrome bin directory
+        id: chrome-bin-directory
+        run:
+          echo "dirname=$(dirname ${{ steps.setup-chrome.outputs.chrome-path }})" >> "$GITHUB_OUTPUT"
       -
         name: Checkout code
         uses: actions/checkout@v4
@@ -150,6 +158,7 @@ jobs:
         name: Run tests
         run: |
           mkdir /tmp/test-results
+          export PATH="${{ steps.chrome-bin-directory.outputs.dirname }}:$PATH"
           bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       -
         name: Publish RSpec report
