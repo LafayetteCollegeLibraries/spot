@@ -8,7 +8,7 @@ RSpec.describe AudioVisual do
   [
     [:date,                 RDF::Vocab::DC.date],
     [:premade_derivatives,  'http://ldr.lafayette.edu/ns#premade_derivatives'],
-    [:stored_derivatives,   'http://ldr.lafayette.edu/ns#stored_derivatives'],
+    [:stored_derivatives,   'http://ldr.lafayette.edu/ns#stored_derivatives']
   ].each do |(prop, uri)|
     it { is_expected.to have_editable_property(prop).with_predicate(uri) }
   end
