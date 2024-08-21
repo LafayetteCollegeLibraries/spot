@@ -104,7 +104,7 @@ jobs:
           echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
           apt-get update -y && apt-get install -y --no-install-recommends \
             build-essential coreutils curl git libpq-dev libxml2 libxml2-dev libxslt-dev \
-            netcat-openbsd nodejs openssl ruby-dev tzdata unzip zip
+            netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata unzip zip
       -
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
