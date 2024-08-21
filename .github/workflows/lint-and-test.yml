@@ -70,6 +70,17 @@ jobs:
       URL: http://localhost:3000
 
     steps:
+      -
+        name: Install dependencies
+        run: |
+          sudo apt-get install --yes \
+            pandoc \
+            nodejs \
+            pkg-config \
+            libxml2-dev \
+            libxslt-dev \
+            libyaml-dev
+
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
