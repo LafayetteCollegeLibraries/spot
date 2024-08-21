@@ -24,6 +24,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    container: ubuntu
     needs: lint
     services:
       database:
