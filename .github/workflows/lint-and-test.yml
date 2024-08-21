@@ -94,7 +94,7 @@ jobs:
       -
         name: Setup Solr core with local configs
         run: |
-          curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
+          curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
           curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
       -
         name: Run migrations
