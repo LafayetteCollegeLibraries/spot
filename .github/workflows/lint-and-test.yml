@@ -66,6 +66,7 @@ jobs:
           SOLR_ADMIN_USERNAME: solr_admin
           SOLR_ADMIN_PASSWORD: solr_password
           SOLR_CLOUD_BOOTSTRAP: yes
+          SOLR_ENABLE_AUTHENTICATION: yes
           SOLR_ENABLE_CLOUD_MODE: yes
           SOLR_HOST: solr
           SOLR_ZK_HOSTS: zookeeper:2181
@@ -88,7 +89,7 @@ jobs:
       PSQL_USER: spot_test_user
       PSQL_DATABASE: spot_test
       RAILS_ENV: test
-      SOLR_TEST_URL: http://solr:8983/solr/spot-test
+      SOLR_TEST_URL: http://admin:bitnami@solr:8983/solr/spot-test
       URL: http://localhost:3000
 
     steps:
