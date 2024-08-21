@@ -153,9 +153,14 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+# break out linting into its own group to simplify installation in ci stage
+group :development, :test, :lint do
+  # Samvera community's rules, includes Rubocop + extensions
+  gem 'bixby', '~> 5.0.1'
+end
+
 # things used for development + testing (again, not as necessary to lock down versions)
 group :development, :test do
-  gem 'bixby', '~> 5.0.1'
   gem 'byebug', '~> 11.1.3'
   gem 'capybara', '~> 3.38'
   gem 'capybara-screenshot', '~> 1.0.26'

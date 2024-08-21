@@ -11,7 +11,7 @@ jobs:
         with:
           bundler-cache: true
         env:
-          BUNDLE_WITH: test
+          BUNDLE_WITH: lint
       -
         name: Run Rubocop
         run: bundle exec rubocop --format junit --out rubocop-$(date +'%Y%m%md').xml
@@ -70,8 +70,9 @@ jobs:
       URL: http://localhost:3000
 
     steps:
+      - uses: actions/checkout@v4
       -
-        name: Install dependencies
+        name: Install system dependencies from Dockerfile
         run: |
           apt-get clean && apt-get update && \
           apt-get install -y --no-install-recommends ca-certificates curl gnupg && \
@@ -81,12 +82,17 @@ jobs:
           apt-get update -y && apt-get install -y --no-install-recommends \
             awscli build-essential coreutils git libpq-dev libxml2 libxml2-dev libxslt-dev \
             netcat-openbsd nodejs openssl ruby-dev tzdata zip
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      -
+        name: Restore installed Gems
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
-        env:
-          BUNDLE_WITH: test
+          path: vendor/bundle
+          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
+      -
+        name: Install gem dependencies
+        run:
+          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
+          BUNDLE_WITH=test BUNDLE_PATH=vendor/bundle bundle install
       -
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
