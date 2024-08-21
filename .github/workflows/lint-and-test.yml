@@ -115,11 +115,6 @@ jobs:
           install-dependencies: true
           install-chromedriver: true
       -
-        name: Get Chrome bin directory
-        id: chrome-bin-directory
-        run:
-          echo "dirname=$(dirname ${{ steps.setup-chrome.outputs.chrome-path }})" >> "$GITHUB_OUTPUT"
-      -
         name: Checkout code
         uses: actions/checkout@v4
       -
@@ -156,9 +151,10 @@ jobs:
         run: bundle exec rake db:migrate
       -
         name: Run tests
+        env:
+          WD_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           mkdir /tmp/test-results
-          export PATH="${{ steps.chrome-bin-directory.outputs.dirname }}:$PATH"
           bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
       -
         name: Publish RSpec report
