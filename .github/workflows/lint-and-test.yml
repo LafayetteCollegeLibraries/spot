@@ -81,18 +81,12 @@ jobs:
       URL: http://localhost:3000
 
     steps:
-      - uses: actions/checkout@v4
       -
         name: Install system dependencies from Dockerfile
         run: |
-          apt-get clean && apt-get update && \
-          apt-get install -y --no-install-recommends ca-certificates curl gnupg && \
-          mkdir -p /etc/apt/keyrings && \
-          curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-          echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
           apt-get update -y && apt-get install -y --no-install-recommends \
-            awscli build-essential coreutils git libpq-dev libxml2 libxml2-dev libxslt-dev \
-            netcat-openbsd nodejs openssl ruby-dev tzdata unzip zip
+            build-essential coreutils git libpq-dev libxml2 libxml2-dev libxslt-dev \
+            netcat-openbsd openssl ruby-dev tzdata unzip zip
       -
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
@@ -100,14 +94,17 @@ jobs:
           install-dependencies: true
           install-chromedriver: true
       -
-        name: "Restore Solr config.zip from cache"
+        name: Checkout code
+        uses: actions/checkout@v4
+      -
+        name: Restore Solr config.zip from cache
         id: solr-config-cache
         uses: actions/cache@v4
         with:
           path: /tmp/spot_solr_config.zip
           key: spot-solr-${{ hashFiles('docker/solr/config') }}
       -
-        name: "Build Solr config.zip"
+        name: Build Solr config.zip
         if: steps.solr-config-cache.outputs.cache-hit != 'true'
         run: |
           cd docker/solr/config
