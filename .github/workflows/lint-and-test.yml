@@ -98,7 +98,7 @@ jobs:
           key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
       -
         name: Install gem dependencies
-        run:
+        run: |
           gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
           BUNDLE_WITH=test BUNDLE_PATH=vendor/bundle bundle install
       -
