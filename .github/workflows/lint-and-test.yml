@@ -91,7 +91,7 @@ jobs:
       PSQL_DATABASE: spot_test
       PSQL_HOST: database
       RAILS_ENV: test
-      SOLR_TEST_URL: http://admin:bitnami@solr:8983/solr/spot-test
+      SOLR_TEST_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
       URL: http://localhost:3000
 
     steps:
