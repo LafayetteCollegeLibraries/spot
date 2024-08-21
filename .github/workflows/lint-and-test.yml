@@ -95,6 +95,9 @@ jobs:
       -
         name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
+        with:
+          install-dependencies: true
+          install-chromedriver: true
       -
         name: "Restore Solr config.zip from cache"
         id: solr-config-cache
