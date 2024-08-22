@@ -11,11 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUNDLE_PATH: vendor/bundle
+      BUNDLE_WITH: test
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
-        env:
-          BUNDLE_ONLY: lint
         with:
           bundler-cache: true
       -
@@ -131,6 +130,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         env:
           BUNDLE_WITH: test
+          BUNDLE_PATH: vendor/bundle
         with:
           bundler-cache: true
       -
