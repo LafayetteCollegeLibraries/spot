@@ -160,10 +160,12 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
+          check_name: Test summary
           report_paths: /tmp/test-results/*.xml
       -
         name: Publish coverage
         uses: joshmfrankel/simplecov-check-action@main
         with:
+          check_job_name: Test coverage
           minimum_suite_coverage: 95
           github_token: ${{ secrets.GITHUB_TOKEN }}
