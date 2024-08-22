@@ -2,9 +2,11 @@ name: Lint and Run Tests
 on:
   push:
 
+permissions:
+  checks: write
+
 jobs:
   lint:
-    if: false
     runs-on: ubuntu-latest
     env:
       BUNDLE_WITH: lint
@@ -34,7 +36,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: ruby:2.7.8-slim-bullseye
-    # needs: lint
+    needs: lint
     services:
       database:
         image: postgres:13-alpine
