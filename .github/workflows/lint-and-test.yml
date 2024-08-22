@@ -10,20 +10,14 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     env:
-      BUNDLE_WITH: lint
       BUNDLE_PATH: vendor/bundle
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
-      -
-        name: Restore installed Gems
-        uses: actions/cache@v4
+        env:
+          BUNDLE_ONLY: lint
         with:
-          path: vendor/bundle
-          key: spot-bundle-lint-${{ hashFiles('Gemfile.lock') }}
-      -
-        name: Install gems
-        run: bundle install
+          bundler-cache: true
       -
         name: Run Rubocop
         run: bundle exec rubocop --format github
@@ -79,8 +73,6 @@ jobs:
           SOLR_HOST: solr
           SOLR_ZK_HOSTS: zookeeper:2181
     env:
-      BUNDLE_WITH: test
-      BUNDLE_PATH: vendor/bundle
       CAS_BASE_URL: ''
       CI: 1
       FEDORA_TEST_URL: http://fedora:8080/rest
@@ -135,16 +127,12 @@ jobs:
           curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
           curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
       -
-        name: Restore installed Gems
-        uses: actions/cache@v4
+        name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        env:
+          BUNDLE_WITH: test
         with:
-          path: vendor/bundle
-          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
-      -
-        name: Install gem dependencies
-        run: |
-          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
-          bundle install
+          bundler-cache: true
       -
         name: Run migrations
         run: bundle exec rake db:migrate
