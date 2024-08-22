@@ -165,3 +165,9 @@ jobs:
         if: always()
         with:
           report_paths: /tmp/test-results/*.xml
+      -
+        name: Publish coverage
+        uses: joshmfrankel/simplecov-check-action@main
+        with:
+          minimum_suite_coverage: 95
+          github_token: ${{ secrets.GITHUB_TOKEN }}
