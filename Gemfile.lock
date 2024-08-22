@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/LafayetteCollegeLibraries/ldr-development-seeds.git
-  revision: 0341725c91de6ddea377f15a046467fe6cec215f
-  branch: main
-  specs:
-    ldr-development-seeds (0.0.0)
-      bulkrax (~> 5)
-      hyrax (~> 3)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1131,7 +1122,6 @@ DEPENDENCIES
   jbuilder (~> 2.11.5)
   jquery-rails (~> 4.6.0)
   kaminari (~> 1.2.2)
-  ldr-development-seeds!
   linkeddata (~> 3.1.6)
   listen (>= 3.0.5, < 3.8)
   mini_magick (~> 4.11)
