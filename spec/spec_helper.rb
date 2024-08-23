@@ -34,23 +34,14 @@ require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
 require 'mail'
 
-# copied selenium chrome drive config from samvera/hyrax/spec/spec_helper.rb
-#
-# @note In January 2018, TravisCI disabled Chrome sandboxing in its Linux
-#       container build environments to mitigate Meltdown/Spectre
-#       vulnerabilities, at which point Hyrax could no longer use the
-#       Capybara-provided :selenium_chrome_headless driver (which does not
-#       include the `--no-sandbox` argument).
-Capybara.register_driver :selenium_chrome_headless_sandboxless do |app|
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+Capybara.register_driver :selenium_firefox_headless do |app|
+  browser_options = ::Selenium::WebDriver::Firefox::Options.new
   browser_options.args << '--headless'
-  browser_options.args << '--disable-gpu'
-  browser_options.args << '--no-sandbox'
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+  Capybara::Selenium::Driver.new(app, browser: :firefox, options: browser_options)
 end
 
 Capybara.default_driver = :rack_test # This is a faster driver
-Capybara.javascript_driver = :selenium_chrome_headless_sandboxless # This is slower
+Capybara.javascript_driver = :selenium_firefox_headless # This is slower
 
 # Uncomment this block to watch feature tests run in a web browser
 # Capybara.javascript_driver = :selenium
@@ -62,7 +53,7 @@ Capybara.javascript_driver = :selenium_chrome_headless_sandboxless # This is slo
 # since we've created a custsom driver (that is a wrapper around a Selenium
 # driver), we need to tell capybara-screenshot how to take a screenshot
 # (which is copied from the Selenium configuration)
-Capybara::Screenshot.register_driver(:selenium_chrome_headless_sandboxless) do |driver, path|
+Capybara::Screenshot.register_driver(:selenium_firefox_headless) do |driver, path|
   driver.browser.save_screenshot(path)
 end
 
@@ -160,12 +151,10 @@ WebMock.disable_net_connect!(
   allow_localhost: true,
   net_http_connect_on_start: true,
 
-  # let webdrivers gem fetch the chrome browser and
   # account for our aliased services via docker
   allow: %w[
-    googlechromelabs.github.io
-    chromedriver.storage.googleapis.com
-    storage.googleapis.com
+    objects.githubusercontent.com
+    github.com
     db
     fedora
     fitsservlet

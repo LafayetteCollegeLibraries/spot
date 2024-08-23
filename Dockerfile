@@ -84,6 +84,7 @@ COPY config/pdfjs/web/lafayette-viewer-enhancements.js /tmp/pdfjs/web
 # Installs Ruby development dependencies
 ##
 FROM spot-base AS spot-web-development
+RUN apt-get update -y && apt-get install -y firefox-esr
 RUN bundle config unset with &&\
     bundle config unset without && \
     bundle config set with "development:test" && \
