@@ -72,6 +72,8 @@ jobs:
           SOLR_HOST: solr
           SOLR_ZK_HOSTS: zookeeper:2181
     env:
+      BUNDLE_PATH: vendor/bundle
+      BUNDLE_WITH: test
       CAS_BASE_URL: ''
       CI: 1
       FEDORA_TEST_URL: http://fedora:8080/rest
@@ -133,9 +135,6 @@ jobs:
           key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
       -
         name: Install gem dependencies
-        env:
-          BUNDLE_WITH: test
-          BUNDLE_PATH: vendor/bundle
         run: |
           gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
           bundle install
