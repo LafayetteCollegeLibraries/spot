@@ -56,4 +56,12 @@ RSpec.describe AudioVisualHelper do
 
     it { is_expected.to match_array derivatives }
   end
+
+  describe '#get_derivative_res' do
+    subject { get_derivative_res(derivative) }
+
+    let(:derivative) { '1234_0_access-480.mp4' }
+
+    it { is_expected.to eq '480' }
+  end
 end
