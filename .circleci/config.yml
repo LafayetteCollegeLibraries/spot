@@ -116,13 +116,13 @@ jobs:
             sudo apt-get update
             sudo apt-get -y install postgresql-13
 
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+      - browser-tools/install-firefox
+      - browser-tools/install-geckodriver
 
-      # start chrome
+      # start firefox
       - run:
-          name: Start headless Chrome browser
-          command: google-chrome --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
+          name: Start headless Firefox browser
+          command: firefox --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
 
       - run:
           name: Make sure dependencies are valid
