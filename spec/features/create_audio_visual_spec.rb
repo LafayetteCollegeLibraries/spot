@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.feature 'Create a Audio Visual', :clean, :js do
   before do
-    stub_request(:get, subject_uri)
+    stub_request(:get, subject)
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
