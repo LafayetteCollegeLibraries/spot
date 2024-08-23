@@ -11,7 +11,7 @@ RSpec.describe AudioVisualHelper do
     let(:url) { "s3://#{s3_bucket}/#{key}" }
 
     before do
-      allow(Aws::S3::Client).to receive(:new).with(:client_opts).and_return(mock_s3_client)
+      allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
       allow(Aws::S3::Object).to receive(:new).with(bucket_name: s3_bucket, key: key, client: mock_s3_client).and_return(mock_s3_object)
       allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
     end
