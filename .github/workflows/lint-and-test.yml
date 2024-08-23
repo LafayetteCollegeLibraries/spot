@@ -126,13 +126,19 @@ jobs:
           curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
           curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
       -
-        name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        name: Restore installed Gems
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
+      -
+        name: Install gem dependencies
         env:
           BUNDLE_WITH: test
           BUNDLE_PATH: vendor/bundle
-        with:
-          bundler-cache: true
+        run: |
+          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
+          bundle install
       -
         name: Run migrations
         run: bundle exec rake db:migrate
