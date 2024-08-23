@@ -15,6 +15,10 @@ module AudioVisualHelper
     url
   end
 
+  # Matches fileset ids with their presenters and returns their original file names for audio playlist
+  # @param presntres [[FileSetPresenter]] list of file set presenters attactched to a work
+  # @param derivative [String] a particular derivative key to be matched with a presenter
+  # @return [String] the original file name of the given derivative
   def get_original_name(presenters, derivative)
     presenters.each do |presenter|
       return presenter.original_filenames[0] if presenter.id.to_s == derivative.split("-")[0]
@@ -22,10 +26,14 @@ module AudioVisualHelper
     ""
   end
 
+  # @param file_set [FileSet] a fileset from the view
+  # @return [String] a list of associated derivatives of the work
   def get_derivative_list(file_set)
     file_set.parent.stored_derivatives.to_a
   end
 
+  # @param derivative [String] a particular derivative key
+  # @return [String] the height of the derivative video
   def get_derivative_res(derivative)
     ret = derivative.split('-').last
     ret = ret.split('.')[0]
