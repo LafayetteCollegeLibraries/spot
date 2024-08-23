@@ -19,4 +19,26 @@ RSpec.describe AudioVisualHelper do
 
     it { is_expected.to eq url }
   end
+
+  describe '#get_original_name' do
+    subject { get_original_name(presenters, derivative) }
+
+    let(:key) { '1234-0-access.mp3' }
+    let(:wrong_presenter) { instance_double(Hyrax::FileSetPresenter) }
+    let(:right_presenter) { instance_double(Hyrax::FileSetPresenter) }
+    let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter]}
+    let(:right_name) { 'correct_name' }
+    let(:wrong_name) { 'correct_name' }
+    let(:right_id) { '1234' }
+    let(:wrong_id) { '5678' }
+
+    before do
+      allow(wrong_presenter).to receive(:id).and_return(wrong_id)
+      allow(wrong_presenter).to receive(:original_filenames).and_return([wrong_name])
+      allow(right_presenter).to receive(:id).and_return(right_id)
+      allow(right_presenter).to receive(:original_filenames).and_return([right_name])
+    end
+
+    it { is_expected.to eq right_name }
+  end
 end
