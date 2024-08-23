@@ -23,7 +23,7 @@ RSpec.describe AudioVisualHelper do
   describe '#get_original_name' do
     subject { get_original_name(presenters, derivative) }
 
-    let(:key) { '1234-0-access.mp3' }
+    let(:derivative) { '1234-0-access.mp3' }
     let(:wrong_presenter) { instance_double(Hyrax::FileSetPresenter) }
     let(:right_presenter) { instance_double(Hyrax::FileSetPresenter) }
     let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter] }
