@@ -122,7 +122,7 @@ jobs:
       # start firefox
       - run:
           name: Start headless Firefox browser
-          command: firefox --headless --disable-gpu -no-sandbox --browsertime.xvfb --remote-debugging-port=9222 http://localhost &
+          command: firefox --headless --remote-debugging-port=9222 http://localhost &
 
       - run:
           name: Make sure dependencies are valid
