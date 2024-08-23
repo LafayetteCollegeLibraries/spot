@@ -168,9 +168,9 @@ group :development, :test do
   gem 'rspec-its', '~> 1.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rspec-rails', '~> 5.1'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.21.2', require: false
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 5'
   gem 'webmock', '~> 3.8'
 end
