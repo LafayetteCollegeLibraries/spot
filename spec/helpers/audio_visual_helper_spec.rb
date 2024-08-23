@@ -10,7 +10,7 @@ RSpec.describe AudioVisualHelper do
     let(:mock_s3_object) { instance_double(Aws::S3::Object) }
     let(:url) { "s3://#{s3_bucket}/#{key}" }
 
-    stub_env('AWS_AV_ASSET_BUCKET', s3_bucket)
+    stub_env('AWS_AV_ASSET_BUCKET', 'av-derivatives')
 
     before do
       allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
