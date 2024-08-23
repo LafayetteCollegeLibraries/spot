@@ -41,4 +41,19 @@ RSpec.describe AudioVisualHelper do
 
     it { is_expected.to eq right_name }
   end
+
+  describe '#get_derivative_list' do
+    subject { get_derivative_list(file_set) }
+
+    let(:file_set) { build(:file_set) }
+    let(:work) { instance_double(AudioVisual) }
+    let(:derivatives) { ['1234_0_access.mp3', '1234_1_access.mp3'] }
+
+    before do
+      allow(file_set).to receive(:parent).and_return(work)
+      allow(work).to receive(:stored_derivatives).and_return(derivatives)
+    end
+
+    it { is_expected.to match_array derivatives }
+  end
 end
