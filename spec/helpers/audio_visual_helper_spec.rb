@@ -26,7 +26,7 @@ RSpec.describe AudioVisualHelper do
     let(:key) { '1234-0-access.mp3' }
     let(:wrong_presenter) { instance_double(Hyrax::FileSetPresenter) }
     let(:right_presenter) { instance_double(Hyrax::FileSetPresenter) }
-    let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter]}
+    let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter] }
     let(:right_name) { 'correct_name' }
     let(:wrong_name) { 'correct_name' }
     let(:right_id) { '1234' }
