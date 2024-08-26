@@ -103,6 +103,8 @@ jobs:
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
         id: setup-firefox
+        env:
+          HOME: /root
         with:
           firefox-version: latest-esr
       -
