@@ -96,16 +96,14 @@ jobs:
           curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
           echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
           apt-get update -y && apt-get install -y --no-install-recommends \
-            build-essential coreutils curl firefox-esr git libpq-dev libxml2 libxml2-dev libxslt-dev \
+            build-essential coreutils curl git libpq-dev libxml2 libxml2-dev libxslt-dev \
             netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata unzip zip
       -
-        name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-        id: setup-chrome
+        name: Setup Firefox
+        uses: browser-actions/setup-firefox@v1
+        id: setup-firefox
         with:
-          chrome-version: stable
-          install-dependencies: true
-          install-chromedriver: true
+          firefox-version: stable
       -
         name: Checkout code
         uses: actions/checkout@v4
@@ -144,7 +142,8 @@ jobs:
       -
         name: Run tests
         env:
-          WD_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
+          RAILS_SILENCE_DEPRECATIONS: true
         run: |
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress

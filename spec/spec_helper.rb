@@ -36,6 +36,7 @@ require 'mail'
 
 Capybara.register_driver :selenium_firefox_headless do |app|
   browser_options = ::Selenium::WebDriver::Firefox::Options.new
+  browser_options.binary = ENV['FIREFOX_BINARY_PATH'] if ENV['FIREFOX_BINARY_PATH'].present?
   browser_options.args << '--headless'
   Capybara::Selenium::Driver.new(app, browser: :firefox, options: browser_options)
 end
