@@ -103,7 +103,7 @@ jobs:
         uses: browser-actions/setup-firefox@v1
         id: setup-firefox
         with:
-          firefox-version: stable
+          firefox-version: latest-esr
       -
         name: Checkout code
         uses: actions/checkout@v4
