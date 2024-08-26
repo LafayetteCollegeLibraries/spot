@@ -95,9 +95,10 @@ jobs:
           mkdir -p /etc/apt/keyrings && \
           curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
           echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-          apt-get update -y && apt-get install -y --no-install-recommends \
-            build-essential coreutils curl git libgtk-3-0 libpq-dev libxml2 libxml2-dev libxslt-dev \
-            netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata unzip zip
+          apt-get update -y && apt-get install -y \
+            build-essential coreutils curl git libxml2 libxml2-dev libxslt-dev \
+            netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
+            libasound2 libgtk-3-0 libpq-dev unzip
       -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
