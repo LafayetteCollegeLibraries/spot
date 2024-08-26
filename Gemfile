@@ -175,4 +175,3 @@ group :development, :test do
   gem 'stub_env', '~> 1.0.4'
   gem 'webmock', '~> 3.8'
 end
-
