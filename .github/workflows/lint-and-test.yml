@@ -98,7 +98,7 @@ jobs:
           apt-get update -y && apt-get install -y \
             build-essential coreutils curl git libxml2 libxml2-dev libxslt-dev \
             netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
-            libasound2 libgtk-3-0 libpq-dev unzip
+            libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
       -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
