@@ -149,7 +149,7 @@ jobs:
           RAILS_SILENCE_DEPRECATIONS: true
         run: |
           mkdir /tmp/test-results
-          bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress
+          bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format RSpec::Github::Formatter
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3

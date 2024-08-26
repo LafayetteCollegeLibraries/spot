@@ -33,7 +33,6 @@ require 'rspec/matchers'
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
 require 'mail'
-require 'rspec-github' if ENV['CI']
 
 Capybara.register_driver :selenium_firefox_headless do |app|
   browser_options = ::Selenium::WebDriver::Firefox::Options.new
@@ -67,6 +66,11 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  if ENV['CI']
+    require 'rspec/github'
+    config.add_formatter RSpec::Github::Formatter
+  end
+
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
