@@ -33,6 +33,7 @@ require 'rspec/matchers'
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
 require 'mail'
+require 'rspec-github' if ENV['CI']
 
 Capybara.register_driver :selenium_firefox_headless do |app|
   browser_options = ::Selenium::WebDriver::Firefox::Options.new
