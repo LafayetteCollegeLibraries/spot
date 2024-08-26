@@ -14,6 +14,7 @@ RUN apt-get clean && \
     apt-get update -y && apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
+        clamav \
         coreutils \
         git \
         libpq-dev \
