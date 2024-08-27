@@ -52,19 +52,20 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
   describe '#cleanup_derivatives' do
     subject { described_class.new(file_set).cleanup_derivatives }
 
-    let(:response) { { contents: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4', '5678-0-access-480.mp4', '5678-0-access-1080.mp4'] } }
-    let(:delete) { { objects: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4'], quiet: false } }
+    let(:response) { { contents: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }, { key: '5678-0-access-480.mp4' }, { key: '5678-0-access-1080.mp4' }] } }
+    let(:delete) { { objects: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }], quiet: false } }
 
     before do
       allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket).and_return response
-      allow(_file_set).to receive(:id).and_return('1234')
+      allow(_file_set).to receive(:id).and_return("1234")
+      allow(mock_s3_client).to receive(:delete_objects).with(bucket: aws_av_asset_bucket, delete: delete)
       service.cleanup_derivatives
     end
 
     it 'deletes objects from S3' do
       expect(mock_s3_client)
         .to have_received(:delete_objects)
-        .with(bucket: s3_bucket, delete: delete)
+        .with(bucket: aws_av_asset_bucket, delete: delete)
     end
   end
 
