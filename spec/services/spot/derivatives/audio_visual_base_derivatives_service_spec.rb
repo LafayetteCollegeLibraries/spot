@@ -47,6 +47,8 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
     allow(_file_set).to receive(:mime_type).and_return('video/mp4')
   end
 
+  it_behaves_like 'a Hyrax::DerivativeService'
+
   describe '#valid?' do
     subject { described_class.new(file_set).valid? }
 
