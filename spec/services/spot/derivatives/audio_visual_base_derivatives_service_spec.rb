@@ -52,8 +52,8 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
   describe '#cleanup_derivatives' do
     subject { described_class.new(file_set).cleanup_derivatives }
 
-    let(:response) { {contents: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4', '5678-0-access-480.mp4', '5678-0-access-1080.mp4']} }
-    let(:delete) { {objects: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4'], quiet: false} }
+    let(:response) { { contents: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4', '5678-0-access-480.mp4', '5678-0-access-1080.mp4'] } }
+    let(:delete) { { objects: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4'], quiet: false } }
 
     before do
       allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket).and_return response
