@@ -35,10 +35,7 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  # Silence deprecations via ENV
-  config.active_support.deprecation = begin
-    ActiveModel::Type::Boolean.new.cast(ENV.fetch('RAILS_SILENCE_DEPRECATIONS', false)) ? :silence : :stderr
-  end
+  config.active_support.deprecation = :stderr
 
   config.active_job.queue_adapter = :test
 end

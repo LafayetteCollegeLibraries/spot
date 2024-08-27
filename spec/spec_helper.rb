@@ -69,6 +69,18 @@ RSpec.configure do |config|
   if ENV['CI']
     require 'rspec/github'
     config.add_formatter RSpec::Github::Formatter
+
+    # @see https://stackoverflow.com/a/52213501
+    if ActiveModel::Type::Boolean.new.cast(ENV.fetch('RAILS_SILENCE_DEPRECATIONS', false))
+      config.before(:all) do
+        @with_warnings = $VERBOSE
+        $VERBOSE = nil
+      end
+
+      config.after(:all) do
+        $VERBOSE = @with_warnings
+      end
+    end
   end
 
   config.expect_with :rspec do |expectations|
