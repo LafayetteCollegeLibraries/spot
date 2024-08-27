@@ -52,7 +52,8 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
 
       it 'logs a warning and returns false' do
         expect(described_class.new(file_set).valid?).to be false
-        expect(Rails.logger).to have_received(:warn).with(/AWS_AV_ASSET_BUCKET environment variable is not defined/)
+        expect(Rails.logger).to have_received(:warn)
+          .with('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
       end
     end
 
