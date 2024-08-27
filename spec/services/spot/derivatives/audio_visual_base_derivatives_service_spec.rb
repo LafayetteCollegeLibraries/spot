@@ -49,6 +49,25 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
 
   it_behaves_like 'a Hyrax::DerivativeService'
 
+  describe '#cleanup_derivatives' do
+    subject { described_class.new(file_set).cleanup_derivatives }
+
+    let(:response) { {contents: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4', '5678-0-access-480.mp4', '5678-0-access-1080.mp4']} }
+    let(:delete) { {objects: ['1234-0-access-480.mp4', '1234-0-access-1080.mp4'], quiet: false} }
+
+    before do
+      allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket).and_return response
+      allow(_file_set).to receive(:id).and_return('1234')
+      service.cleanup_derivatives
+    end
+
+    it 'deletes objects from S3' do
+      expect(mock_s3_client)
+        .to have_received(:delete_objects)
+        .with(bucket: s3_bucket, delete: delete)
+    end
+  end
+
   describe '#valid?' do
     subject { described_class.new(file_set).valid? }
 
