@@ -27,6 +27,11 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
     stub_env('AWS_SECRET_ACCESS_KEY', aws_secret_access_key)
     stub_env('AWS_AV_ASSET_BUCKET', aws_av_asset_bucket)
 
+    allow(Hyrax::DerivativePath)
+      .to receive(:derivative_path_for_reference)
+      .with(file_set, 'access.mp4')
+      .and_return("#{derivative_path}.access.mp4")
+
     allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
 
     allow(File).to receive(:exist?).with(derivative_path).and_return true
@@ -38,6 +43,8 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
     allow(FileUtils).to receive(:rm_f).with(File.dirname(derivative_path))
     allow(File).to receive(:open).with(derivative_path, "r").and_return(stringio)
     allow(Digest::MD5).to receive(:file).with(derivative_path).and_return(mock_digest)
+
+    allow(_file_set).to receive(:mime_type).and_return('video/mp4')
   end
 
   describe '#valid?' do
