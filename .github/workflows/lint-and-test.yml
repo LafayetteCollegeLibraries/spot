@@ -109,12 +109,13 @@ jobs:
           firefox-version: latest-esr
       -
         name: Setup Geckodriver
-        uses: browser-actions/setup-geckodriver@v1
+        uses: browser-actions/setup-geckodriver@latest
         id: setup-geckodriver
         env:
           HOME: /root
         with:
-          firefox-version: latest
+          token: ${{ secrets.GITHUB_TOKEN }}
+          geckodriver-version: latest
       -
         name: Checkout code
         uses: actions/checkout@v4
@@ -156,6 +157,7 @@ jobs:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
           RAILS_SILENCE_DEPRECATIONS: true
         run: |
+          export PATH="$(dirname ${{ steps.setup-geckodriver.outputs.geockdriver-path }}):$PATH"
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format RSpec::Github::Formatter
       -
