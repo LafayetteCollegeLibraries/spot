@@ -69,17 +69,19 @@ RSpec.configure do |config|
   if ENV['CI']
     require 'rspec/github'
     config.add_formatter RSpec::Github::Formatter
+  end
 
-    # @see https://stackoverflow.com/a/52213501
-    if ActiveModel::Type::Boolean.new.cast(ENV.fetch('RAILS_SILENCE_DEPRECATIONS', false))
-      config.before(:all) do
-        @with_warnings = $VERBOSE
-        $VERBOSE = nil
-      end
+  if ENV['RAILS_SILENCE_DEPRECATIONS']
+    Deprecation.default_deprecation_behavior = :silence
+    ActiveSupport::Deprecation.silenced = true
 
-      config.after(:all) do
-        $VERBOSE = @with_warnings
-      end
+    config.before(:all) do
+      @original_verbose = $VERBOSE
+      $VERBOSE = nil
+    end
+
+    config.after(:all) do
+      $VERBOSE = @original_verbose
     end
   end
 

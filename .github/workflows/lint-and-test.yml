@@ -108,6 +108,14 @@ jobs:
         with:
           firefox-version: latest-esr
       -
+        name: Setup Geckodriver
+        uses: browser-actions/setup-geckodriver@v1
+        id: setup-geckodriver
+        env:
+          HOME: /root
+        with:
+          firefox-version: latest
+      -
         name: Checkout code
         uses: actions/checkout@v4
       -
