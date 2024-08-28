@@ -157,9 +157,8 @@ jobs:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
           RAILS_SILENCE_DEPRECATIONS: true
         run: |
-          export PATH="$(dirname ${{ steps.setup-geckodriver.outputs.geockdriver-path }}):$PATH"
           mkdir /tmp/test-results
-          bundle exec rspec --backtrace --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format RSpec::Github::Formatter
+          bundle exec rspec --backtrace --format RSpec::Github::Formatter --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
