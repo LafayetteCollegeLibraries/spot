@@ -74,8 +74,6 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   describe '#derivative_urls' do
     subject { service.derivative_urls }
 
-    before { allow(service).to receive(:derivative_paths).and_return([derivative_path]) }
-
     it { is_expected.to eq ["file://#{derivative_path}"] }
   end
 
@@ -229,5 +227,11 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
       end
     end
+  end
+
+  describe '#derivative_paths' do
+    subject { service.derivative_paths }
+
+    it {is_expected.to eq([derivative_path])}
   end
 end

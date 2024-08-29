@@ -9,6 +9,8 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
 
   let(:mock_file) { Hydra::PCDM::File.new }
   let(:derivative_path) { '/rails/tmp/derivatives/ab/c1/23/de/f-access.mp4' }
+  let(:derivative_path_high) { '/rails/tmp/derivatives/ab/c1/23/de/f-access-high.mp4' }
+  let(:derivative_path_low) { '/rails/tmp/derivatives/ab/c1/23/de/f-access-low.mp4' }
   let(:src_path) { '/original/path/to/src/file.mp4' }
   let(:file_size) { 0 }
   let(:file_digest) { 'base64digest' }
@@ -31,8 +33,13 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
 
     allow(Hyrax::DerivativePath)
       .to receive(:derivative_path_for_reference)
-      .with(file_set, 'access.mp4')
-      .and_return("#{derivative_path}.access.mp4")
+      .with(file_set, 'access-high.mp4')
+      .and_return("#{derivative_path_high}.access-high.mp4")
+
+    allow(Hyrax::DerivativePath)
+      .to receive(:derivative_path_for_reference)
+      .with(file_set, 'access-low.mp4')
+      .and_return("#{derivative_path_low}.access-low.mp4")
 
     allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
 
@@ -74,9 +81,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#derivative_urls' do
     subject { service.derivative_urls }
 
-    before { allow(service).to receive(:derivative_paths).and_return([derivative_path]) }
-
-    it { is_expected.to eq ["file://#{derivative_path}"] }
+    it { is_expected.to eq ["file://#{derivative_path_high}", "file://#{derivative_path_low}"] }
   end
 
   describe '#valid?' do
@@ -229,5 +234,11 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
       end
     end
+  end
+
+  describe '#derivative_paths' do
+    subject { service.derivative_paths }
+
+    it {is_expected.to eq([derivative_path_high, derivative_path_low])}
   end
 end
