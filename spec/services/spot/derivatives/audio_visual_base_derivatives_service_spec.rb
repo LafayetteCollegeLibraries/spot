@@ -252,9 +252,10 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
         expect(mock_parent).to have_received(:save)
         expect(mock_s3_client)
           .to have_received(:copy_object)
-          .with(bucket:       aws_av_asset_bucket,
-                copy_source:  source_path,
-                key:          key)
+          .with(
+            bucket:       aws_av_asset_bucket,
+            copy_source:  source_path,
+            key:          key)
       end
     end
   end
