@@ -239,6 +239,45 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#derivative_paths' do
     subject { service.derivative_paths }
 
-    it {is_expected.to eq([derivative_path_high, derivative_path_low])}
+    it { is_expected.to eq([derivative_path_high, derivative_path_low]) }
+  end
+
+  describe '#get_video_resolution' do
+    subject { service.get_video_resolution(filename) }
+
+    let(:filename) { src_path }
+    let(:mock_ffprobe) { instance_double(Ffprober::Wrapper, video_streams: [stream]) }
+    let(:stream) { double(:width => 100, :height => 200) }
+
+    before do
+      allow(Ffprober::Parser).to receive(:from_file).with(filename).and_return(mock_ffprobe)
+    end
+
+    it 'returns the resolution as an array of width and height' do
+      is_expected.to eq([100, 200])
+    end
+  end
+
+  describe '#get_derivative_resolution' do
+    subject { service.get_derivative_resolution(filename, height) }
+
+    let(:filename) { src_path }
+    let(:height) { 480 }
+
+    context "width is mod 16" do
+      before do
+        allow(service).to receive(:get_video_resolution).with(filename).and_return([100, 200])
+      end
+
+      it {is_expected.to eq("240x480")}
+    end
+
+    context "width is not mod 16" do
+      before do
+        allow(service).to receive(:get_video_resolution).with(filename).and_return([110, 200])
+      end
+
+      it {is_expected.to eq("272x480")}
+    end
   end
 end
