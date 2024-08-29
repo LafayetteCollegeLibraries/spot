@@ -66,11 +66,6 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  if ENV['CI']
-    require 'rspec/github'
-    config.add_formatter RSpec::Github::Formatter
-  end
-
   if ENV['RAILS_SILENCE_DEPRECATIONS']
     Deprecation.default_deprecation_behavior = :silence
     ActiveSupport::Deprecation.silenced = true

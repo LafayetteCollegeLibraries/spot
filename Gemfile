@@ -165,7 +165,6 @@ group :development, :test do
   gem 'hyrax-spec', '~> 0.3.2'
   gem 'rails-controller-testing', '~> 1.0.5'
   gem 'rspec', '~> 3.10'
-  gem "rspec-github", "~> 2.4", require: false
   gem 'rspec-its', '~> 1.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rspec-rails', '~> 5.1'
