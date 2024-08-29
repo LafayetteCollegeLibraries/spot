@@ -232,6 +232,6 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   describe '#derivative_paths' do
     subject { service.derivative_paths }
 
-    it {is_expected.to eq([derivative_path])}
+    it { is_expected.to eq([derivative_path]) }
   end
 end
