@@ -129,7 +129,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       allow(file_set).to receive(:parent).and_return(mock_parent)
     end
 
-    context 'when stored_derivatives is empty' do 
+    context 'when stored_derivatives is empty' do
       let(:stored) { [] }
 
       before do
@@ -155,7 +155,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       end
     end
 
-    context 'when stored_derivatives is not empty' do 
+    context 'when stored_derivatives is not empty' do
       let(:stored) { ["5678_0_access_480.mp4"] }
 
       before do
@@ -194,7 +194,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       allow(file_set).to receive(:parent).and_return(mock_parent)
     end
 
-    context 'when stored_derivatives is empty' do 
+    context 'when stored_derivatives is empty' do
       let(:stored) { [] }
 
       before do
@@ -203,7 +203,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
         allow(mock_parent).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
-          .with(bucket: aws_av_asset_bucket, 
+          .with(bucket: aws_av_asset_bucket,
           copy_source: source_path, key: key)
         service.send(:transfer_s3_derivative, derivative, key)
       end
@@ -213,12 +213,12 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
         expect(mock_parent).to have_received(:save)
         expect(mock_s3_client)
           .to have_received(:copy_object)
-          .with(bucket: aws_av_asset_bucket, 
+          .with(bucket: aws_av_asset_bucket,
           copy_source: source_path, key: key)
       end
     end
 
-    context 'when stored_derivatives is not empty' do 
+    context 'when stored_derivatives is not empty' do
       let(:stored) { ["5678_0_access_480.mp4"] }
 
       before do
@@ -227,7 +227,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
         allow(mock_parent).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
-          .with(bucket: aws_av_asset_bucket, 
+          .with(bucket: aws_av_asset_bucket,
           copy_source: source_path, key: key)
         service.send(:transfer_s3_derivative, derivative, key)
       end
@@ -237,8 +237,9 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
         expect(mock_parent).to have_received(:save)
         expect(mock_s3_client)
           .to have_received(:copy_object)
-          .with(bucket: aws_av_asset_bucket, 
-          copy_source: source_path, key: key)
+          .with(bucket: aws_av_asset_bucket,
+            copy_source: source_path,
+            key: key)
       end
     end
   end
