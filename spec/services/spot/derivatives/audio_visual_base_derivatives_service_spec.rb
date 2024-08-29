@@ -50,7 +50,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
   it_behaves_like 'a Hyrax::DerivativeService'
 
   describe '#cleanup_derivatives' do
-    subject { described_class.new(file_set).cleanup_derivatives }
+    subject { service.cleanup_derivatives }
 
     let(:response) { { contents: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }, { key: '5678-0-access-480.mp4' }, { key: '5678-0-access-1080.mp4' }] } }
     let(:delete) { { objects: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }], quiet: false } }
@@ -69,8 +69,16 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
     end
   end
 
+  describe '#derivative_urls' do
+    subject { service.derivative_urls }
+
+    before { allow(service).to receive(:derivative_paths).and_return([derivative_path]) }
+
+    it {is_expected.to eq ["file://#{derivative_path}"]}
+  end
+
   describe '#valid?' do
-    subject { described_class.new(file_set).valid? }
+    subject { service.valid? }
 
     context 'when no S3 bucket name set in environment' do
       let(:aws_av_asset_bucket) { nil }
@@ -92,7 +100,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       end
 
       it 'returns false' do
-        expect(described_class.new(file_set).valid?).to be false
+        expect(service.valid?).to be false
       end
     end
 
@@ -102,7 +110,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       end
 
       it 'returns true' do
-        expect(described_class.new(file_set).valid?).to be true
+        expect(service.valid?).to be true
       end
     end
   end
