@@ -247,7 +247,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
 
     let(:filename) { src_path }
     let(:mock_ffprobe) { instance_double(Ffprober::Wrapper, video_streams: [stream]) }
-    let(:stream) { double(:width => 100, :height => 200) }
+    let(:stream) { double(width: 100, height: 200) }
 
     before do
       allow(Ffprober::Parser).to receive(:from_file).with(filename).and_return(mock_ffprobe)
@@ -269,7 +269,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
         allow(service).to receive(:get_video_resolution).with(filename).and_return([100, 200])
       end
 
-      it {is_expected.to eq("240x480")}
+      it { is_expected.to eq("240x480") }
     end
 
     context "width is not mod 16" do
@@ -277,7 +277,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
         allow(service).to receive(:get_video_resolution).with(filename).and_return([110, 200])
       end
 
-      it {is_expected.to eq("272x480")}
+      it { is_expected.to eq("272x480") }
     end
   end
 end
