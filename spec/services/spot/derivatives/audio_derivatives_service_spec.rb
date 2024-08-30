@@ -261,7 +261,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
       end
 
-      it { is_expected.to eq(false)}
+      it { is_expected.to eq(false) }
     end
 
     context 'stored_derivatives full, premade_derivatives full' do
@@ -281,7 +281,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
       end
 
-      it { is_expected.to eq(true)}
+      it { is_expected.to eq(true) }
     end
 
     context 'stored_derivatives empty, premade_derivatives empty' do
@@ -301,7 +301,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
       end
 
-      it { is_expected.to eq(false)}
+      it { is_expected.to eq(false) }
     end
 
     context 'stored_derivatives empty, premade_derivatives full' do
@@ -321,7 +321,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         expect(service).to have_received(:rename_premade_derivative).with('derivative_2', 1)
       end
 
-      it { is_expected.to eq(true)}
+      it { is_expected.to eq(true) }
     end
   end
 end
