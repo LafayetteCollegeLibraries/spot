@@ -391,4 +391,82 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       expect(service).to have_received(:transfer_s3_derivative).with('derivative_1', '1234-0-access-200.mp4')
     end
   end
+
+  describe '#create_derivatives' do
+    subject { service.create_derivatives(filename) }
+
+    let(:filename) { mock_file }
+
+    context 'check_premade_derivatives returns true' do
+      before do
+        allow(service).to receive(:check_premade_derivatives).and_return(true)
+        service.create_derivatives(filename)
+      end
+
+      it 'should return immediately' do
+        expect(service).to_not receive(:create_derivative_files)
+      end
+    end
+
+    context 'check_premade_derivatives returns true' do
+      before do
+        allow(service).to receive(:check_premade_derivatives).and_return(false)
+        allow(service).to receive(:get_derivative_resolution).with(filename, 1080).and_return('544x1080')
+        allow(service).to receive(:get_derivative_resolution).with(filename, 480).and_return('240x480')
+        allow(Hydra::Derivatives::VideoDerivatives)
+          .to receive(:create)
+          .with(filename, outputs: [
+            { label: 'high',
+              format: 'mp4',
+              url: "file://#{derivative_path_high}",
+              size: '544x1080',
+              input_options: "-t 10 -ss 1",
+              video: "-g 30 -b:v 8000k",
+              audio: "-b:a 256k -ar 44100" },
+            { label: 'low',
+              format: 'mp4',
+              url: "file://#{derivative_path_low}",
+              size: '240x480',
+              input_options: "-t 10 -ss 1",
+              video: "-g 30 -b:v 2500k",
+              audio: "-b:a 256k -ar 44100" }])
+        allow(_file_set).to receive(:id).and_return("1234")
+        allow(service).to receive(:upload_derivatives_to_s3).with(['1234-0-access-1080.mp4','1234-1-access-480.mp4'], [derivative_path_high, derivative_path_low])
+        allow(File).to receive(:exist?).with(derivative_path_high).and_return true
+        allow(FileUtils).to receive(:rm_f).with(derivative_path_high)
+        allow(File).to receive(:exist?).with(derivative_path_low).and_return true
+        allow(FileUtils).to receive(:rm_f).with(derivative_path_low)
+        service.create_derivatives(filename)
+      end
+
+      it 'creates derivative files' do
+        expect(Hydra::Derivatives::VideoDerivatives)
+          .to have_received(:create)
+          .with(filename, outputs: [
+            { label: 'high',
+              format: 'mp4',
+              url: "file://#{derivative_path_high}",
+              size: '544x1080',
+              input_options: "-t 10 -ss 1",
+              video: "-g 30 -b:v 8000k",
+              audio: "-b:a 256k -ar 44100" },
+            { label: 'low',
+              format: 'mp4',
+              url: "file://#{derivative_path_low}",
+              size: '240x480',
+              input_options: "-t 10 -ss 1",
+              video: "-g 30 -b:v 2500k",
+              audio: "-b:a 256k -ar 44100" }])
+      end
+
+      it 'uploads derivatives to s3' do
+        expect(service).to have_received(:upload_derivatives_to_s3).with(['1234-0-access-1080.mp4','1234-1-access-480.mp4'], [derivative_path_high, derivative_path_low])
+      end
+
+      it 'removes temporary files' do
+        expect(FileUtils).to have_received(:rm_f).with(derivative_path_high)
+        expect(FileUtils).to have_received(:rm_f).with(derivative_path_low)
+      end
+    end
+  end
 end
