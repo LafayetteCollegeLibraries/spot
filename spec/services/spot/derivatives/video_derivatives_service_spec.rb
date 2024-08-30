@@ -429,9 +429,10 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
               size: '240x480',
               input_options: "-t 10 -ss 1",
               video: "-g 30 -b:v 2500k",
-              audio: "-b:a 256k -ar 44100" }])
+              audio: "-b:a 256k -ar 44100" }
+            ])
         allow(_file_set).to receive(:id).and_return("1234")
-        allow(service).to receive(:upload_derivatives_to_s3).with(['1234-0-access-1080.mp4','1234-1-access-480.mp4'], [derivative_path_high, derivative_path_low])
+        allow(service).to receive(:upload_derivatives_to_s3).with(['1234-0-access-1080.mp4', '1234-1-access-480.mp4'], [derivative_path_high, derivative_path_low])
         allow(File).to receive(:exist?).with(derivative_path_high).and_return true
         allow(FileUtils).to receive(:rm_f).with(derivative_path_high)
         allow(File).to receive(:exist?).with(derivative_path_low).and_return true
@@ -456,11 +457,12 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
               size: '240x480',
               input_options: "-t 10 -ss 1",
               video: "-g 30 -b:v 2500k",
-              audio: "-b:a 256k -ar 44100" }])
+              audio: "-b:a 256k -ar 44100" }
+            ])
       end
 
       it 'uploads derivatives to s3' do
-        expect(service).to have_received(:upload_derivatives_to_s3).with(['1234-0-access-1080.mp4','1234-1-access-480.mp4'], [derivative_path_high, derivative_path_low])
+        expect(service).to have_received(:upload_derivatives_to_s3).with(['1234-0-access-1080.mp4', '1234-1-access-480.mp4'], [derivative_path_high, derivative_path_low])
       end
 
       it 'removes temporary files' do
