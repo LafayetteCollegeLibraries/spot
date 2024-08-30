@@ -234,4 +234,94 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
 
     it { is_expected.to eq([derivative_path]) }
   end
+
+  describe '#check_premade_derivatives' do
+    subject { service.check_premade_derivatives }
+
+    let(:mock_parent) { instance_double(AudioVisual) }
+
+    before do
+      allow(file_set).to receive(:parent).and_return(mock_parent)
+    end
+
+    context 'stored_derivatives full, premade_derivatives empty' do
+      let(:stored) { ['derivative_1', 'derivative_2'] }
+      let(:premade) { [] }
+
+      before do
+        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
+        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
+        service.check_premade_derivatives
+      end
+
+      it 'should not call rename' do
+        expect(service).to_not receive(:rename_premade_derivative).with('derivative_1', 0)
+        expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
+      end
+
+      it { is_expected.to eq(false)}
+    end
+
+    context 'stored_derivatives full, premade_derivatives full' do
+      let(:stored) { ['derivative_1', 'derivative_2'] }
+      let(:premade) { ['derivative_1', 'derivative_2'] }
+
+      before do
+        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
+        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
+        service.check_premade_derivatives
+      end
+
+      it 'should not call rename' do
+        expect(service).to_not receive(:rename_premade_derivative).with('derivative_1', 0)
+        expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
+      end
+
+      it { is_expected.to eq(true)}
+    end
+
+    context 'stored_derivatives empty, premade_derivatives empty' do
+      let(:stored) { [] }
+      let(:premade) { [] }
+
+      before do
+        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
+        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
+        service.check_premade_derivatives
+      end
+
+      it 'should not call rename' do
+        expect(service).to_not receive(:rename_premade_derivative).with('derivative_1', 0)
+        expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
+      end
+
+      it { is_expected.to eq(false)}
+    end
+
+    context 'stored_derivatives empty, premade_derivatives full' do
+      let(:stored) { [] }
+      let(:premade) { ['derivative_1', 'derivative_2'] }
+
+      before do
+        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
+        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
+        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
+        service.check_premade_derivatives
+      end
+
+      it 'should call rename' do
+        expect(service).to have_received(:rename_premade_derivative).with('derivative_1', 0)
+        expect(service).to have_received(:rename_premade_derivative).with('derivative_2', 1)
+      end
+
+      it { is_expected.to eq(true)}
+    end
+  end
 end
