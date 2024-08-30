@@ -344,4 +344,55 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       expect(service).to have_received(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
     end
   end
+
+  describe '#create_derivatives' do
+    subject { service.create_derivatives(filename) }
+
+    let(:filename) { mock_file }
+
+    context 'check_premade_derivatives returns true' do
+      before do
+        allow(service).to receive(:check_premade_derivatives).and_return(true)
+        service.create_derivatives(filename)
+      end
+
+      it 'should return immediately' do
+        expect(service).to_not receive(:create_derivative_files)
+      end
+    end
+
+    context 'check_premade_derivatives returns true' do
+      before do
+        allow(service).to receive(:check_premade_derivatives).and_return(false)
+        allow(Hydra::Derivatives::AudioDerivatives)
+          .to receive(:create)
+          .with(filename, outputs: [
+            { label: 'mp3',
+              format: 'mp3',
+              url: "file://#{derivative_path}" }])
+        allow(_file_set).to receive(:id).and_return("1234")
+        allow(service).to receive(:upload_derivatives_to_s3).with(['1234-0-access.mp3'], [derivative_path])
+        allow(File).to receive(:exist?).with(derivative_path).and_return true
+        allow(FileUtils).to receive(:rm_f).with(derivative_path)
+        service.create_derivatives(filename)
+      end
+
+      it 'creates derivative files' do
+        expect(Hydra::Derivatives::AudioDerivatives)
+          .to have_received(:create)
+          .with(filename, outputs: [
+            { label: 'mp3',
+              format: 'mp3',
+              url: "file://#{derivative_path}" }])
+      end
+
+      it 'uploads derivatives to s3' do
+        expect(service).to have_received(:upload_derivatives_to_s3).with(['1234-0-access.mp3'], [derivative_path])
+      end
+
+      it 'removes temporary files' do
+        expect(FileUtils).to have_received(:rm_f).with(derivative_path)
+      end
+    end
+  end
 end
