@@ -324,4 +324,24 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       it { is_expected.to eq(true) }
     end
   end
+
+  describe '#rename_premade_derivative' do
+    subject { service.rename_premade_derivative(derivative, index) }
+
+    let(:derivative) { 'derivative_1' }
+    let(:index) { 0 }
+
+    before do
+      allow(_file_set).to receive(:id).and_return("1234")
+      allow(File).to receive(:exist?).with('/tmp/derivative_1').and_return true
+      allow(FileUtils).to receive(:rm_f).with('/tmp/derivative_1')
+      allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
+      allow(service).to receive(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
+      service.rename_premade_derivative(derivative, index)
+    end
+
+    it 'should call to transfer the premade derivative' do
+      expect(service).to have_received(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
+    end
+  end
 end
