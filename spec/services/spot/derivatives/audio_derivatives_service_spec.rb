@@ -364,13 +364,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     context 'check_premade_derivatives returns true' do
       before do
         allow(service).to receive(:check_premade_derivatives).and_return(false)
-        allow(Hydra::Derivatives::AudioDerivatives)
-          .to receive(:create)
-          .with(filename, outputs: [
-          { label: 'mp3',
-            format: 'mp3',
-            url: "file://#{derivative_path}" }
-          ])
+        allow(Hydra::Derivatives::AudioDerivatives).to receive(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
         allow(_file_set).to receive(:id).and_return("1234")
         allow(service).to receive(:upload_derivatives_to_s3).with(['1234-0-access.mp3'], [derivative_path])
         allow(File).to receive(:exist?).with(derivative_path).and_return true
@@ -380,12 +374,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
 
       it 'creates derivative files' do
         expect(Hydra::Derivatives::AudioDerivatives)
-          .to have_received(:create)
-          .with(filename, outputs: [
-          { label: 'mp3',
-            format: 'mp3',
-            url: "file://#{derivative_path}" }
-          ])
+          .to have_received(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
       end
 
       it 'uploads derivatives to s3' do
