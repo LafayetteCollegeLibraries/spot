@@ -1,5 +1,9 @@
 name: Build prerelease containers
 on:
+  push:
+    branches:
+      - develop
+
   release:
     types:
       - prereleased
