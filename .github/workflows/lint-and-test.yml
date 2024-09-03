@@ -1,7 +1,13 @@
 name: Lint + Test
 on:
-  push:
   workflow_call:
+  push:
+    # we call this workflow from within the prerelease process,
+    # which is automatically run on pushes/merges to the `develop` branch,
+    # so no need to run the tests twice.
+    branches:
+      - '!develop'
+
 
 permissions:
   checks: write
