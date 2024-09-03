@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/LafayetteCollegeLibraries/ldr-development-seeds.git
-  revision: 0341725c91de6ddea377f15a046467fe6cec215f
-  branch: main
-  specs:
-    ldr-development-seeds (0.0.0)
-      bulkrax (~> 5)
-      hyrax (~> 3)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1077,10 +1068,6 @@ GEM
       rexml (~> 3.0)
     warden (1.2.9)
       rack (>= 2.0.9)
-    webdrivers (5.3.1)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0, < 4.11)
     webmock (3.19.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -1131,7 +1118,6 @@ DEPENDENCIES
   jbuilder (~> 2.11.5)
   jquery-rails (~> 4.6.0)
   kaminari (~> 1.2.2)
-  ldr-development-seeds!
   linkeddata (~> 3.1.6)
   listen (>= 3.0.5, < 3.8)
   mini_magick (~> 4.11)
@@ -1163,7 +1149,6 @@ DEPENDENCIES
   stub_env (~> 1.0.4)
   turbolinks (~> 5.2.1)
   uglifier (~> 4.2.0)
-  webdrivers (~> 5)
   webmock (~> 3.8)
 
 BUNDLED WITH

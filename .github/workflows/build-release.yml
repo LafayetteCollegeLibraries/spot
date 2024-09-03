@@ -5,12 +5,17 @@ on:
       - released
 
 jobs:
+  lint_and_test:
+    name: Lint + Test
+    uses: ./.github/workflows/lint-and-test.yml
+
   publish_release_containers:
     strategy:
       matrix:
         environment: [stage, production]
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
+    needs: [lint_and_test]
     steps:
       -
         name: Check out repo

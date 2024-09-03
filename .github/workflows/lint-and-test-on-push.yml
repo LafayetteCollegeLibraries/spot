@@ -1,0 +1,11 @@
+name: Lint and Test (on push)
+on:
+  push:
+
+permissions:
+  checks: write
+
+jobs:
+  lint_and_test:
+    name: Lint + Test
+    uses: ./.github/workflows/lint-and-test.yml
