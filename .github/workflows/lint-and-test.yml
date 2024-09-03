@@ -2,9 +2,6 @@ name: Lint + Test
 on:
   workflow_call:
 
-permissions:
-  checks: write
-
 jobs:
   lint:
     name: Lint
