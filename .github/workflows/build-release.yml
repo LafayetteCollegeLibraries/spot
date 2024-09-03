@@ -4,6 +4,9 @@ on:
     types:
       - released
 
+permissions:
+  checks: write
+
 jobs:
   lint_and_test:
     name: Lint + Test

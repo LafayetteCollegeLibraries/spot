@@ -167,6 +167,7 @@ jobs:
       -
         name: Publish coverage
         uses: joshmfrankel/simplecov-check-action@main
+        if: always()
         with:
           check_job_name: Test coverage
           minimum_suite_coverage: 95
