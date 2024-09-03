@@ -22,6 +22,9 @@ on:
           - stage
           - production
 jobs:
+  lint_and_test:
+    uses: ./.github/workflows/lint-and-test.yml
+
   build_all:
     if: ${{ inputs.service == 'All' }}
     strategy:
@@ -29,6 +32,7 @@ jobs:
         environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment)) }}
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
+    needs: [lint_and_test]
     steps:
       -
         name: Check out repository
@@ -58,6 +62,7 @@ jobs:
         environment: ${{ inputs.environment == 'both' && fromJSON('["stage","production"]') || fromJSON(format('["{0}"]', inputs.environment)) }}
     runs-on: ubuntu-latest
     environment: ${{ matrix.environment }}
+    needs: [lint_and_test]
     steps:
       -
         name: Check out repository

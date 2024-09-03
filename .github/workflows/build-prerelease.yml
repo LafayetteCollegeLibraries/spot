@@ -9,9 +9,13 @@ on:
       - prereleased
 
 jobs:
+  lint_and_test:
+    uses: ./.github/workflows/lint-and-test.yml
+
   publish_prerelease_containers:
     runs-on: ubuntu-latest
     environment: stage
+    needs: [lint_and_test]
     steps:
       -
         name: Check out repo
