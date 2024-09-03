@@ -66,20 +66,6 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  if ENV['RAILS_SILENCE_DEPRECATIONS']
-    Deprecation.default_deprecation_behavior = :silence
-    ActiveSupport::Deprecation.silenced = true
-
-    config.before(:all) do
-      @original_verbose = $VERBOSE
-      $VERBOSE = nil
-    end
-
-    config.after(:all) do
-      $VERBOSE = @original_verbose
-    end
-  end
-
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods

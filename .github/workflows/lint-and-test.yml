@@ -156,7 +156,6 @@ jobs:
         env:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
           HOME: /root
-          RAILS_SILENCE_DEPRECATIONS: true
         run: |
           export PATH="$(dirname $(which geckodriver)):${PATH}"
           mkdir /tmp/test-results
