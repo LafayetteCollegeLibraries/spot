@@ -7,4 +7,5 @@ permissions:
 
 jobs:
   lint_and_test:
+    name: Lint + Test
     uses: ./.github/workflows/lint-and-test.yml

@@ -23,6 +23,7 @@ on:
           - production
 jobs:
   lint_and_test:
+    name: Lint + Test
     uses: ./.github/workflows/lint-and-test.yml
 
   build_all:
