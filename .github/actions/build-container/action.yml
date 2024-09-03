@@ -28,6 +28,15 @@ runs:
         build_date="$(date +'%Y%m%d')"
         echo "date=$build_date" >> "$GITHUB_OUTPUT"
     -
+      id: clean_tag
+      shell: bash
+      name: Clean Docker tag
+      env:
+        CURRENT_TAG: ${{ inputs.tag }}
+      run: |
+        clean_tag=$(echo $CURRENT_TAG | sed 's/\//__/')
+        echo "tag=$clean_tag" >> "$GITHUB_OUTPUT"
+    -
       name: Build and push ${{ inputs.image_name }} container
       uses: docker/build-push-action@v5
       with:
@@ -38,5 +47,5 @@ runs:
         context: ${{ inputs.context }}
         provenance: false
         push: true
-        tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ inputs.tag }}
+        tags: ${{ inputs.registry }}/${{ inputs.image_name }}:${{ steps.clean_tag.outputs.tag }}
         target: ${{ inputs.target }}
