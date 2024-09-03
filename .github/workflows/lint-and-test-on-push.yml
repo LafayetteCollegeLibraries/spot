@@ -1,9 +1,6 @@
 name: Lint and Test (on push)
 on:
   push:
-    branches:
-      - '**'
-      - '!develop'
 
 jobs:
   lint_and_test:
