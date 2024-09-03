@@ -1,0 +1,27 @@
+# @see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#managing-caches
+name: Clean up after a deleted branch
+on:
+  delete:
+
+jobs:
+  cleanup_branch_cache:
+    name: Clean up branch caches
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Delete caches for ${{ github.ref_name }}
+        env:
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          gh extension install actions/gh-actions-cache
+
+          echo "Getting cache names"
+          cacheKeys=$(gh actions-cache list -R $REPO -B $BRANCH -L 100 | cut -f 1)
+
+          set +e
+          echo "Deleting caches..."
+          for cacheKey in $cacheKeys
+          do
+            gh actions-cache delete $cacheKey -R $REPO -B $BRANCH --confirm
+          done
