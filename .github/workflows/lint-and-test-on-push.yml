@@ -4,8 +4,8 @@ on:
     # we call this workflow from within the prerelease process,
     # which is automatically run on pushes/merges to the `develop` branch,
     # so no need to run the tests twice.
-    branches:
-      - '!develop'
+    branches-ignore:
+      - develop
 
 jobs:
   lint_and_test:
