@@ -53,7 +53,7 @@ module Spot
       end
 
       def fast_id
-        URI.parse(rdf_subject.to_s).path.gsub(/\/fast\//, '')
+        rdf_subject_uri.path.gsub(/\/fast\//, '')
       end
 
       def pick_preferred_label
@@ -66,7 +66,7 @@ module Spot
       end
 
       def rdf_subject_uri
-        URI(rdf_subject.to_s)
+        URI.parse(rdf_subject.to_s)
       end
     end
   end
