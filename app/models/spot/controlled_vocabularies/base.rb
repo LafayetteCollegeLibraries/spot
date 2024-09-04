@@ -26,7 +26,9 @@ module Spot
       # - caching the label to prevent repeat fetches
       # - making 3 attempts at fetching
       def fetch(*args)
+        RdfLabel.destroy_by(uri: rdf_subject.to_s)
         tries = 3
+
         begin
           super(*args).tap do
             find_or_create_from_cache { |label| label.value = pick_preferred_label }
@@ -80,7 +82,7 @@ module Spot
       #
       # @return [String]
       def preferred_label
-        @preferred_label ||= RdfLabel.find_by(uri: rdf_subject.to_s)&.value
+        @preferred_label ||= RdfLabel.label_for(uri: rdf_subject.to_s)
         @preferred_label ||= pick_preferred_label
       end
 

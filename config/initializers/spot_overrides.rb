@@ -249,9 +249,24 @@ Rails.application.config.to_prepare do
           fast_id: fast_id,
           id: "http://id.worldcat.org/fast/#{fast_id.gsub(/^fst/, '')}",
           label: term,
+          type: doc['type'],
           value: doc['auth']
         }
       end
+    end
+  end
+
+  # In order for us to search assignFAST by FAST IDs, we need to
+  # add the 'idroot' searchIndex as a valid subauthority for AssignFast
+  Qa::Authorities::AssignFastSubauthority.module_eval do
+    def index_for_authority(authority)
+      return authority if authority == 'idroot'
+
+      super
+    end
+
+    def subauthorities
+      super + ['idroot']
     end
   end
 end
