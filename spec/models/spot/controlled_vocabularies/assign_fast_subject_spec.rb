@@ -5,7 +5,7 @@ RSpec.describe Spot::ControlledVocabularies::AssignFastSubject do
   let(:fast_id_number) { '485998' }
   let(:fast_id) { "fst#{fast_id_number}" }
   let(:resource_label) { "Wishman, Doris, 1920-2002" }
-  let(:uri) { "http://id.worldcat.org/fast/#{fast_id_number}"}
+  let(:uri) { "http://id.worldcat.org/fast/#{fast_id_number}" }
 
   describe '#fetch' do
     let(:search_url) do
