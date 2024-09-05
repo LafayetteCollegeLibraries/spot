@@ -5,6 +5,7 @@ RSpec.describe Spot::ControlledVocabularies::AssignFastSubject do
   let(:fast_id_number) { '485998' }
   let(:fast_id) { "fst#{fast_id_number}" }
   let(:resource_label) { "Wishman, Doris, 1920-2002" }
+  let(:uri) { "http://id.worldcat.org/fast/#{fast_id_number}"}
 
   describe '#fetch' do
     let(:search_url) do
@@ -45,6 +46,15 @@ RSpec.describe Spot::ControlledVocabularies::AssignFastSubject do
         RdfLabel.destroy_all
 
         expect { resource.fetch }.to change { RdfLabel.count }.from(0).to(1)
+      end
+    end
+
+    context 'when no label is returned' do
+      let(:search_response_docs) { [] }
+
+      it 'uses the URI as the label' do
+        resource.fetch
+        expect(resource.rdf_label).to eq([uri])
       end
     end
 

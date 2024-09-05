@@ -23,7 +23,7 @@ module Spot
         RdfLabel.destroy_by(uri: rdf_subject.to_s)
 
         find_or_create_from_cache do |label|
-          label.value = search_for_fast_id
+          label.value = search_for_fast_id || rdf_subject.to_s
         end
       end
 
@@ -40,7 +40,7 @@ module Spot
         results = idroot_subauthority.search(fast_id)
         auth_result = results.find { |res| res[:type] == 'auth' } || results.first
 
-        auth_result.fetch(:value, nil)
+        auth_result&.fetch(:value, nil)
       end
 
       # 'idroot' is not included in Qa::Authorities::AssignFast's subauthorities,
