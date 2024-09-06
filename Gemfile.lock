@@ -1155,7 +1155,6 @@ DEPENDENCIES
   stub_env (~> 1.0.4)
   turbolinks (~> 5.2.1)
   uglifier (~> 4.2.0)
-  webdrivers (~> 5)
   webmock (~> 3.8)
 
 BUNDLED WITH
