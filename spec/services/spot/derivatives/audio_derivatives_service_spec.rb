@@ -340,6 +340,14 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       service.rename_premade_derivative(derivative, index)
     end
 
+    it 'should download the file from s3' do
+      expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
+    end
+    
+    it 'should remove the temporary file' do
+      expect(FileUtils).to have_received(:rm_f).with('/tmp/derivative_1')
+    end
+
     it 'should call to transfer the premade derivative' do
       expect(service).to have_received(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
     end
