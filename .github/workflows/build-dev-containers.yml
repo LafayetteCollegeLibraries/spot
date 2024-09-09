@@ -1,0 +1,30 @@
+name: Build development containers
+on:
+  push:
+    branches:
+      - develop
+      - refactor-actions # remove this before merging!
+
+  release:
+    types:
+      - prereleased
+
+permissions:
+  checks: write
+
+jobs:
+  lint_and_test:
+    name: Lint + Test
+    uses: ./.github/workflows/lint-and-test.yml
+
+  build_and_push_development_containers:
+    name: Build and push dev containers
+    uses: ./.github/workflows/build-containers.yml
+    with:
+      registry: ${{ secrets.CONTAINER_REGISTRY }}
+      username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
+      password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+      tag: ${{ github.event.release.tag_name || github.ref_name }}
+      environments: '["stage"]'
+      services: '["rails","sidekiq","fcrepo","solr","fits_servlet"]'
+
