@@ -40,13 +40,13 @@ RSpec.describe AudioVisualHelper do
 
     context 'the right presenter is included' do
       let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter] }
-      
+
       it { is_expected.to eq right_name }
     end
 
     context 'the right presenter is not included' do
       let(:presenters) { [wrong_presenter, wrong_presenter, wrong_presenter] }
-      
+
       it { is_expected.to eq "" }
     end
   end
