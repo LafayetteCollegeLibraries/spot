@@ -390,7 +390,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
     it 'should download the file from s3' do
       expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
     end
-    
+
     it 'should remove the temporary file' do
       expect(FileUtils).to have_received(:rm_f).with('/tmp/derivative_1')
     end
