@@ -26,9 +26,8 @@ RSpec.describe AudioVisualHelper do
     let(:derivative) { '1234-0-access.mp3' }
     let(:wrong_presenter) { instance_double(Hyrax::FileSetPresenter) }
     let(:right_presenter) { instance_double(Hyrax::FileSetPresenter) }
-    let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter] }
     let(:right_name) { 'correct_name' }
-    let(:wrong_name) { 'correct_name' }
+    let(:wrong_name) { 'wrong_name' }
     let(:right_id) { '1234' }
     let(:wrong_id) { '5678' }
 
@@ -39,7 +38,17 @@ RSpec.describe AudioVisualHelper do
       allow(right_presenter).to receive(:original_filenames).and_return([right_name])
     end
 
-    it { is_expected.to eq right_name }
+    context 'the right presenter is included' do
+      let(:presenters) { [wrong_presenter, wrong_presenter, right_presenter, wrong_presenter] }
+      
+      it { is_expected.to eq right_name }
+    end
+
+    context 'the right presenter is not included' do
+      let(:presenters) { [wrong_presenter, wrong_presenter, wrong_presenter] }
+      
+      it { is_expected.to eq "" }
+    end
   end
 
   describe '#get_derivative_list' do
