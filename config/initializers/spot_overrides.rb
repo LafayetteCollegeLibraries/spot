@@ -270,7 +270,7 @@ Rails.application.config.to_prepare do
     end
   end
 
-  # Modifying the Video Runner for Hydra to use a customized Processor 
+  # Modifying the Video Runner for Hydra to use a customized Processor
   # which backports changes from 3.8.0
   #
   # @see https://github.com/samvera/hydra-derivatives/blob/v3.8.0/lib/hydra/derivatives/runners/video_derivatives.rb
