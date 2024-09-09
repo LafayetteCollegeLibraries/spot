@@ -3,6 +3,7 @@ on:
   push:
     branches-ignore:
       - develop
+      - refactor-actions # remove this before merging!
 
 permissions:
   checks: write
