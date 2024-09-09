@@ -15,19 +15,22 @@ jobs:
   publish_release_containers:
     name: Build and push release containers
     runs-on: ubuntu-latest
-    environment: ${{ matrix.environment }}
+    strategy:
+      matrix:
+        container_env: ["stage", "production"]
+    environment: ${{ matrix.container_env }}
     needs: [lint_and_test]
     steps:
       -
         name: Check out repo
         uses: actions/checkout@v3
       -
-        name: Build and publish release containers in stage environment
+        name: Build and publish release containers in ${{ matrix.container_env }} environment
         uses: ./.github/workflows/build-containers.yml
         with:
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
           tag: ${{ github.event.release.tag_name }}
-          environments: '["stage", "production"]'
-          servies: '["rails","sidekiq","fcrepo","solr","fits_servlet"]'
+          environments: '["${{ matrix.container_env }}"]'
+          services: '["rails","sidekiq","fcrepo","solr","fits_servlet"]'

@@ -20,10 +20,11 @@ jobs:
   build_and_push_development_containers:
     name: Build and push dev containers
     uses: ./.github/workflows/build-containers.yml
-    with:
+    secrets:
       registry: ${{ secrets.CONTAINER_REGISTRY }}
       username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+    with:
       tag: ${{ github.event.release.tag_name || github.ref_name }}
       environments: '["stage"]'
       services: '["rails","sidekiq","fcrepo","solr","fits_servlet"]'
