@@ -7,9 +7,15 @@ ENV['URL_HOST'] = 'http://localhost' if ENV['URL_HOST'].nil?
 if ENV['COVERAGE'] || ENV['CI']
   ENV['DISABLE_BOOTSNAP'] = 'true'
 
+  # set up code-coverage; we use LCOV formatting to send to undercover-ci.
+  # @see https://undercover-ci.com/app
   require 'simplecov'
+  require 'simplecov-lcov'
+  SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
+  SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
   SimpleCov.start 'rails' do
     add_filter 'lib/mailer_previews'
+    enable_coverage(:branch)
   end
 end
 
