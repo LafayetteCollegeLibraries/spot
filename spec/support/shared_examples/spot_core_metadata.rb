@@ -7,6 +7,7 @@ RSpec.shared_examples 'it includes Spot::CoreMetadata' do
     [:contributor,            RDF::Vocab::DC11.contributor],
     [:creator,                RDF::Vocab::DC11.creator],
     [:description,            RDF::Vocab::DC11.description],
+    [:format,                 RDF::Vocab::DC.format],
     [:identifier,             RDF::Vocab::DC.identifier],
     [:keyword,                RDF::Vocab::SCHEMA.keywords],
     [:language,               RDF::Vocab::DC11.language],

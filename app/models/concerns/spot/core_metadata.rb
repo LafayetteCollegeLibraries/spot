@@ -32,6 +32,8 @@ module Spot
         index.as :stored_searchable
       end
 
+      # Free text: The file format, physical medium, or dimensions of the resource.
+      # @replaces :physical_medium
       property :format, predicate: ::RDF::Vocab::DC.format do |index|
         index.as :stored_searchable, :facetable
       end
@@ -69,6 +71,7 @@ module Spot
       end
 
       # A physical material or carrier. Examples include paper, canvas, or DVD.
+      # @deprecated use :format instead
       property :physical_medium, predicate: ::RDF::Vocab::DC.PhysicalMedium do |index|
         index.as :stored_searchable, :facetable
       end

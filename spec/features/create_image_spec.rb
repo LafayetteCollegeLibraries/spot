@@ -117,8 +117,8 @@ RSpec.feature 'Create an Image', :clean, :js do
         fill_in 'image_source', with: attrs[:source].first
         expect(page).to have_css('.image_source .controls-add-text')
 
-        fill_in 'image_physical_medium', with: attrs[:physical_medium].first
-        expect(page).to have_css('.image_physical_medium .controls-add-text')
+        fill_in 'image_format', with: attrs[:format].first
+        expect(page).to have_css('.image_format .controls-add-text')
 
         fill_in 'image_original_item_extent', with: attrs[:original_item_extent].first
         expect(page).to have_css('.image_original_item_extent .controls-add-text')

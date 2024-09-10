@@ -23,7 +23,7 @@ RSpec.describe Hyrax::ImageForm do
       it { is_expected.to include :location }
       it { is_expected.to include :language }
       it { is_expected.to include :source }
-      it { is_expected.to include :physical_medium }
+      it { is_expected.to include :format }
       it { is_expected.to include :original_item_extent }
       it { is_expected.to include :repository_location }
       it { is_expected.to include :requested_by }
@@ -57,7 +57,7 @@ RSpec.describe Hyrax::ImageForm do
     it { is_expected.to include(location: []) }
     it { is_expected.to include(language: []) }
     it { is_expected.to include(source: []) }
-    it { is_expected.to include(physical_medium: []) }
+    it { is_expected.to include(format: []) }
     it { is_expected.to include(original_item_extent: []) }
     it { is_expected.to include(repository_location: []) }
     it { is_expected.to include(requested_by: []) }
