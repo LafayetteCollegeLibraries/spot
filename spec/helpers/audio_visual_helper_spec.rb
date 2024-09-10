@@ -11,6 +11,7 @@ RSpec.describe AudioVisualHelper do
 
     before do
       stub_env('AWS_AV_ASSET_BUCKET', 'av-derivatives')
+      stub_env('AWS_ENDPOINT_URL', 'http://minio:9000')
       allow(Aws::S3::Object).to receive(:new).with(bucket_name: s3_bucket, key: key, client: mock_s3_client).and_return(mock_s3_object)
       allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
     end
