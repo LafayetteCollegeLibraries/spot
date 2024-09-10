@@ -3,10 +3,15 @@ on:
   push:
     branches:
       - develop
+      - schedule-workflow # delete before merging!
 
   release:
     types:
       - prereleased
+
+  # run every Monday morning at 6a so that stage has a fresh build of `develop`
+  schedule:
+    - cron: '0 6 * * 1'
 
 permissions:
   checks: write
@@ -16,16 +21,34 @@ jobs:
     name: Lint + Test
     uses: ./.github/workflows/lint-and-test.yml
 
+  branch:
+    runs-on: ubuntu
+    needs: [lint_and_test]
+    outputs:
+      develop_branch: ${{ steps.dev_branch_for_schedule.name }}
+      release_tag: ${{ steps.release_tag.name}}
+    steps:
+      - id: dev_branch_for_schedule
+        run: echo "name=develop" >> "$GITHUB_OUTPUT"
+        if: ${{ github.event.schedule }}
+      - id: release_tag
+        run: echo "name=${{ github.event.release.tag_name || github.event.ref.ref_name}}" >> "$GITHUB_OUTPUT"
+      - run: |
+          echo "::group::Get branch names for docker tag"
+          echo "develop_branch: ${{ steps.dev_branch_for_schedule && steps.dev_branch_for_schedule.name}}"
+          echo "release_tag:    ${{ steps.release_tag.name }}"
+          echo "::endgroup::"
+
   build_and_push_development_containers:
     name: Build and push dev containers
     uses: ./.github/workflows/build-containers.yml
-    needs: [lint_and_test]
+    needs: [lint_and_test, branch]
     secrets:
       registry: ${{ secrets.CONTAINER_REGISTRY }}
       username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
     with:
-      tag: ${{ github.event.release.tag_name || github.ref_name }}
+      tag: ${{ needs.branch.outputs.develop_branch || needs.branch.outputs.release_tag }}
       environments: '["stage"]'
       services: '["rails","sidekiq","fcrepo","solr","fits_servlet"]'
 
