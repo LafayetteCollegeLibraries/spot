@@ -5,32 +5,84 @@ RSpec.describe AudioVisualHelper do
 
     let(:key) { '1234-0-access.mp3' }
     let(:s3_bucket) { 'av-derivatives' }
-    let(:client_opts) { {} }
     let(:mock_s3_client) { instance_double(Aws::S3::Client) }
     let(:mock_s3_object) { instance_double(Aws::S3::Object) }
     let(:url) { "s3://#{s3_bucket}/#{key}" }
 
     before do
       stub_env('AWS_AV_ASSET_BUCKET', 'av-derivatives')
-      allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
       allow(Aws::S3::Object).to receive(:new).with(bucket_name: s3_bucket, key: key, client: mock_s3_client).and_return(mock_s3_object)
       allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
     end
 
-    context 'the object exists' do
+    context 'env is development' do
+      let(:client_opts) { { :endpoint=>"http://localhost:9000" } }
+
       before do
-        allow(mock_s3_object).to receive(:data).and_return("something")
+        allow(Rails.env).to receive(:development?).and_return(true)
+        allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
       end
 
-      it { is_expected.to eq url }
+      context 'the object exists' do
+        before do
+          allow(mock_s3_object).to receive(:data).and_return("something")
+          helper.s3_url(key)
+        end
+
+        it 'is expected to receive the client opts' do
+          expect(Aws::S3::Client).to have_received(:new).with(client_opts)
+        end
+
+        it { is_expected.to eq url }
+      end
+
+      context 'the object does not exist' do
+        before do
+          allow(mock_s3_object).to receive(:data).and_return(nil)
+          helper.s3_url(key)
+        end
+
+        it 'is expected to receive the client opts' do
+          expect(Aws::S3::Client).to have_received(:new).with(client_opts)
+        end
+
+        it { is_expected.to eq "" }
+      end
     end
 
-    context 'the object does not exist' do
+    context 'env is development' do
+      let(:client_opts) { {} }
+
       before do
-        allow(mock_s3_object).to receive(:data).and_return(nil)
+        allow(Rails.env).to receive(:development?).and_return(false)
+        allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
       end
 
-      it { is_expected.to eq "" }
+      context 'the object exists' do
+        before do
+          allow(mock_s3_object).to receive(:data).and_return("something")
+          helper.s3_url(key)
+        end
+
+        it 'is expected to receive the empty client opts' do
+          expect(Aws::S3::Client).to have_received(:new).with(client_opts)
+        end
+
+        it { is_expected.to eq url }
+      end
+
+      context 'the object does not exist' do
+        before do
+          allow(mock_s3_object).to receive(:data).and_return(nil)
+          helper.s3_url(key)
+        end
+
+        it 'is expected to receive the empty client opts' do
+          expect(Aws::S3::Client).to have_received(:new).with(client_opts)
+        end
+
+        it { is_expected.to eq "" }
+      end
     end
   end
 
