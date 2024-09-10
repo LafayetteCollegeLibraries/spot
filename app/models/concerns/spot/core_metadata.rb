@@ -32,6 +32,10 @@ module Spot
         index.as :stored_searchable
       end
 
+      property :format, predicate: ::RDF::Vocab::DC.format do |index|
+        index.as :stored_searchable, :facetable
+      end
+
       # Both standard and local identifiers. Values should have an prefix declaring the source.
       # @see {Spot::Identifier}
       property :identifier, predicate: ::RDF::Vocab::DC.identifier do |index|
