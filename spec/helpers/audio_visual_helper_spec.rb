@@ -17,7 +17,21 @@ RSpec.describe AudioVisualHelper do
       allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
     end
 
-    it { is_expected.to eq url }
+    context 'the object exists' do 
+      before do
+        allow(mock_s3_object).to receive(:data).and_return("something")
+      end
+      
+      it { is_expected.to eq url }
+    end
+
+    context 'the object does not exist' do 
+      before do
+        allow(mock_s3_object).to receive(:data).and_return(nil)
+      end
+      
+      it { is_expected.to eq "" }
+    end
   end
 
   describe '#get_original_name' do
