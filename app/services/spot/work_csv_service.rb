@@ -36,8 +36,6 @@ module Spot
           values = Array.wrap(value)
           values = values.map(&:to_s)
           values.join(multi_value_separator)
-        rescue
-          puts work.class
         end
       end
     end
