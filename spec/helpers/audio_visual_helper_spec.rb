@@ -16,7 +16,7 @@ RSpec.describe AudioVisualHelper do
     end
 
     context 'env is development' do
-      let(:client_opts) { { :endpoint=>"http://localhost:9000" } }
+      let(:client_opts) { { endpoint: "http://localhost:9000" } }
 
       before do
         allow(Rails.env).to receive(:development?).and_return(true)
