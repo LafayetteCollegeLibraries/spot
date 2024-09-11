@@ -12,7 +12,7 @@ module AudioVisualHelper
       return ""
     end
     client_opts = {}
-    client_opts = { endpoint: ENV['AWS_ENDPOINT_URL']&.sub('minio', 'localhost') } if Rails.env.development?
+    client_opts = { endpoint: ENV['AWS_ENDPOINT_URL'].sub('minio', 'localhost') } if Rails.env.development?
     client = Aws::S3::Client.new(**client_opts)
     obj = Aws::S3::Object.new(bucket_name: ENV['AWS_AV_ASSET_BUCKET'], key: key, client: client)
     url = ""
