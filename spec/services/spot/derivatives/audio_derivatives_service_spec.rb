@@ -390,7 +390,9 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       end
 
       it 'removes temporary files' do
-        expect(FileUtils).to have_received(:rm_f).with(derivative_path)
+        [derivative_path].each do |path|
+          expect(FileUtils).to have_received(:rm_f).with(path)
+        end
       end
     end
   end

@@ -442,8 +442,9 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       end
 
       it 'removes temporary files' do
-        expect(FileUtils).to have_received(:rm_f).with(derivative_path_high)
-        expect(FileUtils).to have_received(:rm_f).with(derivative_path_low)
+        [derivative_path_high, derivative_path_low].each do |path|
+          expect(FileUtils).to have_received(:rm_f).with(path)
+        end
       end
     end
   end
