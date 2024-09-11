@@ -389,7 +389,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
           expect(Hydra::Derivatives::AudioDerivatives)
             .to have_received(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
         end
-  
+
         it 'uploads derivatives to s3' do
           expect(service).to have_received(:upload_derivatives_to_s3).with(['1234-0-access.mp3'], [derivative_path])
         end
@@ -411,7 +411,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
           expect(Hydra::Derivatives::AudioDerivatives)
             .to have_received(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
         end
-  
+
         it 'uploads derivatives to s3' do
           expect(service).to have_received(:upload_derivatives_to_s3).with(['1234-0-access.mp3'], [derivative_path])
         end
