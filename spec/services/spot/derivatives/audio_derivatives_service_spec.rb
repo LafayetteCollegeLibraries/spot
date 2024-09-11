@@ -332,8 +332,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     let(:index) { 0 }
 
     before do
-      allow(_file_set).to receive(:id).and_return("1234")
-      
+      allow(_file_set).to receive(:id).and_return("1234") 
       allow(FileUtils).to receive(:rm_f).with('/tmp/derivative_1')
       allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
       allow(service).to receive(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
