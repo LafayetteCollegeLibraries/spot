@@ -7,6 +7,10 @@ module AudioVisualHelper
   # @note For development environments, we need to subsitute the service hostname of S3 ('minio')
   #       with 'localhost' for links to resolve. In production, 'AWS_ENDPOINT_URL's hostname is valid.
   def s3_url(key)
+    if ENV['AWS_ENDPOINT_URL'].blank?
+      Rails.logger.warn('AWS_ENDPOINT_URL environment variable is not defined.')
+      return ""
+    end
     client_opts = {}
     client_opts = { endpoint: ENV['AWS_ENDPOINT_URL']&.sub('minio', 'localhost') } if Rails.env.development?
     client = Aws::S3::Client.new(**client_opts)
