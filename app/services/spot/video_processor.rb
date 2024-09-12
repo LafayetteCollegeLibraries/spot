@@ -25,7 +25,6 @@ module Spot
       attrs = @directives[:video] if @directives[:video].present?
       # If you have set Hydra::Derivatives::Processors::Video::Processor.config.video_attributes and want to customize the bitrate
       # in the directives then you will need to pass the video parameter in the directives instead.
-      attrs ||= config.default_video_attributes(@directives[:bitrate]) if @directives[:bitrate].present?
       attrs ||= config.video_attributes
       attrs
     end

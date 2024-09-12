@@ -136,14 +136,6 @@ describe Spot::VideoProcessor do
       end
     end
 
-    # context 'bitrate attribute present' do
-    #   let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail', bitrate: '400k' } }
-
-    #   it 'returns the config video attributes with a custom bitrate' do
-    #     expect(subject.video_attributes).to eq('-g 30 -b:v 400k')
-    #   end
-    # end
-
     context 'no video attributes present' do
       let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
 
