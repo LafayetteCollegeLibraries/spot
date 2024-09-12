@@ -67,4 +67,26 @@ describe Spot::VideoProcessor do
       end
     end
   end
+
+  describe 'audio_attributes' do
+    context 'the directives include audio attributes' do
+      let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail', audio: 'directive_audio' } }
+
+      it 'returns the directive audio attributes' do
+        expect(subject.audio_attributes).to eq('directive_audio')
+      end
+    end
+
+    context 'the directives do not include audio attributes' do
+      let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
+
+      before do
+        allow(subject.config).to receive(:audio_attributes).and_return("config_audio")
+      end
+
+      it 'returns the config audio attributes' do
+        expect(subject.audio_attributes).to eq('config_audio')
+      end
+    end
+  end
 end
