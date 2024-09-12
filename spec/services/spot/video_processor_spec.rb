@@ -47,15 +47,30 @@ describe Spot::VideoProcessor do
     end
 
     context "when an mkv is requested" do
-      let(:directives) { { label: :thumb, format: 'mkv', url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
+      context "input options present" do
+        let(:directives) { { label: :thumb, format: 'mkv', url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail', input_options: 'test_input_options' } }
 
-      it "creates a fedora resource and infers the name" do
-        expect(subject)
-          .to receive(:encode_file)
-          .with("mkv",
-            Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-            Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "")
-        subject.process
+        it "creates a fedora resource and infers the name" do
+          expect(subject)
+            .to receive(:encode_file)
+            .with("mkv",
+              Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
+              Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "test_input_options")
+          subject.process
+        end
+      end
+
+      context "input options not present" do
+        let(:directives) { { label: :thumb, format: 'mkv', url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
+
+        it "creates a fedora resource and infers the name" do
+          expect(subject)
+            .to receive(:encode_file)
+            .with("mkv",
+              Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
+              Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "")
+          subject.process
+        end
       end
     end
 
@@ -86,6 +101,54 @@ describe Spot::VideoProcessor do
 
       it 'returns the config audio attributes' do
         expect(subject.audio_attributes).to eq('config_audio')
+      end
+    end
+  end
+
+  describe 'size_attributes' do
+    context 'the directives include size attributes' do
+      let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail', size: 'directive_size' } }
+
+      it 'returns the directive size attributes' do
+        expect(subject.size_attributes).to eq('directive_size')
+      end
+    end
+
+    context 'the directives do not include size attributes' do
+      let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
+
+      before do
+        allow(subject.config).to receive(:size_attributes).and_return("config_size")
+      end
+
+      it 'returns the config audio attributes' do
+        expect(subject.size_attributes).to eq('config_size')
+      end
+    end
+  end
+
+  describe 'video_attributes' do
+    context 'video attributes present' do
+      let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail', video: 'test_video_attributes' } }
+
+      it 'returns the directives video attributes' do
+        expect(subject.video_attributes).to eq('test_video_attributes')
+      end
+    end
+
+    # context 'bitrate attribute present' do
+    #   let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail', bitrate: '400k' } }
+
+    #   it 'returns the config video attributes with a custom bitrate' do
+    #     expect(subject.video_attributes).to eq('-g 30 -b:v 400k')
+    #   end
+    # end
+
+    context 'no video attributes present' do
+      let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
+
+      it 'returns the config video attributes' do
+        expect(subject.video_attributes).to eq('-g 30 -b:v 345k')
       end
     end
   end
