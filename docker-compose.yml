@@ -11,7 +11,12 @@ services:
     ports:
       - "443:443"
     env_file:
-      - .env.local
+      - path: ./docker.env
+        required: true
+      - path: ./docker.env.local
+        required: false
+      - path: .env.local
+        required: false
     depends_on:
       - cantaloupe
       - db
@@ -54,7 +59,12 @@ services:
   db_migrate:
     image: lafayette/spot-web
     env_file:
-      - .env.local
+      - path: ./docker.env
+        required: true
+      - path: ./docker.env.local
+        required: false
+      - path: .env.local
+        required: false
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
     depends_on:
@@ -110,7 +120,12 @@ services:
       context: .
       target: spot-worker-development
     env_file:
-      - .env.local
+      - path: ./docker.env
+        required: true
+      - path: ./docker.env.local
+        required: false
+      - path: .env.local
+        required: false
     environment:
       - FITS_SERVLET_URL=http://fits-servlet:8080/fits
     ports:
