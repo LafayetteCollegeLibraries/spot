@@ -5,7 +5,7 @@ class AudioVisualIndexer < BaseIndexer
   # @return [Hash<String => *>]
   def generate_solr_document
     super.tap do |solr_doc|
-      solr_doc['stored_derivatives_ssim'] = []
+      solr_doc['stored_derivatives_ssim'] ||= []
     end
   end
 end
