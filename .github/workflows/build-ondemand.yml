@@ -12,6 +12,7 @@ on:
           - Rails/Sidekiq
           - Fedora Commons Repository
           - Solr
+          - FITS Servlet
       environment:
         description: 'Container repository environment'
         required: true
