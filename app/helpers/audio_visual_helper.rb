@@ -11,7 +11,7 @@ module AudioVisualHelper
       Rails.logger.warn('AWS_ENDPOINT_URL environment variable is not defined.')
       return ""
     end
-    client = Aws::S3::Client.new()
+    client = Aws::S3::Client.new
     begin
       client.head_object(key: key, bucket: ENV['AWS_AV_ASSET_BUCKET'])
     rescue Aws::S3::Errors::NotFound
@@ -19,7 +19,6 @@ module AudioVisualHelper
       return ""
     end
     if Rails.env.development?
-      client_opts = {}
       client_opts = { endpoint: ENV['AWS_ENDPOINT_URL'].sub('minio', 'localhost') }
       client = Aws::S3::Client.new(**client_opts)
     end
