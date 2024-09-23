@@ -1,0 +1,178 @@
+name: Lint + Test
+on:
+  workflow_call:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_PATH: vendor/bundle
+      BUNDLE_WITH: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      -
+        name: Run Rubocop
+        run: bundle exec rubocop --format github
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    container: ruby:2.7.8-slim-bullseye
+    needs: lint
+    services:
+      database:
+        image: postgres:13-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: spot_test
+          POSTGRES_USER: spot_test_user
+          POSTGRES_PASSWORD: spot_test_pw
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      fedora:
+        image: samvera/fcrepo4:4.7.5
+        ports:
+          - 8080:8080
+        env:
+          CATALINA_OPTS: '-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:PermSize=256m -XX:MaxPermSize=256m -XX:+DisableExplicitGC'
+      redis:
+        image: redis:6.2-alpine
+        ports:
+          - 6379:6379
+      zookeeper:
+        image: bitnami/zookeeper:3.9
+        ports:
+          - 2181:2181
+        env:
+          ZOO_SERVER_ID: 1
+          ALLOW_ANONYMOUS_LOGIN: yes
+          ZOO_SERVERS: zookeeper:2888:3888
+          ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
+      solr:
+        image: bitnami/solr:8.11.2
+        ports:
+          - 8983:8983
+        env:
+          SOLR_ADMIN_USERNAME: solr_admin
+          SOLR_ADMIN_PASSWORD: solr_password
+          SOLR_CLOUD_BOOTSTRAP: yes
+          SOLR_ENABLE_AUTHENTICATION: yes
+          SOLR_ENABLE_CLOUD_MODE: yes
+          SOLR_HOST: solr
+          SOLR_ZK_HOSTS: zookeeper:2181
+    env:
+      BUNDLE_PATH: vendor/bundle
+      BUNDLE_WITH: test
+      CAS_BASE_URL: ''
+      CI: 1
+      FEDORA_TEST_URL: http://fedora:8080/rest
+      IIIF_BASE_URL: http://localhost/iiif/2
+      NOKOGIRI_USE_SYSTEM_LIBRARIES: true
+      PSQL_PASSWORD: spot_test_pw
+      PSQL_USER: spot_test_user
+      PSQL_DATABASE: spot_test
+      PSQL_HOST: database
+      RAILS_ENV: test
+      SOLR_TEST_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
+      URL_HOST: http://localhost:3000
+
+    steps:
+      -
+        name: Install system dependencies from Dockerfile
+        run: |
+          apt-get update -y && apt-get install -y --no-install-recommends ca-certificates curl gnupg && \
+          mkdir -p /etc/apt/keyrings && \
+          curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+          echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+          apt-get update -y && apt-get install -y \
+            build-essential coreutils curl git libxml2 libxml2-dev libxslt-dev \
+            netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
+            libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
+      -
+        name: Setup Firefox
+        uses: browser-actions/setup-firefox@v1
+        id: setup-firefox
+        env:
+          HOME: /root
+        with:
+          firefox-version: latest-esr
+      -
+        name: Setup Geckodriver
+        uses: browser-actions/setup-geckodriver@latest
+        id: setup-geckodriver
+        env:
+          HOME: /root
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          geckodriver-version: latest
+      -
+        name: Checkout code
+        uses: actions/checkout@v4
+      -
+        name: Restore Solr config.zip from cache
+        id: solr-config-cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/spot_solr_config.zip
+          key: spot-solr-${{ hashFiles('docker/solr/config') }}
+      -
+        name: Build Solr config.zip
+        if: steps.solr-config-cache.outputs.cache-hit != 'true'
+        run: |
+          cd docker/solr/config
+          zip -1 /tmp/spot_solr_config.zip ./*
+      -
+        name: Setup Solr core with local configs
+        run: |
+          curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
+          curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
+      -
+        name: Restore installed Gems
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
+      -
+        name: Install gem dependencies
+        run: |
+          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
+          bundle install
+      -
+        name: Run migrations
+        run: bundle exec rake db:migrate
+      -
+        name: Run tests
+        env:
+          FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
+          HOME: /root
+        run: |
+          export PATH="$(dirname $(which geckodriver)):${PATH}"
+          mkdir /tmp/test-results
+          bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+          ruby -e "$(curl -s https://undercover-ci.com/uploader.rb)" -- \
+            --repo ${{ github.repository }} \
+            --commit ${{ github.event.pull_request.head.sha || github.sha }} \
+            --lcov coverage/lcov/spot.lcov
+      -
+        name: Publish RSpec report
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          check_name: Test summary
+          report_paths: /tmp/test-results/*.xml
+      -
+        name: Publish coverage
+        uses: joshmfrankel/simplecov-check-action@main
+        if: always()
+        with:
+          check_job_name: Test coverage
+          minimum_suite_coverage: 95
+          github_token: ${{ secrets.GITHUB_TOKEN }}

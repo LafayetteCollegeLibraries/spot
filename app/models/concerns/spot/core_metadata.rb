@@ -119,7 +119,7 @@ module Spot
       # Stored as OCLC FAST URI, displayed as human-readable prefLabel.
       # @see {Spot::DeepIndexingService} for label indexing details
       property :subject, predicate: ::RDF::Vocab::DC11.subject,
-                         class_name: Spot::ControlledVocabularies::Base do |index|
+                         class_name: Spot::ControlledVocabularies::AssignFastSubject do |index|
         index.as :symbol
       end
 

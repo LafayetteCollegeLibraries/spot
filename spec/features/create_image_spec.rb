@@ -3,6 +3,8 @@
 RSpec.feature 'Create an Image', :clean, :js do
   before do
     stub_request(:get, subject_uri)
+    stub_request(:get, /fast\.oclc\.org\/searchfast\/fastsuggest/)
+
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
@@ -85,7 +87,7 @@ RSpec.feature 'Create an Image', :clean, :js do
 
         fill_in_autocomplete '.image_subject', with: attrs[:subject].first
         expect(page).to have_css('.image_subject.form-control[data-autocomplete="subject"]', visible: false)
-        expect(page).to have_css('.image_subject.form-control[data-autocomplete-url="/authorities/search/linked_data/oclc_fast"]', visible: false)
+        expect(page).to have_css('.image_subject.form-control[data-autocomplete-url="/authorities/search/assign_fast/all"]', visible: false)
         expect(page).to have_css('.image_subject .controls-add-text')
 
         # multi-authority for location

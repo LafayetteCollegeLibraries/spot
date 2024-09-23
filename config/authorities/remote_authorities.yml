@@ -1,7 +1,7 @@
 terms:
   - id: fast
     label: FAST
-    search: /authorities/search/linked_data/oclc_fast
+    search: /authorities/search/assign_fast/all
   - id: geonames
     label: GeoNames
     search: /authorities/search/geonames

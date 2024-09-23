@@ -145,7 +145,7 @@ gem 'simple_form', '< 5.2'
 # development dependencies (not as necessary to lock down versions here)
 group :development do
   # Seed data
-  gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
+  # gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
 
   gem 'listen', '>= 3.0.5', '< 3.8'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -168,9 +168,10 @@ group :development, :test do
   gem 'rspec-its', '~> 1.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rspec-rails', '~> 5.1'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.21.2', require: false
+  gem "simplecov-lcov", "~> 0.8.0", require: false
   gem 'stub_env', '~> 1.0.4'
-  gem 'webdrivers', '~> 5'
   gem 'webmock', '~> 3.8'
 end

@@ -4,27 +4,33 @@ on:
     types:
       - released
 
+permissions:
+  checks: write
+
 jobs:
+  lint_and_test:
+    name: Lint + Test
+    uses: ./.github/workflows/lint-and-test.yml
+
   publish_release_containers:
+    name: Build and push release containers
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        environment: [stage, production]
-    runs-on: ubuntu-latest
-    environment: ${{ matrix.environment }}
+        container_env: ["stage", "production"]
+    environment: ${{ matrix.container_env }}
+    needs: [lint_and_test]
     steps:
       -
         name: Check out repo
         uses: actions/checkout@v3
       -
-        name: Build and publish release containers in stage environment
-        uses: ./.github/actions/build-containers
+        name: Build and publish release containers in ${{ matrix.container_env }} environment
+        uses: ./.github/workflows/build-containers.yml
         with:
           registry: ${{ secrets.CONTAINER_REGISTRY }}
           username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
           tag: ${{ github.event.release.tag_name }}
-          application_image_name: ${{ vars.APPLICATION_CONTAINER_ID }}
-          worker_image_name: ${{ vars.WORKER_CONTAINER_ID }}
-          fcrepo_image_name: ${{ vars.FCREPO_CONTAINER_ID }}
-          handle_image_name: ${{ vars.HANDLE_CONTAINER_ID }}
-          solr_image_name: ${{ vars.SOLR_CONTAINER_ID }}
+          environments: '["${{ matrix.container_env }}"]'
+          services: '["rails","sidekiq","fcrepo","solr","fits_servlet"]'
