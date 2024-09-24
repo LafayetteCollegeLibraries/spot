@@ -8,9 +8,11 @@ RSpec.describe AudioVisualHelper do
     let(:mock_s3_client) { instance_double(Aws::S3::Client) }
     let(:mock_s3_object) { instance_double(Aws::S3::Object) }
     let(:url) { "s3://#{s3_bucket}/#{key}" }
+    let(:client_opts) { { endpoint: "http://localhost:9000" } }
 
     before do
       stub_env('AWS_AV_ASSET_BUCKET', 'av-derivatives')
+      allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
       allow(Aws::S3::Object).to receive(:new).with(bucket_name: s3_bucket, key: key, client: mock_s3_client).and_return(mock_s3_object)
       allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
     end
@@ -33,73 +35,51 @@ RSpec.describe AudioVisualHelper do
         stub_env('AWS_ENDPOINT_URL', 'http://minio:9000')
       end
 
-      context 'env is in development' do
-        let(:client_opts) { { endpoint: "http://localhost:9000" } }
-
+      context 'the object does not exist' do
         before do
-          allow(Rails.env).to receive(:development?).and_return(true)
-          allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
+          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_raise(Aws::S3::Errors::NotFound)
         end
 
-        context 'the object exists' do
-          before do
-            allow(mock_s3_object).to receive(:data).and_return("something")
-            helper.s3_url(key)
-          end
-
-          it 'is expected to receive the client opts' do
-            expect(Aws::S3::Client).to have_received(:new).with(client_opts)
-          end
-
-          it { is_expected.to eq url }
-        end
-
-        context 'the object does not exist' do
-          before do
-            allow(mock_s3_object).to receive(:data).and_return(nil)
-            helper.s3_url(key)
-          end
-
-          it 'is expected to receive the client opts' do
-            expect(Aws::S3::Client).to have_received(:new).with(client_opts)
-          end
-
-          it { is_expected.to eq "" }
+        it 'logs a warning and returns the empty string' do
+          expect(helper.s3_url(key)).to eq ""
+          expect(Rails.logger).to have_received(:warn)
+            .with('S3: Key not found.')
         end
       end
 
-      context 'env is not in development' do
-        let(:client_opts) { {} }
+      context 'the object exists' do
+        let(:mock_s3_head) { instance_double(Aws::S3::Types::HeadObjectOutput) }
 
         before do
-          allow(Rails.env).to receive(:development?).and_return(false)
-          allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
+          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and return(mock_s3_head)
         end
-
-        context 'the object exists' do
+      
+        context 'env is in development' do
           before do
-            allow(mock_s3_object).to receive(:data).and_return("something")
+            allow(Rails.env).to receive(:development?).and_return(true)
+            allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
             helper.s3_url(key)
           end
 
-          it 'is expected to receive the empty client opts' do
+          it 'is expected to receive the client opts' do
             expect(Aws::S3::Client).to have_received(:new).with(client_opts)
           end
 
           it { is_expected.to eq url }
         end
 
-        context 'the object does not exist' do
+        context 'env is not in development' do
+
           before do
-            allow(mock_s3_object).to receive(:data).and_return(nil)
+            allow(Rails.env).to receive(:development?).and_return(false)
             helper.s3_url(key)
           end
 
-          it 'is expected to receive the empty client opts' do
-            expect(Aws::S3::Client).to have_received(:new).with(client_opts)
+          it 'is not expected to receive the client opts' do
+            expect(Aws::S3::Client).to_not receive(:new).with(client_opts)
           end
 
-          it { is_expected.to eq "" }
+          it { is_expected.to eq url }
         end
       end
     end
