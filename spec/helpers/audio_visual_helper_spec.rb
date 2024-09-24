@@ -54,7 +54,7 @@ RSpec.describe AudioVisualHelper do
         before do
           allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_return(mock_s3_head)
         end
-      
+
         context 'env is in development' do
           before do
             allow(Rails.env).to receive(:development?).and_return(true)
@@ -70,7 +70,6 @@ RSpec.describe AudioVisualHelper do
         end
 
         context 'env is not in development' do
-
           before do
             allow(Rails.env).to receive(:development?).and_return(false)
             helper.s3_url(key)
