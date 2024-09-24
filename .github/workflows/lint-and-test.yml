@@ -179,6 +179,7 @@ jobs:
   report:
     name: Publish reports
     runs-on: ubuntu-latest
+    needs: [lint, test]
     steps:
       -
         name: Download artifacts
