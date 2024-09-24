@@ -37,7 +37,8 @@ RSpec.describe AudioVisualHelper do
 
       context 'the object does not exist' do
         before do
-          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_raise(Aws::S3::Errors::NotFound)
+          allow(mock_s3_client).to receive(:head_object).with(bucket: 'av-derivatives', key: key).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
+          allow(Rails.logger).to receive(:warn).with('S3: Key not found.')
         end
 
         it 'logs a warning and returns the empty string' do
@@ -51,7 +52,7 @@ RSpec.describe AudioVisualHelper do
         let(:mock_s3_head) { instance_double(Aws::S3::Types::HeadObjectOutput) }
 
         before do
-          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and return(mock_s3_head)
+          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_return(mock_s3_head)
         end
       
         context 'env is in development' do
