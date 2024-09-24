@@ -157,22 +157,47 @@ jobs:
           export PATH="$(dirname $(which geckodriver)):${PATH}"
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+      -
+        name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: test-results
+          path: |
+            /tmp/test-results/rspec.xml
+            coverage/lcov/*.lcov
+            coverage/*.json
+      -
+        name: Send coverage to UndercoverCI
+        continue-on-error: true
+        run: |
           ruby -e "$(curl -s https://undercover-ci.com/uploader.rb)" -- \
-            --repo ${{ github.repository }} \
-            --commit ${{ github.event.pull_request.head.sha || github.sha }} \
-            --lcov coverage/lcov/spot.lcov
+              --repo ${{ github.repository }} \
+              --commit ${{ github.event.pull_request.head.sha || github.sha }} \
+              --lcov coverage/lcov/spot.lcov
+
+  report:
+    name: Publish reports
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results
+          merge-multiple: true
+      -
+        name: Publish Coverage report
+        uses: joshmfrankel/simplecov-check-action@main
+        continue-on-error: true
+        with:
+          check_job_name: Code coverage
+          minimum_suite_coverage: 95
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
-        if: always()
+        continue-on-error: true
         with:
           check_name: Test summary
-          report_paths: /tmp/test-results/*.xml
-      -
-        name: Publish coverage
-        uses: joshmfrankel/simplecov-check-action@main
-        if: always()
-        with:
-          check_job_name: Test coverage
-          minimum_suite_coverage: 95
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_paths: rspec.xml
