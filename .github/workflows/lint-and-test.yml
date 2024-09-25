@@ -163,6 +163,7 @@ jobs:
         continue-on-error: true
         with:
           name: test-results
+          include-hidden-files: true
           path: |
             /tmp/test-results/rspec.xml
             coverage/lcov/*.lcov
@@ -193,8 +194,11 @@ jobs:
         continue-on-error: true
         with:
           check_job_name: Code coverage
+          coverage_path: .last_run.json
           minimum_suite_coverage: 95
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # coverage_json_path: coverage.json
+          # minimum_file_coverage: 0
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
