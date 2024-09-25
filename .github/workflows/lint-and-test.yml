@@ -195,6 +195,7 @@ jobs:
         with:
           check_job_name: Code coverage
           coverage_path: .last_run.json
+          debug_mode: true
           minimum_suite_coverage: 95
           github_token: ${{ secrets.GITHUB_TOKEN }}
           # coverage_json_path: coverage.json
