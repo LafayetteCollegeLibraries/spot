@@ -107,5 +107,5 @@ jobs:
       password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
     with:
       tag: ${{ needs.translate_inputs.outputs.tag }}
-      services: ${{ toJson(needs.translate_inputs.outputs.containers) }}
-      environments: ${{ toJson(needs.translate_inputs.outputs.environments )}}
+      services: ${{ needs.translate_inputs.outputs.containers }}
+      environments: ${{ needs.translate_inputs.outputs.environments }}
