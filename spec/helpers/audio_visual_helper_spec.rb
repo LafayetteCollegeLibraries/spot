@@ -17,48 +17,48 @@ RSpec.describe AudioVisualHelper do
       allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
     end
 
-    context 'the env field does not exist' do
+    context 'the object does not exist' do
       before do
-        stub_env('AWS_ENDPOINT_URL', '')
-        allow(Rails.logger).to receive(:warn)
+        allow(mock_s3_client).to receive(:head_object).with(bucket: 'av-derivatives', key: key).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
+        allow(Rails.logger).to receive(:warn).with('S3: Key not found.')
       end
 
       it 'logs a warning and returns the empty string' do
         expect(helper.s3_url(key)).to eq ""
         expect(Rails.logger).to have_received(:warn)
-          .with('AWS_ENDPOINT_URL environment variable is not defined.')
+          .with('S3: Key not found.')
       end
     end
 
-    context 'the env field exists' do
+    context 'the object exists' do
+      let(:mock_s3_head) { instance_double(Aws::S3::Types::HeadObjectOutput) }
+
       before do
-        stub_env('AWS_ENDPOINT_URL', 'http://minio:9000')
+        allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_return(mock_s3_head)
       end
 
-      context 'the object does not exist' do
+      context 'env is in development' do
         before do
-          allow(mock_s3_client).to receive(:head_object).with(bucket: 'av-derivatives', key: key).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
-          allow(Rails.logger).to receive(:warn).with('S3: Key not found.')
+          allow(Rails.env).to receive(:development?).and_return(true)
+          allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
         end
 
-        it 'logs a warning and returns the empty string' do
-          expect(helper.s3_url(key)).to eq ""
-          expect(Rails.logger).to have_received(:warn)
-            .with('S3: Key not found.')
-        end
-      end
-
-      context 'the object exists' do
-        let(:mock_s3_head) { instance_double(Aws::S3::Types::HeadObjectOutput) }
-
-        before do
-          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_return(mock_s3_head)
-        end
-
-        context 'env is in development' do
+        context 'the env field does not exist' do
           before do
-            allow(Rails.env).to receive(:development?).and_return(true)
-            allow(Aws::S3::Client).to receive(:new).with(client_opts).and_return(mock_s3_client)
+            stub_env('AWS_ENDPOINT_URL', '')
+            allow(Rails.logger).to receive(:warn)
+          end
+      
+          it 'logs a warning and returns the empty string' do
+            expect(helper.s3_url(key)).to eq ""
+            expect(Rails.logger).to have_received(:warn)
+              .with('AWS_ENDPOINT_URL environment variable is not defined.')
+          end
+        end
+      
+        context 'the env field exists' do
+          before do
+            stub_env('AWS_ENDPOINT_URL', 'http://minio:9000')
             helper.s3_url(key)
           end
 
@@ -68,19 +68,19 @@ RSpec.describe AudioVisualHelper do
 
           it { is_expected.to eq url }
         end
+      end
 
-        context 'env is not in development' do
-          before do
-            allow(Rails.env).to receive(:development?).and_return(false)
-            helper.s3_url(key)
-          end
-
-          it 'is not expected to receive the client opts' do
-            expect(Aws::S3::Client).to_not receive(:new).with(client_opts)
-          end
-
-          it { is_expected.to eq url }
+      context 'env is not in development' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(false)
+          helper.s3_url(key)
         end
+
+        it 'is not expected to receive the client opts' do
+          expect(Aws::S3::Client).to_not receive(:new).with(client_opts)
+        end
+
+        it { is_expected.to eq url }
       end
     end
   end
