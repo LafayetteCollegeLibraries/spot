@@ -48,14 +48,14 @@ RSpec.describe AudioVisualHelper do
             stub_env('AWS_ENDPOINT_URL', '')
             allow(Rails.logger).to receive(:warn)
           end
-      
+
           it 'logs a warning and returns the empty string' do
             expect(helper.s3_url(key)).to eq ""
             expect(Rails.logger).to have_received(:warn)
               .with('AWS_ENDPOINT_URL environment variable is not defined.')
           end
         end
-      
+
         context 'the env field exists' do
           before do
             stub_env('AWS_ENDPOINT_URL', 'http://minio:9000')
