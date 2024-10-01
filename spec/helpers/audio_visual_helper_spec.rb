@@ -24,7 +24,7 @@ RSpec.describe AudioVisualHelper do
       end
 
       it 'logs a warning and returns the empty string' do
-        expect(helper.s3_url(key)).to eq ""
+        expect(helper.s3_url(key)).to eq "S3: Key not found."
         expect(Rails.logger).to have_received(:warn)
           .with('S3: Key not found.')
       end
@@ -50,7 +50,7 @@ RSpec.describe AudioVisualHelper do
           end
 
           it 'logs a warning and returns the empty string' do
-            expect(helper.s3_url(key)).to eq ""
+            expect(helper.s3_url(key)).to eq "AWS_ENDPOINT_URL environment variable is not defined."
             expect(Rails.logger).to have_received(:warn)
               .with('AWS_ENDPOINT_URL environment variable is not defined.')
           end
