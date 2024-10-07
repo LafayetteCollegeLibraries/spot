@@ -286,4 +286,7 @@ Rails.application.config.to_prepare do
   Hyrax::FileSetPresenter.class_eval do
     delegate :original_filenames, to: :solr_document
   end
+
+  # Add support for downloading file_set transcripts
+  Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
 end
