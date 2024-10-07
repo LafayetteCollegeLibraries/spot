@@ -269,4 +269,7 @@ Rails.application.config.to_prepare do
       super + ['idroot']
     end
   end
+
+  # Add support for downloading file_set transcripts
+  Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
 end
