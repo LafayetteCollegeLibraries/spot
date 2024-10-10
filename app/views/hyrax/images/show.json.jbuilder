@@ -33,7 +33,7 @@ json.ocm_classification(@curation_concern.subject_ocm.sort)
 json.extract!(@curation_concern, :date, :date_scope_note, :date_associated, :date_uploaded, :date_modified)
 
 # more descriptions
-json.extract!(@curation_concern, :physical_medium, :original_item_extent, :repository_location, :related_resource, :research_assistance)
+json.extract!(@curation_concern, :format, :original_item_extent, :repository_location, :related_resource, :research_assistance)
 
 # rights info
 json.rights_statement(map_uris(@curation_concern.rights_statement))

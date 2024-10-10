@@ -19,7 +19,7 @@ module Spot
     # delegate common properties to solr_document, so descendents only need
     # to add their unique fields
     delegate :contributor, :creator, :description, :identifier, :keyword, :language,
-             :language_label, :location, :note, :permalink, :physical_medium,
+             :language_label, :location, :note, :permalink,
              :publisher, :registered?, :related_resource, :resource_type, :rights_holder, :rights_statement,
              :source, :subject, :subtitle, :title_alternative, :title,
              :visibility, :citation_journal_title, :citation_volume, :citation_issue,
@@ -48,6 +48,11 @@ module Spot
     # @return [Array<Symbol>]
     def export_formats
       %i[csv ttl nt jsonld]
+    end
+
+    # Combine :format with :physical_medium while migrating fields
+    def format
+      (solr_document.format + solr_document.physical_medium).uniq
     end
 
     # @return [Array<Spot::Identifier>]

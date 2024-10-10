@@ -28,6 +28,7 @@ en:
         embargo_release_date: Embargo Release Date
         file_format: File Format
         file_size: File Size
+        format: Format
         has_model: LDR Type
         inscription: Inscription
         keyword: Keyword

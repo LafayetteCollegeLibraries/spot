@@ -5,10 +5,10 @@
 # our Solr suggestion authorities
 solr_suggestion_authorities = %w[
   bibliographic_citation
+  format
   keyword
   name
   organization
-  physical_medium
   publisher
   source
 ]

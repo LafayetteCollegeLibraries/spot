@@ -23,6 +23,7 @@ module Spot
       attribute :creator,                ::Blacklight::Types::Array,  'creator_tesim'
       attribute :description,            ::Blacklight::Types::Array,  'description_tesim'
       attribute :identifier,             ::Blacklight::Types::Array,  'identifier_ssim'
+      attribute :format,                 ::Blacklight::Types::Array,  'format_tesim'
       attribute :keyword,                ::Blacklight::Types::Array,  'keyword_tesim'
       attribute :language,               ::Blacklight::Types::Array,  'language_ssim'
       attribute :language_label,         ::Blacklight::Types::Array,  'language_label_ssim'
