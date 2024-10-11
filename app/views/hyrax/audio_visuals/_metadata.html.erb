@@ -33,8 +33,6 @@
                                       search_field: :research_assistance_ssim) %>
       <%= presenter.attribute_to_html(:repository_location) %>
       <%= presenter.attribute_to_html(:permalink) %>
-
-      <%= presenter.attribute_to_html(:format, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:provenance, render_as: :faceted) %>
       <%= presenter.attribute_to_html(:barcode, render_as: :faceted) %>
 
