@@ -72,7 +72,6 @@ module Spot
       # AudioVisual properties
       attribute :premade_derivatives,    ::Blacklight::Types::Array,  'premade_derivatives_ssim'
       attribute :stored_derivatives,     ::Blacklight::Types::Array,  'stored_derivatives_ssim'
-      attribute :format,                 ::Blacklight::Types::String, 'format_ssim'
       attribute :provenance,             ::Blacklight::Types::Array,  'provenance_tesim'
       attribute :barcode,                ::Blacklight::Types::Array,  'barcode_ssim'
 

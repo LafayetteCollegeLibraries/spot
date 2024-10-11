@@ -33,10 +33,6 @@ class AudioVisual < ActiveFedora::Base
     index.as :symbol
   end
 
-  property :format, predicate: ::RDF::URI.new('http://purl.org/dc/terms/Format') do |index|
-    index.as :stored_searchable, :facetable
-  end
-
   property :original_item_extent, predicate: ::RDF::Vocab::DC.extent do |index|
     index.as :stored_searchable
   end

@@ -34,7 +34,6 @@ module Hyrax
       :related_resource,
       :local_identifier,
       :note,
-      :format,
       :provenance,
       :barcode,
       :premade_derivatives
