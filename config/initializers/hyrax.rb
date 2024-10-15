@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'wings'
+
 Hyrax.config do |config|
   config.register_curation_concern :publication
   config.register_curation_concern :image
@@ -6,6 +8,15 @@ Hyrax.config do |config|
 
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
+
+  Wings::ModelRegistry.register(PublicationResource, Publication)
+  Wings::ModelRegistry.register(ImageResource, Image)
+  Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
+
+  config.collection_model = 'Hyrax::PcdmCollection'
+  config.admin_set_model = 'Hyrax::AdministrativeSet'
+  config.query_index_from_valkyrie = true
+  config.index_adapter = :solr_index
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
