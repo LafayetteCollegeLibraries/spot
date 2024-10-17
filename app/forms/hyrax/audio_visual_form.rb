@@ -2,6 +2,7 @@
 module Hyrax
   class AudioVisualForm < ::Spot::Forms::WorkForm
     transforms_language_tags_for :title, :title_alternative, :subtitle, :description, :inscription
+    transforms_nested_fields_for :language
     singular_form_fields :title, :format
 
     self.model_class = ::AudioVisual
