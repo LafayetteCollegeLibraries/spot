@@ -34,7 +34,7 @@ en:
         note: Information important to internal maintenance of records or relevant to the original items, such as administrative, digitization, or decision documentation.
         organization: The organization associated with the resource.
         original_item_extent: The size or duration of the physical resource.
-        physical_medium: A physical material or carrier.  Examples include paper, canvas, or DVD.
+        physical_medium: The file format, physical medium, or dimensions of the resource.
         publisher: The person or group making the work available. Generally this is the institution.
         related_resource: Further information about the subject resource.
         repository_location: Location of the physical resource within the archives.
