@@ -3,6 +3,10 @@ module Spot
   # Mixin to append behaviors to Hyrax::DownloadsController.
   #
   # @see config/initializers/spot_overrides.rb
+  # @note this needs to be :prepend-ed to Hyrax::DownloadsController, as #load_file is defined there
+  # @example
+  #   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
+  #
   module DownloadsControllerBehavior
     # Add support to download a FileSet's attached :transcript file.
     # To access, use the 'file=transcript' query string
