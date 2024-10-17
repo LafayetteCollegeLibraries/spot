@@ -16,3 +16,6 @@ en:
       student_work:
         name: Student Work
         description: Works created by students
+      audio_visual:
+        name: Audio Visual
+        description: Audio and video artifacts

@@ -9,7 +9,9 @@ module Spot
     self.derivative_services = [
       ::Spot::Derivatives::ThumbnailService,
       ::Spot::Derivatives::IiifAccessCopyService,
-      ::Spot::Derivatives::TextExtractionService
+      ::Spot::Derivatives::TextExtractionService,
+      ::Spot::Derivatives::AudioDerivativeService,
+      ::Spot::Derivatives::VideoDerivativeService
     ]
 
     def cleanup_derivatives

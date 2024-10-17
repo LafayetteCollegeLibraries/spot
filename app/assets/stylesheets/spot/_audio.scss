@@ -1,0 +1,24 @@
+.play-list {
+  .play-list-row {
+    .track-title {
+      .playlist-track {
+        &:hover {
+          text-decoration: underline;
+        }
+        color: #000;
+        text-decoration: none;
+      }
+    }
+    .track-title {
+      .playlist-track {
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    .track-title.active-track {
+      font-weight: bold;
+    }
+  }
+}

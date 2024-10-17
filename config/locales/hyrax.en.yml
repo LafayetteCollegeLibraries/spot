@@ -5,6 +5,7 @@ en:
       publication: Publication
       image: Image
       student_work: Student Work
+      audio_visual: Audio Visual
   hyrax:
     base:
       show_actions:

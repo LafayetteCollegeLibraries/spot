@@ -1,0 +1,112 @@
+<div>
+    <audio id="audio" preload="none" controls="controls" style="width:100%" controlsList="nodownload" >
+        <% @presenter.stored_derivatives.each_with_index do |derivative, index| %>
+            <source src="<%= s3_url(derivative) %>" type="audio/mp3" data-track-number="<%= index %>" />
+        <% end %>    
+        <%= t('hyrax.file_set.show.downloadable_content.audio_tag_not_supported') %>
+    </audio>
+
+    <div class="panel panel-default play-list">
+        <div class="panel-heading panel-heading-slim">
+            <h5>Tracks</h5>
+        </div>
+        <table class="table table-bordered metadata-table">
+            <tbody>
+            <% @presenter.stored_derivatives.each_with_index do |derivative, index| %>
+                <tr class = "play-list-row" data-track-row="<%= index %>">
+                    <th>Track <%= index+1 %></th>
+                    <% if index == 0 %>
+                        <% if @presenter.premade_derivatives.length == 0 %>
+                        <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= get_original_name(@presenter.member_presenters, derivative) %></a></td>
+                        <% else %>
+                        <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.premade_derivatives[index] %></a></td>
+                        <% end %>
+                    <% else %>
+                        <% if @presenter.premade_derivatives.length == 0 %>
+                        <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= get_original_name(@presenter.member_presenters, derivative) %></a></td>
+                        <% else %>
+                        <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.premade_derivatives[index] %></a></td>
+                        <% end %>
+                    <% end %>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Private variables
+        var _currentTrack = null;
+        var _elements = {
+            audio: document.getElementById("audio"),
+            playListRows: document.getElementsByClassName("play-list-row"),
+        };
+        var _trackLoaded = false;
+
+        //Adding event listeners to playlist clickable elements.
+        for (var i = 0; i < _elements.playListRows.length; i++) {
+            var playListLink = _elements.playListRows[i].children[1].children[0];
+
+            //Playlist link clicked.
+            playListLink.addEventListener("click", function(e) {
+                e.preventDefault();
+                var selectedTrack = parseInt(this.parentNode.parentNode.getAttribute("data-track-row"));
+
+                if (selectedTrack !== _currentTrack) {
+                _currentTrack = null;
+                _trackLoaded = false;
+                }
+
+                if (_trackLoaded === false) {
+                _currentTrack = parseInt(selectedTrack);
+                _setTrack();
+                } else {
+                _playBack(this);
+                }
+            }, false);
+        }
+
+        /**
+        * Controls playback of the audio element.
+        *
+        **/
+        var _playBack = function() {
+            if (_elements.audio.paused) {
+            _elements.audio.play();
+            } else {
+            _elements.audio.pause();
+            }
+        };
+ 
+        /**
+        * Sets the track if it hasn't already been loaded yet.
+        *
+        **/
+        var _setTrack = function() {
+            var songURL = _elements.audio.children[_currentTrack].src;
+        
+            _elements.audio.setAttribute("src", songURL);
+            _elements.audio.load();
+        
+            _trackLoaded = true;
+        
+            _setActiveItem(_currentTrack, _elements.playListRows);
+        
+            _playBack();
+        };
+ 
+        /**
+        * Sets the activly playing item within the playlist.
+        *
+        * @param currentTrack The current track number being played.
+        * @param playListRows The playlist object.
+        **/
+        var _setActiveItem = function(currentTrack, playListRows) {
+            for (var i = 0; i < playListRows.length; i++) {
+            playListRows[i].children[1].className = "track-title";
+            }
+        
+            playListRows[currentTrack].children[1].className = "track-title active-track";
+        };
+    </script>
+</div>
