@@ -2,7 +2,7 @@
 module Hyrax
   class ImageForm < ::Spot::Forms::WorkForm
     transforms_language_tags_for :title, :title_alternative, :subtitle, :description, :inscription
-    transforms_nested_fields_for :subject_ocm
+    transforms_nested_fields_for :subject_ocm, :language
     singular_form_fields :title
 
     self.model_class = ::Image
