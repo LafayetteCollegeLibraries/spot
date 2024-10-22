@@ -12,15 +12,14 @@ module IndexesPermalinkUrl
 
   def handle_identifier
     @handle_identifier ||= begin
-      id = resource.identifier.find { |id| id.start_with? 'hdl:' }
+      id = resource.identifier.find { |value| value.start_with? 'hdl:' }
       Spot::Identifier.from_string(id)
     end
   end
 
   def permalink
-    @permalink ||= begin
+    @permalink ||=
       handle_identifier ? "http://hdl.handle.net/#{handle_identifier.value}" : resource_url
-    end
   end
 
   def resource_url

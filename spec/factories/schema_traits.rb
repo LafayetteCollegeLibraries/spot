@@ -29,9 +29,9 @@ FactoryBot.define do
 
   trait :core_metadata do
     title { [] }
-    date_modified { }
-    date_uploaded { }
-    depositor { }
+    date_modified { '' }
+    date_uploaded { '' }
+    depositor { '' }
   end
 
   trait :image_metadata do
