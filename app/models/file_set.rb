@@ -20,7 +20,8 @@ class FileSet < ActiveFedora::Base
   #
   # @example
   #   file_set = work.file_sets.first
-  #   job_io = JobIoWrapper.create_with_varied_file_handling(user: uploading_user, file: '/path/to/file.vtt', relation: :transcript, file_set: file_set)
+  #   file = File.open('/path/to/file.vtt', 'r')
+  #   job_io = JobIoWrapper.create_with_varied_file_handling!(user: uploading_user, file: file, relation: :transcript, file_set: file_set)
   #   Hyrax::Actors::FileSetActor.new(file_set, uploading_user).create_content(job_io, :transcript)
   #
   directly_contains_one :transcript, through: :files, type: ::RDF::URI('http://pcdm.org/use#Transcript'), class_name: 'Hydra::PCDM::File'
