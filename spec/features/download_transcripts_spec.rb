@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 RSpec.describe 'Hyrax::DownloadsController' do
   let(:file_set) { FileSet.create(visibility: 'open') }
-  let(:original_file) { Rails.root.join('spec/fixtures/image.png') }
-  let(:transcript_file) { Rails.root.join('spec/fixtures/image_transcript.vtt') }
+  let(:original_file) { Rails.root.join('spec', 'fixtures', 'image.png') }
+  let(:transcript_file) { Rails.root.join('spec', 'fixtures', 'image_transcript.vtt') }
 
   before do
     Hydra::Works::AddFileToFileSet.call(file_set, File.open(transcript_file), :transcript)
