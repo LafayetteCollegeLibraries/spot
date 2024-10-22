@@ -7,6 +7,7 @@ FactoryBot.define do
     transient do
       user { create(:user) }
       content { nil }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
 
     after(:build) do |fs, evaluator|
@@ -18,6 +19,7 @@ FactoryBot.define do
     end
 
     trait :public do
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       read_groups { ["public"] }
     end
 
