@@ -1,0 +1,22 @@
+# Included in Hyrax::Work + copied from Hyrax source
+# @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/config/metadata/core_metadata.yaml
+attributes:
+  title:
+    predicate: http://purl.org/dc/terms/title
+    type: string
+    multiple: true
+    index_keys:
+      - "title_sim"
+      - "title_tesim"
+    form:
+      multiple: true
+      required: true
+  date_modified:
+    predicate: http://purl.org/dc/terms/modified
+    type: date_time
+  date_uploaded:
+    precicate: http://purl.org/dc/terms/dateSubmitted
+    type: date_time
+  depositor:
+    predicate: http://id.loc.gov/vocabulary/relators/dpt
+    type: string
