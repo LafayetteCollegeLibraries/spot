@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BaseResourceIndexer < ::Hyrax::ValkyrieIndexer
   include IndexesPermalinkUrl
   include IndexesSeasonalDates
@@ -22,7 +23,7 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieIndexer
 
   def generate_sortable_date
     raw_date_value = (resource.try(sortable_date_property) || []).sort.first
-    parsed = Date.edtf(raw)
+    parsed = Date.edtf(raw_date_value)
 
     return Date.parse(resource.create_date.to_s).strftime('%FT%TZ') if parsed.nil?
 

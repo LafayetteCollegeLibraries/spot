@@ -26,7 +26,7 @@ module IndexesSeasonalDates
     end.flatten.reject(&:blank?)
   end
 
- # Determines the season based on the month:#
+  # Determines the season based on the month:#
   #   Spring => March, April, May
   #   Summer => June, July, August
   #   Autumn/Fall => September, October, November

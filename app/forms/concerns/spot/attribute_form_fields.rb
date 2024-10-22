@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Spot
   def self.AttributeFormFields(*fields)
     AttributeFormFields.new(fields)
@@ -9,7 +10,7 @@ module Spot
         adds = []
         deletes = []
 
-        Array.wrap(self.send(:"#{field}_attributes")).each do |_, attrs|
+        Array.wrap(send(:"#{field}_attributes")).each do |_, attrs|
           if attrs['_destroy'] == 'true'
             deletes << attrs[value_key]
           else
@@ -17,7 +18,7 @@ module Spot
           end
         end
 
-        ((Array.wrap(self.send(field.to_sym)) + adds) - deletes).uniq
+        ((Array.wrap(send(field.to_sym)) + adds) - deletes).uniq
       end
     end
 
@@ -35,8 +36,8 @@ module Spot
       @fields.map(&:to_sym).each do |field|
         descendant.property(:"#{field}_attributes",
                             virtual: true,
-                            prepopulator: ->(_opts) { self.send(:"#{field}") },
-                            populator: ->(_opts) { self.send(:"#{field}=", parse_attribute_values(field: field)) })
+                            prepopulator: ->(_opts) { send(:"#{field}") },
+                            populator: ->(_opts) { send(:"#{field}=", parse_attribute_values(field: field)) })
       end
     end
   end
