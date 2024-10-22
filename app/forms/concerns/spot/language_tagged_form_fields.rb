@@ -51,9 +51,14 @@ module Spot
       end
 
       # Helper method for the helper methods (lol).
-      def process_field_values(field:, &block)
-        processed = Array.wrap(self.send(field.to_sym)).map do |original_value|
-          block.call(original_value)
+      # yilds the original values for processing and returns the updated value(s)
+      #
+      # @param [Hash] options
+      # @option [#to_sym] field
+      # @return [void]
+      def process_field_values(field:)
+        processed = Array.wrap(send(field.to_sym)).map do |original_value|
+          yield original_value
         end
 
         self.class.definitions[field.to_s][:multiple] ? processed : processed.first
@@ -90,18 +95,15 @@ module Spot
 
       @fields.map(&:to_sym).each do |field|
         default_value = descendant.definitions[field.to_s][:multiple] ? [] : nil
+        val_prepopulator = ->(_opts) { send(:"#{field}_value=", language_tagged_fields_for(field: field)) }
+        lang_prepopulator = ->(_opts) { send(:"#{field}_language=", language_tagged_languages_for(field: field)) }
 
-        descendant.property(:"#{field}_value", virtual: true, default: default_value, prepopulator: ->(_opts) {
-          self.send(:"#{field}_value=", language_tagged_values_for(field: field))
-        })
-
-        descendant.property(:"#{field}_language", virtual: true, default: default_value, prepopulator: ->(_opts) {
-          self.send(:"#{field}_language=", language_tagged_languages_for(field: field))
-        })
+        descendant.property(:"#{field}_value", virtual: true, default: default_value, prepopulator: val_prepopulator)
+        descendant.property(:"#{field}_language", virtual: true, default: default_value, prepopulator: lang_prepopulator)
 
         # @todo perform presence check if the field is required?
         descendant.validate(field) do
-          self.send(:"#{field}=", language_tagged_literals_for(field: field))
+          send(:"#{field}=", language_tagged_literals_for(field: field))
         end
       end
     end
