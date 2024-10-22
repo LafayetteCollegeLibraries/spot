@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Spot
   class EdtfDateValidator < ::ActiveModel::Validator
     def validate(record)
