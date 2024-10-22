@@ -14,12 +14,12 @@ FactoryBot.define do
       fs.apply_depositor_metadata evaluator.user.user_key
     end
 
-    after(:create) do |file, evaluator|
-      Hydra::Works::UploadFileToFileSet.call(file, evaluator.content) if evaluator.content.present?
+    after(:create) do |fs, evaluator|
+      Hydra::Works::UploadFileToFileSet.call(fs, evaluator.content) if evaluator.content.present?
     end
 
     trait :public do
-      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
       read_groups { ["public"] }
     end
 

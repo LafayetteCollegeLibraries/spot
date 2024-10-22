@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 RSpec.describe 'Hyrax::DownloadsController' do
-  let(:file_set) { FileSet.create(visibility: 'open') }
-  let(:original_file) { Rails.root.join('spec', 'fixtures', 'image.png') }
-  let(:transcript_file) { Rails.root.join('spec', 'fixtures', 'image_transcript.vtt') }
+  include ActiveJob::TestHelper
+
+  let(:file_set) { create(:file_set, :public, content: File.open(original_file)) }
+  let(:original_file) { Rails.root.join('spec', 'fixtures', 'image.png').to_s }
+  let(:transcript_file) { Rails.root.join('spec', 'fixtures', 'image_transcript.vtt').to_s }
 
   before do
-    Hydra::Works::AddFileToFileSet.call(file_set, File.open(transcript_file), :transcript)
-  end
-
-  after do
-    file_set.destroy!
+    perform_enqueued_jobs(only: IngestJob) do
+      Spot::FileSetTranscriptAttachmentService.attach(path: transcript_file, file_set: file_set)
+    end
   end
 
   scenario 'downloading transcript' do
