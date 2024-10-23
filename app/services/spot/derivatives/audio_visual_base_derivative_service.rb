@@ -97,22 +97,6 @@ module Spot
         parent.stored_derivatives = stored_derivatives
         parent.save
       end
-
-      # Transfers a single derviative from the source bucket to the destination bucket, renaming
-      # it. Adds all uploaded keys to the stored_derivatives metadata field
-      def transfer_s3_derivative(derivative, key)
-        parent = file_set.parent
-        stored_derivatives = parent.stored_derivatives.to_a
-        stored_derivatives.push(key)
-        parent.stored_derivatives = stored_derivatives
-        parent.save
-        src = "/" + s3_source + "/" + derivative
-        s3_client.copy_object(
-          bucket: s3_bucket,
-          copy_source: src,
-          key: key
-        )
-      end
     end
   end
 end

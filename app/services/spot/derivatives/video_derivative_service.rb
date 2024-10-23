@@ -43,25 +43,8 @@ module Spot
         return true unless stored_derivatives.empty?
         return false if premade_derivatives.empty?
 
-        premade_derivatives.each_with_index do |derivative, index|
-          rename_premade_derivative(derivative, index)
-        end
+        Spot::TransferPremadeDerivativeJob.perform_later(file_set, premade_derivatives)
         true
-      end
-
-      # Check to see if any premade derivatives exist, process them if so.
-      #
-      # @param [String] derivative, the s3 key of a premade derivative
-      # @param [Integer] index, index of premade derivative in array
-      # @return [void]
-      def rename_premade_derivative(derivative, index)
-        file_path = "/tmp/" + derivative
-        s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
-        res = get_video_resolution(file_path)
-        # add any other checks to the file here
-        key = format('%s-%d-access-%d.mp4', file_set.id, index, res[1])
-        FileUtils.rm_f(file_path) if File.exist?(file_path)
-        transfer_s3_derivative(derivative, key)
       end
 
       # Returns the resolution of a video file.
