@@ -31,4 +31,12 @@ RSpec.describe AudioVisualIndexer do
 
     it_behaves_like 'simple model indexing'
   end
+
+  describe 'years_encompassed' do
+    let(:work) { build(:image, date: ['1986/1988'], date_associated: ['1959-08-13', '1958-01-22', '1986-02-11']) }
+
+    it 'generates an array of encompassed years' do
+      expect(solr_doc['years_encompassed_iim']).to eq [1958, 1959, 1986, 1987, 1988]
+    end
+  end
 end
