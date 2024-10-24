@@ -4,8 +4,8 @@ module Hyrax
     humanize_date_fields :date, :date_associated
 
     delegate :stored_derivatives, :premade_derivatives,
-             :original_item_extent, :repository_location, :research_assistance,
-             :provenance, :barcode,
+             :original_item_extent, :repository_location,
+             :research_assistance, :barcode,
              to: :solr_document
 
     def description
