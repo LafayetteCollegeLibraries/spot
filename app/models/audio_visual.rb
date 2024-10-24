@@ -38,7 +38,7 @@ class AudioVisual < ActiveFedora::Base
   end
 
   property :barcode, predicate: ::RDF::URI.new('https://schema.org/Barcode') do |index|
-    index.as :symbol
+    index.as :symbol, :facetable
   end
 
   property :provenance, predicate: ::RDF::Vocab::DC.provenance do |index|
