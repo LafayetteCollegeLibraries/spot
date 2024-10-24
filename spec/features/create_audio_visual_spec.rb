@@ -79,7 +79,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         expect(page).to have_css '.audio_visual_subject .controls-add-text'
 
         # multi-authority for location
-        location_selector = 'input.image_location.multi_auth_controlled_vocabulary'
+        location_selector = 'input.audio_visual_location.multi_auth_controlled_vocabulary'
         expect(page).to have_css("#{location_selector}[data-autocomplete='location']", visible: false)
 
         # @todo maybe this should be a support thing?
@@ -87,7 +87,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
           ['GeoNames', '/authorities/search/geonames'],
           ['Getty Thesaurus of Geo. Names', '/authorities/search/getty/tgn']
         ].each do |(name, autocomplete_url)|
-          select name, from: 'image_location_authority_select_0'
+          select name, from: 'audio_visual_location_authority_select_0'
           sleep 1
 
           data_prop = page.evaluate_script("$('#{location_selector}').data('autocomplete-url');")
@@ -96,7 +96,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
           sleep 1
         end
 
-        expect(page).to have_css('.image_location .controls-add-text')
+        expect(page).to have_css('.audio_visual_location .controls-add-text')
         # end location
 
         fill_in_autocomplete '.audio_visual_language', with: attrs[:language].first
