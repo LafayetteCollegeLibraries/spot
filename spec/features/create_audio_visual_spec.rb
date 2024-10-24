@@ -2,16 +2,6 @@
 RSpec.feature 'Create a Audio Visual', :clean, :js do
   before do
     stub_request(:get, subject)
-    stub_request(:get, "http://www.geonames.org/getJSON?geonameId=5188140&username=lafayette_dss")
-      .with(
-        headers:
-        {
-          'Accept' => 'application/json',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'User-Agent' => 'Faraday v0.17.6'
-        }
-      )
-      .to_return(status: 200, body: "", headers: {})
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
@@ -88,8 +78,26 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         fill_in_autocomplete '.audio_visual_subject', with: attrs[:subject].first
         expect(page).to have_css '.audio_visual_subject .controls-add-text'
 
-        fill_in_autocomplete '.audio_visual_location', with: attrs[:location].first
-        expect(page).to have_css('.audio_visual_location .controls-add-text')
+        # multi-authority for location
+        location_selector = 'input.image_location.multi_auth_controlled_vocabulary'
+        expect(page).to have_css("#{location_selector}[data-autocomplete='location']", visible: false)
+
+        # @todo maybe this should be a support thing?
+        [
+          ['GeoNames', '/authorities/search/geonames'],
+          ['Getty Thesaurus of Geo. Names', '/authorities/search/getty/tgn']
+        ].each do |(name, autocomplete_url)|
+          select name, from: 'image_location_authority_select_0'
+          sleep 1
+
+          data_prop = page.evaluate_script("$('#{location_selector}').data('autocomplete-url');")
+          expect(data_prop).to eq autocomplete_url
+
+          sleep 1
+        end
+
+        expect(page).to have_css('.image_location .controls-add-text')
+        # end location
 
         fill_in_autocomplete '.audio_visual_language', with: attrs[:language].first
         expect(page).to have_css('.audio_visual_language .controls-add-text')
@@ -133,28 +141,6 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         ##
         # add files
         ##
-
-        # not entirely sure _why_ this is happening, but upgrading chrome
-        # from 73 -> 74 was raising the error:
-        #
-        #   Failure/Error: click_link 'Files'
-        #
-        #     Selenium::WebDriver::Error::WebDriverError:
-        #       element click intercepted: Element <a href="#files" aria-controls="files" role="tab" data-toggle="tab">...</a>
-        #       is not clickable at point (423, 21). Other element would receive the click:
-        #       <input type="text" name="q" id="search-field-header" class="form-control" placeholder="Begin your search here">
-        #         (Session info: headless chrome=74.0.3729.108)
-        #         (Driver info: chromedriver=74.0.3729.6 (255758eccf3d244491b8a1317aa76e1ce10d57e9-refs/branch-heads/3729@{#29}),platform=Mac OS X 10.12.6 x86_64)
-        #
-        # from the best that I can tell, what's happening is that we're far-enough down
-        # the screen that the +a[href="#files"]+ tab is out of view and not clickable?
-        # in a byebug console, trying +click_link 'Files'+ once will raise the error,
-        # but then repeating the +click_link+ call will succeed, leading me to believe
-        # that the page is scrolling up as a reset?
-        #
-        # again, no idea _why_ it's happening, but scrolling to the top of the page
-        # seems to stop the problem. so we'll go with it for now.
-        page.execute_script('window.scrollTo(0,0)')
 
         click_link 'Files'
         expect(page).to have_content 'Add files'
