@@ -1,0 +1,34 @@
+<%# app/views/hyrax/file_sets/media_display/_video.html.erb %>
+<% content_for(:head) do %>
+    <meta name="turbolinks-visit-control" content="reload">
+<% end %>
+
+<div class="viewer-wrapper">
+    <video id="video" controls class="video-js vjs-default-skin vjs-fill" style="width:100%;height:100%" preload="auto">
+        <% @presenter.stored_derivatives.each do |derivative| %>
+            <source src="<%= s3_url(derivative) %>" type="video/mp4" label="<%= get_derivative_res(derivative) %>" />
+        <% end %>
+        <%= t('hyrax.file_set.show.downloadable_content.video_tag_not_supported') %>
+    </video>
+
+    <script>
+        // disable amd loader for videojs scripts
+        define._oldAmd = define.amd;
+        define.amd = null;
+    </script>
+    <script src="https://vjs.zencdn.net/8.10.0/video.js" defer></script>
+    <script src="https://unpkg.com/@silvermine/videojs-quality-selector/dist/js/silvermine-videojs-quality-selector.min.js" defer></script>
+    <script>
+        document.addEventListener('turbolinks:load', function (_event) {
+            videojs('video', {}, function () {
+                var player = this;
+                player.controlBar.addChild('QualitySelector');
+            });
+
+            // restore the old amd loader
+            if (define._oldAmd) {
+                define.amd = define._oldAmd
+            }
+        });
+    </script>
+</div>

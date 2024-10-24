@@ -269,4 +269,24 @@ Rails.application.config.to_prepare do
       super + ['idroot']
     end
   end
+
+  # Modifying the Video Runner for Hydra to use a customized Processor
+  # which backports changes from 3.8.0
+  #
+  # @see https://github.com/samvera/hydra-derivatives/blob/v3.8.0/lib/hydra/derivatives/runners/video_derivatives.rb
+  Hydra::Derivatives::VideoDerivatives.class_eval do
+    def self.processor_class
+      Spot::VideoProcessor
+    end
+  end
+
+  # Add original file names to presenter for file sets
+  #
+  # @see https://github.com/samvera/hyrax/blob/e4f8a06aaf1c9ec378f87764da59f73a8adf06d7/app/presenters/hyrax/file_set_presenter.rb
+  Hyrax::FileSetPresenter.class_eval do
+    delegate :original_filenames, to: :solr_document
+  end
+
+  # Add support for downloading file_set transcripts
+  Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
 end

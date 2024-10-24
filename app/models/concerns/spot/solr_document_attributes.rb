@@ -69,6 +69,12 @@ module Spot
       attribute :research_assistance,    ::Blacklight::Types::Array,  'research_assistance_ssim'
       attribute :subject_ocm,            ::Blacklight::Types::Array,  'subject_ocm_ssim'
 
+      # AudioVisual properties
+      attribute :premade_derivatives,    ::Blacklight::Types::Array,  'premade_derivatives_ssim'
+      attribute :stored_derivatives,     ::Blacklight::Types::Array,  'stored_derivatives_ssim'
+      attribute :provenance,             ::Blacklight::Types::Array,  'provenance_tesim'
+      attribute :barcode,                ::Blacklight::Types::Array,  'barcode_ssim'
+
       # StudentWork properties
       attribute :access_note,            ::Blacklight::Types::Array,  'access_note_tesim'
       attribute :advisor,                ::Blacklight::Types::Array,  'advisor_ssim'
@@ -79,6 +85,7 @@ module Spot
       attribute :file_size,              ::Blacklight::Types::String, 'file_size_lts'
       attribute :original_checksum,      ::Blacklight::Types::String, 'original_checksum_tesim'
       attribute :page_count,             ::Blacklight::Types::String, 'page_count_tesim'
+      attribute :original_filenames,     ::Blacklight::Types::Array,  'original_filenames_ssim'
 
       # Collection properties
       attribute :collection_slug,        ::Blacklight::Types::String, 'collection_slug_ssi'
