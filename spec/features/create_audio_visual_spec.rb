@@ -37,7 +37,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         expect(page).not_to have_css '.audio_visual_resource_type .controls-add-text'
 
         select 'No Known Copyright', from: 'audio_visual_rights_statement'
-        
+
         fill_in 'audio_visual_date', with: attrs[:date].first
         expect(page).to have_css '.audio_visual_date .controls-add-text'
 
@@ -131,7 +131,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
 
         fill_in 'audio_visual_barcode', with: attrs[:barcode].first
         expect(page).to have_css '.audio_visual_barcode .controls-add-text'
-        
+
         fill_in 'audio_visual_premade_derivatives', with: attrs[:premade_derivatives].first
         expect(page).to have_css '.audio_visual_premade_derivatives .controls-add-text'
 
