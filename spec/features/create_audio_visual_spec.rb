@@ -33,16 +33,110 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         fill_in 'audio_visual_title', with: attrs[:title].first
         expect(page).not_to have_css '.audio_visual_title .controls-add-text'
 
+        select 'Audio', from: 'audio_visual_resource_type'
+        expect(page).not_to have_css '.audio_visual_resource_type .controls-add-text'
+
+        select 'No Known Copyright', from: 'audio_visual_rights_statement'
+        
         fill_in 'audio_visual_date', with: attrs[:date].first
         expect(page).to have_css '.audio_visual_date .controls-add-text'
 
-        select 'Other', from: 'audio_visual_resource_type'
-        expect(page).not_to have_css '.audio_visual_resource_type .controls-add-text'
+        fill_in 'audio_visual_title_alternative', with: attrs[:title_alternative].first
+        fill_in 'audio_visual_title_alternative_language', with: 'en'
+        expect(page).to have_css '.audio_visual_title_alternative .controls-add-text'
 
+        fill_in 'audio_visual_subtitle', with: attrs[:subtitle].first
+        fill_in 'audio_visual_subtitle_language', with: 'en'
+        expect(page).to have_css '.audio_visual_title_alternative .controls-add-text'
+
+        fill_in 'audio_visual_date_associated', with: attrs[:date_associated].first
+        expect(page).to have_css '.audio_visual_date_associated .controls-add-text'
+
+        fill_in 'audio_visual_rights_holder', with: attrs[:rights_holder].first
+        expect(page).to have_css '.audio_visual_rights_holder .controls-add-text'
+
+        fill_in 'audio_visual_description', with: attrs[:description].first
+        fill_in 'audio_visual_description_language', with: 'en'
+        expect(page).to have_css '.audio_visual_description .controls-add-text'
+
+        fill_in 'audio_visual_inscription', with: attrs[:inscription].first
+        fill_in 'audio_visual_inscription_language', with: 'en'
+        expect(page).to have_css '.audio_visual_inscription .controls-add-text'
+
+        fill_in 'audio_visual_creator', with: attrs[:creator].first
+        expect(page).to have_css '.audio_visual_creator .controls-add-text'
+
+        fill_in 'audio_visual_contributor', with: attrs[:contributor].first
+        expect(page).to have_css '.audio_visual_contributor .controls-add-text'
+
+        fill_in 'audio_visual_publisher', with: attrs[:publisher].first
+        expect(page).to have_css '.audio_visual_publisher .controls-add-text'
+
+        fill_in 'audio_visual_keyword', with: attrs[:keyword].first
+        expect(page).to have_css '.audio_visual_keyword .controls-add-text'
+
+        fill_in_autocomplete '.audio_visual_subject', with: attrs[:subject].first
+        expect(page).to have_css '.audio_visual_subject .controls-add-text'
+
+        # multi-authority for location
+        location_selector = 'input.audio_visual_location.multi_auth_controlled_vocabulary'
+        expect(page).to have_css("#{location_selector}[data-autocomplete='location']", visible: false)
+
+        # @todo maybe this should be a support thing?
+        [
+          ['GeoNames', '/authorities/search/geonames'],
+          ['Getty Thesaurus of Geo. Names', '/authorities/search/getty/tgn']
+        ].each do |(name, autocomplete_url)|
+          select name, from: 'audio_visual_location_authority_select_0'
+          sleep 1
+
+          data_prop = page.evaluate_script("$('#{location_selector}').data('autocomplete-url');")
+          expect(data_prop).to eq autocomplete_url
+
+          sleep 1
+        end
+
+        expect(page).to have_css('.audio_visual_location .controls-add-text')
+        # end location
+
+        fill_in_autocomplete '.audio_visual_language', with: attrs[:language].first
+        expect(page).to have_css('.audio_visual_language .controls-add-text')
+
+        fill_in 'audio_visual_source', with: attrs[:source].first
+        expect(page).to have_css('.audio_visual_source .controls-add-text')
+
+        fill_in 'audio_visual_physical_medium', with: attrs[:physical_medium].first
+        expect(page).to have_css('.audio_visual_physical_medium .controls-add-text')
+
+        fill_in 'audio_visual_original_item_extent', with: attrs[:original_item_extent].first
+        expect(page).to have_css('.audio_visual_original_item_extent .controls-add-text')
+
+        fill_in 'audio_visual_repository_location', with: attrs[:repository_location].first
+        expect(page).to have_css('.audio_visual_repository_location .controls-add-text')
+
+        fill_in 'audio_visual_research_assistance', with: attrs[:research_assistance].first
+        expect(page).to have_css('.audio_visual_research_assistance .controls-add-text')
+
+        fill_in 'audio_visual_related_resource', with: attrs[:related_resource].first
+        expect(page).to have_css('.audio_visual_related_resource .controls-add-text')
+
+        fill_in 'audio_visual_local_identifier', with: 'local:abc123'
+        expect(page).to have_css('.audio_visual_local_identifier .controls-add-text')
+
+        fill_in 'audio_visual_note', with: attrs[:note].first
+        expect(page).to have_css('.audio_visual_note .controls-add-text')
+
+        fill_in 'audio_visual_provenance', with: attrs[:provenance].first
+        expect(page).to have_css '.audio_visual_provenance .controls-add-text'
+
+        fill_in 'audio_visual_barcode', with: attrs[:barcode].first
+        expect(page).to have_css '.audio_visual_barcode .controls-add-text'
+        
         fill_in 'audio_visual_premade_derivatives', with: attrs[:premade_derivatives].first
         expect(page).to have_css '.audio_visual_premade_derivatives .controls-add-text'
 
-        select 'No Known Copyright', from: 'audio_visual_rights_statement'
+        # see long note in +create_publication_spec.rb+ for why we need to scroll back to the top
+        page.execute_script('window.scrollTo(0,0)')
 
         ##
         # add files
