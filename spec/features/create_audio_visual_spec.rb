@@ -2,7 +2,14 @@
 RSpec.feature 'Create a Audio Visual', :clean, :js do
   before do
     stub_request(:get, subject)
-    stub_request(:get, "http://www.geonames.org/getJSON?geonameId=5188140&username=lafayette_dss")
+    stub_request(:get, "http://www.geonames.org/getJSON?geonameId=5188140&username=lafayette_dss").
+    with(
+      headers: {
+	    'Accept'=>'application/json',
+	    'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+	    'User-Agent'=>'Faraday v0.17.6'
+      }).
+    to_return(status: 200, body: "", headers: {})
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
