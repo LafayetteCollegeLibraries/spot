@@ -32,6 +32,7 @@
                                       render_as: :faceted,
                                       search_field: :research_assistance_ssim) %>
       <%= presenter.attribute_to_html(:repository_location) %>
+      <%= presenter.attribute_to_html(:provenance) %>
       <%= presenter.attribute_to_html(:permalink) %>
 
       <%= render 'shared/metadata/rights_statement', presenter: presenter %>

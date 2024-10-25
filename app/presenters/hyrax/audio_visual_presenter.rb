@@ -5,7 +5,7 @@ module Hyrax
 
     delegate :stored_derivatives, :premade_derivatives,
              :original_item_extent, :repository_location,
-             :research_assistance, :barcode,
+             :research_assistance, :barcode, :provenance,
              to: :solr_document
 
     def description
