@@ -42,7 +42,7 @@ class AudioVisual < ActiveFedora::Base
   end
 
   property :provenance, predicate: ::RDF::Vocab::DC.provenance do |index|
-    index.as :stored_searchable, :facetable
+    index.as :stored_searchable
   end
 
   # see {Spot::WorkBehavior.setup_nested_attributes!}
