@@ -8,6 +8,9 @@ module Spot
   #   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
   #
   module DownloadsControllerBehavior
+    # :nocov:
+    # Testing handled in spec/features/download_transcripts_spec.rb
+    #
     # Add support to download a FileSet's attached :transcript file.
     # To access, use the 'file=transcript' query string
     #
@@ -27,5 +30,6 @@ module Spot
       pcdm_file = dereference_file(params[:file]).find_target
       ActiveFedora::File.find(pcdm_file.id) if pcdm_file&.id
     end
+    # :nocov:
   end
 end
