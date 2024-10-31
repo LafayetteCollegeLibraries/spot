@@ -8,6 +8,7 @@
         <% @presenter.stored_derivatives.each do |derivative| %>
             <source src="<%= s3_url(derivative) %>" type="video/mp4" label="<%= get_derivative_res(derivative) %>" />
         <% end %>
+        <track label="CC" kind="subtitles" srclang="en" src="<%= transcript_path(file_set) %>" default />
         <%= t('hyrax.file_set.show.downloadable_content.video_tag_not_supported') %>
     </video>
 

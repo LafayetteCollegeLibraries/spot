@@ -26,6 +26,8 @@ module Spot
       def create_derivatives(filename)
         return if check_premade_derivatives
 
+        check_transcript(filename)
+
         create_derivative_files(filename)
         upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
         derivative_paths.each do |path|
@@ -62,6 +64,22 @@ module Spot
         key = format('%s-%d-access-%d.mp4', file_set.id, index, res[1])
         FileUtils.rm_f(file_path) if File.exist?(file_path)
         transfer_s3_derivative(derivative, key)
+      end
+
+      # Checks if the file has an associated transcript on s3, enques the relevant job if so.
+      #
+      # @param [String,Pathname] filename, the src path of the file
+      # @return [void]
+      def check_transcript(filename)
+        transcript_name = filename.split('.')[0] + ".vtt"
+        begin
+          s3_client.head_object(bucket: s3_source, key: transcript_name)
+        rescue Aws::S3::Errors::NotFound
+          return
+        else
+          #enqueue job
+          Spot::TranscriptJob.perform_later(file_set: file_set, transcript_name: transcript_name)
+        end
       end
 
       # Returns the resolution of a video file.
