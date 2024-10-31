@@ -75,9 +75,9 @@ module Spot
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound
-          return
+          Rails.logger.warn('Transcript not found.')
         else
-          #enqueue job
+          # enqueue job
           Spot::TranscriptJob.perform_later(file_set: file_set, transcript_name: transcript_name)
         end
       end
@@ -134,14 +134,14 @@ module Spot
                                                                 format: 'mp4',
                                                                 url: derivative_urls[0],
                                                                 size: get_derivative_resolution(filename, 1080),
-                                                                input_options: "-t 10 -ss 1",
+                                                                input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 8000k",
                                                                 audio: "-b:a 256k -ar 44100" },
                                                               { label: 'low',
                                                                 format: 'mp4',
                                                                 url: derivative_urls[1],
                                                                 size: get_derivative_resolution(filename, 480),
-                                                                input_options: "-t 10 -ss 1",
+                                                                input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 2500k",
                                                                 audio: "-b:a 256k -ar 44100" }])
       end
