@@ -71,7 +71,7 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def check_transcript(filename)
-        transcript_name = filename.split('.')[0] + ".vtt"
+        transcript_name = filename.to_s.split('/')[-1].split('.')[0] + ".vtt"
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound
