@@ -21,7 +21,10 @@ module Spot
 
     def attach_transcript(path:)
       job_io = wrap_transcript_io(path)
-      Hyrax::Actors::FileSetActor.new(@file_set, @depositor).create_content(job_io, :transcript)
+      Hydra::Works::AddFileToFileSet.call(@file_set,
+                                          job_io,
+                                          :transcript,
+                                          versioning: false)
     end
 
     private
