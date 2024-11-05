@@ -9,7 +9,7 @@ attributes:
       - "title_sim"
       - "title_tesim"
     form:
-      multiple: true
+      multiple: false
       required: true
   date_modified:
     predicate: http://purl.org/dc/terms/modified

@@ -94,8 +94,8 @@ module Spot
       descendant.include(HelperMethods)
 
       @fields.map(&:to_sym).each do |field|
-        default_value = descendant.definitions[field.to_s][:multiple] ? [] : nil
-        val_prepopulator = ->(_opts) { send(:"#{field}_value=", language_tagged_fields_for(field: field)) }
+        default_value = descendant.definitions[field.to_s][:default].call
+        val_prepopulator = ->(_opts) { send(:"#{field}_value=", language_tagged_values_for(field: field)) }
         lang_prepopulator = ->(_opts) { send(:"#{field}_language=", language_tagged_languages_for(field: field)) }
 
         descendant.property(:"#{field}_value", virtual: true, default: default_value, prepopulator: val_prepopulator)

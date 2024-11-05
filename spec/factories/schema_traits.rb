@@ -22,7 +22,7 @@ FactoryBot.define do
     rights_statement { [] }
     source { [] }
     source_identifier { [] }
-    subject { [] }
+    subject { [RDF::URI('http://id.loc.gov/authorities/subjects/sh85029526')] }
     subtitle { [] }
     title_alternative { [] }
   end
