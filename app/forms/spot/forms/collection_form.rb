@@ -25,6 +25,8 @@ module Spot
       include ::SingularFormFields
       include ::StripsWhitespace
 
+      self.model_class = ::Collection
+
       transforms_language_tags_for :title, :abstract, :description
       transforms_nested_fields_for :language
 
