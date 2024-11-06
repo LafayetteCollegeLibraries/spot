@@ -41,7 +41,7 @@ RSpec.shared_examples 'a nested attribute field' do
       end
 
       let(:_value) { 'https://ldr.lafayette.edu' }
-      let(:incoming_metadata) { { field_attributes_key => { '0' => { 'id' => 'https://ldr.lafayette.edu' }, '1' => { 'id' => 'https://lafayette.edu' } } } }
+      let(:incoming_metadata) { { field_attributes_key.to_sym => { '0' => { 'id' => 'https://ldr.lafayette.edu' }, '1' => { 'id' => 'https://lafayette.edu' } } } }
 
       it 'adds the value to the field' do
         expect { form.validate(incoming_metadata) }

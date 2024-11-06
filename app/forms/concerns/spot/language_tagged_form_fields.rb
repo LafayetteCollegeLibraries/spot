@@ -3,11 +3,9 @@ module Spot
   # The intention is to treat this like the existing Hyrax::FormFields mixins.
   #
   # @example
-  #   module Hyrax
-  #     class WorkResourceForm < ::Hyrax::Forsm::ResourceForm(WorkResource)
-  #       include Hyrax::FormFields(:metadata_schema)
-  #       include Hyrax::LanguageTaggedFormFields(:title, :title_alternative)
-  #     end
+  #   class WorkResourceForm < ::Hyrax::Forms::ResourceForm(WorkResource)
+  #     include Hyrax::FormFields(:metadata_schema)
+  #     include Hyrax::LanguageTaggedFormFields(:title, :title_alternative)
   #   end
   def self.LanguageTaggedFormFields(*fields)
     Spot::LanguageTaggedFormFields.new(*fields)
