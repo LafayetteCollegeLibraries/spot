@@ -67,13 +67,13 @@ module Spot
         (adds - deletes).uniq
       end
 
-      def set_attributes_for(field)
+      def update_attributes_for!(field)
         attributes = wrap_attribute_values(field: field)
         send(:"#{field}_attributes=", attributes)
       end
 
       def wrap_attribute_values(field:, value_key: 'id')
-        Array.wrap(send(field)).each_with_index.reduce({}) do |out, (val, idx)|
+        Array.wrap(send(field)).each_with_index.each_with_object({}) do |(val, idx), out|
           out[idx.to_s] = { value_key => val.to_s }
           out
         end
@@ -91,12 +91,11 @@ module Spot
     end
 
     def initialize(fields)
+      super
       @fields = fields
     end
 
     private
-
-    def rename_nested_param_for!(**); end
 
     def included(descendant)
       super
@@ -122,7 +121,7 @@ module Spot
 
         descendant.property(:"#{field}_attributes",
                             virtual: true,
-                            prepopulator: ->(_opts) { set_attributes_for(field) },
+                            prepopulator: ->(_opts) { update_attributes_for!(field) },
                             populator: :"#{field}_populator")
       end
     end
