@@ -8,7 +8,7 @@ RSpec.shared_examples 'a language-tagged resource field' do
   # let(:form) { described_class.for(resource: resource) }
   let(:form) { described_class.new(resource) }
   let(:resource) { resource_class.new }
-  let(:resource_class ) { described_class.name.split('::').last.gsub(/Form$/, '').constantize }
+  let(:resource_class) { described_class.name.split('::').last.gsub(/Form$/, '').constantize }
   let(:form_definitions) { described_class.definitions }
   let(:field_is_multiple) { form_definitions[field.to_s][:multiple] }
 
