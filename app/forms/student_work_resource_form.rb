@@ -16,11 +16,9 @@ class StudentWorkResourceForm < ::Hyrax::Forms::ResourceForm(StudentWorkResource
   validates_with Spot::EdtfDateValidator, fields: [:date]
 
   # @todo provide the StudentWork admin_set as a default? Or stuff the value and not expose it?
-  def admin_set_id
-  end
+  def admin_set_id; end
 
   def rights_statement
     super || [DEFAULT_RIGHTS_STATEMENT_URI]
   end
 end
-

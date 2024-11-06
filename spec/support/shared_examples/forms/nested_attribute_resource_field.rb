@@ -5,8 +5,8 @@ RSpec.shared_examples 'a nested attribute field' do
   end
 
   let(:resource) { resource_class.new(field => value) }
-  let(:resource_factory ) { described_class.name.split('::').last.gsub(/Form$/, '').underscore.to_sym }
-  let(:resource_class ) { described_class.name.split('::').last.gsub(/Form$/, '').constantize }
+  let(:resource_factory) { described_class.name.split('::').last.gsub(/Form$/, '').underscore.to_sym }
+  let(:resource_class) { described_class.name.split('::').last.gsub(/Form$/, '').constantize }
   let(:value) { field_is_multiple ? [_value] : _value }
 
   let(:form) { described_class.for(resource) }
@@ -56,7 +56,7 @@ RSpec.shared_examples 'a nested attribute field' do
         form.validate(incoming_metadata)
       end
 
-      let(:incoming_metadata) { { field_attributes_key => { '0' => {'id' => _value, '_destroy' => 'true'} } } }
+      let(:incoming_metadata) { { field_attributes_key => { '0' => { 'id' => _value, '_destroy' => 'true' } } } }
 
       it 'removes the value from the field' do
         expect(form.send(field)).to be_empty
