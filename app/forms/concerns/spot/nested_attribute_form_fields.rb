@@ -91,7 +91,6 @@ module Spot
     end
 
     def initialize(fields)
-      super
       @fields = fields
     end
 
