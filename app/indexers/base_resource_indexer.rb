@@ -1,7 +1,8 @@
 # frozen_string_literal: true
-class BaseResourceIndexer < ::Hyrax::ValkyrieIndexer
+class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
+  # @note :core_metadata is included with Hyrax::ValkyrieWorkIndexer
+  include Hyrax::Indexer(:base_metadata)
   include IndexesPermalinkUrl
-  include IndexesSeasonalDates
 
   class_attribute :sortable_date_property, default: :date_issued
 
@@ -9,49 +10,60 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieIndexer
     super.tap do |document|
       document['title_sort_si'] = resource.title.first.to_s.downcase
       document['date_sort_dtsi'] = generate_sortable_date
-      document['file_format_ssim'] = resource.file_sets.map(&:mime_type).reject(&:blank?)
       document['identifier_standard_ssim'] = mapped_identifiers.select(&:standard?).map(&:to_s)
       document['identifier_local_ssim'] = mapped_identifiers.select(&:local?).map(&:to_s)
 
-      index_language_and_label(document)
-      index_sortable_date(document)
+      document['language_ssim'] = resource.try(:language)
+      document['language_label_ssim'] = (resource.try(:language) || []).map { |language| Spot::ISO6391.label_for(language) }
+
       index_thumbnail_url(document)
+
+      # @todo not sure if the resource retains file_set objects anymore? there is no longer
+      #       a :file_sets method and the closest analogue I can find in Hyrax 3.6 is :member_ids,
+      #       which would require us to fetch the objects just to copy the mime_type to the
+      #       parent work. maybe it would be better to give this to the presenter and delegate
+      #       to the file_set_presenters?
+      #
+      # document['file_format_ssim'] = resource.file_sets.map(&:mime_type).reject(&:blank?)
+
+      stringify_rdf_uris(document)
     end
   end
 
   private
 
-  def generate_sortable_date
-    raw_date_value = (resource.try(sortable_date_property) || []).sort.first
-    parsed = Date.edtf(raw_date_value)
-
-    return Date.parse(resource.create_date.to_s).strftime('%FT%TZ') if parsed.nil?
-
-    # if we get an edtf range/set/etc, we want the earliest date.
-    # rather than checking if it's a +EDTF::Set+, +EDTF::Interval+, etc.
-    # we'll see if it's inherited from +Enumerable+ and call +#first+ if so
-    parsed = parsed.first if parsed.class < ::Enumerable
-    parsed.strftime('%FT%TZ')
+  # @todo maybe this is fixed down the road in Hyrax, but Hyrax::Indexer(:base_metadata)
+  #       will index fields with `document[field] = resource.send(field)` which will lead
+  #       to (at the very least) RDF::URI values on the way to Solr. I'm not sure if there
+  #       are mechanisms in place in Hyrax/RSolr to stringify URI values before they get
+  #       sent to Solr, but just in case they're not we'll at least stringify RDF::URIs.
+  def stringify_rdf_uris(document)
+    document.each do |key, value|
+      next unless value.is_a?(Array) && value.any?(RDF::URI)
+      document[key] = value.map(&:to_s) # should we _just_ be targeting URIs?
+    end
   end
 
-  def index_language_and_label(solr_document)
-    return if resource&.language.blank?
+  def generate_sortable_date
+    object_date_values = resource.try(sortable_date_property) || []
+    date_value = object_date_values.sort.first
+    output_format_string = '%FT%TZ'
 
-    solr_document['language_ssim'] ||= []
-    solr_document['language_label_ssim'] ||= []
+    # if the object doesn't have any date values, default to using
+    # its created_at value (note: this will return nil if the object
+    # doesn't have a :created_at value, typically assigned on persistence.
+    return resource.try(:created_at).try(:strftime, output_format_string) if date_value.nil?
 
-    resource.language.each do |lang|
-      solr_document['language_ssim'] << lang
-      solr_document['language_label_ssim'] << Spot::ISO6391.label_for(lang)
-    end
+    parsed = Date.edtf(date_value)
+    parsed.strftime(output_format_string) if parsed.present?
   end
 
   def index_thumbnail_url(solr_document)
     return if ENV['URL_HOST'].blank?
 
     host = ENV['URL_HOST']
-    host = "http://#{host}" unless host.start_with?('http')
-    path = Hyrax::ThumnailPathService.call(resource) # @todo does this work with resources?
+    host = "https://#{host}" unless host.start_with?('http')
+    path = Hyrax::ThumbnailPathService.call(resource) # @todo does this work with resources?
     url = URI.join(host, path).to_s
 
     solr_document['thumbnail_url_ss'] = url unless url.empty?
