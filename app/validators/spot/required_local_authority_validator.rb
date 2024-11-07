@@ -16,9 +16,8 @@ module Spot
       authority_name = options[:authority]
       field = options[:field]
       authority = authority_for(authority_name)
-
       values = record.send(field)
-      values = Array.wrap(values) unless values.respond_to?(:each)
+      values = Array.wrap(values) unless values.class < Enumerable
 
       values.each do |v|
         value = v.is_a?(ActiveTriples::Resource) ? v.id : v.to_s

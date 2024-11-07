@@ -104,7 +104,7 @@ attributes:
       - related_resource_tesim
       - related_resource_sim
   resource_type:
-    predicate: ''
+    predicate: 'http://purl.org/dc/terms/type'
     type: string
     multiple: true
     form:
@@ -120,9 +120,16 @@ attributes:
     index_keys:
       - rights_holder_tesim
       - rights_holder_sim
+
+  # @note Business rules only allow one rights statement value per work
+  #       but we were using a multiple property with Fedora and only
+  #       displaying the first, so we'll replicate that by making this
+  #       field multiple to save us the hassle of combing through the
+  #       code to update this.
   rights_statement:
     predicate: http://www.europeana.eu/schemas/edm/rights
     type: uri
+    multiple: true
     form:
       multiple: false
     index_keys:

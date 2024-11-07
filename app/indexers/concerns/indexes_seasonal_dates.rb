@@ -61,6 +61,12 @@ module IndexesSeasonalDates
   #
   # @return [Array<String>]
   def dates
-    object.send(date_property_for_seasonal_label)
+    work_object.send(date_property_for_seasonal_label)
+  end
+
+  # Doing this because we're sharing this code with old Hyrax indexers
+  # that refer to the resource as "object", which doesn't exist in ResourceIndexers
+  def work_object
+    try(:resource) || object
   end
 end

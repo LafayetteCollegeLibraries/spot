@@ -17,21 +17,21 @@ FactoryBot.define do
     physical_medium { [] }
     publisher { [] }
     related_resource { [] }
-    resource_type { [] }
+    resource_type { ['Other'] }
     rights_holder { [] }
-    rights_statement { [] }
+    rights_statement { ['http://rightsstatements.org/vocab/NKC/1.0/'] }
     source { [] }
     source_identifier { [] }
-    subject { [RDF::URI('http://id.loc.gov/authorities/subjects/sh85029526')] }
+    subject { [] }
     subtitle { [] }
     title_alternative { [] }
   end
 
   trait :core_metadata do
-    title { [] }
-    date_modified { '' }
-    date_uploaded { '' }
-    depositor { '' }
+    title { |n| ["Title of work (#{n})"] }
+    date_modified { Time.now.utc }
+    date_uploaded { Time.now.utc }
+    depositor { 'repository@lafayette.edu' }
   end
 
   trait :image_metadata do
@@ -55,7 +55,7 @@ FactoryBot.define do
 
   trait :publication_metadata do
     abstract { [] }
-    date_issued { [] }
+    date_issued { [Time.zone.now.strftime('%Y-%m-%d')] }
     date_available { [] }
     editor { [] }
     license { [] }
