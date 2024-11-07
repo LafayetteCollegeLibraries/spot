@@ -13,6 +13,7 @@ module IndexesPermalinkUrl
   def handle_identifier
     @handle_identifier ||= begin
       id = resource.identifier.find { |value| value.start_with? 'hdl:' }
+      return unless id
       Spot::Identifier.from_string(id)
     end
   end
