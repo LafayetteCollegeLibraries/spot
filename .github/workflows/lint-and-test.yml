@@ -73,6 +73,7 @@ jobs:
       BUNDLE_WITH: test
       CAS_BASE_URL: ''
       CI: 1
+      FEDORA_URL: http://fedora:8080/rest
       FEDORA_TEST_URL: http://fedora:8080/rest
       IIIF_BASE_URL: http://localhost/iiif/2
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
@@ -81,6 +82,7 @@ jobs:
       PSQL_DATABASE: spot_test
       PSQL_HOST: database
       RAILS_ENV: test
+      SOLR_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
       SOLR_TEST_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
       URL_HOST: http://localhost:3000
 
