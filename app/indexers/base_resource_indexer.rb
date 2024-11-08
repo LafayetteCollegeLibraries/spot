@@ -15,8 +15,7 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
 
       document['language_ssim'] = resource.try(:language)
       document['language_label_ssim'] = (resource.try(:language) || []).map { |language| Spot::ISO6391.label_for(language) }
-
-      index_thumbnail_url(document)
+      document['thumbnail_url_ss'] = index_thumbnail_url
 
       # @todo not sure if the resource retains file_set objects anymore? there is no longer
       #       a :file_sets method and the closest analogue I can find in Hyrax 3.6 is :member_ids,
@@ -58,15 +57,13 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
     parsed.strftime(output_format_string) if parsed.present?
   end
 
-  def index_thumbnail_url(solr_document)
+  def index_thumbnail_url
     return if ENV['URL_HOST'].blank?
 
     host = ENV['URL_HOST']
     host = "https://#{host}" unless host.start_with?('http')
-    path = Hyrax::ThumbnailPathService.call(resource) # @todo does this work with resources?
-    url = URI.join(host, path).to_s
-
-    solr_document['thumbnail_url_ss'] = url unless url.empty?
+    path = Hyrax::ThumbnailPathService.call(resource)
+    URI.join(host, path).to_s
   end
 
   def mapped_identifiers
