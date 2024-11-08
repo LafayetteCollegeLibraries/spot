@@ -15,8 +15,8 @@ attributes:
     form:
       multiple: true
     index_keys:
-      - date_ssim
-      - date_tesim
+      - date_associated_ssim
+      - date_associated_tesim
   date_scope_note:
     predicate: http://www.w3.org/2004/02/skos/core#scopeNote
     type: string

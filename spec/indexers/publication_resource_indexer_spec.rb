@@ -2,6 +2,14 @@
 RSpec.describe PublicationResourceIndexer, valkyrization: true do
   it_behaves_like 'a BaseResourceIndexer'
 
+  describe 'publication_metadata' do
+    it_behaves_like 'it indexes', :abstract, to: ['abstract_tesim']
+    it_behaves_like 'it indexes', :date_issued, to: ['date_issued_ssim']
+    it_behaves_like 'it indexes', :date_available, to: ['date_available_ssim']
+    it_behaves_like 'it indexes', :editor, to: ['editor_sim', 'editor_tesim']
+    it_behaves_like 'it indexes', :license, to: ['license_tsm']
+  end
+
   describe 'seasonal date indexing' do
     subject { solr_document['english_language_date_teim'] }
     let(:resource) { build(:publication_resource, date_issued: [date]) }
