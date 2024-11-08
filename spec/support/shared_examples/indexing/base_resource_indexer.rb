@@ -43,9 +43,14 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
       end
 
       context 'when the resource has no Handle identifier but is persisted' do
+        before do
+          allow(resource).to receive(:persisted?).and_return(true)
+        end
+
         let(:id) { SecureRandom.hex }
-        let(:resource) { FactoryBot.valkyrie_create(resource_factory, **metadata) }
+        let(:resource) { build(resource_factory, **metadata) }
         let(:metadata) { { id: id, identifier: ['laf:test_id'] } }
+
         let(:rails_url) { URI.join(ENV['URL_HOST'], "/concern/#{resource_factory.to_s.gsub(/_resource$/, '').pluralize}/#{id}") }
 
         it 'uses the Rails URL' do
