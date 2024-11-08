@@ -64,6 +64,7 @@ jobs:
       BUNDLE_WITH: test
       CAS_BASE_URL: ''
       CI: 1
+      FEDORA_URL: http://fedora:8080/rest
       FEDORA_TEST_URL: http://fedora:8080/rest
       HYRAX_VALKYRIE: ${{ matrix.hyrax_valkyrie_enabled }}
       IIIF_BASE_URL: http://localhost/iiif/2
