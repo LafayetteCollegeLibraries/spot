@@ -24,78 +24,81 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
     it_behaves_like 'it indexes', :title_alternative, to: ['title_alternative_tesim', 'title_alternative_sim']
   end
 
-  subject(:indexer) { described_class.for(resource: resource) }
-  let(:resource_factory) { described_class.name.split('::').last.gsub(/Indexer$/, '').underscore.to_sym }
-  let(:resource) { build(resource_factory, **metadata) }
-  let(:metadata) { {} }
-  let(:solr_document) { indexer.to_solr }
+  describe 'field indexing' do
+    subject(:indexer) { described_class.for(resource: resource) }
+    let(:resource_factory) { described_class.name.split('::').last.gsub(/Indexer$/, '').underscore.to_sym }
+    let(:resource) { build(resource_factory, **metadata) }
+    let(:metadata) { {} }
+    let(:solr_document) { indexer.to_solr }
 
-  describe 'permalink_urls' do
-    subject(:permalink_url) { solr_document['permalink_ss'] }
+    describe 'permalink_urls' do
+      subject(:permalink_url) { solr_document['permalink_ss'] }
 
-    context 'when the resource has a Handle identifier' do
-      let(:metadata) { { identifier: ['hdl:10385/abc123def'] } }
+      context 'when the resource has a Handle identifier' do
+        let(:metadata) { { identifier: ['hdl:10385/abc123def'] } }
 
-      it 'uses the Handle URL' do
-        expect(permalink_url).to eq 'http://hdl.handle.net/10385/abc123def'
+        it 'uses the Handle URL' do
+          expect(permalink_url).to eq 'http://hdl.handle.net/10385/abc123def'
+        end
+      end
+
+      context 'when the resource has no Handle identifier but is persisted' do
+        let(:id) { SecureRandom.hex }
+        let(:resource) { FactoryBot.valkyrie_create(resource_factory, **metadata) }
+        let(:metadata) { { id: id, identifier: ['laf:test_id'] } }
+        let(:rails_url) { URI.join(ENV['URL_HOST'], "/concern/#{resource_factory.to_s.gsub(/_resource$/, '').pluralize}/#{id}") }
+
+        it 'uses the Rails URL' do
+          expect(permalink_url).to eq rails_url.to_s
+        end
       end
     end
 
-    context 'when the resource has no Handle identifier but is persisted' do
-      let(:resource) { FactoryBot.valkyrie_create(resource_factory, **metadata) }
-      let(:metadata) { { id: 'abc123def', identifier: ['laf:test_id'] } }
-      let(:rails_url) { URI.join(ENV['URL_HOST'], "/concern/#{resource_factory.to_s.gsub(/_resource$/, '').pluralize}/abc123def") }
+    describe 'title sort' do
+      subject { solr_document['title_sort_si'] }
 
-      it 'uses the Rails URL' do
-        expect(permalink_url).to eq rails_url.to_s
+      let(:metadata) { { title: ['A Primary Title', 'Some Secondary Title'] } }
+
+      it { is_expected.to eq 'a primary title' }
+    end
+
+    describe 'date sort' do
+      subject { solr_document['date_sort_dtsi'] }
+
+      let(:date_property) { described_class.sortable_date_property }
+
+      context 'when the resource has values for the date_property' do
+        let(:metadata) { { date_property => ['2023-10-21', '1986-02-11', '1991-09-04'] } }
+
+        it { is_expected.to eq '1986-02-11T00:00:00Z' }
+      end
+
+      context 'when the resource has no values for the date_property, but was persisted' do
+        let(:created_date) { DateTime.now.utc }
+        let(:metadata) { { date_property => [], :created_at => created_date } }
+
+        it { is_expected.to eq created_date.strftime('%FT%TZ') }
+      end
+
+      context 'when the resource has not been persisted and has no values' do
+        let(:resource) { resource_factory.to_s.camelize.constantize.new }
+
+        it { is_expected.to be nil }
       end
     end
-  end
 
-  describe 'title sort' do
-    subject { solr_document['title_sort_si'] }
+    describe 'indexes language labels' do
+      let(:metadata) { { language: ['eng', 'ita'] } }
 
-    let(:metadata) { { title: ['A Primary Title', 'Some Secondary Title'] } }
-
-    it { is_expected.to eq 'a primary title' }
-  end
-
-  describe 'date sort' do
-    subject { solr_document['date_sort_dtsi'] }
-
-    let(:date_property) { described_class.sortable_date_property }
-
-    context 'when the resource has values for the date_property' do
-      let(:metadata) { { date_property => ['2023-10-21', '1986-02-11', '1991-09-04'] } }
-
-      it { is_expected.to eq '1986-02-11T00:00:00Z' }
-    end
-
-    context 'when the resource has no values for the date_property, but was persisted' do
-      let(:created_date) { DateTime.now.utc }
-      let(:metadata) { { date_property => [], :created_at => created_date } }
-
-      it { is_expected.to eq created_date.strftime('%FT%TZ') }
-    end
-
-    context 'when the resource has not been persisted and has no values' do
-      let(:resource) { resource_factory.to_s.camelize.constantize.new }
-
-      it { is_expected.to be nil }
-    end
-  end
-
-  describe 'indexes language labels' do
-    let(:metadata) { { language: ['eng', 'ita'] } }
-
-    context 'label values' do
-      it 'are generated' do
-        expect(solr_document['language_label_ssim']).to eq ['English', 'Italian']
+      context 'label values' do
+        it 'are generated' do
+          expect(solr_document['language_label_ssim']).to eq ['English', 'Italian']
+        end
       end
     end
+    # identifier_standard
+    # identifier_local
+    # language and label
+    # thumbnail url
   end
-  # identifier_standard
-  # identifier_local
-  # language and label
-  # thumbnail url
 end
