@@ -11,6 +11,8 @@
 #
 # Running the checks this way allows us to send a follow-up email/post
 # when the jobs are done running.
+#
+# @todo Update file_set fetching to a Valkyrie query
 module Spot
   class RepositoryFixityCheckJob < ApplicationJob
     queue_as :low_priority

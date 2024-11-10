@@ -6,6 +6,8 @@ module Spot
   # Service for generating IIIF urls (via file_ids) for an external Cantaloupe image server.
   # Really, this could be used for _any_ external image server, save for the #download_url
   # method, which attaches the Cantaloupe-specific content-disposition query string.
+  #
+  # @todo Do we need to refactor download_url to work with Serverless IIIF? Valkyrization?
   class IiifService
     COMPLIANCE_LEVEL = 2
     COMPLIANCE_LEVEL_URI = 'http://iiif.io/api/image/2/level2.json'

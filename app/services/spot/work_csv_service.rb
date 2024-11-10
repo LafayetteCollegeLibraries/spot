@@ -2,7 +2,10 @@
 #
 # Taking notes from +Hyrax::FileSetCsvService+ this allows us to
 # export metadata from a Work. Technically, this will work for
-# anything that includes methods that map to
+# anything that includes methods that map to.
+#
+# @todo Now that we're using Bulkrax for imports/exports, can we replace this
+#       with those services instead?
 require 'csv'
 
 module Spot
