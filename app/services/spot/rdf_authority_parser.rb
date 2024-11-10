@@ -15,6 +15,8 @@
 #
 #   FrenchRDFAuthorityParser.load_rdf('languages_fr', ['http://id.loc.gov/vocabulary/iso639-1.nt'])
 #
+# @todo Okay to remove? I'm not entirely sure that we've ever used this?
+#
 module Spot
   class RDFAuthorityParser < ::Qa::Services::RDFAuthorityParser
     class_attribute :preferred_language

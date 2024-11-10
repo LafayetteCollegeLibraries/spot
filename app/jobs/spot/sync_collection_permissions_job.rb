@@ -14,6 +14,8 @@ module Spot
   #   collection = Collection.find('abc123def')
   #   Spot::SyncCollectionPermissionsJob.perform_later(collection, reset: true)
   #
+  # @todo Update collection member querying to use Valkyrie
+  #
   class SyncCollectionPermissionsJob < ApplicationJob
     # @param [Collection]
     # @param [Hash] options

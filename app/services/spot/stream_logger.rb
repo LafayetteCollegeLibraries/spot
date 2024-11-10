@@ -14,6 +14,8 @@
 #   importer = Darlingtonia::RecordImporter.new(info_stream: info_stream,
 #                                               error_stream: error_stream)
 #
+# @todo Likely no longer necessary now that we're using Bulkrax for importing/exporting.
+#
 module Spot
   class StreamLogger
     # @param logger [Logger] instance of logger to use

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 module Spot
   # Service used to create or update Handle identifiers and attach them to a work.
+  #
+  # @todo Refactor for Valkyrization
   class HandleService
     attr_reader :work
 

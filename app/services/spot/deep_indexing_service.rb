@@ -19,6 +19,8 @@
 # path, rather than just using +Hyrax::DeepIndexingService+
 # because of a requirement of +Hyrax::BasicMetadata+ fields,
 # some of which we're excluding.
+#
+# @todo (2024-11-10) Is this necessary for Valkyrization? How are we handling RDF indexing?
 module Spot
   class DeepIndexingService < ActiveFedora::RDF::IndexingService
     # Called from within {ActiveFedora::RDF::IndexingService#add_assertions}

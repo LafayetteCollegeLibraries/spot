@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 module Spot
-  # @todo do we need this service anymore?
+  # Service to ensure that an AdminSet for StudentWorks is created that
+  # sets the workflow to "mediated_student_work_deposit". This is set up
+  # to mimic the signatures of {Hyrax::AdminSetCreateService} and was used
+  # to ensure that a StudentWork-focused AdminSet existed in all environments.
+  #
+  # Use this service to reference the StudentWork-mediated-deposit AdminSet's ID;
+  # if the AdminSet doesn't exist in the environment, it will be created first.
+  #
+  # @example
+  #   work = StudentWork.new
+  #   work.admin_set_id = Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id
+  #
+  # @todo I'm not entirely sure how necessary this is anymore, but if we _are_ going
+  #       to keep it around, it'll need to be updated to work with Valkyrie.
   class StudentWorkAdminSetCreateService
     ADMIN_SET_ID = 'admin_set/student_work'
     DEFAULT_TITLE = ['Student Work'].freeze
