@@ -3,6 +3,8 @@
 # This name _might_ be misleading, I'm not 100% sure. For now, we're only
 # exporting a work's FileSets with this. Our parity release doesn't nest works,
 # but works can have multiple FileSets.
+#
+# @todo Update for Valkyrization
 module Spot
   module Exporters
     class WorkMembersExporter

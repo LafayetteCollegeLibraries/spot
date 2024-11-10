@@ -4,6 +4,10 @@ require 'fileutils'
 
 module Spot
   module Exporters
+    # Helper class to wrap up metadata and file exports into a zip file.
+    #
+    # @see {Spot::Exporters::WorkMembersExporter}
+    # @see {Spot::Exporters::WorkMetadataExporter}
     class ZippedWorkExporter
       attr_reader :solr_document, :request
 

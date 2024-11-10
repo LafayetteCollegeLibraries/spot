@@ -1,11 +1,33 @@
 # frozen_string_literal: true
 module Spot
   module Exporters
+    # Service to, well, export the metadata of a work. Requires a SolrDocument and an
+    # ActionDispatch::Request object to substitute out the local Fedora hostname with
+    # the site's (this is expected to be called from within a Controller context, see todo).
+    # Note that this is only used for Linked Data exports (:nt, :ttl, :jsonld) and not
+    # for :csv files.
+    #
+    # Supports the following Symbols for export formats:
+    #  - :csv (comma-separated values)
+    #  - :jsonld (json linked-data)
+    #  - :nt (ntriples)
+    #  - :ttl (turtle)
+    #  - :all (all formats)
+    #
+    # @example
+    #   solr_document = SolrDocument.find(id)
+    #   export_destination = Rails.root.join('tmp', 'metadata_exports')
+    #   FileUtils.mkdir_p(export_destination) unless Dir.exist?(export_destination)
+    #   Spot::WorkMetadataExporter.new(solr_document).export!(destination: export_destination, format: :csv)
+    #
+    # @todo Hyrax::GraphExporter no longer requires a `request` parameter and now prefers a :hostname keyword param.
+    #       We can substitute out "request" and use something like `ENV['APPLICATION_FQDN']` or
+    #       `URI.parse(ENV['SITE_URL']).hostname` instead to make this independent of the controller context.
     class WorkMetadataExporter
       attr_reader :solr_document, :request
 
       # @param [SolrDocument]
-      # @param [Ability, nil]
+      # @param [ActionDispatch::Request, #host, nil]
       # @param [#host]
       def initialize(solr_document, request = nil)
         @solr_document = solr_document
@@ -15,12 +37,6 @@ module Spot
       # @param [Pathname, String] :destination
       #   Where to export the files
       # @param [Symbol] :format
-      #   Format of exported metadata. Accepts:
-      #     - :all (all formats)
-      #     - :nt (ntriples)
-      #     - :ttl (turtle)
-      #     - :jsonld (json linked-data)
-      #     - :csv (comma-separated values)
       # @return [void]
       def export!(destination:, format: :all)
         format = all_formats if format == :all

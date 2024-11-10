@@ -3,6 +3,8 @@ module Spot
   # Job that allows us to recreate thumbnails without having to run the entirety of
   # +CreateDerivativesJob+ which generates pyramidal tiffs, extracts full-text content,
   # basically a whole lot of work that we might not need to repeat.
+  #
+  # @todo Update for Valkyrization if we're keeping.
   class RegenerateThumbnailJob < ApplicationJob
     def perform(work)
       return if work&.thumbnail_id.nil?

@@ -12,6 +12,7 @@ module Spot
   # @example Clear out expired leases
   #   Spot::EmbargoLeaseService.clear_expired_leases
   #
+  # @todo Refactor for Valkyrization
   class EmbargoLeaseService
     class << self
       # Convenience method to clear both embargoes and leases
