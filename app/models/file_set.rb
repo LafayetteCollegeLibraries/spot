@@ -6,7 +6,7 @@ class FileSet < ActiveFedora::Base
   #
   # This MUST be before the include declarations for the file to avoid an
   # error where the GeneratedResourceSchema for the FileSet does not include
-  # Sourc_identifier.
+  # Source_identifier.
   #
   # @todo find a better predicate for this field
   property :source_identifier, predicate: ::RDF::URI('http://ldr.lafayette.edu/ns#source_identifier') do |index|

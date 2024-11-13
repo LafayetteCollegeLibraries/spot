@@ -86,6 +86,7 @@ module Spot
       attribute :original_checksum,      ::Blacklight::Types::String, 'original_checksum_tesim'
       attribute :page_count,             ::Blacklight::Types::String, 'page_count_tesim'
       attribute :original_filenames,     ::Blacklight::Types::Array,  'original_filenames_ssim'
+      attribute :transcript_name,        ::Blacklight::Types::String, 'transcript_name_ssi' 
 
       # Collection properties
       attribute :collection_slug,        ::Blacklight::Types::String, 'collection_slug_ssi'
