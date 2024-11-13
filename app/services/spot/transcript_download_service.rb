@@ -21,11 +21,6 @@ module Spot
       path = "/tmp/" + @transcript_name
       s3_client.get_object(key: @transcript_name, bucket: s3_source, response_target: path)
       Spot::FileSetTranscriptAttachmentService.attach(path: path, file_set: @file_set)
-      #remove_transcript(path)
-    end
-
-    def remove_transcript(path)
-      FileUtils.rm_f(path) if File.exist?(path)
     end
 
     private
