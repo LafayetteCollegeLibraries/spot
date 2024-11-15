@@ -101,9 +101,74 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
         end
       end
     end
-    # identifier_standard
-    # identifier_local
-    # language and label
-    # thumbnail url
+
+    describe 'indexes standard/local identifiers' do
+      let(:metadata) { { identifier: ['issn:0000-0000', 'noid:abc123def', 'lafayette:magazine_112', 'nil-identifier']} }
+
+      it 'indexes "standard" identifiers to identifier_standard_ssim' do
+        expect(solr_document['identifier_standard_ssim']).to eq ['issn:0000-0000']
+      end
+
+      it 'indexes unknown identifier prefixes to identifier_local_ssim' do
+        expect(solr_document['identifier_local_ssim']).to eq ['noid:abc123def', 'lafayette:magazine_112', 'nil-identifier']
+      end
+    end
+
+    describe 'indexes thumbnail url' do
+      subject { solr_document['thumbnail_url_ss'] }
+
+      let(:metadata) { { thumbnail_id: 'fs-ghi456jkl' } }
+      let(:download_path) { 'http://cool-host.org/download/fsabc123def?file=thumbnail'}
+      let(:file_set_type_service_mock) { instance_double(Hyrax::FileSetTypeService, audio?: is_audio) }
+      let(:is_audio) { false }
+
+      before do
+        allow(Hyrax.query_service)
+        .to receive(:find_by_alternate_identifier)
+        .with(alternate_identifier: resource.thumbnail_id)
+        .and_return(file_set)
+
+        allow(File)
+          .to receive(:exist?)
+          .with(Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'thumbnail'))
+          .and_return(true)
+
+        allow(Hyrax::FileSetTypeService)
+          .to receive(:new)
+          .with(file_set: file_set)
+          .and_return(file_set_type_service_mock)
+
+        stub_env('URL_HOST', url_host)
+      end
+
+      # Want to make sure we support both FileSet classes during the migration.
+      [FileSet, Hyrax::FileSet].each do |klass|
+        context "with #{klass}" do
+          subject(:thumbnail_url) { solr_document['thumbnail_url_ss'] }
+
+          let(:file_set) { instance_double(klass, id: metadata[:thumbnail_id], file_set?: true) }
+
+          context 'when URL_HOST is set in the environment' do
+            let(:url_host) { 'http://cool-host.org' }
+
+            it { is_expected.to eq 'http://cool-host.org/downloads/fs-ghi456jkl?file=thumbnail' }
+
+            context 'when a file_set is an audio file' do
+              let(:is_audio) { true }
+
+              it 'uses the default audio thumbnail' do
+                expect(thumbnail_url).to match(/^http:\/\/cool-host\.org\/assets\/audio-[a-z0-9]+\.png$/)
+              end
+            end
+          end
+
+          context 'when URL_HOST is not set' do
+            let(:url_host) { nil }
+            it { is_expected.to be nil }
+          end
+
+        end
+      end
+    end
   end
 end
