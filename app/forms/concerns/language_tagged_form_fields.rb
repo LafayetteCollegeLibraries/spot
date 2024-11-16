@@ -106,7 +106,7 @@ module LanguageTaggedFormFields
 
     # @return [RdfLiteralSerializer]
     def serializer
-      @serializer ||= RdfLiteralSerializer.new
+      RdfLiteralSerializer
     end
   end
 end
