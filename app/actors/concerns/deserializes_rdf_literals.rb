@@ -87,7 +87,7 @@ module DeserializesRdfLiterals
 
   # @return [RdfLiteralSerializer]
   def serializer
-    @serializer ||= RdfLiteralSerializer.new
+    RdfLiteralSerializer
   end
 
   # Fetches contents of the +language_tagged_fields+ singleton method defined
