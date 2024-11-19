@@ -12,21 +12,28 @@
 # Running the checks this way allows us to send a follow-up email/post
 # when the jobs are done running.
 #
-# @todo Update file_set fetching to a Valkyrie query
+# @todo Is this service still useful in a Valkyrized world? Are there other ways
+#       to be doing this now?
 module Spot
   class RepositoryFixityCheckJob < ApplicationJob
     queue_as :low_priority
 
     around_perform :wrap_check
 
-    # @param [true, false] :force Ignore the 'max days between check' parameter
+    # @param [Hash] options
+    # @option [true, false] :force Ignore the 'max days between check' parameter (default is false)
+    # @return [void]
+    #
+    # @todo because we're running this with the `async_jobs: false` option, we should
+    #       have access to the ChecksumAuditLog objects that are generated in
+    #       Hyrax::FileSetFixityCheckService. Do we want to do anything with that info?
     def perform(force: false)
       opts = { async_jobs: false }
       opts[:max_days_between_fixity_checks] = -1 if force
 
       @count = 0
 
-      ::FileSet.find_each do |file_set|
+      Hyrax.query_service.find_all_of_model(model: FileSet).each do |file_set|
         @count += 1
         Hyrax::FileSetFixityCheckService.new(file_set, opts).fixity_check
       end
