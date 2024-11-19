@@ -26,7 +26,7 @@ module Spot
     #
     # @return [Spot::IiifManifestPresenter]
     def iiif_manifest_presenter
-      ::Spot::IiifManifestPresenter.new(curation_concern_from_search_results).tap do |p|
+      ::Spot::IiifManifestPresenter.new(search_result_document(search_params)).tap do |p|
         p.hostname = request.hostname
         p.ability = current_ability
       end
@@ -34,6 +34,13 @@ module Spot
 
     def load_workflow_presenter
       @workflow_presenter = Hyrax::WorkflowPresenter.new(::SolrDocument.find(params[:id]), current_ability)
+    end
+
+    # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/app/controllers/concerns/hyrax/works_controller_behavior.rb#L252-L253
+    def search_params
+      params.deep_dup.tap do |sp|
+        sp.delete(:page)
+      end
     end
 
     # When the workflow presenter has actions available, append a note to the update flash that the

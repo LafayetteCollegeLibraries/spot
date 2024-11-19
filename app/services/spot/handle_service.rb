@@ -42,10 +42,8 @@ module Spot
       res = send_payload
 
       raise("Received error code minting handle [#{handle_id}]: #{res['responseCode']}") unless res['responseCode'] == 1
-      return res['handle'] if work_has_handle?
 
-      work.identifier += [Spot::Identifier.new('hdl', res['handle']).to_s]
-      work.save!
+      update_work_identifier(handle: res['handle']) unless work_has_handle?
 
       res['handle']
     end
@@ -120,6 +118,11 @@ module Spot
       # deal with the response: did everything go ok?
       # if so, update the item
       JSON.parse(response.body)
+    end
+
+    def update_work_identifier(handle:)
+      work.identifier += [Spot::Identifier.new('hdl', handle).to_s]
+      Hyrax.persister.save(resource: work)
     end
 
     # @return [true, false]
