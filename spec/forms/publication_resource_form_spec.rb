@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe PublicationResourceForm, valkyrization: true do
+  it_behaves_like 'it supports local/standard identifiers'
+
   describe "#abstract" do
     let(:field) { :abstract }
     it_behaves_like 'a language-tagged resource field'

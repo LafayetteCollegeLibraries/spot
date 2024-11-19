@@ -6,6 +6,7 @@ class ImageResourceForm < ::Hyrax::Forms::ResourceForm(ImageResource)
 
   include Spot::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :description, :inscription)
   include Spot::NestedAttributeFormFields(:subject, :language, :subject_ocm)
+  include Spot::IdentifierFormFields
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
 end
