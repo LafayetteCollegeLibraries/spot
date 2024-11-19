@@ -4,12 +4,12 @@ module Spot
   # +CreateDerivativesJob+ which generates pyramidal tiffs, extracts full-text content,
   # basically a whole lot of work that we might not need to repeat.
   #
-  # @todo Update for Valkyrization if we're keeping.
   class RegenerateThumbnailJob < ApplicationJob
     def perform(work)
+      @work = work
       return if work&.thumbnail_id.nil?
-      file_set = FileSet.find(work.thumbnail_id)
 
+      file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: work.thumbnail_id)
       filename = Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'thumbnail')
       Spot::Derivatives::ThumbnailService.new(file_set).create_derivatives(filename)
 
@@ -17,6 +17,9 @@ module Spot
       file_set.update_index
       work.update_index
 
+      true
+    rescue ::Valkyrie::Persistence::ObjectNotFoundError, ActiveFedora::ObjectNotFoundError, Ldp::Gone => err
+      Rails.logger.warn("Unable to regenerate thumbnail for #{@work.id}: #{err.message}")
       true
     end
   end

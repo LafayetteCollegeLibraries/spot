@@ -14,10 +14,8 @@ module Spot
   #   collection = Collection.find('abc123def')
   #   Spot::SyncCollectionPermissionsJob.perform_later(collection, reset: true)
   #
-  # @todo Update collection member querying to use Valkyrie
-  #
   class SyncCollectionPermissionsJob < ApplicationJob
-    # @param [Collection]
+    # @param [Collection, Hyrax::PcdmCollection]
     # @param [Hash] options
     # @option [true, false] reset
     def perform(collection, reset: false)
@@ -39,7 +37,7 @@ module Spot
     #
     # @param [Collection] collection
     def members_of(collection)
-      ActiveFedora::Base.where(member_of_collection_ids_ssim: collection.id)
+      Hyrax.query_service.custom_queries.find_members_of(collection: collection)
     end
 
     # Clears out edit groups/users and read groups/users for an item. Since permission_templates
