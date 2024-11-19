@@ -12,6 +12,7 @@ class StudentWorkResourceForm < ::Hyrax::Forms::ResourceForm(StudentWorkResource
   include Hyrax::FormFields(:student_work_metadata)
 
   include Spot::NestedAttributeFormFields(:subject, :language, :academic_department, :advisor, :division)
+  include Spot::IdentifierFormFields
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
 

@@ -103,7 +103,7 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
     end
 
     describe 'indexes standard/local identifiers' do
-      let(:metadata) { { identifier: ['issn:0000-0000', 'noid:abc123def', 'lafayette:magazine_112', 'nil-identifier']} }
+      let(:metadata) { { identifier: ['issn:0000-0000', 'noid:abc123def', 'lafayette:magazine_112', 'nil-identifier'] } }
 
       it 'indexes "standard" identifiers to identifier_standard_ssim' do
         expect(solr_document['identifier_standard_ssim']).to eq ['issn:0000-0000']
@@ -118,15 +118,15 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
       subject { solr_document['thumbnail_url_ss'] }
 
       let(:metadata) { { thumbnail_id: 'fs-ghi456jkl' } }
-      let(:download_path) { 'http://cool-host.org/download/fsabc123def?file=thumbnail'}
+      let(:download_path) { 'http://cool-host.org/download/fsabc123def?file=thumbnail' }
       let(:file_set_type_service_mock) { instance_double(Hyrax::FileSetTypeService, audio?: is_audio) }
       let(:is_audio) { false }
 
       before do
         allow(Hyrax.query_service)
-        .to receive(:find_by_alternate_identifier)
-        .with(alternate_identifier: resource.thumbnail_id)
-        .and_return(file_set)
+          .to receive(:find_by_alternate_identifier)
+          .with(alternate_identifier: resource.thumbnail_id)
+          .and_return(file_set)
 
         allow(File)
           .to receive(:exist?)
@@ -166,7 +166,6 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
             let(:url_host) { nil }
             it { is_expected.to be nil }
           end
-
         end
       end
     end
