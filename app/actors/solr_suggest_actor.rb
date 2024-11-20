@@ -1,4 +1,10 @@
 # frozen_string_literal: true
+#
+# Updates the Solr suggestion dictionaries after a work is modified
+# so that they're up-to-date with values.
+#
+# @note replaced in Hyrax::Transactions with Spot::Listeners::SolrSuggestDictionaryListener
+#
 class SolrSuggestActor < ::Hyrax::Actors::AbstractActor
   # @param [Hyrax::Actors::Environment] env
   # @return [void]
