@@ -13,17 +13,9 @@ module Spot
       # @option [User] user
       # @return [void]
       def on_object_metadata_updated(object:, user:) # rubocop:disable Lint/UnusedMethodArgument
-        return if object.member_of_collection_ids.empty?
+        return if object.member_of_collection_ids.blank?
 
-        # @todo see CollectionsMembershipActor, we should work our way up the parent tree to assume
-        #       nested child collections
-        parent_collection_ids = object.member_of_collection_ids.reduce([]) do |ids, collection_id|
-          ids += parent_collection_ids_for(collection_id)
-        end.uniq
-
-        collection_ids_to_add = parent_collection_ids - object.member_of_collection_ids
-
-        # bail if nothing's changed
+        collection_ids_to_add = parent_collection_ids_for(object.member_of_collection_ids)
         return if collection_ids_to_add.empty?
 
         object.member_of_collection_ids += collection_ids_to_add
@@ -31,8 +23,23 @@ module Spot
       end
 
       private
-å
-      def parent_collection_ids_for(collection_id)
+
+      def parent_collection_ids_for(initial_collections)
+        collections_to_check = initial_collections.dup
+        collection_ids_to_add = []
+
+        until collections_to_check.empty?
+          col_id = collections_to_check.shift
+          collection_ids_to_add << col_id
+
+          collections_to_check += collection_ids_for(col_id)
+          collections_to_check.uniq!
+        end
+
+        collection_ids_to_add - initial_collections
+      end
+
+      def collection_ids_for(collection_id)
         collection = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: collection_id)
         collection.try(:member_of_collection_ids) || []
       end
