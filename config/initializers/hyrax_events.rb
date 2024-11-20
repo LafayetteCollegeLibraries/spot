@@ -14,4 +14,8 @@ module Spot
   end
 end
 
-Hyrax.publisher.subscribe(Spot::ApplicationListener.new)
+Rails.application.config.to_prepare do
+  Hyrax.publisher.subscribe(Spot::ApplicationListener.new)
+  Hyrax.publisher.subscribe(Spot::ParentCollectionMembershipListener.new)
+  Hyrax.publisher.subscribe(Spot::SolrSuggestDictionaryListener.new)
+end
