@@ -14,4 +14,4 @@ module Spot
   end
 end
 
-Hyrax::Publisher.instance.subscribe(Spot::ApplicationListener.new)
+Hyrax.publisher.subscribe(Spot::ApplicationListener.new)
