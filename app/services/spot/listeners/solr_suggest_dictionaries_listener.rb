@@ -12,7 +12,7 @@ module Spot
     # @example
     #   Hyrax.publisher.subscribe(Spot::Listeners::SolrSuggestDictionaryListener.new)
     #
-    class SolrSuggestDictionaryListener
+    class SolrSuggestDictionariesListener
       def on_object_metadata_updated(object:, user:) # rubocop:disable Lint/UnusedMethodArgument
         Spot::UpdateSolrSuggestDictionariesJob.perform_now
       end
