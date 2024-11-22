@@ -13,17 +13,14 @@ class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource
 
   # Set a date_available value to either the embargo's release date (where present)
   # or the current day, in YYYY-MM-DD format.
-  #
-  # @return [Array<String>]
-  # @note replaces work done in Hyrax::Actors::PublicationActor
-  def date_available
-    value = super
-    return value if value.present?
+  validate(:date_available) do
+    next if date_available.present?
 
-    if embargo_release_date.present?
-      [embargo_release_date.strftime('%Y-%m-%d')]
-    else
-      [Time.zone.now.strftime('%Y-%m-%d')]
-    end
+    self.date_available =
+      if embargo_release_date.present?
+        [embargo_release_date.strftime('%Y-%m-%d')]
+      else
+        [Time.zone.now.strftime('%Y-%m-%d')]
+      end
   end
 end
