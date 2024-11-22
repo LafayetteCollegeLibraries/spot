@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Listeners::SolrSuggestDictionaryListener, valkyrization: true do
+RSpec.describe Spot::Listeners::SolrSuggestDictionariesListener, valkyrization: true do
   let(:listener) { described_class.new }
 
   describe '#on_object_metadata_updated' do
