@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it includes Hyrax::FormFields' do |opts|
-  opts = opts || {}
+  opts ||= {}
   schema = opts.fetch(:schema, nil)
   raise 'Shared Example needs a :schema parameter passed' if schema.nil?
 
@@ -12,7 +12,7 @@ RSpec.shared_examples 'it includes Hyrax::FormFields' do |opts|
   let(:resource) { resource_class.new }
   let(:resource_class) { described_class.name.to_s.split('::').last.gsub(/Form$/, '').constantize }
 
-  form_definitions.each_pair do |key, attrs|
+  form_definitions.each_pair do |key, _attrs|
     next if skip_list.include?(key)
 
     field_def = schema_loader.raw_attributes_for(schema: schema).fetch(key)
