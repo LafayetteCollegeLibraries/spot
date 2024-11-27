@@ -33,7 +33,7 @@ module Spot
 
       @count = 0
 
-      Hyrax.query_service.find_all_of_model(model: FileSet).each do |file_set|
+      Hyrax.query_service.find_all_of_model(model: Hyrax::FileSet).each do |file_set|
         @count += 1
         Hyrax::FileSetFixityCheckService.new(file_set, opts).fixity_check
       end

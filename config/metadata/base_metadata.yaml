@@ -156,6 +156,7 @@ attributes:
     form:
       multiple: true
       primary: true
+      default: []
     index_keys:
       - subject_ssim
   subtitle:

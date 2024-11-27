@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe RdfLiteralSerializer do
-  let(:serializer) { described_class.new }
-
   describe '#deserialize' do
-    subject { serializer.deserialize(value) }
+    subject { described_class.deserialize(value) }
 
     let(:value) { '"Cool Beans"' }
 
@@ -17,7 +15,7 @@ RSpec.describe RdfLiteralSerializer do
   end
 
   describe '#serialize' do
-    subject { serializer.serialize(value) }
+    subject { described_class.serialize(value) }
 
     context 'when it is an RDF::Literal' do
       let(:value) { RDF::Literal('Cool Beans', language: :en) }
