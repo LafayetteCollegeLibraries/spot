@@ -2,13 +2,14 @@
 RSpec.describe Spot::HandleService do
   subject(:service) { described_class.new(work) }
 
-  let(:work) { instance_double(Publication, id: 'abc123def', identifier: identifiers) }
+  let(:work) { build(:publication, id: 'abc123def', identifier: identifiers) }
   let(:identifiers) { [] }
   let(:handle_server_url) { 'http://handle-service:8000' }
   let(:handle_prefix) { '10385' }
 
   before do
     stub_env('URL_HOST', 'http://localhost')
+    allow(Hyrax.persister).to receive(:save)
   end
 
   describe '.env_values_defined?' do
@@ -74,7 +75,7 @@ RSpec.describe Spot::HandleService do
       service.mint
 
       expect(work).to have_received(:identifier=).with(["hdl:#{handle_value}"])
-      expect(work).to have_received(:save!)
+      expect(Hyrax.persister).to have_received(:save).with(resource: work)
     end
 
     context 'when a responseCode != 1 is returned' do

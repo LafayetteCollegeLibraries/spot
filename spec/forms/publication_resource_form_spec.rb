@@ -6,7 +6,6 @@ RSpec.describe PublicationResourceForm, valkyrization: true do
   it_behaves_like 'it includes Hyrax::FormFields', schema: :publication_metadata
   it_behaves_like 'it includes Hyrax::FormFields', schema: :institutional_metadata
 
-  # @todo test validation to ensure date_available is set
   describe '#date_available' do
     let(:form) { described_class.for(resource) }
     let(:resource) { PublicationResource.new(**metadata) }
