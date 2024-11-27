@@ -4,6 +4,8 @@ module Spot
   # +CreateDerivativesJob+ which generates pyramidal tiffs, extracts full-text content,
   # basically a whole lot of work that we might not need to repeat.
   #
+  # @todo #reload and #update_index may not exist on Resources, may be a case where
+  #       we just need to call the persister.
   class RegenerateThumbnailJob < ApplicationJob
     def perform(work)
       @work = work

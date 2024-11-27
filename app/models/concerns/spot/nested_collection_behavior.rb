@@ -33,7 +33,7 @@ module Spot
       collection_ids_to_add = collections_to_add.map(&:id)
 
       Array(new_member_ids).collect do |member_id|
-        member = member_query_service(member_id)
+        member = find_member_by_id(member_id)
         message = check_multiple_membership(item: member, collection_ids: collection_ids_to_add)
 
         if message
@@ -66,15 +66,9 @@ module Spot
       end
     end
 
-    # Hyrax@3 uses +Hyrax.query_service.find_by_alternate_id+ to fetch an object. Hyrax@2
-    # uses +ActiveFedora::Base.find+. This ought to allow us to upgrade without a fuss
-    # (at least as far as this code is concerned). We can replace this after the upgrade.
-    #
     # @param [String] id
-    # @return [ActiveFedora::Base]
-    # @todo replace with just a call to +find_by_alternate_id+ after we upgrade to hyrax@3
-    #       and start switching to Wings
-    def member_query_service(id)
+    # @return [Hyrax::Resource]
+    def find_member_by_id(id)
       Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id, use_valkyrie: false)
     end
 
