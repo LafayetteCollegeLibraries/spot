@@ -427,12 +427,13 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#create_derivatives' do
     subject { service.create_derivatives(filename) }
 
-    let(:filename) { mock_file }
-    let(:output_high) { { label: 'high', format: 'mp4', url: "file://#{derivative_path_high}", size: '544x1080', input_options: "-t 10 -ss 1", video: "-g 30 -b:v 8000k", audio: "-b:a 256k -ar 44100" } }
-    let(:output_low) { { label: 'low', format: 'mp4', url: "file://#{derivative_path_low}", size: '240x480', input_options: "-t 10 -ss 1", video: "-g 30 -b:v 2500k", audio: "-b:a 256k -ar 44100" } }
+    let(:filename) { mock_file.to_s }
+    let(:output_high) { { label: 'high', format: 'mp4', url: "file://#{derivative_path_high}", size: '544x1080', input_options: "-ss 1", video: "-g 30 -b:v 8000k", audio: "-b:a 256k -ar 44100" } }
+    let(:output_low) { { label: 'low', format: 'mp4', url: "file://#{derivative_path_low}", size: '240x480', input_options: "-ss 1", video: "-g 30 -b:v 2500k", audio: "-b:a 256k -ar 44100" } }
 
     context 'check_premade_derivatives returns true' do
       before do
+        allow(service).to receive(:check_transcript).with(filename)
         allow(service).to receive(:check_premade_derivatives).and_return(true)
         service.create_derivatives(filename)
       end
@@ -444,6 +445,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
 
     context 'check_premade_derivatives returns false' do
       before do
+        allow(service).to receive(:check_transcript).with(filename)
         allow(service).to receive(:check_premade_derivatives).and_return(false)
         allow(service).to receive(:get_derivative_resolution).with(filename, 1080).and_return('544x1080')
         allow(service).to receive(:get_derivative_resolution).with(filename, 480).and_return('240x480')
