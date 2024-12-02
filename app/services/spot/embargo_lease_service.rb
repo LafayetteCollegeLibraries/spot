@@ -11,8 +11,7 @@ module Spot
   #
   # @example Clear out expired leases
   #   Spot::EmbargoLeaseService.clear_expired_leases
-  #
-  # @todo Refactor for Valkyrization
+
   class EmbargoLeaseService
     class << self
       # Convenience method to clear both embargoes and leases
@@ -29,18 +28,16 @@ module Spot
       # @return [void]
       def clear_expired_embargoes(regenerate_thumbnails: false)
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
-          item = ActiveFedora::Base.find(presenter.id)
+          resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: presenter.id)
+          manager = Hyrax::EmbargoManager.new(resource: resource)
+          next unless manager.release
 
-          next if item.under_embargo?
+          Hyrax.persister.save(resource: resource)
+          # next if resource.file_set?
 
-          ::Hyrax::Actors::EmbargoActor.new(item).destroy
+          copy_visibility_to_files(resource: resource)
 
-          next if item.is_a? FileSet
-
-          item.copy_visibility_to_files
-          item.save!
-
-          RegenerateThumbnailJob.perform_later(item) if regenerate_thumbnails == true
+          RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
         end
       end
 
@@ -49,15 +46,22 @@ module Spot
       # @return [void]
       def clear_expired_leases(regenerate_thumbnails: false)
         ::Hyrax::LeaseService.assets_with_expired_leases.each do |presenter|
-          item = ActiveFedora::Base.find(presenter.id)
+          resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: presenter.id)
+          manager = Hyrax::LeaseManager.new(resource: resource)
+          next unless manager.release
 
-          next if item.active_lease?
+          Hyrax.persister.save(resource: resource)
+          # next if resource.file_set?
 
-          ::Hyrax::Actors::LeaseActor.new(item).destroy
+          copy_visibility_to_files(resource: resource)
 
-          item.copy_visibility_to_files unless item.is_a? FileSet
+          RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
+        end
+      end
 
-          RegenerateThumbnailJob.perform_later(item) if regenerate_thumbnails == true
+      def copy_visibility_to_files!(resource:)
+        Hyrax.query_service.find_members(resource: resource).each do |member|
+          Hyrax::AccessControlList.copy_permissions(source: resource, target: member)
         end
       end
     end
