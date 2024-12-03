@@ -7,9 +7,15 @@ RSpec.describe Spot::TranscriptDownloadService do
 
   # AWS environment (maybe this should be a shared_context?)
   let(:aws_import_bucket) { 'ldr-imports' }
+  let(:aws_access_key_id) { 'AWS-access_key-id' }
+  let(:aws_secret_access_key) { 'AWS-secret-access_key' }
   let(:mock_s3_client) { instance_double(Aws::S3::Client) }
 
   before do
+    stub_env('AWS_ACCESS_KEY_ID', aws_access_key_id)
+    stub_env('AWS_SECRET_ACCESS_KEY', aws_secret_access_key)
+    stub_env('AWS_BULKRAX_IMPORTS_BUCKET', aws_import_bucket)
+
     allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
   end
 
