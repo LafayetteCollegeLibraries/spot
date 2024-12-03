@@ -138,4 +138,17 @@ RSpec.describe AudioVisualHelper do
 
     it { is_expected.to eq '480' }
   end
+
+  describe '#transcript_path' do
+    subject { transcript_path(file_set) }
+
+    let(:file_set) { build(:file_set) }
+
+    before do
+      allow(file_set).to receive(:id).and_return('0')
+      allow(Hyrax::Engine.routes.url_helpers).to receive(:download_path).with(id: '0', file: 'transcript')
+    end
+
+    it { is_expected.to eq "/downloads/0?file=transcript"}
+  end
 end

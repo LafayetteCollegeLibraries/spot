@@ -427,7 +427,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#create_derivatives' do
     subject { service.create_derivatives(filename) }
 
-    let(:filename) { mock_file.to_s }
+    let(:filename) { src_path }
     let(:output_high) { { label: 'high', format: 'mp4', url: "file://#{derivative_path_high}", size: '544x1080', input_options: "-ss 1", video: "-g 30 -b:v 8000k", audio: "-b:a 256k -ar 44100" } }
     let(:output_low) { { label: 'low', format: 'mp4', url: "file://#{derivative_path_low}", size: '240x480', input_options: "-ss 1", video: "-g 30 -b:v 2500k", audio: "-b:a 256k -ar 44100" } }
 
@@ -498,6 +498,36 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
             expect(FileUtils).to_not receive(:rm_f).with(path)
           end
         end
+      end
+    end
+  end
+
+  describe '#check_transcript' do
+    let(:filename) { src_path }
+    let(:transcript_name) { 'file.vtt' }
+    let(:response) { {} }
+
+    context 'the transcript does not exist' do
+      before do
+        allow(mock_s3_client).to receive(:head_object).with(bucket: aws_import_bucket, key: transcript_name).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
+        allow(Rails.logger).to receive(:warn).with('Transcript not found.')
+        service.check_transcript(filename)
+      end
+
+      it "logs a warning that there is no transcript" do
+        expect(Rails.logger).to have_received(:warn).with('Transcript not found.')
+      end
+    end
+
+    context 'the transcript exists' do
+      before do
+        allow(mock_s3_client).to receive(:head_object).with(bucket: aws_import_bucket, key: transcript_name).and_return(response)
+        allow(Spot::TranscriptJob).to receive(:perform_later).with(file_set: file_set, transcript_name: transcript_name)
+        service.check_transcript(filename)
+      end
+
+      it "enques the transcript job" do
+        expect(Spot::TranscriptJob).to have_received(:perform_later).with(file_set: file_set, transcript_name: transcript_name)
       end
     end
   end
