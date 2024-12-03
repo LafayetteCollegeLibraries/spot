@@ -23,7 +23,7 @@ RSpec.describe Spot::TranscriptDownloadService do
 
     it 'pulls the file and calls the attachment service' do
       service.download_transcript
-  
+
       expect(mock_s3_client).to have_received(:get_object).with(key: transcript_name, bucket: aws_import_bucket, response_target: path)
       expect(Spot::FileSetTranscriptAttachmentService).to have_received(:attach).with(path: path, file_set: file_set)
     end
