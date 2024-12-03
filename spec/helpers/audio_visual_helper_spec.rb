@@ -149,6 +149,6 @@ RSpec.describe AudioVisualHelper do
       allow(Hyrax::Engine.routes.url_helpers).to receive(:download_path).with(id: '0', file: 'transcript')
     end
 
-    it { is_expected.to eq "/downloads/0?file=transcript"}
+    it { is_expected.to eq "/downloads/0?file=transcript" }
   end
 end
