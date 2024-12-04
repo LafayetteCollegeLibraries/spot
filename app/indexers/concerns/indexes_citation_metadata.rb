@@ -9,8 +9,6 @@ module IndexesCitationMetadata
     end
   end
 
-  alias generate_solr_document to_solr
-
   def add_citation_to_solr_document(document:, citation:)
     document['citation_journal_title_ss'] = citation[:"container-title"]&.first
     document['citation_volume_ss'] = citation[:volume]&.first
