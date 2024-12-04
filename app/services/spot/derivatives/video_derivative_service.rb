@@ -24,9 +24,8 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        return if check_premade_derivatives
-
         check_transcript(filename)
+        return if check_premade_derivatives
 
         create_derivative_files(filename)
         upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
