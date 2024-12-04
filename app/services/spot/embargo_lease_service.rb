@@ -3,10 +3,10 @@ module Spot
   # A service for dealing with embargoes and leases. Right now, we're just
   # using this to clear out expired items.
   #
-  # @example Clear out all expired values at once
-  #   Spot::EmbargoLeaseService.clear_all_expired
+  # @example Clear out all expired values at once and regenerate thumbnails
+  #   Spot::EmbargoLeaseService.clear_all_expired(regenerate_thumbnails: true)
   #
-  # @example Clear out expired embargoes (and update +date_available+ values)
+  # @example Clear out expired embargoes
   #   Spot::EmbargoLeaseService.clear_expired_embargoes
   #
   # @example Clear out expired leases
@@ -28,14 +28,8 @@ module Spot
       # @return [void]
       def clear_expired_embargoes(regenerate_thumbnails: false)
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
-          resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: presenter.id)
-          manager = Hyrax::EmbargoManager.new(resource: resource)
-          next unless manager.release
-
-          Hyrax.persister.save(resource: resource)
-          # next if resource.file_set?
-
-          copy_visibility_to_files(resource: resource)
+          resource = release_and_save_for_id(presenter.id, :embargo)
+          return unless resource
 
           RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
         end
@@ -46,17 +40,45 @@ module Spot
       # @return [void]
       def clear_expired_leases(regenerate_thumbnails: false)
         ::Hyrax::LeaseService.assets_with_expired_leases.each do |presenter|
-          resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: presenter.id)
-          manager = Hyrax::LeaseManager.new(resource: resource)
-          next unless manager.release
-
-          Hyrax.persister.save(resource: resource)
-          # next if resource.file_set?
-
-          copy_visibility_to_files(resource: resource)
+          resource = release_and_save_for_id(presenter.id, :lease)
+          return unless resource
 
           RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
         end
+      end
+
+      private
+
+      # Embargos and Leases behave very similarly and are managed through similar interfaces
+      # in Hyrax, so we'll do the bulk of that work here.
+      #
+      # @param [String] id
+      # @param [:embargo, :lease] type
+      # @return [Hyrax::Resource, nil]
+      def release_and_save_for_id(id, type)
+        manager_klass = case type
+                        when :embargo
+                          Hyrax::EmbargoManager
+                        when :lease
+                          Hyrax::LeaseManager
+                        end
+
+        return if manager_klass.nil?
+        resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id)
+
+        manager_klass.new(resource: resource).release!
+        byebug
+        Hyrax.persister.save(resource: resource)
+        copy_visibility_to_files!(resource: resource)
+
+        resource
+
+      # calling #release! on the managers will raise a +NotReleaseableError+ if
+      # the embargo/lease isn't ready to be deactivated. Since the resource's
+      # visibility hasn't changed, we won't bother to resave the object or enqueue
+      # a thumbnail regeneration job.
+      rescue Hyrax::EmbargoManager::NotReleasableError, Hyrax::LeaseManager::NotReleasableError
+        nil
       end
 
       def copy_visibility_to_files!(resource:)
