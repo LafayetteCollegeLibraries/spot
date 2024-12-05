@@ -46,6 +46,19 @@
         <td><code><%= @presenter.original_checksum %></code></td>
       </tr>
       <% end %>
+
+      <% if @presenter.transcript_name != nil %>
+      <tr>
+        <th>Caption File</th>
+        <td><%= link_to @presenter.transcript_name,
+          hyrax.download_path(@presenter, file: 'transcript'),
+          title: t('.caption_download_title', file_set: @presenter),
+          target: "_blank",
+          id: "caption_download",
+          class: "download" %>
+        </td>
+      </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
