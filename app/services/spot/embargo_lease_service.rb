@@ -29,7 +29,7 @@ module Spot
       def clear_expired_embargoes(regenerate_thumbnails: false)
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
           resource = release_and_save_for_id(presenter.id, :embargo)
-          return unless resource
+          next unless resource
 
           RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
         end
@@ -41,7 +41,7 @@ module Spot
       def clear_expired_leases(regenerate_thumbnails: false)
         ::Hyrax::LeaseService.assets_with_expired_leases.each do |presenter|
           resource = release_and_save_for_id(presenter.id, :lease)
-          return unless resource
+          next unless resource
 
           RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
         end
