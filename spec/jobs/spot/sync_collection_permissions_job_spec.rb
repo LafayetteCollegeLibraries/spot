@@ -26,12 +26,12 @@ RSpec.describe Spot::SyncCollectionPermissionsJob, valkyrization: true do
       edit_groups: [admin],
       edit_users: [helper_user.email],
       read_groups: [admin],
-      read_users: [helper_user.email],
+      read_users: [helper_user.email]
     )
     Hyrax.persister.save(resource: obj)
   end
 
-  let(:test_fcrepo_url) { "#{ENV['FEDORA_TEST_URL']}/test/sy/nc/-c/ol/sync-collection.id"}
+  let(:test_fcrepo_url) { "#{ENV['FEDORA_TEST_URL']}/test/sy/nc/-c/ol/sync-collection.id" }
   let(:valkyrie_solr_query) do
     %(+(member_of_collection_ids_ssim: "#{test_fcrepo_url}" OR member_of_collection_ids_ssim: "#{collection_id}"))
   end
@@ -51,9 +51,9 @@ RSpec.describe Spot::SyncCollectionPermissionsJob, valkyrization: true do
       expect { described_class.perform_now(collection) }
         .to change { item.permission_manager.edit_groups }
         .from([admin]).to([admin, 'cool-group'])
-          .and change { item.edit_users }.from([helper_user.email]).to([helper_user.email, user.email])
-          .and change { item.read_groups }.from([admin]).to([admin, 'public'])
-          .and change { item.read_users }.from([helper_user.email]).to([helper_user.email, user.email])
+        .and change { item.edit_users }.from([helper_user.email]).to([helper_user.email, user.email])
+                                       .and change { item.read_groups }.from([admin]).to([admin, 'public'])
+                                                                       .and change { item.read_users }.from([helper_user.email]).to([helper_user.email, user.email])
     end
   end
 
@@ -62,9 +62,9 @@ RSpec.describe Spot::SyncCollectionPermissionsJob, valkyrization: true do
       expect { described_class.perform_now(collection, reset: true) }
         .to change { item.edit_groups }
         .from([admin]).to(['cool-group'])
-          .and change { item.edit_users }.from([helper_user.email]).to([user.email])
-          .and change { item.read_groups }.from([admin]).to(['public'])
-          .and change { item.read_users }.from([helper_user.email]).to([user.email])
+        .and change { item.edit_users }.from([helper_user.email]).to([user.email])
+                                       .and change { item.read_groups }.from([admin]).to(['public'])
+                                                                       .and change { item.read_users }.from([helper_user.email]).to([user.email])
     end
   end
 end
