@@ -3,9 +3,6 @@ module Spot
   # Job that allows us to recreate thumbnails without having to run the entirety of
   # +CreateDerivativesJob+ which generates pyramidal tiffs, extracts full-text content,
   # basically a whole lot of work that we might not need to repeat.
-  #
-  # @todo #reload and #update_index may not exist on Resources, may be a case where
-  #       we just need to call the persister.
   class RegenerateThumbnailJob < ApplicationJob
     def perform(work)
       @work = work
@@ -15,9 +12,8 @@ module Spot
       filename = Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'thumbnail')
       Spot::Derivatives::ThumbnailService.new(file_set).create_derivatives(filename)
 
-      file_set.reload
-      file_set.update_index
-      work.update_index
+      # I think we need to at least persist the Resource so that the updated thumbnail path is saved
+      [work, file_set].each { |obj| Hyrax.persister.save(resource: obj) }
 
       true
     rescue ::Valkyrie::Persistence::ObjectNotFoundError, ActiveFedora::ObjectNotFoundError, Ldp::Gone => err
