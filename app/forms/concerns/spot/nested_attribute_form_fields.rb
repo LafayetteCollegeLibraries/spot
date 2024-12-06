@@ -108,18 +108,13 @@ module Spot
       descendant.include(HelperMethods)
 
       @fields.each do |field|
-        descendant.define_method(:"#{field}_attributes_prepopulator") do |_opts|
-          send(:"#{field}_attributes=", wrap_attribute_values(field: field))
-        end
-
-        descendant.define_method(:"#{field}_attributes_populator") do |fragment:, **|
-          send(:"#{field}=", parse_attribute_fragment(fragment: fragment, field: field))
-        end
+        prepopulator = ->(_opts) { send(:"#{field}_attributes=", wrap_attribute_values(field: field)) }
+        populator = ->(fragment:, **) { send(:"#{field}=", parse_attribute_fragment(fragment: fragment, field: field)) }
 
         descendant.property(:"#{field}_attributes",
                             virtual: true,
-                            prepopulator: :"#{field}_attributes_prepopulator",
-                            populator: :"#{field}_attributes_populator")
+                            prepopulator: prepopulator,
+                            populator: populator)
       end
     end
   end
