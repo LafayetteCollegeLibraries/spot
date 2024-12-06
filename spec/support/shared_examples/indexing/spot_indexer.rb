@@ -90,7 +90,7 @@ RSpec.shared_examples 'a Spot indexer' do
 
   describe 'sortable title' do
     it 'indexes the first title, downcased' do
-      expect(solr_doc['title_sort_si']).to eq work.title.first.to_s.downcase
+      expect(solr_doc['title_sort_si']).to eq work.title.first.to_s.downcase.gsub(/^(a(n)|the)\s+/, '')
     end
   end
 

@@ -64,7 +64,7 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
 
       let(:metadata) { { title: ['A Primary Title', 'Some Secondary Title'] } }
 
-      it { is_expected.to eq 'a primary title' }
+      it { is_expected.to eq 'primary title' }
     end
 
     describe 'date sort' do
