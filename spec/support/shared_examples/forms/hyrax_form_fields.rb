@@ -19,7 +19,7 @@ RSpec.shared_examples 'it includes Hyrax::FormFields' do |opts|
     is_uri = field_def['type'] == 'uri'
 
     describe "##{key}" do
-      let(:original_value) { is_uri ? [RDF::URI.new('Undefined')] : [] }
+      let(:original_value) { [] }
       let(:expected_value) { is_uri ? [RDF::URI.new('http://cool.org')] : ['Test Value'] }
       let(:change_value) { is_uri ? ['http://cool.org'] : ['Test Value'] }
 
