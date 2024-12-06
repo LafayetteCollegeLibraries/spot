@@ -45,7 +45,7 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
 
         it 'does nothing' do
           expect { described_class.clear_expired_embargoes }
-            .not_to change {  Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: resource.id).visibility }
+            .not_to change { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: resource.id).visibility }
         end
       end
     end
@@ -81,4 +81,3 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
     end
   end
 end
-
