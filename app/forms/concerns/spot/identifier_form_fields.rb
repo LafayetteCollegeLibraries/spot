@@ -1,6 +1,26 @@
 # frozen_string_literal: true
 module Spot
-  # Mixin to add support for separate standard/local identifier form fields.
+  # Mixin to add support for separate standard/local identifier form fields. We store all identifiers
+  # in a single field (typically :identifier) but include prefixes to determine the origin of the value.
+  # In the form, we want to split out "standard" identifiers (registered in the Spot::Identifier initializer)
+  # with known prefixes from "local" identifiers, which are ad-hoc. This takes care of that splitting and
+  # merging work in the form context.
+  #
+  # @example
+  #   class WorkResourceForm < Hyrax::Form(WorkResource)
+  #     include Hyrax::FormFields(:work_resource)
+  #     include Spot::IdentifierFormFields
+  #   end
+  #
+  #
+  # @example To change which field this points to, update the :identifier_field class attribute
+  #   class WorkResourceForm < Hyrax::Form(WorkResource)
+  #     include Hyrax::FormFields(:work_resource)
+  #     include Spot::IdentifierFormFields
+  #
+  #     self.identifier_field = :external_identifier
+  #   end
+  #
   module IdentifierFormFields
     extend ActiveSupport::Concern
 
@@ -23,6 +43,7 @@ module Spot
       end
     end
 
+    # We store the work's NOID as an identifier, but don't want to allow it to be edited.
     def local_identifiers
       wrapped_identifiers.select(&:local?).reject { |id| id.prefix == 'noid' }
     end

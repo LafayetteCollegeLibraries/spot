@@ -5,7 +5,7 @@ module Spot
   # @example
   #   class WorkResourceForm < ::Hyrax::Forms::ResourceForm(WorkResource)
   #     include Hyrax::FormFields(:metadata_schema)
-  #     include Hyrax::LanguageTaggedFormFields(:title, :title_alternative)
+  #     include Spot::LanguageTaggedFormFields(:title, :title_alternative)
   #   end
   def self.LanguageTaggedFormFields(*fields)
     Spot::LanguageTaggedFormFields.new(*fields)
