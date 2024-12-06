@@ -67,9 +67,9 @@ module Spot
         resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id)
 
         manager_klass.new(resource: resource).release!
-        byebug
-        Hyrax.persister.save(resource: resource)
-        copy_visibility_to_files!(resource: resource)
+        resource.permission_manager.acl.save
+
+        copy_visibility_to_members!(resource: resource)
 
         resource
 
@@ -81,7 +81,7 @@ module Spot
         nil
       end
 
-      def copy_visibility_to_files!(resource:)
+      def copy_visibility_to_members!(resource:)
         Hyrax.query_service.find_members(resource: resource).each do |member|
           Hyrax::AccessControlList.copy_permissions(source: resource, target: member)
         end
