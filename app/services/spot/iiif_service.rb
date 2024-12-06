@@ -99,6 +99,8 @@ module Spot
     # @option [String] format (default: 'jpg')
     # @return [String]
     # @see https://cantaloupe-project.github.io/manual/4.1/endpoints.html#Response%20Content%20Disposition
+    #
+    # @todo does this work with us hosting IIIF assets on S3?
     def download_url(filename: nil, format: 'jpg', **args)
       filename = "#{file_set_id}.#{format}" if filename.nil?
       base_url = image_url(format: format, **args)
