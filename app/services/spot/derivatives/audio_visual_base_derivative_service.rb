@@ -27,12 +27,15 @@ module Spot
       # @return [void]
       # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
-        object_list = s3_client.list_objects(bucket: s3_bucket).to_h[:contents]
-        delete = { objects: [], quiet: false }
-        object_list.each do |object|
-          delete[:objects].push({ key: object[:key] }) if object[:key].include? file_set.id + "-"
+        prefix = file_set.id + "-"
+        object_list = s3_client.list_objects(bucket: s3_bucket, prefix: prefix).to_h[:contents]
+        unless object_list.nil?
+          delete = { objects: [], quiet: false }
+          object_list.each do |object|
+            delete[:objects].push({ key: object[:key] })
+          end
+          s3_client.delete_objects(bucket: s3_bucket, delete: delete)
         end
-        s3_client.delete_objects(bucket: s3_bucket, delete: delete)
       end
 
       # Placeholder for file specific paths in children
@@ -81,8 +84,7 @@ module Spot
       # Uploads generated derivatives specified by paths with new names specified by
       # keys to the s3 bucket. Adds all uploaded keys to the stored_derivatives metadata field
       def upload_derivatives_to_s3(keys, paths)
-        parent = file_set.parent
-        stored_derivatives = parent.stored_derivatives.to_a
+        stored_derivatives = file_set.stored_derivatives.to_a
         paths.each_with_index do |path, index|
           stored_derivatives.push(keys[index])
           s3_client.put_object(
@@ -94,18 +96,17 @@ module Spot
             metadata: {}
           )
         end
-        parent.stored_derivatives = stored_derivatives
-        parent.save
+        file_set.stored_derivatives = stored_derivatives
+        file_set.save
       end
 
       # Transfers a single derviative from the source bucket to the destination bucket, renaming
       # it. Adds all uploaded keys to the stored_derivatives metadata field
       def transfer_s3_derivative(derivative, key)
-        parent = file_set.parent
-        stored_derivatives = parent.stored_derivatives.to_a
+        stored_derivatives = file_set.stored_derivatives.to_a
         stored_derivatives.push(key)
-        parent.stored_derivatives = stored_derivatives
-        parent.save
+        file_set.stored_derivatives = stored_derivatives
+        file_set.save
         src = "/" + s3_source + "/" + derivative
         s3_client.copy_object(
           bucket: s3_bucket,

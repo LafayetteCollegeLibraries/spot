@@ -284,7 +284,8 @@ Rails.application.config.to_prepare do
   #
   # @see https://github.com/samvera/hyrax/blob/e4f8a06aaf1c9ec378f87764da59f73a8adf06d7/app/presenters/hyrax/file_set_presenter.rb
   Hyrax::FileSetPresenter.class_eval do
-    delegate :original_filenames, :transcript_name, to: :solr_document
+    delegate :original_filenames, :transcript_name,
+             :stored_derivatives, to: :solr_document
   end
 
   # Add support for downloading file_set transcripts

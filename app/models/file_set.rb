@@ -13,6 +13,10 @@ class FileSet < ActiveFedora::Base
     index.as :symbol, :stored_searchable
   end
 
+  property :stored_derivatives, predicate: ::RDF::URI.new('http://ldr.lafayette.edu/ns#stored_derivatives') do |index|
+    index.as :symbol
+  end
+
   include ::Hyrax::FileSetBehavior
   include ::Spot::MetadataOnlyVisibility
 

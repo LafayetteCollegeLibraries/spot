@@ -24,7 +24,7 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        return if check_premade_derivatives
+        return if check_premade_derivatives(filename)
 
         create_derivative_files(filename)
         upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
@@ -36,12 +36,16 @@ module Spot
       # Check to see if any premade derivatives exist, process them if so.
       #
       # @return [Boolean]
-      def check_premade_derivatives
-        premade_derivatives = file_set.parent.premade_derivatives.to_a
-        stored_derivatives = file_set.parent.stored_derivatives.to_a
+      def check_premade_derivatives(filename)
+        prefix = filename.to_s.split('/')[-1].split('.')[0] + "_derivative"
+        object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
 
-        return false if premade_derivatives.empty?
-        return true unless stored_derivatives.empty?
+        return false if object_list.nil?
+
+        premade_derivatives = []
+        object_list.each do |object|
+          premade_derivatives.push( object[:key] )
+        end
 
         premade_derivatives.each_with_index do |derivative, index|
           rename_premade_derivative(derivative, index)
