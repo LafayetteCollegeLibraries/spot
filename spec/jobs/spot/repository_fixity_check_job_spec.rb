@@ -7,6 +7,8 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
   let(:job_opts) { {} }
 
   before do
+    # I don't love this? We should probably ensure the db is truncated and use a factory to ensure the fs is created
+    allow(Hyrax.query_service).to receive(:find_all_of_model).with(model: Hyrax::FileSet).and_return([fs])
     allow(Hyrax::FileSetFixityCheckService).to receive(:new).and_return(service_double)
     allow(service_double).to receive(:fixity_check)
     perform_job!
@@ -18,7 +20,7 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
     it 'calls the Hyrax::FileSetFixityCheckService without async_jobs' do
       expect(Hyrax::FileSetFixityCheckService)
         .to have_received(:new)
-        .with(fs, opts)
+        .with(fs, **opts)
 
       expect(service_double).to have_received(:fixity_check).at_least(1).times
     end
@@ -31,7 +33,7 @@ RSpec.describe Spot::RepositoryFixityCheckJob do
     it do
       expect(Hyrax::FileSetFixityCheckService)
         .to have_received(:new)
-        .with(fs, opts)
+        .with(fs, **opts)
 
       expect(service_double).to have_received(:fixity_check).at_least(1).times
     end
