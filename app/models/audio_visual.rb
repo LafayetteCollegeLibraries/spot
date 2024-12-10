@@ -13,14 +13,6 @@ class AudioVisual < ActiveFedora::Base
     index.as :symbol, :stored_searchable
   end
 
-  property :premade_derivatives, predicate: ::RDF::URI.new('http://ldr.lafayette.edu/ns#premade_derivatives') do |index|
-    index.as :symbol
-  end
-
-  property :stored_derivatives, predicate: ::RDF::URI.new('http://ldr.lafayette.edu/ns#stored_derivatives') do |index|
-    index.as :symbol
-  end
-
   property :inscription, predicate: ::RDF::URI.new('http://dbpedia.org/ontology/inscription') do |index|
     index.as :stored_searchable
   end

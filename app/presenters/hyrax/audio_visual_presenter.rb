@@ -3,8 +3,7 @@ module Hyrax
   class AudioVisualPresenter < ::Spot::BasePresenter
     humanize_date_fields :date, :date_associated
 
-    delegate :stored_derivatives, :premade_derivatives,
-             :original_item_extent, :repository_location,
+    delegate :original_item_extent, :repository_location,
              :research_assistance, :barcode, :provenance,
              to: :solr_document
 

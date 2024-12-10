@@ -40,8 +40,15 @@ module AudioVisualHelper
 
   # @param file_set [FileSet] a fileset from the view
   # @return [String] a list of associated derivatives of the work
-  def get_derivative_list(file_set)
-    file_set.parent.stored_derivatives.to_a
+  def get_derivative_list(presenters)
+    list = []
+    presenters.each do |presenter|
+      stored = presenter.stored_derivatives
+      stored.each do |derivative|
+        list.push(derivative)
+      end
+    end
+    list
   end
 
   # @param derivative [String] a particular derivative key

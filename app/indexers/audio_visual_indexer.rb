@@ -6,7 +6,6 @@ class AudioVisualIndexer < BaseIndexer
   def generate_solr_document
     super.tap do |solr_doc|
       store_years_encompassed(solr_doc)
-      solr_doc['stored_derivatives_ssim'] ||= []
     end
   end
 
