@@ -44,7 +44,7 @@ module Spot
 
         premade_derivatives = []
         object_list.each do |object|
-          premade_derivatives.push( object[:key] )
+          premade_derivatives.push(object[:key])
         end
 
         premade_derivatives.each_with_index do |derivative, index|

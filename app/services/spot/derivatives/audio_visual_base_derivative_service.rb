@@ -29,13 +29,13 @@ module Spot
       def cleanup_derivatives
         prefix = file_set.id + "-"
         object_list = s3_client.list_objects(bucket: s3_bucket, prefix: prefix).to_h[:contents]
-        unless object_list.nil?
-          delete = { objects: [], quiet: false }
-          object_list.each do |object|
-            delete[:objects].push({ key: object[:key] })
-          end
-          s3_client.delete_objects(bucket: s3_bucket, delete: delete)
+        return if object_list.nil?
+
+        delete = { objects: [], quiet: false }
+        object_list.each do |object|
+          delete[:objects].push({ key: object[:key] })
         end
+        s3_client.delete_objects(bucket: s3_bucket, delete: delete)
       end
 
       # Placeholder for file specific paths in children
