@@ -249,7 +249,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       let(:response) { { contents: [{ key: 'example_derivative-480.mp3' }, { key: 'example_derivative-1080.mp3' }] } }
 
       before do
-        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
+        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_import_bucket, prefix: prefix).and_return response
         allow(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
         allow(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp3', 1)
         service.check_premade_derivatives(filename)
@@ -267,7 +267,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       let(:response) { { contents: nil } }
 
       before do
-        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
+        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_import_bucket, prefix: prefix).and_return response
         service.check_premade_derivatives(filename)
       end
 
