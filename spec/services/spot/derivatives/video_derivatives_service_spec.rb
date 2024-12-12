@@ -286,8 +286,12 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#check_premade_derivatives' do
     subject { service.check_premade_derivatives(filename) }
 
-    let(:filename) { "/tmp/example.mp4" }
+    let(:filename) { mock_file }
     let(:prefix) { "example_derivative" }
+
+    before do
+      allow(filename).to receive(:to_s).and_return "/tmp/example.mp4"
+    end
 
     context 'the response is not empty' do
       let(:response) { { contents: [{ key: 'example_derivative-480.mp4' }, { key: 'example_derivative-1080.mp4' }] } }
