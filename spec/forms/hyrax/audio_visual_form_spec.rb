@@ -31,7 +31,6 @@ RSpec.describe Hyrax::AudioVisualForm do
       it { is_expected.to include :note }
       it { is_expected.to include :provenance }
       it { is_expected.to include :barcode }
-      it { is_expected.to include :premade_derivatives }
     end
   end
 
@@ -63,7 +62,6 @@ RSpec.describe Hyrax::AudioVisualForm do
     it { is_expected.to include(related_resource: []) }
     it { is_expected.to include(local_identifier: []) }
     it { is_expected.to include(note: []) }
-    it { is_expected.to include(premade_derivatives: []) }
     it {
       is_expected.to include(based_near_attributes: [:id, :_destroy],
                              member_of_collections_attributes: [:id, :_destroy],

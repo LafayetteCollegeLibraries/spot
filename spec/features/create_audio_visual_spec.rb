@@ -134,9 +134,6 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         fill_in 'audio_visual_barcode', with: attrs[:barcode].first
         expect(page).to have_css '.audio_visual_barcode .controls-add-text'
 
-        fill_in 'audio_visual_premade_derivatives', with: attrs[:premade_derivatives].first
-        expect(page).to have_css '.audio_visual_premade_derivatives .controls-add-text'
-
         # see long note in +create_publication_spec.rb+ for why we need to scroll back to the top
         page.execute_script('window.scrollTo(0,0)')
 

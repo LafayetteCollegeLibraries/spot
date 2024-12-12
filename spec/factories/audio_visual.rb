@@ -10,8 +10,6 @@ FactoryBot.define do
     provenance { ['Owned by Lafayette College'] }
     barcode { ['abcdefg'] }
     resource_type { ['Audio'] }
-    premade_derivatives { ['sound.wav'] }
-    stored_derivatives { ['sound.wav'] }
   end
 
   factory :audio_visual_with_file_set, traits: [:has_file_set]
