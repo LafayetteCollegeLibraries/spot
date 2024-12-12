@@ -117,15 +117,21 @@ RSpec.describe AudioVisualHelper do
   end
 
   describe '#get_derivative_list' do
-    subject { get_derivative_list(file_set) }
+    subject { get_derivative_list(presenters) }
 
-    let(:file_set) { build(:file_set) }
-    let(:work) { instance_double(AudioVisual) }
-    let(:derivatives) { ['1234_0_access.mp3', '1234_1_access.mp3'] }
+    let(:file_set_1) { build(:file_set) }
+    let(:file_set_2) { build(:file_set) }
+    let(:file_set_3) { build(:file_set) }
+    let(:presenters) { [file_set_1, file_set_2, file_set_3] }
+    let(:stored_1) { ['1234_0_access.mp3', '1234_1_access.mp3'] }
+    let(:stored_2) { ['5678_0_access.mp3'] }
+    let(:stored_3) { ['9012_0_access.mp3', '9012_1_access.mp3', '9012_2_access.mp3'] }
+    let(:derivatives) { ['1234_0_access.mp3', '1234_1_access.mp3', '5678_0_access.mp3', '9012_0_access.mp3', '9012_1_access.mp3', '9012_2_access.mp3'] }
 
     before do
-      allow(file_set).to receive(:parent).and_return(work)
-      allow(work).to receive(:stored_derivatives).and_return(derivatives)
+      allow(file_set_1).to receive(:stored_derivatives).and_return(stored_1)
+      allow(file_set_2).to receive(:stored_derivatives).and_return(stored_2)
+      allow(file_set_3).to receive(:stored_derivatives).and_return(stored_3)
     end
 
     it { is_expected.to match_array derivatives }
