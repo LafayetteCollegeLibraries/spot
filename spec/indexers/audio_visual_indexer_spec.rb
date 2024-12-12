@@ -22,9 +22,7 @@ RSpec.describe AudioVisualIndexer do
     related_resource: %w[tesim sim],
     date_associated: %w[ssim tesim],
     provenance_derivatives: %w[tesim],
-    barcode_derivatives: %w[ssim],
-    premade_derivatives: %w[ssim],
-    stored_derivatives: %w[ssim]
+    barcode_derivatives: %w[ssim]
   }.each_pair do |method, suffixes|
     let(:work_method) { method }
     let(:solr_fields) { suffixes.map { |suffix| "#{method}_#{suffix}" } }

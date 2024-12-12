@@ -13,9 +13,7 @@ RSpec.describe AudioVisual do
     [:repository_location,  'http://purl.org/vra/placeOfRepository'],
     [:research_assistance,  'http://www.rdaregistry.info/Elements/a/#P50265'],
     [:barcode,              'https://schema.org/Barcode'],
-    [:provenance,           RDF::Vocab::DC.provenance],
-    [:premade_derivatives,  'http://ldr.lafayette.edu/ns#premade_derivatives'],
-    [:stored_derivatives,   'http://ldr.lafayette.edu/ns#stored_derivatives']
+    [:provenance,           RDF::Vocab::DC.provenance]
   ].each do |(prop, uri)|
     it { is_expected.to have_editable_property(prop).with_predicate(uri) }
   end

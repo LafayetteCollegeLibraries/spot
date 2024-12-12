@@ -36,8 +36,7 @@ module Hyrax
       :local_identifier,
       :note,
       :provenance,
-      :barcode,
-      :premade_derivatives
+      :barcode
     ].concat(hyrax_form_fields)
 
     class << self
