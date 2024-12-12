@@ -83,6 +83,7 @@ jobs:
       RAILS_ENV: test
       SOLR_TEST_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
       URL_HOST: http://localhost:3000
+      VALKYRIE_SOLR_HOST: 'solr_admin:solr_password@solr'
 
     steps:
       -
