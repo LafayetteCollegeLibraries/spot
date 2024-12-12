@@ -54,12 +54,12 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   describe '#cleanup_derivatives' do
     subject { service.cleanup_derivatives }
 
-    let(:response) { { contents: [{ key: '1234-0-access.mp3' }, { key: '1234-0-access.mp3' }, { key: '5678-0-access.mp3' }, { key: '5678-0-access.mp3' }] } }
+    let(:response) { { contents: [{ key: '1234-0-access.mp3' }, { key: '1234-0-access.mp3' }] } }
     let(:delete) { { objects: [{ key: '1234-0-access.mp3' }, { key: '1234-0-access.mp3' }], quiet: false } }
 
     before do
-      allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket).and_return response
       allow(_file_set).to receive(:id).and_return("1234")
+      allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: "1234-").and_return response
       allow(mock_s3_client).to receive(:delete_objects).with(bucket: aws_av_asset_bucket, delete: delete)
       service.cleanup_derivatives
     end
@@ -131,9 +131,9 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       let(:stored) { [] }
 
       before do
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(mock_parent).to receive(:stored_derivatives=).with(["1234_0_access.mp3"])
-        allow(mock_parent).to receive(:save)
+        allow(file_set).to receive(:stored_derivatives).and_return(stored)
+        allow(file_set).to receive(:stored_derivatives=).with(["1234_0_access.mp3"])
+        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
@@ -144,8 +144,8 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         expect(mock_s3_client)
           .to have_received(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
-        expect(mock_parent).to have_received(:stored_derivatives=).with(["1234_0_access.mp3"])
-        expect(mock_parent).to have_received(:save)
+        expect(file_set).to have_received(:stored_derivatives=).with(["1234_0_access.mp3"])
+        expect(file_set).to have_received(:save)
       end
     end
 
@@ -153,9 +153,9 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       let(:stored) { ["5678_0_access.mp3"] }
 
       before do
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(mock_parent).to receive(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        allow(mock_parent).to receive(:save)
+        allow(file_set).to receive(:stored_derivatives).and_return(stored)
+        allow(file_set).to receive(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
+        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
@@ -166,8 +166,8 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         expect(mock_s3_client)
           .to have_received(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
-        expect(mock_parent).to have_received(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        expect(mock_parent).to have_received(:save)
+        expect(file_set).to have_received(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
+        expect(file_set).to have_received(:save)
       end
     end
   end
@@ -188,9 +188,9 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       let(:stored) { [] }
 
       before do
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(mock_parent).to receive(:stored_derivatives=).with(["1234_0_access.mp3"])
-        allow(mock_parent).to receive(:save)
+        allow(file_set).to receive(:stored_derivatives).and_return(stored)
+        allow(file_set).to receive(:stored_derivatives=).with(["1234_0_access.mp3"])
+        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -198,8 +198,8 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       end
 
       it 'saves the key to stored derivatives and uploads to s3' do
-        expect(mock_parent).to have_received(:stored_derivatives=).with(["1234_0_access.mp3"])
-        expect(mock_parent).to have_received(:save)
+        expect(file_set).to have_received(:stored_derivatives=).with(["1234_0_access.mp3"])
+        expect(file_set).to have_received(:save)
         expect(mock_s3_client)
           .to have_received(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -210,9 +210,9 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       let(:stored) { ["5678_0_access.mp3"] }
 
       before do
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(mock_parent).to receive(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        allow(mock_parent).to receive(:save)
+        allow(file_set).to receive(:stored_derivatives).and_return(stored)
+        allow(file_set).to receive(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
+        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -220,8 +220,8 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       end
 
       it 'saves the key to stored derivatives and uploads to s3' do
-        expect(mock_parent).to have_received(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        expect(mock_parent).to have_received(:save)
+        expect(file_set).to have_received(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
+        expect(file_set).to have_received(:save)
         expect(mock_s3_client)
           .to have_received(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -236,92 +236,43 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   end
 
   describe '#check_premade_derivatives' do
-    subject { service.check_premade_derivatives }
+    subject { service.check_premade_derivatives(filename) }
 
-    let(:mock_parent) { instance_double(AudioVisual) }
+    let(:filename) { "/tmp/example.mp3" }
+    let(:prefix) { "example_derivative" }
 
-    before do
-      allow(file_set).to receive(:parent).and_return(mock_parent)
-    end
-
-    context 'stored_derivatives full, premade_derivatives empty' do
-      let(:stored) { ['derivative_1', 'derivative_2'] }
-      let(:premade) { [] }
+    context 'the response is not empty' do
+      let(:response) { { contents: [{ key: 'example_derivative-480.mp3' }, { key: 'example_derivative-1080.mp3' }] } }
 
       before do
-        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
-        service.check_premade_derivatives
-      end
-
-      it 'should not call rename' do
-        expect(service).to_not receive(:rename_premade_derivative).with('derivative_1', 0)
-        expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
-      end
-
-      it { is_expected.to eq(false) }
-    end
-
-    context 'stored_derivatives full, premade_derivatives full' do
-      let(:stored) { ['derivative_1', 'derivative_2'] }
-      let(:premade) { ['derivative_1', 'derivative_2'] }
-
-      before do
-        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
-        service.check_premade_derivatives
-      end
-
-      it 'should not call rename' do
-        expect(service).to_not receive(:rename_premade_derivative).with('derivative_1', 0)
-        expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
-      end
-
-      it { is_expected.to eq(true) }
-    end
-
-    context 'stored_derivatives empty, premade_derivatives empty' do
-      let(:stored) { [] }
-      let(:premade) { [] }
-
-      before do
-        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
-        service.check_premade_derivatives
-      end
-
-      it 'should not call rename' do
-        expect(service).to_not receive(:rename_premade_derivative).with('derivative_1', 0)
-        expect(service).to_not receive(:rename_premade_derivative).with('derivative_2', 1)
-      end
-
-      it { is_expected.to eq(false) }
-    end
-
-    context 'stored_derivatives empty, premade_derivatives full' do
-      let(:stored) { [] }
-      let(:premade) { ['derivative_1', 'derivative_2'] }
-
-      before do
-        allow(mock_parent).to receive(:premade_derivatives).and_return(premade)
-        allow(mock_parent).to receive(:stored_derivatives).and_return(stored)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_1', 0)
-        allow(service).to receive(:rename_premade_derivative).with('derivative_2', 1)
-        service.check_premade_derivatives
+        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
+        allow(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
+        allow(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp3', 1)
+        service.cleanup_derivatives
       end
 
       it 'should call rename' do
-        expect(service).to have_received(:rename_premade_derivative).with('derivative_1', 0)
-        expect(service).to have_received(:rename_premade_derivative).with('derivative_2', 1)
+        expect(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
+        expect(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp3', 1)
       end
 
       it { is_expected.to eq(true) }
+    end
+
+    context 'the response is empty' do
+      let(:response) { { contents: nil } }
+
+      before do
+        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
+        service.cleanup_derivatives
+      end
+
+      it 'should not call rename' do
+        expect(service).to_not receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
+        expect(service).to_not receive(:rename_premade_derivative).with('example_derivative-1080.mp3', 1)
+      end
+
+      it { is_expected.to eq(false) }
     end
   end
 
