@@ -252,7 +252,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
         allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
         allow(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
         allow(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp3', 1)
-        service.cleanup_derivatives
+        service.check_premade_derivatives(filename)
       end
 
       it 'should call rename' do
@@ -268,7 +268,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
 
       before do
         allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
-        service.cleanup_derivatives
+        service.check_premade_derivatives(filename)
       end
 
       it 'should not call rename' do
