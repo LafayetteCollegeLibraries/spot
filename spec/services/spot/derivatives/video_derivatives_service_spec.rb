@@ -316,7 +316,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
 
       before do
         allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: prefix).and_return response
-        service.cleanup_derivativesservice.check_premade_derivatives(filename)d
+        service.check_premade_derivatives(filename)
 
       it 'should not call rename' do
         expect(service).to_not receive(:rename_premade_derivative).with('example_derivative-480.mp4', 0)
