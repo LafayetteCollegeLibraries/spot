@@ -39,7 +39,9 @@ module Spot
       end
 
       # Placeholder for file specific paths in children
+      # :nocov:
       def derivative_paths; end
+      # :nocov:
 
       # make urls out of derivative paths
       def derivative_urls
@@ -79,7 +81,9 @@ module Spot
       end
 
       # Placeholder for derivative keys in children
+      # :nocov:
       def s3_derivative_keys; end
+      # :nocov:
 
       # Uploads generated derivatives specified by paths with new names specified by
       # keys to the s3 bucket. Adds all uploaded keys to the stored_derivatives metadata field
