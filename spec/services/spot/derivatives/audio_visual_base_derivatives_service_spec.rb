@@ -54,20 +54,39 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
   describe '#cleanup_derivatives' do
     subject { service.cleanup_derivatives }
 
-    let(:response) { { contents: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }] } }
-    let(:delete) { { objects: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }], quiet: false } }
-
     before do
       allow(_file_set).to receive(:id).and_return("1234")
-      allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: "1234-").and_return response
-      allow(mock_s3_client).to receive(:delete_objects).with(bucket: aws_av_asset_bucket, delete: delete)
-      service.cleanup_derivatives
     end
 
-    it 'deletes objects from S3' do
-      expect(mock_s3_client)
-        .to have_received(:delete_objects)
-        .with(bucket: aws_av_asset_bucket, delete: delete)
+    context 'the list is not empty' do
+      let(:response) { { contents: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }] } }
+      let(:delete) { { objects: [{ key: '1234-0-access-480.mp4' }, { key: '1234-0-access-1080.mp4' }], quiet: false } }
+
+      before do
+        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: "1234-").and_return response
+        allow(mock_s3_client).to receive(:delete_objects).with(bucket: aws_av_asset_bucket, delete: delete)
+        service.cleanup_derivatives
+      end
+
+      it 'deletes objects from S3' do
+        expect(mock_s3_client)
+          .to have_received(:delete_objects)
+          .with(bucket: aws_av_asset_bucket, delete: delete)
+      end
+    end
+
+    contex 'the list is empty' do
+      let(:response) { { contents: nil } }
+
+      before do
+        allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_av_asset_bucket, prefix: "1234-").and_return response
+        service.cleanup_derivatives
+      end
+
+      it 'does not delete objects from S3' do
+        expect(mock_s3_client)
+          .to_not receive(:delete_objects)
+      end
     end
   end
 
