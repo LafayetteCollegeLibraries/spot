@@ -75,7 +75,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       end
     end
 
-    contex 'the list is empty' do
+    context 'the list is empty' do
       let(:response) { { contents: nil } }
 
       before do
