@@ -304,8 +304,8 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       end
 
       it 'should call rename' do
-        expect(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp4', 0)
-        expect(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp4', 1)
+        expect(service).to have_received(:rename_premade_derivative).with('example_derivative-480.mp4', 0)
+        expect(service).to have_received(:rename_premade_derivative).with('example_derivative-1080.mp4', 1)
       end
 
       it { is_expected.to eq(true) }
