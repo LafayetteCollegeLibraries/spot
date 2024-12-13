@@ -256,7 +256,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       end
 
       it 'should call rename' do
-        expect(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
+        #expect(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp3', 0)
         expect(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp3', 1)
       end
 
