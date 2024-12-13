@@ -55,6 +55,9 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
 
   # Previously was a mixin (IndexesCitationMetadata) but parses the first :bibliographic_citation
   # value and adds the metadata to the Solr document.
+  #
+  # @param [SolrDocument,Hash]
+  # @return [void]
   def add_citation_metadata(document)
     raw = Array.wrap(resource.bibliographic_citation).first
     citation = ::AnyStyle.parse(raw)&.first
@@ -70,20 +73,18 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
     document['citation_lastpage_ss'] = last_page
   end
 
+  # Uses a) earliest date in +sortable_date_property+, b) resource's :created_at value to serve
+  # as the sort date for the object. Will return nil if neither of these are present.
+  #
+  # @return [String, nil]
   def generate_sortable_date
-    object_date_values = resource.try(sortable_date_property) || []
-    date_value = object_date_values.sort.first
-    output_format_string = '%FT%TZ'
+    object_date_value = resource.try(sortable_date_property).presence || resource.try(:created_at).try(:strftime, '%FT%TZ')
+    date_value = Array.wrap(object_date_value).sort.first
 
-    # if the object doesn't have any date values, default to using
-    # its created_at value (note: this will return nil if the object
-    # doesn't have a :created_at value, typically assigned on persistence.
-    return resource.try(:created_at).try(:strftime, output_format_string) if date_value.nil?
-
-    parsed = Date.edtf(date_value)
-    parsed.strftime(output_format_string) if parsed.present?
+    Date.edtf(date_value).try(:strftime, '%FT%TZ')
   end
 
+  # @return [String]
   def generate_sortable_title
     resource.title.first.to_s.downcase.gsub(/^(an?|the)\s+/, '').strip
   end
