@@ -31,7 +31,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     let(:file_set) { instance_double(FileSet, original_file: file, transcript: transcript) }
 
     describe '#files' do
-      subject { described_class.files }
+      subject { exporter.files }
 
       it { is_expected.to match_array([file, transcript]) }
     end
@@ -54,7 +54,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     let(:file_set) { instance_double(FileSet, original_file: file) }
 
     describe '#files' do
-      subject { described_class.files }
+      subject { exporter.files }
 
       it { is_expected.to eq(file) }
     end
