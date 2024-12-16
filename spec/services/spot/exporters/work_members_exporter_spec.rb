@@ -30,7 +30,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
 
   describe '#export!' do
     let(:expected_file_1) { File.join(destination, 'test-image.png') }
-    let(:expected_file_1) { File.join(destination, 'test-transcript.vtt') }
+    let(:expected_file_2) { File.join(destination, 'test-transcript.vtt') }
 
     before { exporter.export!(destination: destination) }
     after { FileUtils.rm_r(destination) }
