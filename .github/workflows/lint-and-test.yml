@@ -151,22 +151,21 @@ jobs:
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
-        name: Upload capybara-screenshot on test failure
-        uses: actions/upload-artifact@v4
-        if : ${{ steps.tests.conclusion == 'failure' }}
-        with:
-          name: capybara-screenshot
-          path: tmp/capybara
-      -
         name: (temporary) Set up tmate access for debugging
         uses: mxschmitt/action-tmate@v3
-        if: ${{ steps.tests.conclusion == 'failure' }}
+        if: ${{ failure() }}
         timeout-minutes: 15
         with:
           detached: true
       -
-        name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        name: Upload capybara-screenshot on test failure
+        uses: actions/upload-artifact@v4
+        with:
+          name: capybara-screenshot
+          path: tmp/capybara
+          if-no-files-found: ignore
+      -
+        name: Publish UndercoverCI report
         continue-on-error: true
       -
         name: Publish RSpec report
