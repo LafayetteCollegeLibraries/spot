@@ -86,6 +86,8 @@ jobs:
       VALKYRIE_SOLR_HOST: 'solr_admin:solr_password@solr'
 
     steps:
+      - name: (tempoary) Set up tmate access for debugging
+        uses: mxschmitt/action-tmate@v3
       -
         name: Install system dependencies from Dockerfile
         run: |
