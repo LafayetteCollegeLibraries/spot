@@ -7,7 +7,6 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
   subject(:exporter) { described_class.new(solr_document) }
 
   let(:solr_document) { instance_double(SolrDocument, file_set_ids: ['abc123']) }
-  let(:file_set) { instance_double(FileSet, original_file: file, transcript: transcript) }
   let(:path_to_file) { Rails.root.join('spec', 'fixtures', 'image.png') }
   let(:path_to_transcript) { Rails.root.join('spec', 'fixtures', 'transcript.vtt') }
   let(:file) do
@@ -28,16 +27,41 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     FileUtils.mkdir_p(destination)
   end
 
-  describe '#export!' do
-    let(:expected_file_1) { File.join(destination, 'test-image.png') }
-    let(:expected_file_2) { File.join(destination, 'test-transcript.vtt') }
+  context 'the fileset has a transcript' do 
+    let(:file_set) { instance_double(FileSet, original_file: file, transcript: transcript) }
 
-    before { exporter.export!(destination: destination) }
-    after { FileUtils.rm_r(destination) }
+    describe '#files' do
+      it {is_expected.to match_array([file, transcript])}
 
-    it 'writes the file to the destination' do
-      expect(File.exist?(expected_file_1)).to be true
-      expect(File.exist?(expected_file_2)).to be true
+    describe '#export!' do
+      let(:expected_file_1) { File.join(destination, 'test-image.png') }
+      let(:expected_file_2) { File.join(destination, 'test-transcript.vtt') }
+
+      before { exporter.export!(destination: destination) }
+      after { FileUtils.rm_r(destination) }
+
+      it 'writes the file to the destination' do
+        expect(File.exist?(expected_file_1)).to be true
+        expect(File.exist?(expected_file_2)).to be true
+      end
+    end
+  end
+
+  context 'the fileset does not have a transcript' do 
+    let(:file_set) { instance_double(FileSet, original_file: file) }
+
+    describe '#files' do
+      it {is_expected.to eq(file)}
+
+    describe '#export!' do
+      let(:expected_file_1) { File.join(destination, 'test-image.png') }
+
+      before { exporter.export!(destination: destination) }
+      after { FileUtils.rm_r(destination) }
+
+      it 'writes the file to the destination' do
+        expect(File.exist?(expected_file_1)).to be true
+      end
     end
   end
 end
