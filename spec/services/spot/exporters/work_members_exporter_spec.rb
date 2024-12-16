@@ -32,6 +32,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
 
     describe '#files' do
       it {is_expected.to match_array([file, transcript])}
+    end
 
     describe '#export!' do
       let(:expected_file_1) { File.join(destination, 'test-image.png') }
@@ -52,6 +53,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
 
     describe '#files' do
       it {is_expected.to eq(file)}
+    end
 
     describe '#export!' do
       let(:expected_file_1) { File.join(destination, 'test-image.png') }
