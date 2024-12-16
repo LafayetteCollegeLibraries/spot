@@ -56,7 +56,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     describe '#files' do
       subject { exporter.files }
 
-      it { is_expected.to eq(file) }
+      it { is_expected.to match_array([file]) }
     end
 
     describe '#export!' do
