@@ -86,8 +86,6 @@ jobs:
       VALKYRIE_SOLR_HOST: 'solr_admin:solr_password@solr'
 
     steps:
-      - name: (tempoary) Set up tmate access for debugging
-        uses: mxschmitt/action-tmate@v3
       -
         name: Install system dependencies from Dockerfile
         run: |
@@ -160,6 +158,12 @@ jobs:
           export PATH="$(dirname $(which geckodriver)):${PATH}"
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
+      - name: (temporary) Set up tmate access for debugging
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ failure() }}
+        timeout-minutes: 15
+        with:
+          detached: true
       -
         name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
