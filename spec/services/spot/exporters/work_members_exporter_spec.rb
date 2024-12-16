@@ -27,11 +27,11 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     FileUtils.mkdir_p(destination)
   end
 
-  context 'the fileset has a transcript' do 
+  context 'the fileset has a transcript' do
     let(:file_set) { instance_double(FileSet, original_file: file, transcript: transcript) }
 
     describe '#files' do
-      it {is_expected.to match_array([file, transcript])}
+      it { is_expected.to match_array([file, transcript]) }
     end
 
     describe '#export!' do
@@ -48,11 +48,11 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     end
   end
 
-  context 'the fileset does not have a transcript' do 
+  context 'the fileset does not have a transcript' do
     let(:file_set) { instance_double(FileSet, original_file: file) }
 
     describe '#files' do
-      it {is_expected.to eq(file)}
+      it { is_expected.to eq(file) }
     end
 
     describe '#export!' do
