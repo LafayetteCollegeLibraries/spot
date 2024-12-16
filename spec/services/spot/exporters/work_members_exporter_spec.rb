@@ -14,6 +14,7 @@ RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
     instance_double(Hydra::PCDM::File,
                     stream: [File.read(path_to_file)],
                     file_name: ['test-image.png'])
+  end
   let(:transcript) do
     instance_double(Hydra::PCDM::File,
                     stream: [File.read(path_to_file)],
