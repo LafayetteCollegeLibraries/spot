@@ -150,6 +150,7 @@ jobs:
         name: Run migrations
         run: bundle exec rake db:migrate
       -
+        id: tests
         name: Run tests
         env:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
@@ -158,9 +159,17 @@ jobs:
           export PATH="$(dirname $(which geckodriver)):${PATH}"
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
-      - name: (temporary) Set up tmate access for debugging
+      -
+        name: Upload capybara-screenshot on test failure
+        uses: actions/upload-artifact@v4
+        if : ${{ steps.tests.conclusion == 'failure' }}
+        with:
+          name: capybara-screenshot
+          path: tmp/capybara
+      -
+        name: (temporary) Set up tmate access for debugging
         uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() }}
+        if: ${{ steps.tests.conclusion == 'failure' }}
         timeout-minutes: 15
         with:
           detached: true
@@ -171,7 +180,7 @@ jobs:
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
-        if: always()
+        if: ${{ always() }}
         continue-on-error: true
         with:
           check_name: Test summary
@@ -179,7 +188,7 @@ jobs:
       -
         name: Publish coverage
         uses: joshmfrankel/simplecov-check-action@main
-        if: always()
+        if: ${{ success() }}
         continue-on-error: true
         with:
           check_job_name: Test coverage
