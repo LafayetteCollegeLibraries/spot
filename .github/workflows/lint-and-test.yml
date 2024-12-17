@@ -160,13 +160,6 @@ jobs:
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
-        name: (temporary) Set up tmate access for debugging
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() }}
-        timeout-minutes: 15
-        with:
-          detached: true
-      -
         name: Upload capybara-screenshot on test failure
         uses: actions/upload-artifact@v4
         with:
