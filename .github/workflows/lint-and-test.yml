@@ -158,14 +158,6 @@ jobs:
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
-        name: Publish UndercoverCI report
-        continue-on-error: true
-        run: |
-          ruby -e "$(curl -s https://undercover-ci.com/uploader.rb)" -- \
-            --repo ${{ github.repository }} \
-            --commit ${{ github.event.pull_request.head.sha || github.sha }} \
-            --lcov coverage/lcov/spot.lcov
-      -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
         if: always()
