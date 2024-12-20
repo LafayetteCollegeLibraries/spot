@@ -8,6 +8,8 @@ if ENV['COVERAGE'] || ENV['CI']
   ENV['DISABLE_BOOTSNAP'] = 'true'
 
   require 'simplecov'
+  require 'simplecov-cobertura'
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
   SimpleCov.start 'rails' do
     add_filter 'lib/mailer_previews'
   end

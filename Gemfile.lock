@@ -977,6 +977,9 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
+    simplecov-cobertura (2.1.0)
+      rexml
+      simplecov (~> 0.19)
     simplecov-html (0.13.1)
     simplecov_json_formatter (0.1.4)
     slack-ruby-client (0.14.6)
@@ -1146,6 +1149,7 @@ DEPENDENCIES
   sidekiq-cron (~> 1.9.1)
   simple_form (< 5.2)
   simplecov (~> 0.21.2)
+  simplecov-cobertura (~> 2.1)
   slack-ruby-client (~> 0.14.6)
   spring (~> 2.1.1)
   spring-watcher-listen (~> 2.0.0)
