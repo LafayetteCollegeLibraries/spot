@@ -170,6 +170,7 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: jwellnit/spot
       -
         name: Publish coverage
         uses: joshmfrankel/simplecov-check-action@main
