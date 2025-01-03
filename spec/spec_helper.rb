@@ -7,7 +7,7 @@ ENV['URL_HOST'] = 'http://localhost' if ENV['URL_HOST'].nil?
 if ENV['COVERAGE'] || ENV['CI']
   ENV['DISABLE_BOOTSNAP'] = 'true'
 
-  # set up code-coverage; 
+  # set up code-coverage
   require 'simplecov'
   require 'simplecov-cobertura'
   SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
