@@ -162,7 +162,7 @@ jobs:
         uses: codecov/codecov-action@v3
         continue-on-error: true
         with:
-          token: ${{ secrets.CODECOV_TOKEN }
+          token: ${{ secrets.CODECOV_TOKEN }}
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
