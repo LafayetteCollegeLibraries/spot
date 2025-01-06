@@ -262,11 +262,11 @@ Rails.application.config.to_prepare do
     def index_for_authority(authority)
       return authority if authority == 'idroot'
 
-      super
+      Qa::Authorities::AssignFastSubauthority::SUBAUTHORITIES[authority]
     end
 
     def subauthorities
-      super + ['idroot']
+      Qa::Authorities::AssignFastSubauthority::SUBAUTHORITIES.keys + ['idroot']
     end
   end
 end
