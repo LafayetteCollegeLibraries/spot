@@ -161,8 +161,8 @@ jobs:
         name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         continue-on-error: true
-        ENV:
-          token: ${{ secrets.CODECOV_TOKEN }}
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
