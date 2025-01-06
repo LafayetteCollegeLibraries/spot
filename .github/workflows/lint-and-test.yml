@@ -159,7 +159,7 @@ jobs:
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
         name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v3
         continue-on-error: true
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
