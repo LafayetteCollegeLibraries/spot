@@ -159,8 +159,10 @@ jobs:
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
         name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v4
         continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
