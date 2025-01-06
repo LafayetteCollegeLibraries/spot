@@ -158,7 +158,7 @@ jobs:
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
-        name: Upload coverage to Codecov
+        name: Upload coverage to Codecov :)
         uses: codecov/codecov-action@v5
         continue-on-error: true
         with:
