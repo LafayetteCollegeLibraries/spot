@@ -13,6 +13,7 @@ jobs:
         env:
           REPO: ${{ github.repository }}
           BRANCH: ${{ github.ref_name }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh extension install actions/gh-actions-cache
 
