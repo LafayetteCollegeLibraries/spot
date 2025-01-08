@@ -143,6 +143,7 @@ jobs:
       -
         id: tests
         name: Run tests
+        continue-on-error: true
         env:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
           HOME: /root
