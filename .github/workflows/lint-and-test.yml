@@ -154,7 +154,6 @@ jobs:
       -
         id: tests
         name: Run tests
-        continue-on-error: true
         env:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
           HOME: /root
@@ -172,6 +171,7 @@ jobs:
       -
         name: Upload capybara-screenshot on test failure
         uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
         with:
           name: capybara-screenshot
           path: tmp/capybara
@@ -179,6 +179,7 @@ jobs:
       -
         name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        if: ${{ always() }}
         continue-on-error: true
       -
         name: Publish RSpec report
