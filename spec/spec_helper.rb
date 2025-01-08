@@ -140,6 +140,9 @@ RSpec.configure do |config|
   config.before clean: true do
     DatabaseCleaner.clean
     ActiveFedora::Cleaner.clean!
+
+    # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/spec_helper.rb#L121-L126
+    ActiveFedora.fedora.connection.send(:init_base_path)
   end
 
   config.before js: true do
