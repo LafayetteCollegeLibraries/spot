@@ -34,13 +34,8 @@ module Spot
       @comment.present?
     end
 
-    # The title of the Workflow Actions form widget. Hardcoded in Hyrax < 3 to "Review and Approval"
-    # but uses I18n.t beyond that.
-    #
-    # @todo update after Hyrax v3 upgrade
     def workflow_actions_title
-      "Review and Approval"
-      # I18n.t('hyrax.base.workflow_actions.title')
+      I18n.t('hyrax.base.workflow_actions.title')
     end
   end
 end
