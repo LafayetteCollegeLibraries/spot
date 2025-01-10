@@ -16,7 +16,6 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
     it_behaves_like 'it indexes', :related_resource, to: ['related_resource_tesim', 'related_resource_sim']
     it_behaves_like 'it indexes', :resource_type, to: ['resource_type_ssim']
     it_behaves_like 'it indexes', :rights_holder, to: ['rights_holder_tesim', 'rights_holder_sim']
-    it_behaves_like 'it indexes', :rights_statement, to: ['rights_statement_ssim']
     it_behaves_like 'it indexes', :source, to: ['source_tesim', 'source_sim']
     it_behaves_like 'it indexes', :source_identifier, to: ['source_identifier_ssim']
     it_behaves_like 'it indexes', :subject, to: ['subject_ssim']
@@ -137,6 +136,46 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
         let(:url_host_value) { 'http://another-cool-site.org' }
 
         it { is_expected.to eq "#{url_host_value}#{thumbnail_path}" }
+      end
+    end
+
+    describe 'indexes rights_statement and label' do
+      let(:metadata) { { rights_statement: ['http://rightsstatements.org/vocab/InC-EDU/1.0/'] } }
+
+      it 'indexes the URI value' Do
+        expect(solr_document['rights_statement_ssim']).to eq ['http://rightsstatements.org/vocab/InC-EDU/1.0/']
+      end
+
+      it 'indexes the shortcode' do
+        expect(solr_document['rights_statement_shortcode_ssim']).to eq ['InC-EDU']
+      end
+
+      it 'indexes the label' do
+        expect(solr_document['rights_statement_label_ssim']).to eq ['In Copyright - Educational Use Permitted']
+      end
+    end
+
+    describe 'indexes citation metadata' do
+      let(:metadata) { { bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000): 1-2.'] } }
+
+      it 'indexes the citation fields' do
+        expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
+        expect(solr_doc['citation_volume_ss']).to eq '1'
+        expect(solr_doc['citation_issue_ss']).to eq '2'
+        expect(solr_doc['citation_firstpage_ss']).to eq '1'
+        expect(solr_doc['citation_lastpage_ss']).to eq '2'
+      end
+
+      context 'with incomplete metadata' do
+        let(:metadata) { { bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000)'] } }
+
+        it 'indexes what it can' do
+          expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
+          expect(solr_doc['citation_volume_ss']).to eq '1'
+          expect(solr_doc['citation_issue_ss']).to eq '2'
+          expect(solr_doc['citation_firstpage_ss']).to eq nil
+          expect(solr_doc['citation_lastpage_ss']).to eq nil
+        end
       end
     end
   end
