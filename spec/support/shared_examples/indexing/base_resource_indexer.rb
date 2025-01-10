@@ -142,7 +142,7 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
     describe 'indexes rights_statement and label' do
       let(:metadata) { { rights_statement: ['http://rightsstatements.org/vocab/InC-EDU/1.0/'] } }
 
-      it 'indexes the URI value' Do
+      it 'indexes the URI value' do
         expect(solr_document['rights_statement_ssim']).to eq ['http://rightsstatements.org/vocab/InC-EDU/1.0/']
       end
 
