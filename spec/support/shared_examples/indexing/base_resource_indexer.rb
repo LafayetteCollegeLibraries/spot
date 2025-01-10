@@ -159,22 +159,22 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
       let(:metadata) { { bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000): 1-2.'] } }
 
       it 'indexes the citation fields' do
-        expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
-        expect(solr_doc['citation_volume_ss']).to eq '1'
-        expect(solr_doc['citation_issue_ss']).to eq '2'
-        expect(solr_doc['citation_firstpage_ss']).to eq '1'
-        expect(solr_doc['citation_lastpage_ss']).to eq '2'
+        expect(solr_document['citation_journal_title_ss']).to eq 'Journal'
+        expect(solr_document['citation_volume_ss']).to eq '1'
+        expect(solr_document['citation_issue_ss']).to eq '2'
+        expect(solr_document['citation_firstpage_ss']).to eq '1'
+        expect(solr_document['citation_lastpage_ss']).to eq '2'
       end
 
       context 'with incomplete metadata' do
         let(:metadata) { { bibliographic_citation: ['Last, First. "Title." Journal 1.2 (2000)'] } }
 
         it 'indexes what it can' do
-          expect(solr_doc['citation_journal_title_ss']).to eq 'Journal'
-          expect(solr_doc['citation_volume_ss']).to eq '1'
-          expect(solr_doc['citation_issue_ss']).to eq '2'
-          expect(solr_doc['citation_firstpage_ss']).to eq nil
-          expect(solr_doc['citation_lastpage_ss']).to eq nil
+          expect(solr_document['citation_journal_title_ss']).to eq 'Journal'
+          expect(solr_document['citation_volume_ss']).to eq '1'
+          expect(solr_document['citation_issue_ss']).to eq '2'
+          expect(solr_document['citation_firstpage_ss']).to eq nil
+          expect(solr_document['citation_lastpage_ss']).to eq nil
         end
       end
     end
