@@ -22,6 +22,7 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
   # @note :core_metadata is included with Hyrax::ValkyrieWorkIndexer
   include Hyrax::Indexer(:base_metadata)
   include IndexesPermalinkUrl
+  include IndexesRightsStatementsAndLabels
 
   class_attribute :sortable_date_property, default: :date
 
