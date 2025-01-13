@@ -25,6 +25,7 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
 
   describe 'field indexing' do
     subject(:indexer) { described_class.for(resource: resource) }
+
     let(:resource_factory) { described_class.name.split('::').last.gsub(/Indexer$/, '').underscore.to_sym }
     let(:resource) { build(resource_factory, **metadata) }
     let(:metadata) { {} }
