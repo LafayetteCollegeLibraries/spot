@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it indexes' do |field, opts|
+  include_context 'resource indexing'
+
   suffixes = opts[:to_suffixes]
 
   raise 'Pass a field to the "it indexes" shared_example' unless field
@@ -12,11 +14,6 @@ RSpec.shared_examples 'it indexes' do |field, opts|
       "#{field}_#{suffix.starts_with?('_') ? suffix[1..-1] : suffix}"
     end
   end
-
-  let(:indexer) { described_class.for(resource: resource) }
-  let(:resource_type) { described_class.name.split('::').last.gsub(/Indexer$/, '').underscore.to_sym }
-  let(:resource) { build(resource_type) }
-  let(:solr_document) { indexer.to_solr }
 
   to_fields.each do |solr_field|
     it "#{field} to #{solr_field}" do

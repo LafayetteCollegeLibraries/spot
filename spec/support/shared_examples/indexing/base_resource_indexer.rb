@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'a BaseResourceIndexer' do
+  include_context 'resource indexing'
+
   describe 'base_metadata fields' do
     # base metadata
     it_behaves_like 'it indexes', :bibliographic_citation, to: ['bibliographic_citation_tesim']
@@ -24,13 +26,6 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
   end
 
   describe 'field indexing' do
-    subject(:indexer) { described_class.for(resource: resource) }
-
-    let(:resource_factory) { described_class.name.split('::').last.gsub(/Indexer$/, '').underscore.to_sym }
-    let(:resource) { build(resource_factory, **metadata) }
-    let(:metadata) { {} }
-    let(:solr_document) { indexer.to_solr }
-
     describe 'permalink_urls' do
       subject(:permalink_url) { solr_document['permalink_ss'] }
 
