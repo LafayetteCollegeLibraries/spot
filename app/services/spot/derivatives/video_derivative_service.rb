@@ -38,7 +38,9 @@ module Spot
       #
       # @return [Boolean]
       def check_premade_derivatives(filename)
-        prefix = filename.to_s.split('/')[-1].split('.')[0] + "_derivative"
+        base_file = filename.to_s.split('/')[-1].split('.')[0]
+        project_name = base_file.split('_')[0]
+        prefix = project_name + "/" + base_file + "_derivative"
         object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
 
         return false if object_list.nil?
@@ -74,7 +76,9 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def check_transcript(filename)
-        transcript_name = filename.to_s.split('/')[-1].split('.')[0] + ".vtt"
+        base_file = filename.to_s.split('/')[-1].split('.')[0]
+        project_name = base_file.split('_')[0]
+        transcript_name = project_name + "/" + base_file + "_caption.vtt"
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound

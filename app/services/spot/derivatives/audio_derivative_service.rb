@@ -37,7 +37,9 @@ module Spot
       #
       # @return [Boolean]
       def check_premade_derivatives(filename)
-        prefix = filename.to_s.split('/')[-1].split('.')[0] + "_derivative"
+        base_file = filename.to_s.split('/')[-1].split('.')[0]
+        project_name = base_file.split('_')[0]
+        prefix = project_name + "/" + base_file + "_derivative"
         object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
 
         return false if object_list.nil?
