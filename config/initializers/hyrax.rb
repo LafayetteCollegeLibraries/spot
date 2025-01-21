@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'wings'
+require 'wings' unless Hyrax.config.disable_wings
 
 Hyrax.config do |config|
   config.register_curation_concern :publication, :image, :student_work, :audio_visual
@@ -7,10 +7,13 @@ Hyrax.config do |config|
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
 
-  Wings::ModelRegistry.register(PublicationResource, Publication)
-  Wings::ModelRegistry.register(ImageResource, Image)
-  Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
-  Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
+  unless Hyrax.config.disable_wings
+    Wings::ModelRegistry.register(PublicationResource, Publication)
+    Wings::ModelRegistry.register(ImageResource, Image)
+    Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
+    Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
+    Wings::ModelRegistry.register(Hyrax::AdministrativeSet, AdminSet)
+  end
 
   config.collection_model = Hyrax.config.use_valkyrie? ? 'Hyrax::PcdmCollection' : 'Collection'
   config.admin_set_model = Hyrax.config.use_valkyrie? ? 'Hyrax::AdministrativeSet' : 'AdminSet'
