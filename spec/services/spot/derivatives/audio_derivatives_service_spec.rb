@@ -246,18 +246,18 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     end
 
     context 'the response is not empty' do
-      let(:response) { { contents: [{ key: 'example_derivative-480.mp3' }, { key: 'example_derivative-1080.mp3' }] } }
+      let(:response) { { contents: [{ key: 'project/project_example_derivative-480.mp3' }, { key: 'project/project_example_derivative-1080.mp3' }] } }
 
       before do
         allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_import_bucket, prefix: prefix).and_return response
-        allow(service).to receive(:rename_premade_derivative).with('project_example_derivative-480.mp3', 0)
-        allow(service).to receive(:rename_premade_derivative).with('project_example_derivative-1080.mp3', 1)
+        allow(service).to receive(:rename_premade_derivative).with('project/project_example_derivative-480.mp3', 0)
+        allow(service).to receive(:rename_premade_derivative).with('project/project_example_derivative-1080.mp3', 1)
         service.check_premade_derivatives(filename)
       end
 
       it 'should call rename' do
-        expect(service).to have_received(:rename_premade_derivative).with('project_example_derivative-480.mp3', 0)
-        expect(service).to have_received(:rename_premade_derivative).with('project_example_derivative-1080.mp3', 1)
+        expect(service).to have_received(:rename_premade_derivative).with('project/project_example_derivative-480.mp3', 0)
+        expect(service).to have_received(:rename_premade_derivative).with('project/project_example_derivative-1080.mp3', 1)
       end
 
       it { is_expected.to eq(true) }
@@ -272,8 +272,8 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       end
 
       it 'should not call rename' do
-        expect(service).to_not receive(:rename_premade_derivative).with('project_example_derivative-480.mp3', 0)
-        expect(service).to_not receive(:rename_premade_derivative).with('project_example_derivative-1080.mp3', 1)
+        expect(service).to_not receive(:rename_premade_derivative).with('project/project_example_derivative-480.mp3', 0)
+        expect(service).to_not receive(:rename_premade_derivative).with('project/project_example_derivative-1080.mp3', 1)
       end
 
       it { is_expected.to eq(false) }
