@@ -167,7 +167,7 @@ Rails.application.reloader.to_prepare do
     end
   end
 
-  Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator) unless Rails.env.test?
+  Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
 
   # Only store entitlements related to us in the session to prevent a cookie overflow.
   #
