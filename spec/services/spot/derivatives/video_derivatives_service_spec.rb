@@ -460,9 +460,13 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   end
 
   describe '#check_transcript' do
-    let(:filename) { src_path }
     let(:transcript_name) { 'project/project_file.vtt' }
     let(:response) { {} }
+    let(:filename) { mock_file }
+
+    before do
+      allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp4"
+    end
 
     context 'the transcript does not exist' do
       before do
