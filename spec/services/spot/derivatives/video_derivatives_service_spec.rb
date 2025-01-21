@@ -460,7 +460,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   end
 
   describe '#check_transcript' do
-    let(:transcript_name) { 'project/project_file.vtt' }
+    let(:transcript_name) { 'project/project_example_caption.vtt' }
     let(:response) { {} }
     let(:filename) { mock_file }
 
