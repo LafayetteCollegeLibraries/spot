@@ -287,25 +287,25 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
     subject { service.check_premade_derivatives(filename) }
 
     let(:filename) { mock_file }
-    let(:prefix) { "example_derivative" }
+    let(:prefix) { "project/project_example_derivative" }
 
     before do
-      allow(filename).to receive(:to_s).and_return "/tmp/example.mp4"
+      allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp4"
     end
 
     context 'the response is not empty' do
-      let(:response) { { contents: [{ key: 'example_derivative-480.mp4' }, { key: 'example_derivative-1080.mp4' }] } }
+      let(:response) { { contents: [{ key: 'project/project_example_derivative-480.mp4' }, { key: 'project/project_example_derivative-1080.mp4' }] } }
 
       before do
         allow(mock_s3_client).to receive(:list_objects).with(bucket: aws_import_bucket, prefix: prefix).and_return response
-        allow(service).to receive(:rename_premade_derivative).with('example_derivative-480.mp4', 0)
-        allow(service).to receive(:rename_premade_derivative).with('example_derivative-1080.mp4', 1)
+        allow(service).to receive(:rename_premade_derivative).with('project/project_example_derivative-480.mp4', 0)
+        allow(service).to receive(:rename_premade_derivative).with('project/project_example_derivative-1080.mp4', 1)
         service.check_premade_derivatives(filename)
       end
 
       it 'should call rename' do
-        expect(service).to have_received(:rename_premade_derivative).with('example_derivative-480.mp4', 0)
-        expect(service).to have_received(:rename_premade_derivative).with('example_derivative-1080.mp4', 1)
+        expect(service).to have_received(:rename_premade_derivative).with('project/project_example_derivative-480.mp4', 0)
+        expect(service).to have_received(:rename_premade_derivative).with('project/project_example_derivative-1080.mp4', 1)
       end
 
       it { is_expected.to eq(true) }
@@ -320,8 +320,8 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       end
 
       it 'should not call rename' do
-        expect(service).to_not receive(:rename_premade_derivative).with('example_derivative-480.mp4', 0)
-        expect(service).to_not receive(:rename_premade_derivative).with('example_derivative-1080.mp4', 1)
+        expect(service).to_not receive(:rename_premade_derivative).with('project/project_example_derivative-480.mp4', 0)
+        expect(service).to_not receive(:rename_premade_derivative).with('project/project_example_derivative-1080.mp4', 1)
       end
 
       it { is_expected.to eq(false) }
@@ -461,7 +461,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
 
   describe '#check_transcript' do
     let(:filename) { src_path }
-    let(:transcript_name) { 'file.vtt' }
+    let(:transcript_name) { 'project/project_file.vtt' }
     let(:response) { {} }
 
     context 'the transcript does not exist' do
