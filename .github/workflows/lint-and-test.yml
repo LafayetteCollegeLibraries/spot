@@ -77,6 +77,7 @@ jobs:
       SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
       VALKYRIE_SOLR_HOST: 'solr_admin:solr_password@solr'
+      VALKYRIE_SOLR_CORE: spot-test
 
     steps:
       - uses: actions/checkout@v4
