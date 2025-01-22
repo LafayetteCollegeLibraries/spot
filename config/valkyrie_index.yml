@@ -1,3 +1,4 @@
+# @note We can change this to be `url: <%= ENV['SOLR_URL'] %> in Hyrax >= 5
 development:
   host: <%= ENV['VALKYRIE_SOLR_HOST'] %>
   port: <%= ENV['VALKYRIE_SOLR_PORT'] %>
