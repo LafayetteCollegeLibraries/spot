@@ -11,14 +11,12 @@ Hyrax.config do |config|
     Wings::ModelRegistry.register(PublicationResource, Publication)
     Wings::ModelRegistry.register(ImageResource, Image)
     Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
-    Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
-    Wings::ModelRegistry.register(Hyrax::AdministrativeSet, AdminSet)
   end
 
+  config.admin_set_model = Hyrax::AdministrativeSet
   config.collection_model = Hyrax.config.use_valkyrie? ? 'Hyrax::PcdmCollection' : 'Collection'
-  config.admin_set_model = Hyrax.config.use_valkyrie? ? 'Hyrax::AdministrativeSet' : 'AdminSet'
   config.query_index_from_valkyrie = Hyrax.config.use_valkyrie?
-  config.index_adapter = :solr_index
+  config.index_adapter = Hyrax.config.use_valkyrie? ? :solr_index : :null_index
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
