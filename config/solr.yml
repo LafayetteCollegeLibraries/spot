@@ -4,7 +4,7 @@ development:
   ssl:
     verify: false
 test:
-  url: <%= ENV['SOLR_TEST_URL'] || ENV['SOLR_URL'] || "http://127.0.0.1:#{ENV.fetch('SOLR_TEST_PORT', 8983)}/solr/spot-test" %>
+  url: <%= ENV['SOLR_TEST_URL'] || "http://127.0.0.1:#{ENV.fetch('SOLR_TEST_PORT', 8983)}/solr/spot-test" %>
 production:
   url: <%= ENV['SOLR_URL'] %>
   ssl:
