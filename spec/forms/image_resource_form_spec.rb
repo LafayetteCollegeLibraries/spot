@@ -7,6 +7,7 @@ RSpec.describe ImageResourceForm, valkyrization: true do
   it_behaves_like 'it includes Hyrax::FormFields', schema: :core_metadata
   it_behaves_like 'it includes Hyrax::FormFields', schema: :base_metadata
   it_behaves_like 'it includes Hyrax::FormFields', schema: :image_metadata
+  it_behaves_like 'it validates EDTF date fields', fields: [:date]
 
   describe 'language-tagged resource fields' do
     describe '#title' do
