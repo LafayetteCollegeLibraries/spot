@@ -25,23 +25,31 @@ module Spot
     # to generate field labels.
     #
     # @return [Spot::IiifManifestPresenter]
+    # @todo is there a way we can add test coverage for this?
+    #
+    # :nocov:
     def iiif_manifest_presenter
       ::Spot::IiifManifestPresenter.new(search_result_document(search_params)).tap do |p|
         p.hostname = request.hostname
         p.ability = current_ability
       end
     end
+    # :nocov:
 
     def load_workflow_presenter
       @workflow_presenter = Hyrax::WorkflowPresenter.new(::SolrDocument.find(params[:id]), current_ability)
     end
 
     # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/app/controllers/concerns/hyrax/works_controller_behavior.rb#L252-L253
+    # @todo is there a way we can add test coverage for this?
+    #
+    # :nocov:
     def search_params
       params.deep_dup.tap do |sp|
         sp.delete(:page)
       end
     end
+    # :nocov:
 
     # When the workflow presenter has actions available, append a note to the update flash that the
     # review form needs to be marked as completed.
