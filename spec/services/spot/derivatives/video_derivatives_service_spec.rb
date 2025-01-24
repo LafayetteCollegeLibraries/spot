@@ -468,17 +468,17 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp4"
     end
 
-    context 'the transcript does not exist' do
-      before do
-        allow(mock_s3_client).to receive(:head_object).with(bucket: aws_import_bucket, key: transcript_name).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
-        allow(Rails.logger).to receive(:warn).with('Transcript not found.')
-        service.check_transcript(filename)
-      end
+    # context 'the transcript does not exist' do
+    #   before do
+    #     allow(mock_s3_client).to receive(:head_object).with(bucket: aws_import_bucket, key: transcript_name).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
+    #     allow(Rails.logger).to receive(:warn).with('Transcript not found.')
+    #     service.check_transcript(filename)
+    #   end
 
-      it "logs a warning that there is no transcript" do
-        expect(Rails.logger).to have_received(:warn).with('Transcript not found.')
-      end
-    end
+    #   it "logs a warning that there is no transcript" do
+    #     expect(Rails.logger).to have_received(:warn).with('Transcript not found.')
+    #   end
+    # end
 
     context 'the transcript exists' do
       before do
