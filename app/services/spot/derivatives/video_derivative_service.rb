@@ -41,11 +41,12 @@ module Spot
         base_file = filename.to_s.split('/')[-1].split('.')[0]
         project_name = base_file.split('_')[0]
         prefix = project_name + "/" + base_file + "_derivative"
-        Rails.logger.error('Derivative Prefix: ' + prefix)
+        Rails.logger.warn { 'Derivative Prefix: ' + prefix }
         object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
-        Rails.logger.error('Derivative list size: ' + object_list.length.to_s)
 
         return false if object_list.nil?
+
+        Rails.logger.warn { 'Derivative list size: ' + object_list.length.to_s }
 
         premade_derivatives = []
         object_list.each do |object|
@@ -81,15 +82,15 @@ module Spot
         base_file = filename.to_s.split('/')[-1].split('.')[0]
         project_name = base_file.split('_')[0]
         transcript_name = project_name + "/" + base_file + "_caption.vtt"
-        Rails.logger.error('Transcript Name: ' + transcript_name)
+        Rails.logger.warn { 'Transcript Name: ' + transcript_name }
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound
-          Rails.logger.error('Transcript not found.')
+          Rails.logger.warn('Transcript not found.') { 'Transcript not found.' }
         else
           # enqueue job
           Spot::TranscriptJob.perform_later(file_set: file_set, transcript_name: transcript_name)
-          Rails.logger.error('Transcript job enqueued.')
+          Rails.logger.warn { 'Transcript job enqueued.' }
         end
       end
 
