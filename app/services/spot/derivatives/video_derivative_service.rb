@@ -86,7 +86,7 @@ module Spot
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound
-          Rails.logger.warn('Transcript not found.') { 'Transcript not found.' }
+          Rails.logger.warn('Transcript not found.')
         else
           # enqueue job
           Spot::TranscriptJob.perform_later(file_set: file_set, transcript_name: transcript_name)
