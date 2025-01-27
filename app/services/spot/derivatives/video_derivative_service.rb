@@ -126,7 +126,7 @@ module Spot
       # only run service if bucket is defined and file includes video mime types
       def valid?
         if s3_bucket.blank?
-          Sidekiq::Logging.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
+          Rails.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
           return false
         end
 
