@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     container: ruby:2.7.8-slim-bullseye
     needs: lint
+    strategy:
+      matrix:
+        hyrax_valkyrie: [false, true]
     services:
       database:
         image: postgres:13-alpine
@@ -74,7 +77,7 @@ jobs:
       CAS_BASE_URL: ''
       CI: 1
       FEDORA_TEST_URL: http://fedora:8080/rest
-      HYRAX_VALKYRIE: false
+      HYRAX_VALKYRIE: ${{ matrix.hyrax_valkyrie }}
       IIIF_BASE_URL: http://localhost/iiif/2
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       PSQL_PASSWORD: spot_test_pw
