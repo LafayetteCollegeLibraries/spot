@@ -28,10 +28,7 @@ module Spot
       # @return [void]
       def clear_expired_embargoes(regenerate_thumbnails: false)
         ::Hyrax::EmbargoService.assets_with_expired_embargoes.each do |presenter|
-          resource = release_and_save_for_id(presenter.id, :embargo)
-          next unless resource
-
-          RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
+          release_and_save_for_id(presenter.id, type: :embargo, regenerate_thumbnails: regenerate_thumbnails)
         end
       end
 
@@ -40,10 +37,7 @@ module Spot
       # @return [void]
       def clear_expired_leases(regenerate_thumbnails: false)
         ::Hyrax::LeaseService.assets_with_expired_leases.each do |presenter|
-          resource = release_and_save_for_id(presenter.id, :lease)
-          next unless resource
-
-          RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
+          release_and_save_for_id(presenter.id, type: :lease, regenerate_thumbnails: regenerate_thumbnails)
         end
       end
 
@@ -53,32 +47,42 @@ module Spot
       # in Hyrax, so we'll do the bulk of that work here.
       #
       # @param [String] id
-      # @param [:embargo, :lease] type
-      # @return [Hyrax::Resource, nil]
-      def release_and_save_for_id(id, type)
-        manager_klass = case type
-                        when :embargo
-                          Hyrax::EmbargoManager
-                        when :lease
-                          Hyrax::LeaseManager
-                        end
-
-        return if manager_klass.nil?
-        resource = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id)
-
-        manager_klass.new(resource: resource).release!
-        resource.permission_manager.acl.save
+      # @option [:embargo, :lease] :type
+      # @option [true/false] :regenerate_thumbnails
+      # @return [void]
+      def release_and_save_for_id(id, type:, regenerate_thumbnails: false)
+        resource = release_and_save_acl_for(type: type, resource: Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: id))
+        return if resource.nil?
 
         copy_visibility_to_members!(resource: resource)
 
-        resource
+        RegenerateThumbnailJob.perform_later(resource) if regenerate_thumbnails == true
+      end
 
       # calling #release! on the managers will raise a +NotReleaseableError+ if
       # the embargo/lease isn't ready to be deactivated. Since the resource's
       # visibility hasn't changed, we won't bother to resave the object or enqueue
       # a thumbnail regeneration job.
+      #
+      # @todo how can we test the `nil` return value for coverage?
+      def release_and_save_acl_for(type:, resource:)
+        manager_class = manager_class_for(type)
+        return if manager_class.nil?
+
+        manager_class.new(resource: resource).release!
+        resource.permission_manager.acl.save
+        resource
       rescue Hyrax::EmbargoManager::NotReleasableError, Hyrax::LeaseManager::NotReleasableError
         nil
+      end
+
+      def manager_class_for(type)
+        case type
+        when :embargo
+          Hyrax::EmbargoManager
+        when :lease
+          Hyrax::LeaseManager
+        end
       end
 
       def copy_visibility_to_members!(resource:)
