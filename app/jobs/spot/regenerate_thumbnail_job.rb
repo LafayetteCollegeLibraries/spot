@@ -16,8 +16,8 @@ module Spot
       [work, file_set].each { |obj| Hyrax.persister.save(resource: obj) }
 
       true
-    rescue ::Valkyrie::Persistence::ObjectNotFoundError, ActiveFedora::ObjectNotFoundError, Ldp::Gone => err
-      Rails.logger.warn("Unable to regenerate thumbnail for #{@work.id}: #{err.message}")
+    rescue ::Valkyrie::Persistence::ObjectNotFoundError, ActiveFedora::ObjectNotFoundError, Ldp::Gone
+      Rails.logger.warn("Unable to regenerate thumbnail for deleted work #{@work.id}")
       true
     end
   end
