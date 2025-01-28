@@ -23,6 +23,13 @@ RSpec.describe Spot::RegenerateThumbnailJob, valkyrization: true do
   end
 
   describe '#perform' do
+    it 'generates a thumbnail and updates the index' do
+      described_class.perform_now(work)
+
+      expect(thumbnail_service_double).to have_received(:create_derivatives).with(thumbnail_path)
+      expect(Hyrax.persister).to have_received(:save).exactly(2).times
+    end
+
     context 'when a work does not have a thumbnail_id' do
       let(:thumbnail_id) { nil }
 
@@ -33,11 +40,20 @@ RSpec.describe Spot::RegenerateThumbnailJob, valkyrization: true do
       end
     end
 
-    it 'generates a thumbnail and updates the index' do
-      described_class.perform_now(work)
+    context 'when a work no longer exists' do
+      before do
+        allow(Rails.logger).to receive(:warn)
 
-      expect(thumbnail_service_double).to have_received(:create_derivatives).with(thumbnail_path)
-      expect(Hyrax.persister).to have_received(:save).exactly(2).times
+        allow(Hyrax.query_service)
+          .to receive(:find_by_alternate_identifier)
+          .with(alternate_identifier: thumbnail_id)
+          .and_raise(::Valkyrie::Persistence::ObjectNotFoundError)
+      end
+
+      it 'logs a warning' do
+        described_class.perform_now(work)
+        expect(Rails.logger).to have_received(:warn).with("Unable to regenerate thumbnail for deleted work #{work.id}")
+      end
     end
   end
 end
