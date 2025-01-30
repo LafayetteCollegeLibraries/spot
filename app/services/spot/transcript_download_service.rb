@@ -19,6 +19,7 @@ module Spot
 
     def download_transcript
       path = "/tmp/" + @transcript_name
+      FileUtils.touch(path)
       s3_client.get_object(key: @transcript_name, bucket: s3_source, response_target: path)
       Spot::FileSetTranscriptAttachmentService.attach(path: path, file_set: @file_set)
     end

@@ -93,12 +93,12 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       let(:aws_av_asset_bucket) { nil }
 
       before do
-        allow(Rails.logger).to receive(:warn)
+        allow(Hyrax.logger).to receive(:warn)
       end
 
       it 'logs a warning and returns false' do
         expect(service.valid?).to be false
-        expect(Rails.logger).to have_received(:warn)
+        expect(Hyrax.logger).to have_received(:warn)
           .with('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
       end
     end
@@ -468,17 +468,17 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
       allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp4"
     end
 
-    # context 'the transcript does not exist' do
-    #   before do
-    #     allow(mock_s3_client).to receive(:head_object).with(bucket: aws_import_bucket, key: transcript_name).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
-    #     allow(Rails.logger).to receive(:warn).with('Transcript not found.')
-    #     service.check_transcript(filename)
-    #   end
+    context 'the transcript does not exist' do
+      before do
+        allow(mock_s3_client).to receive(:head_object).with(bucket: aws_import_bucket, key: transcript_name).and_raise(Aws::S3::Errors::NotFound.new(nil, nil))
+        allow(Hyrax.logger).to receive(:warn).with('Transcript not found.')
+        service.check_transcript(filename)
+      end
 
-    #   it "logs a warning that there is no transcript" do
-    #     expect(Rails.logger).to have_received(:warn).with('Transcript not found.')
-    #   end
-    # end
+      it "logs a warning that there is no transcript" do
+        expect(Hyrax.logger).to have_received(:warn).with('Transcript not found.')
+      end
+    end
 
     context 'the transcript exists' do
       before do

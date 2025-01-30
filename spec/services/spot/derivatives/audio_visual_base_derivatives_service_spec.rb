@@ -105,12 +105,12 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       let(:aws_av_asset_bucket) { nil }
 
       before do
-        allow(Rails.logger).to receive(:warn)
+        allow(Hyrax.logger).to receive(:warn)
       end
 
       it 'logs a warning and returns false' do
         expect(service.valid?).to be false
-        expect(Rails.logger).to have_received(:warn)
+        expect(Hyrax.logger).to have_received(:warn)
           .with('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
       end
     end

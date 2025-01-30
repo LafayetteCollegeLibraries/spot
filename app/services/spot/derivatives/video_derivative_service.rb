@@ -66,6 +66,7 @@ module Spot
       # @return [void]
       def rename_premade_derivative(derivative, index)
         file_path = "/tmp/" + derivative
+        FileUtils.touch(file_path)
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         res = get_video_resolution(file_path)
         # add any other checks to the file here
@@ -126,7 +127,7 @@ module Spot
       # only run service if bucket is defined and file includes video mime types
       def valid?
         if s3_bucket.blank?
-          Rails.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
+          Hyrax.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
           return false
         end
 
