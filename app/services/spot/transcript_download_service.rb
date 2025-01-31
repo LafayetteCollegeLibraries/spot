@@ -18,7 +18,7 @@ module Spot
     end
 
     def download_transcript
-      path = "tmp/" + @transcript_name
+      path = Rails.root.join('tmp', 'premade_derivatives', @transcript_name).to_s
       FileUtils.mkdir_p(File.dirname(path))
 
       s3_client.get_object(key: @transcript_name, bucket: s3_source, response_target: path)

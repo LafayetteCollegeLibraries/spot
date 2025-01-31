@@ -65,7 +65,7 @@ module Spot
       # @param [Integer] index, index of premade derivative in array
       # @return [void]
       def rename_premade_derivative(derivative, index)
-        file_path = "tmp/" + derivative
+        file_path = Rails.root.join('tmp', 'premade_derivatives', derivative).to_s
         FileUtils.mkdir_p(File.dirname(file_path))
 
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
@@ -84,6 +84,7 @@ module Spot
         base_file = filename.to_s.split('/')[-1].split('.')[0]
         project_name = base_file.split('_')[0]
         transcript_name = project_name + "/" + base_file + "_caption.vtt"
+
         Hyrax.logger.debug('Transcript Name: ' + transcript_name)
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
