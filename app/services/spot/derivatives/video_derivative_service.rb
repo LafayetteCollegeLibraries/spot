@@ -66,7 +66,8 @@ module Spot
       # @return [void]
       def rename_premade_derivative(derivative, index)
         file_path = "/tmp/" + derivative
-        FileUtils.touch(file_path)
+        FileUtils.mkdir_p(File.dirname(file_path))
+
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         res = get_video_resolution(file_path)
         # add any other checks to the file here
