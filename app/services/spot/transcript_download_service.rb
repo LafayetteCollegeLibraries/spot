@@ -18,7 +18,7 @@ module Spot
     end
 
     def download_transcript
-      path = "/tmp/" + @transcript_name
+      path = "tmp/" + @transcript_name
       FileUtils.mkdir_p(File.dirname(path))
 
       s3_client.get_object(key: @transcript_name, bucket: s3_source, response_target: path)
