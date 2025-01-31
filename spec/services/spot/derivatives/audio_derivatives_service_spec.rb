@@ -283,51 +283,53 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   describe '#rename_premade_derivative' do
     subject { service.rename_premade_derivative(derivative, index) }
 
-    let(:derivative) { 'derivative_1' }
+    let(:derivative) { 'misc/misc_derivative_1.mp3' }
     let(:index) { 0 }
 
     before do
       allow(_file_set).to receive(:id).and_return("1234")
-      allow(FileUtils).to receive(:rm_f).with('/tmp/derivative_1')
-      allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
-      allow(service).to receive(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
+      allow(File).to receive(:dirname).with('/tmp/misc/misc_derivative_1.mp3').and_return('/tmp/misc')
+      allow(FileUtils).to receive(:mkdir_p).with('/tmp/misc')
+      allow(FileUtils).to receive(:rm_f).with('/tmp/misc/misc_derivative_1.mp3')
+      allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/misc/misc_derivative_1.mp3')
+      allow(service).to receive(:transfer_s3_derivative).with('misc/misc_derivative_1.mp3', '1234-0-access.mp3')
     end
 
     context 'the file exists' do
       before do
-        allow(File).to receive(:exist?).with('/tmp/derivative_1').and_return true
+        allow(File).to receive(:exist?).with('/tmp/misc/misc_derivative_1.mp3').and_return true
         service.rename_premade_derivative(derivative, index)
       end
 
       it 'should download the file from s3' do
-        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
+        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/misc/misc_derivative_1.mp3')
       end
 
       it 'should remove the temporary file' do
-        expect(FileUtils).to have_received(:rm_f).with('/tmp/derivative_1')
+        expect(FileUtils).to have_received(:rm_f).with('/tmp/misc/misc_derivative_1.mp3')
       end
 
       it 'should call to transfer the premade derivative' do
-        expect(service).to have_received(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
+        expect(service).to have_received(:transfer_s3_derivative).with('misc/misc_derivative_1.mp3', '1234-0-access.mp3')
       end
     end
 
     context 'the file does not exist' do
       before do
-        allow(File).to receive(:exist?).with('/tmp/derivative_1').and_return false
+        allow(File).to receive(:exist?).with('/tmp/misc/misc_derivative_1.mp3').and_return false
         service.rename_premade_derivative(derivative, index)
       end
 
       it 'should download the file from s3' do
-        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/derivative_1')
+        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/tmp/misc/misc_derivative_1.mp3')
       end
 
       it 'should not remove the temporary file' do
-        expect(FileUtils).to_not receive(:rm_f).with('/tmp/derivative_1')
+        expect(FileUtils).to_not receive(:rm_f).with('/tmp/misc/misc_derivative_1.mp3')
       end
 
       it 'should call to transfer the premade derivative' do
-        expect(service).to have_received(:transfer_s3_derivative).with('derivative_1', '1234-0-access.mp3')
+        expect(service).to have_received(:transfer_s3_derivative).with('misc/misc_derivative_1.mp3', '1234-0-access.mp3')
       end
     end
   end

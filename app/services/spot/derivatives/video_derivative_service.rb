@@ -41,12 +41,12 @@ module Spot
         base_file = filename.to_s.split('/')[-1].split('.')[0]
         project_name = base_file.split('_')[0]
         prefix = project_name + "/" + base_file + "_derivative"
-        Hyrax.logger.warn('Derivative Prefix: ' + prefix)
+        Hyrax.logger.debug('Derivative Prefix: ' + prefix)
         object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
 
         return false if object_list.nil?
 
-        Hyrax.logger.warn('Derivative list size: ' + object_list.length.to_s)
+        Hyrax.logger.debug('Derivative list size: ' + object_list.length.to_s)
 
         premade_derivatives = []
         object_list.each do |object|
@@ -84,7 +84,7 @@ module Spot
         base_file = filename.to_s.split('/')[-1].split('.')[0]
         project_name = base_file.split('_')[0]
         transcript_name = project_name + "/" + base_file + "_caption.vtt"
-        Hyrax.logger.warn('Transcript Name: ' + transcript_name)
+        Hyrax.logger.debug('Transcript Name: ' + transcript_name)
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound
@@ -92,7 +92,7 @@ module Spot
         else
           # enqueue job
           Spot::TranscriptJob.perform_later(file_set: file_set, transcript_name: transcript_name)
-          Hyrax.logger.warn { 'Transcript job enqueued.' }
+          Hyrax.logger.debug{ 'Transcript job enqueued.' }
         end
       end
 
