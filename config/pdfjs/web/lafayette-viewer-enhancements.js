@@ -6,8 +6,11 @@ document.addEventListener('pagerendered', function (ev) {
 
   app.eventBus.on('pagesloaded', function () {
     var findController = app.findController || {}
+    console.log("findController: " + findController)
     var state = findController.state || {}
+    console.log("state: " + state)
     var query = state.query || null
+    console.log("query: " + query)
 
     if (!query) {
       return
