@@ -8,7 +8,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   let(:fs_mime_type) { 'audio/mp3' }
 
   let(:mock_file) { Hydra::PCDM::File.new }
-  let(:derivative_path) { Rails.root.join('tmp','derivatives','ab','c1','23','de', 'f-access.mp3').to_s }
+  let(:derivative_path) { Rails.root.join('tmp', 'derivatives', 'ab', 'c1', '23', 'de', 'f-access.mp3').to_s }
   let(:src_path) { '/original/path/to/src/file.mp3' }
   let(:file_size) { 0 }
   let(:file_digest) { 'base64digest' }
@@ -288,7 +288,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     let(:derivatives_base) { Rails.root.join('tmp', 'derivatives') }
 
     before do
-      allow(FileUtils).to receive(:rm_f).with(premade_derivatives_base.join(derivative).to_s )
+      allow(FileUtils).to receive(:rm_f).with(premade_derivatives_base.join(derivative).to_s)
       allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: local_premade_derivative_path)
       allow(service).to receive(:transfer_s3_derivative).with('misc/misc_derivative_1.mp3', '1234-0-access.mp3')
     end
