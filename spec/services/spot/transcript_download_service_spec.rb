@@ -20,7 +20,7 @@ RSpec.describe Spot::TranscriptDownloadService do
   end
 
   describe '#download_transcript' do
-    let(:path) { '/__w/spot/spot/tmp/premade_derivatives/' + transcript_name }
+    let(:path) { Rails.root.join('tmp', 'premade_derivatives', transcript_name).to_s }
 
     before do
       allow(mock_s3_client).to receive(:get_object).with(key: transcript_name, bucket: aws_import_bucket, response_target: path)

@@ -38,9 +38,8 @@ module Spot
       #
       # @return [Boolean]
       def check_premade_derivatives(filename)
-        base_file = filename.to_s.split('/')[-1].split('.')[0]
-        project_name = base_file.split('_')[0]
-        prefix = project_name + "/" + base_file + "_derivative"
+        prefix = premade_derivative_key_with_suffix(filename, suffix: '_derivative')
+
         Hyrax.logger.debug('Derivative Prefix: ' + prefix)
         object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
 
@@ -48,11 +47,7 @@ module Spot
 
         Hyrax.logger.debug('Derivative list size: ' + object_list.length.to_s)
 
-        premade_derivatives = []
-        object_list.each do |object|
-          premade_derivatives.push(object[:key])
-        end
-
+        premade_derivatives = object_list.map { |object| object[:key] }
         premade_derivatives.each_with_index do |derivative, index|
           rename_premade_derivative(derivative, index)
         end
@@ -66,7 +61,9 @@ module Spot
       # @return [void]
       def rename_premade_derivative(derivative, index)
         file_path = Rails.root.join('tmp', 'premade_derivatives', derivative).to_s
-        FileUtils.mkdir_p(File.dirname(file_path))
+        destination = File.dirname(file_path)
+
+        FileUtils.mkdir_p(destination) unless Dir.exist?(destination)
 
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         res = get_video_resolution(file_path)
@@ -81,11 +78,9 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def check_transcript(filename)
-        base_file = filename.to_s.split('/')[-1].split('.')[0]
-        project_name = base_file.split('_')[0]
-        transcript_name = project_name + "/" + base_file + "_caption.vtt"
-
+        transcript_name = premade_derivative_key_with_suffix(filename, suffix: '_caption.vtt')
         Hyrax.logger.debug('Transcript Name: ' + transcript_name)
+
         begin
           s3_client.head_object(bucket: s3_source, key: transcript_name)
         rescue Aws::S3::Errors::NotFound
@@ -128,10 +123,7 @@ module Spot
 
       # only run service if bucket is defined and file includes video mime types
       def valid?
-        if s3_bucket.blank?
-          Hyrax.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
-          return false
-        end
+        return no_bucket_warning if s3_bucket.blank?
 
         video_mime_types.include?(mime_type)
       end

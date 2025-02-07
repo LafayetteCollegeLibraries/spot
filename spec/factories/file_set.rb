@@ -19,7 +19,7 @@ FactoryBot.define do
     end
 
     trait :public do
-      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
+      visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
       read_groups { ["public"] }
     end
 

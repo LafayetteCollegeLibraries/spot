@@ -2,13 +2,13 @@
 RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   let(:service) { described_class.new(file_set) }
 
-  let(:_file_set) { build(:file_set) }
+  let(:_file_set) { build(:file_set, id: '1234') }
   let(:file_set) { _file_set }
   let(:valid_file_set) { _file_set }
   let(:fs_mime_type) { 'audio/mp3' }
 
   let(:mock_file) { Hydra::PCDM::File.new }
-  let(:derivative_path) { '/rails/tmp/derivatives/ab/c1/23/de/f-access.mp3' }
+  let(:derivative_path) { Rails.root.join('tmp','derivatives','ab','c1','23','de', 'f-access.mp3').to_s }
   let(:src_path) { '/original/path/to/src/file.mp3' }
   let(:file_size) { 0 }
   let(:file_digest) { 'base64digest' }
@@ -281,32 +281,30 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   end
 
   describe '#rename_premade_derivative' do
-    subject { service.rename_premade_derivative(derivative, index) }
-
     let(:derivative) { 'misc/misc_derivative_1.mp3' }
     let(:index) { 0 }
+    let(:premade_derivatives_base) { Rails.root.join('tmp', 'premade_derivatives') }
+    let(:local_premade_derivative_path) { premade_derivatives_base.join(derivative).to_s }
+    let(:derivatives_base) { Rails.root.join('tmp', 'derivatives') }
 
     before do
-      allow(_file_set).to receive(:id).and_return("1234")
-      allow(File).to receive(:dirname).with('/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3').and_return('/__w/spot/spot/tmp/premade_derivatives/misc')
-      allow(FileUtils).to receive(:mkdir_p).with('/__w/spot/spot/tmp/premade_derivatives/misc')
-      allow(FileUtils).to receive(:rm_f).with('/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3')
-      allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3')
+      allow(FileUtils).to receive(:rm_f).with(premade_derivatives_base.join(derivative).to_s )
+      allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: local_premade_derivative_path)
       allow(service).to receive(:transfer_s3_derivative).with('misc/misc_derivative_1.mp3', '1234-0-access.mp3')
     end
 
     context 'the file exists' do
       before do
-        allow(File).to receive(:exist?).with('/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3').and_return true
+        allow(File).to receive(:exist?).with(local_premade_derivative_path).and_return true
         service.rename_premade_derivative(derivative, index)
       end
 
       it 'should download the file from s3' do
-        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3')
+        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: local_premade_derivative_path)
       end
 
       it 'should remove the temporary file' do
-        expect(FileUtils).to have_received(:rm_f).with('/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3')
+        expect(FileUtils).to have_received(:rm_f).with(local_premade_derivative_path)
       end
 
       it 'should call to transfer the premade derivative' do
@@ -316,16 +314,16 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
 
     context 'the file does not exist' do
       before do
-        allow(File).to receive(:exist?).with('/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3').and_return false
+        allow(File).to receive(:exist?).with(local_premade_derivative_path).and_return false
         service.rename_premade_derivative(derivative, index)
       end
 
       it 'should download the file from s3' do
-        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: '/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3')
+        expect(mock_s3_client).to have_received(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: local_premade_derivative_path)
       end
 
       it 'should not remove the temporary file' do
-        expect(FileUtils).to_not receive(:rm_f).with('/__w/spot/spot/tmp/premade_derivatives/misc/misc_derivative_1.mp3')
+        expect(FileUtils).to_not receive(:rm_f).with(local_premade_derivative_path)
       end
 
       it 'should call to transfer the premade derivative' do
