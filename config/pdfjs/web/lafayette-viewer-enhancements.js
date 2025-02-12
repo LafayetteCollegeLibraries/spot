@@ -1,7 +1,6 @@
 // fills in the findInput search box with the
 // provided query term (when present), only on load
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOMContentLoaded');
+document.addEventListener('DOMContentLoaded', function(ev) {
   var findInput = document.getElementById('findInput')
   var app = PDFViewerApplication
 
