@@ -245,7 +245,7 @@ GEM
       declarative-option (< 0.2.0)
       representable (>= 2.4.0, <= 3.1.0)
       uber (< 0.2.0)
-    docile (1.4.0)
+    docile (1.4.1)
     docopt (0.5.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
@@ -349,6 +349,8 @@ GEM
     faraday_middleware (0.14.0)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.15.5)
+    ffprober (1.0)
+      sorbet-runtime
     flipflop (2.7.1)
       activesupport (>= 4.0)
       terminal-table (>= 1.8)
@@ -971,7 +973,7 @@ GEM
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
-    simplecov (0.21.2)
+    simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
@@ -991,6 +993,7 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
+    sorbet-runtime (0.5.11463)
     sparql (3.2.5)
       builder (~> 3.2)
       ebnf (~> 2.2, >= 2.3.1)
@@ -1113,6 +1116,7 @@ DEPENDENCIES
   equivalent-xml (~> 0.6.0)
   factory_bot_rails (~> 6)
   faraday (~> 0.17.6)
+  ffprober
   honeybadger (~> 4.12.1)
   hydra-role-management (~> 1.1.0)
   hyrax (~> 3.6.0)

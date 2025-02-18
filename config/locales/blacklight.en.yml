@@ -11,6 +11,7 @@ en:
         academic_department: Academic Department
         advisor_label: Advisor
         author: Author
+        barcode: Barcode
         bibliographic_citation: Bibliographic Citation
         contributor: Contributor
         creator: Creator
@@ -45,6 +46,8 @@ en:
         page_count: Page Count
         permalink: Permalink
         physical_medium: Format
+        premade_derivatives: Premade Derivative
+        provenance: Provenance
         proxy_depositor: Proxy Depositor
         publisher: Publisher
         related_resource: Related Resource
