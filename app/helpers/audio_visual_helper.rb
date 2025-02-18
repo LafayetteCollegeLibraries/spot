@@ -32,31 +32,25 @@ module AudioVisualHelper
   # @param derivative [String] a particular derivative key to be matched with a presenter
   # @return [String] the original file name of the given derivative
   def get_original_name(presenters, derivative)
-    presenters.each do |presenter|
-      return presenter.original_filenames[0] if presenter.id.to_s == derivative.split("-")[0]
-    end
-    ""
+    presenter = presenters.find { |p| p.id.to_s == derivative.split('-').first }
+    return '' if presenter.blank?
+
+    presenter.original_filenames.first
   end
 
   # @param file_set [FileSet] a fileset from the view
   # @return [String] a list of associated derivatives of the work
   def get_derivative_list(presenters)
-    list = []
-    presenters.each do |presenter|
-      stored = presenter.stored_derivatives
-      stored.each do |derivative|
-        list.push(derivative)
-      end
-    end
-    list
+    presenters.flat_map(&:stored_derivatives)
   end
 
   # @param derivative [String] a particular derivative key
   # @return [String] the height of the derivative video
+  # @example
+  #   get_derivative_res('project/project_example_derivative-480.mp4')
+  #   #=> '480'
   def get_derivative_res(derivative)
-    ret = derivative.split('-').last
-    ret = ret.split('.')[0]
-    ret
+    File.basename(derivative, '.*').split('-').last
   end
 
   # @return the network path to the thumbnail

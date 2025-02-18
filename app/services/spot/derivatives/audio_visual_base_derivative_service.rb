@@ -45,24 +45,30 @@ module Spot
 
       # make urls out of derivative paths
       def derivative_urls
-        ret = []
-        derivative_paths.each do |path|
-          ret.push(URI("file://#{path}").to_s)
-        end
-        ret
+        derivative_paths.map { |path| URI("file://#{path}").to_s }
       end
 
       # Check mime types, overwritten by children
       def valid?
-        if s3_bucket.blank?
-          Hyrax.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
-          return false
-        end
+        return no_bucket_warning if s3_bucket.blank?
 
         audio_mime_types.include?(mime_type) || video_mime_types.include?(mime_type)
       end
 
       private
+
+      def no_bucket_warning
+        Hyrax.logger.warn('Skipping audio derivative generation because the AWS_AUDIO_VISUAL_BUCKET environment variable is not defined.')
+        false
+      end
+
+      def premade_derivative_key_with_suffix(filename, suffix: '_derivative')
+        file_key = File.basename(filename, '.*')
+        project_name = file_key.split('_').first
+        suffix = "_#{suffix}" unless suffix.start_with?('_')
+
+        "#{project_name}/#{file_key}#{suffix}".strip
+      end
 
       # destination for av derivatives
       def s3_bucket
