@@ -1,6 +1,6 @@
 // fills in the findInput search box with the
 // provided query term (when present), only on load
-document.addEventListener('pagerendered', function (ev) {
+document.addEventListener('DOMContentLoaded', function(ev) {
   var findInput = document.getElementById('findInput')
   var app = PDFViewerApplication
 
@@ -15,4 +15,4 @@ document.addEventListener('pagerendered', function (ev) {
 
     findInput.value = query
   })
-})
+}, true);
