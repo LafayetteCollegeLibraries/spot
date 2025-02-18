@@ -7,7 +7,6 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   let(:valid_file_set) { _file_set }
   let(:fs_mime_type) { 'video/mp4' }
 
-  let(:mock_file) { Hydra::PCDM::File.new }
   let(:derivative_path_base) { Rails.root.join('tmp', 'derivatives', 'ab', 'c1', '23', 'de') }
   let(:derivative_path) { derivative_path_base.join('f-access.mp4').to_s }
   let(:derivative_path_high) { derivative_path_base.join('f-access-high.mp4').to_s }
@@ -287,12 +286,8 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#check_premade_derivatives' do
     subject { service.check_premade_derivatives(filename) }
 
-    let(:filename) { mock_file }
+    let(:filename) { '/tmp/project_example.mp4' }
     let(:prefix) { "project/project_example_derivative" }
-
-    before do
-      allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp4"
-    end
 
     context 'the response is not empty' do
       let(:response) { { contents: [{ key: 'project/project_example_derivative-480.mp4' }, { key: 'project/project_example_derivative-1080.mp4' }] } }
@@ -465,11 +460,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
   describe '#check_transcript' do
     let(:transcript_name) { 'project/project_example_caption.vtt' }
     let(:response) { {} }
-    let(:filename) { mock_file }
-
-    before do
-      allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp4"
-    end
+    let(:filename) { '/tmp/project_example.mp4' }
 
     context 'the transcript does not exist' do
       before do

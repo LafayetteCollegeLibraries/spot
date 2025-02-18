@@ -40,17 +40,17 @@ module Spot
       def check_premade_derivatives(filename)
         prefix = premade_derivative_key_with_suffix(filename, suffix: '_derivative')
 
-        Hyrax.logger.debug('Derivative Prefix: ' + prefix)
-        object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
+        Hyrax.logger.debug("Derivative Prefix: #{prefix}")
+        object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h.fetch(:contents, nil)
 
         return false if object_list.nil?
 
-        Hyrax.logger.debug('Derivative list size: ' + object_list.length.to_s)
+        Hyrax.logger.debug("Derivative list size: #{object_list.length}")
 
-        premade_derivatives = object_list.map { |object| object[:key] }
-        premade_derivatives.each_with_index do |derivative, index|
-          rename_premade_derivative(derivative, index)
+        object_list.each_with_index do |obj, index|
+          rename_premade_derivative(obj[:key], index)
         end
+
         true
       end
 

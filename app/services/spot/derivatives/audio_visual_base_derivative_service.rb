@@ -63,7 +63,7 @@ module Spot
       end
 
       def premade_derivative_key_with_suffix(filename, suffix: '_derivative')
-        file_key = filename.to_s.split('/').last.split('.').first # see also File.basename(filename, '.*')
+        file_key = File.basename(filename, '.*')
         project_name = file_key.split('_').first
         suffix = "_#{suffix}" unless suffix.start_with?('_')
 

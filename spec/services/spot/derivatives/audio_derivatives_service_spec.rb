@@ -43,7 +43,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     allow(FileUtils).to receive(:rm_f).with(derivative_path)
 
     allow(FileUtils).to receive(:rm_f).with(File.dirname(derivative_path))
-    allow(File).to receive(:open).with(derivative_path, "r").and_return(stringio)
+    allow(File).to receive(:open).with(derivative_path, 'r').and_return(stringio)
     allow(Digest::MD5).to receive(:file).with(derivative_path).and_return(mock_digest)
 
     allow(_file_set).to receive(:mime_type).and_return('audio/mp3')
@@ -238,12 +238,8 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   describe '#check_premade_derivatives' do
     subject { service.check_premade_derivatives(filename) }
 
-    let(:filename) { mock_file }
+    let(:filename) { '/tmp/project_example.mp3' }
     let(:prefix) { "project/project_example_derivative" }
-
-    before do
-      allow(filename).to receive(:to_s).and_return "/tmp/project_example.mp3"
-    end
 
     context 'the response is not empty' do
       let(:response) { { contents: [{ key: 'project/project_example_derivative-480.mp3' }, { key: 'project/project_example_derivative-1080.mp3' }] } }
@@ -333,14 +329,12 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
   end
 
   describe '#create_derivatives' do
-    subject { service.create_derivatives(filename) }
-
-    let(:filename) { mock_file }
+    subject { service.create_derivatives(mock_file) }
 
     context 'check_premade_derivatives returns true' do
       before do
         allow(service).to receive(:check_premade_derivatives).and_return(true)
-        service.create_derivatives(filename)
+        service.create_derivatives(mock_file)
       end
 
       it 'should return immediately' do
@@ -351,7 +345,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     context 'check_premade_derivatives returns false' do
       before do
         allow(service).to receive(:check_premade_derivatives).and_return(false)
-        allow(Hydra::Derivatives::AudioDerivatives).to receive(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
+        allow(Hydra::Derivatives::AudioDerivatives).to receive(:create).with(src_path, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
         allow(_file_set).to receive(:id).and_return("1234")
         allow(service).to receive(:upload_derivatives_to_s3).with(['1234-0-access.mp3'], [derivative_path])
         allow(File).to receive(:exist?).with(derivative_path).and_return true
@@ -361,12 +355,12 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       context 'the files exists' do
         before do
           allow(File).to receive(:exist?).with(derivative_path).and_return true
-          service.create_derivatives(filename)
+          service.create_derivatives(src_path)
         end
 
         it 'creates derivative files' do
           expect(Hydra::Derivatives::AudioDerivatives)
-            .to have_received(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
+            .to have_received(:create).with(src_path, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
         end
 
         it 'uploads derivatives to s3' do
@@ -383,12 +377,12 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       context 'the file does not exist' do
         before do
           allow(File).to receive(:exist?).with(derivative_path).and_return false
-          service.create_derivatives(filename)
+          service.create_derivatives(src_path)
         end
 
         it 'creates derivative files' do
           expect(Hydra::Derivatives::AudioDerivatives)
-            .to have_received(:create).with(filename, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
+            .to have_received(:create).with(src_path, outputs: [{ label: 'mp3', format: 'mp3', url: "file://#{derivative_path}" }])
         end
 
         it 'uploads derivatives to s3' do
