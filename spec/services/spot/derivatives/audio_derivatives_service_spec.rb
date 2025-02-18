@@ -284,6 +284,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     let(:derivatives_base) { Rails.root.join('tmp', 'derivatives') }
 
     before do
+      allow(File).to receive(:directory?).with(File.dirname(local_premade_derivative_path)).and_return(true)
       allow(FileUtils).to receive(:rm_f).with(premade_derivatives_base.join(derivative).to_s)
       allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: local_premade_derivative_path)
       allow(service).to receive(:transfer_s3_derivative).with('misc/misc_derivative_1.mp3', '1234-0-access.mp3')

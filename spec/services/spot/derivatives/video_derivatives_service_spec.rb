@@ -333,7 +333,7 @@ RSpec.describe Spot::Derivatives::VideoDerivativeService, derivatives: true do
     let(:local_premade_derivative_path) { premade_derivatives_base.join(derivative).to_s }
 
     before do
-      allow(FileUtils).to receive(:mkdir_p).with(File.basename(local_premade_derivative_path))
+      allow(FileUtils).to receive(:mkdir_p).with(File.dirname(local_premade_derivative_path))
       allow(FileUtils).to receive(:rm_f).with(local_premade_derivative_path)
       allow(mock_s3_client).to receive(:get_object).with(key: derivative, bucket: aws_import_bucket, response_target: local_premade_derivative_path)
       allow(service).to receive(:get_video_resolution).with(local_premade_derivative_path).and_return [100, 200]
