@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 module Spot
-  # The intention is to treat this like the existing Hyrax::FormFields mixins.
+  # Adds support for adding a language tag to a value within the form. This is done
+  # by creating virtual "_value" and "_language" fields in the form, parsed from RDF::Literals,
+  # and merging them when the form is submitted. Include using the method invocation and pass
+  # the field names.
   #
   # @example
   #   class WorkResourceForm < ::Hyrax::Forms::ResourceForm(WorkResource)

@@ -12,7 +12,6 @@ module Spot
     extend ActiveSupport::Concern
     include ::Hyrax::WorksControllerBehavior
     include ::Hyrax::BreadcrumbsForWorks
-    include AdditionalFormatsForController
 
     included do
       before_action :load_workflow_presenter, only: :edit
@@ -20,6 +19,15 @@ module Spot
     end
 
     private
+
+    def additional_response_formats(wants)
+      super
+
+      wants.csv do
+        content = Spot::WorkCSVService.new(presenter.solr_document).csv
+        send_data(content, type: 'text/csv', filename: "#{presenter.id}.csv")
+      end
+    end
 
     # Overrides Hyrax behavior by using our own IIIF presenter that relies on Blacklight locales
     # to generate field labels.
