@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+#
+# @todo update for valkyrization?
 RSpec.shared_examples 'it accepts "metadata" as a visibility' do
   let(:work) { described_class.new }
   let(:public_group) { Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC }
