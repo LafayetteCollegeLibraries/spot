@@ -7,15 +7,18 @@ FactoryBot.define do
       visibility_setting { nil }
     end
 
+    # rubocop:disable Style/IfUnlessModifier
     after :build do |work, evaluator|
       if evaluator.visibility_setting
         Hyrax::VisibilityWriter.new(resource: work).assign_access_for(visibility: evaluator.visibility_setting)
       end
     end
+    # rubocop:enable Style/IfUnlessModifier
 
     after :create do |work, evaluator|
       if evaluator.visibility_setting
         Hyrax::VisibilityWriter.new(resource: work).assign_access_for(visibility: evaluator.visibility_setting)
+        work.permission_manager.acl.save
       end
     end
 
