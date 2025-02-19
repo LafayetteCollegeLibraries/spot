@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::Actors::PublicationActor do
+  include_context 'mock remote authorities'
+
   it_behaves_like 'a Spot actor'
 
   describe '#apply_date_available' do
@@ -32,13 +34,19 @@ RSpec.describe Hyrax::Actors::PublicationActor do
     end
 
     context 'when an embargo is set for the work' do
-      before { allow(work).to receive(:embargo).and_return embargo }
+      before do
+        work.embargo = af_embargo
+      end
 
       let(:embargo) do
-        instance_double(Hydra::AccessControls::Embargo,
-                        embargo_release_date: tomorrow_time,
-                        to_hash: {})
+        Hyrax::Embargo.new(
+          visibility_during_embargo: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
+          visibility_after_embargo: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
+          embargo_release_date: tomorrow_time
+        )
       end
+      let(:af_embargo) { Hyrax.persister.resource_factory.from_resource(resource: embargo) }
+
       let(:tomorrow_time) { Time.zone.tomorrow }
       let(:tomorrow) { tomorrow_time.strftime('%Y-%m-%d') }
 

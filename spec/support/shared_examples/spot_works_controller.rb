@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
-  let(:work_type) { described_class.name.split('::').last.sub('Controller', '').singularize.underscore.to_sym }
-  let(:work) { create(work_type, :public) }
+  let(:work_type) { described_class.curation_concern_type.name.underscore }
+  let(:using_valkyrie_resource) { work_type.end_with?('_resource') }
+  let(:factory_name) { using_valkyrie_resource ? :"#{work_type}_with_required_fields_only" : work_type.to_sym }
+  let(:factory_method) { using_valkyrie_resource ? :valkyrie_create : :create }
+  let(:visibility_trait) { :public }
+  let(:work) { FactoryBot.send(factory_method, factory_name, visibility_trait) }
 
   describe 'Hyrax::WorksControllerBehavior' do
     # @todo is this class_attribute going anywhere? keep an eye on it, i guess.
     context "when visiting a known #{described_class.curation_concern_type}" do
       before do
-        get :show, params: { id: work.id }
+        get :show, params: { id: work.id.to_s }
       end
 
       it { expect(response).to be_successful }
@@ -21,10 +25,10 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
     end
 
     context 'when visiting a Private Publication as a guest' do
-      let(:doc) { create(:publication, :private) }
+      let(:visibility_trait) { :private }
 
       before do
-        get :show, params: { id: doc.id }
+        get :show, params: { id: work.id.to_s }
       end
 
       it 'redirects to the login page' do
@@ -37,7 +41,7 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
   describe 'setting workflow_presenter' do
     context 'when editing a work' do
       it 'sets a @workflow_presenter' do
-        get :edit, params: { id: work.id }
+        get :edit, params: { id: work.id.to_s }
         presenter = assigns(:workflow_presenter)
 
         expect(presenter).not_to be nil
@@ -47,7 +51,7 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
 
     context 'when viewing a work' do
       it 'does nothing' do
-        get :show, params: { id: work.id }
+        get :show, params: { id: work.id.to_s }
         presenter = assigns(:workflow_presenter)
 
         expect(presenter).to be nil
@@ -68,7 +72,7 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
     let(:admin_user) { FactoryBot.create(:admin_user) }
     let(:mock_workflow_presenter) { instance_double('Hyrax::WorkflowPresenter', actions: workflow_actions) }
     let(:workflow_actions) { [] }
-    let(:response) { put :update, params: { id: work.id } }
+    let(:response) { put :update, params: { id: work.id.to_s } }
 
     it 'notifies that the work has been updated' do
       expect(flash_notice).to include('successfully updated')
@@ -88,9 +92,10 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
     context 'when requesting the metadata as csv' do
       let(:disposition)  { response.header.fetch('Content-Disposition') }
       let(:content_type) { response.header.fetch('Content-Type') }
+      let(:visibility_trait) { :public }
 
       it 'downloads the file' do
-        get :show, params: { id: work.id, format: 'csv' }
+        get :show, params: { id: work.id.to_s, format: 'csv' }
 
         expect(response).to be_successful
         expect(disposition).to include 'attachment'
