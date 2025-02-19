@@ -13,6 +13,5 @@ FactoryBot.define do
   factory :student_work_resource,
           parent: :student_work_resource_with_required_fields_only,
           traits: [:base_metadata, :institutional_metadata, :student_work_metadata] do
-
   end
 end
