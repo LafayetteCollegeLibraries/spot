@@ -1,0 +1,73 @@
+attributes:
+  date:
+    predicate: http://purl.org/dc/terms/date
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - date_ssim
+  date_associated:
+    predicate: https://d-nb.info/standards/elementset/gnd#associatedDate
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - date_associated_ssim
+      - date_associated_tesim
+  inscription:
+    predicate: http://dbpedia.org/ontology/inscription
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - inscription_tesim
+  original_item_extent:
+    predicate: http://purl.org/dc/terms/extent
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - original_item_extent_tesim
+  repository_location:
+    predicate: http://purl.org/vra/placeOfRepository
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - repository_location_ssim
+  research_assistance:
+    predicate: http://www.rdaregistry.info/Elements/a/#P50265
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - research_assistance_ssim
+  provenance:
+    predicate: http://purl.org/dc/terms/provenance
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - provenance_tesim
+  barcode:
+    predicate: https://schema.org/Barcode
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - barcode_ssim
+  stored_derivatives:
+    type: string
+    multiple: true
+    form:
+      multiple: false
+    index_keys:
+      - stored_derivatives_ssim
