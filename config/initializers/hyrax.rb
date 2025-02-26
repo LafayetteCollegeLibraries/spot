@@ -13,8 +13,10 @@ Hyrax.config do |config|
     Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
   end
 
-  config.admin_set_model = Hyrax::AdministrativeSet
-  config.collection_model = Hyrax.config.use_valkyrie? ? 'Hyrax::PcdmCollection' : 'Collection'
+  config.admin_set_model = 'AdminSet'
+  config.collection_model = 'Collection'
+  # config.admin_set_model = Hyrax::AdministrativeSet
+  # config.collection_model = Hyrax.config.use_valkyrie? ? 'Hyrax::PcdmCollection' : 'Collection'
   config.query_index_from_valkyrie = Hyrax.config.use_valkyrie?
   config.index_adapter = Hyrax.config.use_valkyrie? ? :solr_index : :null_index
 

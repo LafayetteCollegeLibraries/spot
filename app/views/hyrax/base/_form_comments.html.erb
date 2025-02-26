@@ -1,4 +1,4 @@
-<% if @workflow_presenter&.comments.empty? || @workflow_presenter.nil? %>
+<% if (@workflow_presenter.try(:comments) || []).empty? || @workflow_presenter.nil? %>
   <div class="panel panel-info">
     <div class="panel-body">
       <em><%= f.object.title %></em> has no comments to display.
