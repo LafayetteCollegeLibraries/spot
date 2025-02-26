@@ -47,8 +47,8 @@ class Ability
     can(role_abilities, Role)
 
     # admins can create everything
-    can(:create, curation_concerns_models)
-    can(:create, [PublicationResource, ImageResource, StudentWorkResource])
+    can([:create, :delete, :manage], curation_concerns_models)
+    can([:create, :delete, :manage], [PublicationResource, ImageResource, StudentWorkResource])
   end
 
   def authenticated_users_can_deposit_student_works

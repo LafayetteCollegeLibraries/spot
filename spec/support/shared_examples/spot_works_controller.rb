@@ -7,6 +7,10 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
   let(:visibility_trait) { :public }
   let(:work) { FactoryBot.send(factory_method, factory_name, visibility_trait) }
 
+  before do
+    ActiveJob::Base.queue_adapter.filter = [IngestJob]
+  end
+
   describe 'Hyrax::WorksControllerBehavior' do
     # @todo is this class_attribute going anywhere? keep an eye on it, i guess.
     context "when visiting a known #{described_class.curation_concern_type}" do
@@ -60,11 +64,12 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
   end
 
   describe 'updating flash message' do
-    subject(:flash_notice) { response.request.flash[:notice] }
+    subject(:flash_notice) { update_response.request.flash[:notice] }
 
     before do
       allow(Hyrax::CurationConcern.actor).to receive(:update).and_return true
       allow(Hyrax::WorkflowPresenter).to receive(:new).and_return(mock_workflow_presenter)
+      ActiveJob::Base.queue_adapter.filter = []
 
       sign_in admin_user
     end
@@ -72,7 +77,7 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
     let(:admin_user) { FactoryBot.create(:admin_user) }
     let(:mock_workflow_presenter) { instance_double('Hyrax::WorkflowPresenter', actions: workflow_actions) }
     let(:workflow_actions) { [] }
-    let(:response) { put :update, params: { id: work.id.to_s } }
+    let(:update_response) { patch :update, params: { id: work.id.to_s, work_type => { title_value: ['new title value'] } } }
 
     it 'notifies that the work has been updated' do
       expect(flash_notice).to include('successfully updated')

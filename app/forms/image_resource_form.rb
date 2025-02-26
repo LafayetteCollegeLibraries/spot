@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# Form to edit ImageResource objects
 class ImageResourceForm < ::Hyrax::Forms::ResourceForm(ImageResource)
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:image_metadata)
