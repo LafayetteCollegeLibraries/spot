@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# Form to edit PublicationResource objects
 class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource)
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:institutional_metadata)

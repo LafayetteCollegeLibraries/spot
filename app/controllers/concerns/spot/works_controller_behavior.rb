@@ -13,12 +13,26 @@ module Spot
     include ::Hyrax::WorksControllerBehavior
     include ::Hyrax::BreadcrumbsForWorks
 
+
     included do
       before_action :load_workflow_presenter, only: :edit
       after_action  :update_workflow_flash, only: :update
+
+      self.work_form_service = Spot::WorkFormService
     end
 
     private
+
+    # @note valkyrie forms only accept the resource in the initializer,
+    #       so our specs are currently failing when HYRAX_VALKYRIE=1.
+    #       I'm assuming this is fixed upstream, so I'm just going to
+    #       patch this for now.
+    # @todo Remove when Hyrax > 5
+    def build_form
+      super
+    rescue ArgumentError
+      @form = work_form_service.form_class(curation_concern).new(curation_concern)
+    end
 
     def additional_response_formats(wants)
       super

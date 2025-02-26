@@ -1,0 +1,7 @@
+<%#
+  @note This partial is removed in Hyrax 5 and is here to prevent test errors when HYRAX_VALKYRIE=1
+  @see https://github.com/samvera/hyrax/issues/5594
+%>
+<% unless (f.object.model.try(:errors).try(:[], :ordered_member_ids) || []).empty? %>
+  <%= f.full_error(:ordered_member_ids) %>
+<% end %>
