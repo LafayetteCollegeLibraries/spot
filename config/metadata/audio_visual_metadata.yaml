@@ -64,10 +64,3 @@ attributes:
       multiple: true
     index_keys:
       - barcode_ssim
-  stored_derivatives:
-    type: string
-    multiple: true
-    form:
-      multiple: false
-    index_keys:
-      - stored_derivatives_ssim
