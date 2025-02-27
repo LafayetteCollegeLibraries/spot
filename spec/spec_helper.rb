@@ -118,6 +118,7 @@ RSpec.configure do |config|
   config.include StubEnv::Helpers
   config.include ControllerHelpers, type: :helper
   config.include Select2Helpers, type: :feature
+  config.include FeatureSpecHelpers, type: :feature
   config.include Mail::Matchers, type: :mailer
 
   config.use_transactional_fixtures = false

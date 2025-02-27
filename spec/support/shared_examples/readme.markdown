@@ -27,6 +27,7 @@ forms/nested_attribute_resource_field.rb        | `'a nested attribute field'`  
 forms/primary_terms_form_hints.rb               | `'it has hints for all primary_terms'`                                                | revisit for Valkyrization?
 forms/required_fields.rb                        | `'it handles required fields'`                                                        | revisit for Valkyrization?
 forms/spot_work_form.rb                         | `'a Spot work form'`                                                                  | deprecated (Hyrax < 6)
+forms/spot_resource_form.rb                     | `'a Spot resource form'`                                                              | common resource form attributes
 forms/strips_whitespace.rb                      | `'it strips whitespaces from values'`                                                 | revisit for Valkyrization?
 forms/transforms_local_vocabulary_attributes.rb | `'it transforms a local vocabulary attribute'`                                        | deprecated (Hyrax < 6)
 indexing/base_resource_indexer.rb               | `'a BaseResourceIndexer'`                                                             |
