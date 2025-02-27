@@ -39,59 +39,59 @@ RSpec.feature 'Create an Image', :clean, :js do
 
         expect(page).to have_content "Add New #{i18n_term}"
 
-        fill_in 'image_title', with: attrs[:title].first
-        expect(page).not_to have_css '.image_title .controls-add-text'
+        fill_in image_selector_for('title'), with: attrs[:title].first
+        expect(page).not_to have_css ".#{image_selector_for('title')} .controls-add-text"
 
-        select 'Image', from: 'image_resource_type'
-        expect(page).not_to have_css '.image_resource_type .controls-add-text'
+        select 'Image', from: image_selector_for('resource_type')
+        expect(page).not_to have_css ".#{image_selector_for('resource_type')} .controls-add-text"
 
-        fill_in 'image_date', with: attrs[:date].first
-        expect(page).to have_css '.image_date .controls-add-text'
+        fill_in image_selector_for('date'), with: attrs[:date].first
+        expect(page).to have_css ".#{image_selector_for('date')} .controls-add-text"
 
-        select 'Copyright Undetermined', from: 'image_rights_statement'
-        expect(page).not_to have_css '.image_rights_statement .controls-add-text'
+        select 'Copyright Undetermined', from: image_selector_for('rights_statement')
+        expect(page).not_to have_css ".#{image_selector_for('rights_statement')} .controls-add-text"
 
-        fill_in 'image_title_alternative', with: attrs[:title_alternative].first
-        fill_in 'image_title_alternative_language', with: 'en'
-        expect(page).to have_css '.image_title_alternative .controls-add-text'
+        fill_in image_selector_for('title_alternative'), with: attrs[:title_alternative].first
+        fill_in image_selector_for('title_alternative_language'), with: 'en'
+        expect(page).to have_css ".#{image_selector_for('title_alternative')} .controls-add-text"
 
-        fill_in 'image_subtitle', with: attrs[:subtitle].first
-        fill_in 'image_subtitle_language', with: 'en'
-        expect(page).to have_css '.image_title_alternative .controls-add-text'
+        fill_in image_selector_for('subtitle'), with: attrs[:subtitle].first
+        fill_in image_selector_for('subtitle_language'), with: 'en'
+        expect(page).to have_css ".#{image_selector_for('title_alternative')} .controls-add-text"
 
-        fill_in 'image_date_associated', with: attrs[:date_associated].first
-        expect(page).to have_css '.image_date_associated .controls-add-text'
+        fill_in image_selector_for('date_associated'), with: attrs[:date_associated].first
+        expect(page).to have_css ".#{image_selector_for('date_associated')} .controls-add-text"
 
-        fill_in 'image_date_scope_note', with: attrs[:date_scope_note].first
-        expect(page).to have_css '.image_date_scope_note .controls-add-text'
+        fill_in image_selector_for('date_scope_note'), with: attrs[:date_scope_note].first
+        expect(page).to have_css ".#{image_selector_for('date_scope_note')} .controls-add-text"
 
-        fill_in 'image_rights_holder', with: attrs[:rights_holder].first
-        expect(page).to have_css '.image_rights_holder .controls-add-text'
+        fill_in image_selector_for('rights_holder'), with: attrs[:rights_holder].first
+        expect(page).to have_css ".#{image_selector_for('rights_holder')} .controls-add-text"
 
-        fill_in 'image_description', with: attrs[:description].first
-        fill_in 'image_description_language', with: 'en'
-        expect(page).to have_css '.image_description .controls-add-text'
+        fill_in image_selector_for('description'), with: attrs[:description].first
+        fill_in image_selector_for('description_language'), with: 'en'
+        expect(page).to have_css ".#{image_selector_for('description')} .controls-add-text"
 
-        fill_in 'image_inscription', with: attrs[:inscription].first
-        fill_in 'image_inscription_language', with: 'en'
-        expect(page).to have_css '.image_inscription .controls-add-text'
+        fill_in image_selector_for('inscription'), with: attrs[:inscription].first
+        fill_in image_selector_for('inscription_language'), with: 'en'
+        expect(page).to have_css ".#{image_selector_for('inscription')} .controls-add-text"
 
-        fill_in 'image_creator', with: attrs[:creator].first
-        expect(page).to have_css '.image_creator .controls-add-text'
+        fill_in image_selector_for('creator'), with: attrs[:creator].first
+        expect(page).to have_css ".#{image_selector_for('creator')} .controls-add-text"
 
-        fill_in 'image_publisher', with: attrs[:publisher].first
-        expect(page).to have_css '.image_publisher .controls-add-text'
+        fill_in image_selector_for('publisher'), with: attrs[:publisher].first
+        expect(page).to have_css ".#{image_selector_for('publisher')} .controls-add-text"
 
-        fill_in 'image_keyword', with: attrs[:keyword].first
-        expect(page).to have_css '.image_keyword .controls-add-text'
+        fill_in image_selector_for('keyword'), with: attrs[:keyword].first
+        expect(page).to have_css ".#{image_selector_for('keyword')} .controls-add-text"
 
         fill_in_autocomplete '.image_subject', with: attrs[:subject].first
-        expect(page).to have_css('.image_subject.form-control[data-autocomplete="subject"]', visible: false)
-        expect(page).to have_css('.image_subject.form-control[data-autocomplete-url="/authorities/search/assign_fast/all"]', visible: false)
-        expect(page).to have_css('.image_subject .controls-add-text')
+        expect(page).to have_css(".#{image_selector_for('subject')}.form-control[data-autocomplete='subject']", visible: false)
+        expect(page).to have_css(".#{image_selector_for('subject')}.form-control[data-autocomplete-url='/authorities/search/assign_fast/all']", visible: false)
+        expect(page).to have_css(".#{image_selector_for('subject')} .controls-add-text")
 
         # multi-authority for location
-        location_selector = 'input.image_location.multi_auth_controlled_vocabulary'
+        location_selector = "input.#{image_selector_for('location')}.multi_auth_controlled_vocabulary"
         expect(page).to have_css("#{location_selector}[data-autocomplete='location']", visible: false)
 
         # @todo maybe this should be a support thing?
@@ -108,44 +108,44 @@ RSpec.feature 'Create an Image', :clean, :js do
           sleep 1
         end
 
-        expect(page).to have_css('.image_location .controls-add-text')
+        expect(page).to have_css(".#{image_selector_for('location')} .controls-add-text")
         # end location
 
-        fill_in_autocomplete '.image_language', with: attrs[:language].first
-        expect(page).to have_css('.image_language .controls-add-text')
+        fill_in_autocomplete ".#{image_selector_for('language')}", with: attrs[:language].first
+        expect(page).to have_css(".#{image_selector_for('language')} .controls-add-text")
 
-        fill_in 'image_source', with: attrs[:source].first
-        expect(page).to have_css('.image_source .controls-add-text')
+        fill_in image_selector_for('source'), with: attrs[:source].first
+        expect(page).to have_css(".#{image_selector_for('source')} .controls-add-text")
 
-        fill_in 'image_physical_medium', with: attrs[:physical_medium].first
-        expect(page).to have_css('.image_physical_medium .controls-add-text')
+        fill_in image_selector_for('physical_medium'), with: attrs[:physical_medium].first
+        expect(page).to have_css(".#{image_selector_for('physical_medium')} .controls-add-text")
 
-        fill_in 'image_original_item_extent', with: attrs[:original_item_extent].first
-        expect(page).to have_css('.image_original_item_extent .controls-add-text')
+        fill_in image_selector_for('original_item_extent'), with: attrs[:original_item_extent].first
+        expect(page).to have_css(".#{image_selector_for('original_item_extent')} .controls-add-text")
 
-        fill_in 'image_repository_location', with: attrs[:repository_location].first
-        expect(page).to have_css('.image_repository_location .controls-add-text')
+        fill_in image_selector_for('repository_location'), with: attrs[:repository_location].first
+        expect(page).to have_css(".#{image_selector_for('repository_location')} .controls-add-text")
 
-        fill_in 'image_requested_by', with: attrs[:requested_by].first
-        expect(page).to have_css('.image_requested_by .controls-add-text')
+        fill_in image_selector_for('requested_by'), with: attrs[:requested_by].first
+        expect(page).to have_css(".#{image_selector_for('requested_by')} .controls-add-text")
 
-        fill_in 'image_research_assistance', with: attrs[:research_assistance].first
-        expect(page).to have_css('.image_research_assistance .controls-add-text')
+        fill_in image_selector_for('research_assistance'), with: attrs[:research_assistance].first
+        expect(page).to have_css(".#{image_selector_for('research_assistance')} .controls-add-text")
 
-        fill_in 'image_donor', with: attrs[:donor].first
-        expect(page).to have_css('.image_donor .controls-add-text')
+        fill_in image_selector_for('donor'), with: attrs[:donor].first
+        expect(page).to have_css(".#{image_selector_for('donor')} .controls-add-text")
 
-        fill_in 'image_related_resource', with: attrs[:related_resource].first
-        expect(page).to have_css('.image_related_resource .controls-add-text')
+        fill_in image_selector_for('related_resource'), with: attrs[:related_resource].first
+        expect(page).to have_css(".#{image_selector_for('related_resource')} .controls-add-text")
 
-        fill_in 'image_local_identifier', with: 'local:abc123'
-        expect(page).to have_css('.image_local_identifier .controls-add-text')
+        fill_in image_selector_for('local_identifier'), with: 'local:abc123'
+        expect(page).to have_css(".#{image_selector_for('local_identifier')} .controls-add-text")
 
-        fill_in_autocomplete '.image_subject_ocm', with: attrs[:subject_ocm].first
-        expect(page).to have_css('.image_subject_ocm .controls-add-text')
+        fill_in_autocomplete ".#{image_selector_for('subject_ocm')}", with: attrs[:subject_ocm].first
+        expect(page).to have_css(".#{image_selector_for('subject_ocm')} .controls-add-text")
 
-        fill_in 'image_note', with: attrs[:note].first
-        expect(page).to have_css('.image_note .controls-add-text')
+        fill_in image_selector_for('note'), with: attrs[:note].first
+        expect(page).to have_css(".#{image_selector_for('note')} .controls-add-text")
 
         # see long note in +create_publication_spec.rb+ for why we need to scroll back to the top
         page.execute_script('window.scrollTo(0,0)')
@@ -158,7 +158,7 @@ RSpec.feature 'Create an Image', :clean, :js do
         end
 
         # select visibility
-        choose 'image_visibility_open'
+        choose image_selector_for('visibility_open')
 
         # check the submission agreement
         # check 'agreement'
