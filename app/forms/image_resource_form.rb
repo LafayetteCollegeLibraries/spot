@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class ImageResourceForm < ::Hyrax::Forms::ResourceForm(ImageResource)
+  include Spot::ResourceFormBehavior
+
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:image_metadata)
 

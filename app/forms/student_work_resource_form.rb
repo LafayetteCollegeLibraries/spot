@@ -7,6 +7,8 @@
 class StudentWorkResourceForm < ::Hyrax::Forms::ResourceForm(StudentWorkResource)
   DEFAULT_RIGHTS_STATEMENT_URI = 'http://rightsstatements.org/vocab/InC-EDU/1.0/'
 
+  include Spot::ResourceFormBehavior
+
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:institutional_metadata)
   include Hyrax::FormFields(:student_work_metadata)
