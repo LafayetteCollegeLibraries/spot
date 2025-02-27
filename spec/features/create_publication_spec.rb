@@ -22,6 +22,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
     let(:id_standard) { Spot::Identifier.new('issn', '1234-5678') }
     let(:identifier) { Spot::Identifier.from_string(attrs[:identifier].first) }
     let(:subject_uri) { 'http://id.worldcat.org/fast/1061714' }
+    let(:selector_prefix) { Hyrax.config.use_valkyrie? ? 'publication_resource' : 'publication' }
 
     describe 'can fill out and submit a new Publication' do
       scenario do
@@ -36,73 +37,82 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
         expect(page).to have_content "Add New #{i18n_term}"
 
-        fill_in 'publication_title', with: attrs[:title].first
-        expect(page).not_to have_css '.publication_title .controls-add-text'
+        # @note a little confusing with all the abstraction re: helpers, but we needed a way
+        #       to account for "publication" vs "publication_resource" in the selector name and
+        #       i wanted to abstract out the field portion as well. it's important to note which
+        #       selectors are being used (#fill_in doesn't use a selector prefix, #have_css is
+        #       using css classes). without the helpers this looks like:
+        #
+        #       fill_in 'publication_resource_title', with: attrs[:title].first
+        #       expect(page).not_to have_css '.publication_resource_title" .controls-add-text'
 
-        fill_in 'publication_rights_holder', with: attrs[:rights_holder].first
-        expect(page).to have_css '.publication_rights_holder .controls-add-text'
+        fill_in publication_selector_for('title'), with: attrs[:title].first
+        expect(page).not_to have_css ".#{publication_selector_for('title')} .controls-add-text"
 
-        fill_in 'publication_subtitle', with: attrs[:subtitle].first
-        expect(page).to have_css '.publication_subtitle .controls-add-text'
+        fill_in publication_selector_for('rights_holder'), with: attrs[:rights_holder].first
+        expect(page).to have_css ".#{publication_selector_for('rights_holder')} .controls-add-text"
 
-        fill_in 'publication_title_alternative', with: attrs[:title_alternative].first
-        expect(page).to have_css '.publication_title_alternative .controls-add-text'
+        fill_in publication_selector_for('subtitle'), with: attrs[:subtitle].first
+        expect(page).to have_css ".#{publication_selector_for('subtitle')} .controls-add-text"
 
-        fill_in 'publication_publisher', with: attrs[:publisher].first
-        expect(page).to have_css '.publication_publisher .controls-add-text'
+        fill_in publication_selector_for('title_alternative'), with: attrs[:title_alternative].first
+        expect(page).to have_css ".#{publication_selector_for('title_alternative')} .controls-add-text"
 
-        fill_in 'publication_source', with: attrs[:source].first
-        expect(page).to have_css '.publication_source .controls-add-text'
+        fill_in publication_selector_for('publisher'), with: attrs[:publisher].first
+        expect(page).to have_css ".#{publication_selector_for('publisher')} .controls-add-text"
 
-        select 'Article', from: 'publication_resource_type'
-        expect(page).not_to have_css '.publication_resource_type .controls-add-text'
+        fill_in publication_selector_for('source'), with: attrs[:source].first
+        expect(page).to have_css ".#{publication_selector_for('source')} .controls-add-text"
 
-        fill_in_autocomplete '.publication_language', with: attrs[:language].first
-        expect(page).to have_css '.publication_language .controls-add-text'
+        select "Article", from: "#{publication_selector_for('resource_type')}"
+        expect(page).not_to have_css ".#{publication_selector_for('resource_type')} .controls-add-text"
 
-        fill_in 'publication_abstract', with: attrs[:abstract].first
-        expect(page).not_to have_css '.publication_abstract .controls-add-text'
+        fill_in_autocomplete ".#{publication_selector_for('language')}", with: attrs[:language].first
+        expect(page).to have_css ".#{publication_selector_for('language')} .controls-add-text"
 
-        fill_in 'publication_description', with: attrs[:description].first
-        expect(page).to have_css '.publication_description .controls-add-text'
+        fill_in publication_selector_for('abstract'), with: attrs[:abstract].first
+        expect(page).not_to have_css ".#{publication_selector_for('abstract')} .controls-add-text"
 
-        select id_standard.prefix_label, from: 'publication[standard_identifier_prefix][]'
-        fill_in 'publication[standard_identifier_value][]', with: id_standard.value
+        fill_in publication_selector_for('description'), with: attrs[:description].first
+        expect(page).to have_css ".#{publication_selector_for('description')} .controls-add-text"
 
-        fill_in 'publication[local_identifier][]', with: id_local.to_s
+        select id_standard.prefix_label, from: "#{selector_prefix}[standard_identifier_prefix][]"
+        fill_in "#{publication_selector_prefix}[standard_identifier_value][]", with: id_standard.value
 
-        fill_in 'publication_bibliographic_citation', with: attrs[:bibliographic_citation].first
-        expect(page).to have_css '.publication_bibliographic_citation .controls-add-text'
+        fill_in "#{publication_selector_prefix}[local_identifier][]", with: id_local.to_s
 
-        fill_in 'publication_date_issued', with: attrs[:date_issued].first
-        expect(page).not_to have_css '.publication_date_issued .controls-add-text'
+        fill_in publication_selector_for('bibliographic_citation'), with: attrs[:bibliographic_citation].first
+        expect(page).to have_css "#{publication_selector_for('bibliographic_citation')} .controls-add-text"
 
-        fill_in 'publication_creator', with: attrs[:creator].first
-        expect(page).to have_css '.publication_creator .controls-add-text'
+        fill_in publication_selector_for('date_issued'), with: attrs[:date_issued].first
+        expect(page).not_to have_css ".#{publication_selector_for('date_issued')} .controls-add-text"
 
-        fill_in 'publication_contributor', with: attrs[:contributor].first
-        expect(page).to have_css '.publication_contributor .controls-add-text'
+        fill_in publication_selector_for('creator'), with: attrs[:creator].first
+        expect(page).to have_css ".#{publication_selector_for('creator')} .controls-add-text"
 
-        fill_in 'publication_editor', with: attrs[:editor].first
-        expect(page).to have_css '.publication_editor .controls-add-text'
+        fill_in publication_selector_for('contributor'), with: attrs[:contributor].first
+        expect(page).to have_css ".#{publication_selector_for('contributor')} .controls-add-text"
 
-        fill_in_autocomplete '.publication_academic_department',
+        fill_in publication_selector_for('editor'), with: attrs[:editor].first
+        expect(page).to have_css ".#{publication_selector_for('editor')} .controls-add-text"
+
+        fill_in_autocomplete publication_selector_for('academic_department'),
                              with: attrs[:academic_department].first
-        expect(page).to have_css '.publication_academic_department .controls-add-text'
+        expect(page).to have_css ".#{publication_selector_for('academic_department')} .controls-add-text"
 
-        fill_in_autocomplete '.publication_division', with: attrs[:division].first
-        expect(page).to have_css '.publication_division .controls-add-text'
+        fill_in_autocomplete ".#{publication_selector_for('division')}", with: attrs[:division].first
+        expect(page).to have_css ".#{publication_selector_for('division')} .controls-add-text"
 
-        fill_in_autocomplete '.publication_subject', with: attrs[:subject].first
-        expect(page).to have_css '.publication_subject .controls-add-text'
+        fill_in_autocomplete ".#{publication_selector_for('subject')}", with: attrs[:subject].first
+        expect(page).to have_css ".#{publication_selector_for('subject')} .controls-add-text"
 
-        fill_in 'publication_organization', with: attrs[:organization].first
-        expect(page).to have_css '.publication_organization .controls-add-text'
+        fill_in publication_selector_for('organization'), with: attrs[:organization].first
+        expect(page).to have_css ".#{publication_selector_for('organization')} .controls-add-text"
 
-        fill_in 'publication_keyword', with: attrs[:keyword].first
-        expect(page).to have_css '.publication_keyword .controls-add-text'
+        fill_in publication_selector_for('keyword'), with: attrs[:keyword].first
+        expect(page).to have_css ".#{publication_selector_for('keyword')} .controls-add-text"
 
-        select 'No Known Copyright', from: 'publication_rights_statement'
+        select 'No Known Copyright', from: publication_selector_for('rights_statement')
 
         ##
         # add files
@@ -138,7 +148,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         end
 
         # select visibility
-        choose 'publication_visibility_open'
+        choose publication_selector_for('visibility_open')
 
         # check the submission agreement
         # check 'agreement'

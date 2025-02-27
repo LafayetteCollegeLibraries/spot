@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 RSpec.describe PublicationResourceForm, valkyrization: true do
+  it_behaves_like 'a Spot resource form'
   it_behaves_like 'it supports local/standard identifiers'
   it_behaves_like 'it includes Hyrax::FormFields', schema: :core_metadata
   it_behaves_like 'it includes Hyrax::FormFields', schema: :base_metadata
