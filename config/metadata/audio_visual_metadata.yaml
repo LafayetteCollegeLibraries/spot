@@ -3,6 +3,7 @@ attributes:
     predicate: http://purl.org/dc/terms/date
     type: string
     multiple: true
+    required: true
     form:
       multiple: true
     index_keys:
