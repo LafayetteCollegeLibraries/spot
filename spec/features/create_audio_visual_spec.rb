@@ -32,53 +32,53 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
 
         expect(page).to have_content "Add New #{i18n_term}"
 
-        fill_in audio_visual_selector_for('title'), with: attrs[:title].first
-        expect(page).not_to have_css ".#{audio_visual_selector_for('title')}.controls-add-text"
+        fill_in 'audio_visual_title', with: attrs[:title].first
+        expect(page).not_to have_css '.audio_visual_title .controls-add-text'
 
-        select 'Audio', from: 'audio_visual_selector_for('resource_type')
-        expect(page).not_to have_css '.audio_visual_selector_for('resource_type').controls-add-text'
+        select 'Audio', from: 'audio_visual_resource_type'
+        expect(page).not_to have_css '.audio_visual_resource_type .controls-add-text'
 
-        select 'No Known Copyright', from: 'audio_visual_selector_for('rights_statement')
+        select 'No Known Copyright', from: 'audio_visual_rights_statement'
 
-        fill_in 'audio_visual_selector_for('date'), with: attrs[:date].first
-        expect(page).to have_css '.audio_visual_selector_for('date').controls-add-text'
+        fill_in 'audio_visual_date', with: attrs[:date].first
+        expect(page).to have_css '.audio_visual_date .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('title_alternative'), with: attrs[:title_alternative].first
-        fill_in 'audio_visual_selector_for('title_alternative_language'), with: 'en'
-        expect(page).to have_css '.audio_visual_selector_for('title_alternative').controls-add-text'
+        fill_in 'audio_visual_title_alternative', with: attrs[:title_alternative].first
+        fill_in 'audio_visual_title_alternative_language', with: 'en'
+        expect(page).to have_css '.audio_visual_title_alternative .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('subtitle'), with: attrs[:subtitle].first
-        fill_in 'audio_visual_selector_for('subtitle_language'), with: 'en'
-        expect(page).to have_css '.audio_visual_selector_for('title_alternative').controls-add-text'
+        fill_in 'audio_visual_subtitle', with: attrs[:subtitle].first
+        fill_in 'audio_visual_subtitle_language', with: 'en'
+        expect(page).to have_css '.audio_visual_title_alternative .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('date_associated'), with: attrs[:date_associated].first
-        expect(page).to have_css '.audio_visual_selector_for('date_associated').controls-add-text'
+        fill_in 'audio_visual_date_associated', with: attrs[:date_associated].first
+        expect(page).to have_css '.audio_visual_date_associated .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('rights_holder'), with: attrs[:rights_holder].first
-        expect(page).to have_css '.audio_visual_selector_for('rights_holder').controls-add-text'
+        fill_in 'audio_visual_rights_holder', with: attrs[:rights_holder].first
+        expect(page).to have_css '.audio_visual_rights_holder .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('description'), with: attrs[:description].first
-        fill_in 'audio_visual_selector_for('description_language'), with: 'en'
-        expect(page).to have_css '.audio_visual_selector_for('description').controls-add-text'
+        fill_in 'audio_visual_description', with: attrs[:description].first
+        fill_in 'audio_visual_description_language', with: 'en'
+        expect(page).to have_css '.audio_visual_description .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('inscription'), with: attrs[:inscription].first
-        fill_in 'audio_visual_selector_for('inscription_language'), with: 'en'
-        expect(page).to have_css '.audio_visual_selector_for('inscription').controls-add-text'
+        fill_in 'audio_visual_inscription', with: attrs[:inscription].first
+        fill_in 'audio_visual_inscription_language', with: 'en'
+        expect(page).to have_css '.audio_visual_inscription .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('creator'), with: attrs[:creator].first
-        expect(page).to have_css '.audio_visual_selector_for('creator').controls-add-text'
+        fill_in 'audio_visual_creator', with: attrs[:creator].first
+        expect(page).to have_css '.audio_visual_creator .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('contributor'), with: attrs[:contributor].first
-        expect(page).to have_css '.audio_visual_selector_for('contributor').controls-add-text'
+        fill_in 'audio_visual_contributor', with: attrs[:contributor].first
+        expect(page).to have_css '.audio_visual_contributor .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('publisher'), with: attrs[:publisher].first
-        expect(page).to have_css '.audio_visual_selector_for('publisher').controls-add-text'
+        fill_in 'audio_visual_publisher', with: attrs[:publisher].first
+        expect(page).to have_css '.audio_visual_publisher .controls-add-text'
 
-        fill_in 'audio_visual_selector_for('keyword'), with: attrs[:keyword].first
-        expect(page).to have_css '.audio_visual_selector_for('keyword').controls-add-text'
+        fill_in 'audio_visual_keyword', with: attrs[:keyword].first
+        expect(page).to have_css '.audio_visual_keyword .controls-add-text'
 
-        fill_in_autocomplete '.audio_visual_selector_for('subject'), with: attrs[:subject].first
-        expect(page).to have_css '.audio_visual_selector_for('subject').controls-add-text'
+        fill_in_autocomplete '.audio_visual_subject', with: attrs[:subject].first
+        expect(page).to have_css '.audio_visual_subject .controls-add-text'
 
         # multi-authority for location
         location_selector = 'input.audio_visual_location.multi_auth_controlled_vocabulary'
