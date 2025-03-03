@@ -61,7 +61,7 @@ module Spot
 
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         # add any other checks to the file here
-        key = format('%s-%d-access.mp3', file_set.id, index)
+        key = format('%s-%d-access.mp3', file_set_resource.id, index)
         FileUtils.rm_f(file_path) if File.exist?(file_path)
         transfer_s3_derivative(derivative, key)
       end
@@ -91,7 +91,7 @@ module Spot
 
       # Keys for generated derivatives.
       def s3_derivative_keys
-        [format('%s-0-access.mp3', file_set.id)]
+        [format('%s-0-access.mp3', file_set_resource.id)]
       end
     end
   end
