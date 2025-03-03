@@ -18,8 +18,54 @@ class StudentWorkResourceForm < ::Hyrax::Forms::ResourceForm(StudentWorkResource
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
 
+  # Hack to allow us to override certain form fields to make them singular when they're multiple
+  # in other places. We were able to do this in earlier Hyrax forms by evaluating the user accessing
+  # the form, but I think that behavior is decoupled in the Valkyrized world and performed during
+  # the change_set saving transaction (iirc).
+  %w(
+    abstract
+    date
+    date_available
+    description
+  ).each { |field| self.definitions[field].merge!(multiple: false) }
+
   # @todo provide the StudentWork admin_set as a default? Or stuff the value and not expose it?
-  def admin_set_id; end
+  # def admin_set_id; end
+
+  def primary_terms
+    [
+      :title,
+      :creator,
+      :advisor,
+      :academic_department,
+      :description,
+      :date,
+      :date_available,
+      :resource_type,
+      :rights_statement,
+      :rights_holder
+    ]
+  end
+
+  def secondary_terms
+    [
+      :division,
+      :abstract,
+      :language,
+      :related_resource,
+      :organization,
+      :subject,
+      :keyword,
+      :bibliographic_citation,
+      :standard_identifier,
+      :access_note,
+      :note
+    ]
+  end
+
+  def description
+    Array.wrap(super).first
+  end
 
   def rights_statement
     super || [DEFAULT_RIGHTS_STATEMENT_URI]

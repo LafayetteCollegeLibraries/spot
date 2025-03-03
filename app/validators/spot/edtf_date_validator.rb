@@ -5,7 +5,7 @@ module Spot
       fields = Array.wrap(options[:fields] || options[:field])
 
       fields.each do |field|
-        Array.wrap(record.send(field)).each do |value|
+        Array.wrap(record.send(field)).compact.each do |value|
           record.errors[field] << invalid_edtf_value_message(value) if Date.edtf(value).nil?
         end
       end

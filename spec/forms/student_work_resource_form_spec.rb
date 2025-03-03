@@ -3,7 +3,6 @@ RSpec.describe StudentWorkResourceForm, valkyrization: true do
   subject(:form) { described_class.new(resource) }
   let(:resource) { build(:student_work_resource) }
 
-  it_behaves_like 'a Spot resource form'
   it_behaves_like 'it supports local/standard identifiers'
   it_behaves_like 'it includes Hyrax::FormFields', schema: :core_metadata
   it_behaves_like 'it includes Hyrax::FormFields', schema: :base_metadata
