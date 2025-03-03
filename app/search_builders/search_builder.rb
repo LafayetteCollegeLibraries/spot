@@ -11,6 +11,17 @@ class SearchBuilder < Blacklight::SearchBuilder
   include Hydra::AccessControlsEnforcement
   include Hyrax::SearchFilters
 
+  # Overriding Hyrax::SearchBuilder#work_types to include our Valkyrized Resource classes,
+  # rather than registering them in config/initializers/hyrax.rb because registering adds
+  # unwanted behaviors (such as adding dupicate work types to the create works modal).
+  #
+  # @return [Array<Class>]
+  def work_types
+    Hyrax.config.curation_concerns.flat_map do |concern_class|
+      [concern_class, "#{concern_class}Resource".safe_constantize].compact
+    end
+  end
+
   ##
   # @example Adding a new step to the processor chain
   #   self.default_processor_chain += [:add_custom_data_to_query]

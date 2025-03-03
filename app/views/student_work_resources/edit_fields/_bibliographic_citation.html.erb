@@ -1,0 +1,7 @@
+<%= f.input :bibliographic_citation,
+            as: :multi_value,
+            input_html: {
+              rows: '5',
+              type: 'textarea'
+            },
+            required: f.object.required?(:bibliographic_citation) %>
