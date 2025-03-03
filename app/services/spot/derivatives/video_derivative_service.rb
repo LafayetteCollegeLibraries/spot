@@ -68,7 +68,7 @@ module Spot
         s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
         res = get_video_resolution(file_path)
         # add any other checks to the file here
-        key = format('%s-%d-access-%d.mp4', file_set.id, index, res[1])
+        key = format('%s-%d-access-%d.mp4', file_set_resource.id, index, res[1])
         FileUtils.rm_f(file_path) if File.exist?(file_path)
         transfer_s3_derivative(derivative, key)
       end
@@ -155,8 +155,8 @@ module Spot
 
       # Keys for generated derivatives.
       def s3_derivative_keys
-        [format('%s-0-access-1080.mp4', file_set.id),
-         format('%s-1-access-480.mp4', file_set.id)]
+        [format('%s-0-access-1080.mp4', file_set_resource.id),
+         format('%s-1-access-480.mp4', file_set_resource.id)]
       end
     end
   end
