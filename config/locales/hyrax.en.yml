@@ -31,15 +31,25 @@ en:
           visibility: Visibility
           date_uploaded: Date
 
+    directory:
+      suffix:               "@example.org"
+
     footer:
       copyright_html: "<strong>Copyright &copy; 2017 Samvera</strong> Licensed under the Apache License, Version 2.0"
       service_html: A service of <a href="http://samvera.org/" class="navbar-link" target="_blank">Samvera</a>.
 
-    directory:
-      suffix:               "@example.org"
-
     institution_name:       "Lafayette College"
     institution_name_full:  "Lafayette College"
+
+    models:
+      audio_visual: Audio Visual
+      audio_visual_resource: Audio Visual
+      image: Image
+      image_resource: Image
+      publication: Publication
+      publication_resource: Publication
+      student_work: Student Work
+      student_work_resource: Student Work
 
     product_description: |
       %{name} is an online archive designed to preserve and make accessible materials from
@@ -73,7 +83,7 @@ en:
           comments: Comments
           files: Add Files
           media: Representative Media
-    
+
     file_sets:
       actions:
         caption_download: Download Caption

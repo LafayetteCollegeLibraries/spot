@@ -1,0 +1,19 @@
+<%=
+  f.input :advisor,
+          as: :local_controlled_vocabulary,
+          placeholder: 'Search for a Faculty Member',
+          input_html: {
+            class: 'form-control',
+            data: {
+              'autocomplete-url' => '/authorities/search/local/lafayette_instructors',
+              'autocomplete' => 'advisor'
+            },
+          },
+          wrapper_html: {
+            data: {
+              'autocomplete-url' => '/authorities/search/local/lafayette_instructors',
+              'field-name' => 'advisor'
+            }
+          },
+          required: f.object.required?(:advisor)
+%>

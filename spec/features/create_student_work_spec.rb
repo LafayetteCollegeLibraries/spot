@@ -12,7 +12,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
     login_as user
   end
 
-  let(:i18n_term) { I18n.t('activefedora.models.student_work') }
+  let(:i18n_term) { I18n.t("hyrax.models.#{student_work_selector_prefix}") }
   let(:app_name) { I18n.t('hyrax.product_name') }
   let(:attrs) { attributes_for(:student_work, subject: [subject_uri]) }
   let(:standard_id) { Spot::Identifier.new('issn', '1234-5678') }
@@ -35,67 +35,67 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
 
       expect(page).to have_content "Add New #{i18n_term}"
 
-      fill_in 'student_work_title', with: attrs[:title].first
-      expect(page).not_to have_css '.student_work_title .controls-add-text'
+      fill_in student_work_selector_for('title'), with: attrs[:title].first
+      expect(page).not_to have_css ".#{student_work_selector_for('title')} .controls-add-text"
 
-      fill_in 'student_work_creator', with: attrs[:creator].first
-      expect(page).to have_css '.student_work_creator .controls-add-text'
+      fill_in student_work_selector_for('creator'), with: attrs[:creator].first
+      expect(page).to have_css ".#{student_work_selector_for('creator')} .controls-add-text"
 
-      fill_in_autocomplete '.student_work_advisor', with: attrs[:advisor].first
-      expect(page).to have_css '.student_work_advisor .controls-add-text'
+      fill_in_autocomplete ".#{student_work_selector_for('advisor')}", with: attrs[:advisor].first
+      expect(page).to have_css ".#{student_work_selector_for('advisor')} .controls-add-text"
 
       fill_in_autocomplete '.student_work_academic_department', with: 'Libraries'
-      expect(page).to have_css '.student_work_academic_department .controls-add-text'
+      expect(page).to have_css ".#{student_work_selector_for('academic_department')} .controls-add-text"
 
-      fill_in 'student_work_description', with: attrs[:description].first
-      expect(page).not_to have_css '.student_work_description .controls-add-text'
+      fill_in student_work_selector_for('description'), with: attrs[:description].first
+      expect(page).not_to have_css ".#{student_work_selector_for('description')} .controls-add-text"
 
-      fill_in 'student_work_date', with: attrs[:date].first
-      expect(page).not_to have_css '.student_work_date .controls-add-text'
+      fill_in student_work_selector_for('date'), with: attrs[:date].first
+      expect(page).not_to have_css ".#{student_work_selector_for('date')} .controls-add-text"
 
-      select 'No Copyright - United States', from: 'student_work_rights_statement'
-      expect(page).not_to have_css '.student_work_rights_statement .controls-add-text'
+      select 'No Copyright - United States', from: student_work_selector_for('rights_statement')
+      expect(page).not_to have_css ".#{student_work_selector_for('rights_statement')} .controls-add-text"
 
-      select 'Research Paper', from: 'student_work_resource_type'
+      select 'Research Paper', from: student_work_selector_for('resource_type')
       # resource_type's form field allows for multiple values from within
       # a single gui widget, so we should not expect a button to add another value field
-      expect(page).not_to have_css '.student_work_resource_type .controls-add-text'
+      expect(page).not_to have_css ".#{student_work_selector_for('resource_type')} .controls-add-text"
 
       click_link 'Additional fields'
       sleep 1
 
-      fill_in_autocomplete '.student_work_division', with: 'Humanities'
-      expect(page).to have_css '.student_work_division .controls-add-text'
+      fill_in_autocomplete ".#{student_work_selector_for('division')}", with: 'Humanities'
+      expect(page).to have_css ".#{student_work_selector_for('division')} .controls-add-text"
 
-      fill_in 'student_work_abstract', with: attrs[:abstract].first
-      expect(page).not_to have_css '.student_work_abstract .controls-add-text'
+      fill_in student_work_selector_for('abstract'), with: attrs[:abstract].first
+      expect(page).not_to have_css ".#{student_work_selector_for('abstract')} .controls-add-text"
 
-      fill_in_autocomplete '.student_work_language', with: attrs[:language].first
-      expect(page).to have_css '.student_work_language .controls-add-text'
+      fill_in_autocomplete ".#{student_work_selector_for('language')}", with: attrs[:language].first
+      expect(page).to have_css ".#{student_work_selector_for('language')} .controls-add-text"
 
-      fill_in 'student_work_related_resource', with: attrs[:related_resource].first
-      expect(page).to have_css '.student_work_related_resource .controls-add-text'
+      fill_in student_work_selector_for('related_resource'), with: attrs[:related_resource].first
+      expect(page).to have_css ".#{student_work_selector_for('related_resource')} .controls-add-text"
 
-      fill_in 'student_work_access_note', with: attrs[:access_note].first
-      expect(page).to have_css '.student_work_access_note .controls-add-text'
+      fill_in student_work_selector_for('access_note'), with: attrs[:access_note].first
+      expect(page).to have_css ".#{student_work_selector_for('access_note')} .controls-add-text"
 
-      fill_in 'student_work_organization', with: attrs[:organization].first
-      expect(page).to have_css '.student_work_organization .controls-add-text'
+      fill_in student_work_selector_for('organization'), with: attrs[:organization].first
+      expect(page).to have_css ".#{student_work_selector_for('organization')} .controls-add-text"
 
-      fill_in_autocomplete '.student_work_subject', with: attrs[:subject].first
-      expect(page).to have_css '.student_work_subject .controls-add-text'
+      fill_in_autocomplete ".#{student_work_selector_for('subject')}", with: attrs[:subject].first
+      expect(page).to have_css ".#{student_work_selector_for('subject')} .controls-add-text"
 
-      fill_in 'student_work_keyword', with: attrs[:keyword].first
-      expect(page).to have_css '.student_work_keyword .controls-add-text'
+      fill_in student_work_selector_for('keyword'), with: attrs[:keyword].first
+      expect(page).to have_css ".#{student_work_selector_for('keyword')} .controls-add-text"
 
-      fill_in 'student_work_bibliographic_citation', with: attrs[:bibliographic_citation].first
-      expect(page).to have_css '.student_work_bibliographic_citation .controls-add-text'
+      fill_in student_work_selector_for('bibliographic_citation'), with: attrs[:bibliographic_citation].first
+      expect(page).to have_css ".#{student_work_selector_for('bibliographic_citation')} .controls-add-text"
 
-      select standard_id.prefix_label, from: 'student_work[standard_identifier_prefix][]'
-      fill_in 'student_work[standard_identifier_value][]', with: standard_id.value
+      select standard_id.prefix_label, from: "#{student_work_selector_prefix}[standard_identifier_prefix][]"
+      fill_in "#{student_work_selector_prefix}[standard_identifier_value][]", with: standard_id.value
 
-      fill_in 'student_work_note', with: attrs[:note].first
-      expect(page).to have_css '.student_work_note .controls-add-text'
+      fill_in student_work_selector_for('note'), with: attrs[:note].first
+      expect(page).to have_css ".#{student_work_selector_for('note')} .controls-add-text"
 
       # see long note in +create_publication_spec.rb+ for why we need to scroll back to the top
       page.execute_script('window.scrollTo(0,0)')
@@ -108,7 +108,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
       end
 
       # select visibility
-      choose 'student_work_visibility_open'
+      choose student_work_selector_for('visibility_open')
 
       # check the submission agreement
       # check 'agreement'

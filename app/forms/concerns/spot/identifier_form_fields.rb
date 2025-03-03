@@ -50,6 +50,7 @@ module Spot
     def local_identifiers
       wrapped_identifiers.select(&:local?).reject { |id| id.prefix == 'noid' }
     end
+    alias local_identifier local_identifiers
 
     def merged_identifiers
       [
@@ -70,6 +71,7 @@ module Spot
     def standard_identifiers
       wrapped_identifiers.select(&:standard?)
     end
+    alias standard_identifier standard_identifiers
 
     def wrapped_identifiers
       Array.wrap(send(identifier_field)).map { |id| Spot::Identifier.from_string(id) }
