@@ -89,6 +89,12 @@ module Spot
       "#{title.first} // #{I18n.t('hyrax.product_name')}"
     end
 
+    def representative_presenter
+      super
+    rescue Hyrax::ObjectNotFoundError, ArgumentError
+      nil
+    end
+
     # @return [Array<Array<String>>]
     def rights_statement_merged
       solr_document.rights_statement.zip(solr_document.rights_statement_label)
