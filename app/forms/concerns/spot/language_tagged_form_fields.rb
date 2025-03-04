@@ -77,7 +77,7 @@ module Spot
 
         values = Array.wrap(send(:"#{field}_value"))
         languages = Array.wrap(send(:"#{field}_language"))
-        literals = values.zip(languages).map { |(value, language)| RDF::Literal(value, language: language&.to_sym) }
+        literals = values.zip(languages).map { |(value, language)| RDF::Literal(value, language: language&.to_sym) unless value.empty? }
 
         multiple ? literals : literals.first
       end
