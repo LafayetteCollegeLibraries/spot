@@ -82,7 +82,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in "#{publication_selector_prefix}[local_identifier][]", with: id_local.to_s
 
         fill_in publication_selector_for('bibliographic_citation'), with: attrs[:bibliographic_citation].first
-        expect(page).to have_css "#{publication_selector_for('bibliographic_citation')} .controls-add-text"
+        expect(page).to have_css ".#{publication_selector_for('bibliographic_citation')} .controls-add-text"
 
         fill_in publication_selector_for('date_issued'), with: attrs[:date_issued].first
         expect(page).not_to have_css ".#{publication_selector_for('date_issued')} .controls-add-text"

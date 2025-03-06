@@ -29,7 +29,7 @@ class StandardIdentifierInputGroupInput < MultiValueInput
   # @param [Integer] index
   # @return [String] HTML output
   def build_field(raw_value, index)
-    identifier = Spot::Identifier.from_string(raw_value)
+    identifier = Spot::Identifier.from_string(raw_value.to_s)
 
     <<-HTML
       <div class="row">

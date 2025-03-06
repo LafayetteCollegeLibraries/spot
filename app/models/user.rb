@@ -116,4 +116,9 @@ class User < ApplicationRecord
 
     self.username = email.gsub(/@.*$/, '')
   end
+
+  # Overriding this locally so it doesn't try to create a user w/ a password (which we don't support)
+  def self.find_or_create_system_user(user_key)
+    User.find_by_user_key(user_key) || User.create!(user_key_field => user_key)
+  end
 end

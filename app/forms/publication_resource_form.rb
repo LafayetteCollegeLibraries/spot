@@ -7,8 +7,13 @@ class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource
   include Hyrax::FormFields(:publication_metadata)
 
   include Spot::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :abstract, :description)
-  include Spot::NestedAttributeFormFields(:subject, :language, :academic_department, :division)
   include Spot::IdentifierFormFields
+
+  include Spot::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
+  include Spot::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
+  include Spot::ControlledVocabularyFormField(:academic_department)
+  include Spot::ControlledVocabularyFormField(:division)
+  include Spot::ControlledVocabularyFormField(:language)
 
   validates_with Spot::EdtfDateValidator, fields: [:date_issued]
 
@@ -19,9 +24,44 @@ class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource
 
     self.date_available =
       if embargo_release_date.present?
-        [embargo_release_date.strftime('%Y-%m-%d')]
+        [DateTime.parse(embargo_release_date).strftime('%Y-%m-%d')]
       else
         [Time.zone.now.strftime('%Y-%m-%d')]
       end
+  end
+
+  def primary_terms
+    [
+      # required_fields first
+      :title,
+      :date_issued,
+      :resource_type,
+      :rights_statement,
+
+      # starting with rights holder since it relates to rights_statement
+      :rights_holder,
+      :subtitle,
+      :title_alternative,
+      :creator,
+      :contributor,
+      :editor,
+      :publisher,
+      :source,
+      :bibliographic_citation,
+      :standard_identifier,
+      :local_identifier,
+      :abstract,
+      :description,
+      :subject,
+      :keyword,
+      :language,
+      :physical_medium,
+      :location,
+      :note,
+      :related_resource,
+      :academic_department,
+      :division,
+      :organization
+    ]
   end
 end

@@ -173,19 +173,24 @@ Rails.application.config.to_prepare do
   # Override to fix Hyrax bug where calling Hyrax::AdminSetCreateService.find_or_create_default_admin_set
   # will try to load an AdminSet's entire set of members when called.
   #
+  # @note setting this to production only as it was causing the student_work AdminSet to load as default
+  #       in dev/test environments, causing all sorts of havoc and isn't as necessary.
+  #
   # @see https://github.com/samvera/hyrax/issues/6171
   # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
-  module Spot
-    module AdminSetCreateServiceDecorator
-      private
+  if Rails.env.production?
+    module Spot
+      module AdminSetCreateServiceDecorator
+        private
 
-      def find_default_admin_set
-        AdminSet.first
+        def find_default_admin_set
+          AdminSet.first
+        end
       end
     end
-  end
 
-  Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator) unless Rails.env.test?
+    Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
+  end
 
   # Only store entitlements related to us in the session to prevent a cookie overflow.
   #
@@ -290,4 +295,35 @@ Rails.application.config.to_prepare do
 
   # Add support for downloading file_set transcripts
   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
+
+  # Encountering an issue where Hyrax::PersistDirectlyContainedOutputFileService.retrieve_file_set requires
+  # Hyrax::UploadedFile#file_set_uri to be an URI but querying for that URI throws an error (ActiveFedora
+  # is appending the base root to the full uri, resulting in errors like:
+  #     Ldp::BadRequest: Path contains empty element! /dev/ht/tp/:/http://fedora:8080/rest/dev/2v/23/vt/36/2v23vt362")
+  Hyrax::UploadedFile.class_eval do
+    def add_file_set!(file_set)
+      uri = case file_set
+            when ActiveFedora::Base
+              file_set.uri
+            when Hyrax::Resource
+              file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
+            end
+
+      update!(file_set_uri: uri) if uri.present?
+    end
+  end
+
+  Hyrax::ValkyrieIngestJob.class_eval do
+    def ingest(file:, pcdm_use:)
+      file_set_id = Valyrie::ID.new(Hyrax::Base.uri_to_id(file.file_set_uri))
+      file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: file_set_id)
+
+      upload_file(
+        file: file,
+        file_set: file_set,
+        pcdm_use: pcdm_use,
+        user: file.user
+      )
+    end
+  end
 end
