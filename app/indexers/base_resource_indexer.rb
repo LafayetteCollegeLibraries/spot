@@ -109,9 +109,22 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
   #       are mechanisms in place in Hyrax/RSolr to stringify URI values before they get
   #       sent to Solr, but just in case they're not we'll at least stringify RDF::URIs.
   def stringify_rdf_uris(document)
-    document.each do |key, value|
-      next unless value.is_a?(Array) && value.any?(RDF::URI)
-      document[key] = value.map(&:to_s) # should we _just_ be targeting URIs?
+    document.transform_values do |values|
+      stringified_values = stringify_values(values)
+      values.is_a?(Array) ? stringified_values : stringified_values.first
+    end
+  end
+
+  def stringify_values(values)
+    Array.wrap(values).map do |value|
+      case value
+      when RDF::Literal, RDF::URI
+        value.to_s
+      when ActiveTriples::Resource
+        value.rdf_subject
+      else
+        value
+      end
     end
   end
 end

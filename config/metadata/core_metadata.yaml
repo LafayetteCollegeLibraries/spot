@@ -10,7 +10,7 @@ attributes:
       - "title_tesim"
     form:
       multiple: false
-      required: false
+      required: true
   date_modified:
     predicate: http://purl.org/dc/terms/modified
     type: date_time

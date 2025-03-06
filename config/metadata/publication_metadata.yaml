@@ -12,7 +12,7 @@ attributes:
     type: string
     multiple: true
     form:
-      multiple: true
+      multiple: false
       required: true
     index_keys:
       - date_issued_ssim
@@ -22,7 +22,7 @@ attributes:
     type: string
     multiple: true
     form:
-      multiple: true
+      multiple: false
     index_keys:
       - date_available_ssim
   editor:

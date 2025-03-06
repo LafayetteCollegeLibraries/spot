@@ -155,19 +155,24 @@ Rails.application.reloader.to_prepare do
   # Override to fix Hyrax bug where calling Hyrax::AdminSetCreateService.find_or_create_default_admin_set
   # will try to load an AdminSet's entire set of members when called.
   #
+  # @note setting this to production only as it was causing the student_work AdminSet to load as default
+  #       in dev/test environments, causing all sorts of havoc and isn't as necessary.
+  #
   # @see https://github.com/samvera/hyrax/issues/6171
   # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
-  module Spot
-    module AdminSetCreateServiceDecorator
-      private
+  if Rails.env.production?
+    module Spot
+      module AdminSetCreateServiceDecorator
+        private
 
-      def find_default_admin_set
-        AdminSet.first
+        def find_default_admin_set
+          AdminSet.first
+        end
       end
     end
-  end
 
-  Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator) unless Rails.env.test?
+    Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
+  end
 
   # Only store entitlements related to us in the session to prevent a cookie overflow.
   #
@@ -249,59 +254,34 @@ Rails.application.reloader.to_prepare do
   # Add support for downloading file_set transcripts
   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
 
-  # Modifying Bulkrax ImporterJob so that it correctly fetches file sizes
-  #
-  # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
-  #
-  Bulkrax::ImporterJob.class_eval do
-    # checks the file sizes of the download files to match the original files
-    def all_files_completed?(importer)
-      cloud_files = importer.parser_fields['cloud_file_paths']
-      original_files = importer.parser_fields['original_file_paths']
-      return true unless cloud_files.present? && original_files.present?
+  # Encountering an issue where Hyrax::PersistDirectlyContainedOutputFileService.retrieve_file_set requires
+  # Hyrax::UploadedFile#file_set_uri to be an URI but querying for that URI throws an error (ActiveFedora
+  # is appending the base root to the full uri, resulting in errors like:
+  #     Ldp::BadRequest: Path contains empty element! /dev/ht/tp/:/http://fedora:8080/rest/dev/2v/23/vt/36/2v23vt362")
+  Hyrax::UploadedFile.class_eval do
+    def add_file_set!(file_set)
+      uri = case file_set
+            when ActiveFedora::Base
+              file_set.uri
+            when Hyrax::Resource
+              file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
+            end
 
-      imported_file_sizes = cloud_files.map { |_, v| get_file_size_from_s3(v['url']) }
-      original_file_sizes = original_files.map { |imported_file| File.size(imported_file) }
-
-      original_file_sizes == imported_file_sizes
-    end
-
-    # s3 file size fetch
-    # @todo should we add handling for other types of cloud files?
-    def get_file_size_from_s3(url)
-      uri_parsed = ::Addressable::URI.parse(url)
-      return unless uri_parsed.scheme == 's3'
-
-      client = Aws::S3::Client.new
-      resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
-      resp.content_length
+      update!(file_set_uri: uri) if uri.present?
     end
   end
 
-  # Bulkrax's parser replaces any whitespace character with a space, which kills paragraph breaks
-  # and newlines. Our patch modifies the base #result method to only replace tabs with
-  # spaces and strip lead/trailing spaces.
-  #
-  # @see app/services/concerns/spot/bulkrax_matcher_whitespace_patch.rb
-  # @see spec/matchers/bulkrax/application_matcher_spec.rb
-  Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxMatcherWhitespacePatch)
+  Hyrax::ValkyrieIngestJob.class_eval do
+    def ingest(file:, pcdm_use:)
+      file_set_id = Valyrie::ID.new(Hyrax::Base.uri_to_id(file.file_set_uri))
+      file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: file_set_id)
 
-  # Modifying the Downloads Controller to not send an unauthorized status for requests.
-  # The unauthorized status breaks the laf only thumbnail.
-  #
-  # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/app/controllers/hyrax/downloads_controller.rb#L52-L63
-  Hyrax::DownloadsController.class_eval do
-    # Customize the :read ability in your Ability class, or override this method.
-    # Hydra::Ability#download_permissions can't be used in this case because it assumes
-    # that files are in a LDP basic container, and thus, included in the asset's uri.
-    def authorize_download!
-      authorize! :download, params[asset_param_key]
-      # Deny access if the work containing this file is restricted by a workflow
-      return unless workflow_restriction?(file_set_parent(params[asset_param_key]), ability: current_ability)
-      raise Hyrax::WorkflowAuthorizationException
-    rescue CanCan::AccessDenied, Hyrax::WorkflowAuthorizationException
-      unauthorized_image = Rails.root.join("app", "assets", "images", "unauthorized.png")
-      send_file unauthorized_image
+      upload_file(
+        file: file,
+        file_set: file_set,
+        pcdm_use: pcdm_use,
+        user: file.user
+      )
     end
   end
 
