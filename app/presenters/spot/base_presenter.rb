@@ -36,8 +36,6 @@ module Spot
     def download_url
       return '' if representative_presenter.blank?
       Hyrax::Engine.routes.url_helpers.download_url(representative_id, host: request.host, protocol: 'https://')
-    rescue ArgumentError
-      ''
     end
     # :nocov:
 

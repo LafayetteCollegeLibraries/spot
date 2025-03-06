@@ -77,7 +77,9 @@ module Spot
 
         values = Array.wrap(send(:"#{field}_value"))
         languages = Array.wrap(send(:"#{field}_language"))
-        literals = values.zip(languages).map { |(value, language)| RDF::Literal(value, language: language&.to_sym) }
+        literals = values.zip(languages).map do |(value, language)|
+          RDF::Literal(value, language: language&.to_sym) if value.present?
+        end.compact
 
         multiple ? literals : literals.first
       end
@@ -96,16 +98,30 @@ module Spot
 
       @fields.map(&:to_sym).each do |field|
         default_value = descendant.definitions[field.to_s][:default].call
+        required = descendant.definitions[field.to_s][:required]
         val_prepopulator = ->(_opts) { send(:"#{field}_value=", language_tagged_values_for(field: field)) }
         lang_prepopulator = ->(_opts) { send(:"#{field}_language=", language_tagged_languages_for(field: field)) }
 
-        descendant.property(:"#{field}_value", virtual: true, default: default_value, prepopulator: val_prepopulator)
+        val_populator = lambda do |fragment:, doc:, **_opts|
+          vals = Array.wrap(doc["#{field}_value"]).zip(Array.wrap(doc["#{field}_language"])).map do |(value, language)|
+            if value.present? && language.present?
+              RDF::Literal.new(value.to_s, language: language.to_sym)
+            elsif value.present?
+              RDF::Literal.new(value.to_s)
+            end
+          end.compact
+
+          send(:"#{field}=", vals)
+        end
+
+        descendant.property(:"#{field}_value", virtual: true, default: default_value, prepopulator: val_prepopulator, populator: val_populator)
         descendant.property(:"#{field}_language", virtual: true, default: default_value, prepopulator: lang_prepopulator)
 
-        # @todo perform presence check if the field is required?
-        descendant.validate(field) do
-          send(:"#{field}=", language_tagged_literals_for(field: field))
-        end
+        # descendant.validate(field) do
+        #   send(:"#{field}=", language_tagged_literals_for(field: field))
+        # end
+
+        descendant.validates(field, presence: true) if required
       end
     end
   end
