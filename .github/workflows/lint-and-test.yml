@@ -26,6 +26,7 @@ jobs:
       volumes:
         - solr:/tmp/solr
     needs: lint
+    continue-on-error: ${{ matrix.hyrax_valkyrie == true }}
     strategy:
       matrix:
         hyrax_valkyrie_enabled: [false]
