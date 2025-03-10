@@ -13,7 +13,6 @@ module Spot
     include ::Hyrax::WorksControllerBehavior
     include ::Hyrax::BreadcrumbsForWorks
 
-
     included do
       before_action :load_workflow_presenter, only: :edit
       after_action  :update_workflow_flash, only: :update

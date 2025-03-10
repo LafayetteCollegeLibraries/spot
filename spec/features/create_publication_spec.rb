@@ -64,7 +64,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
         fill_in publication_selector_for('source'), with: attrs[:source].first
         expect(page).to have_css ".#{publication_selector_for('source')} .controls-add-text"
 
-        select "Article", from: "#{publication_selector_for('resource_type')}"
+        select "Article", from: publication_selector_for('resource_type')
         expect(page).not_to have_css ".#{publication_selector_for('resource_type')} .controls-add-text"
 
         fill_in_autocomplete ".#{publication_selector_for('language')}", with: attrs[:language].first
