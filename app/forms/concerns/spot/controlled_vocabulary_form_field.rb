@@ -71,7 +71,7 @@ module Spot
       # @option [Symbol,String] field
       # @option [String] value_key (default: 'id')
       # @return [Hash<String => Hash<String => String>>]
-      def wrap_attribute_values(field:, field_value_class: String, value_key: 'id')
+      def wrap_attribute_values(field:, field_value_class: String)
         values = Array.wrap(send(field))
         values << field_value_class.new if values.empty?
         values
