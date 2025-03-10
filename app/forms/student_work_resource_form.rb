@@ -13,7 +13,13 @@ class StudentWorkResourceForm < ::Hyrax::Forms::ResourceForm(StudentWorkResource
   include Hyrax::FormFields(:institutional_metadata)
   include Hyrax::FormFields(:student_work_metadata)
 
-  include Spot::NestedAttributeFormFields(:subject, :language, :academic_department, :advisor, :division)
+  include Spot::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
+  include Spot::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
+  include Spot::ControlledVocabularyFormField(:academic_department)
+  include Spot::ControlledVocabularyFormField(:advisor)
+  include Spot::ControlledVocabularyFormField(:division)
+  include Spot::ControlledVocabularyFormField(:language)
+
   include Spot::IdentifierFormFields
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
