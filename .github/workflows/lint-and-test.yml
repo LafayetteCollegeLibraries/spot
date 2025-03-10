@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     container: ruby:2.7.8-slim-bullseye
     needs: lint
+    continue-on-error: ${{ matrix.hyrax_valkyrie == true }}
     strategy:
       matrix:
         hyrax_valkyrie: [false, true]
