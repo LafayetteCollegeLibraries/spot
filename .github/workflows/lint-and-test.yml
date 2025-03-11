@@ -171,5 +171,5 @@ jobs:
         if: ${{ always() }}
         continue-on-error: true
         with:
-          check_name: Test summary
+          check_name: Test summary (Valkyrie ${{ matrix.hyrax_valkyrie == true && 'enabled' || 'disabled' }})
           report_paths: /tmp/test-results/*.xml
