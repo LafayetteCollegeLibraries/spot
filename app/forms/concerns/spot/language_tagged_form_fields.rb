@@ -15,113 +15,72 @@ module Spot
   end
 
   class LanguageTaggedFormFields < Module
-    # Methods called from within the :prepopulator and :validate
-    module HelperMethods
-      # Extract the strings of field values that include RDF::Literals.
-      # Return value depends on the field's configuration for :multiple.
-      #
-      # @param [Hash] options
-      # @option [String] field
-      #   Form field to process
-      # @return [Array<String>, String]
-      def language_tagged_values_for(field:)
-        process_field_values(field: field) do |original|
-          case original
-          when RDF::Literal
-            original.value.to_s
-          else
-            original
-          end
-        end
-      end
-
-      # Extract the languages of field values that are RDF::Literals.
-      # Return value depends on the field's configuration for :multiple.
-      #
-      # @param [Hash] options
-      # @option [String] field
-      #   Form field to process
-      # @return [Array<String>, String]
-      def language_tagged_languages_for(field:)
-        process_field_values(field: field) do |original|
-          case original
-          when RDF::Literal
-            original.language.to_s
-          end
-        end
-      end
-
-      # Helper method for the helper methods (lol).
-      # yilds the original values for processing and returns the updated value(s)
-      #
-      # @param [Hash] options
-      # @option [#to_sym] field
-      # @return [void]
-      def process_field_values(field:)
-        processed = Array.wrap(send(field.to_sym)).map do |original_value|
-          yield original_value
-        end
-
-        self.class.definitions[field.to_s][:multiple] ? processed : processed.first
-      end
-
-      # Merges field _value and _language form values into language-tagged RDF::Literals.
-      # Return value depends on the field's configuration for :multiple.
-      #
-      # @param [Hash] options
-      # @option [String] field
-      #   Form field to process
-      # @return [Array<RDF::Literal>, RDF::Literal]
-      def language_tagged_literals_for(field:)
-        multiple = self.class.definitions[field.to_s][:multiple]
-
-        values = Array.wrap(send(:"#{field}_value"))
-        languages = Array.wrap(send(:"#{field}_language"))
-        literals = values.zip(languages).map do |(value, language)|
-          RDF::Literal(value, language: language&.to_sym) if value.present?
-        end.compact
-
-        multiple ? literals : literals.first
-      end
-    end
-
     def initialize(*fields)
       @fields = fields.flatten
     end
 
     private
 
+    def language_prepopulator_for(field:)
+      lambda do |_opts|
+        vals = Array.wrap(send(field.to_sym)).map do |original|
+          case original
+          when RDF::Literal
+            original.language.to_s
+          end
+        end.compact
+
+        send(:"#{field}_language=", self.class.definitions[field.to_s][:multiple] ? vals : vals.first)
+      end
+    end
+
+    def value_prepopulator_for(field:)
+      lambda do |_opts|
+        vals = Array.wrap(send(field.to_sym)).map do |original|
+          case original
+          when RDF::Literal
+            original.value.to_s
+          else
+            original
+          end
+        end.compact
+
+        send(:"#{field}_value=", self.class.definitions[field.to_s][:multiple] ? vals : vals.first)
+      end
+    end
+
+    def value_populator_for(field:)
+      lambda do |doc:, **_opts|
+        vals = Array.wrap(doc["#{field}_value"]).zip(Array.wrap(doc["#{field}_language"])).map do |(value, language)|
+          if value.present? && language.present?
+            RDF::Literal.new(value.to_s, language: language.to_sym)
+          elsif value.present?
+            RDF::Literal.new(value.to_s)
+          end
+        end.compact
+
+        vals = vals.first unless self.class.definitions[field.to_s][:multiple]
+
+        send(:"#{field}=", vals)
+      end
+    end
+
     def included(descendant)
       super
 
-      descendant.include(HelperMethods)
-
       @fields.map(&:to_sym).each do |field|
         default_value = descendant.definitions[field.to_s][:default].call
-        required = descendant.definitions[field.to_s][:required]
-        val_prepopulator = ->(_opts) { send(:"#{field}_value=", language_tagged_values_for(field: field)) }
-        lang_prepopulator = ->(_opts) { send(:"#{field}_language=", language_tagged_languages_for(field: field)) }
+        descendant.property(:"#{field}_value",
+                            virtual: true,
+                            default: default_value,
+                            prepopulator: value_prepopulator_for(field: field),
+                            populator: value_populator_for(field: field))
+        descendant.property(:"#{field}_language",
+                            virtual: true,
+                            default: default_value,
+                            prepopulator: language_prepopulator_for(field: field))
 
-        val_populator = lambda do |fragment:, doc:, **_opts|
-          vals = Array.wrap(doc["#{field}_value"]).zip(Array.wrap(doc["#{field}_language"])).map do |(value, language)|
-            if value.present? && language.present?
-              RDF::Literal.new(value.to_s, language: language.to_sym)
-            elsif value.present?
-              RDF::Literal.new(value.to_s)
-            end
-          end.compact
-
-          send(:"#{field}=", vals)
-        end
-
-        descendant.property(:"#{field}_value", virtual: true, default: default_value, prepopulator: val_prepopulator, populator: val_populator)
-        descendant.property(:"#{field}_language", virtual: true, default: default_value, prepopulator: lang_prepopulator)
-
-        # descendant.validate(field) do
-        #   send(:"#{field}=", language_tagged_literals_for(field: field))
-        # end
-
-        descendant.validates(field, presence: true) if required
+        descendant.validates(field, presence: true) if descendant.definitions[field.to_s][:required]
       end
     end
   end

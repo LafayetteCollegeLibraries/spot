@@ -24,9 +24,10 @@ class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource
 
     self.date_available =
       if embargo_release_date.present?
-        [DateTime.parse(embargo_release_date).strftime('%Y-%m-%d')]
+        date_time = embargo_release_date.respond_to?(:strftime) ? embargo_release_date : DateTime.parse(embargo_release_date.to_s)
+        [date_time.strftime('%Y-%m-%d')]
       else
-        [Time.zone.now.strftime('%Y-%m-%d')]
+        [DateTime.now.strftime('%Y-%m-%d')]
       end
   end
 
