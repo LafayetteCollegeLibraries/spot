@@ -1,5 +1,26 @@
 # frozen_string_literal: true
 module Spot
+  # Mixin to add support for Controlled Vocabulary fields in Resource forms.
+  #
+  # @usage
+  #   class CoolNewResourceForm < Hyrax::Forms::ResourceForm(CoolNewResource)
+  #     include Hyrax::FormFields(:base_metadata)
+  #     include Hyrax::FormFields(:cool_new_resource_metadata)
+  #     include Spot::ControlledVocabularyFormField(:academic_department)
+  #     include Spot::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
+  #
+  #     # ...
+  #   end
+  #
+  # Similarly to `Spot::LanguageTaggedFormFields`, this creates a virtual `<field>_attributes` property that
+  # is parsed downstream by `ControlledVocabularyInput` and its descendants into a Select2 typeahead input.
+  # For local controlled vocabularies (eg. Language, Academic Departments, Subject OCM) the values are simply
+  # cast as strings, but for remote authorities (eg. Subject, Location), we need to wrap URI values in an
+  # `ActiveTriples::Resource` class to fetch values. This was previously configured in ActiveFedora within the
+  # model's property via a `:class_name attribute, but for now we'll definie it in the form instead of the model.
+  #
+  # @todo Maybe this behavior _should_ be defined within the model? Not sure how you'd cast an empty value in the
+  #       form, though. Maybe configured in two places? (redundancy?)
   def self.ControlledVocabularyFormField(field, vocabulary_class: String)
     ControlledVocabularyFormField.new(field, vocabulary_class: vocabulary_class)
   end
@@ -73,7 +94,7 @@ module Spot
       # @option [String] value_key (default: 'id')
       # @return [Hash<String => Hash<String => String>>]
       def wrap_attribute_values(field:, field_value_class: String)
-        values = Array.wrap(send(field))
+        values = Array.wrap(send(field)).map { |v| v.is_a?(field_value_class) ? v : field_value_class.new(v) }
         values << field_value_class.new if values.empty?
         values
       end
