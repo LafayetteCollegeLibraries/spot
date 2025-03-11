@@ -2,7 +2,7 @@
 RSpec.describe 'Hyrax events' do
   describe 'on "object.deposited" event' do
     before do
-      allow(MintHandleJob).to receive(:perform_later).with(work)
+      allow(MintHandleJob).to receive(:perform_later).with(work.id)
     end
 
     let(:work) { build(:publication, id: 'pub1') }
@@ -11,7 +11,7 @@ RSpec.describe 'Hyrax events' do
     it 'enqueues jobs' do
       Hyrax::Publisher.instance.publish('object.deposited', object: work, user: user)
 
-      expect(MintHandleJob).to have_received(:perform_later).with(work).exactly(1).time
+      expect(MintHandleJob).to have_received(:perform_later).with(work.id).exactly(1).time
     end
   end
 end

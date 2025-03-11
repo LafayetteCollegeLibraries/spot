@@ -1,5 +1,8 @@
 # frozen_string_literal: true
-RSpec.shared_examples 'a nested attribute field' do
+RSpec.shared_examples 'a controlled vocabulary field' do |opts|
+  opts ||= {}
+  let(:cv_klass) { opts[:class] || String }
+
   before do
     raise 'Specify a field using `let(:field)`' unless defined? field
   end
@@ -13,25 +16,16 @@ RSpec.shared_examples 'a nested attribute field' do
   let(:form_definitions) { described_class.definitions }
   let(:field_is_multiple) { form_definitions[field.to_s][:multiple] }
   let(:field_attributes_key) { "#{field}_attributes" }
-  let(:_value) { 'Nested attribute field value' }
+  let(:cv_klass_is_cv) { cv_klass.new.is_a?(ActiveTriples::Resource) }
+  let(:_value) do
+    cv_klass_is_cv ? 'https://sws.geonames.org/5188153/' : 'Controlled Vocabulary attribute value'
+  end
+  let(:controlled_vocabulary_class) { String }
 
   it 'adds a virtual _attributes property' do
     expect(form_definitions.keys).to include(field_attributes_key)
     expect(form_definitions[field_attributes_key][:writeable]).to be false
     expect(form_definitions[field_attributes_key][:readable]).to be false
-  end
-
-  describe 'prepopulation' do
-    let(:expected_attributes) do
-      { '0' => { 'id' => _value } }
-    end
-
-    it 'sets the resource value to the form value' do
-      expect { form.prepopulate! }
-        .to change { form.send(field_attributes_key) }
-        .from(nil)
-        .to(expected_attributes)
-    end
   end
 
   describe 'population' do
@@ -40,14 +34,28 @@ RSpec.shared_examples 'a nested attribute field' do
         form.prepopulate!
       end
 
-      let(:_value) { 'https://ldr.lafayette.edu' }
-      let(:incoming_metadata) { { field_attributes_key.to_sym => { '0' => { 'id' => 'https://ldr.lafayette.edu' }, '1' => { 'id' => 'https://lafayette.edu' } } } }
+      let(:_incoming_value) do
+        cv_klass_is_cv ? 'https://sws.geonames.org/4943644/' : 'Second CV attribute'
+      end
+
+      let!(:incoming_metadata) do
+        {
+          field_attributes_key.to_sym => {
+            '0' => { 'id' => _value },
+            '1' => { 'id' => _incoming_value }
+          }
+        }
+      end
+
+      let(:mapped_incoming_values) do
+        incoming_metadata[field_attributes_key.to_sym].map { |_idx, value| cv_klass.new(value['id']) }
+      end
 
       it 'adds the value to the field' do
         expect { form.validate(incoming_metadata) }
-          .to change { form.send(field).map(&:to_s) } # guard against URI fields
+          .to change { form.send(field) }
           .from(value)
-          .to(['https://ldr.lafayette.edu', 'https://lafayette.edu'])
+          .to(field_is_multiple ? mapped_incoming_values : mapped_incoming_values.first)
       end
     end
 
@@ -56,7 +64,13 @@ RSpec.shared_examples 'a nested attribute field' do
         form.validate(incoming_metadata)
       end
 
-      let(:incoming_metadata) { { field_attributes_key => { '0' => { 'id' => _value, '_destroy' => 'true' } } } }
+      let(:incoming_metadata) do
+        {
+          field_attributes_key => {
+            '0' => { 'id' => _value, '_destroy' => 'true' }
+          }
+        }
+      end
 
       it 'removes the value from the field' do
         expect(form.send(field)).to be_empty

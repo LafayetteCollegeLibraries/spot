@@ -16,14 +16,14 @@ spot_presenter.rb                               | `'a Spot presenter'`          
 spot_work_behavior.rb                           | `'it includes Spot::WorkBehavior'`                                                    | deprecated (ActiveFedora)
 spot_workflow_notification.rb                   | `'a Spot::Workflow notification'`                                                     |
 spot_works_controller.rb                        | `'it includes Spot::WorksControllerBehavior'`                                         |
-forms/hyrax_form_fields.rb                      | `'it includes Hyrax::FormFields', schema: :schema`                                    | requires `:schema` parameter
+forms/controlled_vocabulary_resource_field.rb   | `'a controlled vocabulary field', class: String`                                      | `:class` param used for casting example values
+forms/hyrax_form_fields.rb                      | `'it includes Hyrax::FormFields', schema: :schema, except: []`                        | requires `:schema` parameter, optional `:except` defines fields to skip
 forms/hyrax_permitted_params.rb                 | `'it builds Hyrax permitted params'`                                                  | deprecated (Hyrax < 6)
 forms/identifier_fields.rb                      | `'it handles identifier form fields'`                                                 | deprecated (Hyrax < 6), replaced with `forms/identifier_form_fields.rb`
 forms/identifier_form_fields.rb                 | `'it supports local/standard identifiers'`                                            |
 forms/language_tagged_literal.rb                | `'a parsed language-tagged literal (single)'`                                         | deprecated (Hyrax < 6), replaced with `forms/language_tagged_resource_field.rb`
 \------                                         | `'a parsed language-tagged literal (multiple)'`                                       | deprecated (Hyrax < 6)
 forms/language_tagged_resource_field.rb         | `'a language-tagged resource field'`                                                  |
-forms/nested_attribute_resource_field.rb        | `'a nested attribute field'`                                                          |
 forms/primary_terms_form_hints.rb               | `'it has hints for all primary_terms'`                                                | revisit for Valkyrization?
 forms/required_fields.rb                        | `'it handles required fields'`                                                        | revisit for Valkyrization?
 forms/spot_work_form.rb                         | `'a Spot work form'`                                                                  | deprecated (Hyrax < 6)

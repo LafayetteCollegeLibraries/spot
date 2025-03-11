@@ -5,25 +5,34 @@ RSpec.shared_examples 'it includes Hyrax::FormFields' do |opts|
   raise 'Shared Example needs a :schema parameter passed' if schema.nil?
 
   skip_list = opts.fetch(:except, [])
-  schema_loader = SpecSchemaLoader.new
-  form_definitions = schema_loader.form_definitions_for(schema: schema)
 
   let(:form) { described_class.for(resource) }
   let(:resource) { resource_class.new }
   let(:resource_class) { described_class.name.to_s.split('::').last.gsub(/Form$/, '').constantize }
 
-  form_definitions.each_pair do |key, _attrs|
-    next if skip_list.include?(key)
-
-    field_def = schema_loader.raw_attributes_for(schema: schema).fetch(key)
-    is_uri = field_def['type'] == 'uri'
+  SpecSchemaLoader.new.raw_attributes_for(schema: schema).each do |key, raw_attrs|
+    next if skip_list.include?(key) || !raw_attrs.key?('form')
 
     describe "##{key}" do
+      let(:is_multiple) { described_class.definitions[key.to_s][:multiple] == true }
+      let(:uri_value) { RDF::URI.new('http://cool.org') }
+      let(:string_value) { 'http://cool.org' }
+      let(:value) do
+        case raw_attrs['type']
+        when 'uri'
+          RDF::URI.new('http://cool.org')
+        when 'date_time'
+          DateTime.now
+        else
+          string_value
+        end
+      end
       let(:original_value) { [] }
-      let(:expected_value) { is_uri ? [RDF::URI.new('http://cool.org')] : ['Test Value'] }
-      let(:change_value) { is_uri ? ['http://cool.org'] : ['Test Value'] }
+      let(:expected_value) { is_multiple ? [value] : value }
+      let(:change_value) { is_multiple ? [value.to_s] : value.to_s }
 
       it do
+        # byebug if key == :rights_statement
         expect { form[key] = change_value }
           .to change { form[key] }
           .from(original_value)

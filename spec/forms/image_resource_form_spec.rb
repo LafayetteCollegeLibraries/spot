@@ -37,20 +37,25 @@ RSpec.describe ImageResourceForm, valkyrization: true do
     end
   end
 
-  describe 'nested attribute fields' do
-    describe '#subject' do
-      let(:field) { :subject }
-      it_behaves_like 'a nested attribute field'
-    end
-
+  describe 'controlled vocabulary fields' do
     describe '#language' do
       let(:field) { :language }
-      it_behaves_like 'a nested attribute field'
+      it_behaves_like 'a controlled vocabulary field'
+    end
+
+    describe '#location' do
+      let(:field) { :location }
+      it_behaves_like 'a controlled vocabulary field', class: Spot::ControlledVocabularies::Location
+    end
+
+    describe '#subject' do
+      let(:field) { :subject }
+      it_behaves_like 'a controlled vocabulary field', class: Spot::ControlledVocabularies::AssignFastSubject
     end
 
     describe '#subject_ocm' do
       let(:field) { :subject_ocm }
-      it_behaves_like 'a nested attribute field'
+      it_behaves_like 'a controlled vocabulary field'
     end
   end
 end
