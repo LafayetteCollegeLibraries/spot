@@ -17,7 +17,7 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
 
   # rubocop:disable Metrics/MethodLength
   def primary_terms
-    [ 
+    [
       # required_fields first
       :title,
       :date,
