@@ -16,8 +16,7 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
   validates_with Spot::EdtfDateValidator, fields: [:date]
 
   def primary_terms
-    [
-      # required_fields first
+    [ # required_fields first
       :title,
       :date,
       :resource_type,
@@ -47,7 +46,6 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
       :related_resource,
       :research_assistance,
       :provenance,
-      :barcode
-    ]
+      :barcode]
   end
 end
