@@ -15,8 +15,10 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
 
+  # rubocop:disable Metrics/MethodLength
   def primary_terms
-    [ # required_fields first
+    [ 
+      # required_fields first
       :title,
       :date,
       :resource_type,
@@ -49,4 +51,5 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
       :barcode
     ]
   end
+  # rubocop:enable Metrics/MethodLength
 end
