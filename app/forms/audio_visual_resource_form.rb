@@ -46,6 +46,7 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
       :related_resource,
       :research_assistance,
       :provenance,
-      :barcode]
+      :barcode
+    ]
   end
 end
