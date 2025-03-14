@@ -2,7 +2,7 @@
 # the very recently patched 4.7.6 release of Fedora.
 #
 # @todo remove this when 4.7.6 release is published
-FROM        openjdk:8 as warfile
+FROM        openjdk:8 AS warfile
 RUN         mkdir -p /build /unpack
 WORKDIR     /unpack
 ADD         https://raw.githubusercontent.com/samvera-labs/docker-fcrepo/main/assets/repack.sh ./repack.sh
@@ -22,7 +22,7 @@ COPY --chown=jetty:jetty --from=warfile /build/* ${JETTY_BASE}/fedora/
 
 COPY ./scripts/ldr-fedora-entrypoint.sh /
 
-ENTRYPOINT "/ldr-fedora-entrypoint.sh"
+ENTRYPOINT ["/ldr-fedora-entrypoint.sh"]
 
 EXPOSE 8080
 
