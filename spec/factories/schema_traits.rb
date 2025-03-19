@@ -69,4 +69,15 @@ FactoryBot.define do
     date { ['2024-11-08'] }
     date_available { ['2024-11-08'] }
   end
+
+  trait :audio_visual_metadata do
+    date { ['2024-11'] }
+    date_associated { ['2024'] }
+    inscription { ['hey look over here'] }
+    original_item_extent { ['24 x 19.5 cm.'] }
+    repository_location { ['On that one shelf in the back'] }
+    research_assistance { ['Student, Ashley'] }
+    provenance { ['Owner Information'] }
+    barcode { ['abc123'] }
+  end
 end
