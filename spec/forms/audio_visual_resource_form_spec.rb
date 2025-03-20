@@ -45,7 +45,7 @@ RSpec.describe AudioVisualResourceForm, valkyrization: true do
   end
 
   describe '#primary_terms' do
-    subject(:primary_terms) { described_class.primary_terms }
+    subject { described_class.primary_terms }
 
     describe 'includes fields' do
       it { is_expected.to include :title }
