@@ -27,7 +27,7 @@ module Spot
       # @return [void]
       # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
-        prefix = Hyrax.config.use_valkyrie? ? file_set_resource.id + "-" : file_set.id + "-"
+        prefix = file_set_resource.id + "-"
         object_list = s3_client.list_objects(bucket: s3_bucket, prefix: prefix).to_h[:contents]
         return if object_list.nil?
 
@@ -99,7 +99,7 @@ module Spot
       # Uploads generated derivatives specified by paths with new names specified by
       # keys to the s3 bucket. Adds all uploaded keys to the stored_derivatives metadata field
       def upload_derivatives_to_s3(keys, paths)
-        stored_derivatives = Hyrax.config.use_valkyrie? ? file_set_resource.stored_derivatives.to_a : file_set.stored_derivatives.to_a
+        stored_derivatives = file_set_resource.stored_derivatives.to_a
         paths.each_with_index do |path, index|
           stored_derivatives.push(keys[index])
           s3_client.put_object(
@@ -111,27 +111,17 @@ module Spot
             metadata: {}
           )
         end
-        if Hyrax.config.use_valkyrie?
-          file_set_resource.stored_derivatives = stored_derivatives
-          Hyrax.persister.save(resource: file_set_resource)
-        else
-          file_set.stored_derivatives = stored_derivatives
-          file_set.save
-        end
+        file_set_resource.stored_derivatives = stored_derivatives
+        Hyrax.persister.save(resource: file_set_resource)
       end
 
       # Transfers a single derviative from the source bucket to the destination bucket, renaming
       # it. Adds all uploaded keys to the stored_derivatives metadata field
       def transfer_s3_derivative(derivative, key)
-        stored_derivatives = Hyrax.config.use_valkyrie? ? file_set_resource.stored_derivatives.to_a : file_set.stored_derivatives.to_a
+        stored_derivatives = file_set_resource.stored_derivatives.to_a
         stored_derivatives.push(key)
-        if Hyrax.config.use_valkyrie?
-          file_set_resource.stored_derivatives = stored_derivatives
-          Hyrax.persister.save(resource: file_set_resource)
-        else
-          file_set.stored_derivatives = stored_derivatives
-          file_set.save
-        end
+        file_set_resource.stored_derivatives = stored_derivatives
+        Hyrax.persister.save(resource: file_set_resource)
         src = "/" + s3_source + "/" + derivative
         s3_client.copy_object(
           bucket: s3_bucket,
