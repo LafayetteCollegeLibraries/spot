@@ -35,7 +35,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       .to receive(:find_by_alternate_identifier)
       .with(alternate_identifier: "1234")
       .and_return(:_file_set)
-    
+
     allow(Hyrax::DerivativePath)
       .to receive(:derivative_path_for_reference)
       .with(file_set, 'access.mp4')
