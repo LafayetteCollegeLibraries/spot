@@ -29,6 +29,13 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
     stub_env('AWS_AV_ASSET_BUCKET', aws_av_asset_bucket)
     stub_env('AWS_BULKRAX_IMPORTS_BUCKET', aws_import_bucket)
 
+    allow(_file_set).to receive(:id).and_return("1234")
+
+    allow(Hyrax.query_service)
+      .to receive(:find_by_alternate_identifier)
+      .with(alternate_identifier: "1234")
+      .and_return(:_file_set)
+    
     allow(Hyrax::DerivativePath)
       .to receive(:derivative_path_for_reference)
       .with(file_set, 'access.mp4')
