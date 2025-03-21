@@ -222,7 +222,6 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       before do
         allow(file_set).to receive(:stored_derivatives).and_return(stored)
         allow(file_set).to receive(:stored_derivatives=).with(["1234_0_access_480.mp4"])
-        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -231,7 +230,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
 
       it 'saves the key to stored derivatives and uploads to s3' do
         expect(file_set).to have_received(:stored_derivatives=).with(["1234_0_access_480.mp4"])
-        expect(file_set).to have_received(:save)
+        expect(Hyrax.persister).to have_received(:save).with(resource: file_set)
         expect(mock_s3_client)
           .to have_received(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -244,7 +243,6 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
       before do
         allow(file_set).to receive(:stored_derivatives).and_return(stored)
         allow(file_set).to receive(:stored_derivatives=).with(["5678_0_access_480.mp4", "1234_0_access_480.mp4"])
-        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -253,7 +251,7 @@ RSpec.describe Spot::Derivatives::AudioVisualBaseDerivativeService, derivatives:
 
       it 'saves the key to stored derivatives and uploads to s3' do
         expect(file_set).to have_received(:stored_derivatives=).with(["5678_0_access_480.mp4", "1234_0_access_480.mp4"])
-        expect(file_set).to have_received(:save)
+        expect(Hyrax.persister).to have_received(:save).with(resource: file_set)
         expect(mock_s3_client)
           .to have_received(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
