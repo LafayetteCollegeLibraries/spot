@@ -5,6 +5,7 @@ en:
       publication: Publication
       image: Image
       student_work: Student Work
+      audio_visual: Audio Visual
   hyrax:
     base:
       show_actions:
@@ -72,3 +73,8 @@ en:
           comments: Comments
           files: Add Files
           media: Representative Media
+    
+    file_sets:
+      actions:
+        caption_download: Download Caption
+        caption_download_title: Download Caption %{file_set}

@@ -142,6 +142,9 @@ gem 'redlock', '>= 0.1.2', '< 2.0'
 # that throws off how forms are built in Hyrax.
 gem 'simple_form', '< 5.2'
 
+# video file resource for getting information on video derivatives
+gem 'ffprober'
+
 # development dependencies (not as necessary to lock down versions here)
 group :development do
   # Seed data

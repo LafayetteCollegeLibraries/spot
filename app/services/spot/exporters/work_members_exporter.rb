@@ -36,7 +36,7 @@ module Spot
       #
       # @return [Array<Hydra::PCDM::File>]
       def files
-        file_sets.map(&:original_file)
+        file_sets.flat_map { |fs| [fs.original_file, fs.try(:transcript)].compact }
       end
     end
   end

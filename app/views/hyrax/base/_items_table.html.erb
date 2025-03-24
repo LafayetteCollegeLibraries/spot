@@ -13,6 +13,10 @@
       <tr>
         <td class="text-center">
           <span class="label label-<%= type_class %>"><%= type %></span>
+          <% if type == 'File' && member.transcript_name != nil %>
+            <br>
+            <span class="label label-<%= type_class %>">Captioned</span>
+          <% end %>
         </td>
         <td>
           <% if presenter.metadata_only? %>
@@ -24,7 +28,7 @@
         <td>
           Uploaded <%= member.try(:date_uploaded) %>
         </td>
-        <td>
+        <td class="text-center">
           <%= member.permission_badge %>
         </td>
         <% if !presenter.metadata_only? && model_name == :file_set -%>

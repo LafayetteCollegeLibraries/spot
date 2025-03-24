@@ -1,4 +1,4 @@
-FROM solr:8.11.2
+FROM solr:8.11.4
 
 USER root
 RUN apt-get update && apt-get upgrade -y
