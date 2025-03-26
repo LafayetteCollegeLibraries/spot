@@ -68,9 +68,6 @@ Hyrax.config do |config|
   # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
   # config.analytics = false
 
-  # Google Analytics tracking ID to gather usage statistics
-  config.google_analytics_id = ENV.fetch('GOOGLE_ANALYTICS_ID', nil)
-
   # Date you wish to start collecting Google Analytic statistics for
   # Leaving it blank will set the start date to when ever the file was uploaded by
   # NOTE: if you have always sent analytics to GA for downloads and page views leave this commented out
@@ -286,39 +283,15 @@ Hyrax.config do |config|
   # config.bagit_dir = "tmp/descriptions"
 
   # If browse-everything has been configured, load the configs.  Otherwise, set to nil.
-  # begin
-  #   if defined? BrowseEverything
-  #     config.browse_everything = BrowseEverything.config
-  #   else
-  #     Rails.logger.warn "BrowseEverything is not installed"
-  #   end
-  # rescue Errno::ENOENT
-  #   config.browse_everything = nil
-  # end
-
-  # Until we actually use it, force BrowseEverything not to load.
-  # Otherwise it may just return an empty Hash which is truth-y.
-  # (use the configuration above when you get to the point where you want to use it)
-  config.browse_everything = nil
-
-  ## Whitelist all directories which can be used to ingest from the local file
-  # system.
-  #
-  # Any file, and only those, that is anywhere under one of the specified
-  # directories can be used by CreateWithRemoteFilesActor to add local files
-  # to works. Files uploaded by the user are handled separately and the
-  # temporary directory for those need not be included here.
-  #
-  # Default value includes BrowseEverything.config['file_system'][:home] if it
-  # is set, otherwise default is an empty list. You should only need to change
-  # this if you have custom ingestions using CreateWithRemoteFilesActor to
-  # ingest files from the file system that are not part of the BrowseEverything
-  # mount point.
-  #
-  config.whitelisted_ingest_dirs = [
-    Rails.root.join('tmp', 'ingest').to_s,
-    Rails.root.to_s
-  ]
+  begin
+    if defined? BrowseEverything
+      config.browse_everything = BrowseEverything.config
+    else
+      Rails.logger.warn "BrowseEverything is not installed"
+    end
+  rescue Errno::ENOENT
+    config.browse_everything = nil
+  end
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
 end

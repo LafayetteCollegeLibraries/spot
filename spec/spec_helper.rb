@@ -73,6 +73,8 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+DatabaseCleaner.allow_remote_database_url = true
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
