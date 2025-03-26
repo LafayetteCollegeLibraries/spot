@@ -21,7 +21,7 @@ jobs:
   test:
     name: Test (Valkyrie ${{ matrix.hyrax_valkyrie == true && 'enabled' || 'disabled' }})
     runs-on: ubuntu-latest
-    container: ruby:2.7.8-slim-bullseye
+    container: ruby:3.2-slim-bullseye
     needs: lint
     continue-on-error: ${{ matrix.hyrax_valkyrie == true }}
     strategy:
