@@ -12,7 +12,7 @@ end
 gem 'rails', '~> 6.1'
 
 # use Puma as the app server
-gem 'puma', '~> 6.4.0'
+gem 'puma', '~> 6.6.0'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
@@ -143,6 +143,8 @@ gem 'twitter-typeahead-rails', '~> 0.11.1'
 #   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD in this way:
 #   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
 gem 'sprockets-es6', '~> 0.9.2'
+
+gem 'twitter-typeahead-rails', '~> 0.11.1'
 
 # Locking "redlock" to < 2.0, as the 2.x series currently breaks Sidekiq jobs.
 # @see https://github.com/samvera/hyrax/pull/5961

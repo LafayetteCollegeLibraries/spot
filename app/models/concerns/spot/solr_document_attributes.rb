@@ -103,5 +103,13 @@ module Spot
       attribute :citation_firstpage,     ::Blacklight::Types::String, 'citation_firstpage_ss'
       attribute :citation_lastpage,      ::Blacklight::Types::String, 'citation_lastpage_ss'
     end
+
+    # module ClassMethods
+    #   def attribute(name, type, field)
+    #     define_method name do
+    #       type.coerce(self[field])
+    #     end
+    #   end
+    # end
   end
 end
