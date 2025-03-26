@@ -9,13 +9,13 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '~> 5.2.7'
+gem 'rails', '~> 6.0.6'
 
 # use Puma as the app server
-gem 'puma', '~> 6.4.0'
+gem 'puma', '~> 6.6.0'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.1.0'
+gem 'sass-rails', '~> 6.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '~> 4.2.0'
@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 3.6.0'
+gem 'hyrax', '~> 4.0.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -44,16 +44,17 @@ gem 'aws-sdk-s3', '~> 1.142.0'
 gem 'bagit', '~> 0.6.0'
 
 # blacklight plugins for enhanced searching
-gem 'blacklight_advanced_search', '~> 6.4.1'
-gem 'blacklight_oai_provider', '~> 6.0.0'
+gem 'blacklight_advanced_search', '~> 7.0.0'
+gem 'blacklight_oai_provider', '~> 7.0.2'
 gem 'blacklight_range_limit', '~> 6.3.3'
 
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
+gem 'bootstrap', '~> 5.3.3'
 
 # Bulkrax for batch ingesting objects
-gem 'browse-everything', '~> 1.1.2'
-gem 'bulkrax', '~> 9.0.2'
+gem 'browse-everything', '~> 1.3.0'
+gem 'bulkrax', '~> 5.5.1'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -73,7 +74,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '~> 0.17.6'
+gem 'faraday', '~> 1.10.4'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
@@ -138,6 +139,8 @@ gem 'slack-ruby-client', '~> 0.14.6'
 #   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD in this way:
 #   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
 gem 'sprockets-es6', '~> 0.9.2'
+
+gem 'twitter-typeahead-rails', '~> 0.11.1'
 
 # Locking "redlock" to < 2.0, as the 2.x series currently breaks Sidekiq jobs.
 # @see https://github.com/samvera/hyrax/pull/5961

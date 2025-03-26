@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-#
-# Generated from +rails generate hyrax:install+
 class SolrDocument
   include Blacklight::Solr::Document
   include BlacklightOaiProvider::SolrDocument

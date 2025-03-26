@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 #
 # Class attribute updates + monkey-patching customizations for Hyrax.
+
 Rails.application.config.to_prepare do
   # Bump start the Noid minter in development:
   # Using Bulkrax on a brand-new Hyrax application will wreak havoc with
@@ -28,7 +29,9 @@ Rails.application.config.to_prepare do
 
   # Use our own FileSetDerivativesService first and fall back to the Hyrax services
   # for formats we don't currently handle uniquely.
-  Hyrax::DerivativeService.services = [
+  #
+  # @todo move this to the Hyrax initializer?
+  Hyrax.config.derivative_services = [
     ::Spot::FileSetDerivativesService,
     ::Hyrax::FileSetDerivativesService
   ]
@@ -271,7 +274,7 @@ Rails.application.config.to_prepare do
     end
   end
 
-  Hyrax::ValkyrieIngestJob.class_eval do
+  ValkyrieIngestJob.class_eval do
     def ingest(file:, pcdm_use:)
       file_set_id = Valyrie::ID.new(Hyrax::Base.uri_to_id(file.file_set_uri))
       file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: file_set_id)

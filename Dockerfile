@@ -3,7 +3,7 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.7.8-slim-bullseye AS spot-base
+FROM ruby:3.2-slim-bullseye AS spot-base
 
 RUN apt-get clean && \
     apt-get update && \
