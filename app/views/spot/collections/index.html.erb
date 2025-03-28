@@ -4,8 +4,6 @@
   <h1><%= t('.header') %></h1>
 </div>
 
-<%= render partial: 'catalog/paginate_compact', object: @response %>
-
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingOne">
@@ -113,6 +111,8 @@
     </div>
   </div>
 </div>
+
+<%= render partial: 'catalog/paginate_compact', object: @response %>
 
 <% @collections.each_slice(3).each do |collections| %>
 <div class="row">
