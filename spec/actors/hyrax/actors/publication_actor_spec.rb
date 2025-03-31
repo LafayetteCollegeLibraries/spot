@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 RSpec.describe Hyrax::Actors::PublicationActor do
-  include_context 'mock remote authorities'
+  before do
+    stub_request(:get, 'http://www.geonames.org/getJSON')
+      .with(query: hash_including(username: 'lafayette_dss'))
+      .to_return(status: 200, body: '{}')
+
+    stub_request(:get, 'http://fast.oclc.org/searchfast/fastsuggest')
+      .with(query: hash_including(queryIndex: 'idroot'))
+      .to_return(status: 200, body: '{}')
+  end
 
   it_behaves_like 'a Spot actor'
 
@@ -34,19 +42,14 @@ RSpec.describe Hyrax::Actors::PublicationActor do
     end
 
     context 'when an embargo is set for the work' do
-      before do
-        work.embargo = af_embargo
-      end
+      before { allow(work).to receive(:embargo).and_return embargo }
 
       let(:embargo) do
-        Hyrax::Embargo.new(
-          visibility_during_embargo: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE,
-          visibility_after_embargo: Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC,
-          embargo_release_date: tomorrow_time
-        )
+        instance_double(Hydra::AccessControls::Embargo,
+                        attributes: {},
+                        embargo_release_date: tomorrow_time,
+                        to_hash: {})
       end
-      let(:af_embargo) { Hyrax.persister.resource_factory.from_resource(resource: embargo) }
-
       let(:tomorrow_time) { Time.zone.tomorrow }
       let(:tomorrow) { tomorrow_time.strftime('%Y-%m-%d') }
 

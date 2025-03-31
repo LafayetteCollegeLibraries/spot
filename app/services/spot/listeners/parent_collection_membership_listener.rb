@@ -8,12 +8,10 @@ module Spot
     #       reindex? (see Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX) Is that something that
     #       was addressed in Valkyrization?
     class ParentCollectionMembershipListener
-      # @params [Hash] options
-      # @option [Hyrax::Resource,#member_of_collection_ids] object
-      # @option [User] user
       # @return [void]
-      def on_object_metadata_updated(object:, user:) # rubocop:disable Lint/UnusedMethodArgument
-        return if object.member_of_collection_ids.blank?
+      def on_object_metadata_updated(event) # rubocop:disable Lint/UnusedMethodArgument
+        object = event.try(:object)
+        return if object.blank? || object.try(:member_of_collection_ids).blank?
 
         collection_ids_to_add = parent_collection_ids_for(object.member_of_collection_ids)
         return if collection_ids_to_add.empty?

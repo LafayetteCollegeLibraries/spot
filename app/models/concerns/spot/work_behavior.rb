@@ -32,6 +32,12 @@ module Spot
                      field: :rights_statement, authority: 'rights_statements'
     end
 
+    # WorkType#label is called within Hyrax::Serializers#to_s if a work is missing a title.
+    # This just enusres that the check doesn't thorw a NoMethodError.
+    #
+    # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/app/models/concerns/hyrax/serializers.rb#L7
+    def label; end
+
     module ClassMethods
       # Intended to be called at the end of your model to setup +accepts_nested_attributes_for+
       # for your controlled properties. Uses the +controlled_properties+ attribute.

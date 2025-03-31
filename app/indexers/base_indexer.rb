@@ -26,6 +26,7 @@ class BaseIndexer < ::Hyrax::WorkIndexer
       solr_doc['file_format_ssim'] = object.file_sets.map(&:mime_type).reject(&:blank?)
 
       store_thumbnail_url(solr_doc)
+      stringify_rdf_uris(solr_doc)
     end
   end
 
@@ -47,5 +48,26 @@ class BaseIndexer < ::Hyrax::WorkIndexer
     url = URI.join(host, path).to_s
 
     doc['thumbnail_url_ss'] = url unless url.empty?
+  end
+
+  # @see app/indexers/base_resource_indexer.rb
+  def stringify_rdf_uris(document)
+    document.transform_values! do |values|
+      stringified_values = stringify_values(values)
+      values.is_a?(Array) ? stringified_values : stringified_values.first
+    end
+  end
+
+  def stringify_values(values)
+    Array.wrap(values).map do |value|
+      case value
+      when RDF::Literal, RDF::URI
+        value.to_s
+      when ActiveTriples::Resource
+        value.rdf_subject
+      else
+        value
+      end
+    end
   end
 end
