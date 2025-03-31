@@ -13,7 +13,7 @@ module Spot
     #   Hyrax.publisher.subscribe(Spot::Listeners::SolrSuggestDictionaryListener.new)
     #
     class SolrSuggestDictionariesListener
-      def on_object_metadata_updated(object:, user:) # rubocop:disable Lint/UnusedMethodArgument
+      def on_object_metadata_updated(_event)
         Spot::UpdateSolrSuggestDictionariesJob.perform_now
       end
     end
