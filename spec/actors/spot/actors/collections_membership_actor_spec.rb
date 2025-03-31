@@ -1,16 +1,17 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Actors::CollectionsMembershipActor do
+RSpec.describe Spot::Actors::CollectionsMembershipActor, actor_stack: true do
   before do
     allow(Collection).to receive(:find).with(parent_collection.id).and_return(parent_collection)
     allow(Collection).to receive(:find).with(child_collection.id).and_return(child_collection)
 
-    allow(parent_collection).to receive(:share_applies_to_new_works?).and_return true
-    allow(child_collection).to receive(:share_applies_to_new_works?).and_return true
+    allow(Hyrax::CollectionType).to receive(:for).with(collection: parent_collection).and_return(mock_collection_type)
+    allow(Hyrax::CollectionType).to receive(:for).with(collection: child_collection).and_return(mock_collection_type)
 
     work.member_of_collections.clear
     child_collection.member_of_collections.clear
   end
 
+  let(:mock_collection_type) { instance_double(Hyrax::CollectionType, share_applies_to_new_works?: true) }
   let(:stack) { described_class.new(Hyrax::Actors::Terminator.new) }
   let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
 

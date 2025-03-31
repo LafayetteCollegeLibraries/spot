@@ -205,7 +205,9 @@ Rails.application.config.to_prepare do
     private
 
     def parse_authority_response(raw_response)
-      raw_response['response']['docs'].map do |doc|
+      results = raw_response.try(:[], 'response').try(:[], 'docs') || []
+
+      results.map do |doc|
         index = Qa::Authorities::AssignFast.index_for_authority(subauthority)
         term = doc[index].first
         term += " (USE #{doc['auth']})" if doc['type'] == 'alt'
