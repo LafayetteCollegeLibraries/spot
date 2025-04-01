@@ -23,6 +23,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
       scenario do
         visit '/dashboard'
         click_link 'Works'
+        sleep 1
         click_link 'Add New Work'
 
         sleep 1
