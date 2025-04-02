@@ -33,56 +33,56 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
 
         expect(page).to have_content "Add New #{i18n_term}"
 
-        fill_in audio_visual_selctor_for('title'), with: attrs[:title].first
-        expect(page).not_to have_css ".#{audio_visual_selctor_for('title')} .controls-add-text"
+        fill_in audio_visual_selector_for('title'), with: attrs[:title].first
+        expect(page).not_to have_css ".#{audio_visual_selector_for('title')} .controls-add-text"
 
-        select 'Audio', from: audio_visual_selctor_for('resource_type')
-        expect(page).not_to have_css ".#{audio_visual_selctor_for('resource_type')} .controls-add-text"
+        select 'Audio', from: audio_visual_selector_for('resource_type')
+        expect(page).not_to have_css ".#{audio_visual_selector_for('resource_type')} .controls-add-text"
 
-        select 'No Known Copyright', from: audio_visual_selctor_for('rights_statement')
+        select 'No Known Copyright', from: audio_visual_selector_for('rights_statement')
 
-        fill_in audio_visual_selctor_for('date'), with: attrs[:date].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('date')} .controls-add-text"
+        fill_in audio_visual_selector_for('date'), with: attrs[:date].first
+        expect(page).to have_css ".#{audio_visual_selector_for('date')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('title_alternative'), with: attrs[:title_alternative].first
-        fill_in audio_visual_selctor_for('title_alternative_language'), with: 'en'
-        expect(page).to have_css ".#{audio_visual_selctor_for('title_alternative')} .controls-add-text"
+        fill_in audio_visual_selector_for('title_alternative'), with: attrs[:title_alternative].first
+        fill_in audio_visual_selector_for('title_alternative_language'), with: 'en'
+        expect(page).to have_css ".#{audio_visual_selector_for('title_alternative')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('subtitle'), with: attrs[:subtitle].first
-        fill_in audio_visual_selctor_for('subtitle_language'), with: 'en'
-        expect(page).to have_css ".#{audio_visual_selctor_for('title_alternative')} .controls-add-text"
+        fill_in audio_visual_selector_for('subtitle'), with: attrs[:subtitle].first
+        fill_in audio_visual_selector_for('subtitle_language'), with: 'en'
+        expect(page).to have_css ".#{audio_visual_selector_for('title_alternative')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('date_associated'), with: attrs[:date_associated].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('date_associated')} .controls-add-text"
+        fill_in audio_visual_selector_for('date_associated'), with: attrs[:date_associated].first
+        expect(page).to have_css ".#{audio_visual_selector_for('date_associated')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('rights_holder'), with: attrs[:rights_holder].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('rights_holder')} .controls-add-text"
+        fill_in audio_visual_selector_for('rights_holder'), with: attrs[:rights_holder].first
+        expect(page).to have_css ".#{audio_visual_selector_for('rights_holder')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('description'), with: attrs[:description].first
-        fill_in audio_visual_selctor_for('description_language'), with: 'en'
-        expect(page).to have_css ".#{audio_visual_selctor_for('description')} .controls-add-text"
+        fill_in audio_visual_selector_for('description'), with: attrs[:description].first
+        fill_in audio_visual_selector_for('description_language'), with: 'en'
+        expect(page).to have_css ".#{audio_visual_selector_for('description')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('inscription'), with: attrs[:inscription].first
-        fill_in audio_visual_selctor_for('inscription_language'), with: 'en'
-        expect(page).to have_css ".#{audio_visual_selctor_for('inscription')} .controls-add-text"
+        fill_in audio_visual_selector_for('inscription'), with: attrs[:inscription].first
+        fill_in audio_visual_selector_for('inscription_language'), with: 'en'
+        expect(page).to have_css ".#{audio_visual_selector_for('inscription')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('creator'), with: attrs[:creator].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('creator')} .controls-add-text"
+        fill_in audio_visual_selector_for('creator'), with: attrs[:creator].first
+        expect(page).to have_css ".#{audio_visual_selector_for('creator')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('contributor'), with: attrs[:contributor].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('contributor')} .controls-add-text"
+        fill_in audio_visual_selector_for('contributor'), with: attrs[:contributor].first
+        expect(page).to have_css ".#{audio_visual_selector_for('contributor')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('publisher'), with: attrs[:publisher].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('publisher')} .controls-add-text"
+        fill_in audio_visual_selector_for('publisher'), with: attrs[:publisher].first
+        expect(page).to have_css ".#{audio_visual_selector_for('publisher')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('keyword'), with: attrs[:keyword].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('keyword')} .controls-add-text"
+        fill_in audio_visual_selector_for('keyword'), with: attrs[:keyword].first
+        expect(page).to have_css ".#{audio_visual_selector_for('keyword')} .controls-add-text"
 
-        fill_in_autocomplete ".#{audio_visual_selctor_for('subject')}", with: attrs[:subject].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('subject')} .controls-add-text"
+        fill_in_autocomplete ".#{audio_visual_selector_for('subject')}", with: attrs[:subject].first
+        expect(page).to have_css ".#{audio_visual_selector_for('subject')} .controls-add-text"
 
         # multi-authority for location
-        location_selector = "input.#{audio_visual_selctor_for('location')}.multi_auth_controlled_vocabulary"
+        location_selector = "input.#{audio_visual_selector_for('location')}.multi_auth_controlled_vocabulary"
         expect(page).to have_css("#{location_selector}[data-autocomplete='location']", visible: false)
 
         # @todo maybe this should be a support thing?
@@ -99,41 +99,41 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
           sleep 1
         end
 
-        expect(page).to have_css(".#{audio_visual_selctor_for('location')} .controls-add-text")
+        expect(page).to have_css(".#{audio_visual_selector_for('location')} .controls-add-text")
         # end location
 
-        fill_in_autocomplete ".#{audio_visual_selctor_for('language')}", with: attrs[:language].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('language')} .controls-add-text")
+        fill_in_autocomplete ".#{audio_visual_selector_for('language')}", with: attrs[:language].first
+        expect(page).to have_css(".#{audio_visual_selector_for('language')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('source'), with: attrs[:source].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('source')} .controls-add-text")
+        fill_in audio_visual_selector_for('source'), with: attrs[:source].first
+        expect(page).to have_css(".#{audio_visual_selector_for('source')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('physical_medium'), with: attrs[:physical_medium].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('physical_medium')} .controls-add-text")
+        fill_in audio_visual_selector_for('physical_medium'), with: attrs[:physical_medium].first
+        expect(page).to have_css(".#{audio_visual_selector_for('physical_medium')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('original_item_extent'), with: attrs[:original_item_extent].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('original_item_extent')} .controls-add-text")
+        fill_in audio_visual_selector_for('original_item_extent'), with: attrs[:original_item_extent].first
+        expect(page).to have_css(".#{audio_visual_selector_for('original_item_extent')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('repository_location'), with: attrs[:repository_location].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('repository_location')} .controls-add-text")
+        fill_in audio_visual_selector_for('repository_location'), with: attrs[:repository_location].first
+        expect(page).to have_css(".#{audio_visual_selector_for('repository_location')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('research_assistance'), with: attrs[:research_assistance].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('research_assistance')} .controls-add-text")
+        fill_in audio_visual_selector_for('research_assistance'), with: attrs[:research_assistance].first
+        expect(page).to have_css(".#{audio_visual_selector_for('research_assistance')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('related_resource'), with: attrs[:related_resource].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('related_resource')} .controls-add-text")
+        fill_in audio_visual_selector_for('related_resource'), with: attrs[:related_resource].first
+        expect(page).to have_css(".#{audio_visual_selector_for('related_resource')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('local_identifier'), with: 'local:abc123'
-        expect(page).to have_css(".#{audio_visual_selctor_for('local_identifier')} .controls-add-text")
+        fill_in audio_visual_selector_for('local_identifier'), with: 'local:abc123'
+        expect(page).to have_css(".#{audio_visual_selector_for('local_identifier')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('note'), with: attrs[:note].first
-        expect(page).to have_css(".#{audio_visual_selctor_for('note')} .controls-add-text")
+        fill_in audio_visual_selector_for('note'), with: attrs[:note].first
+        expect(page).to have_css(".#{audio_visual_selector_for('note')} .controls-add-text")
 
-        fill_in audio_visual_selctor_for('provenance'), with: attrs[:provenance].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('provenance')} .controls-add-text"
+        fill_in audio_visual_selector_for('provenance'), with: attrs[:provenance].first
+        expect(page).to have_css ".#{audio_visual_selector_for('provenance')} .controls-add-text"
 
-        fill_in audio_visual_selctor_for('barcode'), with: attrs[:barcode].first
-        expect(page).to have_css ".#{audio_visual_selctor_for('barcode')} .controls-add-text"
+        fill_in audio_visual_selector_for('barcode'), with: attrs[:barcode].first
+        expect(page).to have_css ".#{audio_visual_selector_for('barcode')} .controls-add-text"
 
         # see long note in +create_publication_spec.rb+ for why we need to scroll back to the top
         page.execute_script('window.scrollTo(0,0)')
@@ -150,7 +150,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         end
 
         # select visibility
-        choose audio_visual_selctor_for('visibility_open')
+        choose audio_visual_selector_for('visibility_open')
 
         # check the submission agreement
         # check 'agreement'
