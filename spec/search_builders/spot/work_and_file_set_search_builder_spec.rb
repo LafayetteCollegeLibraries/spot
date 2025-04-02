@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 RSpec.describe Spot::WorkAndFileSetSearchBuilder do
-  let(:builder) { described_class.new([]) }
+  let(:builder) { described_class.new(processor_chain, scope) }
+  let(:processor_chain) { [] }
+  let(:scope) { double('scope', blacklight_config: {}) }
 
   describe '#filter_models' do
     subject(:params) { {} }

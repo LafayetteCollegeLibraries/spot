@@ -10,9 +10,7 @@ module Spot
   class CharacterizationService < ::Hydra::Works::CharacterizationService
     def self.run(characterization_proxy, filepath, opts = {})
       tool = ENV['FITS_SERVLET_URL'].present? ? :fits_servlet : :fits
-      opts = { ch12n_tool: tool }.merge(opts)
-
-      super(characterization_proxy, filepath, opts)
+      super(characterization_proxy, filepath, { ch12n_tool: tool }.merge(opts))
     end
   end
 end

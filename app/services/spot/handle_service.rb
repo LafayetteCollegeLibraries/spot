@@ -50,9 +50,10 @@ module Spot
 
     # @return [Faraday::Client]
     def client
-      @client ||=
-        Faraday::Connection.new(self.class.handle_server_url,
-                                ssl: { client_cert: handle_certificate, client_key: handle_key, verify: false })
+      @client ||= begin
+        ssl_opts = { client_cert: handle_certificate, client_key: handle_key, verify: false }
+        Faraday.new(self.class.handle_server_url, ssl: ssl_opts)
+      end
     end
 
     def find_handle_id
@@ -82,35 +83,28 @@ module Spot
     end
 
     # @return [String]
-    def payload
-      {
-        index: 100,
-        type: 'URL',
-        permissions: '1110',
-        data: {
-          format: 'string',
-          value: permalink_url
-        }
-      }
-    end
-
-    # @return [String]
     def permalink_url
       # need to use CGI.unescape as the slashes in our handle_id will be encoded by +handle_url+
       CGI.unescape(Rails.application.routes.url_helpers.handle_url(handle_id, host: ENV['URL_HOST']))
     end
 
-    # @param [Hash] options
-    # @option [Boolean] update_only
     # @return [void]
     # @todo update the record afterwards
     def send_payload
-      response = client.put do |req|
-        req.url "/api/handles/#{handle_id}"
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = 'Handle clientCert=true'
-        req.body = JSON.dump(payload)
-      end
+      payload = {
+        index: 100,
+        type: 'URL',
+        permissions: '1110',
+        data: { format: 'string', value: permalink_url }
+      }
+
+      headers = {
+        'Authorization' => 'Handle clientCert=true',
+        'Content-Type' => 'application/json'
+      }
+
+      put_url = "#{self.class.handle_server_url.gsub(/\/$/, '')}/api/handles/#{handle_id}"
+      response = Faraday.put(put_url, JSON.dump(payload), headers)
 
       # this isn't where we want to stop, we still need to
       # deal with the response: did everything go ok?

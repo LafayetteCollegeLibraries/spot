@@ -2,7 +2,7 @@
 require 'fileutils'
 
 RSpec.describe Spot::Exporters::WorkMetadataExporter do
-  let(:exporter) { described_class.new(solr_document, request) }
+  let(:exporter) { described_class.new(solr_document) }
   let(:work_id) { 'spot-work_metadata_exporter_spec-obj' }
   let(:ability) { Ability.new(nil) }
   let(:request) { instance_double(ActionDispatch::Request, host: 'localhost') }
@@ -14,8 +14,14 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
     create(:publication, id: work_id, title: ['ok cool'])
   end
 
-  before { FileUtils.mkdir_p(destination) }
-  after { FileUtils.rm_r(destination) }
+  before do
+    stub_env('URL_HOST', 'localhost') unless ENV.key?('URL_HOST')
+    FileUtils.mkdir_p(destination)
+  end
+
+  after do
+    FileUtils.rm_r(destination)
+  end
 
   describe '#export!' do
     subject(:content) do
@@ -28,7 +34,8 @@ RSpec.describe Spot::Exporters::WorkMetadataExporter do
     before { exporter.export!(destination: destination, format: format) }
 
     let(:expected_output_file) { File.join(destination, "#{work.id}.#{format}") }
-    let(:object_url) { "http://localhost/concern/publications/#{work.id}" }
+    let(:hostname) { ENV.fetch('URL_HOST', 'http://localhost').gsub(/^https?:\/\//, '') }
+    let(:object_url) { "http://#{hostname}/concern/publications/#{work.id}" }
 
     context 'when requesting ttl' do
       let(:format) { :ttl }
