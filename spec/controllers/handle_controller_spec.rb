@@ -4,7 +4,7 @@ RSpec.describe HandleController do
   describe '#show' do
     subject(:make_request) { get :show, params: { id: handle } }
 
-    let(:solr_service) { ActiveFedora::SolrService }
+    let(:solr_service) { Hyrax::SolrService }
 
     before do
       solr_service.add(solr_data)
@@ -82,8 +82,6 @@ RSpec.describe HandleController do
     end
 
     context 'when a handle does not exist for an item' do
-      let(:handle) { '1234/nothere' }
-
       let(:solr_data) { { id: 'unrelated' } }
 
       it 'raises a Blacklight::Exceptions::RecordNotFound error' do

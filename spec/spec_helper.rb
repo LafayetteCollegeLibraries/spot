@@ -112,6 +112,7 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include WithoutDetailedExceptions, type: :controller
   config.include FactoryBot::Syntax::Methods
   config.include StubEnv::Helpers
   config.include ControllerHelpers, type: :helper
@@ -171,6 +172,7 @@ WebMock.disable_net_connect!(
     solr
   ]
 )
+WebMock.enable!
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

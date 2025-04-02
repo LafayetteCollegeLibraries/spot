@@ -22,7 +22,7 @@ module Spot
     private
 
     def language_prepopulator_for(field:)
-      lambda do |_opts|
+      lambda do
         vals = Array.wrap(send(field.to_sym)).map do |original|
           case original
           when RDF::Literal
@@ -35,7 +35,7 @@ module Spot
     end
 
     def value_prepopulator_for(field:)
-      lambda do |_opts|
+      lambda do
         vals = Array.wrap(send(field.to_sym)).map do |original|
           case original
           when RDF::Literal
@@ -50,7 +50,7 @@ module Spot
     end
 
     def value_populator_for(field:)
-      lambda do |doc:, **_opts|
+      lambda do |doc:, **|
         vals = Array.wrap(doc["#{field}_value"]).zip(Array.wrap(doc["#{field}_language"])).map do |(value, language)|
           if value.present? && language.present?
             RDF::Literal.new(value.to_s, language: language.to_sym)

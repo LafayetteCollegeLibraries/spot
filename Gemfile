@@ -78,7 +78,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 gem 'faraday', '~> 2.0'
 
 # video file resource for getting information on video derivatives
-gem 'ffprober'
+gem 'ffprober', '~> 1.0'
 
 # error trackijng
 gem 'honeybadger', '~> 4.12.1'

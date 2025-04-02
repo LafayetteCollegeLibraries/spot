@@ -11,7 +11,8 @@ RSpec.describe Spot::CatalogSearchBuilder do
   describe '#add_full_text_context' do
     subject(:context_query) { builder.add_full_text_context(params) }
 
-    let(:builder) { described_class.new([]).with(blacklight_params) }
+    let(:builder) { described_class.new([], scope_double).with(blacklight_params) }
+    let(:scope_double) { double('scope', blacklight_config: {}) }
     let(:blacklight_params) { { q: 'a cool query' } }
     let(:feature_available) { true }
     let(:params) { {} }

@@ -119,20 +119,14 @@ RSpec.describe AudioVisualHelper do
   describe '#get_derivative_list' do
     subject { get_derivative_list(presenters) }
 
-    let(:file_set_1) { build(:file_set) }
-    let(:file_set_2) { build(:file_set) }
-    let(:file_set_3) { build(:file_set) }
+    let(:file_set_1) { build(:file_set, stored_derivatives: stored_1) }
+    let(:file_set_2) { build(:file_set, stored_derivatives: stored_2) }
+    let(:file_set_3) { build(:file_set, stored_derivatives: stored_3) }
     let(:presenters) { [file_set_1, file_set_2, file_set_3] }
     let(:stored_1) { ['1234_0_access.mp3', '1234_1_access.mp3'] }
     let(:stored_2) { ['5678_0_access.mp3'] }
     let(:stored_3) { ['9012_0_access.mp3', '9012_1_access.mp3', '9012_2_access.mp3'] }
     let(:derivatives) { ['1234_0_access.mp3', '1234_1_access.mp3', '5678_0_access.mp3', '9012_0_access.mp3', '9012_1_access.mp3', '9012_2_access.mp3'] }
-
-    before do
-      allow(file_set_1).to receive(:stored_derivatives).and_return(stored_1)
-      allow(file_set_2).to receive(:stored_derivatives).and_return(stored_2)
-      allow(file_set_3).to receive(:stored_derivatives).and_return(stored_3)
-    end
 
     it { is_expected.to match_array derivatives }
   end
@@ -152,7 +146,6 @@ RSpec.describe AudioVisualHelper do
 
     before do
       allow(file_set).to receive(:id).and_return('0')
-      allow(Hyrax::Engine.routes.url_helpers).to receive(:download_path).with(id: '0', file: 'transcript')
     end
 
     it { is_expected.to eq "/downloads/0?file=transcript" }

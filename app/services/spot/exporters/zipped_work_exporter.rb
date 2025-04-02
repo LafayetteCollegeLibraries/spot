@@ -9,13 +9,12 @@ module Spot
     # @see {Spot::Exporters::WorkMembersExporter}
     # @see {Spot::Exporters::WorkMetadataExporter}
     class ZippedWorkExporter
-      attr_reader :solr_document, :request
+      attr_reader :solr_document
 
       # @param [SolrDocument]
       # @param [ActionDispatch::Request]
-      def initialize(solr_document, request)
+      def initialize(solr_document)
         @solr_document = solr_document
-        @request = request
       end
 
       # @param [Pathname, String] :destination
@@ -75,7 +74,7 @@ module Spot
 
       # @return [Spot::Exporters::WorkMetadataExporter]
       def metadata_exporter
-        WorkMetadataExporter.new(solr_document, request)
+        WorkMetadataExporter.new(solr_document)
       end
 
       def zip_export_to(destination)

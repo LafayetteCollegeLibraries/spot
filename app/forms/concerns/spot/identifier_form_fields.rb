@@ -30,16 +30,16 @@ module Spot
       property :local_identifier,
                virtual: true,
                display: true,
-               prepopulator: ->(_opts) { self.local_identifier = local_identifiers.map(&:to_s) }
+               prepopulator: -> { self.local_identifier = local_identifiers.map(&:to_s) }
 
       property :standard_identifier_prefix,
                virtual: true,
                display: true,
-               prepopulator: ->(_opts) { self.standard_identifier_prefix = standard_identifiers.map(&:prefix) }
+               prepopulator: -> { self.standard_identifier_prefix = standard_identifiers.map(&:prefix) }
       property :standard_identifier_value,
                virtual: true,
                display: true,
-               prepopulator: ->(_opts) { self.standard_identifier_value = standard_identifiers.map(&:value) }
+               prepopulator: -> { self.standard_identifier_value = standard_identifiers.map(&:value) }
 
       validate(identifier_field) do
         send(:"#{identifier_field}=", merged_identifiers)

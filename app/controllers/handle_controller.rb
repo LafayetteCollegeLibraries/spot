@@ -6,8 +6,7 @@ class HandleController < ApplicationController
   include ::Spot::RedirectionHelpers
 
   # Searches for a Handle based on an +hdl:+ identifier.
-  # Displays a 404 (via raised +Blacklight::Exceptions::RecordNotFound+
-  # that is handled with +Hydra::Catalog+) if no item is found.
+  # Displays a 404 (via raised +Hyrax::ObjectNotFoundError+) if no item is found.
   def show
     query_opts = query_for_identifier(Spot::Identifier.new('hdl', params[:id]))
     service = Hyrax::SolrQueryService.new(query: [query_opts.delete(:q)])
