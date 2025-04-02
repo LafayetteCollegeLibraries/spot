@@ -78,7 +78,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         fill_in audio_visual_selctor_for('keyword'), with: attrs[:keyword].first
         expect(page).to have_css ".#{audio_visual_selctor_for('keyword')} .controls-add-text"
 
-        fill_in_autocomplete ".#{audio_visual_selctor_for('subject', with: attrs[:subject].first
+        fill_in_autocomplete ".#{audio_visual_selctor_for('subject')}", with: attrs[:subject].first
         expect(page).to have_css ".#{audio_visual_selctor_for('subject')} .controls-add-text"
 
         # multi-authority for location
@@ -102,7 +102,7 @@ RSpec.feature 'Create a Audio Visual', :clean, :js do
         expect(page).to have_css(".#{audio_visual_selctor_for('location')} .controls-add-text")
         # end location
 
-        fill_in_autocomplete ".#{audio_visual_selctor_for('language', with: attrs[:language].first
+        fill_in_autocomplete ".#{audio_visual_selctor_for('language')}", with: attrs[:language].first
         expect(page).to have_css(".#{audio_visual_selctor_for('language')} .controls-add-text")
 
         fill_in audio_visual_selctor_for('source'), with: attrs[:source].first
