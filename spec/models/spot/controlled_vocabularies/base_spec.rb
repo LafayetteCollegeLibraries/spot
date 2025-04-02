@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::ControlledVocabularies::Base do
   let(:resource) { described_class.new(uri) }
-  let(:uri) { RDF::URI('http://id.loc.gov/authorities/subjects/sh85062079') }
+  let(:uri) { RDF::URI('http://id.loc.gov/authorities/subjects/sh85062079').to_s }
   let(:label_en) { RDF::Literal('Horror in art', language: :en) }
   let(:label_de) { RDF::Literal('Schrecken <Motiv>', language: :de) }
   let(:labels) { [label_en, label_de] }

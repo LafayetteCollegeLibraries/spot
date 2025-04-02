@@ -28,7 +28,7 @@ module AudioVisualHelper
   end
 
   # Matches fileset ids with their presenters and returns their original file names for audio playlist
-  # @param presntres [[FileSetPresenter]] list of file set presenters attactched to a work
+  # @param presenters [Array<FileSetPresenter>] list of file set presenters attactched to a work
   # @param derivative [String] a particular derivative key to be matched with a presenter
   # @return [String] the original file name of the given derivative
   def get_original_name(presenters, derivative)
@@ -41,7 +41,7 @@ module AudioVisualHelper
   # @param file_set [FileSet] a fileset from the view
   # @return [String] a list of associated derivatives of the work
   def get_derivative_list(presenters)
-    presenters.flat_map(&:stored_derivatives)
+    presenters.reduce([]) { |enum, presenter| enum + presenter.stored_derivatives.to_a }
   end
 
   # @param derivative [String] a particular derivative key

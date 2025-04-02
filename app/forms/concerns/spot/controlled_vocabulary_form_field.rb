@@ -43,7 +43,7 @@ module Spot
       prepopulator_key = "#{field}_prepopulator".to_sym
       populator_key = "#{field}_populator".to_sym
 
-      descendant.define_method(prepopulator_key) do |_opts|
+      descendant.define_method(prepopulator_key) do
         vocab_class = @vocabulary_class || String
         send(:"#{attributes_key}=", wrap_attribute_values(field: field, field_value_class: vocab_class))
       end

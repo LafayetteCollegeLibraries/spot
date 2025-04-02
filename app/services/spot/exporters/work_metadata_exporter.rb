@@ -29,9 +29,8 @@ module Spot
       # @param [SolrDocument]
       # @param [ActionDispatch::Request, #host, nil]
       # @param [#host]
-      def initialize(solr_document, request = nil)
+      def initialize(solr_document)
         @solr_document = solr_document
-        @request = request
       end
 
       # @param [Pathname, String] :destination
@@ -76,7 +75,9 @@ module Spot
 
       # @return [RDF::Graph]
       def graph
-        @graph ||= Hyrax::GraphExporter.new(solr_document, request).fetch
+        @graph ||= begin
+          Hyrax::GraphExporter.new(solr_document, hostname: URI.parse(ENV.fetch('URL_HOST')).hostname).fetch
+        end
       end
     end
   end

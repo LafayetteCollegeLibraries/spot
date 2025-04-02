@@ -9,7 +9,7 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '~> 6.0.6'
+gem 'rails', '~> 6.1.7'
 
 # use Puma as the app server
 gem 'puma', '~> 6.6.0'
@@ -49,7 +49,7 @@ gem 'blacklight_oai_provider', '~> 7.0.2'
 gem 'blacklight_range_limit', '~> 6.3.3'
 
 # start up the server faster
-gem 'bootsnap', '~> 1.17', require: false
+gem 'bootsnap', '~> 1.18', require: false
 gem 'bootstrap', '~> 5.3.3'
 
 # Bulkrax for batch ingesting objects
@@ -77,7 +77,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 gem 'faraday', '~> 1.10.4'
 
 # video file resource for getting information on video derivatives
-gem 'ffprober'
+gem 'ffprober', '~> 1.0'
 
 # error trackijng
 gem 'honeybadger', '~> 4.12.1'
@@ -141,15 +141,6 @@ gem 'slack-ruby-client', '~> 0.14.6'
 gem 'sprockets-es6', '~> 0.9.2'
 
 gem 'twitter-typeahead-rails', '~> 0.11.1'
-
-# Locking "redlock" to < 2.0, as the 2.x series currently breaks Sidekiq jobs.
-# @see https://github.com/samvera/hyrax/pull/5961
-# @todo remove when Hyrax 3.5.1 or 3.6 (whichever includes it) drops
-gem 'redlock', '>= 0.1.2', '< 2.0'
-
-# This is locked in hydra_editor > v6 to prevent an update
-# that throws off how forms are built in Hyrax.
-gem 'simple_form', '< 5.2'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do

@@ -4,7 +4,7 @@ RSpec.describe HandleController do
   describe '#show' do
     subject { get :show, params: { id: handle } }
 
-    let(:solr_service) { ActiveFedora::SolrService }
+    let(:solr_service) { Hyrax::SolrService }
 
     before do
       solr_service.add(solr_data)
@@ -82,11 +82,15 @@ RSpec.describe HandleController do
     end
 
     context 'when a handle does not exist for an item' do
-      let(:handle) { '1234/nothere' }
-
       let(:solr_data) { { id: 'unrelated' } }
 
-      it { is_expected.to have_http_status :not_found }
+      it 'returns a 404 error' do
+        without_detailed_exceptions do
+          get :show, params: { id: '1234/nothere' }
+        end
+
+        expect(response).to have_http_status :not_found
+      end
     end
   end
 end
