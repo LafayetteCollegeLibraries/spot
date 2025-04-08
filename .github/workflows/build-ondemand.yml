@@ -32,17 +32,13 @@ permissions:
   checks: write
 
 jobs:
-  lint_and_test:
-    name: Lint + Test
-    if: ${{ inputs.skip_tests == false }}
-    uses: ./.github/workflows/lint-and-test.yml
-
-  translate_inputs:
+  get_inputs:
     runs-on: ubuntu-latest
     outputs:
       containers: ${{ steps.container_choices.outputs.containers }}
       environments: ${{ steps.environment_choices.outputs.environments }}
       tag: ${{ steps.tag_name.outputs.tag }}
+    needs: []
     steps:
     -
       id: container_choices
@@ -97,15 +93,21 @@ jobs:
         BRANCH_NAME: ${{ github.ref_name }}
       run: echo "tag=$BRANCH_NAME" >> "${GITHUB_OUTPUT}"
 
+  lint_and_test:
+    name: Lint + Test
+    if: ${{ !inputs.skip_tests }}
+    needs: [get_inputs]
+    uses: ./.github/workflows/lint-and-test.yml
+
   build_containers:
     name: Build Containers
     uses: ./.github/workflows/build-containers.yml
-    needs: [lint_and_test,translate_inputs]
+    needs: [lint_and_test]
     secrets:
       registry: ${{ secrets.CONTAINER_REGISTRY }}
       username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
     with:
-      tag: ${{ needs.translate_inputs.outputs.tag }}
-      services: ${{ needs.translate_inputs.outputs.containers }}
-      environments: ${{ needs.translate_inputs.outputs.environments }}
+      tag: ${{ needs.get_inputs.outputs.tag }}
+      services: ${{ needs.get_inputs.outputs.containers }}
+      environments: ${{ needs.get_inputs.outputs.environments }}
