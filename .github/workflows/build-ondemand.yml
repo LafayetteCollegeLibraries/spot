@@ -38,7 +38,6 @@ jobs:
       containers: ${{ steps.container_choices.outputs.containers }}
       environments: ${{ steps.environment_choices.outputs.environments }}
       tag: ${{ steps.tag_name.outputs.tag }}
-    needs: []
     steps:
     -
       id: container_choices
