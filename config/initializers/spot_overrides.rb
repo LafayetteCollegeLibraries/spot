@@ -290,4 +290,35 @@ Rails.application.config.to_prepare do
 
   # Add support for downloading file_set transcripts
   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
+
+  # Modifying Bulkrax ImporterJob so that it waits for
+  # downloads to complete
+  #
+  # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
+  Bulkrax::ImporterJob.class_eval do
+    def perform(importer_id, only_updates_since_last_import = false)
+      importer = Importer.find(importer_id)
+      return schedule(importer, Time.zone.now + 3.minutes) unless all_files_completed?(importer)
+
+      importer.current_run
+      unzip_imported_file(importer.parser)
+      import(importer, only_updates_since_last_import)
+      update_current_run_counters(importer)
+      schedule(importer) if importer.schedulable?
+    rescue ::CSV::MalformedCSVError => e
+      importer.set_status_info(e)
+    end
+
+    # checks the file sizes of the download files to match the original files
+    def all_files_completed?(importer)
+      cloud_files = importer.parser_fields['cloud_file_paths']
+      original_files = importer.parser_fields['original_file_paths']
+      return true unless cloud_files.present? && original_files.present?
+
+      imported_file_sizes = cloud_files.map { |_, v| v['file_size'].to_i }
+      original_file_sizes = original_files.map { |imported_file| File.size(imported_file) }
+
+      original_file_sizes == imported_file_sizes
+    end
+  end
 end
