@@ -9,7 +9,7 @@ on:
         type: choice
         options:
           - All
-          - Rails/Sidekiq
+          - Rails/Sidekiq/FITS Servlet
           - Fedora Commons Repository
           - Solr
           - FITS Servlet
@@ -52,8 +52,8 @@ jobs:
           "All")
             output_txt='containers=["rails","sidekiq","fcrepo","solr","fits_servlet"]'
             ;;
-          "Rails/Sidekiq")
-            output_txt='containers=["rails","sidekiq"]'
+          "Rails/Sidekiq/FITS Servlet")
+            output_txt='containers=["rails","sidekiq","fits_servlet"]'
             ;;
           "Solr")
             output_txt='containers=["solr"]'
