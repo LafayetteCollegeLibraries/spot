@@ -54,24 +54,25 @@ jobs:
         env:
           CURRENT_SERVICE: ${{ matrix.service }}
         run: |
-          config="{}"
+          config='{}'
           case "${CURRENT_SERVICE}" in
             "rails")
-              echo "config={\"image\": \"lafayette/rails\", \"context\": \".\", \"target\": \"spot-web-production\"}" >> "$GITHUB_OUTPUT"
+              config='{"image": "lafayette/rails", "context": ".", "target": "spot-web-production"}'
               ;;
             "sidekiq")
-              echo "config={\"image\": \"lafayette/sidekiq\", \"context\": \".\", \"target\": \"spot-worker-production\"}" >> "$GITHUB_OUTPUT"
+              config='{"image": "lafayette/sidekiq", "context": ".", "target": "spot-worker-production"}'
               ;;
             "solr")
-              echo "config={\"image\": \"lafayette/solr\", \"context\": \"./docker/solr\"}" >> "$GITHUB_OUTPUT"
+              config='{"image": "lafayette/solr", "context": "./docker/solr"}'
               ;;
             "fcrepo")
-              echo "config={\"image\": \"lafayette/fc\", \"context\": \"./docker/fcrepo\"}" >> "$GITHUB_OUTPUT"
+              config='{"image": "lafayette/fc", "context": "./docker/fcrepo"}'
               ;;
             "fits_servlet")
-              echo "config={\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}" >> "$GITHUB_OUTPUT"
+              config='{"image": "lafayette/fits_servlet", "context": "./docker/fits_servlet"}'
               ;;
           esac
+          echo "config=$config" >> "$GITHUB_OUTPUT"
       -
         name: (debug config)
         run: |
