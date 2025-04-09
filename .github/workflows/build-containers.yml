@@ -57,26 +57,26 @@ jobs:
           config="{}"
           case "${CURRENT_SERVICE}" in
             "rails")
-              echo "config=\"{\"image\": \"lafayette/rails\", \"context\": \".\", \"target\": \"spot-web-production\"}\"" >> "$GITHUB_OUTPUT"
+              echo "config={\"image\": \"lafayette/rails\", \"context\": \".\", \"target\": \"spot-web-production\"}" >> "$GITHUB_OUTPUT"
               ;;
             "sidekiq")
-              echo "config=\"{\"image\": \"lafayette/sidekiq\", \"context\": \".\", \"target\": \"spot-worker-production\"}\"" >> "$GITHUB_OUTPUT"
+              echo "config={\"image\": \"lafayette/sidekiq\", \"context\": \".\", \"target\": \"spot-worker-production\"}" >> "$GITHUB_OUTPUT"
               ;;
             "solr")
-              echo "config=\"{\"image\": \"lafayette/solr\", \"context\": \"./docker/solr\"}\"" >> "$GITHUB_OUTPUT"
+              echo "config={\"image\": \"lafayette/solr\", \"context\": \"./docker/solr\"}" >> "$GITHUB_OUTPUT"
               ;;
             "fcrepo")
-              echo "config=\"{\"image\": \"lafayette/fc\", \"context\": \"./docker/fcrepo\"}\"" >> "$GITHUB_OUTPUT"
+              echo "config={\"image\": \"lafayette/fc\", \"context\": \"./docker/fcrepo\"}" >> "$GITHUB_OUTPUT"
               ;;
             "fits_servlet")
-              echo "config=\"{\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}\"" >> "$GITHUB_OUTPUT"
+              echo "config={\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}" >> "$GITHUB_OUTPUT"
               ;;
           esac
       -
         name: (debug config)
         run: echo "$SERVICE_CONFIG"
         env:
-          SERVICE_CONFIG: ${{ toJson(steps.service.outputs.config) }}
+          SERVICE_CONFIG: ${{ steps.service.outputs.config }}
       -
         name: Build and push ${{ steps.service.outputs.config.image }} container
         uses: ./.github/actions/build-container
