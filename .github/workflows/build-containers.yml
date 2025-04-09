@@ -73,6 +73,11 @@ jobs:
               ;;
           esac
       -
+        name: (debug config)
+        run: echo "$OUTPUTS"
+        env:
+          OUTPUTS: ${{ toJson(steps.service.outputs) }}
+      -
         name: Build and push ${{ steps.service.outputs.config.image }} container
         uses: ./.github/actions/build-container
         with:
