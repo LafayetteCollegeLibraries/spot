@@ -57,41 +57,44 @@ jobs:
           config='{}'
           case "${CURRENT_SERVICE}" in
             "rails")
-              config='{"image": "lafayette/rails", "context": ".", "target": "spot-web-production"}'
+              echo "image=lafayette/rails" >> "$GITHUB_OUTPUT"
+              echo "context=." >> "$GITHUB_OUTPUT"
+              echo "target=spot-web-production" >> "$GITHUB_OUTPUT"
               ;;
             "sidekiq")
-              config='{"image": "lafayette/sidekiq", "context": ".", "target": "spot-worker-production"}'
+              echo "image=lafayette/sidekiq" >> "$GITHUB_OUTPUT"
+              echo "context=." >> "$GITHUB_OUTPUT"
+              echo "target=spot-worker-production" >> "$GITHUB_OUTPUT"
               ;;
             "solr")
-              config='{"image": "lafayette/solr", "context": "./docker/solr"}'
-              ;;
+              echo "image=lafayette/solr" >> "$GITHUB_OUTPUT"
+              echo "context=./docker/solr" >> "$GITHUB_OUTPUT"
             "fcrepo")
-              config='{"image": "lafayette/fc", "context": "./docker/fcrepo"}'
+              echo "image=lafayette/fc" >> "$GITHUB_OUTPUT"
+              echo "context=./docker/fcrepo" >> "$GITHUB_OUTPUT"
               ;;
             "fits_servlet")
-              config='{"image": "lafayette/fits_servlet", "context": "./docker/fits_servlet"}'
+              echo "image=lafayette/fits_servlet" >> "$GITHUB_OUTPUT"
+              echo "context=./docker/fits_servlet" >> "$GITHUB_OUTPUT"
               ;;
           esac
-          echo "config=$config" >> "$GITHUB_OUTPUT"
       -
         name: (debug config)
         run: |
-          echo "(config)  $SERVICE_CONFIG"
           echo "(image)   $IMAGE"
           echo "(context) $CONTEXT"
           echo "(target)  $TARGET"
         env:
-          SERVICE_CONFIG: ${{ toJson(steps.service.outputs.config) }}
-          IMAGE: ${{ steps.service.outputs.config.image }}
-          CONTEXT: ${{ steps.service.outputs.config.context }}
-          TARGET: ${{ steps.service.outputs.config.target }}
+          IMAGE: ${{ steps.service.outputs.image }}
+          CONTEXT: ${{ steps.service.outputs.context }}
+          TARGET: ${{ steps.service.outputs.target }}
 
       -
-        name: Build and push ${{ steps.service.outputs.config.image }} container
+        name: Build and push ${{ steps.service.outputs.image }} container
         uses: ./.github/actions/build-container
         with:
           registry: ${{ secrets.registry || 'docker.io' }}
           tag: ${{ inputs.tag }}
-          image_name: ${{ steps.service.outputs.config.image }}
-          context: ${{ steps.service.outputs.config.context }}
-          target: ${{ steps.service.outputs.config.target }}
+          image_name: ${{ steps.service.outputs.image }}
+          context: ${{ steps.service.outputs.context }}
+          target: ${{ steps.service.outputs.target }}
