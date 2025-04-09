@@ -69,6 +69,7 @@ jobs:
             "solr")
               echo "image=lafayette/solr" >> "$GITHUB_OUTPUT"
               echo "context=./docker/solr" >> "$GITHUB_OUTPUT"
+              ;;
             "fcrepo")
               echo "image=lafayette/fc" >> "$GITHUB_OUTPUT"
               echo "context=./docker/fcrepo" >> "$GITHUB_OUTPUT"
