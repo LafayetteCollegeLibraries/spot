@@ -48,36 +48,36 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Get config
-        id: config
+      -
+        name: Get service config
+        id: service
         env:
           CURRENT_SERVICE: ${{ matrix.service }}
         run: |
           config="{}"
           case "${CURRENT_SERVICE}" in
             "rails")
-              config="{\"image\": \"lafayette/rails\", \"context\": \".\", \"target\": \"spot-web-production\"}"
+              echo 'config="{\"image\": \"lafayette/rails\", \"context\": \".\", \"target\": \"spot-web-production\"}"' >> "$GITHUB_OUTPUT"
               ;;
             "sidekiq")
-              config="{\"image\": \"lafayette/sidekiq\", \"context\": \".\", \"target\": \"spot-worker-production\"}"
+              echo 'config="{\"image\": \"lafayette/sidekiq\", \"context\": \".\", \"target\": \"spot-worker-production\"}"' >> "$GITHUB_OUTPUT"
               ;;
             "solr")
-              config="{\"image\": \"lafayette/solr\", \"context\": \"./docker/solr\"}"
+              echo 'config="{\"image\": \"lafayette/solr\", \"context\": \"./docker/solr\"}"' >> "$GITHUB_OUTPUT"
               ;;
             "fcrepo")
-              config="{\"image\": \"lafayette/fc\", \"context\": \"./docker/fcrepo\"}"
+              echo 'config="{\"image\": \"lafayette/fc\", \"context\": \"./docker/fcrepo\"}"' >> "$GITHUB_OUTPUT"
               ;;
             "fits_servlet")
-              config="{\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}"
+              echo 'config="{\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}"' >> "$GITHUB_OUTPUT"
               ;;
           esac
-          echo "value=${config}" >> "$GITHUB_OUTPUT"
       -
-        name: Build and push ${{ steps.config.outputs.value.image }} container
+        name: Build and push ${{ steps.service.outputs.config.image }} container
         uses: ./.github/actions/build-container
         with:
           registry: ${{ secrets.registry || 'docker.io' }}
           tag: ${{ inputs.tag }}
-          image_name: ${{ steps.config.outputs.value.image }}
-          context: ${{ steps.config.outputs.value.context }}
-          target: ${{ steps.config.outputs.value.target }}
+          image_name: ${{ steps.service.outputs.config.image }}
+          context: ${{ steps.service.outputs.config.context }}
+          target: ${{ steps.service.outputs.config.target }}
