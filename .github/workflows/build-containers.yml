@@ -35,29 +35,7 @@ jobs:
     strategy:
       matrix:
         environment: ${{ fromJson(inputs.environments) }}
-        service:
-          -
-            name: rails
-            image: lafayette/rails
-            context: .
-            target: spot-web-production
-          -
-            name: sidekiq
-            image: lafayette/sidekiq
-            context: .
-            target: spot-worker-production
-          -
-            name: solr
-            image: lafayette/solr
-            context: ./docker/solr
-          -
-            name: fcrepo
-            image: lafayette/fc
-            context: ./docker/fcrepo
-          -
-            name: fits_servlet
-            image: lafayette/fits_servlet
-            context: ./docker/fits_servlet
+        service: ${{ fromJson(inputs.services) }}
     steps:
       - uses: actions/checkout@v4
       -
@@ -70,13 +48,36 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+      - name: Get config
+        id: config
+        env:
+          CURRENT_SERVICE: ${{ matrix.service }}
+        run: |
+          config="{}"
+          case "${CURRENT_SERVICE}" in
+            "rails")
+              config="{\"image\": \"lafayette/rails\", \"context\": \".\", \"target\": \"spot-web-production\"}"
+              ;;
+            "sidekiq")
+              config="{\"image\": \"lafayette/sidekiq\", \"context\": \".\", \"target\": \"spot-worker-production\"}"
+              ;;
+            "solr")
+              config="{\"image\": \"lafayette/solr\", \"context\": \"./docker/solr\"}"
+              ;;
+            "fcrepo")
+              config="{\"image\": \"lafayette/fc\", \"context\": \"./docker/fcrepo\"}"
+              ;;
+            "fits_servlet")
+              config="{\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}"
+              ;;
+          esac
+          echo "${config}" >> "$GITHUB_OUTPUT"
       -
-        name: Build and push ${{ matrix.service.image }} container
+        name: Build and push ${{ steps.config.outputs.image }} container
         uses: ./.github/actions/build-container
-        if: ${{ contains(fromJson(inputs.services), matrix.service.name) }}
         with:
           registry: ${{ secrets.registry || 'docker.io' }}
           tag: ${{ inputs.tag }}
-          image_name: ${{ matrix.service.image }}
-          context: ${{ matrix.service.context }}
-          target: ${{ matrix.service.target }}
+          image_name: ${{ steps.config.outputs.image }}
+          context: ${{ steps.config.outputs.context }}
+          target: ${{ steps.config.outputs.target }}
