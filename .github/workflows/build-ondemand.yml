@@ -102,7 +102,7 @@ jobs:
   build_containers:
     name: Build Containers
     uses: ./.github/workflows/build-containers.yml
-    needs: [lint_and_test]
+    needs: [parse_inputs, lint_and_test]
     if: ${{ always() }}
     secrets:
       registry: ${{ secrets.CONTAINER_REGISTRY }}
