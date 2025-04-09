@@ -32,7 +32,8 @@ permissions:
   checks: write
 
 jobs:
-  get_inputs:
+  parse_inputs:
+    name: Parse Inputs
     runs-on: ubuntu-latest
     outputs:
       containers: ${{ steps.container_choices.outputs.containers }}
@@ -45,7 +46,7 @@ jobs:
       env:
         CONTAINER_CHOICE: ${{ inputs.service }}
       run: |
-        output_txt=''
+        output_txt='containers=[]'
 
         case "${CONTAINER_CHOICE}" in
           "All")
@@ -71,7 +72,7 @@ jobs:
       env:
         ENVIRONMENT_CHOICE: ${{ inputs.environment }}
       run: |
-        output_txt=''
+        output_txt='environments=[]'
 
         case "${ENVIRONMENT_CHOICE}" in
           "Both")
@@ -95,7 +96,7 @@ jobs:
   lint_and_test:
     name: Lint + Test
     if: ${{ !inputs.skip_tests }}
-    needs: [get_inputs]
+    needs: [parse_inputs]
     uses: ./.github/workflows/lint-and-test.yml
 
   build_containers:
@@ -107,6 +108,6 @@ jobs:
       username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
     with:
-      tag: ${{ needs.get_inputs.outputs.tag }}
-      services: ${{ needs.get_inputs.outputs.containers }}
-      environments: ${{ needs.get_inputs.outputs.environments }}
+      tag: ${{ needs.parse_inputs.outputs.tag }}
+      services: ${{ needs.parse_inputs.outputs.containers }}
+      environments: ${{ needs.parse_inputs.outputs.environments }}
