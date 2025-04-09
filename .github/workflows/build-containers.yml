@@ -74,9 +74,17 @@ jobs:
           esac
       -
         name: (debug config)
-        run: echo "$SERVICE_CONFIG"
+        run: |
+          echo "(config)  $SERVICE_CONFIG"
+          echo "(image)   $IMAGE"
+          echo "(context) $CONTEXT"
+          echo "(target)  $TARGET"
         env:
-          SERVICE_CONFIG: ${{ steps.service.outputs.config }}
+          SERVICE_CONFIG: ${{ toJson(steps.service.outputs.config) }}
+          IMAGE: ${{ steps.service.outputs.config.image }}
+          CONTEXT: ${{ steps.service.outputs.config.context }}
+          TARGET: ${{ steps.service.outputs.config.target }}
+
       -
         name: Build and push ${{ steps.service.outputs.config.image }} container
         uses: ./.github/actions/build-container
