@@ -71,13 +71,13 @@ jobs:
               config="{\"image\": \"lafayette/fits_servlet\", \"context\": \"./docker/fits_servlet\"}"
               ;;
           esac
-          echo "${config}" >> "$GITHUB_OUTPUT"
+          echo "value=${config}" >> "$GITHUB_OUTPUT"
       -
-        name: Build and push ${{ steps.config.outputs.image }} container
+        name: Build and push ${{ steps.config.outputs.value.image }} container
         uses: ./.github/actions/build-container
         with:
           registry: ${{ secrets.registry || 'docker.io' }}
           tag: ${{ inputs.tag }}
-          image_name: ${{ steps.config.outputs.image }}
-          context: ${{ steps.config.outputs.context }}
-          target: ${{ steps.config.outputs.target }}
+          image_name: ${{ steps.config.outputs.value.image }}
+          context: ${{ steps.config.outputs.value.context }}
+          target: ${{ steps.config.outputs.value.target }}

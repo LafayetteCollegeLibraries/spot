@@ -53,7 +53,7 @@ jobs:
             output_txt='containers=["rails","sidekiq","fcrepo","solr","fits_servlet"]'
             ;;
           "Rails/Sidekiq")
-            output_txt='containers=["rails","sidekiq","fits_servlet"]'
+            output_txt='containers=["rails","sidekiq"]'
             ;;
           "Solr")
             output_txt='containers=["solr"]'
