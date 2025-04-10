@@ -297,7 +297,7 @@ Rails.application.config.to_prepare do
   # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
   Bulkrax::ImporterJob.class_eval do
     def perform(importer_id, only_updates_since_last_import = false)
-      importer = Importer.find(importer_id)
+      importer = Bulkrax::Importer.find(importer_id)
       return schedule(importer, Time.zone.now + 3.minutes) unless all_files_completed?(importer)
 
       importer.current_run
