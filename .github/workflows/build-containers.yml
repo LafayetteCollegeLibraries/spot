@@ -80,17 +80,6 @@ jobs:
               ;;
           esac
       -
-        name: (debug config)
-        run: |
-          echo "(image)   $IMAGE"
-          echo "(context) $CONTEXT"
-          echo "(target)  $TARGET"
-        env:
-          IMAGE: ${{ steps.service.outputs.image }}
-          CONTEXT: ${{ steps.service.outputs.context }}
-          TARGET: ${{ steps.service.outputs.target }}
-
-      -
         name: Build and push ${{ steps.service.outputs.image }} container
         uses: ./.github/actions/build-container
         with:
