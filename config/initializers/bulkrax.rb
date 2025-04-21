@@ -143,4 +143,7 @@ Rails.application.config.to_prepare do
       "#{basename[0...(255 - ext.length)]}#{ext}"
     end
   end
+
+  # using non Valkyrie object factory
+  Bulkrax.object_factory = Bulkrax::ObjectFactory
 end
