@@ -29,8 +29,8 @@ module Spot
 
     def document_params
       # The only fields we'll need to generate a URL (or url_helper params) is are id and has_model_ssim.
-      result, _documents = repository.search(q: "{!terms f=identifier_ssim}url:#{http_uri}", fl: ['id', 'has_model_ssim'], defType: 'lucene')
-      document = result.response['docs']&.first
+      results = Hyrax::SolrService.query("{!terms f=identifier_ssim}url:#{http_uri}", fl: ['id', 'has_model_ssim'], defType: 'lucene')
+      document = results.first
 
       raise Blacklight::Exceptions::RecordNotFound if document.nil?
       redirect_params_for(solr_document: document)

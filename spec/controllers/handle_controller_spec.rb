@@ -84,12 +84,8 @@ RSpec.describe HandleController do
     context 'when a handle does not exist for an item' do
       let(:solr_data) { { id: 'unrelated' } }
 
-      it 'returns a 404 error' do
-        without_detailed_exceptions do
-          get :show, params: { id: '1234/nothere' }
-        end
-
-        expect(response).to have_http_status :not_found
+      it 'raises a Blacklight::Exceptions::RecordNotFound' do
+        expect { get :show, params: { id: '1234/nothere' } }.to raise_error Blacklight::Exceptions::RecordNotFound
       end
     end
   end

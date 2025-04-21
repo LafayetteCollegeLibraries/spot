@@ -139,6 +139,21 @@ RSpec.configure do |config|
   config.before do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
+
+    WebMock.disable_net_connect!(
+      allow_localhost: true,
+
+      # account for our aliased services via docker
+      allow: %w[
+        objects.githubusercontent.com
+        github.com
+        db
+        fedora
+        fitsservlet
+        solr
+      ]
+    )
+    WebMock.enable!
   end
 
   config.before clean: true do
@@ -157,22 +172,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
-
-WebMock.disable_net_connect!(
-  allow_localhost: true,
-  net_http_connect_on_start: true,
-
-  # account for our aliased services via docker
-  allow: %w[
-    objects.githubusercontent.com
-    github.com
-    db
-    fedora
-    fitsservlet
-    solr
-  ]
-)
-WebMock.enable!
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

@@ -8,11 +8,10 @@ class HandleController < ApplicationController
   # Searches for a Handle based on an +hdl:+ identifier.
   # Displays a 404 (via raised +Hyrax::ObjectNotFoundError+) if no item is found.
   def show
-    result = Hyrax::SolrService.get("{!terms f=identifier_ssim}#{hdl_from_params}", defType: 'lucene')
-    count = result.try(:[], 'response').try(:[], 'numFound')
-    raise Hyrax::ObjectNotFoundError if count.nil? || count.zero?
+    results = Hyrax::SolrService.query("{!terms f=identifier_ssim}#{hdl_from_params}", defType: 'lucene')
+    document = results.first
+    raise Blacklight::Exceptions::RecordNotFound if document.nil?
 
-    document = result['response']['docs'].first
     redirect_to redirect_params_for(solr_document: document)
   end
 
