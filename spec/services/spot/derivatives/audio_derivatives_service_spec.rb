@@ -29,6 +29,17 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
     stub_env('AWS_AV_ASSET_BUCKET', aws_av_asset_bucket)
     stub_env('AWS_BULKRAX_IMPORTS_BUCKET', aws_import_bucket)
 
+    allow(_file_set).to receive(:id).and_return("1234")
+
+    allow(Hyrax.query_service)
+      .to receive(:find_by_alternate_identifier)
+      .with(alternate_identifier: "1234")
+      .and_return(file_set)
+
+    allow(Hyrax.persister)
+      .to receive(:save)
+      .with(resource: file_set)
+
     allow(Hyrax::DerivativePath)
       .to receive(:derivative_path_for_reference)
       .with(file_set, 'access.mp3')
@@ -133,7 +144,6 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       before do
         allow(file_set).to receive(:stored_derivatives).and_return(stored)
         allow(file_set).to receive(:stored_derivatives=).with(["1234_0_access.mp3"])
-        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
@@ -145,7 +155,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
           .to have_received(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
         expect(file_set).to have_received(:stored_derivatives=).with(["1234_0_access.mp3"])
-        expect(file_set).to have_received(:save)
+        expect(Hyrax.persister).to have_received(:save).with(resource: file_set)
       end
     end
 
@@ -155,7 +165,6 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       before do
         allow(file_set).to receive(:stored_derivatives).and_return(stored)
         allow(file_set).to receive(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
@@ -167,7 +176,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
           .to have_received(:put_object)
           .with(bucket: aws_av_asset_bucket, key: key, body: stringio, content_length: file_size, content_md5: file_digest, metadata: {})
         expect(file_set).to have_received(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        expect(file_set).to have_received(:save)
+        expect(Hyrax.persister).to have_received(:save).with(resource: file_set)
       end
     end
   end
@@ -190,7 +199,6 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       before do
         allow(file_set).to receive(:stored_derivatives).and_return(stored)
         allow(file_set).to receive(:stored_derivatives=).with(["1234_0_access.mp3"])
-        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -199,7 +207,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
 
       it 'saves the key to stored derivatives and uploads to s3' do
         expect(file_set).to have_received(:stored_derivatives=).with(["1234_0_access.mp3"])
-        expect(file_set).to have_received(:save)
+        expect(Hyrax.persister).to have_received(:save).with(resource: file_set)
         expect(mock_s3_client)
           .to have_received(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -212,7 +220,6 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
       before do
         allow(file_set).to receive(:stored_derivatives).and_return(stored)
         allow(file_set).to receive(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        allow(file_set).to receive(:save)
         allow(mock_s3_client)
           .to receive(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)
@@ -221,7 +228,7 @@ RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
 
       it 'saves the key to stored derivatives and uploads to s3' do
         expect(file_set).to have_received(:stored_derivatives=).with(["5678_0_access.mp3", "1234_0_access.mp3"])
-        expect(file_set).to have_received(:save)
+        expect(Hyrax.persister).to have_received(:save).with(resource: file_set)
         expect(mock_s3_client)
           .to have_received(:copy_object)
           .with(bucket: aws_av_asset_bucket, copy_source: source_path, key: key)

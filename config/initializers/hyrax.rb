@@ -11,6 +11,7 @@ Hyrax.config do |config|
     Wings::ModelRegistry.register(PublicationResource, Publication)
     Wings::ModelRegistry.register(ImageResource, Image)
     Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
+    Wings::ModelRegistry.register(AudioVisualResource, AudioVisual)
   end
 
   config.admin_set_model = 'AdminSet'
