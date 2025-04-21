@@ -3,9 +3,9 @@ RSpec.describe Spot::RedirectController do
   routes { Rails.application.routes }
 
   describe '#show' do
-    subject { get :show, params: { url: url } }
+    subject(:make_redirect_request) { get :show, params: { url: url } }
 
-    let(:solr_service) { ActiveFedora::SolrService }
+    let(:solr_service) { Hyrax::SolrService }
     let(:solr_data) { { id: 'solr-object' } }
 
     before do
@@ -54,7 +54,9 @@ RSpec.describe Spot::RedirectController do
         }
       end
 
-      it { is_expected.to have_http_status :not_found }
+      it 'raises a Blacklight::Exceptions::RecordNotFound' do
+        expect { make_redirect_request }.to raise_error Blacklight::Exceptions::RecordNotFound
+      end
     end
 
     context 'when the item is a collection' do
@@ -71,9 +73,11 @@ RSpec.describe Spot::RedirectController do
     end
 
     context 'when the URL is an old Islandora search' do
-      let(:url) { 'http://digital.lafayette.edu/collections/browsef[0]=cdm.Relation.IsPartOf%3A%22East%20Asia%20Image%20Collection%22&f[1]=cdm.Relation.IsPartOf%3A%22Japanese%20History%20Study%20Cards%22&f[2]=eastasia.Subject.OCM%3A%22870%20EDUCATION%22' }
+      let(:url) { 'http://digital.lafayette.edu/collections/browse?f[0]=cdm.Relation.IsPartOf%3A%22East%20Asia%20Image%20Collection%22&f[1]=cdm.Relation.IsPartOf%3A%22Japanese%20History%20Study%20Cards%22&f[2]=eastasia.Subject.OCM%3A%22870%20EDUCATION%22' }
 
-      it { is_expected.to have_http_status :not_found }
+      it 'raises a Blacklight::Exceptions::RecordNotFound' do
+        expect { make_redirect_request }.to raise_error Blacklight::Exceptions::RecordNotFound
+      end
     end
   end
 end

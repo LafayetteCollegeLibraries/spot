@@ -52,7 +52,7 @@ module Spot
 
     # @return [Spot::Exporters::ZippedWorkExporter]
     def exporter
-      Spot::Exporters::ZippedWorkExporter.new(solr_document, request)
+      Spot::Exporters::ZippedWorkExporter.new(solr_document)
     end
 
     # Sets the @solr_document attribute from a single-item solr query.
