@@ -249,7 +249,6 @@ Rails.application.config.to_prepare do
   # Add support for downloading file_set transcripts
   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
 
-  
   # Modifying Bulkrax ImporterJob so that it correctly fetches file sizes
   #
   # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
@@ -275,8 +274,6 @@ Rails.application.config.to_prepare do
         client = Aws::S3::Client.new
         resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
         resp.content_length
-      else
-        nil
       end
     end
   end
