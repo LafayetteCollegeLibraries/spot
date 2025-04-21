@@ -75,9 +75,11 @@ module Spot
 
       # @return [RDF::Graph]
       def graph
-        @graph ||= begin
-          Hyrax::GraphExporter.new(solr_document, hostname: URI.parse(ENV.fetch('URL_HOST')).hostname).fetch
-        end
+        @graph ||= graph_exporter.fetch
+      end
+
+      def graph_exporter
+        Hyrax::GraphExporter.new(solr_document, hostname: URI.parse(ENV.fetch('URL_HOST')).hostname)
       end
     end
   end
