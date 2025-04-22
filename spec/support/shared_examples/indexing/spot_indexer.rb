@@ -79,7 +79,7 @@ RSpec.shared_examples 'a Spot indexer' do
       end
     end
 
-    context 'when the URI is an ActiveTriples::Resrouce' do
+    context 'when the URI is an ActiveTriples::Resource' do
       let(:uri) { ActiveTriples::Resource.new('http://rightsstatements.org/vocab/NKC/1.0/') }
 
       it 'uses the #id value' do
@@ -111,6 +111,30 @@ RSpec.shared_examples 'a Spot indexer' do
   describe 'storing thumbnails' do
     it 'stores the full url of a thumbnail' do
       expect(solr_doc['thumbnail_url_ss']).to eq "http://localhost#{thumbnail_path}"
+    end
+  end
+
+  describe 'stringifying rdf values' do
+    subject { solr_doc['related_resource_tesim'] }
+
+    let(:attributes) { { related_resource: [value] } }
+
+    context 'when value is an RDF::Literal' do
+      let(:value) { RDF::Literal.new('A Related Resource') }
+
+      it { is_expected.to eq ['A Related Resource'] }
+    end
+
+    context 'when value is a RDF::URI' do
+      let(:value) { RDF::URI.new('https://coolzone.gov') }
+
+      it { is_expected.to eq ['https://coolzone.gov'] }
+    end
+
+    context 'when value is not an RDF::Literal, RDF::URI, or ActiveTriples::Resource' do
+      let(:value) { 'da value' }
+
+      it { is_expected.to eq ['da value'] }
     end
   end
 

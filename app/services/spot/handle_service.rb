@@ -48,14 +48,6 @@ module Spot
 
     private
 
-    # @return [Faraday::Client]
-    def client
-      @client ||= begin
-        ssl_opts = { client_cert: handle_certificate, client_key: handle_key, verify: false }
-        Faraday.new(self.class.handle_server_url, ssl: ssl_opts)
-      end
-    end
-
     def find_handle_id
       stored = work.identifier.find { |id| id.start_with? 'hdl:' }
       return "#{self.class.handle_prefix}/#{work.id}" unless stored
