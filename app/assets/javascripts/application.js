@@ -23,12 +23,9 @@
 //= require jquery.dataTables
 //= require dataTables.bootstrap4
 //= require blacklight/blacklight
-//= require blacklight_gallery
+//= require blacklight_gallery/blacklight-gallery
 
-// local require that in turn calls a require
-//= require blacklight_gallery
-
-//= require openseadragon
+//= require openseadragon-rails/openseadragon-rails
 //= require hyrax
 //= require almond
 

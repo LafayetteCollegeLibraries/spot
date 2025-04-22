@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 RSpec.describe Spot::RepositoryFixityCheckJob do
-  subject(:perform_job!) { described_class.perform_now(job_opts) }
+  subject(:perform_job!) { described_class.perform_now(**job_opts) }
 
   let(:service_double) { instance_double(Hyrax::FileSetFixityCheckService) }
   let(:fs) { instance_double(Hyrax::FileSet, id: 'abc123') }

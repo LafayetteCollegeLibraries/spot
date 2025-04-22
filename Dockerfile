@@ -3,7 +3,7 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:3.2-slim-bullseye AS spot-base
+FROM ruby:3.3-slim-bookworm AS spot-base
 
 RUN apt-get clean && \
     apt-get update && \
@@ -22,8 +22,7 @@ RUN apt-get clean && \
         libxslt-dev \
         netcat-openbsd \
         nodejs \
-        openssl \
-        postgresql-13 \
+        postgresql \
         ruby-dev \
         tzdata \
         zip
@@ -50,7 +49,7 @@ ARG build_date=""
 ENV SPOT_BUILD_DATE="$build_date"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
-CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt&verify_mode=peer"]
 
 HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
 
@@ -136,6 +135,8 @@ ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
+# @note openjdk 11 isn't available in ruby 3.3 image, can we remove this dependency
+#       now that we're using fits servlet instead of fits cli?
 RUN apt-get update && apt-get install -y --no-install-recommends \
         bash \
         ffmpeg \
@@ -143,7 +144,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         imagemagick \
         libreoffice \
         mediainfo \
-        openjdk-11-jre \
+        openjdk-17-jre \
         perl \
         python3 \
         unzip

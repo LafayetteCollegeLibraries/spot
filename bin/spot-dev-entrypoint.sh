@@ -9,7 +9,7 @@ then
   echo "not installing UniversalViewer as it already exists"
 else
   echo "installing UniversalViewer via Yarn"
-  cd "$app_root" && yarn install
+  cd "$app_root" && (echo "y" | yarn install)
 fi
 
 # copy the dev UV configuration _after_ running yarn install.

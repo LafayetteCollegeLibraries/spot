@@ -2,7 +2,7 @@
 RSpec.describe Spot::Renderers::AttributeRenderer do
   let(:field) { :title }
   let(:options) { {} }
-  let(:renderer) { described_class.new(field, values, options) }
+  let(:renderer) { described_class.new(field, values, **options) }
   let(:values) { 'Run Away With Me' }
 
   describe '#render' do
@@ -55,16 +55,6 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
     end
 
     context 'options[:show_help_text]' do
-      before do
-        allow(I18n).to receive(:translate)
-          .with(:'simple_form.hints.defaults.title', default: [], raise: true)
-          .and_return(help_text)
-        allow(I18n).to receive(:translate)
-          .with(:'blacklight.search.fields.default.show.title', raise: true)
-          .and_return('Title')
-      end
-
-      let(:help_text) { 'Stuck in my head, stuck in my heart, stuck in my body (body)' }
       let(:options) { { show_help_text: true } }
 
       let(:html_result) do
@@ -75,7 +65,7 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
               data-html="true"
               data-toggle="popover"
               data-trigger="hover click"
-              data-content="#{help_text}"
+              data-content="A name to aid in identifying a work."
             ></span>
           </th>
           <td class="attribute attribute-title">
