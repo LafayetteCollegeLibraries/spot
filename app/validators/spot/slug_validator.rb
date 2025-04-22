@@ -6,6 +6,9 @@ module Spot
   class SlugValidator < ActiveModel::Validator
     # @param [ActiveFedora::Base] record
     # @return [void]
+    # @todo "DEPRECATION WARNING: Calling `<<` to an ActiveModel::Errors message array in order to add an error is deprecated.
+    #        Please call `ActiveModel::Errors#add` instead."
+    # @see https://api.rubyonrails.org/classes/ActiveModel/Errors.html#method-i-add
     def validate(record)
       Array.wrap(options[:fields]).each do |field|
         next unless record.respond_to?(field)
@@ -13,9 +16,6 @@ module Spot
         slugs = record.send(field).select { |id| id.start_with? 'slug:' }
         next if slugs.empty?
 
-        # @todo "DEPRECATION WARNING: Calling `<<` to an ActiveModel::Errors message array in order to add an error is deprecated.
-        #        Please call `ActiveModel::Errors#add` instead."
-        # @see https://api.rubyonrails.org/classes/ActiveModel/Errors.html#method-i-add
         record.errors[field] << single_slug_message unless slugs.size == 1
         record.errors[field] << slug_regex_message unless slug_valid?(slugs.first)
       end
