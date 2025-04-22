@@ -1,3 +1,9 @@
+/**
+ *  Custom extension of Hyrax's ControlledVocabulary input to provide options for
+ *  multiple authorities to search against. Adds a dropdown of available authorities
+ *  next to the text input and requires an authority to be selected before allowing
+ *  a value to be entered.
+ */
 import ControlledVocabulary from 'hyrax/editor/controlled_vocabulary';
 import Autocomplete from 'hyrax/autocomplete';
 

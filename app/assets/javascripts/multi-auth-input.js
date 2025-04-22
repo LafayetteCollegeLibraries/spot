@@ -1,4 +1,4 @@
-(function ($) {
+$(document).ready(function () {
   // instantiates the multi-auth controlled vocabulary input when we're on the work form.
   var MultiAuthControlledVocabulary = require('spot/editor/multi_auth_controlled_vocabulary');
 
@@ -14,4 +14,4 @@
       .find('.form-group.multi_auth_controlled_vocabulary')
       .each((_idx, field) => new MultiAuthControlledVocabulary(field, paramKey));
   });
-})(jQuery);
+});

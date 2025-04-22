@@ -1,8 +1,12 @@
+/**
+ *  Copied from Hyrax source and modified to remove the dependency on the Handlebars templating module.
+ *  @overrides https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/app/assets/javascripts/hyrax/editor/controlled_vocabulary.es6
+*/
+
 import { FieldManager } from 'hydra-editor/field_manager'
 import Autocomplete from 'hyrax/autocomplete'
 
 export default class ControlledVocabulary extends FieldManager {
-
   constructor(element, paramKey) {
       let options = {
         /* callback to run after add is called */
@@ -24,6 +28,7 @@ export default class ControlledVocabulary extends FieldManager {
 
         labelControls:      true,
       }
+
       super(element, options)
       this.paramKey = paramKey
       this.fieldName = this.element.data('fieldName')

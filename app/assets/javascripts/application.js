@@ -14,8 +14,6 @@
 
 // Required by Blacklight
 //= require jquery3
-//= require blacklight_advanced_search
-//= require blacklight_range_limit
 //= require rails-ujs
 //= require popper
 //= require twitter/typeahead
@@ -23,6 +21,8 @@
 //= require jquery.dataTables
 //= require dataTables.bootstrap4
 //= require blacklight/blacklight
+//= require blacklight_advanced_search
+//= require blacklight_range_limit
 //= require blacklight_gallery/blacklight-gallery
 
 //= require openseadragon-rails/openseadragon-rails
