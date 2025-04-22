@@ -1,9 +1,15 @@
 // styles applied to the navbar + masthead
 
-#masthead { // scss-lint:disable IdSelector
-  background-color: $red-light;
+// override bootstrap theming colors for masthead
+#masthead.bg-dark { // scss-lint:disable IdSelector
+  background-color: $red-light !important;
   border-bottom: 0;
 
+  .nav-link {
+    color: $white;
+  }
+
+  // @todo ??
   @media(min-width: 768px) {
     #search-field-header { // scss-lint:disable IdSelector
       width: 50rem;
