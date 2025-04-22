@@ -12,7 +12,10 @@ end
 gem 'rails', '~> 6.1'
 
 # use Puma as the app server
-gem 'puma', '~> 6.6.0'
+#
+# @note SSL support in Puma 6 requires openssl v3, which isn't available
+#       on the ruby 3.2 docker image
+gem 'puma', '~> 5.6.9'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
@@ -101,7 +104,7 @@ gem 'kaminari', '~> 1.2.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '~> 4.11'
+gem 'mini_magick'#, '~> 4.11'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.1.6'

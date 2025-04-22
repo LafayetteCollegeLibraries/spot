@@ -3,14 +3,10 @@ module Spot
   module Listeners
     # Listener to ensure that an object in a child collection is also included in the parent collection.
     # Intended to replace Spot::Actors::CollectionsMembershipActor
-    #
-    # @todo Do we need to do anything to ensure that saving the resource won't kick off a long collection
-    #       reindex? (see Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX) Is that something that
-    #       was addressed in Valkyrization?
     class ParentCollectionMembershipListener
       # @return [void]
-      def on_object_metadata_updated(event) # rubocop:disable Lint/UnusedMethodArgument
-        object = event.try(:object)
+      def on_object_metadata_updated(event)
+        object = event[:object]
         return if object.blank? || object.try(:member_of_collection_ids).blank?
 
         collection_ids_to_add = parent_collection_ids_for(object.member_of_collection_ids)
@@ -23,7 +19,7 @@ module Spot
       private
 
       def parent_collection_ids_for(initial_collections)
-        collections_to_check = initial_collections.dup
+        collections_to_check = initial_collections.to_a
         collection_ids_to_add = []
 
         until collections_to_check.empty?

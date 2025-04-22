@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Spot::SyncCollectionPermissionsJob, valkyrization: true do
   let(:collection) { instance_double(Collection, id: collection_id, permission_template: permission_template) }
-  let(:collection_id) { 'sync-collection.id' }
+  let(:collection_id) { 'sync-collection--id' }
 
   let(:user) { create(:user) }
   let(:helper_user) { create(:user) }
@@ -19,7 +19,6 @@ RSpec.describe Spot::SyncCollectionPermissionsJob, valkyrization: true do
   let(:item) { FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only) }
 
   before do
-    allow(collection).to receive(:reindex_extent=)
     allow(Hyrax.query_service.custom_queries).to receive(:find_members_of).with(collection: collection).and_return([item])
   end
 

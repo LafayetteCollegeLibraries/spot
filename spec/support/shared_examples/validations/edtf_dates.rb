@@ -16,7 +16,7 @@ RSpec.shared_examples 'it validates EDTF date fields' do |opts|
         let(:field_value) { '1986-02-11/2025-02-22' }
 
         it 'validates the field' do
-          expect(form.errors.keys).not_to include field
+          expect(form.errors.attribute_names).not_to include field
         end
       end
 

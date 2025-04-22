@@ -48,7 +48,7 @@ ARG build_date=""
 ENV SPOT_BUILD_DATE="$build_date"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
-CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt&verify_mode=peer"]
 
 HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
 
