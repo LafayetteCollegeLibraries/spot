@@ -10,14 +10,14 @@ RSpec.describe Spot::Listeners::ParentCollectionMembershipListener, valkyrizatio
 
   before do
     allow(Hyrax.query_service)
-    .to receive(:find_by_alternate_identifier)
-    .with(alternate_identifier: 'parent')
-    .and_return(parent_collection)
+      .to receive(:find_by_alternate_identifier)
+      .with(alternate_identifier: 'parent')
+      .and_return(parent_collection)
 
     allow(Hyrax.query_service)
-    .to receive(:find_by_alternate_identifier)
-    .with(alternate_identifier: 'child')
-    .and_return(child_collection)
+      .to receive(:find_by_alternate_identifier)
+      .with(alternate_identifier: 'child')
+      .and_return(child_collection)
 
     allow(Hyrax.persister).to receive(:save)
   end

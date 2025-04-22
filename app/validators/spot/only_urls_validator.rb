@@ -7,6 +7,9 @@ module Spot
   class OnlyUrlsValidator < ActiveModel::Validator
     # @param record [ActiveModel::Base]
     # @return [void]
+    # @todo "DEPRECATION WARNING: Calling `<<` to an ActiveModel::Errors message array in order to add an error is deprecated.
+    #        Please call `ActiveModel::Errors#add` instead."
+    # @see https://api.rubyonrails.org/classes/ActiveModel/Errors.html#method-i-add
     def validate(record)
       fields.each do |field|
         next unless record.respond_to?(field)
@@ -14,9 +17,6 @@ module Spot
         values = record.send(field)
         next if values.empty?
 
-      # @todo "DEPRECATION WARNING: Calling `<<` to an ActiveModel::Errors message array in order to add an error is deprecated.
-      #        Please call `ActiveModel::Errors#add` instead."
-      # @see https://api.rubyonrails.org/classes/ActiveModel/Errors.html#method-i-add
         values.each do |val|
           record.errors[field] << "#{val} is not a valid URL" unless val.match?(uri_regex)
         end
