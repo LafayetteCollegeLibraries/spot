@@ -121,7 +121,7 @@ module Spot
 
       # @return [String, nil]
       def help_text
-        translate(:"simple_form.hints.defaults.#{field.downcase}", default: nil)
+        I18n.translate(:"simple_form.hints.defaults.#{field.downcase}", default: '')
       end
 
       # We need to stuff a value in case +options[:work_type]+ isn't provided,

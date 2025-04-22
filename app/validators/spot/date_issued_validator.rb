@@ -15,6 +15,9 @@ module Spot
     # @param [ActiveFedora::Base] record
     # @return [void]
     def validate(record)
+      # @todo "DEPRECATION WARNING: Calling `<<` to an ActiveModel::Errors message array in order to add an error is deprecated.
+      #        Please call `ActiveModel::Errors#add` instead."
+      # @see https://api.rubyonrails.org/classes/ActiveModel/Errors.html#method-i-add
       record.errors[:date_issued] << 'Date Issued may not be blank' if record.date_issued.empty?
       record.errors[:date_issued] << 'Date Issued may only contain one value' if record.date_issued.size > 1
 

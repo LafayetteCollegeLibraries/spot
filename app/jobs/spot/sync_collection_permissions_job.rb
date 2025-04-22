@@ -22,7 +22,6 @@ module Spot
     # @param [Hash] options
     # @option [true, false] reset
     def perform(collection, reset: false)
-      collection.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
       template = collection.permission_template
 
       members_of(collection).each do |member|

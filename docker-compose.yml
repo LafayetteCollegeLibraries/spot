@@ -6,7 +6,9 @@ services:
       target: spot-web-development
     volumes:
       - .:/spot
-      - rails_tmp:/spot/tmp
+      - rails_tmp_derivatives:/spot/tmp/derivatives
+      - rails_tmp_uploads:/spot/tmp/uploads
+      - rails_tmp_branding:/spot/public/branding
       - /spot/public/pdf
     ports:
       - "443:443"
@@ -60,6 +62,7 @@ services:
     depends_on:
       - db
       - fedora
+      - minio
       - solr
 
   fedora:
@@ -118,7 +121,9 @@ services:
     command: ["bundle", "exec", "sidekiq"]
     volumes:
       - .:/spot
-      - rails_tmp:/spot/tmp
+      - rails_tmp_derivatives:/spot/tmp/derivatives
+      - rails_tmp_uploads:/spot/tmp/uploads
+      - rails_tmp_branding:/spot/public/branding
     restart: unless-stopped
     depends_on:
       - db
@@ -145,5 +150,7 @@ volumes:
   fedora:
   minio:
   solr:
-  rails_tmp:
+  rails_tmp_branding:
+  rails_tmp_derivatives:
+  rails_tmp_uploads:
   redis:

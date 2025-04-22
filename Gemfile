@@ -12,7 +12,10 @@ end
 gem 'rails', '~> 6.1.7'
 
 # use Puma as the app server
-gem 'puma', '~> 6.6.0'
+#
+# @note SSL support in Puma 6 requires openssl v3, which isn't available
+#       on the ruby 3.2 docker image
+gem 'puma', '~> 5.6.9'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
@@ -41,7 +44,7 @@ gem 'anystyle', '~> 1.4.1'
 gem 'aws-sdk-s3', '~> 1.142.0'
 
 # parse + build bagit-compliant files
-gem 'bagit', '~> 0.4.5'
+gem 'bagit', '~> 0.6.0'
 
 # blacklight plugins for enhanced searching
 gem 'blacklight_advanced_search', '~> 7.0.0'
@@ -50,7 +53,9 @@ gem 'blacklight_range_limit', '~> 8.5.0'
 
 # start up the server faster
 gem 'bootsnap', '~> 1.18', require: false
-gem 'bootstrap', '~> 5.3.3'
+
+# Bootstrap as the CSS framework
+gem 'bootstrap', '~> 4.6.2.1'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.3.0'
@@ -97,7 +102,7 @@ gem 'kaminari', '~> 1.2.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '~> 4.11'
+gem 'mini_magick'#, '~> 4.11'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.1.6'
