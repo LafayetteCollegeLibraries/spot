@@ -137,6 +137,12 @@ gem 'sidekiq-cron', '~> 1.9.1'
 # using Slack for some of our messaging
 gem 'slack-ruby-client', '~> 0.14.6'
 
+# pin sprockets to 3.7.2 to prevent javascript compilation errors from hyrax source
+# @see https://github.com/samvera/hyrax/issues/6826
+gem 'sprockets', '3.7.2'
+
+gem 'sprockets-rails', '3.4.2'
+
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
 #
