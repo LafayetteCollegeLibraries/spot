@@ -113,6 +113,7 @@ services:
       - .env.local
     environment:
       - FITS_SERVLET_URL=http://fits-servlet:8080/fits
+      - RAILS_MAX_THREADS=3
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
