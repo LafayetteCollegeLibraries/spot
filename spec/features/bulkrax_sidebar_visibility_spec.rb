@@ -14,7 +14,7 @@ RSpec.feature 'the bulkrax importers and exporters dashboard page' do
 
       click_link 'Importers'
 
-      expect(page).to have_content "dataTables_empty"
+      expect(page).to have_content 'Name'
 
       visit '/dashboard'
 
@@ -22,7 +22,7 @@ RSpec.feature 'the bulkrax importers and exporters dashboard page' do
 
       click_link 'Exporters'
 
-      expect(page).to have_content "dataTables_empty"
+      expect(page).to have_content 'Name'
     end
   end
 
