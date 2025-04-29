@@ -1,8 +1,11 @@
 // styles applied to the navbar + masthead
 
-#masthead { // scss-lint:disable IdSelector
-  background-color: $red-light;
+#masthead.navbar.bg-dark { // scss-lint:disable IdSelector
+  background-color: $red-light !important;
   border-bottom: 0;
+
+  .nav-item a { color: $navbar-inverse-link-color; }
+  .nav-item a.dropdown-item { color: #212529; }
 
   @media(min-width: 768px) {
     #search-field-header { // scss-lint:disable IdSelector

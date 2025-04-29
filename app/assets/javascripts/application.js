@@ -14,8 +14,6 @@
 
 // Required by Blacklight
 //= require jquery3
-//= require blacklight_advanced_search
-//= require blacklight_range_limit
 //= require rails-ujs
 
 //= require popper
