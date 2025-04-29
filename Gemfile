@@ -59,7 +59,8 @@ gem 'bootstrap', '~> 4.6.2.1'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.3.0'
-gem 'bulkrax', '~> 5.5.1'
+# gem 'bulkrax', '~> 5.5.1'
+gem 'bulkrax'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -140,7 +141,6 @@ gem 'slack-ruby-client', '~> 0.14.6'
 # pin sprockets to 3.7.2 to prevent javascript compilation errors from hyrax source
 # @see https://github.com/samvera/hyrax/issues/6826
 gem 'sprockets', '3.7.2'
-
 gem 'sprockets-rails', '3.4.2'
 
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
@@ -166,11 +166,11 @@ end
 
 # things used for development + testing (again, not as necessary to lock down versions)
 group :development, :test do
-  gem 'bixby', '~> 5.0.1'
+  gem 'bixby', '~> 5.0.2'
   gem 'byebug', '~> 11.1.3'
-  gem 'capybara', '~> 3.38'
+  gem 'capybara', '~> 3.40'
   gem 'capybara-screenshot', '~> 1.0.26'
-  gem 'database_cleaner', '~> 2.0.1'
+  gem 'database_cleaner', '~> 2.1.0'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 6', require: false
   gem 'hyrax-spec', '~> 0.3.2'
@@ -178,8 +178,8 @@ group :development, :test do
   gem 'rspec', '~> 3.10'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
-  gem 'rspec-rails', '~> 5.1'
-  gem 'selenium-webdriver'
+  gem 'rspec-rails', '~> 6.1'
+  gem 'selenium-webdriver', '~> 4.31'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.22.0', require: false
   gem 'simplecov-cobertura', '~> 2.1', require: false
