@@ -80,7 +80,7 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       expect(form.model.resource_type).to match_array ['Article']
       expect(form.model.license).to match_array ['license1', 'license2']
       expect(form.model.publisher).to match_array ['Rand McNally']
-      expect(form.model.subject).to match_array ['subject1', 'subject2']
+      expect(form.model.subject.map(&:to_s)).to match_array ['subject1', 'subject2']
       expect(form.model.language).to match_array ['en']
       expect(form.model.identifier).to match_array ['id1', 'id2', "noid:#{work1.id}", "noid:#{work2.id}"]
       expect(form.model.location).to match_array ['location1', 'location2']
@@ -92,31 +92,31 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
     subject { described_class.build_permitted_params }
 
     it do
-      is_expected.to eq [{ creator: [] },
-                         { contributor: [] },
-                         { description: [] },
-                         { note: [] },
-                         { keyword: [] },
-                         { resource_type: [] },
-                         { license: [] },
-                         { publisher: [] },
-                         { subject: [] },
-                         { language: [] },
-                         { identifier: [] },
-                         { location: [] },
-                         { related_resource: [] },
-                         { permissions_attributes: [:type, :name, :access, :id, :_destroy] },
-                         :on_behalf_of,
-                         :version,
-                         :add_works_to_collection,
-                         :visibility_during_embargo,
-                         :embargo_release_date,
-                         :visibility_after_embargo,
-                         :visibility_during_lease,
-                         :lease_expiration_date,
-                         :visibility_after_lease,
-                         :visibility,
-                         { location_attributes: [:id, :_destroy] }]
+      is_expected.to match_array [{ creator: [] },
+                                  { contributor: [] },
+                                  { description: [] },
+                                  { note: [] },
+                                  { keyword: [] },
+                                  { resource_type: [] },
+                                  { license: [] },
+                                  { publisher: [] },
+                                  { subject: [] },
+                                  { language: [] },
+                                  { identifier: [] },
+                                  { location: [] },
+                                  { related_resource: [] },
+                                  { permissions_attributes: [:type, :name, :access, :id, :_destroy] },
+                                  :on_behalf_of,
+                                  :version,
+                                  :add_works_to_collection,
+                                  :visibility_during_embargo,
+                                  :embargo_release_date,
+                                  :visibility_after_embargo,
+                                  :visibility_during_lease,
+                                  :lease_expiration_date,
+                                  :visibility_after_lease,
+                                  :visibility,
+                                  { location_attributes: [:id, :_destroy] }]
     end
   end
 end

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 #
 # Class attribute updates + monkey-patching customizations for Hyrax.
-
-Rails.application.config.to_prepare do
+Rails.application.reloader.to_prepare do
   # Bump start the Noid minter in development:
   # Using Bulkrax on a brand-new Hyrax application will wreak havoc with
   # multiple async jobs running MinterState.create! with the same "unique"
@@ -37,96 +36,56 @@ Rails.application.config.to_prepare do
   ]
 
   # Change the layout used for pages and the contact form
-  Hyrax::ContactFormController.class_eval { layout 'hyrax/1_column' }
-  Hyrax::PagesController.class_eval { layout 'hyrax/1_column' }
+  Hyrax::ContactFormController.prepend(Spot::OneColumnLayout)
+  Hyrax::PagesController.prepend(Spot::OneColumnLayout)
 
-  # the dashboard/my/collections (+ thus, dashboard/collections) controller defines
-  # blacklight facets + uses I18n.t to provide a label. as we've found from past experience,
-  # this can get called _before_ all of the locales are loaded, resulting in a
-  # "translation missing" message being provided as a fall-back label. this should
-  # prevent that error from appearing by replacing the +translate+ calls with a symbolized
-  # I18n key (see also 0717dee, + catalog_controller.rb)
-  [Hyrax::My::CollectionsController, Hyrax::Dashboard::CollectionsController].each do |klass|
-    klass.class_eval do
-      def self.update_facet_labels!
-        blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-        blacklight_config.facet_fields[Hyrax.config.collection_type_index_field].label = :'hyrax.dashboard.my.heading.collection_type'
-        blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
-      end
-      update_facet_labels!
-    end
-  end
+  # Update the dashboard labels for collections
+  #
+  # @see app/controllers/concerns/spot/updated_collections_dashboard_collection_facets_behavior.rb
+  Hyrax::My::CollectionsController.prepend(Spot::UpdatedCollectionsDashboardControllerFacetsBehavior)
+  Hyrax::Dashboard::CollectionsController.prepend(Spot::UpdatedCollectionsDashboardControllerFacetsBehavior)
 
-  # same as previous: updating facet labels for dashboard works controller
-  [Hyrax::My::WorksController, Hyrax::Dashboard::WorksController].each do |klass|
-    klass.class_eval do
-      def self.update_facet_labels!
-        blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-      end
-      update_facet_labels!
-    end
-  end
+  # Update the dashboard labels for collections
+  #
+  # @see app/controllers/concerns/spot/updated_works_dashboard_collection_facets_behavior.rb
+  Hyrax::My::WorksController.prepend(Spot::UpdatedWorksDashboardControllerFacetsBehavior)
+  Hyrax::Dashboard::WorksController.prepend(Spot::UpdatedWorksDashboardControllerFacetsBehavior)
 
   # We're using an older version of the FITSServlet tool (1.1.3 as of 2019-12-03,
   # anything higher throws an exception that I can't nail down) that predates
   # a change to set the response encoding to UTF-8. So we need to do this as
   # early as possible within the Characterization tool.
-  require 'hydra-file_characterization'
+  #
+  # @note as of 2025-04-29, is thi sstill necessary?
+  # require 'hydra-file_characterization'
 
-  Hydra::FileCharacterization::Characterizers::FitsServlet.class_eval do
-    # Wrap the datafile= param in quotes to handle filenames with spaces
-    def command
-      %(curl -k -F datafile=@"#{filename}" #{ENV['FITS_SERVLET_URL']}/examine)
-    end
+  # Hydra::FileCharacterization::Characterizers::FitsServlet.class_eval do
+  #   # Wrap the datafile= param in quotes to handle filenames with spaces
+  #   def command
+  #     %(curl -k -F datafile=@"#{filename}" #{ENV['FITS_SERVLET_URL']}/examine)
+  #   end
 
-    def output
-      super.encode('UTF-8', invalid: :replace)
-    end
-  end
+  #   def output
+  #     super.encode('UTF-8', invalid: :replace)
+  #   end
+  # end
 
   # Add our SolrSuggestActor to the front of the default actor-stack. This will
   # trigger a build of all of the Solr suggestion dictionaries at the end of
   # each create, update, destroy process (each method calls the next actor and _then_
   # enqueues the job).
+  #
+  # @todo remove with ActorStack
   Hyrax::CurationConcern.actor_factory.unshift(SolrSuggestActor)
-
-  # By default, +Hydra::AccessControls::Embargo#active?+ compares the
-  # embargo_release_date (a DateTime) to +Date.today+ (a Date). When
-  # the release date is the same day as today, we'll get a truthy return value
-  # when it should be falsey.
-  #
-  #   Date.today < DateTime.parse(Date.today.to_s)
-  #   # => true
-  #
-  #   DateTime.parse(Date.today.to_s) < DateTime.parse(Date.today.to_s)
-  #   # => false
-  #
-  # @see https://github.com/samvera/hydra-head/blob/v10.7.0/hydra-access-controls/app/models/hydra/access_controls/embargo.rb#L13-L15
-  Hydra::AccessControls::Embargo.class_eval do
-    def active?
-      embargo_release_date.present? && DateTime.current < embargo_release_date
-    end
-  end
-
-  Hydra::AccessControls::Lease.class_eval do
-    def active?
-      lease_expiration_date.present? && DateTime.current < lease_expiration_date
-    end
-  end
 
   # Updating how SimpleForm generates labels so that we can use the same locales
   # for the form as those for the metadata display.
+  #
+  # @todo is this still needed?
   SimpleForm::Inputs::Base.class_eval do
     protected def raw_label_text
       options[:label] || I18n.t("blacklight.search.fields.#{attribute_name}", default: label_translation)
     end
-  end
-
-  # Adding label support for metadata-only records
-  Hyrax::PermissionBadge.class_eval do
-    old_visibility_label_class = Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS.dup
-    remove_const(:VISIBILITY_LABEL_CLASS) if const_defined?(:VISIBILITY_LABEL_CLASS)
-    const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
   end
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
@@ -136,6 +95,7 @@ Rails.application.config.to_prepare do
   CharacterizeJob.characterization_service = Spot::CharacterizationService
 
   # Override the Browse-Everything Retreiver to take S3 URIs
+  # @see app/services/concerns/spot/retrieves_s3_urls.rb
   BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
   BrowseEverything::Retriever.class_eval do
     class << self
@@ -143,120 +103,47 @@ Rails.application.config.to_prepare do
     end
   end
 
-  # To be honest, I'm not sure why the Hyrax code doesn't work as-is,
-  # but rewriting the solr_params[:sort] assignment to this kinda
-  # wonky one-liner seems to preserve user-selected sorting. ¯\_(ツ)_/¯
-  #
-  # @see https://github.com/samvera/hyrax/blob/main/app/search_builders/hyrax/collection_search_builder.rb#L36-L42
-  Hyrax::CollectionMemberSearchBuilder.class_eval do
-    def add_sorting_to_solr(solr_parameters)
-      return if solr_parameters[:q]
-      solr_parameters[:sort] ||= (sort || "title_sort_si asc")
-    end
-  end
-
-  # Override to fix Hyrax bug where calling Hyrax::AdminSetCreateService.find_or_create_default_admin_set
-  # will try to load an AdminSet's entire set of members when called.
-  #
-  # @note setting this to production only as it was causing the student_work AdminSet to load as default
-  #       in dev/test environments, causing all sorts of havoc and isn't as necessary.
-  #
-  # @see https://github.com/samvera/hyrax/issues/6171
-  # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
-  if Rails.env.production?
-    module Spot
-      module AdminSetCreateServiceDecorator
-        private
-
-        def find_default_admin_set
-          AdminSet.first
-        end
-      end
-    end
-
-    Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
-  end
+  # # To be honest, I'm not sure why the Hyrax code doesn't work as-is,
+  # # but rewriting the solr_params[:sort] assignment to this kinda
+  # # wonky one-liner seems to preserve user-selected sorting. ¯\_(ツ)_/¯
+  # #
+  # # @see https://github.com/samvera/hyrax/blob/main/app/search_builders/hyrax/collection_search_builder.rb#L36-L42
+  # Hyrax::CollectionMemberSearchBuilder.class_eval do
+  #   def add_sorting_to_solr(solr_parameters)
+  #     return if solr_parameters[:q]
+  #     solr_parameters[:sort] ||= (sort || "title_sort_si asc")
+  #   end
+  # end
 
   # Only store entitlements related to us in the session to prevent a cookie overflow.
   #
+  # @see app/controllers/concerns/spot/cas_entitlement_patch_rack.rb
   # @see https://github.com/biola/rack-cas/blob/v0.16.1/lib/rack/cas.rb#L96-L102
-  # rubocop:disable Style/IfUnlessModifier
+  #
+  # @note is this needed with Rails.application.config.rack_cas.extra_attributes_filter ?
   require 'rack/cas'
-  Rack::CAS.class_eval do
-    def store_session(request, user, ticket, extra_attrs = {})
-      if RackCAS.config.extra_attributes_filter?
-        extra_attrs.select! { |key, _val| RackCAS.config.extra_attributes_filter.map(&:to_s).include?(key.to_s) }
-      end
-
-      if extra_attrs['eduPersonEntitlement'].present?
-        extra_attrs['eduPersonEntitlement'] = Array.wrap(extra_attrs['eduPersonEntitlement']).select do |val|
-          URI.parse(val).host == Spot::CasUserRolesService.entitlement_host
-        end
-      end
-
-      request.session['cas'] = { 'user' => user, 'ticket' => ticket, 'extra_attributes' => extra_attrs }
-    end
-  end
+  Rack::CAS.prepend(Spot::CasEntitlementPatchRack)
 
   # Modifying how Questiong Authority returns AssignFAST results by
   # converting fst ids into URLs
-  require 'qa/authorities/assign_fast'
-  Qa::Authorities::AssignFast::GenericAuthority.class_eval do
-    private
-
-    def parse_authority_response(raw_response)
-      results = raw_response.try(:[], 'response').try(:[], 'docs') || []
-
-      results.map do |doc|
-        index = Qa::Authorities::AssignFast.index_for_authority(subauthority)
-        term = doc[index].first
-        term += " (USE #{doc['auth']})" if doc['type'] == 'alt'
-        fast_id = Array.wrap(doc['idroot']).first
-
-        {
-          fast_id: fast_id,
-          id: "http://id.worldcat.org/fast/#{fast_id.gsub(/^fst/, '')}",
-          label: term,
-          type: doc['type'],
-          value: doc['auth']
-        }
-      end
-    end
-  end
+  #
+  # @see app/authorities/concerns/spot/qa_assign_fast_generic_authority_patch.rb
+  Qa::Authorities::AssignFast::GenericAuthority.prepend(Spot::QaAssignFastGenericAuthorityPatch)
 
   # In order for us to search assignFAST by FAST IDs, we need to
   # add the 'idroot' searchIndex as a valid subauthority for AssignFast
-  Qa::Authorities::AssignFastSubauthority.module_eval do
-    def index_for_authority(authority)
-      return authority if authority == 'idroot'
-
-      Qa::Authorities::AssignFastSubauthority::SUBAUTHORITIES[authority]
-    end
-
-    def subauthorities
-      Qa::Authorities::AssignFastSubauthority::SUBAUTHORITIES.keys + ['idroot']
-    end
-  end
-
-  # Modifying the Video Runner for Hydra to use a customized Processor
-  # which backports changes from 3.8.0
   #
-  # @see https://github.com/samvera/hydra-derivatives/blob/v3.8.0/lib/hydra/derivatives/runners/video_derivatives.rb
-  Hydra::Derivatives::VideoDerivatives.class_eval do
-    def self.processor_class
-      Spot::VideoProcessor
-    end
-  end
+  # @see app/authorities/concerns/spot/qa_assign_fast_subauthority_patch.rb
+  Qa::Authorities::AssignFastSubauthority.prepend(Spot::QaAssignFastSubauthorityPatch)
 
   # Add original file names and the transcript flag to presenter for file sets
   #
+  # @see app/presenters/concerns/spot/file_set_presenter_additions.rb
   # @see https://github.com/samvera/hyrax/blob/e4f8a06aaf1c9ec378f87764da59f73a8adf06d7/app/presenters/hyrax/file_set_presenter.rb
-  Hyrax::FileSetPresenter.class_eval do
-    delegate :original_filenames, :transcript_name,
-             :stored_derivatives, to: :solr_document
-  end
+  Hyrax::FileSetPresenter.include(Spot::FileSetPresenterAdditions)
 
   # Add support for downloading file_set transcripts
+  # @see app/controllers/concerns/spot/downloads_controller_behavior
   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
 
   # Encountering an issue where Hyrax::PersistDirectlyContainedOutputFileService.retrieve_file_set requires
@@ -287,6 +174,16 @@ Rails.application.config.to_prepare do
         pcdm_use: pcdm_use,
         user: file.user
       )
+    end
+  end
+
+  # Likely to not be needed once we're fully Valkyrized.
+  #
+  # @see app/forms/concerns/spot/batch_edit_form_terms_and_permitted_params.rb
+  Hyrax::Forms::BatchEditForm.prepend(Spot::BatchEditFormTermsAndPermittedParams)
+  Hyrax::Forms::BatchEditForm.class_eval do
+    class << self
+      prepend Spot::BatchEditFormTermsAndPermittedParams::ClassMethods
     end
   end
 end

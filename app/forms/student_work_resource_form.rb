@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+#
 # Form to edit StudentWorkResource objects
 #
 # @todo In StudentWorkForm we default :creator and :rights_holder to the name
