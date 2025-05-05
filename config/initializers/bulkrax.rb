@@ -126,7 +126,7 @@ Bulkrax.setup do |config|
   end
 end
 
-Rails.application.config.to_prepare do
+Rails.application.reloader.to_prepare do
   # Modify ExportBehavior to _not_ include the file_set ID as part of the file name
   # @see https://github.com/samvera/bulkrax/blob/v5.4.1/app/models/concerns/bulkrax/export_behavior.rb#L28-L44
   Bulkrax::ExportBehavior.class_eval do

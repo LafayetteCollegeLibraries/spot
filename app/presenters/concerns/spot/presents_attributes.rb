@@ -5,8 +5,6 @@
 # without having to namespace to +Hyrax::Renderers+, though we'll also fall back
 # to a super +#renderer_for+ if it exists.
 #
-# Note that this does not replace any of the other methods defined by the Hyrax
-# mixin. It is simply a less-monkey-patchy way of changing the renderer selector.
 module Spot
   module PresentsAttributes
     # Identical to +Hyrax::PresentsAttributes#attribute_to_html+, but removes

@@ -51,6 +51,8 @@ end
 
 Capybara.default_driver = :rack_test # This is a faster driver
 Capybara.javascript_driver = :selenium_firefox_headless # This is slower
+Capybara.threadsafe = true
+# Capybara.default_max_wait_time = 10
 
 # Uncomment this block to watch feature tests run in a web browser
 # Capybara.javascript_driver = :selenium

@@ -87,6 +87,13 @@ module Spot
       "#{title.first} // #{I18n.t('hyrax.product_name')}"
     end
 
+    # Replacing Hyrax::PermissionBadge with our own subclass that can handle :metadata visibility
+    #
+    # @return [Spot::PermissionBadge]
+    def permission_badge_class
+      Spot::PermissionBadge
+    end
+
     def representative_presenter
       super
     rescue Hyrax::ObjectNotFoundError, ArgumentError
