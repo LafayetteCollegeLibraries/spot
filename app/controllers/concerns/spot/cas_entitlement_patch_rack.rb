@@ -6,9 +6,7 @@ module Spot
 
     # :nocov:
     def store_session(request, user, ticket, extra_attrs = {})
-      if RackCAS.config.extra_attributes_filter?
-        extra_attrs.select! { |key, _val| RackCAS.config.extra_attributes_filter.map(&:to_s).include?(key.to_s) }
-      end
+      extra_attrs.select! { |key, _val| RackCAS.config.extra_attributes_filter.map(&:to_s).include?(key.to_s) } if RackCAS.config.extra_attributes_filter?
 
       if extra_attrs['eduPersonEntitlement'].present?
         extra_attrs['eduPersonEntitlement'] = Array.wrap(extra_attrs['eduPersonEntitlement']).select do |val|

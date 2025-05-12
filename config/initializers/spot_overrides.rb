@@ -180,10 +180,11 @@ Rails.application.reloader.to_prepare do
   # Likely to not be needed once we're fully Valkyrized.
   #
   # @see app/forms/concerns/spot/batch_edit_form_terms_and_permitted_params.rb
-  Hyrax::Forms::BatchEditForm.prepend(Spot::BatchEditFormTermsAndPermittedParams)
-  Hyrax::Forms::BatchEditForm.class_eval do
-    class << self
-      prepend Spot::BatchEditFormTermsAndPermittedParams::ClassMethods
-    end
-  end
+  Hyrax::Forms::BatchEditForm.include(Spot::Forms::BatchEditFormTermsAndPermittedParams)
+  # Hyrax::Forms::BatchEditForm.prepend(Spot::Forms::BatchEditFormTermsAndPermittedParams)
+  # Hyrax::Forms::BatchEditForm.class_eval do
+  #   class << self
+  #     prepend Spot::Forms::BatchEditFormTermsAndPermittedParams::ClassMethods
+  #   end
+  # end
 end

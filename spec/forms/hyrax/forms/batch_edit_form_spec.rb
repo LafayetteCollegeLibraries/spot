@@ -80,10 +80,10 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
       expect(form.model.resource_type).to match_array ['Article']
       expect(form.model.license).to match_array ['license1', 'license2']
       expect(form.model.publisher).to match_array ['Rand McNally']
-      expect(form.model.subject.map(&:to_s)).to match_array ['subject1', 'subject2']
+      expect(form.model.subject.map(&:rdf_label).flatten).to match_array ['subject1', 'subject2']
       expect(form.model.language).to match_array ['en']
       expect(form.model.identifier).to match_array ['id1', 'id2', "noid:#{work1.id}", "noid:#{work2.id}"]
-      expect(form.model.location).to match_array ['location1', 'location2']
+      expect(form.model.location.map(&:rdf_label).flatten).to match_array ['location1', 'location2']
       expect(form.model.related_resource).to match_array ['related_resource1', 'related_resource2']
     end
   end
@@ -109,13 +109,18 @@ RSpec.describe Hyrax::Forms::BatchEditForm do
                                   :on_behalf_of,
                                   :version,
                                   :add_works_to_collection,
-                                  :visibility_during_embargo,
-                                  :embargo_release_date,
-                                  :visibility_after_embargo,
-                                  :visibility_during_lease,
-                                  :lease_expiration_date,
-                                  :visibility_after_lease,
-                                  :visibility,
+                                  {
+                                    file_set: [
+                                      :visibility,
+                                      :visibility_during_embargo,
+                                      :embargo_release_date,
+                                      :visibility_after_embargo,
+                                      :visibility_during_lease,
+                                      :lease_expiration_date,
+                                      :visibility_after_lease,
+                                      :uploaded_file_id
+                                    ]
+                                  },
                                   { location_attributes: [:id, :_destroy] }]
     end
   end

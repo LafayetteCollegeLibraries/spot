@@ -21,6 +21,8 @@ Hyrax.config do |config|
   config.query_index_from_valkyrie = Hyrax.config.use_valkyrie?
   config.index_adapter = Hyrax.config.use_valkyrie? ? :solr_index : :null_index
 
+  config.solr_default_method = :post
+
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES

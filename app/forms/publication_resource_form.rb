@@ -1,19 +1,21 @@
 # frozen_string_literal: true
+'Hyrax::Forms::ResourceForm'.safe_constantize
+
 class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource)
-  include Spot::ResourceFormBehavior
+  include Spot::Forms::ResourceFormBehavior
 
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:institutional_metadata)
   include Hyrax::FormFields(:publication_metadata)
 
-  include Spot::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :abstract, :description)
-  include Spot::IdentifierFormFields
+  include Spot::Forms::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :abstract, :description)
+  include Spot::Forms::IdentifierFormFields
 
-  include Spot::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
-  include Spot::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
-  include Spot::ControlledVocabularyFormField(:academic_department)
-  include Spot::ControlledVocabularyFormField(:division)
-  include Spot::ControlledVocabularyFormField(:language)
+  include Spot::Forms::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
+  include Spot::Forms::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
+  include Spot::Forms::ControlledVocabularyFormField(:academic_department)
+  include Spot::Forms::ControlledVocabularyFormField(:division)
+  include Spot::Forms::ControlledVocabularyFormField(:language)
 
   validates_with Spot::EdtfDateValidator, fields: [:date_issued]
 

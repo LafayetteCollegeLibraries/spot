@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.feature 'the fixity status dashboard page' do
+  include_context 'Capybara host'
+
   before do
     login_as user
   end

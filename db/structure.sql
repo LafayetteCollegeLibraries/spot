@@ -9,6 +9,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -3964,6 +3971,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220413180915'),
 ('20220609001128'),
 ('20230309145101'),
-('20230608153601');
+('20230608153601'),
+('20250505153757'),
+('20250505153758');
 
 

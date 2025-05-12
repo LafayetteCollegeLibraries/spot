@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 RSpec.feature 'OAI-PMH provider (via Blacklight)', clean: true do
+  include_context 'Capybara host'
+
   before do
-    objects.each { |obj| ActiveFedora::SolrService.add(obj) }
-    ActiveFedora::SolrService.commit
+    objects.each { |obj| Hyrax::SolrService.add(obj) }
+    Hyrax::SolrService.commit
   end
 
   # clear out the objects
   after do
     obj_query = objects.map { |o| "id:#{o[:id]}" }.join(' OR ')
-    ActiveFedora::SolrService.instance.conn.delete_by_query("(#{obj_query})")
-    ActiveFedora::SolrService.commit
+    Hyrax::SolrService.delete_by_query("(#{obj_query})")
+    Hyrax::SolrService.commit
   end
 
   let(:xml) { Nokogiri::XML(page.body) }

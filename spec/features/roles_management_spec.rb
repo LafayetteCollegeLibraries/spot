@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.feature 'Role management' do
+  include_context 'Capybara host'
+
   before do
     login_as user
   end

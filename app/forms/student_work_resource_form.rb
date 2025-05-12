@@ -5,23 +5,25 @@
 # @todo In StudentWorkForm we default :creator and :rights_holder to the name
 #       of the depositing user, but I don't think we have a hook in the form.
 #       This might need to be added at the controller level.
+'Hyrax::Forms::ResourceForm'.safe_constantize
+
 class StudentWorkResourceForm < ::Hyrax::Forms::ResourceForm(StudentWorkResource)
   DEFAULT_RIGHTS_STATEMENT_URI = 'http://rightsstatements.org/vocab/InC-EDU/1.0/'
 
-  include Spot::ResourceFormBehavior
+  include Spot::Forms::ResourceFormBehavior
 
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:institutional_metadata)
   include Hyrax::FormFields(:student_work_metadata)
 
-  include Spot::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
-  include Spot::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
-  include Spot::ControlledVocabularyFormField(:academic_department)
-  include Spot::ControlledVocabularyFormField(:advisor)
-  include Spot::ControlledVocabularyFormField(:division)
-  include Spot::ControlledVocabularyFormField(:language)
+  include Spot::Forms::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
+  include Spot::Forms::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
+  include Spot::Forms::ControlledVocabularyFormField(:academic_department)
+  include Spot::Forms::ControlledVocabularyFormField(:advisor)
+  include Spot::Forms::ControlledVocabularyFormField(:division)
+  include Spot::Forms::ControlledVocabularyFormField(:language)
 
-  include Spot::IdentifierFormFields
+  include Spot::Forms::IdentifierFormFields
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
 

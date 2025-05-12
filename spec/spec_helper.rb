@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 #
+# RSpec configuration
+#
+# @todo need to add valkyrie adapter configuration for HYRAX_VALKYRIE=1 specs
+# @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/spec/spec_helper.rb#L61-L71
+
 # envs for running `bundle exec rspec` against an infrastructure brought up using `docker compose up -d`
 ENV['RAILS_ENV'] = 'test'
 ENV['URL_HOST'] = 'http://localhost' if ENV['URL_HOST'].nil?
@@ -19,7 +24,9 @@ end
 require File.expand_path('../../config/environment', __FILE__)
 
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+# @note this is probably unnecessary as we're explicitly defining
+#       RAILS_ENV at the beginning of the file. i'm just being paranoid.
+abort("The Rails environment is running in production mode!") unless Rails.env.test?
 
 require 'rspec/rails'
 require 'factory_bot_rails'
@@ -43,16 +50,14 @@ require 'hyrax/specs/shared_specs/factories/strategies/valkyrie_resource'
 FactoryBot.register_strategy(:valkyrie_create, ValkyrieCreateStrategy)
 
 Capybara.register_driver :selenium_firefox_headless do |app|
-  browser_options = ::Selenium::WebDriver::Firefox::Options.new
+  browser_options = ::Selenium::WebDriver::Firefox::Options.new(args: ['-headless'])
   browser_options.binary = ENV['FIREFOX_BINARY_PATH'] if ENV['FIREFOX_BINARY_PATH'].present?
-  browser_options.args << '--headless'
   Capybara::Selenium::Driver.new(app, browser: :firefox, options: browser_options)
 end
 
 Capybara.default_driver = :rack_test # This is a faster driver
 Capybara.javascript_driver = :selenium_firefox_headless # This is slower
-Capybara.threadsafe = true
-# Capybara.default_max_wait_time = 10
+Capybara.default_max_wait_time = 10
 
 # Uncomment this block to watch feature tests run in a web browser
 # Capybara.javascript_driver = :selenium
@@ -75,6 +80,12 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+# use the rails test adapter instead of the main application queue
+# @see https://api.rubyonrails.org/v6.0.6.1/classes/ActiveJob/QueueAdapters/TestAdapter.html
+ActiveJob::Base.queue_adapter = :test
+
+# DatabaseCleaner will raise an error if the db is configured to a remote url,
+# which is how we're using our local docker setup, so we need to tell it to chill out
 DatabaseCleaner.allow_remote_database_url = true
 
 RSpec.configure do |config|
@@ -141,28 +152,13 @@ RSpec.configure do |config|
   config.before do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
-
-    WebMock.disable_net_connect!(
-      allow_localhost: true,
-
-      # account for our aliased services via docker
-      allow: %w[
-        objects.githubusercontent.com
-        github.com
-        db
-        fedora
-        fitsservlet
-        solr
-      ]
-    )
-    WebMock.enable!
   end
 
   config.before clean: true do
     DatabaseCleaner.clean
-    ActiveFedora::Cleaner.clean!
 
     # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/spec_helper.rb#L121-L126
+    ActiveFedora::Cleaner.clean!
     ActiveFedora.fedora.connection.send(:init_base_path)
   end
 
@@ -174,6 +170,23 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+
+WebMock.disable_net_connect!(
+  allow_localhost: true,
+
+  # account for our aliased services via docker
+  # and github domains that selenium uses
+  allow: %w[
+    objects.githubusercontent.com
+    github.com
+    db
+    fedora
+    fitsservlet
+    solr
+  ]
+)
+
+# WebMock.enable!
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|

@@ -24,7 +24,7 @@ RSpec.feature 'Show Publication page', js: false do
   # Only enqueue the ingest job, not charactarization.
   # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
   before do
-    ActiveJob::Base.queue_adapter.filter = [IngestJob]
+    ActiveJob::Base.queue_adapter.filter = [IngestJob, ValkyrieIngestJob]
 
     RdfLabel.first_or_create(uri: subject_uri, value: subject_label)
 
