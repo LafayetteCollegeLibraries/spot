@@ -1,5 +1,7 @@
 # frozen_string_literal: true
-RSpec.feature 'the system status dashboard panel' do
+RSpec.feature 'the system status dashboard panel', js: false do
+  include_context 'Capybara host'
+
   before do
     allow(OkComputer::Registry).to receive(:all).and_return(mock_collection)
     allow(mock_collection).to receive(:run)

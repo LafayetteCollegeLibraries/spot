@@ -14,15 +14,12 @@ module Spot
   class DateIssuedValidator < ::ActiveModel::Validator
     # @param [ActiveFedora::Base] record
     # @return [void]
-    # @todo "DEPRECATION WARNING: Calling `<<` to an ActiveModel::Errors message array in order to add an error is deprecated.
-    #        Please call `ActiveModel::Errors#add` instead."
-    # @see https://api.rubyonrails.org/classes/ActiveModel/Errors.html#method-i-add
     def validate(record)
-      record.errors[:date_issued] << 'Date Issued may not be blank' if record.date_issued.empty?
-      record.errors[:date_issued] << 'Date Issued may only contain one value' if record.date_issued.size > 1
+      record.errors.add(:date_issued, :invalid, message: 'Date Issued may not be blank') if record.date_issued.empty?
+      record.errors.add(:date_issued, :invalid, message: 'Date Issued may only contain one value') if record.date_issued.size > 1
 
       record.date_issued.each do |date|
-        record.errors[:date_issued] << 'Date Issued must be in YYYY-MM-DD, YYYY-MM, or YYYY format' unless
+        record.errors.add(:date_issued, :invalid, message: 'Date Issued must be in YYYY-MM-DD, YYYY-MM, or YYYY format') unless
           date.match?(/\A\d{4}(-\d{2}){0,2}\z/)
       end
     end

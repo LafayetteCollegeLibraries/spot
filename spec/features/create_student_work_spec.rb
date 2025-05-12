@@ -22,7 +22,6 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
     let(:user) { create(:admin_user) }
 
     scenario 'can fill out and submit a new StudentWork' do
-      byebug
       visit '/dashboard'
 
       click_link 'Works'

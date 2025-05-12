@@ -7,7 +7,7 @@ RSpec.feature 'Create an Image', :clean, :js do
 
     # Only enqueue the ingest job, not charactarization.
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
-    ActiveJob::Base.queue_adapter.filter = [IngestJob]
+    ActiveJob::Base.queue_adapter.filter = [IngestJob, ValkyrieIngestJob]
 
     AdminSet.find_or_create_default_admin_set_id
     login_as user

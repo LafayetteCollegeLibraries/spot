@@ -14,6 +14,8 @@ class CatalogController < ApplicationController
   before_action :enforce_show_permissions, only: :show
 
   configure_blacklight do |config|
+    config.http_method = Hyrax.config.solr_default_method
+
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
     # config.advanced_search[:qt] ||= 'advanced'

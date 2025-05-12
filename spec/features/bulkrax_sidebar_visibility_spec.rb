@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 RSpec.feature 'the bulkrax importers and exporters dashboard page' do
+  include_context 'Capybara host'
+
   before do
     login_as user
   end
@@ -10,19 +12,15 @@ RSpec.feature 'the bulkrax importers and exporters dashboard page' do
     scenario do
       visit '/dashboard'
 
-      expect(page).to have_content 'Importers'
-
       click_link 'Importers'
-
-      expect(page).to have_content 'Name'
+      expect(page.find('.main-header h1').text).to eq 'Importers'
+      expect(page).to have_css 'table#importers-table'
 
       visit '/dashboard'
 
-      expect(page).to have_content 'Exporters'
-
       click_link 'Exporters'
-
-      expect(page).to have_content 'Name'
+      expect(page.find('.main-header h1').text).to eq 'Exporters'
+      expect(page).to have_css 'table#exporters-table'
     end
   end
 

@@ -48,7 +48,11 @@ module Spot
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
 
     config.hosts << URI.parse(ENV['URL_HOST'])&.hostname if ENV['URL_HOST'].present?
-    config.hosts << 'localhost' if Rails.env.test?
+
+    if Rails.env.test?
+      config.hosts << '127.0.0.1'
+      config.hosts << 'localhost'
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

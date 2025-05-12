@@ -8,21 +8,21 @@
 # @todo is there some configuration we're missing that was added to Hyrax to account for this?
 #
 'Hyrax::Forms::ResourceForm'.safe_constantize
-'Spot::LanguageTaggedFormFields'.safe_constantize
-'Spot::ControlledVocabularyFormField'.safe_constantize
-'Spot::IdentifierFormFields'.safe_constantize
-'Spot::EdtfDateValidator'.safe_constantize
+'Spot::Forms::LanguageTaggedFormFields'.safe_constantize
+'Spot::Forms::ControlledVocabularyFormField'.safe_constantize
+'Spot::Forms::IdentifierFormFields'.safe_constantize
+'Spot::Forms::EdtfDateValidator'.safe_constantize
 
 # Form to edit AudioVisualResource objects
 class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource)
-  include Spot::ResourceFormBehavior
+  include Spot::Forms::ResourceFormBehavior
 
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:audio_visual_metadata)
 
-  include Spot::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :description, :inscription)
-  include Spot::ControlledVocabularyFormField(:language)
-  include Spot::IdentifierFormFields
+  include Spot::Forms::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :description, :inscription)
+  include Spot::Forms::ControlledVocabularyFormField(:language)
+  include Spot::Forms::IdentifierFormFields
 
   validates_with Spot::EdtfDateValidator, fields: [:date]
 
