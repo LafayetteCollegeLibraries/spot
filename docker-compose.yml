@@ -11,7 +11,10 @@ services:
     ports:
       - "443:443"
     env_file:
-      - .env.local
+      - path: ./development.env
+        required: true
+      - path: ./development.local.env
+        required: false
     depends_on:
       - cantaloupe
       - db
@@ -54,7 +57,10 @@ services:
   db_migrate:
     image: lafayette/spot-web
     env_file:
-      - .env.local
+      - path: ./development.env
+        required: true
+      - path: ./development.local.env
+        required: false
     entrypoint: ["sh", "-c"]
     command: bin/migrate-and-seed-db.sh
     depends_on:
@@ -110,10 +116,10 @@ services:
       context: .
       target: spot-worker-development
     env_file:
-      - .env.local
-    environment:
-      - FITS_SERVLET_URL=http://fits-servlet:8080/fits
-      - RAILS_MAX_THREADS=1
+      - path: ./development.env
+        required: true
+      - path: ./development.local.env
+        required: false
     ports:
       - "3003:3000"
     command: ["bundle", "exec", "sidekiq"]
