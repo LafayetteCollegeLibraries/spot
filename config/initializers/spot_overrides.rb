@@ -252,6 +252,7 @@ Rails.application.config.to_prepare do
   # Modifying Bulkrax ImporterJob so that it correctly fetches file sizes
   #
   # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
+  #
   Bulkrax::ImporterJob.class_eval do
     # checks the file sizes of the download files to match the original files
     def all_files_completed?(importer)
@@ -259,22 +260,21 @@ Rails.application.config.to_prepare do
       original_files = importer.parser_fields['original_file_paths']
       return true unless cloud_files.present? && original_files.present?
 
-      imported_file_sizes = cloud_files.map { |_, v| get_file_size(v['url']) }
+      imported_file_sizes = cloud_files.map { |_, v| get_file_size_from_s3(v['url']) }
       original_file_sizes = original_files.map { |imported_file| File.size(imported_file) }
 
       original_file_sizes == imported_file_sizes
     end
 
     # s3 file size fetch
-    def get_file_size(url)
+    # @todo should we add handling for other types of cloud files?
+    def get_file_size_from_s3(url)
       uri_parsed = ::Addressable::URI.parse(url)
+      return unless uri_parsed.scheme == 's3'
 
-      case uri_parsed.scheme
-      when "s3"
-        client = Aws::S3::Client.new
-        resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
-        resp.content_length
-      end
+      client = Aws::S3::Client.new
+      resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
+      resp.content_length
     end
   end
 end
