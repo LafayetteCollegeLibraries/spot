@@ -118,6 +118,8 @@ services:
     env_file:
       - path: ./development.env
         required: true
+      - path: ./development.local.sidekiq.env
+        required: false
       - path: ./development.local.env
         required: false
     ports:
