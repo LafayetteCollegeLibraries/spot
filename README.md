@@ -45,7 +45,7 @@ and add values to the following variables:
 
 key                | value
 -------------------|-----------
-`APPLICATION_FQDN` | hostname for the local dev application; since we use Lafayette's CAS authentication system, this needs to be a domain registered with ITS. Spoof the host locally by adding `127.0.0.1 example.lafayette.edu` to your `/etc/hosts` file.
+`APPLICATION_FQDN` | hostname for the local dev application; since we use Lafayette's CAS authentication system, this needs to be a domain registered with ITS. Spoof the host locally by adding `127.0.0.1     example.lafayette.edu` to your `/etc/hosts` file.
 `CAS_BASE_URL`     | Lafayette CAS server to use for authentication
 `DEV_ADMIN_USERS`  | comma-separated list of email addresses to create as admins accounts
 
