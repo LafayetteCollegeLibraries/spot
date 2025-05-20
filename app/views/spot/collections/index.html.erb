@@ -13,11 +13,11 @@
         </a>
       </h4>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        <a href="https://ldr.lafayette.edu/collections/faculty-publications">Faculty Publications</a><br>
-        <a href="https://ldr.lafayette.edu/collections/honors-theses">Student Honors Theses</a>
-      </div>
+    <div id="collapseOne" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingOne">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to 'Faculty Publication', hyrax.collection_path(id: 'faculty-publications') %></li>
+        <li class="list-group-item"><%= link_to 'Student Honors Theses', hyrax.collection_path(id: 'honors-theses') %></li>
+      </ul>
     </div>
   </div>
   <div class="panel panel-default">
@@ -28,19 +28,19 @@
         </a>
       </h4>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <a href="https://ldr.lafayette.edu/collections/lafayette-newspaper-archive">Lafayette Newspaper archive</a><br>
-        <a href="https://ldr.lafayette.edu/collections/lafayette-magazine-archive">Lafayette Magazine archive</a><br>
-        <a href="https://ldr.lafayette.edu/collections/library-newsletters">Library Newsletters</a><br>
-        <a href="https://ldr.lafayette.edu/collections/war-casualties">Lafayette College World War II Casualties</a><br>
-        <a href="https://ldr.lafayette.edu/collections/student-publications">Student Publications</a><br>
-        <a href="https://ldr.lafayette.edu/collections/eisenhower">General Eisenhower at Lafayette: Founders' Day 1946</a><br>
-        <a href="https://ldr.lafayette.edu/collections/historical-photos">College Archives Image Collection</a><br>
-        <a href="https://ldr.lafayette.edu/collections/college-administration">College Administration</a><br>
-        <a href="https://ldr.lafayette.edu/collections/public-safety">Public Safety</a><br>
-        <a href="https://ldr.lafayette.edu/collections/mckelvy-house">McKelvy House</a>
-      </div>
+    <div id="collapseTwo" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingTwo">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to 'Lafayette Newspaper archive', hyrax.collection_path(id: 'lafayette-newspaper-archive') %></li>
+        <li class="list-group-item"><%= link_to 'Lafayette Magazine archive', hyrax.collection_path(id: 'lafayette-magazine-archive') %></li>
+        <li class="list-group-item"><%= link_to 'Library Newsletters', hyrax.collection_path(id: 'library-newsletters') %></li>
+        <li class="list-group-item"><%= link_to 'Lafayette College World War II Casualties', hyrax.collection_path(id: 'war-casualties') %></li>
+        <li class="list-group-item"><%= link_to 'Student Publications', hyrax.collection_path(id: 'student-publications') %></li>
+        <li class="list-group-item"><%= link_to "General Eisenhower at Lafayette: Founders' Day 1946", hyrax.collection_path(id: 'eisenhower') %></li>
+        <li class="list-group-item"><%= link_to 'College Archives Image Collection', hyrax.collection_path(id: 'historical-photos') %></li>
+        <li class="list-group-item"><%= link_to 'College Administration', hyrax.collection_path(id: 'college-administration') %></li>
+        <li class="list-group-item"><%= link_to 'Public Safety', hyrax.collection_path(id: 'public-safety') %></li>
+        <li class="list-group-item"><%= link_to 'McKelvy House', hyrax.collection_path(id: 'mckelvy-house') %></li>
+      </ul>
     </div>
   </div>
   <div class="panel panel-default">
@@ -51,13 +51,13 @@
         </a>
       </h4>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-        <a href="https://ldr.lafayette.edu/collections/alsace-images">Alsace-Lorraine Picture Postcard Collection</a><br>
-        <a href="https://ldr.lafayette.edu/collections/mdl-prints">Marquis de Lafayette Prints Collection</a><br>
-        <a href="https://ldr.lafayette.edu/collections/gazette-american-friends-lafayette">Gazette of the American Friends of Lafayette</a><br>
-        <a href="https://ldr.lafayette.edu/collections/shakespeare-bulletin-archive">Shakespeare Bulletin Archive</a>
-      </div>
+    <div id="collapseThree" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingThree">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to 'Alsace-Lorraine Picture Postcard Collection', hyrax.collection_path(id: 'alsace-images') %></li>
+        <li class="list-group-item"><%= link_to 'Marquis de Lafayette Prints Collection', hyrax.collection_path(id: 'mdl-prints') %></li>
+        <li class="list-group-item"><%= link_to 'Gazette of the American Friends of Lafayette', hyrax.collection_path(id: 'gazette-american-friends-lafayette') %></li>
+        <li class="list-group-item"><%= link_to 'Shakespeare Bulletin Archive', hyrax.collection_path(id: 'shakespeare-bulletin-archive') %></li>
+      </ul>
     </div>
   </div>
   <div class="panel panel-default">
@@ -69,29 +69,39 @@
       </h4>
     </div>
     <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-      <div class="panel-body">
-        <a href="https://ldr.lafayette.edu/collections/warner-negs-indonesia">Gerald and Rella Warner Dutch East Indies Negatives</a><br>
-        <a href="https://ldr.lafayette.edu/collections/warner-slides-japan">Gerald and Rella Warner Japan Slides</a><br>
-        <a href="https://ldr.lafayette.edu/collections/warner-negs-manchuria">Gerald and Rella Warner Manchuria Negatives</a><br>
-        <a href="https://ldr.lafayette.edu/collections/warner-postcards">Gerald and Rella Warner Postcards</a><br>
-        <a href="https://ldr.lafayette.edu/collections/warner-souvenirs">Gerald and Rella Warner Souvenirs of Beijing and Tokyo</a><br>
-        <a href="https://ldr.lafayette.edu/collections/warner-negs-taiwan">Gerald and Rella Warner Taiwan Negatives</a><br>
-        <a href="https://ldr.lafayette.edu/collections/imperial-postcards">Imperial Postcards</a><br>
-        <a href="https://ldr.lafayette.edu/collections/gc-iroha01">Japanese History Study Cards</a><br>
-        <a href="https://ldr.lafayette.edu/collections/pa-koshitsu">Japanese Imperial House Postcard Album</a><br>
-        <a href="https://ldr.lafayette.edu/collections/lin-postcards">Lin Chia-Feng Family Postcards</a><br>
-        <a href="https://ldr.lafayette.edu/collections/lewis-postcards">Michael Lewis Postcards</a><br>
-        <a href="https://ldr.lafayette.edu/collections/pacwar-postcards">Pacific War Postcards</a><br>
-        <a href="https://ldr.lafayette.edu/collections/mammana-postcards">Richard Mammana Japanese Empire Postcard Collection</a><br>
-        <a href="https://ldr.lafayette.edu/collections/cpw-nofuko">Scenic Taiwan Book</a><br>
-        <a href="https://ldr.lafayette.edu/collections/pa-omitsu01">Sino-Japanese War Postcard Album 01</a><br>
-        <a href="https://ldr.lafayette.edu/collections/pa-omitsu02">Sino-Japanese War Postcard Album 02</a><br>
-        <a href="https://ldr.lafayette.edu/collections/japan-bronzes">Sven Saaler Postcards of Japanese Bronze Statues</a><br>
-        <a href="https://ldr.lafayette.edu/collections/rjw-stereo">T.W. Ingersoll Co. Stereoviews of the Siege of Port Arthur</a><br>
-        <a href="https://ldr.lafayette.edu/collections/cpw-shashinkai">Taiwan Photographic Monthly Periodical</a><br>
-        <a href="https://ldr.lafayette.edu/collections/tjwar-postcards">The Truku-Japanese War Commemorative Postcard Collection</a><br>
-        <a href="https://ldr.lafayette.edu/collections/pa-tsubokura">Tsubokura Russo-Japanese War Postcard Album</a><br>
-        <a href="https://ldr.lafayette.edu/collections/woodsworth-images">Woodsworth Images</a>
+      <div class="container-fluid" style="margin-top: 1rem;">
+        <div class="row">
+          <div class="col-sm-6">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Dutch East Indies Negatives', hyrax.collection_path(id: 'warner-negs-indonesia') %></li>
+              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Japan Slides', hyrax.collection_path(id: 'warner-slides-japan') %></li>
+              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Manchuria Negatives', hyrax.collection_path(id: 'warner-negs-manchuria') %></li>
+              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Postcards', hyrax.collection_path(id: 'warner-postcards') %></li>
+              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Souvenirs of Beijing and Tokyo', hyrax.collection_path(id: 'warner-souvenirs') %></li>
+              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Taiwan Negatives', hyrax.collection_path(id: 'warner-negs-taiwan') %></li>
+              <li class="list-group-item"><%= link_to 'Imperial Postcards', hyrax.collection_path(id: 'imperial-postcards') %></li>
+              <li class="list-group-item"><%= link_to 'Japanese History Study Cards', hyrax.collection_path(id: 'gc-iroha01') %></li>
+              <li class="list-group-item"><%= link_to 'Japanese Imperial House Postcard Album', hyrax.collection_path(id: 'pa-koshitsu') %></li>
+              <li class="list-group-item"><%= link_to 'Lin Chia-Feng Family Postcards', hyrax.collection_path(id: 'lin-postcards') %></li>
+              <li class="list-group-item"><%= link_to 'Michael Lewis Postcards', hyrax.collection_path(id: 'lewis-postcards') %></li>
+            </ul>
+          </div>
+          <div class="col-sm-6">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><%= link_to 'Pacific War Postcards', hyrax.collection_path(id: 'pacwar-postcards') %></li>
+              <li class="list-group-item"><%= link_to 'Richard Mammana Japanese Empire Postcard Collection', hyrax.collection_path(id: 'mammana-postcards') %></li>
+              <li class="list-group-item"><%= link_to 'Scenic Taiwan Book', hyrax.collection_path(id: 'cpw-nofuko') %></li>
+              <li class="list-group-item"><%= link_to 'Sino-Japanese War Postcard Album 01', hyrax.collection_path(id: 'pa-omitsu01') %></li>
+              <li class="list-group-item"><%= link_to 'Sino-Japanese War Postcard Album 02', hyrax.collection_path(id: 'pa-omitsu02') %></li>
+              <li class="list-group-item"><%= link_to 'Sven Saaler Postcards of Japanese Bronze Statues', hyrax.collection_path(id: 'japan-bronzes') %></li>
+              <li class="list-group-item"><%= link_to 'T.W. Ingersoll Co. Stereoviews of the Siege of Port Arthur', hyrax.collection_path(id: 'rjw-stereo') %></li>
+              <li class="list-group-item"><%= link_to 'Taiwan Photographic Monthly Periodical', hyrax.collection_path(id: 'cpw-shashinkai') %></li>
+              <li class="list-group-item"><%= link_to 'The Truku-Japanese War Commemorative Postcard Collection', hyrax.collection_path(id: 'tjwar-postcards') %></li>
+              <li class="list-group-item"><%= link_to 'Tsubokura Russo-Japanese War Postcard Album', hyrax.collection_path(id: 'pa-tsubokura') %></li>
+              <li class="list-group-item"><%= link_to 'Woodsworth Images', hyrax.collection_path(id: 'woodsworth-images') %></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -103,11 +113,11 @@
         </a>
       </h4>
     </div>
-    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-      <div class="panel-body">
-        <a href="https://ldr.lafayette.edu/collections/time-slice-maps">Deep Time Maps <span class="label label-info">Lafayette College</span></a><br>
-        <a href="https://ldr.lafayette.edu/collections/geology-slides-esi">John S. Shelton Earth Science Image Collection <span class="label label-info">Lafayette College</span></a>
-      </div>
+    <div id="collapseFive" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingFive">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to 'Deep Time Maps', hyrax.collection_path(id: 'time-slice-maps') %> <span class="label label-info">Lafayette College</span></li>
+        <li class="list-group-item"><%= link_to 'John S. Shelton Earth Science Image Collection', hyrax.collection_path(id: 'geology-slides-esi') %> <span class="label label-info">Lafayette College</span></a></li>
+      </ul>
     </div>
   </div>
 </div>
