@@ -126,24 +126,6 @@ Rails.application.config.to_prepare do
     const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
   end
 
-  # Adding support for cloud files in importers
-  Bulkrax::ImportersController.class_eval do
-    private
-
-    def files_for_import(file, cloud_files)
-      return if file.blank? && cloud_files.blank?
-      @importer[:parser_fields]['import_file_path'] = @importer.parser.write_import_file(file)
-      if cloud_files.present?
-        # For BagIt, there will only be one bag, so we get the file_path back and set import_file_path
-        # For CSV, we expect only file uploads, so we won't get the file_path back
-        # and we expect the import_file_path to be set already
-        target = @importer.parser.retrieve_cloud_files(cloud_files)
-        @importer[:parser_fields]['import_file_path'] = target if target.present?
-      end
-      @importer.save
-    end
-  end
-
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
 
@@ -208,30 +190,6 @@ Rails.application.config.to_prepare do
     end
   end
 
-  # Modifying Bulkrax DownloadCloudFiles job to be perform_later
-  # so as not to overwhelm the system with large ingests
-  #
-  # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
-  Bulkrax::CsvParser.class_eval do
-    def retrieve_cloud_files(files)
-      files_path = File.join(path_for_import, 'files')
-      FileUtils.mkdir_p(files_path) unless File.exist?(files_path)
-      files.each_pair do |_key, file|
-        # fixes bug where auth headers do not get attached properly
-        if file['auth_header'].present?
-          file['headers'] ||= {}
-          file['headers'].merge!(file['auth_header'])
-        end
-        # this only works for uniquely named files
-        target_file = File.join(files_path, file['file_name'].tr(' ', '_'))
-        # Now because we want the files in place before the importer runs
-        # Problematic for a large upload
-        Bulkrax::DownloadCloudFileJob.perform_later(file, target_file)
-      end
-      nil
-    end
-  end
-
   # Modifying how Questiong Authority returns AssignFAST results by
   # converting fst ids into URLs
   require 'qa/authorities/assign_fast'
@@ -290,4 +248,33 @@ Rails.application.config.to_prepare do
 
   # Add support for downloading file_set transcripts
   Hyrax::DownloadsController.prepend(Spot::DownloadsControllerBehavior)
+
+  # Modifying Bulkrax ImporterJob so that it correctly fetches file sizes
+  #
+  # @see https://github.com/samvera/bulkrax/blob/v5.5.1/app/parsers/bulkrax/csv_parser.rb#L258
+  #
+  Bulkrax::ImporterJob.class_eval do
+    # checks the file sizes of the download files to match the original files
+    def all_files_completed?(importer)
+      cloud_files = importer.parser_fields['cloud_file_paths']
+      original_files = importer.parser_fields['original_file_paths']
+      return true unless cloud_files.present? && original_files.present?
+
+      imported_file_sizes = cloud_files.map { |_, v| get_file_size_from_s3(v['url']) }
+      original_file_sizes = original_files.map { |imported_file| File.size(imported_file) }
+
+      original_file_sizes == imported_file_sizes
+    end
+
+    # s3 file size fetch
+    # @todo should we add handling for other types of cloud files?
+    def get_file_size_from_s3(url)
+      uri_parsed = ::Addressable::URI.parse(url)
+      return unless uri_parsed.scheme == 's3'
+
+      client = Aws::S3::Client.new
+      resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])
+      resp.content_length
+    end
+  end
 end
