@@ -1,5 +1,5 @@
-spot / ldr
-===========
+spot
+====
 
 Spot is the codebase for the [Lafayette College Digital Repository]. It is a Ruby on Rails application
 using the [Samvera] community's [Hyrax] engine to interact with a [Fedora Commons Repository] and
