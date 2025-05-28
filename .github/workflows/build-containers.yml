@@ -35,29 +35,7 @@ jobs:
     strategy:
       matrix:
         environment: ${{ fromJson(inputs.environments) }}
-        service:
-          -
-            name: rails
-            image: lafayette/rails
-            context: .
-            target: spot-web-production
-          -
-            name: sidekiq
-            image: lafayette/sidekiq
-            context: .
-            target: spot-worker-production
-          -
-            name: solr
-            image: lafayette/solr
-            context: ./docker/solr
-          -
-            name: fcrepo
-            image: lafayette/fc
-            context: ./docker/fcrepo
-          -
-            name: fits_servlet
-            image: lafayette/fits_servlet
-            context: ./docker/fits_servlet
+        service: ${{ fromJson(inputs.services) }}
     steps:
       - uses: actions/checkout@v4
       -
@@ -71,12 +49,42 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
-        name: Build and push ${{ matrix.service.image }} container
+        name: Get service config
+        id: service
+        env:
+          CURRENT_SERVICE: ${{ matrix.service }}
+        run: |
+          config='{}'
+          case "${CURRENT_SERVICE}" in
+            "rails")
+              echo "image=lafayette/rails" >> "$GITHUB_OUTPUT"
+              echo "context=." >> "$GITHUB_OUTPUT"
+              echo "target=spot-web-production" >> "$GITHUB_OUTPUT"
+              ;;
+            "sidekiq")
+              echo "image=lafayette/sidekiq" >> "$GITHUB_OUTPUT"
+              echo "context=." >> "$GITHUB_OUTPUT"
+              echo "target=spot-worker-production" >> "$GITHUB_OUTPUT"
+              ;;
+            "solr")
+              echo "image=lafayette/solr" >> "$GITHUB_OUTPUT"
+              echo "context=./docker/solr" >> "$GITHUB_OUTPUT"
+              ;;
+            "fcrepo")
+              echo "image=lafayette/fc" >> "$GITHUB_OUTPUT"
+              echo "context=./docker/fcrepo" >> "$GITHUB_OUTPUT"
+              ;;
+            "fits_servlet")
+              echo "image=lafayette/fits_servlet" >> "$GITHUB_OUTPUT"
+              echo "context=./docker/fits_servlet" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+      -
+        name: Build and push ${{ steps.service.outputs.image }} container
         uses: ./.github/actions/build-container
-        if: ${{ contains(fromJson(inputs.services), matrix.service.name) }}
         with:
           registry: ${{ secrets.registry || 'docker.io' }}
           tag: ${{ inputs.tag }}
-          image_name: ${{ matrix.service.image }}
-          context: ${{ matrix.service.context }}
-          target: ${{ matrix.service.target }}
+          image_name: ${{ steps.service.outputs.image }}
+          context: ${{ steps.service.outputs.context }}
+          target: ${{ steps.service.outputs.target }}

@@ -9,7 +9,7 @@ on:
         type: choice
         options:
           - All
-          - Rails/Sidekiq
+          - Rails/Sidekiq/FITS Servlet
           - Fedora Commons Repository
           - Solr
           - FITS Servlet
@@ -32,12 +32,8 @@ permissions:
   checks: write
 
 jobs:
-  lint_and_test:
-    name: Lint + Test
-    if: ${{ inputs.skip_tests == false }}
-    uses: ./.github/workflows/lint-and-test.yml
-
-  translate_inputs:
+  parse_inputs:
+    name: Parse Inputs
     runs-on: ubuntu-latest
     outputs:
       containers: ${{ steps.container_choices.outputs.containers }}
@@ -50,13 +46,13 @@ jobs:
       env:
         CONTAINER_CHOICE: ${{ inputs.service }}
       run: |
-        output_txt=''
+        output_txt='containers=[]'
 
         case "${CONTAINER_CHOICE}" in
           "All")
             output_txt='containers=["rails","sidekiq","fcrepo","solr","fits_servlet"]'
             ;;
-          "Rails/Sidekiq")
+          "Rails/Sidekiq/FITS Servlet")
             output_txt='containers=["rails","sidekiq","fits_servlet"]'
             ;;
           "Solr")
@@ -76,7 +72,7 @@ jobs:
       env:
         ENVIRONMENT_CHOICE: ${{ inputs.environment }}
       run: |
-        output_txt=''
+        output_txt='environments=[]'
 
         case "${ENVIRONMENT_CHOICE}" in
           "Both")
@@ -97,15 +93,22 @@ jobs:
         BRANCH_NAME: ${{ github.ref_name }}
       run: echo "tag=$BRANCH_NAME" >> "${GITHUB_OUTPUT}"
 
+  lint_and_test:
+    name: Lint + Test
+    if: ${{ !inputs.skip_tests }}
+    needs: [parse_inputs]
+    uses: ./.github/workflows/lint-and-test.yml
+
   build_containers:
     name: Build Containers
     uses: ./.github/workflows/build-containers.yml
-    needs: [lint_and_test,translate_inputs]
+    needs: [parse_inputs, lint_and_test]
+    if: ${{ always() }}
     secrets:
       registry: ${{ secrets.CONTAINER_REGISTRY }}
       username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
       password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
     with:
-      tag: ${{ needs.translate_inputs.outputs.tag }}
-      services: ${{ needs.translate_inputs.outputs.containers }}
-      environments: ${{ needs.translate_inputs.outputs.environments }}
+      tag: ${{ needs.parse_inputs.outputs.tag }}
+      services: ${{ needs.parse_inputs.outputs.containers }}
+      environments: ${{ needs.parse_inputs.outputs.environments }}
