@@ -35,9 +35,9 @@ RSpec.describe Hyrax::Actors::PublicationActor do
       before { allow(work).to receive(:embargo).and_return embargo }
 
       let(:embargo) do
-        instance_double(Hydra::AccessControls::Embargo,
-                        embargo_release_date: tomorrow_time,
-                        to_hash: {})
+        Hyrax::Embargo.new(embargo_release_date: tomorrow_time,
+                           visibility_during_embargo: 'metadata',
+                           visibility_after_embargo: 'open')
       end
       let(:tomorrow_time) { Time.zone.tomorrow }
       let(:tomorrow) { tomorrow_time.strftime('%Y-%m-%d') }

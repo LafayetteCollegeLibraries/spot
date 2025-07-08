@@ -9,7 +9,7 @@ RSpec.describe Spot::ControlledVocabularies::AssignFastSubject do
 
   describe '#fetch' do
     let(:search_url) do
-      "http://fast.oclc.org/searchfast/fastsuggest?&query=#{fast_id_number}&queryIndex=idroot&queryReturn=idroot%2Cidroot%2Cauth%2Ctype&suggest=autoSubject&rows=20"
+      "https://fast.oclc.org/fastsuggest?&query=#{fast_id_number}&queryIndex=idroot&queryReturn=idroot%2Cidroot%2Cauth%2Ctype&sort=usage%20desc&suggest=autoSubject&rows=20"
     end
 
     let(:search_response) do
