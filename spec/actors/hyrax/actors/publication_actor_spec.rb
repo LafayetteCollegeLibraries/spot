@@ -32,12 +32,16 @@ RSpec.describe Hyrax::Actors::PublicationActor do
     end
 
     context 'when an embargo is set for the work' do
-      before { allow(work).to receive(:embargo).and_return embargo }
+      before do
+        work.embargo = embargo
+      end
 
       let(:embargo) do
-        Hyrax::Embargo.new(embargo_release_date: tomorrow_time,
-                           visibility_during_embargo: 'metadata',
-                           visibility_after_embargo: 'open')
+        Hydra::AccessControls::Embargo.create!(
+          embargo_release_date: tomorrow_time,
+          visibility_during_embargo: 'metadata',
+          visibility_after_embargo: 'open'
+        )
       end
       let(:tomorrow_time) { Time.zone.tomorrow }
       let(:tomorrow) { tomorrow_time.strftime('%Y-%m-%d') }
