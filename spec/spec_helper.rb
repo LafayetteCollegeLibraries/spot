@@ -68,6 +68,10 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+# DatabaseCleaner will raise an error if the db is configured to a remote url,
+# which is how we're using our local docker setup, so we need to tell it to chill out
+DatabaseCleaner.allow_remote_database_url = true
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`

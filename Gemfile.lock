@@ -55,7 +55,7 @@ GEM
       activemodel (= 5.2.8.1)
       activesupport (= 5.2.8.1)
       arel (>= 9.0)
-    activerecord-import (1.4.1)
+    activerecord-import (2.2.0)
       activerecord (>= 4.2)
     activestorage (5.2.8.1)
       actionpack (= 5.2.8.1)
@@ -105,6 +105,7 @@ GEM
     bagit (0.6.0)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
+    base64 (0.3.0)
     bcp47 (0.3.3)
       i18n
     bcrypt (3.1.19)
@@ -216,6 +217,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    csv (3.3.5)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.1.0)
@@ -366,7 +368,9 @@ GEM
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
     gems (1.2.0)
-    geocoder (1.8.2)
+    geocoder (1.8.5)
+      base64 (>= 0.1.0)
+      csv (>= 3.0.0)
     gli (2.21.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
@@ -721,14 +725,14 @@ GEM
     public_suffix (5.0.3)
     puma (6.4.2)
       nio4r (~> 2.0)
-    qa (5.11.0)
+    qa (5.15.0)
       activerecord-import
       deprecation
       faraday (< 3.0, != 2.0.0)
       geocoder
       ldpath
       nokogiri (~> 1.6)
-      rails (>= 5.0, < 7.2)
+      rails (>= 5.0, < 8.1)
       rdf
     raabro (1.4.0)
     racc (1.7.3)
