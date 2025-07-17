@@ -36,6 +36,9 @@ module Qa::Authorities
   class SolrSuggest
     BUILD_ALL_KEYWORD = :__all__
 
+    class_attribute :linked_data, instance_writer: false\
+    self.linked_data = false
+
     attr_reader :dictionary
 
     def self.build_dictionaries!
@@ -60,16 +63,8 @@ module Qa::Authorities
       connection.get(suggest_path, params: params)
     end
 
-    # @return [RSolr::Client]
-
-    def search(query)
-      solr_suggestion_for_query(query)
-    end
-
-    def term(_id)
-      {}
-    end
-
+    # Base API methods
+    #
     # @see https://github.com/samvera/questioning_authority/blob/main/lib/qa/authorities/base.rb
     def all
       []
@@ -79,10 +74,33 @@ module Qa::Authorities
       {}
     end
 
+    def linked_data?
+      self.class.linked_data == true
+    end
+
+    # Search for the query in the provided Solr suggest dictionary and parse the results.
+    #
+    # @see https://solr.apache.org/guide/7_7/suggester.html#example-usages
+    # @see https://github.com/samvera/questioning_authority/blob/v5.15.0/lib/qa/authorities/assign_fast/generic_authority.rb#L26-L39
+    # @return [Array<Hash>]
+    def search(query)
+      params = {
+        'suggest.q' => query,
+        'suggest.dictionary' => dictionary
+      }
+
+      raw = connection.get(suggest_path, params: params)
+      parse_raw_response(raw, query: query)
+    end
+
+    def term(_id)
+      {}
+    end
+
     private
 
     def connection
-      ActiveFedora::SolrService.instance.conn
+      Hyrax::SolrService.instance.conn
     end
 
     # @return [String]
@@ -91,18 +109,6 @@ module Qa::Authorities
         url = Rails.application.config_for(:solr)['url']
         URI.join(url + '/', 'suggest').path
       end
-    end
-
-    # @param [String] query
-    # @return [Array<Hash<String => String>>]
-    def solr_suggestion_for_query(query)
-      params = {
-        'suggest.q' => query,
-        'suggest.dictionary' => dictionary
-      }
-
-      raw = connection.get(suggest_path, params: params)
-      parse_raw_response(raw, query: query)
     end
 
     # Takes the Solr response and transforms the results into the

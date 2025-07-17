@@ -9,8 +9,8 @@ RSpec.describe Qa::Authorities::SolrSuggest do
     subject { authority.search('good') }
 
     before do
-      objects.each { |obj| ActiveFedora::SolrService.add(obj) }
-      ActiveFedora::SolrService.commit
+      objects.each { |obj| Hyrax::SolrService.add(obj) }
+      Hyrax::SolrService.commit
 
       described_class.build_dictionaries!
     end
