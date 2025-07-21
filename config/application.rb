@@ -6,7 +6,7 @@ require 'sprockets/es6'
 require 'rack-cas/session_store/active_record'
 require 'deprecation'
 
-if ENV.fetch('SPOT_IGNORE_DEPRECATIONS', false)
+if ActiveModel::Type::Boolean.new.cast(ENV.fetch('SPOT_IGNORE_DEPRECATIONS', false))
   ActiveSupport::Deprecation.silence do
     Deprecation.default_deprecation_behavior = :silence
 
