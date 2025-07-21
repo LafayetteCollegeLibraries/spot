@@ -4,10 +4,21 @@ require_relative 'boot'
 require 'rails/all'
 require 'sprockets/es6'
 require 'rack-cas/session_store/active_record'
+require 'deprecation'
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(*Rails.groups)
+if ENV.fetch('SPOT_IGNORE_DEPRECATIONS', false)
+  ActiveSupport::Deprecation.silence do
+    Deprecation.default_deprecation_behavior = :silence
+
+    # Require the gems listed in Gemfile, including any gems
+    # you've limited to :test, :development, or :production.
+    Bundler.require(*Rails.groups)
+  end
+else
+  # Require the gems listed in Gemfile, including any gems
+  # you've limited to :test, :development, or :production.
+  Bundler.require(*Rails.groups)
+end
 
 module Spot
   class Application < Rails::Application

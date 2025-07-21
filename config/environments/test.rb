@@ -35,7 +35,5 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  config.active_support.deprecation = :stderr
-
   config.active_job.queue_adapter = :test
 end
