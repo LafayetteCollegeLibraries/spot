@@ -19,6 +19,29 @@ RSpec.describe Spot::CollectionHelper, type: :helper do
     end
   end
 
+  describe '.collection_logo_file_path' do
+    subject { helper.collection_logo_file_path(presenter) }
+
+    let(:presenter) { instance_double(Spot::CollectionPresenter, logo_record: logo_record_payload) }
+
+    context 'when collection has a logo file' do
+      let(:logo_record_payload) do
+        [{ alttext: "",
+           file: "cool-logo.jpg",
+           file_location: "/branding/collectionid/logo/cool-logo.jpg",
+           linkurl: nil }]
+      end
+
+      it { is_expected.to eq logo_record_payload.first[:file_location] }
+    end
+
+    context 'when collection has no logo file' do
+      let(:logo_record_payload) { [] }
+
+      it { is_expected.to eq helper.image_path('unauthorized.png') }
+    end
+  end
+
   describe '.render_related_resource_language' do
     subject(:rendered_language) { helper.render_related_resource_language(presenter) }
 
