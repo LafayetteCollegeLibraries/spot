@@ -5,9 +5,24 @@ require 'rails/all'
 require 'sprockets/es6'
 require 'rack-cas/session_store/active_record'
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(*Rails.groups)
+# Some gems in the Samvera stack use the 'deprecation' gem instead of
+# ActiveSupport::Deprecation calls, so we need to also set _that_ gem's
+# default behavior before requiring the stack's dependencies.
+#
+# @note dry-types uses its own Deprecation class but doesn't provide an API for silencing
+if ActiveModel::Type::Boolean.new.cast(ENV.fetch('SPOT_IGNORE_DEPRECATIONS', false))
+  require 'deprecation'
+
+  ActiveSupport::Deprecation.silence do
+    Deprecation.default_deprecation_behavior = :silence
+
+    Bundler.require(*Rails.groups)
+  end
+else
+  # Require the gems listed in Gemfile, including any gems
+  # you've limited to :test, :development, or :production.
+  Bundler.require(*Rails.groups)
+end
 
 module Spot
   class Application < Rails::Application
