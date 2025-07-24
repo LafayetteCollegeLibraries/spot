@@ -1,8 +1,21 @@
 # frozen_string_literal: true
 module Spot
   module CollectionHelper
+    # Fetch the path of the collection's branding banner
+    #
+    # @param [Hyrax::CollectionPresenter] presenter
+    # @return [String]
     def collection_banner_file_path(presenter)
       image_path(presenter.banner_file.presence || 'default-collection-background.jpg')
+    end
+
+    # Fetch the path of the collection's branding logo (square)
+    #
+    # @param [Hyrax::CollectionPresenter] presenter
+    # @return [String]
+    def collection_logo_file_path(presenter)
+      record = presenter.logo_record.first || {}
+      record.fetch(:file_location, image_path('unauthorized.png'))
     end
 
     # Responsible for generating the text that preceeds a collection's

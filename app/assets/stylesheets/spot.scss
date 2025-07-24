@@ -99,11 +99,12 @@ select[multiple] {
 }
 
 .collection-list-item {
-  .banner-container {
+  .collection-logo-container {
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: cover;
-    height: 200px;
+    background-size: contain;
+    height: 300px;
+    margin: 1em;
   }
 
   .thumbnail .caption {
