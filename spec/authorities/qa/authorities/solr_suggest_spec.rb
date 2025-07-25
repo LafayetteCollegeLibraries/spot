@@ -9,8 +9,8 @@ RSpec.describe Qa::Authorities::SolrSuggest do
     subject { authority.search('good') }
 
     before do
-      objects.each { |obj| ActiveFedora::SolrService.add(obj) }
-      ActiveFedora::SolrService.commit
+      objects.each { |obj| Hyrax::SolrService.add(obj) }
+      Hyrax::SolrService.commit
 
       described_class.build_dictionaries!
     end
@@ -54,5 +54,11 @@ RSpec.describe Qa::Authorities::SolrSuggest do
     subject { authority.all }
 
     it { is_expected.to eq [] }
+  end
+
+  describe '#linked_data?' do
+    subject { authority.linked_data? }
+
+    it { is_expected.to be false }
   end
 end
