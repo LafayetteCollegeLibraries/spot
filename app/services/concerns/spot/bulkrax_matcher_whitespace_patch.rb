@@ -4,8 +4,9 @@ module Spot
   # raw contents _before_ passing the value to a parse method, so we don't really have direct access to
   # the original parsed value unless #result is patched.
   #
+  # @see spec/matchers/bulkrax/application_matcher_spec.rb (for specs)
+  # @see config/initializers/spot_overrides.rb (for inclusion)
   # @see https://github.com/samvera/bulkrax/blob/v9.1.0/app/matchers/bulkrax/application_matcher.rb#L17C1-L33C8
-
   module BulkraxMatcherWhitespacePatch
     extend ActiveSupport::Concern
 
