@@ -36,7 +36,7 @@ module Qa::Authorities
   class SolrSuggest
     BUILD_ALL_KEYWORD = :__all__
 
-    class_attribute :linked_data, instance_writer: false\
+    class_attribute :linked_data, instance_writer: false
     self.linked_data = false
 
     attr_reader :dictionary
