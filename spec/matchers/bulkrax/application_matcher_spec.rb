@@ -4,7 +4,7 @@
 # @see config/initializers/spot_overrides.rb
 RSpec.describe Bulkrax::ApplicationMatcher do
   describe 'Spot patch' do
-    let(:matcher) { described_class.new(split: /\|/) }
+    let(:matcher) { described_class.new(split: /\|/, if: ['match?', /\r?\n/]) }
 
     it 'preserves newlines in content' do
       result = matcher.result(nil, "this is one line.\r\nthis is another one")
