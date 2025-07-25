@@ -9,11 +9,14 @@ module Spot
   module BulkraxMatcherWhitespacePatch
     extend ActiveSupport::Concern
 
+    # This is copied verbatim from Hyrax source, save for the gsub modification, and
+    # as such Rubocop needs to back off.
+    #
+    # rubocop:disable all
     def result(_parser, content)
       return nil if self.excluded == true || Bulkrax.reserved_properties.include?(self.to)
-      # rubocop:disable Style/RedundantParentheses
+
       return nil if self.if && (!self.if.is_a?(Array) && self.if.length != 2)
-      # rubocop:enable Style/RedundantParentheses
       if self.if
         return unless content.send(self.if[0], Regexp.new(self.if[1]))
       end
@@ -31,5 +34,6 @@ module Spot
 
       @result
     end
+    # rubocop:enable all
   end
 end
