@@ -55,4 +55,10 @@ RSpec.describe Qa::Authorities::SolrSuggest do
 
     it { is_expected.to eq [] }
   end
+
+  describe '#linked_data?' do
+    subject { authority.linked_data? }
+
+    it { is_expected.to be false }
+  end
 end
