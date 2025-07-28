@@ -278,6 +278,14 @@ Rails.application.config.to_prepare do
     end
   end
 
+  # Bulkrax's parser replaces any whitespace character with a space, which kills paragraph breaks
+  # and newlines. Our patch modifies the base #result method to only replace tabs with
+  # spaces and strip lead/trailing spaces.
+  #
+  # @see app/services/concerns/spot/bulkrax_matcher_whitespace_patch.rb
+  # @see spec/matchers/bulkrax/application_matcher_spec.rb
+  Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxMatcherWhitespacePatch)
+
   # Modifying the Downloads Controller to not send an unauthorized status for requests.
   # The unauthorized status breaks the laf only thumbnail.
   #
