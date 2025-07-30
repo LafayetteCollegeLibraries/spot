@@ -145,6 +145,9 @@ gem 'simple_form', '< 5.2'
 # video file resource for getting information on video derivatives
 gem 'ffprober'
 
+# gems for log management
+gem 'lograge'
+
 # development dependencies (not as necessary to lock down versions here)
 group :development do
   # Seed data
