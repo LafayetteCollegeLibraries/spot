@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 RSpec.describe AudioVisualResourceIndexer, valkyrization: true do
+  let(:solr_document) { described_class.new(resource: resource).to_solr }
+  let(:resource) { FactoryBot.valkyrie_create(:audio_visual_resource_with_required_fields_only) }
+
   it_behaves_like 'a BaseResourceIndexer'
 
   describe 'audio_visual_metadata' do

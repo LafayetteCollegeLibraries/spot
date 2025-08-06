@@ -153,6 +153,8 @@ gem 'sprockets-es6', '~> 0.9.2'
 
 gem 'twitter-typeahead-rails', '~> 0.11.1'
 
+gem 'valkyrie-shrine', '~> 1.0.0'
+
 # development dependencies (not as necessary to lock down versions here)
 group :development do
   # Seed data

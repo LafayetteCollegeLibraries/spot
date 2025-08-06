@@ -32,7 +32,6 @@ RSpec.shared_examples 'it includes Hyrax::FormFields' do |opts|
       let(:change_value) { is_multiple ? [value.to_s] : value.to_s }
 
       it do
-        # byebug if key == :rights_statement
         expect { form[key] = change_value }
           .to change { form[key] }
           .from(original_value)

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 RSpec.describe ImageResourceIndexer, valkyrization: true do
+  let(:solr_document) { described_class.new(resource: resource).to_solr }
+  let(:resource) { FactoryBot.valkyrie_create(:image_resource_with_required_fields_only) }
+
   it_behaves_like 'a BaseResourceIndexer'
 
   describe 'image_metadata' do

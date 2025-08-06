@@ -2,16 +2,33 @@
 module Spot
   # Helper module for obtaining labels for ISO-639-1 values. Uses +I18n+ gem to allow
   # custom labels for languages to be provided as a locale file (see +config/locales/iso_639.en.yml+)
-  module ISO6391
+  class Iso6391
     # All of the ISO-639-1 entries in a key/val hash
     #
     # @example
-    #   Spot::LanguageAuthority.all.first.to_h
+    #   Spot::Iso6391.all.first.to_h
     #   # => {'aa' => 'Afar'}
     #
     # @return [Array<Hash<String => String>>]
     def self.all
       @all ||= ISO_639::ISO_639_1.select { |e| e.alpha2.present? }.map { |e| [e.alpha2, label_for(e.alpha2)] }.to_h
+    end
+
+    # Wrapper method for fetching a label
+    #
+    # @example
+    #   Spot::Iso6391.label_for('en')
+    #   # => 'English'
+    #
+    # @return [String]
+    def self.label_for(id)
+      new(id).label
+    end
+
+    # To make life a little easier for indexing, adding simple wrapper behavior that conforms to the
+    # pieces of Spot::ContorlledVocabularies::* that are used in the process.
+    def initialize(key)
+      @key = key.to_s.downcase
     end
 
     # Find the label for a language by its 2-char entry.
@@ -23,9 +40,11 @@ module Spot
     #
     # @param [String] id
     # @return [String, NilClass]
-    def self.label_for(id)
-      id = id.to_s.downcase
-      I18n.t(id, scope: ['iso_639_1'], default: [ISO_639.find(id)&.english_name, id])
+    def label
+      I18n.t(@key, scope: ['iso_639_1'], default: [ISO_639.find(@key)&.english_name, @key])
     end
+
+    # @see {Spot::RemoteLabelIndexing}
+    alias preferred_label label
   end
 end

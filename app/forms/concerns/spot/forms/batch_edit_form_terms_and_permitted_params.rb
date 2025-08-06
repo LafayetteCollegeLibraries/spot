@@ -1,8 +1,17 @@
 # frozen_string_literal: true
-
-# instead of copying Hyrax::Forms::BatchEditForm locally, which is causing conflicts
-# with loading Hyrax::Forms::ResourceForm (method form), use class_eval to apply those
-# patches, which will be unnecessary once we're valkyrized.
+#
+# Mixin to modify Hyrax's BatchEditForm fields to add our own common metadata fields
+# to the form. Originally written as a class_eval in spot_overrides, this Module is now
+# intended to be included in the spot_overrides file like:
+#
+# @example
+#   Rails.application.reloader.to_prepare do
+#     # ...
+#     Hyrax::Forms::BatchEditForm.include(Spot::Forms::BatchEditFormTermsAndPermittedParams)
+#   end
+#
+# @note This is used for the pre-Valkyrization forms and can be removed once we're fully Valkyrized.
+# @see config/initializers/spot_overrides.rb
 module Spot
   module Forms
     module BatchEditFormTermsAndPermittedParams

@@ -1,41 +1,29 @@
 # frozen_string_literal: true
+RSpec.feature 'Create an Image', :js, :clean do
+  let(:i18n_term) { I18n.t(:'activefedora.models.image') }
+  let(:app_name) { I18n.t('hyrax.product_name') }
+  let(:subject_uri) { 'http://id.worldcat.org/fast/1061714' }
+  let(:attrs) { attributes_for(:image, subject: [subject_uri]) } # should this be a :image_resource?
+  let(:admin_user) { create(:admin_user) }
+  let(:public_user) { create(:user) }
 
-RSpec.feature 'Create an Image', :clean, :js do
   before do
     stub_request(:get, subject_uri)
     stub_request(:get, /fast\.oclc\.org\/fastsuggest/)
 
-    # Only enqueue the ingest job, not charactarization.
-    # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
-    ActiveJob::Base.queue_adapter.filter = [IngestJob, ValkyrieIngestJob]
+    ensure_deposit_access_for(admin_user)
 
-    AdminSet.find_or_create_default_admin_set_id
-    login_as user
+    allow(CharacterizeJob).to receive(:perform_later)
   end
 
-  let(:i18n_term) { I18n.t(:'activefedora.models.image') }
-  let(:app_name) { I18n.t('hyrax.product_name') }
-  let(:subject_uri) { 'http://id.worldcat.org/fast/1061714' }
-  let(:attrs) { attributes_for(:image, subject: [subject_uri]) }
+  describe 'the create_image page' do
+    context 'as an admin user' do
+      let(:user) { admin_user }
 
-  context 'a logged in admin user' do
-    let(:user) { create(:admin_user) }
-    let(:attrs) { attributes_for(:image) }
+      scenario 'provides a form to edit' do
+        sign_in user
 
-    # currently we're hiding the new Image form from the nav menus,
-    # the thinking is that Images are likely to be ingested as part of
-    # a batch, rather than individually. if that changes, you'll want
-    # to uncomment the block below
-    describe 'can fill out and submit a new Image' do
-      scenario do
-        visit '/dashboard'
-        click_link 'Works'
-        click_link 'Add New Work'
-
-        sleep 1
-
-        choose 'Image'
-        click_button 'Create work'
+        visit '/concern/images/new'
 
         expect(page).to have_content "Add New #{i18n_term}"
 

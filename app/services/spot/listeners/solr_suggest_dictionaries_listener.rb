@@ -14,7 +14,7 @@ module Spot
     #
     class SolrSuggestDictionariesListener
       def on_object_metadata_updated(_event)
-        Spot::UpdateSolrSuggestDictionariesJob.perform_now
+        ::Spot::UpdateSolrSuggestDictionariesJob.perform_now
       end
     end
   end

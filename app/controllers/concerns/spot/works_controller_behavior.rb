@@ -27,17 +27,17 @@ module Spot
     #       I'm assuming this is fixed upstream, so I'm just going to
     #       patch this for now.
     # @todo Remove when Hyrax > 5
-    def build_form
-      super
-    rescue ArgumentError
-      @form = work_form_service.form_class(curation_concern).new(curation_concern)
-    end
+    # def build_form
+    #   super()
+    # rescue ArgumentError
+    #   @form = work_form_service.form_class(curation_concern).new(curation_concern)
+    # end
 
     def additional_response_formats(wants)
       super
 
       wants.csv do
-        content = Spot::WorkCSVService.new(presenter.solr_document).csv
+        content = Spot::WorkCsvService.new(presenter.solr_document).csv
         send_data(content, type: 'text/csv', filename: "#{presenter.id}.csv")
       end
     end
@@ -50,7 +50,7 @@ module Spot
     #
     # :nocov:
     def iiif_manifest_presenter
-      ::Spot::IiifManifestPresenter.new(search_result_document(search_params)).tap do |p|
+      ::Spot::IiifManifestPresenter.new(search_result_document(id: params[:id], defType: 'lucene')).tap do |p|
         p.hostname = request.hostname
         p.ability = current_ability
       end

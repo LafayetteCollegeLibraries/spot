@@ -33,6 +33,7 @@ FactoryBot.define do
     date_modified { Time.now.utc }
     date_uploaded { Time.now.utc }
     depositor { 'repository@lafayette.edu' }
+    alternate_ids { [] }
   end
 
   trait :image_metadata do

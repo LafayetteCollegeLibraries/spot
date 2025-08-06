@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 #
-# Helper methods for feature specs to construct css selectors for work types and their fields.
-# This is particularly necessary during the Valkyrization process as the selector prefixes change
-# based on the type of resource being loaded (eg. "publication" vs "publication_resource").
+# Helper methods for feature specs. Most of these are used to construct css selectors for work types
+# and their fields.This is particularly necessary during the Valkyrization process as the selector
+# prefixes change based on the type of resource being loaded (eg. "publication" vs "publication_resource").
 # Included are methods to return just the work prefix.
 #
 # @example with Hyrax.config.use_valkyrie? == true
@@ -21,7 +21,26 @@
 #   image_selector_prefix
 #   #=> "image"
 #
+#
+# Also included is a helper method used to ensure that a passed user is able
+# to deposit works into the repository.
 module FeatureSpecHelpers
+  # Ensures that the provided user is able to deposit into the default admin_set
+  #
+  # @param [User] user
+  # @return [Hyrax::PermissionTemplateAccess]
+  def ensure_deposit_access_for(user)
+    default_admin_set_id = Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id
+    permission_template = Hyrax::PermissionTemplate.find_or_create_by!(source_id: default_admin_set_id)
+
+    Hyrax::PermissionTemplateAccess.find_or_create_by!(
+      permission_template: permission_template,
+      agent_type: 'user',
+      agent_id: user.email,
+      access: 'deposit'
+    )
+  end
+
   # @param [Symbol,#to_s] field
   # @return [String]
   def audio_visual_selector_for(field)
@@ -76,6 +95,7 @@ module FeatureSpecHelpers
   # @option [Symbol,#to_s] type
   # @return [String]
   def selector_prefix_for(type:)
-    Hyrax.config.use_valkyrie? ? "#{type}_resource" : type.to_s
+    type.to_s
+    # Hyrax.config.use_valkyrie? ? "#{type}_resource" : type.to_s
   end
 end

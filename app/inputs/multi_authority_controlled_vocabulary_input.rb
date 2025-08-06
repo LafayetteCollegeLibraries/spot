@@ -7,14 +7,12 @@
 #   # app/views/records/edit_fields/_some_field.html.erb
 #   # note: the values for the "authorities" property are the ids
 #   # in config/authorities/remote_authorities.yml
-#   <%=
-#       f.input :some_field,
-#       as: :multi_authority_controlled_vocabulary,
-#       placeholder: 'Search for a value',
-#       authorities: [:geonames, :fast],
-#       wrapper_html: { data: { 'field-name' => 'some_field' } },
-#       required: f.object.required?(:some_field)
-#   %>
+#   <%= f.input :some_field,
+#               as: :multi_authority_controlled_vocabulary,
+#               placeholder: 'Search for a value',
+#               authorities: [:geonames, :fast],
+#               wrapper_html: { data: { 'field-name' => 'some_field' } },
+#               required: f.object.required?(:some_field) %>
 #
 class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
   def input_type
@@ -77,7 +75,8 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
   def collection_values
     val = object[attribute_name]
     col = val.respond_to?(:to_ary) ? val.to_ary : val
-    col.reject { |value| value.respond_to?(:node?) ? value.node? : value.to_s.strip.blank? } + [cv_klass.new]
+    # col.reject { |value| value.respond_to?(:node?) ? value.node? : value.to_s.strip.blank? } + [cv_klass.new]
+    col.reject { |value| value.try(:node?) == true }
   end
 
   # class name of the controlled vocabulary for this property

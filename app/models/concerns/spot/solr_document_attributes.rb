@@ -106,6 +106,9 @@ module Spot
       attribute :citation_issue,         ::Blacklight::Types::String, 'citation_issue_ss'
       attribute :citation_firstpage,     ::Blacklight::Types::String, 'citation_firstpage_ss'
       attribute :citation_lastpage,      ::Blacklight::Types::String, 'citation_lastpage_ss'
+
+      # oai attributes
+      attribute :file_format,            ::Blacklight::Types::Array,  'file_format_ssim'
     end
 
     # module ClassMethods

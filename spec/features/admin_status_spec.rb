@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.feature 'the system status dashboard panel', js: false do
+RSpec.feature 'the system status dashboard panel' do
   include_context 'Capybara host'
 
   before do

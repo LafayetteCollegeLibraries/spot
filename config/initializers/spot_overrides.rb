@@ -26,15 +26,6 @@ Rails.application.reloader.to_prepare do
 
   Hyrax::CurationConcern.actor_factory.swap(Hyrax::Actors::CollectionsMembershipActor, Spot::Actors::CollectionsMembershipActor)
 
-  # Use our own FileSetDerivativesService first and fall back to the Hyrax services
-  # for formats we don't currently handle uniquely.
-  #
-  # @todo move this to the Hyrax initializer?
-  Hyrax.config.derivative_services = [
-    ::Spot::FileSetDerivativesService,
-    ::Hyrax::FileSetDerivativesService
-  ]
-
   # Change the layout used for pages and the contact form
   Hyrax::ContactFormController.prepend(Spot::OneColumnLayout)
   Hyrax::PagesController.prepend(Spot::OneColumnLayout)
@@ -163,19 +154,19 @@ Rails.application.reloader.to_prepare do
     end
   end
 
-  ValkyrieIngestJob.class_eval do
-    def ingest(file:, pcdm_use:)
-      file_set_id = Valyrie::ID.new(Hyrax::Base.uri_to_id(file.file_set_uri))
-      file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: file_set_id)
+  # ValkyrieIngestJob.class_eval do
+  #   def ingest(file:, pcdm_use:)
+  #     file_set_id = Valkyrie::ID.new(Hyrax::Base.uri_to_id(file.file_set_uri))
+  #     file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: file_set_id)
 
-      upload_file(
-        file: file,
-        file_set: file_set,
-        pcdm_use: pcdm_use,
-        user: file.user
-      )
-    end
-  end
+  #     upload_file(
+  #       file: file,
+  #       file_set: file_set,
+  #       pcdm_use: pcdm_use,
+  #       user: file.user
+  #     )
+  #   end
+  # end
 
   # Likely to not be needed once we're fully Valkyrized.
   #
@@ -187,4 +178,6 @@ Rails.application.reloader.to_prepare do
   #     prepend Spot::Forms::BatchEditFormTermsAndPermittedParams::ClassMethods
   #   end
   # end
+
+  Hyrax::PcdmMemberPresenterFactory.prepend(Spot::LucenePatchForPcdmMemberPresentersFactory)
 end

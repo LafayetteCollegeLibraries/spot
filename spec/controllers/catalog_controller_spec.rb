@@ -147,4 +147,145 @@ RSpec.describe CatalogController, clean: true do
       end
     end
   end
+
+  describe '#oai' do
+    subject(:oai_response) { get :oai, params: oai_params }
+    let(:xml) { Nokogiri::XML(oai_response.body) }
+
+    describe 'verb=GetRecord' do
+      include_context 'mock GeoNames RDF response'
+
+      before do
+        # @note I tried oveerriding this a step lower with
+        # allow(Hyrax.query_service.custom_queries).to receive(:find_child_file_sets)
+        # but was running into issues with the mock not taking, so here we are.
+        allow_any_instance_of(PublicationResourceIndexer)
+          .to receive(:file_set_mime_types)
+          .and_return([mock_mime_type])
+      end
+
+      after do
+        Hyrax.persister.delete(resource: work)
+      end
+
+      let(:oai_params) { { verb: 'GetRecord', identifier: "oai:ldr:#{original_work.id}", metadataPrefix: 'oai_dc' } }
+      let(:mock_file_set) { instance_double('Hyrax::FileSet') }
+      let(:mock_mime_type) { 'application/pdf' }
+      let(:work) { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: original_work.id) }
+
+      let(:original_work) do
+        if Hyrax.config.use_valkyrie?
+          FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only, :public, **metadata)
+        else
+          FactoryBot.create(:publication, :public, **metadata)
+        end
+      end
+
+      let(:metadata) do
+        {
+          contributor: ['Contributor A', 'Contributor B'],
+          creator: ['Creator, Anne'],
+          date_issued: ['2025-05-22'],
+          description: ['A description of the resource'],
+          location: [mock_geonames_uri]
+        }
+      end
+      let(:dc_uri) { 'http://purl.org/dc/elements/1.1/' }
+      let(:location_label) do
+        name, admin_name, country_name = mock_geonames_response.values_at(:name, :adminName1, :countryName)
+        "#{name}, #{admin_name}, #{country_name}"
+      end
+
+      it 'displays DC metadata of the indexed object' do
+        expect(xml.xpath('//dc:contributor', dc: dc_uri).map(&:text)).to eq work.contributor
+        expect(xml.xpath('//dc:coverage', dc: dc_uri).map(&:text)).to eq [location_label]
+        expect(xml.xpath('//dc:creator', dc: dc_uri).map(&:text)).to eq work.creator
+        expect(xml.xpath('//dc:date', dc: dc_uri).map(&:text)).to eq work.date_issued
+        expect(xml.xpath('//dc:description', dc: dc_uri).map(&:text)).to eq work.description
+        expect(xml.xpath('//dc:format', dc: dc_uri).map(&:text)).to eq [mock_mime_type]
+      end
+    end
+
+    describe 'verb=ListSets' do
+      let(:oai_params) { { verb: 'ListSets' } }
+
+      before do
+        [col_1, col_2].each do |obj|
+          next obj.save! if obj.respond_to?(:save!)
+          Hyrax.persister.save(resource: obj)
+        end
+
+        item_1.member_of_collection_ids = [col_1.id]
+        item_2.member_of_collection_ids = [col_2.id]
+
+        [item_1, item_2].each { |item| Hyrax.persister.save(resource: item) }
+      end
+
+      after do
+        [col_1, col_2, item_1, item_2].each do |obj|
+          next obj.destroy if obj.respond_to?(:delete!)
+          Hyrax.persister.delete(resource: obj)
+        end
+      end
+
+      let(:collection_class) { Hyrax.config.collection_class }
+
+      let(:col_1) do
+        collection_class.new(title: ['First Collection'],
+                             visibility: 'open',
+                             collection_type_gid: Hyrax::CollectionType.find_or_create_default_collection_type.to_global_id)
+      end
+
+      let(:col_2) do
+        collection_class.new(title: ['Second Collection'],
+                             visibility: 'restricted',
+                             collection_type_gid: Hyrax::CollectionType.find_or_create_default_collection_type.to_global_id)
+      end
+
+      let(:metadata_1) do
+        {
+          alternate_ids: ['work_1'],
+          title: ['Work 1'],
+          date_issued: ['2025-05'],
+          resource_type: ['Postcard'],
+          rights_statement: ['http://rightsstatements.org/vocab/NKC/1.0/'],
+          visibility: 'open'
+        }
+      end
+
+      let(:metadata_2) do
+        {
+          alternate_ids: ['work_2'],
+          title: ['Work 2'],
+          date_issued: ['2025-05'],
+          resource_type: ['Postcard'],
+          rights_statement: ['http://rightsstatements.org/vocab/NKC/1.0/'],
+          visibility: 'restricted'
+        }
+      end
+
+      let(:item_1) do
+        if Hyrax.config.use_valkyrie?
+          FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only, :public, **metadata_1)
+        else
+          FactoryBot.create(:publication, :public, **metadata_1)
+        end
+      end
+
+      let(:item_2) do
+        if Hyrax.config.use_valkyrie?
+          FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only, :public, **metadata_2)
+        else
+          FactoryBot.create(:publication, :public, **metadata_2)
+        end
+      end
+
+      it 'only returns public items' do
+        values = xml.css('ListSets setSpec').map(&:text)
+
+        expect(values).to include("collection_id:#{col_1.id}")
+        expect(values).not_to include("collection_id:#{col_2.id}")
+      end
+    end
+  end
 end

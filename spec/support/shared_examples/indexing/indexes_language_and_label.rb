@@ -11,7 +11,7 @@ RSpec.shared_examples 'it indexes ISO language and label' do
     end
 
     let(:languages) { ['en', 'ja', 'nope'] }
-    let(:labels) { languages.map { |lang| Spot::ISO6391.label_for(lang) } }
+    let(:labels) { languages.map { |lang| Spot::Iso6391.label_for(lang) } }
 
     it 'stores the raw values as _ssim' do
       expect(solr_doc['language_ssim']).to contain_exactly(*languages)
