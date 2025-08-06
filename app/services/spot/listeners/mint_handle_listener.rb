@@ -5,7 +5,7 @@ module Spot
     class MintHandleListener
       # @param [Dry::Events::Event] event
       def on_object_deposited(event)
-        MintHandleJob.perform_later(event[:object].try(:id).try(:to_s))
+        ::MintHandleJob.perform_later(event[:object].try(:id).try(:to_s))
       end
     end
   end

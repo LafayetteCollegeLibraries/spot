@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'a BaseResourceIndexer' do
-  include_context 'resource indexing'
+  include_context 'mock GeoNames RDF response'
+
+  subject(:solr_document) { Hyrax::ValkyrieIndexer.for(resource: resource).to_solr }
+
+  # zero-out remote authority fields so that we can properly mock them for specs below
+  let(:empty_remote_fields) { { location: [], rights_statement: [], subject: [] } }
+  let(:metadata) { { **empty_remote_fields } }
+  let(:resource_key) { described_class.to_s.gsub(/Indexer$/, '').underscore }
+  let(:resource) { build(resource_key.to_sym, **metadata) }
 
   describe 'base_metadata fields' do
     # base metadata
@@ -11,7 +19,6 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
     it_behaves_like 'it indexes', :identifier, to: ['identifier_ssim']
     it_behaves_like 'it indexes', :keyword, to: ['keyword_tesim', 'keyword_sim']
     it_behaves_like 'it indexes', :language, to: ['language_ssim'] # see below for language_labels
-    it_behaves_like 'it indexes', :location, to: ['location_ssim']
     it_behaves_like 'it indexes', :note, to: ['note_tesim']
     it_behaves_like 'it indexes', :physical_medium, to: ['physical_medium_tesim', 'physical_medium_sim']
     it_behaves_like 'it indexes', :publisher, to: ['publisher_tesim', 'publisher_sim']
@@ -20,7 +27,6 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
     it_behaves_like 'it indexes', :rights_holder, to: ['rights_holder_tesim', 'rights_holder_sim']
     it_behaves_like 'it indexes', :source, to: ['source_tesim', 'source_sim']
     it_behaves_like 'it indexes', :source_identifier, to: ['source_identifier_ssim']
-    it_behaves_like 'it indexes', :subject, to: ['subject_ssim']
     it_behaves_like 'it indexes', :subtitle, to: ['subtitle_tesim', 'subtitle_sim']
     it_behaves_like 'it indexes', :title_alternative, to: ['title_alternative_tesim', 'title_alternative_sim']
   end
@@ -43,10 +49,9 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
         end
 
         let(:id) { SecureRandom.hex }
-        let(:resource) { build(resource_factory, **metadata) }
         let(:metadata) { { id: id, identifier: ['laf:test_id'] } }
 
-        let(:rails_url) { URI.join(ENV['URL_HOST'], "/concern/#{resource_factory.to_s.gsub(/_resource$/, '').pluralize}/#{id}") }
+        let(:rails_url) { URI.join(ENV['URL_HOST'], "/concern/#{resource_key.to_s.gsub(/_resource$/, '').pluralize}/#{id}") }
 
         it 'uses the Rails URL' do
           expect(permalink_url).to eq rails_url.to_s
@@ -81,7 +86,7 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
       end
 
       context 'when the resource has not been persisted and has no values' do
-        let(:resource) { resource_factory.to_s.camelize.constantize.new }
+        let(:resource) { resource_key.to_s.camelize.constantize.new }
 
         it { is_expected.to be nil }
       end
@@ -171,6 +176,19 @@ RSpec.shared_examples 'a BaseResourceIndexer' do
           expect(solr_document['citation_issue_ss']).to eq '2'
           expect(solr_document['citation_firstpage_ss']).to eq nil
           expect(solr_document['citation_lastpage_ss']).to eq nil
+        end
+      end
+    end
+
+    describe 'indexing remote authorities' do
+      context '#location values (GeoNames)' do
+        let(:metadata) { { **empty_remote_fields, location: [mock_geonames_uri] } }
+        let(:geores) { mock_geonames_response }
+        let(:subject_label) { "#{geores['name']}, #{geores['adminName1']}, #{geores['countryName']}" }
+
+        it 'fetches and assembles a label' do
+          expect(solr_document['location_label_ssim']).to eq([subject_label])
+          expect(solr_document['location_label_tesim']).to eq([subject_label])
         end
       end
     end

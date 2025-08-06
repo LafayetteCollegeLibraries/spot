@@ -88,6 +88,37 @@ ActiveJob::Base.queue_adapter = :test
 # which is how we're using our local docker setup, so we need to tell it to chill out
 DatabaseCleaner.allow_remote_database_url = true
 
+# Copying Valkyrie setup from Hyrax
+Valkyrie::MetadataAdapter
+  .register(Valkyrie::Persistence::Memory::MetadataAdapter.new, :test_adapter)
+Valkyrie::MetadataAdapter
+  .register(Valkyrie::Persistence::Postgres::MetadataAdapter.new, :postgres_adapter)
+Valkyrie::StorageAdapter.register(
+  Valkyrie::Storage::Disk.new(base_path: Rails.root / 'tmp' / 'test_adapter_uploads'),
+  :test_disk
+)
+
+query_registration_targets = [
+  Valkyrie::MetadataAdapter.find(:test_adapter).query_service.custom_queries,
+  Valkyrie::MetadataAdapter.find(:postgres_adapter).query_service.custom_queries
+]
+
+[Hyrax::CustomQueries::Navigators::CollectionMembers,
+ Hyrax::CustomQueries::Navigators::ChildFileSetsNavigator,
+ Hyrax::CustomQueries::Navigators::ChildFilesetsNavigator, # deprecated, use ChildFileSetsNavigator
+ Hyrax::CustomQueries::Navigators::ChildWorksNavigator,
+ Hyrax::CustomQueries::Navigators::ParentWorkNavigator,
+ Hyrax::CustomQueries::FindAccessControl,
+ Hyrax::CustomQueries::FindCollectionsByType,
+ Hyrax::CustomQueries::FindManyByAlternateIds,
+ Hyrax::CustomQueries::FindIdsByModel,
+ Hyrax::CustomQueries::FindFileMetadata,
+ Hyrax::CustomQueries::Navigators::FindFiles].each do |handler|
+  query_registration_targets.each do |adapter|
+    adapter.register_query_handler(handler)
+  end
+end
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
@@ -125,6 +156,7 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :feature
   config.include WithoutDetailedExceptions, type: :controller
   config.include FactoryBot::Syntax::Methods
   config.include StubEnv::Helpers
@@ -149,17 +181,27 @@ RSpec.configure do |config|
     Hyrax.config.enable_noids = false
   end
 
+  # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/spec/spec_helper.rb#L121-L126
+  # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/spec/spec_helper.rb#L259-L265
+  config.before clean: true do
+    unless Hyrax.config.disable_wings
+      ActiveFedora::Cleaner.clean!
+      ActiveFedora.fedora.connection.send(:init_base_path)
+      Hyrax::DefaultAdministrativeSet.delete_all
+    end
+
+    Hyrax::SolrService.wipe! if Hyrax.config.query_index_from_valkyrie
+
+    # ensure there's an admin set to deposit to
+    admin_set = Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+    Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set.id)
+
+    Hyrax.persister.save(resource: admin_set)
+  end
+
   config.before do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
-  end
-
-  config.before clean: true do
-    DatabaseCleaner.clean
-
-    # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/spec_helper.rb#L121-L126
-    ActiveFedora::Cleaner.clean!
-    ActiveFedora.fedora.connection.send(:init_base_path)
   end
 
   config.before js: true do
@@ -168,6 +210,10 @@ RSpec.configure do |config|
 
   config.after do
     DatabaseCleaner.clean
+  end
+
+  config.append_after(:each) do
+    Capybara.reset_sessions!
   end
 end
 

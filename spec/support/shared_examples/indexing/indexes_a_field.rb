@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 RSpec.shared_examples 'it indexes' do |field, opts|
-  include_context 'resource indexing'
-
   suffixes = opts[:to_suffixes]
 
+  raise 'Define a :solr_document variable with let()' unless defined?(:solr_document)
   raise 'Pass a field to the "it indexes" shared_example' unless field
   raise 'Pass an array to :to_suffixes or an array of keys to :to' unless suffixes || opts[:to]
 

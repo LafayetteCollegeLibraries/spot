@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::ISO6391 do
+RSpec.describe Spot::Iso6391 do
   describe '.all' do
     subject { described_class.all }
 

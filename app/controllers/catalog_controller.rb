@@ -243,9 +243,10 @@ class CatalogController < ApplicationController
     config.add_sort_field 'title_sort_si asc', label: "Title \u25B2"
     config.add_sort_field 'title_sort_si desc', label: "Title \u25BC"
 
-    # If there are more than this many search results, no spelling ("did you
-    # mean") suggestion is offered.
+    # If there are more than this many search results, no spelling ("did you mean") suggestion is offered.
     config.spell_max = 5
+
+    config.search_state_fields += [:verb]
 
     # OAI-PMH provider params
     # (see: https://github.com/projectblacklight/blacklight_oai_provider#configuration)
@@ -254,13 +255,14 @@ class CatalogController < ApplicationController
         repository_name: 'Lafayette Digital Repository',
         repository_url: 'https://ldr.lafayette.edu',
         record_prefix: 'oai:ldr',
-        admin_email: 'dss@lafayette.edu'
+        admin_email: 'repository@lafayette.edu'
       },
 
       document: {
         set_model: Spot::OaiCollectionSolrSet,
         set_fields: [
-          { label: 'collection', solr_field: 'member_of_collections_ssim' }
+          { label: 'collection_id', solr_field: 'member_of_collection_ids_ssim' }
+          # { label: 'collection', solr_field: 'member_of_collections_ssim' }
         ]
       }
     }

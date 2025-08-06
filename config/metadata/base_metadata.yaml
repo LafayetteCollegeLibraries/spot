@@ -51,23 +51,21 @@ attributes:
     index_keys:
       - keyword_tesim
       - keyword_sim
-  # @see IndexesLanguageAndLabel mixin for indexing info
+  # @see IndexesLanguageAndLabel mixin for indexing info, uses
   language:
     predicate: http://purl.org/dc/elements/1.1/language
     type: string
     multiple: true
     form:
       multiple: true
-  # @todo Details about indexing
-  #       how are we gonna handled the RDF of it all?
+  # @note RDF indexing for :location is set up in app/models/base_resource.rb
+  #       and uses "location_ssim" and "location_label_ssim" keys
   location:
     predicate: http://purl.org/dc/terms/spatial
     type: uri
     multiple: true
     form:
       multiple: true
-    index_keys:
-      - location_ssim
   note:
     predicate: http://www.w3.org/2004/02/skos/core#note
     type: string
@@ -145,6 +143,8 @@ attributes:
     multiple: true
     index_keys:
       - source_identifier_ssim
+  # @note RDF indexing for :subject is set up in app/models/base_resource.rb
+  #       and uses "subject_ssim" and "subject_label_ssim" keys
   subject:
     predicate: http://purl.org/dc/elements/1.1/subject
     type: uri
@@ -153,8 +153,6 @@ attributes:
       multiple: true
       primary: true
       default: []
-    index_keys:
-      - subject_ssim
   subtitle:
     predicate: http://purl.org/spar/doco/Subtitle
     type: string

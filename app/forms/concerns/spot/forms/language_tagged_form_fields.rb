@@ -9,15 +9,15 @@ module Spot
     # @example
     #   class WorkResourceForm < ::Hyrax::Forms::ResourceForm(WorkResource)
     #     include Hyrax::FormFields(:metadata_schema)
-    #     include Spot::Forms::LanguageTaggedFormFields(:title, :title_alternative)
+    #     include Spot::Forms::LanguageTaggedFormFields.for(:title, :title_alternative)
     #   end
-    def self.LanguageTaggedFormFields(*fields)
-      LanguageTaggedFormFields.new(*fields)
-    end
-
     class LanguageTaggedFormFields < Module
-      def initialize(*fields)
-        @fields = fields.flatten
+      def self.for(*fields)
+        new(fields: fields.flatten)
+      end
+
+      def initialize(fields:)
+        @fields = fields
       end
 
       private

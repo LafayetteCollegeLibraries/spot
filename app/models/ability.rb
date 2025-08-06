@@ -27,10 +27,18 @@ class Ability
   # @return [void]
   def custom_permissions; end
 
+  # Added by Bulkrax generator
+  #
+  # @return [true, false]
+  # @see https://github.com/samvera/bulkrax/blob/v9.1.0/lib/generators/bulkrax/install_generator.rb#L58-L76
   def can_import_works?
     current_user.admin? || current_user.depositor?
   end
 
+  # Added by Bulkrax generator
+  #
+  # @return [true, false]
+  # @see https://github.com/samvera/bulkrax/blob/v9.1.0/lib/generators/bulkrax/install_generator.rb#L58-L76
   def can_export_works?
     current_user.admin? || current_user.depositor?
   end

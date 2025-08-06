@@ -50,7 +50,7 @@ module LanguageTagging
     default_hint = super
     return unless default_hint
 
-    "#{default_hint} <strong>#{hint_text}</strong>".html_safe
+    "#{default_hint} <em>#{hint_text}</em>".html_safe
   end
 
   private
@@ -63,15 +63,19 @@ module LanguageTagging
   # @param [RDF::Literal, String] raw_value
   # @param [Integer] _index not used
   # @return [String] HTML content for field row
+  #
+  # @note the rows in bootstrap 4 aren't expanding to the full-width of the wrapping container,
+  #       giving a squished appearance. how can we fix this?
+  # @see https://getbootstrap.com/docs/4.6/layout/grid/#no-gutters ?
   def build_field(raw_value, index = nil)
     value, language = parse_value(raw_value)
 
     <<-HTML
-      <div class="row">
-        <div class="col-sm-10">
+      <div class="form-row">
+        <div class="form-group col-10">
           #{build_input(value, index)}
         </div>
-        <div class="col-sm-2">
+        <div class="form-group col-2">
           #{build_language_autocomplete(language)}
         </div>
       </div>
@@ -145,7 +149,7 @@ module LanguageTagging
   # @todo move this to a locale
   # @return [String]
   def hint_text
-    'This field may be tagged with a language'
+    'This field may be tagged with a language.'
   end
 
   # Generates a name property for the autocomplete input.

@@ -154,6 +154,8 @@ gem 'sprockets-es6', '~> 0.9.2'
 
 gem 'twitter-typeahead-rails', '~> 0.11.1'
 
+gem 'valkyrie-shrine', '~> 1.0.0'
+
 # Locking "redlock" to < 2.0, as the 2.x series currently breaks Sidekiq jobs.
 # @see https://github.com/samvera/hyrax/pull/5961
 # @todo remove when Hyrax 3.5.1 or 3.6 (whichever includes it) drops

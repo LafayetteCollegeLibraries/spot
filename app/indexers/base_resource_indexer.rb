@@ -21,8 +21,9 @@
 class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
   # @note :core_metadata is included with Hyrax::ValkyrieWorkIndexer
   include Hyrax::Indexer(:base_metadata)
-  include IndexesPermalinkUrl
-  include IndexesRightsStatementsAndLabels
+  include Spot::IndexesPermalinkUrl
+  include Spot::IndexesRightsStatementsAndLabels
+  include Spot::RemoteLabelIndexing
 
   class_attribute :sortable_date_property, default: :date
 
@@ -32,20 +33,22 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
       document['date_sort_dtsi'] = generate_sortable_date
       document['identifier_standard_ssim'] = wrapped_identifiers.select(&:standard?).map(&:to_s)
       document['identifier_local_ssim'] = wrapped_identifiers.select(&:local?).map(&:to_s)
-
-      document['language_ssim'] = resource.try(:language)
-      document['language_label_ssim'] = resource.try(:language)&.map { |language| Spot::ISO6391.label_for(language) }
       document['thumbnail_url_ss'] = index_thumbnail_url
+      document['file_format_ssim'] = file_set_mime_types
+
+      fetch_and_attach_remote_labels_to(document,
+                                        field: :language,
+                                        controlled_vocabulary_class: Spot::Iso6391)
+      fetch_and_attach_remote_labels_to(document,
+                                        field: :location,
+                                        controlled_vocabulary_class: Spot::ControlledVocabularies::Location,
+                                        label_key: ['location_label_ssim', 'location_label_tesim'])
+      fetch_and_attach_remote_labels_to(document,
+                                        field: :subject,
+                                        controlled_vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject,
+                                        label_key: ['subject_label_ssim', 'subject_label_tesim'])
 
       add_citation_metadata(document) if resource.try(:bibliographic_citation).present?
-
-      # @todo not sure if the resource retains file_set objects anymore? there is no longer
-      #       a :file_sets method and the closest analogue I can find in Hyrax 3.6 is :member_ids,
-      #       which would require us to fetch the objects just to copy the mime_type to the
-      #       parent work. maybe it would be better to give this to the presenter and delegate
-      #       to the file_set_presenters?
-      #
-      # document['file_format_ssim'] = resource.file_sets.map(&:mime_type).reject(&:blank?)
 
       # @note run this last
       stringify_rdf_uris(document)
@@ -54,7 +57,7 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
 
   private
 
-  # Previously was a mixin (IndexesCitationMetadata) but parses the first :bibliographic_citation
+  # Previously was a mixin (IndexesCitationMetadata); parses the first :bibliographic_citation
   # value and adds the metadata to the Solr document.
   #
   # @param [SolrDocument,Hash]
@@ -72,6 +75,15 @@ class BaseResourceIndexer < ::Hyrax::ValkyrieWorkIndexer
     first_page, last_page = citation[:pages]&.first&.split(/[-–—]/, 2)
     document['citation_firstpage_ss'] = first_page
     document['citation_lastpage_ss'] = last_page
+  end
+
+  # Should come up empty for new works before files are attached, but otherwise returns
+  # the mime_types of all child file_sets.
+  #
+  # @return [Array<String>]
+  def file_set_mime_types
+    file_sets = Hyrax.query_service.custom_queries.find_child_file_sets(resource: resource)
+    file_sets.map { |fs| Hyrax::FileSetTypeService.new(file_set: fs).mime_type }
   end
 
   # Uses a) earliest date in +sortable_date_property+, b) resource's :created_at value to serve

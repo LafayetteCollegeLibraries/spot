@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 RSpec.describe StudentWorkResourceIndexer, valkyrization: true do
-  it_behaves_like 'a BaseResourceIndexer'
+  let(:solr_document) { described_class.new(resource: resource).to_solr }
+  let(:resource) { FactoryBot.valkyrie_create(:student_work_resource_with_required_fields_only) }
 
+  it_behaves_like 'a BaseResourceIndexer'
   describe 'student_work_metadata' do
     it_behaves_like 'it indexes', :abstract, to: ['abstract_tesim']
     it_behaves_like 'it indexes', :access_note, to: ['access_note_tesim']

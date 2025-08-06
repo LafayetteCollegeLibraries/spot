@@ -5,7 +5,8 @@ require 'logger'
 require 'rails/all'
 
 require 'sprockets/es6'
-require 'rack-cas/session_store/active_record'
+require 'rack-cas/session_store/redis'
+require 'rack-cas/session_store/rails/redis'
 
 # Some gems in the Samvera stack use the 'deprecation' gem instead of
 # ActiveSupport::Deprecation calls, so we need to also set _that_ gem's
@@ -36,18 +37,11 @@ module Spot
     config.action_mailer.default_url_options = { host: ENV['URL_HOST'] }
     config.action_mailer.preview_path = Rails.root.join('lib', 'mailer_previews')
 
-    # Enables `lograge` gem which makes Rails logs more manageable (read: easier to work with using AWS tooling).
-    #
-    # @note if RAILS_LOG_LEVEL is set to anything higher than :debug, lograte will not have log
-    #       entries to process, effectively making it useless.
-    # @see https://github.com/roidrage/lograge/
-    config.lograge.enabled = ENV.fetch('SPOT_ENABLE_LOGRAGE') { false }
+    config.hosts << URI.parse(ENV['URL_HOST'])&.hostname if ENV['URL_HOST'].present?
 
     config.rack_cas.server_url = ENV['CAS_BASE_URL']
     config.rack_cas.service = '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
-
-    config.hosts << URI.parse(ENV['URL_HOST'])&.hostname if ENV['URL_HOST'].present?
 
     if Rails.env.test?
       config.hosts << '127.0.0.1'

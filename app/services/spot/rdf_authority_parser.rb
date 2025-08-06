@@ -9,7 +9,7 @@
 #
 # @example
 #
-#   class FrenchRdfAuthorityParser < Spot::RdfAuthorityParser
+#   class FrenchRDFAuthorityParser < Spot::RdfAuthorityParser
 #     self.preferred_language = :fr
 #   end
 #

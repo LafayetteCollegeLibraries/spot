@@ -29,18 +29,18 @@ module Spot
         class_attribute :identifier_field, default: :identifier
 
         property :local_identifier,
-                virtual: true,
-                display: true,
-                prepopulator: -> { self.local_identifier = local_identifiers.map(&:to_s) }
+                  virtual: true,
+                  display: true,
+                  prepopulator: -> { self.local_identifier = local_identifiers.map(&:to_s) }
 
         property :standard_identifier_prefix,
-                virtual: true,
-                display: true,
-                prepopulator: -> { self.standard_identifier_prefix = standard_identifiers.map(&:prefix) }
+                  virtual: true,
+                  display: true,
+                  prepopulator: -> { self.standard_identifier_prefix = standard_identifiers.map(&:prefix) }
         property :standard_identifier_value,
-                virtual: true,
-                display: true,
-                prepopulator: -> { self.standard_identifier_value = standard_identifiers.map(&:value) }
+                  virtual: true,
+                  display: true,
+                  prepopulator: -> { self.standard_identifier_value = standard_identifiers.map(&:value) }
 
         validate(identifier_field) do
           send(:"#{identifier_field}=", merged_identifiers)
@@ -51,6 +51,8 @@ module Spot
       def local_identifiers
         wrapped_identifiers.select(&:local?).reject { |id| id.prefix == 'noid' }
       end
+
+      # @todo why am I aliasing this again? Anna-convenience or some other nefarious reason?
       alias local_identifier local_identifiers
 
       def merged_identifiers

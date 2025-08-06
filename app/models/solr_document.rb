@@ -37,13 +37,14 @@ class SolrDocument
   #       mapped to dc:identifier. Will this just work out of the box?
   # @todo PA Digital guidelines specify ISO 639-3 for language (we're using 639-1);
   #       will we need to revisit that?
+
   def self.field_semantics
     {
       collection_name: 'member_of_collections_ssim',
       contributor: 'contributor_tesim',
-      coverage: 'location_label_ssim',
+      coverage: 'location_label_tesim',
       creator: 'creator_tesim',
-      date: 'date_issued_ssim',
+      date: ['date_issued_ssim', 'date_ssim'],
       description: 'description_tesim',
       format: 'file_format_ssim',
       identifier: ['id', 'permalink_ss', 'thumbnail_url_ss'],

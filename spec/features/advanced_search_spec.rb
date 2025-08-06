@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.feature 'Advanced search form', :clean, :js do
+RSpec.feature 'Advanced search form', :clean do
   before do
     # add some stuff to the index
   end

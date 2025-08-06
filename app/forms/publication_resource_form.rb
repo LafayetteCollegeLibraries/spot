@@ -8,14 +8,14 @@ class PublicationResourceForm < ::Hyrax::Forms::ResourceForm(PublicationResource
   include Hyrax::FormFields(:institutional_metadata)
   include Hyrax::FormFields(:publication_metadata)
 
-  include Spot::Forms::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :abstract, :description)
+  include Spot::Forms::LanguageTaggedFormFields.for(:title, :title_alternative, :subtitle, :abstract, :description)
   include Spot::Forms::IdentifierFormFields
 
-  include Spot::Forms::ControlledVocabularyFormField(:location, vocabulary_class: Spot::ControlledVocabularies::Location)
-  include Spot::Forms::ControlledVocabularyFormField(:subject, vocabulary_class: Spot::ControlledVocabularies::AssignFastSubject)
-  include Spot::Forms::ControlledVocabularyFormField(:academic_department)
-  include Spot::Forms::ControlledVocabularyFormField(:division)
-  include Spot::Forms::ControlledVocabularyFormField(:language)
+  include Spot::Forms::ControlledVocabularyFormField.for(:location, model_wrapper: Spot::ControlledVocabularies::Location)
+  include Spot::Forms::ControlledVocabularyFormField.for(:subject, model_wrapper: Spot::ControlledVocabularies::AssignFastSubject)
+  include Spot::Forms::ControlledVocabularyFormField.for(:academic_department)
+  include Spot::Forms::ControlledVocabularyFormField.for(:division)
+  include Spot::Forms::ControlledVocabularyFormField.for(:language)
 
   validates_with Spot::EdtfDateValidator, fields: [:date_issued]
 

@@ -9,11 +9,8 @@ RSpec.describe Spot::WorkAndFileSetSearchBuilder do
 
     before { builder.filter_models(params) }
 
-    it 'adds a :fq key' do
+    it 'adds a :fq key that is an array' do
       expect(params).to include :fq
-    end
-
-    it 'is an array' do
       expect(params[:fq]).to be_an Array
     end
 

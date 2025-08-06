@@ -6,7 +6,7 @@ development:
 test:
   host: <%= ENV['VALKYRIE_SOLR_HOST'] %>
   port: <%= ENV['VALKYRIE_SOLR_PORT'] || 8983 %>
-  core: <%= ENV['VALKYRIE_SOLR_CORE'] || 'spot-test' %>
+  core: <%= ENV['VALKYRIE_SOLR_CORE_TEST'] || 'spot-test' %>
 production:
   host: <%= ENV['VALKYRIE_SOLR_HOST'] %>
   port: <%= ENV['VALKYRIE_SOLR_PORT'] %>

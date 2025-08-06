@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 RSpec.describe PublicationResourceIndexer, valkyrization: true do
+  let(:solr_document) { described_class.new(resource: resource).to_solr }
+  let(:resource) { FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only) }
+
   it_behaves_like 'a BaseResourceIndexer'
 
   describe 'publication_metadata' do
@@ -12,7 +15,7 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
 
   describe 'seasonal date indexing' do
     subject { solr_document['english_language_date_teim'] }
-    let(:resource) { build(:publication_resource, date_issued: [date]) }
+    let(:resource) { build(:publication_resource_with_required_fields_only, date_issued: [date]) }
     let(:indexer) { described_class.for(resource: resource) }
     let(:solr_document) { indexer.to_solr }
 

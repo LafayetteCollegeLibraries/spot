@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 #
-# @note We're following Hyrax conventions by using the form `MixinName(params)`, which the
-#       autoloader doesn't seem to like, raising NoMethodErrors; probably because this class
-#       comes alphabetically before Hyrax and Spot and those constants haven't yet loaded.
-#       By calling :safe_constantize on them first, they'll be available when setting up the class.
-#
-# @todo is there some configuration we're missing that was added to Hyrax to account for this?
-#
-'Hyrax::Forms::ResourceForm'.safe_constantize
-'Spot::Forms::LanguageTaggedFormFields'.safe_constantize
-'Spot::Forms::ControlledVocabularyFormField'.safe_constantize
-'Spot::Forms::IdentifierFormFields'.safe_constantize
-'Spot::Forms::EdtfDateValidator'.safe_constantize
-
 # Form to edit AudioVisualResource objects
 class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource)
   include Spot::Forms::ResourceFormBehavior
@@ -20,8 +7,8 @@ class AudioVisualResourceForm < ::Hyrax::Forms::ResourceForm(AudioVisualResource
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:audio_visual_metadata)
 
-  include Spot::Forms::LanguageTaggedFormFields(:title, :title_alternative, :subtitle, :description, :inscription)
-  include Spot::Forms::ControlledVocabularyFormField(:language)
+  include Spot::Forms::LanguageTaggedFormFields.for(:title, :title_alternative, :subtitle, :description, :inscription)
+  include Spot::Forms::ControlledVocabularyFormField.for(:language)
   include Spot::Forms::IdentifierFormFields
 
   validates_with Spot::EdtfDateValidator, fields: [:date]

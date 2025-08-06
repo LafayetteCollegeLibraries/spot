@@ -16,49 +16,24 @@ module Spot
     #
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
     class IiifAccessCopyService < BaseDerivativeService
-      class_attribute :derivative_key_template
-      self.derivative_key_template = '%s-access.tif'
-
-      # Deletes the derivative from the S3 bucket
+      # Deletes the derivative from the S3 bucket using the Valkyrie storage adapter
       # @todo maybe we should hang onto these when we delete + put them in a glacier grave?
       # @return [void]
-      # @see https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#delete_object-instance_method
       def cleanup_derivatives
-        s3_client.delete_object(bucket: s3_bucket, key: s3_derivative_key)
+        storage_adapter.delete(id: File.basename(shuttle_file))
       end
 
       # Generates a pyramidal TIFF using ImageMagick (via MiniMagick gem)
-      # and uploads it to the S3 bucket.
+      # and uploads it to the S3 bucket via Valkyrie StorageAdapter.
       #
       # @param [String,Pathname] filename the src path of the file
       # @return [void]
+      # @todo do we delete the working copy or just let it hang in tmp/uploads?
       def create_derivatives(filename)
-        output_dirname = File.dirname(derivative_path)
-        FileUtils.mkdir_p(output_dirname) unless File.directory?(output_dirname)
+        create_access_copy_from(filename)
+        upload_derivatives_to_s3
 
-        MiniMagick::Tool::Convert.new do |convert|
-          convert.merge!(
-            [
-              "#{filename}[0]",
-              "-define", "tiff:tile-geometry=128x128",
-              "-compress", "jpeg",
-              "ptif:#{derivative_path}"
-            ]
-          )
-        end
-
-        upload_derivative_to_s3
-
-        FileUtils.rm_f(derivative_path) if File.exist?(derivative_path)
-      end
-
-      # copied from https://github.com/samvera/hyrax/blob/5a9d1be1/app/services/hyrax/file_set_derivatives_service.rb#L32-L37
-      # but modifies the filename it writes out to.
-      #
-      # @return [String]
-      def derivative_path
-        @derivative_path ||=
-          Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access.tif').to_s.gsub(/\.access\.tif$/, '')
+        FileUtils.rm_f(shuttle_file) if File.exist?(shuttle_file)
       end
 
       # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
@@ -73,32 +48,47 @@ module Spot
 
       private
 
+      def create_access_copy_from(src)
+        MiniMagick::Tool::Convert.new do |convert|
+          convert.merge!(
+            [
+              "#{src}[0]",
+              "-define", "tiff:tile-geometry=128x128",
+              "-compress", "jpeg",
+              "ptif:#{shuttle_file}"
+            ]
+          )
+        end
+      end
+
       def s3_bucket
         ENV['AWS_IIIF_ASSET_BUCKET']
       end
 
-      # We're using AWS credentials stored within the App/Sidekiq services for authentication,
-      # so the Aws::S3::Client will pick them up ambiently.
-      def s3_client
-        @s3_client ||= Aws::S3::Client.new
+      def shuttle_file
+        working_directory.join("#{file_set.id}-access.tif")
       end
 
-      def s3_derivative_key
-        derivative_key_template % file_set.id
+      def storage_adapter
+        Valkyrie::StorageAdapter.find(:iiif_source_s3)
       end
 
-      def upload_derivative_to_s3
-        s3_client.put_object(
-          bucket: s3_bucket,
-          key: s3_derivative_key,
-          body: File.open(derivative_path, 'r'),
-          content_length: File.size(derivative_path),
-          content_md5: Digest::MD5.file(derivative_path).base64digest,
+      def upload_derivatives_to_s3
+        storage_adapter.upload(
+          resource: file_set,
+          file: File.open(shuttle_file),
+          original_filename: File.basename(shuttle_file),
           metadata: {
             'width' => file_set.width.first,
             'height' => file_set.height.first
           }
         )
+      end
+
+      def working_directory
+        @working_directory ||= Rails.root.join('tmp', 'iiif-src').tap do |src|
+          FileUtils.mkdir_p(src) unless Dir.exist?(src)
+        end
       end
     end
   end

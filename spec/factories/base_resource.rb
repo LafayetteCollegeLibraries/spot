@@ -1,25 +1,28 @@
 # frozen_string_literal: true
 #
+# Abstracts common resource traits into a separate factory for inheritance, namely visibility
+# settings. Works should inherit from :base_work_resource (@see spec/factories/base_work_resource.rb)
+# which adds support for attaching `Hyrax::FileSet`s to works.
+#
 # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/factories/hyrax_work.rb
 FactoryBot.define do
-  factory :base_resource, traits: [:core_metadata], class: 'Hyrax::Work' do
+  factory :base_resource, traits: [:core_metadata], class: 'Hyrax::Resource' do
     transient do
+      with_index { true }
       visibility_setting { nil }
     end
 
-    # rubocop:disable Style/IfUnlessModifier
     after :build do |work, evaluator|
-      if evaluator.visibility_setting
-        Hyrax::VisibilityWriter.new(resource: work).assign_access_for(visibility: evaluator.visibility_setting)
-      end
+      work.visibility = evaluator.visibility_setting if evaluator.visibility_setting
     end
-    # rubocop:enable Style/IfUnlessModifier
 
     after :create do |work, evaluator|
       if evaluator.visibility_setting
-        Hyrax::VisibilityWriter.new(resource: work).assign_access_for(visibility: evaluator.visibility_setting)
+        work.visibility = evaluator.visibility_setting
         work.permission_manager.acl.save
       end
+
+      Hyrax.index_adapter.save(resource: work) if evaluator.with_index
     end
 
     trait :public do
