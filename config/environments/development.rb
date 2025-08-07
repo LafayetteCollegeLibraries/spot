@@ -56,7 +56,5 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::FileUpdateChecker
 
-  # Enables a logging gem which primarily reduces rails partial logging
-  # to a managable amount
-  config.lograge.enabled = true
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL') { :debug }.to_sym
 end

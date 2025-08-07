@@ -37,6 +37,13 @@ module Spot
     config.action_mailer.default_url_options = { host: ENV['URL_HOST'] }
     config.action_mailer.preview_path = Rails.root.join('lib', 'mailer_previews')
 
+    # Enables `lograge` gem which makes Rails logs more manageable (read: easier to work with using AWS tooling).
+    #
+    # @note if RAILS_LOG_LEVEL is set to anything higher than :debug, lograte will not have log
+    #       entries to process, effectively making it useless.
+    # @see https://github.com/roidrage/lograge/
+    config.lograge.enabled = ENV.fetch('SPOT_ENABLE_LOGRAGE') { false }
+
     config.rack_cas.server_url = ENV['CAS_BASE_URL']
     config.rack_cas.service = '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
