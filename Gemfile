@@ -75,6 +75,9 @@ gem 'edtf-humanize', '~> 2.1.0'
 # require it as we're explicitly using it.
 gem 'faraday', '~> 0.17.6'
 
+# video file resource for getting information on video derivatives
+gem 'ffprober'
+
 # error trackijng
 gem 'honeybadger', '~> 4.12.1'
 
@@ -86,6 +89,9 @@ gem 'iso-639', '~> 0.3.6'
 
 # install jquery with rails (no longer the default)
 gem 'jquery-rails', '~> 4.6.0'
+
+# gem for log management
+gem 'lograge'
 
 # Blacklight/Hyrax use Kaminari for pagination, but since we're
 # using it in other instances, we should require it just in case.
@@ -141,9 +147,6 @@ gem 'redlock', '>= 0.1.2', '< 2.0'
 # This is locked in hydra_editor > v6 to prevent an update
 # that throws off how forms are built in Hyrax.
 gem 'simple_form', '< 5.2'
-
-# video file resource for getting information on video derivatives
-gem 'ffprober'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do

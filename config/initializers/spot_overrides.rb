@@ -277,4 +277,31 @@ Rails.application.config.to_prepare do
       resp.content_length
     end
   end
+
+  # Bulkrax's parser replaces any whitespace character with a space, which kills paragraph breaks
+  # and newlines. Our patch modifies the base #result method to only replace tabs with
+  # spaces and strip lead/trailing spaces.
+  #
+  # @see app/services/concerns/spot/bulkrax_matcher_whitespace_patch.rb
+  # @see spec/matchers/bulkrax/application_matcher_spec.rb
+  Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxMatcherWhitespacePatch)
+
+  # Modifying the Downloads Controller to not send an unauthorized status for requests.
+  # The unauthorized status breaks the laf only thumbnail.
+  #
+  # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/app/controllers/hyrax/downloads_controller.rb#L52-L63
+  Hyrax::DownloadsController.class_eval do
+    # Customize the :read ability in your Ability class, or override this method.
+    # Hydra::Ability#download_permissions can't be used in this case because it assumes
+    # that files are in a LDP basic container, and thus, included in the asset's uri.
+    def authorize_download!
+      authorize! :download, params[asset_param_key]
+      # Deny access if the work containing this file is restricted by a workflow
+      return unless workflow_restriction?(file_set_parent(params[asset_param_key]), ability: current_ability)
+      raise Hyrax::WorkflowAuthorizationException
+    rescue CanCan::AccessDenied, Hyrax::WorkflowAuthorizationException
+      unauthorized_image = Rails.root.join("app", "assets", "images", "unauthorized.png")
+      send_file unauthorized_image
+    end
+  end
 end
