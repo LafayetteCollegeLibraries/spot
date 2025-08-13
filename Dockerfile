@@ -15,6 +15,7 @@ RUN apt-get clean && \
         awscli \
         build-essential \
         coreutils \
+        cron \
         git \
         libpq-dev \
         libxml2 \
@@ -108,6 +109,7 @@ COPY . /spot
 COPY --from=spot-asset-builder /spot/public/assets /spot/public/assets
 COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 COPY --from=pdfjs-installer /tmp/pdfjs /spot/public/pdf
+
 
 
 ##

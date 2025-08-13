@@ -3,6 +3,10 @@ set -e
 
 app_root="/spot"
 
+# add the clean up script (or more) to cron and start the service
+cp "$app_root/bin/cleanup-exports.cron" /etc/cron.d/cleanup-exports
+crontab /etc/cron.d/cleanup-exports && cron
+
 # we're not copying over tmp directories, so we need to ensure that
 # they exist on the the docker side, otherwise derivatives etc.
 # won't be generated.
