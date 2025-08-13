@@ -111,7 +111,6 @@ COPY --from=spot-asset-builder /spot/public/uv /spot/public/uv
 COPY --from=pdfjs-installer /tmp/pdfjs /spot/public/pdf
 
 
-
 ##
 # Target: fits-installer
 # !! This is a builder image, do not use directly !!
