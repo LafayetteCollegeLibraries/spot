@@ -308,3 +308,7 @@ Hyrax.config do |config|
 end
 
 Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
+
+def Hyrax.index_field_mapper
+  config.index_field_mapper
+end
