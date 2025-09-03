@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 RSpec.describe PdfViewerHelper do
+  describe '#pdf_too_large_for_viewer?' do
+    subject { helper.pdf_too_large_for_viewer?(file_set) }
+
+    let(:file_set) { instance_double(Hyrax::FileSetPresenter, file_size: file_size_mb.to_s) }
+
+    context 'when the PDF is too large' do
+      let(:file_size_mb) { 66.75 * (1024 * 1024) }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the PDF is just right' do
+      let(:file_size_mb) { 20.1 * (1024 * 1024) }
+
+      it { is_expected.to be false }
+    end
+  end
+
   describe '#viewer_url' do
     subject { helper.viewer_url(path) }
 

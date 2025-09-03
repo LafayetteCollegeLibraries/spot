@@ -42,6 +42,10 @@ RSpec.feature 'Show Student Work page', js: false do
       .to receive(presenter_check_method)
       .and_return true
 
+    allow_any_instance_of(Hyrax::FileSetPresenter)
+      .to receive(:file_size)
+      .and_return 1
+
     visit item_base_url
   end
 
