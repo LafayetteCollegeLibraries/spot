@@ -3,7 +3,7 @@
       <h2 class="sr-only"><%= t('hyrax.file_set.show.downloadable_content.heading') %></h2>
     </div>
 
-    <% if pdf_too_large?(file_set) %>
+    <% if pdf_too_large_for_viewer?(file_set) %>
         <div class="alert alert-warning">
             This file is <%= number_to_human_size(file_set.file_size) %>, which is too large to display in browser.
             The file can still be downloaded to view.
