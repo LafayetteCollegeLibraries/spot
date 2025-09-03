@@ -3,6 +3,16 @@
 # Helper methods to generate the PDFjs viewer and populate the search query
 # (if present)
 module PdfViewerHelper
+  # Whether or not to display a PDF file in the viewer
+  #
+  # @param [#file_size] file_set to test
+  # @param [Number] limit_mb size limit in megabytes
+  # @return [true,false]
+  def pdf_too_large_for_viewer?(file_set, limit_mb = 65)
+    file_size_in_mb = file_set.file_size.to_i / (1024 * 1024)
+    file_size_in_mb >= limit_mb
+  end
+
   # @param [String] path
   # @return [String] URL to the viewer
   def viewer_url(path)
