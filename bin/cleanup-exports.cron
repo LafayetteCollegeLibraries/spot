@@ -1,0 +1,10 @@
+#
+# Cron script to clean out files from the tmp/export directory.
+# Spot saves exports from the ad-hoc exporter (_not_ Bulkrax) to
+# the tmp directory as a way of caching requests for objects (ie. a
+# class using the same group of resources for a project). The route
+# for this is set to be ignored via the robots.txt directive, but
+# as crawlers can ignore these rules, causing the application container
+# to fill up with temporary export .zip files and run out of space.
+#
+0 6 * * * find /spot/tmp/export -type f -mtime -1 -exec rm {} \;

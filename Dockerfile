@@ -15,6 +15,7 @@ RUN apt-get clean && \
         awscli \
         build-essential \
         coreutils \
+        cron \
         git \
         libpq-dev \
         libxml2 \
