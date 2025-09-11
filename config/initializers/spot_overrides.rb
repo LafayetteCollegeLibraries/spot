@@ -293,7 +293,6 @@ Rails.application.config.to_prepare do
   # @see spec/matchers/bulkrax/application_matcher_spec.rb
   Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxMatcherWhitespacePatch)
 
-
   # Modifying the Downloads Controller to not send an unauthorized status for requests.
   # The unauthorized status breaks the laf only thumbnail.
   #
