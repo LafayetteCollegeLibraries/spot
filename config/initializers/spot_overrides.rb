@@ -140,6 +140,13 @@ Rails.application.config.to_prepare do
     end
   end
 
+  Bulkrax::ObjectFactory.class_eval do
+    class << self
+      prepend Spot::BulkraxObjectFactoryFindPatch::ClassMethods
+    end
+  end
+  Bulkrax::ObjectFactory.prepend(Spot::BulkraxObjectFactoryFindPatch)
+
   # To be honest, I'm not sure why the Hyrax code doesn't work as-is,
   # but rewriting the solr_params[:sort] assignment to this kinda
   # wonky one-liner seems to preserve user-selected sorting. ¯\_(ツ)_/¯
@@ -285,6 +292,7 @@ Rails.application.config.to_prepare do
   # @see app/services/concerns/spot/bulkrax_matcher_whitespace_patch.rb
   # @see spec/matchers/bulkrax/application_matcher_spec.rb
   Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxMatcherWhitespacePatch)
+
 
   # Modifying the Downloads Controller to not send an unauthorized status for requests.
   # The unauthorized status breaks the laf only thumbnail.
