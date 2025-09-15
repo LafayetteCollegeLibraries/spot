@@ -163,12 +163,27 @@ class CatalogController < ApplicationController
     #
     config.add_search_field('all_fields', label: 'All Fields') do |field|
       fields = %w[
-        title_tesim subtitle_tesim title_alternative_tesim
-        creator_tesim contributor_tesim publisher_tesim editor_tesim
-        source_tesim abstract_tesim description_tesim note_tesim
-        subject_label_tesim identifier_ssim bibliographic_citation_tesim
-        english_language_date_teim file_format_tesim
-        extracted_text_tsimv keyword_tesim date_associated_tesim subject_ocm_tesim
+        title_tesim
+        subtitle_tesim
+        title_alternative_tesim
+        creator_tesim
+        contributor_tesim
+        publisher_tesim
+        editor_tesim
+        source_tesim
+        abstract_tesim
+        description_tesim
+        note_tesim
+        subject_label_tesim
+        identifier_ssim
+        bibliographic_citation_tesim
+        english_language_date_teim
+        file_format_tesim
+        extracted_text_tsimv
+        keyword_tesim
+        date_associated_tesim
+        subject_ocm_tesim
+        inscription_tesim
       ]
 
       field.solr_parameters = {
