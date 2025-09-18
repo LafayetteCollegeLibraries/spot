@@ -19,15 +19,30 @@ module Spot
     end
 
     def find_by_source_identifier
+      sleep (2)
+      Hyrax.logger.warn("find - source_identifier")
       return unless attributes.key?('source_identifier') && attributes['source_identifier'].present?
+      Hyrax.logger.warn("continue")
       self.class.find(Array.wrap(attributes['source_identifier']).first)
+    end
+
+    def find_by_id
+      Hyrax.logger.warn("find - id")
+      return unless attributes.key?('id') && attributes['id'].present?
+      Hyrax.logger.warn("continue")
+      ActiveFedora::Base.find(attributes['id'])
     end
 
     module ClassMethods
       # @see https://github.com/samvera/bulkrax/blob/v9.1.0/app/factories/bulkrax/object_factory.rb#L57-L64
       # @see https://github.com/samvera/bulkrax/blob/v9.1.0/app/factories/bulkrax/object_factory_interface.rb#L164-L168
       def find(identifier)
-        id_doc = Hyrax::SolrService.get("source_identifier_ssim:#{identifier}").try(:[], 'response').try(:[], 'docs')&.first
+        Hyrax.logger.warn("find - identifier")
+        Hyrax.logger.warn(identifier)
+        id_doc = Hyrax::SolrService.get("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene')
+        Hyrax.logger.warn(id_doc.to_s)
+        id_doc = id_doc.try(:[], 'response').try(:[], 'docs')&.first
+        Hyrax.logger.warn(id_doc.to_s)
         return super(identifier) if id_doc.nil? || id_doc.try(:[], 'id').nil?
 
         ActiveFedora::Base.find(id_doc['id'])
