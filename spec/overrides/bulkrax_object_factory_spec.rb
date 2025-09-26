@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe BulkraxObjectFactoryFindPatch do
+RSpec.describe Bulkrax::ObjectFactory do
   describe '#find' do
     subject { find }
     let(:mock_work) { instance_double(Hyrax::Work) }
