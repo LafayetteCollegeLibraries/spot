@@ -3,7 +3,7 @@ RSpec.describe BulkraxObjectFactoryFindPatch do
   describe '#find' do
     subject { find }
     let(:mock_work) { instance_double(Hyrax::Work) }
-      
+
     context "'find_by_source_identifier' returns the object" do
       before do
         allow(Bulkrax::ObjectFactory).to receive(:find_by_source_identifier).and_return(mock_work)
