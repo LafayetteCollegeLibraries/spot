@@ -31,16 +31,18 @@ module Spot
       find_by_source_identifier || find_by_id || search_by_identifier || nil
     end
 
-    # This method modifies the search to query Solr for the work's
-    # source_identifier and then returns the object if it's found.
-    def find_by_source_identifier
-      return unless attributes.key?('source_identifier') && attributes['source_identifier'].present?
-      identifier = Array.wrap(attributes['source_identifier']).first
-      id_doc = Hyrax::SolrService.get("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene')
-      id_doc = id_doc.try(:[], 'response').try(:[], 'docs')&.first
-      return nil if id_doc.nil? || id_doc.try(:[], 'id').nil?
+    module ClassMethods
+      # This method modifies the search to query Solr for the work's
+      # source_identifier and then returns the object if it's found.
+      def find_by_source_identifier
+        return unless attributes.key?('source_identifier') && attributes['source_identifier'].present?
+        identifier = Array.wrap(attributes['source_identifier']).first
+        id_doc = Hyrax::SolrService.get("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene')
+        id_doc = id_doc.try(:[], 'response').try(:[], 'docs')&.first
+        return nil if id_doc.nil? || id_doc.try(:[], 'id').nil?
 
-      ActiveFedora::Base.find(id_doc['id'])
+        ActiveFedora::Base.find(id_doc['id'])
+      end
     end
   end
 end
