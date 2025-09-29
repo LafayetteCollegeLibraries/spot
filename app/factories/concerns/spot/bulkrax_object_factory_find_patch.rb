@@ -43,6 +43,15 @@ module Spot
 
         ActiveFedora::Base.find(id_doc['id'])
       end
+
+      # We have to implement these for testing purposes.
+      def find_by_id
+        super
+      end
+
+      def search_by_identifier
+        super
+      end
     end
   end
 end
