@@ -48,13 +48,13 @@ jobs:
         ports:
           - 6379:6379
       zookeeper:
-        image: bitnami/zookeeper:3.9
+        image: zookeeper:3.9
         ports:
           - 2181:2181
         env:
           ZOO_SERVER_ID: 1
           ALLOW_ANONYMOUS_LOGIN: yes
-          ZOO_SERVERS: zookeeper:2888:3888
+          ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
           ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       solr:
         image: bitnami/solr:8.11.2
