@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 RSpec.describe Bulkrax::ObjectFactory do
   describe '#find' do
-    subject { find }
+    subject { described_class.find }
     let(:mock_work) { instance_double(Hyrax::Work) }
 
     context "'find_by_source_identifier' returns the object" do
