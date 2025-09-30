@@ -57,17 +57,14 @@ jobs:
           ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
           ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       solr:
-        image: bitnami/solr:8.11.2
+        image: solr:8.11.4
         ports:
           - 8983:8983
         env:
-          SOLR_ADMIN_USERNAME: solr_admin
-          SOLR_ADMIN_PASSWORD: solr_password
-          SOLR_CLOUD_BOOTSTRAP: yes
-          SOLR_ENABLE_AUTHENTICATION: yes
-          SOLR_ENABLE_CLOUD_MODE: yes
+          SOLR_AUTH_TYPE: basic
+          SOLR_AUTHENTICATION_OPTS: -Dbasicauth=solr_admin:solr_password
           SOLR_HOST: solr
-          SOLR_ZK_HOSTS: zookeeper:2181
+          ZK_HOST: zookeeper:2181
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
