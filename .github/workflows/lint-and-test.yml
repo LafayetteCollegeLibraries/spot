@@ -48,7 +48,9 @@ jobs:
         ports:
           - 6379:6379
       zookeeper:
-        image: zookeeper:3.9
+        image: zookeeper:3.9.4
+        volumes:
+          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/apache-zookeeper-3.9.4-bin/security.json
         ports:
           - 2181:2181
         env:
@@ -129,8 +131,8 @@ jobs:
       -
         name: Setup Solr core with local configs
         run: |
-          curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
-          curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
+          curl --user solr:solrRocks -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
+          curl --user solr:solrRocks -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
       -
         name: Restore installed Gems
         uses: actions/cache@v4
