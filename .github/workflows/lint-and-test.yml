@@ -49,8 +49,6 @@ jobs:
           - 6379:6379
       zookeeper:
         image: zookeeper:3.9.4
-        volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/apache-zookeeper-3.9.4-bin/security.json
         ports:
           - 2181:2181
         env:
@@ -64,7 +62,7 @@ jobs:
           - 8983:8983
         env:
           SOLR_AUTH_TYPE: basic
-          SOLR_AUTHENTICATION_OPTS: -Dbasicauth=solr_admin:solr_password
+          SOLR_OPTS: -Dbasicauth=solr_admin:solr_password
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
     env:
