@@ -52,7 +52,7 @@ jobs:
         ports:
           - 2181:2181
         volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/conf/security.json
+          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/apache-zookeeper-3.9.4-bin/security.json
         env:
           ZOO_SERVER_ID: 1
           ALLOW_ANONYMOUS_LOGIN: yes
@@ -62,6 +62,8 @@ jobs:
         image: solr:8.11.4
         ports:
           - 8983:8983
+        volumes:
+          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/var/solr/data/security.json
         env:
           SOLR_AUTH_TYPE: basic
           SOLR_OPTS: -Dbasicauth=solr:SolrRocks
