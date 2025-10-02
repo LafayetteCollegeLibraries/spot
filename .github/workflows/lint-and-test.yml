@@ -64,7 +64,7 @@ jobs:
           - ${{ github.workspace }}/.github/workflows/assets/enable-solr-auth.sh:/docker-entrypoint-initdb.d/enable-solr-auth.sh
         env:
           SOLR_AUTH_TYPE: basic
-          SOLR_OPTS: -Dbasicauth=solr:SolrRocks
+          SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
 
