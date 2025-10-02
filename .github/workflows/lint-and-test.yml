@@ -97,23 +97,6 @@ jobs:
             netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
             libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
       -
-        name: Setup Firefox
-        uses: browser-actions/setup-firefox@v1
-        id: setup-firefox
-        env:
-          HOME: /root
-        with:
-          firefox-version: latest-esr
-      -
-        name: Setup Geckodriver
-        uses: browser-actions/setup-geckodriver@latest
-        id: setup-geckodriver
-        env:
-          HOME: /root
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          geckodriver-version: latest
-      -
         name: Checkout code
         uses: actions/checkout@v4
       -
@@ -134,6 +117,23 @@ jobs:
         run: |
           curl --user solr:SolrRocks -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
           curl --user solr:SolrRocks -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
+      -
+        name: Setup Firefox
+        uses: browser-actions/setup-firefox@v1
+        id: setup-firefox
+        env:
+          HOME: /root
+        with:
+          firefox-version: latest-esr
+      -
+        name: Setup Geckodriver
+        uses: browser-actions/setup-geckodriver@latest
+        id: setup-geckodriver
+        env:
+          HOME: /root
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          geckodriver-version: latest
       -
         name: Restore installed Gems
         uses: actions/cache@v4
