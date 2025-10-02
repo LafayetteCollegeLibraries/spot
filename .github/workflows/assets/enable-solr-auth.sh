@@ -6,10 +6,8 @@
   -cmd put /security.json '{"authentication":{
    "class":"solr.BasicAuthPlugin",
    "credentials":{"solr":"IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c="}
-},
-"authorization":{
+},"authorization":{
    "class":"solr.RuleBasedAuthorizationPlugin",
-   "permissions":[{"name":"all",
-      "role":"admin"}],
+   "permissions":[{"name":"all", "role":"admin"}],
    "user-role":{"solr":"admin"}
 }}'
