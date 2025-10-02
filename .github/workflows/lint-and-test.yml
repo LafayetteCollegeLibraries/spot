@@ -61,7 +61,7 @@ jobs:
         ports:
           - 8983:8983
         volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/enable-solr-auth.sh:/docker-entrypoint-initdb.d/enable-solr-auth.sh
+          - ${{ github.workspace }}/.github/workflows/assets:/docker-entrypoint-initdb.d
         env:
           SOLR_AUTH_TYPE: basic
           SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
