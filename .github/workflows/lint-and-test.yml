@@ -47,6 +47,7 @@ jobs:
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
         options: >-
+          --health-cmd "curl -Ifs http://localhost:8983/solr/ || exit 1"
           --health-interval 15s
           --health-retries 5
 
