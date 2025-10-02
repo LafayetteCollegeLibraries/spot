@@ -51,8 +51,6 @@ jobs:
         image: zookeeper:3.9.4
         ports:
           - 2181:2181
-        volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/apache-zookeeper-3.9.4-bin/security.json
         env:
           ZOO_SERVER_ID: 1
           ALLOW_ANONYMOUS_LOGIN: yes
@@ -63,7 +61,7 @@ jobs:
         ports:
           - 8983:8983
         volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/var/solr/data/security.json
+          - ${{ github.workspace }}/.github/workflows/assets/enable-solr-auth.sh:/docker-entrypoint-initdb.d/enable-solr-auth.sh
         env:
           SOLR_AUTH_TYPE: basic
           SOLR_OPTS: -Dbasicauth=solr:SolrRocks
@@ -133,8 +131,8 @@ jobs:
       -
         name: Setup Solr core with local configs
         run: |
-          curl --user solr:solrRocks -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
-          curl --user solr:solrRocks -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
+          curl --user solr:SolrRocks -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
+          curl --user solr:SolrRocks -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
       -
         name: Restore installed Gems
         uses: actions/cache@v4
