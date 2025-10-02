@@ -47,9 +47,10 @@ jobs:
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
         options: >-
-          --health-start-period 60s
-          --health-interval 60s
-          --health-retries 4
+          --health-start-period=240s
+          --health-start-interval=60s
+          --health-retries=4
+
       database:
         image: postgres:13-alpine
         ports:
@@ -63,6 +64,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
       fedora:
         image: samvera/fcrepo4:4.7.5
         ports:
