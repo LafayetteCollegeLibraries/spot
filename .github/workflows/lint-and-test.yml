@@ -24,6 +24,8 @@ jobs:
     container: ruby:2.7.8-slim-bullseye
     needs: lint
     services:
+      # Start the Zookeeper and Solr instances first, as the Solr bootup includes the enabling of basic authentication
+      # and needs a longer runway to be ready
       zookeeper:
         image: zookeeper:3.9.4
         ports:
@@ -33,6 +35,21 @@ jobs:
           ALLOW_ANONYMOUS_LOGIN: yes
           ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
           ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
+      solr:
+        image: solr:8.11.4
+        ports:
+          - 8983:8983
+        volumes:
+          - ${{ github.workspace }}/.github/workflows/assets/enable-solr-auth.sh:/docker-entrypoint-initdb.d/enable-solr-auth.sh
+        env:
+          SOLR_AUTH_TYPE: basic
+          SOLR_OPTS: -Dbasicauth=solr:SolrRocks
+          SOLR_HOST: solr
+          ZK_HOST: zookeeper:2181
+        options: >-
+          --health-start-period 60s
+          --health-interval 60s
+          --health-retries 4
       database:
         image: postgres:13-alpine
         ports:
@@ -56,17 +73,6 @@ jobs:
         image: redis:6.2-alpine
         ports:
           - 6379:6379
-      solr:
-        image: solr:8.11.4
-        ports:
-          - 8983:8983
-        volumes:
-          - ${{ github.workspace }}/.github/workflows/assets:/docker-entrypoint-initdb.d
-        env:
-          SOLR_AUTH_TYPE: basic
-          SOLR_AUTHENTICATION_OPTS: "-Dbasicauth=solr:SolrRocks"
-          SOLR_HOST: solr
-          ZK_HOST: zookeeper:2181
 
     env:
       BUNDLE_PATH: vendor/bundle
@@ -97,6 +103,23 @@ jobs:
             netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
             libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
       -
+        name: Setup Firefox
+        uses: browser-actions/setup-firefox@v1
+        id: setup-firefox
+        env:
+          HOME: /root
+        with:
+          firefox-version: latest-esr
+      -
+        name: Setup Geckodriver
+        uses: browser-actions/setup-geckodriver@latest
+        id: setup-geckodriver
+        env:
+          HOME: /root
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          geckodriver-version: latest
+      -
         name: Checkout code
         uses: actions/checkout@v4
       -
@@ -117,23 +140,6 @@ jobs:
         run: |
           curl --user solr:SolrRocks -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
           curl --user solr:SolrRocks -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
-      -
-        name: Setup Firefox
-        uses: browser-actions/setup-firefox@v1
-        id: setup-firefox
-        env:
-          HOME: /root
-        with:
-          firefox-version: latest-esr
-      -
-        name: Setup Geckodriver
-        uses: browser-actions/setup-geckodriver@latest
-        id: setup-geckodriver
-        env:
-          HOME: /root
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          geckodriver-version: latest
       -
         name: Restore installed Gems
         uses: actions/cache@v4
