@@ -47,8 +47,7 @@ jobs:
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
         options: >-
-          --health-start-period=240s
-          --health-start-interval=60s
+          --health-start-interval=120s
           --health-retries=4
 
       database:
