@@ -24,6 +24,15 @@ jobs:
     container: ruby:2.7.8-slim-bullseye
     needs: lint
     services:
+      zookeeper:
+        image: zookeeper:3.9.4
+        ports:
+          - 2181:2181
+        env:
+          ZOO_SERVER_ID: 1
+          ALLOW_ANONYMOUS_LOGIN: yes
+          ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
+          ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       database:
         image: postgres:13-alpine
         ports:
@@ -47,15 +56,6 @@ jobs:
         image: redis:6.2-alpine
         ports:
           - 6379:6379
-      zookeeper:
-        image: zookeeper:3.9.4
-        ports:
-          - 2181:2181
-        env:
-          ZOO_SERVER_ID: 1
-          ALLOW_ANONYMOUS_LOGIN: yes
-          ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
-          ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       solr:
         image: solr:8.11.4
         ports:
@@ -67,6 +67,7 @@ jobs:
           SOLR_OPTS: -Dbasicauth=solr:SolrRocks
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
+
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
