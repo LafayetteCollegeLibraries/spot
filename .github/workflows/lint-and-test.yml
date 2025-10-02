@@ -46,10 +46,6 @@ jobs:
           SOLR_OPTS: -Dbasicauth=solr:SolrRocks
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
-        options: >-
-          --health-cmd "curl -Ifs http://localhost:8983/solr/ || exit 1"
-          --health-start-interval=60s
-          --health-retries=4
 
       database:
         image: postgres:13-alpine
