@@ -30,11 +30,12 @@ jobs:
           - 8983:8983
         volumes:
           - ${{ github.workspace }}/docker/solr/config:/solr-test-config
+          - ${{ github.workspace }}/.github/workflows/assets/solr-test-entrypoint.sh:/solr-test-entrypoint.sh
         env:
           SOLR_HOST: solr
           VERBOSE: yes
         options: >-
-          --entrypoint "precreate-core spot-test /solr-test-config && docker-entrypoint.sh \"$@\""
+          --entrypoint /solr-test-entrypoint.sh
 
       database:
         image: postgres:13-alpine
