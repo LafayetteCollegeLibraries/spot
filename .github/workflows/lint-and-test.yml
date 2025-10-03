@@ -24,29 +24,15 @@ jobs:
     container: ruby:2.7.8-slim-bullseye
     needs: lint
     services:
-      # Start the Zookeeper and Solr instances first, as the Solr bootup includes the enabling of basic authentication
-      # and needs a longer runway to be ready
-      zookeeper:
-        image: zookeeper:3.9.4
-        ports:
-          - 2181:2181
-        env:
-          ZOO_SERVER_ID: 1
-          ALLOW_ANONYMOUS_LOGIN: yes
-          ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
-          ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       solr:
         image: solr:8.11.4
         ports:
           - 8983:8983
         volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/solr-test-security.json
-          - ${{ github.workspace }}/.github/workflows/assets/copy-security-to-zk.sh:/docker-entrypoint-initdb.d/copy-security-to-zk.sh
+          - ${{ github.workspace }}/docker/solr/config:/solr-test-config
+          - ${{ github.workspace }}/.github/workflows/assets/precreate-solr-cores.sh:/docker-entrypoint-initdb.d/precreate-solr-cores.sh
         env:
-          SOLR_AUTH_TYPE: basic
-          SOLR_OPTS: -Dbasicauth=solr:SolrRocks
           SOLR_HOST: solr
-          ZK_HOST: zookeeper:2181
           VERBOSE: yes
 
       database:
