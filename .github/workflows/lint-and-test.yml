@@ -36,6 +36,7 @@ jobs:
           VERBOSE: yes
         options: >-
           --entrypoint /spot-assets/solr-test-entrypoint.sh
+          --name solrservice
 
       database:
         image: postgres:13-alpine
@@ -91,6 +92,16 @@ jobs:
             netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
             libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
       -
+        name: Checkout code
+        uses: actions/checkout@v4
+
+        # see https://github.com/orgs/community/discussions/42127#discussioncomment-7591609
+      -
+        name: Restart Solr (to use volume mounts)
+        uses: docker://docker
+        with:
+          args: docker restart solrservice
+      -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
         id: setup-firefox
@@ -107,9 +118,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           geckodriver-version: latest
-      -
-        name: Checkout code
-        uses: actions/checkout@v4
       -
         name: Restore installed Gems
         uses: actions/cache@v4
