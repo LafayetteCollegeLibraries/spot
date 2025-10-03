@@ -47,6 +47,7 @@ jobs:
           SOLR_OPTS: -Dbasicauth=solr:SolrRocks
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
+          VERBOSE: yes
 
       database:
         image: postgres:13-alpine
