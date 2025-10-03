@@ -109,24 +109,6 @@ jobs:
         name: Checkout code
         uses: actions/checkout@v4
       -
-        name: Restore Solr config.zip from cache
-        id: solr-config-cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/spot_solr_config.zip
-          key: spot-solr-${{ hashFiles('docker/solr/config') }}
-      -
-        name: Build Solr config.zip
-        if: steps.solr-config-cache.outputs.cache-hit != 'true'
-        run: |
-          cd docker/solr/config
-          zip -1 /tmp/spot_solr_config.zip ./*
-      -
-        name: Setup Solr core with local configs
-        run: |
-          curl --user solr:SolrRocks -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
-          curl --user solr:SolrRocks -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
-      -
         name: Restore installed Gems
         uses: actions/cache@v4
         with:
