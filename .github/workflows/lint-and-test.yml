@@ -40,16 +40,13 @@ jobs:
         ports:
           - 8983:8983
         volumes:
-          - ${{ github.workspace }}/.github/workflows/assets/enable-solr-auth.sh:/docker-entrypoint-initdb.d/enable-solr-auth.sh
+          - ${{ github.workspace }}/.github/workflows/assets/solr-test-security.json:/solr-test-security.json
+          - ${{ github.workspace }}/.github/workflows/assets/copy-security-to-zk.sh:/docker-entrypoint-initdb.d/copy-security-to-zk.sh
         env:
           SOLR_AUTH_TYPE: basic
           SOLR_OPTS: -Dbasicauth=solr:SolrRocks
           SOLR_HOST: solr
           ZK_HOST: zookeeper:2181
-        options: >-
-          --health-cmd "curl -Ifs http://localhost:8983/solr/ || exit 1"
-          --health-interval 15s
-          --health-retries 5
 
       database:
         image: postgres:13-alpine
