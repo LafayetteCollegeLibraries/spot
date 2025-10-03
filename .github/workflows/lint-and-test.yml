@@ -99,6 +99,10 @@ jobs:
         uses: docker://docker
         with:
           args: docker restart solrservice
+      - name: Ensure Solr is running
+        run: |
+          sleep 4
+          curl -Ifs http://solr:8983/solr/ || exit 1
       -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
