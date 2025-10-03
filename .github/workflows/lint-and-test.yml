@@ -102,13 +102,13 @@ jobs:
       - name: Ensure Solr is running
         run: |
           retries=5
-          while (( retries > 0 )); do
+          while (( $retries > 0 )); do
             curl -I -fs http://solr:8983/solr/ && break
             echo "no response from Solr, ${retries} / 5 remaining"
-            (( retries --))
+            (( $retries --))
             sleep 5
           done
-          if (( retries == 0 )); then
+          if (( $retries == 0 )); then
             echo "out of retries! couldn't connect to Solr"
             exit 1
           fi
