@@ -101,8 +101,17 @@ jobs:
           args: docker restart solrservice
       - name: Ensure Solr is running
         run: |
-          sleep 4
-          curl -Ifs http://solr:8983/solr/ || exit 1
+          retries=5
+          while (( retries > 0 )); do
+            curl -I -fs http://solr:8983/solr/ && break
+            echo "no response from Solr, ${retries} / 5 remaining"
+            (( retries --))
+            sleep 5
+          done
+          if (( retries == 0 )); then
+            echo "out of retries! couldn't connect to Solr"
+            exit 1
+          fi
       -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
