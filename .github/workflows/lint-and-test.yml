@@ -29,13 +29,11 @@ jobs:
         ports:
           - 8983:8983
         volumes:
-          - ${{ github.workspace }}/docker/solr/config:/solr-test-config
-          - ${{ github.workspace }}/.github/workflows/assets:/spot-assets
+          - ${{ github.workspace }}/.github/workflows/assets:/docker-entrypoint-initdb.d
         env:
           SOLR_HOST: solr
           VERBOSE: yes
         options: >-
-          --entrypoint /spot-assets/solr-test-entrypoint.sh
           --name solrservice
 
       database:
