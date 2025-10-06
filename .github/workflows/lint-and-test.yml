@@ -67,6 +67,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: docker/setup-docker-action@v4
         id: setup-docker
+        with:
+          set-host: true
       -
         # Create and start the Solr service container as a step instead to ensure
         # that the precreate-core startup script is executed and the test core is created.
