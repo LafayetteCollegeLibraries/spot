@@ -75,7 +75,7 @@ jobs:
         name: Create + Start Solr service container
         run: |
           docker create --name solr_service --network ${{ job.container.network }} --network-alias solr \
-            --workdir $WORKDIR -p 8983:8983 \
+            --workdir ${{ github.workspace }} -p 8983:8983 \
             -e GITHUB_ACTIONS=true -e CI=true -e SOLR_HOST=solr \
             -v "${{ steps.setup-docker.outputs.sock }}:/var/run/docker.sock" \
             -v "${{ github.workspace }}/docker/solr/config:/solr-test-config" \
