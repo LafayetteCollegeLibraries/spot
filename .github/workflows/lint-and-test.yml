@@ -21,7 +21,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    container: ruby:2.7.8-slim-bullseye
     needs: lint
     services:
       database:
@@ -37,7 +36,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
       fedora:
         image: samvera/fcrepo4:4.7.5
         ports:
@@ -48,7 +46,6 @@ jobs:
         image: redis:6.2-alpine
         ports:
           - 6379:6379
-
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
@@ -63,26 +60,24 @@ jobs:
       PSQL_HOST: database
       RAILS_ENV: test
       SOLR_TEST_URL: http://solr:SolrRocks@solr:8983/solr/spot-test
+      SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
 
     steps:
-      -
-        name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       -
         # Create and start the Solr service container as a step instead to ensure
         # that the precreate-core startup script is executed and the test core is created.
         # @see https://www.liip.ch/en/blog/how-to-use-a-custom-solr-schema-when-testing-code-with-github-actions
         # @see https://gist.github.com/bellisk/949ea041369ad512f6e07c065fc14083#file-test-final-yaml-L36-L44
         name: Create + Start Solr service container
-        env:
-          SOLR_VERSION: "8.11.4"
         run: |
           apt-get update -y && apt-get -y install docker
 
           docker create --name solr_service --network ${{ job.container.network }} --network-alias solr \
             --workdir $WORKDIR -p 8983:8983 \
             -e GITHUB_ACTIONS=true -e CI=true -e SOLR_HOST=solr \
+            -v "/var/run/docker.sock:/var/run/docker.sock" \
             -v "${{ github.workspace }}/docker/solr/config:/solr-test-config" \
             -v "${{ github.workspace }}/.github/workflows/assets/solr-create-core.sh:/docker-entrypoint-initdb.d/solr-create-core.sh" \
             solr:$SOLR_VERSION \
@@ -117,17 +112,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           geckodriver-version: latest
-      -
-        name: Restore installed Gems
-        uses: actions/cache@v4
+
+      - name: Setup Ruby + install Gems
+        uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
-      -
-        name: Install gem dependencies
-        run: |
-          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
-          bundle install
+          bundler-cache: true
       -
         name: Run migrations
         run: bundle exec rake db:migrate
