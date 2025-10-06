@@ -65,10 +65,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-docker-action@v4
-        id: setup-docker
-        with:
-          set-host: true
       -
         # Create and start the Solr service container as a step instead to ensure
         # that the precreate-core startup script is executed and the test core is created.
@@ -79,7 +75,6 @@ jobs:
           docker create --name solr_service --network ${{ job.container.network }} --network-alias solr \
             --workdir ${{ github.workspace }} -p 8983:8983 \
             -e GITHUB_ACTIONS=true -e CI=true -e SOLR_HOST=solr \
-            -v "${{ steps.setup-docker.outputs.sock }}:/var/run/docker.sock" \
             -v "${{ github.workspace }}/docker/solr/config:/solr-test-config" \
             -v "${{ github.workspace }}/.github/workflows/assets/solr-create-core.sh:/docker-entrypoint-initdb.d/solr-create-core.sh" \
             solr:$SOLR_VERSION \
