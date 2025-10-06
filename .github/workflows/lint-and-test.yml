@@ -34,7 +34,7 @@ jobs:
           SOLR_HOST: solr
           VERBOSE: yes
         options: >-
-          --name solrservice
+          --name solr
 
       database:
         image: postgres:13-alpine
@@ -87,7 +87,7 @@ jobs:
         name: Restart Solr (to use volume mounts)
         uses: docker://docker
         with:
-          args: docker restart solrservice
+          args: docker restart solr
       -
         name: Install system dependencies from Dockerfile
         run: |
