@@ -78,7 +78,7 @@ jobs:
         env:
           SOLR_VERSION: "8.11.4"
         run: |
-          /usr/bin/docker create --name solr_service --network ${{ job.container.network }} --network-alias solr \
+          docker create --name solr_service --network ${{ job.container.network }} --network-alias solr \
             --workdir $WORKDIR -p 8983:8983 \
             -e GITHUB_ACTIONS=true -e CI=true -e SOLR_HOST=solr \
             -v "${{ github.workspace }}/docker/solr/config:/solr-test-config" \
@@ -86,7 +86,7 @@ jobs:
             solr:$SOLR_VERSION \
             -f "/dev/null"
 
-          /usr/bin/docker start solr_service
+          docker start solr_service
       -
         name: Install system dependencies from Dockerfile
         run: |
