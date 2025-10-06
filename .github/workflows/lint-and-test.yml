@@ -78,6 +78,16 @@ jobs:
       URL_HOST: http://localhost:3000
 
     steps:
+      # see https://github.com/orgs/community/discussions/42127#discussioncomment-7591609
+      # restart the solr service early w/ volume mounts attached to give it time to create the core
+      -
+        name: Checkout code
+        uses: actions/checkout@v4
+      -
+        name: Restart Solr (to use volume mounts)
+        uses: docker://docker
+        with:
+          args: docker restart solrservice
       -
         name: Install system dependencies from Dockerfile
         run: |
@@ -89,29 +99,6 @@ jobs:
             build-essential coreutils curl git libxml2 libxml2-dev libxslt-dev \
             netcat-openbsd nodejs openssl postgresql-13 ruby-dev tzdata zip \
             libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
-      -
-        name: Checkout code
-        uses: actions/checkout@v4
-
-        # see https://github.com/orgs/community/discussions/42127#discussioncomment-7591609
-      -
-        name: Restart Solr (to use volume mounts)
-        uses: docker://docker
-        with:
-          args: docker restart solrservice
-      - name: Ensure Solr is running
-        run: |
-          retries=5; \
-          while [[ $retries > 0 ]]; do
-            curl -I -fs http://solr:8983/solr/ && break;
-            echo "no response from Solr, ${retries} / 5 remaining";
-            retries=$(( $retries - 1 ));
-            sleep 5;
-          done
-          if [[ $retries -eq 0 ]]; then
-            echo "out of retries! couldn't connect to Solr";
-            exit 1;
-          fi
       -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
