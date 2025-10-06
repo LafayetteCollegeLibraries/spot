@@ -78,6 +78,8 @@ jobs:
         env:
           SOLR_VERSION: "8.11.4"
         run: |
+          apt-get update -y && apt-get -y install docker
+
           docker create --name solr_service --network ${{ job.container.network }} --network-alias solr \
             --workdir $WORKDIR -p 8983:8983 \
             -e GITHUB_ACTIONS=true -e CI=true -e SOLR_HOST=solr \
