@@ -21,6 +21,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    container: ruby:2.7.8-slim-bullseye
     needs: lint
     services:
       database:
@@ -50,10 +51,10 @@ jobs:
         image: solr:8.11.4
         ports:
           - 8983:8983
+        volumes:
+          - /tmp/solr/config:/var/solr/data/spot-test
         env:
           SOLR_HOST: solr
-        volumes:
-          - ${{ github.workspace }}/docker/solr/config:/var/solr/data/spot-test
         options: --name solrservice
     env:
       BUNDLE_PATH: vendor/bundle
@@ -74,6 +75,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Copy Solr config to mount
+        run: |
+          cp -r docker/solr/config/* /tmp/solr/config/
+          touch /tmp/solr/config/core.properties
+
       - name: Restart Docker services
         uses: docker://docker
         with:
