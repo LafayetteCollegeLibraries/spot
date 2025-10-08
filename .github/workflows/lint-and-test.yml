@@ -24,7 +24,7 @@ jobs:
     container:
       image: ruby:2.7.8-slim-bullseye
       volumes:
-        - /tmp/solr/config:/tmp/solr/config
+        - /tmp/solr:/tmp/solr
     needs: lint
     services:
       database:
@@ -55,8 +55,7 @@ jobs:
         ports:
           - 8983:8983
         volumes:
-          - /tmp/solr/config:/var/solr/data/spot-test
-          - solr_test_data:/var/solr/data/spot-test/data
+          - /tmp/solr:/var/solr/data
         env:
           SOLR_HOST: solr
         options: --name solrservice
@@ -81,9 +80,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Copy Solr config to mount
         run: |
-          cp -r docker/solr/config/* /tmp/solr/config/
-          touch /tmp/solr/config/core.properties
-
+          mkdir -p /tmp/solr/spot-test
+          cp docker/solr/config/* /tmp/solr/spot-test
+          touch /tmp/solr/spot-test/core.properties
+          chown -R solr:solr /tmp/solr/spot-test
       - name: Restart Docker services
         uses: docker://docker
         with:
