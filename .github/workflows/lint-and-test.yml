@@ -116,10 +116,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           geckodriver-version: latest
       -
-        name: Setup Ruby + install Gems
-        uses: ruby/setup-ruby@v1
+        name: Restore installed Gems
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
+          path: vendor/bundle
+          key: spot-bundle-${{ hashFiles('Gemfile.lock') }}
+      -
+        name: Install gem dependencies
+        run: |
+          gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
+          bundle install
       -
         name: Run migrations
         run: bundle exec rake db:migrate
