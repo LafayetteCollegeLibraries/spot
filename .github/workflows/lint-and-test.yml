@@ -21,7 +21,10 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    container: ruby:2.7.8-slim-bullseye
+    container:
+      image: ruby:2.7.8-slim-bullseye
+      volumes:
+        - /tmp/solr/config:/tmp/solr/config
     needs: lint
     services:
       database:
