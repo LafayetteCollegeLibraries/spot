@@ -56,6 +56,7 @@ jobs:
           - 8983:8983
         volumes:
           - /tmp/solr/config:/var/solr/data/spot-test
+          - solr_test_data:/var/solr/data/spot-test/data
         env:
           SOLR_HOST: solr
         options: --name solrservice
