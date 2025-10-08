@@ -58,7 +58,7 @@ jobs:
           - /tmp/solr:/var/solr/data
         env:
           SOLR_HOST: solr
-        options: --name solrservice
+        options: --name solrservice --user root
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
