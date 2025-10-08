@@ -83,7 +83,7 @@ jobs:
           mkdir -p /tmp/solr/spot-test
           cp -r docker/solr/config/* /tmp/solr/spot-test
           touch /tmp/solr/spot-test/core.properties
-          chown -r 8983:8983 /tmp/solr/spot-test
+          chown -R 8983:8983 /tmp/solr/spot-test
       - name: Restart Docker services
         uses: docker://docker
         with:
