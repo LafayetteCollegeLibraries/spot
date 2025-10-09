@@ -85,7 +85,7 @@ jobs:
       - name: Restart Docker services
         uses: docker://docker
         with:
-          args: docker restart solr
+          args: docker stop solr && docker start solr
       -
         name: Install system dependencies from Dockerfile
         run: |
