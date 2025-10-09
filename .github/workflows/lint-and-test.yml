@@ -21,7 +21,10 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    container: ruby:2.7.8-slim-bullseye
+    container:
+      image: ruby:2.7.8-slim-bullseye
+      volumes:
+        - solr:/tmp/solr
     needs: lint
     services:
       database:
@@ -47,27 +50,12 @@ jobs:
         image: redis:6.2-alpine
         ports:
           - 6379:6379
-      zookeeper:
-        image: zookeeper:3.9
-        ports:
-          - 2181:2181
-        env:
-          ZOO_SERVER_ID: 1
-          ALLOW_ANONYMOUS_LOGIN: yes
-          ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
-          ZOO_4LW_COMMANDS_WHITELIST: srvr,mntr,conf,ruok
       solr:
-        image: bitnami/solr:8.11.2
+        image: solr:8.11.4
         ports:
           - 8983:8983
-        env:
-          SOLR_ADMIN_USERNAME: solr_admin
-          SOLR_ADMIN_PASSWORD: solr_password
-          SOLR_CLOUD_BOOTSTRAP: yes
-          SOLR_ENABLE_AUTHENTICATION: yes
-          SOLR_ENABLE_CLOUD_MODE: yes
-          SOLR_HOST: solr
-          SOLR_ZK_HOSTS: zookeeper:2181
+        volumes:
+          - solr:/var/solr/data
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
@@ -81,10 +69,22 @@ jobs:
       PSQL_DATABASE: spot_test
       PSQL_HOST: database
       RAILS_ENV: test
-      SOLR_TEST_URL: http://solr_admin:solr_password@solr:8983/solr/spot-test
+      SOLR_TEST_URL: http://solr:8983/solr/spot-test
+      SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
 
     steps:
+      - uses: actions/checkout@v4
+      - name: Copy Solr config to mount
+        run: |
+          mkdir -p /tmp/solr/spot-test/data
+          cp -r docker/solr/config/* /tmp/solr/spot-test
+          touch /tmp/solr/spot-test/core.properties
+          chown -R 8983:8983 /tmp/solr/spot-test
+      - name: Restart Solr service
+        uses: docker://docker
+        with:
+          args: docker restart ${{ job.services.solr.id }}
       -
         name: Install system dependencies from Dockerfile
         run: |
@@ -114,27 +114,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           geckodriver-version: latest
       -
-        name: Checkout code
-        uses: actions/checkout@v4
-      -
-        name: Restore Solr config.zip from cache
-        id: solr-config-cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/spot_solr_config.zip
-          key: spot-solr-${{ hashFiles('docker/solr/config') }}
-      -
-        name: Build Solr config.zip
-        if: steps.solr-config-cache.outputs.cache-hit != 'true'
-        run: |
-          cd docker/solr/config
-          zip -1 /tmp/spot_solr_config.zip ./*
-      -
-        name: Setup Solr core with local configs
-        run: |
-          curl --user solr_admin:solr_password -H "Content-type: application/octet-stream" --data-binary @/tmp/spot_solr_config.zip "http://solr:8983/solr/admin/configs?action=UPLOAD&name=spot"
-          curl --user solr_admin:solr_password -H "Content-type: application/json" http://solr:8983/api/collections/ -d "{create: {name: spot-test, config: spot, numShards: 1}}"
-      -
         name: Restore installed Gems
         uses: actions/cache@v4
         with:
@@ -144,7 +123,14 @@ jobs:
         name: Install gem dependencies
         run: |
           gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
-          bundle install
+      -
+        name: Status check Solr
+        uses: cygnetdigital/wait_for_response@v2.0.0
+        with:
+          url: http://solr:8983/solr/
+          responseCode: 200,301
+          timeout: 10000
+          interval: 1000
       -
         name: Run migrations
         run: bundle exec rake db:migrate
