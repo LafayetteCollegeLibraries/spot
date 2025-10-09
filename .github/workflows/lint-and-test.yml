@@ -24,7 +24,7 @@ jobs:
     container:
       image: ruby:2.7.8-slim-bullseye
       volumes:
-        - /tmp/solr:/tmp/solr
+        - solr:/tmp/solr
     needs: lint
     services:
       database:
@@ -55,7 +55,7 @@ jobs:
         ports:
           - 8983:8983
         volumes:
-          - /tmp/solr:/var/solr/data
+          - solr:/var/solr/data
         options: --name solrservice
     env:
       BUNDLE_PATH: vendor/bundle
