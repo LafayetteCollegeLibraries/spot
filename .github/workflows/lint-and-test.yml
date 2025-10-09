@@ -56,8 +56,6 @@ jobs:
           - 8983:8983
         volumes:
           - /tmp/solr:/var/solr/data
-        env:
-          SOLR_HOST: solr
         options: --name solrservice
     env:
       BUNDLE_PATH: vendor/bundle
