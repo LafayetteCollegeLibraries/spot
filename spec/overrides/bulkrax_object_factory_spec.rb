@@ -88,7 +88,7 @@ RSpec.describe Bulkrax::ObjectFactory do
           let(:id_doc) { { 'response': { 'docs': [{ 'id': nil }] } } }
 
           before do
-            allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{ identifier }", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
+            allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
           end
 
           it { is_expected.to eq nil }
@@ -100,7 +100,7 @@ RSpec.describe Bulkrax::ObjectFactory do
           let(:mock_work) { instance_double(Hyrax::Work) }
 
           before do
-            allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{ identifier }", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
+            allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
             allow(ActiveFedora::Base).to receive(:find).with(id).and_return(mock_work)
           end
 
