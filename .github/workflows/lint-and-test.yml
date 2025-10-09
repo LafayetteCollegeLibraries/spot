@@ -56,7 +56,6 @@ jobs:
           - 8983:8983
         volumes:
           - solr:/var/solr/data
-        options: --name solrservice
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
@@ -86,14 +85,10 @@ jobs:
         uses: docker://docker
         with:
           args: docker stats -a --no-stream
-      - name: Stop Solr service
+      - name: Restart Solr service
         uses: docker://docker
         with:
-          args: docker stop solrservice
-      - name: Start Solr service
-        uses: docker://docker
-        with:
-          args: docker start solrservice
+          args: docker restart ${{ job.services.solr.id }}
       -
         name: Install system dependencies from Dockerfile
         run: |
@@ -137,11 +132,10 @@ jobs:
         name: Docker Stats
         uses: docker://docker
         with:
-          args: docker stats --no-stream
+          args: docker stats -a --no-stream
       -
         name: Status check Solr
         run: |
-          ls -al /tmp/solr/spot-test
           curl -I -fs -vvv $SOLR_TEST_URL || exit 1
       -
         name: Run migrations
