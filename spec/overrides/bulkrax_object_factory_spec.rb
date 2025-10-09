@@ -68,6 +68,10 @@ RSpec.describe Bulkrax::ObjectFactory do
     context "there is no source_identifier" do
       let(:attributes) { { 'source_identifier': nil } }
 
+      before do
+        allow(Bulkrax::ObjectFactory).to receive(:attributes).and_return(attributes)
+      end
+
       it { is_expected.to eq nil }
     end
 
@@ -77,6 +81,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
       context "the solr query does not match with an object" do
         before do
+          allow(Bulkrax::ObjectFactory).to receive(:attributes).and_return(attributes)
           allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(nil)
         end
 
@@ -88,6 +93,7 @@ RSpec.describe Bulkrax::ObjectFactory do
           let(:id_doc) { { 'response': { 'docs': [{ 'id': nil }] } } }
 
           before do
+            allow(Bulkrax::ObjectFactory).to receive(:attributes).and_return(attributes)
             allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
           end
 
@@ -100,6 +106,7 @@ RSpec.describe Bulkrax::ObjectFactory do
           let(:mock_work) { instance_double(Hyrax::Work) }
 
           before do
+            allow(Bulkrax::ObjectFactory).to receive(:attributes).and_return(attributes)
             allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
             allow(ActiveFedora::Base).to receive(:find).with(id).and_return(mock_work)
           end
