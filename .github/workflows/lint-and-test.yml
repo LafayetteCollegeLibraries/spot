@@ -129,7 +129,7 @@ jobs:
         name: Status check Solr
         run: |
           ls -al /tmp/solr/spot-test
-          curl -Ifs $SOLR_TEST_URL || exit 1
+          curl -I -fs -vvv $SOLR_TEST_URL || exit 1
       -
         name: Run migrations
         run: bundle exec rake db:migrate
