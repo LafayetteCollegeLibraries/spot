@@ -81,10 +81,6 @@ jobs:
           cp -r docker/solr/config/* /tmp/solr/spot-test
           touch /tmp/solr/spot-test/core.properties
           chown -R 8983:8983 /tmp/solr/spot-test
-      - name: Get Docker service status
-        uses: docker://docker
-        with:
-          args: docker stats -a --no-stream
       - name: Restart Solr service
         uses: docker://docker
         with:
@@ -127,12 +123,6 @@ jobs:
         name: Install gem dependencies
         run: |
           gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
-          bundle install
-      -
-        name: Docker Stats
-        uses: docker://docker
-        with:
-          args: docker stats -a --no-stream
       -
         name: Status check Solr
         uses: cygnetdigital/wait_for_response@v2.0.0
