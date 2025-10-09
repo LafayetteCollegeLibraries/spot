@@ -123,6 +123,7 @@ jobs:
         name: Install gem dependencies
         run: |
           gem install bundler:$(tail -n 1 Gemfile.lock | sed -e "s/ *//")
+          bundle install
       -
         name: Status check Solr
         uses: cygnetdigital/wait_for_response@v2.0.0
