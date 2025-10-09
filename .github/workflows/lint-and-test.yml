@@ -82,10 +82,18 @@ jobs:
           cp -r docker/solr/config/* /tmp/solr/spot-test
           touch /tmp/solr/spot-test/core.properties
           chown -R 8983:8983 /tmp/solr/spot-test
-      - name: Restart Docker services
+      - name: Get Docker service status
         uses: docker://docker
         with:
-          args: docker stop solr && docker start solr
+          args: docker stats --no-stream
+      - name: Stop Solr service
+        uses: docker://docker
+        with:
+          args: docker stop solr
+      - name: Start Solr service
+        uses: docker://docker
+        with:
+          args: docker start solr
       -
         name: Install system dependencies from Dockerfile
         run: |
