@@ -70,7 +70,7 @@ jobs:
       PSQL_DATABASE: spot_test
       PSQL_HOST: database
       RAILS_ENV: test
-      SOLR_TEST_URL: http://solr:8983/solr/spot-test
+      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
       SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
 
