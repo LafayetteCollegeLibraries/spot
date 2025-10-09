@@ -69,7 +69,7 @@ jobs:
       PSQL_DATABASE: spot_test
       PSQL_HOST: database
       RAILS_ENV: test
-      SOLR_TEST_URL: http://localhost:8983/solr/spot-test
+      SOLR_TEST_URL: http://solr:8983/solr/spot-test
       SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
 
@@ -135,8 +135,12 @@ jobs:
           args: docker stats -a --no-stream
       -
         name: Status check Solr
-        run: |
-          curl -I -fs -vvv $SOLR_TEST_URL || exit 1
+        uses: cygnetdigital/wait_for_response@v2.0.0
+        with:
+          url: http://solr:8983/solr/
+          responseCode: 200,301
+          timeout: 10000
+          interval: 1000
       -
         name: Run migrations
         run: bundle exec rake db:migrate
