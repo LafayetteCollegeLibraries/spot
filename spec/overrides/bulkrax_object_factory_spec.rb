@@ -65,11 +65,13 @@ RSpec.describe Bulkrax::ObjectFactory do
   describe '#find_by_source_identifier' do
     subject { described_class.find_by_source_identifier }
 
-    let(@attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
+    let(:mock_attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
+
+    before(:each) { @attributes = mock_attributes }
 
     context "there is no source_identifier" do
       before do
-        allow(@attributes).to receive(:key?).with('source_identifier').and_return(false)
+        allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(false)
       end
 
       it { is_expected.to eq nil }
@@ -77,8 +79,8 @@ RSpec.describe Bulkrax::ObjectFactory do
 
     context "source_identifier is nil" do
       before do
-        allow(@attributes).to receive(:key?).with('source_identifier').and_return(true)
-        allow(@attributes).to receive(:[]).with('source_identifier').and_return(nil)
+        allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(true)
+        allow(mock_attributes).to receive(:[]).with('source_identifier').and_return(nil)
       end
 
       it { is_expected.to eq nil }
@@ -88,8 +90,8 @@ RSpec.describe Bulkrax::ObjectFactory do
       let(:identifier) { "test_0_0" }
 
       before do
-        allow(@attributes).to receive(:key?).with('source_identifier').and_return(true)
-        allow(@attributes).to receive(:[]).with('source_identifier').and_return([identifier])
+        allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(true)
+        allow(mock_attributes).to receive(:[]).with('source_identifier').and_return([identifier])
       end
 
       context "the solr query does not match with an object" do
