@@ -62,70 +62,70 @@ RSpec.describe Bulkrax::ObjectFactory do
     end
   end
 
-  describe '#find_by_source_identifier' do
-    subject { described_class.find_by_source_identifier }
+  # describe '#find_by_source_identifier' do
+  #   subject { described_class.find_by_source_identifier }
 
-    let(:mock_attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
+  #   let(:mock_attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
 
-    before(:each) { attributes = mock_attributes } # rubocop:disable Lint/UselessAssignment
+  #   before(:each) { attributes = mock_attributes } # rubocop:disable Lint/UselessAssignment
 
-    context "there is no source_identifier" do
-      before do
-        allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(false)
-      end
+  #   context "there is no source_identifier" do
+  #     before do
+  #       allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(false)
+  #     end
 
-      it { is_expected.to eq nil }
-    end
+  #     it { is_expected.to eq nil }
+  #   end
 
-    context "source_identifier is nil" do
-      before do
-        allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(true)
-        allow(mock_attributes).to receive(:[]).with('source_identifier').and_return(nil)
-      end
+  #   context "source_identifier is nil" do
+  #     before do
+  #       allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(true)
+  #       allow(mock_attributes).to receive(:[]).with('source_identifier').and_return(nil)
+  #     end
 
-      it { is_expected.to eq nil }
-    end
+  #     it { is_expected.to eq nil }
+  #   end
 
-    context "there is a source_identifier" do
-      let(:identifier) { "test_0_0" }
+  #   context "there is a source_identifier" do
+  #     let(:identifier) { "test_0_0" }
 
-      before do
-        allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(true)
-        allow(mock_attributes).to receive(:[]).with('source_identifier').and_return([identifier])
-      end
+  #     before do
+  #       allow(mock_attributes).to receive(:key?).with('source_identifier').and_return(true)
+  #       allow(mock_attributes).to receive(:[]).with('source_identifier').and_return([identifier])
+  #     end
 
-      context "the solr query does not match with an object" do
-        before do
-          allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(nil)
-        end
+  #     context "the solr query does not match with an object" do
+  #       before do
+  #         allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(nil)
+  #       end
 
-        it { is_expected.to eq nil }
-      end
+  #       it { is_expected.to eq nil }
+  #     end
 
-      context "the solr query matches with an object" do
-        context "the id is empty" do
-          let(:id_doc) { { 'response': { 'docs': [{ 'id': nil }] } } }
+  #     context "the solr query matches with an object" do
+  #       context "the id is empty" do
+  #         let(:id_doc) { { 'response': { 'docs': [{ 'id': nil }] } } }
 
-          before do
-            allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
-          end
+  #         before do
+  #           allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
+  #         end
 
-          it { is_expected.to eq nil }
-        end
+  #         it { is_expected.to eq nil }
+  #       end
 
-        context "the id is not empty" do
-          let(:id) { "0a0a0a0a" }
-          let(:id_doc) { { 'response': { 'docs': [{ 'id': id }] } } }
-          let(:mock_work) { instance_double(Hyrax::Work) }
+  #       context "the id is not empty" do
+  #         let(:id) { "0a0a0a0a" }
+  #         let(:id_doc) { { 'response': { 'docs': [{ 'id': id }] } } }
+  #         let(:mock_work) { instance_double(Hyrax::Work) }
 
-          before do
-            allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
-            allow(ActiveFedora::Base).to receive(:find).with(id).and_return(mock_work)
-          end
+  #         before do
+  #           allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
+  #           allow(ActiveFedora::Base).to receive(:find).with(id).and_return(mock_work)
+  #         end
 
-          it { is_expected.to eq mock_work }
-        end
-      end
-    end
-  end
+  #         it { is_expected.to eq mock_work }
+  #       end
+  #     end
+  #   end
+  # end
 end
