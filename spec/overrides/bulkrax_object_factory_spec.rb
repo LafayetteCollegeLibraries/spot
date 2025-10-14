@@ -67,7 +67,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
     let(:mock_attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
 
-    before(:each) { attributes = mock_attributes }
+    before(:each) { :attributes = mock_attributes }
 
     context "there is no source_identifier" do
       before do
