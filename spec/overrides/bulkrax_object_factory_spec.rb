@@ -65,15 +65,32 @@ RSpec.describe Bulkrax::ObjectFactory do
   describe '#find_by_source_identifier' do
     subject { described_class.find_by_source_identifier }
 
+    let(@attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
+
     context "there is no source_identifier" do
-      let(@attributes) { { 'source_identifier': nil } }
+      before do
+        allow(@attributes).to receive(:key?).with('source_identifier').and_return(false)
+      end
+
+      it { is_expected.to eq nil }
+    end
+
+    context "source_identifier is nil" do
+      before do
+        allow(@attributes).to receive(:key?).with('source_identifier').and_return(true)
+        allow(@attributes).to receive(:[]).with('source_identifier').and_return(nil)
+      end
 
       it { is_expected.to eq nil }
     end
 
     context "there is a source_identifier" do
       let(:identifier) { "test_0_0" }
-      let(@attributes) { { 'source_identifier': [identifier] } }
+
+      before do
+        allow(@attributes).to receive(:key?).with('source_identifier').and_return(true)
+        allow(@attributes).to receive(:[]).with('source_identifier').and_return([identifier])
+      end
 
       context "the solr query does not match with an object" do
         before do
