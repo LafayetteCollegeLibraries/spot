@@ -26,6 +26,9 @@ jobs:
       volumes:
         - solr:/tmp/solr
     needs: lint
+    strategy:
+      matrix:
+        hyrax_valkyrie_enabled: [false]
     services:
       database:
         image: postgres:13-alpine
@@ -62,6 +65,7 @@ jobs:
       CAS_BASE_URL: ''
       CI: 1
       FEDORA_TEST_URL: http://fedora:8080/rest
+      HYRAX_VALKYRIE: ${{ matrix.hyrax_valkyrie_enabled }}
       IIIF_BASE_URL: http://localhost/iiif/2
       NOKOGIRI_USE_SYSTEM_LIBRARIES: true
       PSQL_PASSWORD: spot_test_pw
