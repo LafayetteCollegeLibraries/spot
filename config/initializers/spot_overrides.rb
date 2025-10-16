@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Class attribute updates + monkey-patching customizations for Hyrax.
-Rails.application.config.to_prepare do
+Rails.application.reloader.to_prepare do
   # Bump start the Noid minter in development:
   # Using Bulkrax on a brand-new Hyrax application will wreak havoc with
   # multiple async jobs running MinterState.create! with the same "unique"
