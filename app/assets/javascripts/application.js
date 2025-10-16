@@ -14,6 +14,8 @@
 
 // Required by Blacklight
 //= require jquery3
+//= require blacklight_advanced_search
+//= require blacklight_range_limit
 //= require rails-ujs
 
 //= require popper
@@ -23,8 +25,6 @@
 //= require jquery.dataTables
 //= require dataTables.bootstrap4
 //= require blacklight/blacklight
-//= require blacklight_advanced_search
-//= require blacklight_range_limit
 
 //= require blacklight_gallery/default
 //= require blacklight_gallery/osd_viewer
