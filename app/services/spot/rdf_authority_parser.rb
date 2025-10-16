@@ -9,14 +9,14 @@
 #
 # @example
 #
-#   class FrenchRDFAuthorityParser < Spot::RDFAuthorityParser
+#   class FrenchRdfAuthorityParser < Spot::RdfAuthorityParser
 #     self.preferred_language = :fr
 #   end
 #
-#   FrenchRDFAuthorityParser.load_rdf('languages_fr', ['http://id.loc.gov/vocabulary/iso639-1.nt'])
+#   FrenchRdfAuthorityParser.load_rdf('languages_fr', ['http://id.loc.gov/vocabulary/iso639-1.nt'])
 #
 module Spot
-  class RDFAuthorityParser < ::Qa::Services::RDFAuthorityParser
+  class RdfAuthorityParser < ::Qa::Services::RDFAuthorityParser
     class_attribute :preferred_language
     self.preferred_language = :en
 

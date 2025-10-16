@@ -13,9 +13,6 @@ class ApplicationController < ActionController::Base
 
   before_action :store_user_location!, if: :storable_location?
 
-  # from Blacklight: 'Discarding flash messages on XHR requests is deprecated.'
-  skip_after_action :discard_flash_if_xhr
-
   protect_from_forgery with: :exception
 
   # @return [Hash]
