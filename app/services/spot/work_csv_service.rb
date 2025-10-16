@@ -6,7 +6,7 @@
 require 'csv'
 
 module Spot
-  class WorkCSVService
+  class WorkCsvService
     attr_reader :work, :terms, :multi_value_separator, :include_headers
 
     # @param [ActiveFedora::Base,SolrDocument] work

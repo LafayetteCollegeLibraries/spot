@@ -13,11 +13,9 @@ require 'rack-cas/session_store/active_record'
 if ActiveModel::Type::Boolean.new.cast(ENV.fetch('SPOT_IGNORE_DEPRECATIONS', false))
   require 'deprecation'
 
-  ActiveSupport::Deprecation.silence do
-    Deprecation.default_deprecation_behavior = :silence
-
-    Bundler.require(*Rails.groups)
-  end
+  ActiveSupport::Deprecation.silenced = true
+  Deprecation.default_deprecation_behavior = :silence
+  Bundler.require(*Rails.groups)
 else
   # Require the gems listed in Gemfile, including any gems
   # you've limited to :test, :development, or :production.
@@ -27,7 +25,7 @@ end
 module Spot
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 6.0
 
     # use sidekiq for async jobs
     config.active_job.queue_adapter = :sidekiq

@@ -9,13 +9,13 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '~> 5.2.7'
+gem 'rails', '~> 6.1'
 
 # use Puma as the app server
 gem 'puma', '~> 6.4.0'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.1.0'
+gem 'sass-rails', '~> 6.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '~> 4.2.0'
@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 3.6.0'
+gem 'hyrax', '~> 4.0.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -44,12 +44,14 @@ gem 'aws-sdk-s3', '~> 1.142.0'
 gem 'bagit', '~> 0.6.0'
 
 # blacklight plugins for enhanced searching
-gem 'blacklight_advanced_search', '~> 6.4.1'
-gem 'blacklight_oai_provider', '~> 6.0.0'
-gem 'blacklight_range_limit', '~> 6.3.3'
+gem 'blacklight_advanced_search', '~> 7.0.0'
+gem 'blacklight_oai_provider', '~> 7.0.2'
+gem 'blacklight_range_limit', '~> 9.1.0'
 
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
+
+gem 'bootstrap', '~> 4.0'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.1.2'
@@ -73,7 +75,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '~> 0.17.6'
+gem 'faraday' #, '~> 0.17.6'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
