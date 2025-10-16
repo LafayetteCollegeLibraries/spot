@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 5.2.0'
+gem 'hyrax', '~> 4.0.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -75,7 +75,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '~> 2.0'
+gem 'faraday' #, '~> 0.17.6'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
