@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     volumes:
       - db:/var/lib/postgresql/data
       - ./bin/create-dev-dbs.sql:/docker-entrypoint-initdb.d/10-create-dev-dbs.sql
