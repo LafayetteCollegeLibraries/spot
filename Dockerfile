@@ -3,14 +3,12 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:2.7.8-slim-bullseye AS spot-base
+FROM ruby:3.2.9-slim-bookworm AS spot-base
 
 RUN apt-get clean && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates curl gnupg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update -y && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash && \
     apt-get update -y && apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
@@ -24,7 +22,7 @@ RUN apt-get clean && \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql-13 \
+        postgresql \
         ruby-dev \
         tzdata \
         zip
@@ -38,10 +36,9 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
 
 RUN corepack enable
 
-COPY Gemfile.lock /spot/
+COPY Gemfile Gemfile.lock /spot/
 RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
 
-COPY Gemfile /spot/
 RUN bundle config unset with && \
     bundle config unset without && \
     bundle config set without "development:test" && \
@@ -137,14 +134,14 @@ ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        bash \
+RUN apt-get update -y && \
+    apt-get install -y \
         ffmpeg \
         ghostscript \
         imagemagick \
         libreoffice \
         mediainfo \
-        openjdk-11-jre \
+        openjdk-17-jre \
         perl \
         python3 \
         unzip
