@@ -46,7 +46,7 @@ gem 'bagit', '~> 0.6.0'
 # blacklight plugins for enhanced searching
 gem 'blacklight_advanced_search', '~> 7.0.0'
 gem 'blacklight_oai_provider', '~> 7.0.2'
-gem 'blacklight_range_limit', '~> 9.1.0'
+gem 'blacklight_range_limit', '~> 8.5.0'
 
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
@@ -75,7 +75,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday' #, '~> 0.17.6'
+gem 'faraday', '~> 1.10.4'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
@@ -137,6 +137,9 @@ gem 'slack-ruby-client'
 # used in the Hyrax 4 upgrade but not a dependency??
 gem 'twitter-typeahead-rails', '~> 0.11.1'
 
+# used in the Hyrax 4 upgrade but not a dependency??
+gem 'twitter-typeahead-rails', '~> 0.11.1'
+
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
 #
@@ -156,9 +159,6 @@ gem 'simple_form', '< 5.2'
 
 # sprockets support gets cagey after 1.0
 gem 'openseadragon', '~> 0.9.0'
-
-# need to be 1.20.1 or higher to avoid an incompatibility with json gem
-gem 'multi_json', '~> 1.20.1'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do

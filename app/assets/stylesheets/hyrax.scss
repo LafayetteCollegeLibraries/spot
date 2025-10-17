@@ -1,7 +1,7 @@
 // our own overrides are called _before_ we import hyrax/bootstrap
 @import "spot/variables";
 
-@import "bootstrap-compass";
+// @import "bootstrap-compass";
 @import "bootstrap-default-overrides";
 @import 'bootstrap';
 @import 'blacklight/blacklight';
@@ -9,5 +9,5 @@
 @import "blacklight_gallery/masonry";
 @import "blacklight_gallery/slideshow";
 @import "blacklight_gallery/osd_viewer";
-@import "blacklight_gallery/gallery";
+@import "hyrax/blacklight_gallery";
 @import 'hyrax/hyrax';

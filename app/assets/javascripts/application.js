@@ -26,8 +26,8 @@
 //= require dataTables.bootstrap4
 //= require blacklight/blacklight
 
-//= require blacklight_gallery/default
-//= require blacklight_gallery/osd_viewer
+// local require that in turn calls a require
+//= require blacklight_gallery/blacklight-gallery
 
 // require openseadragon
 //= require openseadragon/openseadragon
