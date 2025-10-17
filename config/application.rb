@@ -15,12 +15,11 @@ if ActiveModel::Type::Boolean.new.cast(ENV.fetch('SPOT_IGNORE_DEPRECATIONS', fal
 
   ActiveSupport::Deprecation.silenced = true
   Deprecation.default_deprecation_behavior = :silence
-  Bundler.require(*Rails.groups)
-else
-  # Require the gems listed in Gemfile, including any gems
-  # you've limited to :test, :development, or :production.
-  Bundler.require(*Rails.groups)
 end
+
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module Spot
   class Application < Rails::Application

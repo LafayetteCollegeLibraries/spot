@@ -27,9 +27,12 @@
 //= require blacklight/blacklight
 
 // local require that in turn calls a require
-//= require blacklight_gallery
+//= require blacklight_gallery/blacklight-gallery
 
-//= require openseadragon
+// require openseadragon
+//= require openseadragon/openseadragon
+//= require openseadragon/rails
+
 //= require hyrax
 //= require almond
 
