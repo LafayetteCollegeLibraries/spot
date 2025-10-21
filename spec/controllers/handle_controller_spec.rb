@@ -2,7 +2,7 @@
 
 RSpec.describe HandleController do
   describe '#show' do
-    subject { get :show, params: { id: handle } }
+    subject(:make_request) { get :show, params: { id: handle } }
 
     let(:solr_service) { ActiveFedora::SolrService }
 
@@ -86,7 +86,9 @@ RSpec.describe HandleController do
 
       let(:solr_data) { { id: 'unrelated' } }
 
-      it { is_expected.to have_http_status :not_found }
+      it 'raises a Blacklight::Exceptions::RecordNotFound error' do
+        expect { make_request }.to raise_error Blacklight::Exceptions::RecordNotFound
+      end
     end
   end
 end
