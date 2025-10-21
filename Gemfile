@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 4.0.0'
+gem 'hyrax', '~> 5.2.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -55,7 +55,7 @@ gem 'bootstrap', '~> 4.0'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.6.0'
-gem 'bulkrax', '~> 9.3.3'
+gem 'bulkrax', '~> 9.0.2'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -75,7 +75,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '~> 1.10.4'
+gem 'faraday', '~> 2.0'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
@@ -133,9 +133,6 @@ gem 'sidekiq-cron', '~> 1.9.1'
 
 # using Slack for some of our messaging
 gem 'slack-ruby-client'
-
-# used in the Hyrax 4 upgrade but not a dependency??
-gem 'twitter-typeahead-rails', '~> 0.11.1'
 
 # used in the Hyrax 4 upgrade but not a dependency??
 gem 'twitter-typeahead-rails', '~> 0.11.1'
