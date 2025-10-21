@@ -22,7 +22,7 @@ jobs:
     name: "Test (Valkyrie enabled: ${{ github.matrix.hyrax_valkyrie_enabled }})"
     runs-on: ubuntu-latest
     container:
-      image: ruby:2.7.8-slim-bullseye
+      image: ruby:3.2.9-slim-bookworm
       volumes:
         - solr:/tmp/solr
     needs: lint
