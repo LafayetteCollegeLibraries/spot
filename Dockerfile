@@ -8,8 +8,8 @@ FROM ruby:3.2.9-slim-bookworm AS spot-base
 RUN apt-get clean && \
     apt-get update -y && \
     apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | bash && \
-    apt-get update -y && apt-get install -y --no-install-recommends \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get update -y --fix-missing && apt-get install -y --no-install-recommends \
         awscli \
         build-essential \
         coreutils \
