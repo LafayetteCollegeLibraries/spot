@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 4.0.0'
+gem 'hyrax', '~> 5.2.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -54,7 +54,7 @@ gem 'bootsnap', '~> 1.17', require: false
 gem 'bootstrap', '~> 4.0'
 
 # Bulkrax for batch ingesting objects
-gem 'browse-everything', '~> 1.1.2'
+gem 'browse-everything', '~> 1.6.0'
 gem 'bulkrax', '~> 9.0.2'
 
 # This needs to be here if we want to compile our own JS
@@ -75,7 +75,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '~> 1.10.4'
+gem 'faraday', '~> 2.0'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
@@ -131,7 +131,7 @@ gem 'sidekiq', '~> 5.2.9'
 gem 'sidekiq-cron', '~> 1.9.1'
 
 # using Slack for some of our messaging
-gem 'slack-ruby-client', '~> 0.14.6'
+gem 'slack-ruby-client'
 
 # used in the Hyrax 4 upgrade but not a dependency??
 gem 'twitter-typeahead-rails', '~> 0.11.1'
@@ -161,7 +161,7 @@ group :development do
   # Seed data
   # gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
 
-  gem 'listen', '>= 3.0.5', '< 3.8'
+  gem 'listen', '~> 3.9.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1.1'
   gem 'spring-watcher-listen', '~> 2.0.0'
