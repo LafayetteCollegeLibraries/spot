@@ -9,12 +9,11 @@ class HandleController < ApplicationController
   # Displays a 404 (via raised +Blacklight::Exceptions::RecordNotFound+
   # that is handled with +Hydra::Catalog+) if no item is found.
   def show
-    query = query_for_identifier(Spot::Identifier.new('hdl', params[:id]))
-    result, _documents = repository.search(query)
+    query_opts = query_for_identifier(Spot::Identifier.new('hdl', params[:id]))
+    service = Hyrax::SolrQueryService.new(query: [query_opts.delete(:q)])
+    document = service.get(**query_opts)['response']['docs'].first
 
-    raise Blacklight::Exceptions::RecordNotFound if result.response['numFound'].zero?
-    document = result.response['docs'].first
-
+    raise Blacklight::Exceptions::RecordNotFound if document.nil?
     redirect_to redirect_params_for(solr_document: document)
   end
 
@@ -32,7 +31,6 @@ class HandleController < ApplicationController
   # @param id [Spot::Identifier, #to_s] the identifier (with prefix)
   # @return [Hash<Symbol => String>]
   def query_for_identifier(id)
-    { q: "{!terms f=#{identifier_solr_field}}#{id}",
-      defType: 'lucene' }
+    { q: "{!terms f=identifier_ssim}#{id}", defType: 'lucene' }
   end
 end
