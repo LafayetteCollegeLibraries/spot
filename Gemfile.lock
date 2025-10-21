@@ -718,7 +718,7 @@ GEM
       uri
     net-http-persistent (4.0.6)
       connection_pool (~> 2.2, >= 2.2.4)
-    net-imap (0.4.22)
+    net-imap (0.5.12)
       date
       net-protocol
     net-pop (0.1.2)
@@ -732,7 +732,7 @@ GEM
     noid-rails (3.3.0)
       actionpack (>= 5.0.0, < 9)
       noid (~> 0.9)
-    nokogiri (1.15.7)
+    nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     non-digest-assets (2.2.0)
@@ -1153,7 +1153,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.18)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   ruby
