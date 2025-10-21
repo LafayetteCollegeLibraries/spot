@@ -7,11 +7,8 @@ Hyrax.config do |config|
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
 
-  config.admin_set_model = '::AdminSet'
   config.collection_model = '::Collection'
-  config.file_set_model = '::FileSet'
-
-  config.solr_default_method = :post
+  config.admin_set_model = '::AdminSet'
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
