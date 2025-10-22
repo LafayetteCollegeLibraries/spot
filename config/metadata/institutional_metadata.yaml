@@ -1,0 +1,28 @@
+attributes:
+  academic_department:
+    predicate: http://vivoweb.org/ontology/core#AcademicDepartment
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - academic_department_tesim
+      - academic_department_sim
+  division:
+    predicate: http://vivoweb.org/ontology/core#Division
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - division_tesim
+      - division_sim
+  organization:
+    predicate: http://vivoweb.org/ontology/core#Organization
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - organization_tesim
+      - organization_sim
