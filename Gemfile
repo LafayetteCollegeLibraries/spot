@@ -16,8 +16,13 @@ gem 'rails', '~> 6.1'
 # @note SSL support in Puma 6 requires openssl v3, which isn't available
 #       on the ruby 3.2 docker image
 gem 'puma', '~> 5.6.9'
+#
+# @note SSL support in Puma 6 requires openssl v3, which isn't available
+#       on the ruby 3.2 docker image
+gem 'puma', '~> 5.6.9'
 
 # Use SCSS for stylesheets
+gem 'sass-rails', '~> 6.0'
 gem 'sass-rails', '~> 6.0'
 
 # Use Uglifier as compressor for JavaScript assets
@@ -47,6 +52,9 @@ gem 'aws-sdk-s3', '~> 1.142.0'
 gem 'bagit', '~> 0.6.0'
 
 # blacklight plugins for enhanced searching
+gem 'blacklight_advanced_search', '~> 7.0.0'
+gem 'blacklight_oai_provider', '~> 7.0.2'
+gem 'blacklight_range_limit', '~> 8.5.0'
 gem 'blacklight_advanced_search', '~> 7.0.0'
 gem 'blacklight_oai_provider', '~> 7.0.2'
 gem 'blacklight_range_limit', '~> 8.5.0'
@@ -82,6 +90,7 @@ gem 'faraday', '~> 2.0'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober', '~> 1.0'
+gem 'ffprober', '~> 1.0'
 
 # error trackijng
 gem 'honeybadger', '~> 4.12.1'
@@ -104,6 +113,7 @@ gem 'kaminari', '~> 1.2.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
+gem 'mini_magick', '~> 4.13.2'
 gem 'mini_magick', '~> 4.13.2'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
@@ -182,9 +192,12 @@ end
 # things used for development + testing (again, not as necessary to lock down versions)
 group :development, :test do
   gem 'bixby', '~> 5.0.2'
+  gem 'bixby', '~> 5.0.2'
   gem 'byebug', '~> 11.1.3'
   gem 'capybara', '~> 3.40'
+  gem 'capybara', '~> 3.40'
   gem 'capybara-screenshot', '~> 1.0.26'
+  gem 'database_cleaner', '~> 2.1.0'
   gem 'database_cleaner', '~> 2.1.0'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 6', require: false
@@ -193,6 +206,8 @@ group :development, :test do
   gem 'rspec', '~> 3.10'
   gem 'rspec-its', '~> 1.1'
   gem 'rspec_junit_formatter', '~> 0.4.1'
+  gem 'rspec-rails', '~> 6.1'
+  gem 'selenium-webdriver', '~> 4.31'
   gem 'rspec-rails', '~> 6.1'
   gem 'selenium-webdriver', '~> 4.31'
   gem 'shoulda-matchers', '~> 4'

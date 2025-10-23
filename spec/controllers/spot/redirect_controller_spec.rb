@@ -6,6 +6,7 @@ RSpec.describe Spot::RedirectController do
     subject(:make_request) { get :show, params: { url: url } }
 
     let(:solr_service) { Hyrax::SolrService }
+    let(:solr_service) { Hyrax::SolrService }
     let(:solr_data) { { id: 'solr-object' } }
 
     before do
@@ -73,6 +74,7 @@ RSpec.describe Spot::RedirectController do
     end
 
     context 'when the URL is an old Islandora search' do
+      let(:url) { 'http://digital.lafayette.edu/collections/browse?f[0]=cdm.Relation.IsPartOf%3A%22East%20Asia%20Image%20Collection%22&f[1]=cdm.Relation.IsPartOf%3A%22Japanese%20History%20Study%20Cards%22&f[2]=eastasia.Subject.OCM%3A%22870%20EDUCATION%22' }
       let(:url) { 'http://digital.lafayette.edu/collections/browse?f[0]=cdm.Relation.IsPartOf%3A%22East%20Asia%20Image%20Collection%22&f[1]=cdm.Relation.IsPartOf%3A%22Japanese%20History%20Study%20Cards%22&f[2]=eastasia.Subject.OCM%3A%22870%20EDUCATION%22' }
 
       it 'raises a Blacklight::Exceptions::RecordNotFound error' do

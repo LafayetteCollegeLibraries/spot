@@ -16,6 +16,7 @@ RUN apt-get clean && \
         cron \
         git \
         libjemalloc2 \
+        libjemalloc2 \
         libpq-dev \
         libxml2 \
         libxml2-dev \
@@ -41,6 +42,12 @@ ENV LD_PRELOAD="libjemalloc.so.2" \
     MALLOC_CONFIG="dirty_decay_ms:1000,narenas:2,background_thread:true,stats_print:true" \
     RUBY_YJIT_ENABLE="1"
 
+# configure ruby to use jemalloc + yjit to improve performance
+# @see https://matthaliski.com/blog/upgrading-to-rails-7-1-ruby-3-3-and-jemalloc
+ENV LD_PRELOAD="libjemalloc.so.2" \
+    MALLOC_CONFIG="dirty_decay_ms:1000,narenas:2,background_thread:true,stats_print:true" \
+    RUBY_YJIT_ENABLE="1"
+
 RUN corepack enable
 
 COPY Gemfile Gemfile.lock /spot/
@@ -55,6 +62,7 @@ ARG build_date=""
 ENV SPOT_BUILD_DATE="$build_date"
 
 ENTRYPOINT ["/spot/bin/spot-entrypoint.sh"]
+CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt&verify_mode=peer"]
 CMD ["bundle", "exec", "rails", "server", "-b", "ssl://0.0.0.0:443?key=/spot/tmp/ssl/application.key&cert=/spot/tmp/ssl/application.crt&verify_mode=peer"]
 
 HEALTHCHECK CMD curl -skf https://localhost/healthcheck/default || exit 1
@@ -138,6 +146,7 @@ RUN unzip -d /tmp/fits /tmp/fits.zip && \
 FROM spot-base AS spot-worker-base
 # @see https://github.com/mperham/sidekiq/wiki/Memory#bloat
 # ENV MALLOC_ARENA_MAX=2
+# ENV MALLOC_ARENA_MAX=2
 # We don't need the entrypoint script to generate an SSL cert
 ENV SKIP_SSL_CERT=true
 
@@ -148,6 +157,7 @@ RUN apt-get update -y && \
         imagemagick \
         libreoffice \
         mediainfo \
+        openjdk-17-jre \
         openjdk-17-jre \
         perl \
         python3 \
