@@ -26,7 +26,6 @@ jobs:
       volumes:
         - solr:/tmp/solr
     needs: lint
-    continue-on-error: ${{ matrix.hyrax_valkyrie == true }}
     strategy:
       matrix:
         hyrax_valkyrie_enabled: [false]
@@ -77,10 +76,6 @@ jobs:
       SOLR_TEST_URL: http://solr:8983/solr/spot-test
       SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
-      VALKYRIE_SOLR_HOST: 'solr_admin:solr_password@solr'
-      VALKYRIE_SOLR_CORE: spot-test
-      VALKYRIE_SOLR_HOST: 'solr_admin:solr_password@solr'
-      VALKYRIE_SOLR_CORE: spot-test
 
     steps:
       - uses: actions/checkout@v4
@@ -145,8 +140,6 @@ jobs:
         name: Run migrations
         run: bundle exec rake db:migrate
       -
-        id: tests
-        id: tests
         name: Run tests
         env:
           FIREFOX_BINARY_PATH: ${{ steps.setup-firefox.outputs.firefox-path }}
@@ -156,34 +149,23 @@ jobs:
           mkdir /tmp/test-results
           bundle exec rspec --backtrace --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml
       -
-        name: Upload capybara-screenshot on test failure
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: capybara-screenshot
-          path: tmp/capybara
-          if-no-files-found: ignore
-      -
-        name: Upload capybara-screenshot on test failure
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: capybara-screenshot
-          path: tmp/capybara
-          if-no-files-found: ignore
-      -
         name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
-        if: ${{ always() }}
-        if: ${{ always() }}
         continue-on-error: true
       -
         name: Publish RSpec report
         uses: mikepenz/action-junit-report@v3
-        if: ${{ always() }}
-        if: ${{ always() }}
+        if: always()
         continue-on-error: true
         with:
-          check_name: Test summary (Valkyrie ${{ matrix.hyrax_valkyrie == true && 'enabled' || 'disabled' }})
-          check_name: Test summary (Valkyrie ${{ matrix.hyrax_valkyrie == true && 'enabled' || 'disabled' }})
+          check_name: Test summary
           report_paths: /tmp/test-results/*.xml
+      -
+        name: Publish coverage
+        uses: joshmfrankel/simplecov-check-action@main
+        if: always()
+        continue-on-error: true
+        with:
+          check_job_name: Test coverage
+          minimum_suite_coverage: 95
+          github_token: ${{ secrets.GITHUB_TOKEN }}
