@@ -141,9 +141,5 @@ RSpec.describe Spot::Derivatives::IiifAccessCopyService, derivatives: true do
         expect(Rails.logger).to have_received(:warn).with(/AWS_IIIF_ASSET_BUCKET environment variable is not defined/)
       end
     end
-
-    context 'when the work is an image' do
-
-    end
   end
 end

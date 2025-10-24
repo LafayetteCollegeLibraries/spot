@@ -16,10 +16,6 @@ gem 'rails', '~> 6.1'
 # @note SSL support in Puma 6 requires openssl v3, which isn't available
 #       on the ruby 3.2 docker image
 gem 'puma', '~> 5.6.9'
-#
-# @note SSL support in Puma 6 requires openssl v3, which isn't available
-#       on the ruby 3.2 docker image
-gem 'puma', '~> 5.6.9'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
@@ -155,8 +151,6 @@ gem 'sprockets-rails', '3.4.2'
 #   When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD in this way:
 #   https://github.com/rails/sprockets/issues/73#issuecomment-139113466
 gem 'sprockets-es6', '~> 0.9.2'
-
-gem 'twitter-typeahead-rails', '~> 0.11.1'
 
 gem 'valkyrie-shrine', '~> 1.0.0'
 
