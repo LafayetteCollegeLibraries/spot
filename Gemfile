@@ -12,10 +12,7 @@ end
 gem 'rails', '~> 6.1'
 
 # use Puma as the app server
-#
-# @note SSL support in Puma 6 requires openssl v3, which isn't available
-#       on the ruby 3.2 docker image
-gem 'puma', '~> 5.6.9'
+gem 'puma', '~> 6.4.0'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'

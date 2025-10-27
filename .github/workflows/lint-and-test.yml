@@ -95,9 +95,9 @@ jobs:
           apt-get update -y && apt-get install -y curl && \
           curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
           apt-get update -y --fix-missing && apt-get install -y --no-install-recommends \
-            awscli build-essential coreutils cron git libpq-dev libxml2 libxml2-dev \
-            libxslt-dev netcat-openbsd nodejs openssl postgresql ruby-dev tzdata zip \
-            libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
+            awscli build-essential coreutils cron git libjemalloc2 libpq-dev libxml2 \
+            libxml2-dev libxslt-dev netcat-openbsd nodejs openssl postgresql ruby-dev \
+            tzdata zip libasound2 libdbus-glib-1-dev libgtk-3-0 libpq-dev unzip libx11-xcb1
       -
         name: Setup Firefox
         uses: browser-actions/setup-firefox@v1
