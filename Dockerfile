@@ -22,7 +22,7 @@ RUN apt-get clean && \
         netcat-openbsd \
         nodejs \
         openssl \
-        postgresql \
+        postgresql-14 \
         ruby-dev \
         tzdata \
         zip
