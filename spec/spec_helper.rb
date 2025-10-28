@@ -37,6 +37,11 @@ require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
 require 'mail'
 
+# FactoryBot setup borrowed from Hyrax
+# @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/spec_helper.rb#L83-L88
+require 'hyrax/specs/shared_specs/factories/strategies/valkyrie_resource'
+FactoryBot.register_strategy(:valkyrie_create, ValkyrieCreateStrategy)
+
 Capybara.register_driver :selenium_firefox_headless do |app|
   browser_options = ::Selenium::WebDriver::Firefox::Options.new
   browser_options.binary = ENV['FIREFOX_BINARY_PATH'] if ENV['FIREFOX_BINARY_PATH'].present?
