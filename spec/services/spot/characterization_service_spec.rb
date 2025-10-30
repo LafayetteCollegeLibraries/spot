@@ -9,7 +9,7 @@ RSpec.describe Spot::CharacterizationService do
 
   before do
     allow(described_class).to receive(:run).with(proxy, filename).and_call_original
-    allow(described_class).to receive(:new).with(proxy, filename, ch12n_tool: tool).and_return(service_double)
+    allow(described_class).to receive(:new).with(proxy, filename, { ch12n_tool: tool }).and_return(service_double)
   end
 
   it 'is set to be the service for CharacterizeJob' do
@@ -24,7 +24,7 @@ RSpec.describe Spot::CharacterizationService do
     it 'passes the :fits_servlet tool to the initializer' do
       described_class.run(proxy, filename)
 
-      expect(described_class).to have_received(:new).with(proxy, filename, ch12n_tool: tool)
+      expect(described_class).to have_received(:new).with(proxy, filename, { ch12n_tool: tool })
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe Spot::CharacterizationService do
     it 'passes the :fits tool to the initializer' do
       described_class.run(proxy, filename)
 
-      expect(described_class).to have_received(:new).with(proxy, filename, ch12n_tool: tool)
+      expect(described_class).to have_received(:new).with(proxy, filename, { ch12n_tool: tool })
     end
   end
 
@@ -42,13 +42,13 @@ RSpec.describe Spot::CharacterizationService do
     let(:tool) { :some_advanced_tool }
 
     before do
-      allow(described_class).to receive(:run).with(proxy, filename, ch12n_tool: tool).and_call_original
+      allow(described_class).to receive(:run).with(proxy, filename, { ch12n_tool: tool }).and_call_original
     end
 
     it 'uses the provided tool' do
-      described_class.run(proxy, filename, ch12n_tool: tool)
+      described_class.run(proxy, filename, { ch12n_tool: tool })
 
-      expect(described_class).to have_received(:new).with(proxy, filename, ch12n_tool: tool)
+      expect(described_class).to have_received(:new).with(proxy, filename, { ch12n_tool: tool })
     end
   end
 end
