@@ -2,7 +2,7 @@
 RSpec.describe Spot::Workflow::GrantSipityRoleToAdvisor do
   let(:workflow_role) { Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: permission_template.active_workflow) }
   let(:advisors) { [create(:user), create(:user)] }
-  let(:admin_set) { AdminSet.find(Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id) }
+  let(:admin_set) { Hyrax::AdminSetCreateService.find_or_create_default_admin_set }
   let(:default_access_grants) do
     [{ agent_type: 'group', agent_id: ::Ability.admin_group_name, access: Hyrax::PermissionTemplateAccess::MANAGE }]
   end
