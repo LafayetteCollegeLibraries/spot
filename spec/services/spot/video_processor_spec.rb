@@ -18,7 +18,7 @@ describe Spot::VideoProcessor do
         .to receive(:encode_file)
         .with("mp4",
           { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec mpeg4 -acodec aac -strict -2 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-          Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
+            Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
       subject.process
     end
   end
@@ -32,7 +32,7 @@ describe Spot::VideoProcessor do
           .to receive(:encode_file)
           .with("webm",
             { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec libvpx -acodec libvorbis -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-            Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
+              Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
         subject.process
       end
     end
@@ -55,7 +55,7 @@ describe Spot::VideoProcessor do
             .to receive(:encode_file)
             .with("mkv",
               { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-              Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "test_input_options" })
+                Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "test_input_options" })
           subject.process
         end
       end
@@ -68,7 +68,7 @@ describe Spot::VideoProcessor do
             .to receive(:encode_file)
             .with("mkv",
               { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-              Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
+                Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
           subject.process
         end
       end
