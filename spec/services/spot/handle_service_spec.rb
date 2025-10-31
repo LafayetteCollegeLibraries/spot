@@ -2,9 +2,14 @@
 RSpec.describe Spot::HandleService do
   subject(:service) { described_class.new(work) }
 
+  # @note This isn't a real-world example of a working Handle server URL,
+  #       but WebMock requires a mocked URL to resolve to a real host/port
+  #       combination, and this will get tests passing.
+  # @see https://github.com/bblimke/webmock/issues/955
+  let(:handle_server_url) { 'http://hdl.handle.net' }
+
   let(:work) { instance_double(Publication, id: 'abc123def', identifier: identifiers) }
   let(:identifiers) { [] }
-  let(:handle_server_url) { 'http://handle-service:8000' }
   let(:handle_prefix) { '10385' }
 
   before do
