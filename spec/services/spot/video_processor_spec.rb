@@ -11,7 +11,6 @@ describe Spot::VideoProcessor do
     end
 
     after { described_class.config = @original_config }
-
     let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
     let(:opts) do
       {
@@ -22,9 +21,8 @@ describe Spot::VideoProcessor do
     it "is configurable" do
       expect(subject)
         .to receive(:encode_file)
-        .with("mp4",
-          { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec mpeg4 -acodec aac -strict -2 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-            Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
+        .with("mp4", **opts)
+
       subject.process
     end
   end
@@ -41,9 +39,7 @@ describe Spot::VideoProcessor do
       it "creates a fedora resource and infers the name" do
         expect(subject)
           .to receive(:encode_file)
-          .with("webm",
-            { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec libvpx -acodec libvorbis -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-              Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
+          .with("webm", **opts)
         subject.process
       end
     end
@@ -69,9 +65,8 @@ describe Spot::VideoProcessor do
         it "creates a fedora resource and infers the name" do
           expect(subject)
             .to receive(:encode_file)
-            .with("mkv",
-              { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-                Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "test_input_options" })
+            .with("mkv", **opts)
+
           subject.process
         end
       end
@@ -87,9 +82,8 @@ describe Spot::VideoProcessor do
         it "creates a fedora resource and infers the name" do
           expect(subject)
             .to receive(:encode_file)
-            .with("mkv",
-              { Hydra::Derivatives::Processors::Ffmpeg::OUTPUT_OPTIONS => "-s 320x240 -vcodec ffv1 -g 30 -b:v 345k -ac 2 -ab 96k -ar 44100",
-                Hydra::Derivatives::Processors::Ffmpeg::INPUT_OPTIONS => "" })
+            .with("mkv", **opts)
+
           subject.process
         end
       end

@@ -43,20 +43,46 @@ Rails.application.reloader.to_prepare do
   # "translation missing" message being provided as a fall-back label. this should
   # prevent that error from appearing by replacing the +translate+ calls with a symbolized
   # I18n key (see also 0717dee, + catalog_controller.rb)
-  [Hyrax::My::CollectionsController, Hyrax::Dashboard::CollectionsController].each do |klass|
-    klass.class_eval do
-      blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-      blacklight_config.facet_fields[Hyrax.config.collection_type_index_field].label = :'hyrax.dashboard.my.heading.collection_type'
-      blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
+  module Spot
+    module CollectionsControllerFacetDecorator
+      extend ActiveSupport::Concern
+
+      class_methods do
+        def update_facet_labels!
+          blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
+          blacklight_config.facet_fields[Hyrax.config.collection_type_index_field].label = :'hyrax.dashboard.my.heading.collection_type'
+          blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
+        end
+      end
+
+      included do
+        update_facet_labels!
+      end
+    end
+  end
+
+  Hyrax::My::CollectionsController.prepend(Spot::CollectionsControllerFacetDecorator)
+  Hyrax::Dashboard::CollectionsController.prepend(Spot::CollectionsControllerFacetDecorator)
+
+  module Spot
+    module WorksControllerFacetDecorator
+      extend ActiveSupport::Concern
+
+      class_methods do
+        def update_facet_labels!
+          blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
+        end
+      end
+
+      included do
+        update_facet_labels!
+      end
     end
   end
 
   # same as previous: updating facet labels for dashboard works controller
-  [Hyrax::My::WorksController, Hyrax::Dashboard::WorksController].each do |klass|
-    klass.class_eval do
-      blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-    end
-  end
+  Hyrax::My::WorksController.prepend(Spot::WorksControllerFacetDecorator)
+  Hyrax::Dashboard::WorksController.prepend(Spot::WorksControllerFacetDecorator)
 
   # Rewrite Hyrax::DashboardController local mods to be a decorator.
   # @see app/controllers/concerns/spot/hyrax_dashboard_controller_decorator.rb
@@ -136,6 +162,13 @@ Rails.application.reloader.to_prepare do
 
   SimpleForm::Inputs::Base.prepend(Spot::SimpleFormBaseInputDecorator)
 
+  # Adding label support for metadata-only records
+  Hyrax::PermissionBadge.class_eval do
+    old_visibility_label_class = Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS.dup
+    remove_const(:VISIBILITY_LABEL_CLASS) if const_defined?(:VISIBILITY_LABEL_CLASS)
+    const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
+  end
+
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
 
@@ -155,6 +188,24 @@ Rails.application.reloader.to_prepare do
   # wonky one-liner seems to preserve user-selected sorting. ¯\_(ツ)_/¯
   #
   # @see https://github.com/samvera/hyrax/blob/main/app/search_builders/hyrax/collection_search_builder.rb#L36-L42
+  module Spot
+    module CollectionMemberSearchBuilderDecorator
+      extend ActiveSupport::Concern
+
+      def add_sorting_to_solr(solr_parameters)
+        return if solr_parameters[:q]
+        solr_parameters[:sort] ||= (sort || "title_sort_si asc")
+      end
+    end
+  end
+
+  Hyrax::CollectionMemberSearchBuilder.prepend(Spot::CollectionMemberSearchBuilderDecorator)
+
+  # Override to fix Hyrax bug where calling Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+  # will try to load an AdminSet's entire set of members when called.
+  #
+  # @see https://github.com/samvera/hyrax/issues/6171
+  # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
   module Spot
     module CollectionMemberSearchBuilderDecorator
       extend ActiveSupport::Concern
@@ -273,7 +324,7 @@ Rails.application.reloader.to_prepare do
     module FileSetPresenterDecorator
       extend ActiveSupport::Concern
 
-      prepended do
+      included do
         delegate :original_filenames, :transcript_name,
                  :stored_derivatives, to: :solr_document
       end
@@ -354,20 +405,26 @@ Rails.application.reloader.to_prepare do
     end
   end
 
+  Hyrax::DownloadsController.prepend(Spot::HyraxDownloadsControllerDecorator)
+
   # Encountering an issue where Hyrax::PersistDirectlyContainedOutputFileService.retrieve_file_set requires
   # Hyrax::UploadedFile#file_set_uri to be an URI but querying for that URI throws an error (ActiveFedora
   # is appending the base root to the full uri, resulting in errors like:
   #     Ldp::BadRequest: Path contains empty element! /dev/ht/tp/:/http://fedora:8080/rest/dev/2v/23/vt/36/2v23vt362")
-  Hyrax::UploadedFile.class_eval do
-    def add_file_set!(file_set)
-      uri = case file_set
-            when ActiveFedora::Base
-              file_set.uri
-            when Hyrax::Resource
-              file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
-            end
+  module Spot
+    module HyraxUploadedFileDecorator
+      def add_file_set!(file_set)
+        uri = case file_set
+              when ActiveFedora::Base
+                file_set.uri
+              when Hyrax::Resource
+                file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
+              end
 
-      update!(file_set_uri: uri) if uri.present?
+        update!(file_set_uri: uri) if uri.present?
+      end
     end
   end
+
+  Hyrax::UploadedFile.prepend(Spot::HyraxUploadedFileDecorator)
 end
