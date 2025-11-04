@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-require 'aws-sdk-s3'
-require 'fileutils'
-
 module Spot
   # Service to download transcript files and clean them up after attachment.
   # Calls the FileSetTranscriptAttachmentService.

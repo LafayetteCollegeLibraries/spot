@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'fileutils'
-
 RSpec.describe Spot::Exporters::ZippedWorkExporter do
   let(:exporter) { described_class.new(work, request) }
   let(:path_to_file) { Rails.root.join('spec', 'fixtures', 'image.png') }

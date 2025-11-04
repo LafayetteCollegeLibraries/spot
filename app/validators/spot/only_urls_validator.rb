@@ -1,8 +1,4 @@
 # frozen_string_literal: true
-#
-#
-require 'uri'
-
 module Spot
   class OnlyUrlsValidator < ActiveModel::Validator
     # @param record [ActiveModel::Base]

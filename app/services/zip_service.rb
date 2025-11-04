@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-require 'fileutils'
-require 'zip'
-
+#
 # Abstracting out our zipping/unzipping into its own service so that it's not
 # lumped in with another one.
 #
