@@ -37,7 +37,7 @@ RSpec.describe Collection, skip_if_valkyrie: true do
       context 'when the collection does not exist' do
         it 'raises an ObjectNotFoundError' do
           expect { described_class.find(param) }
-            .to raise_error(ActiveFedora::ObjectNotFoundError, %r{'id'=#{param}$})
+            .to raise_error(Hyrax::ObjectNotFoundError, %r{'id'=#{param}$})
         end
       end
 
