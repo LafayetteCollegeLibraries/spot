@@ -56,6 +56,6 @@ RSpec.describe Spot::FacetHelper, type: :helper do
 
     let(:visibility) { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PUBLIC }
 
-    it { is_expected.to eq '<span class="label label-success">Public</span>' }
+    it { is_expected.to eq '<span class="badge badge-success">Public</span>' }
   end
 end
