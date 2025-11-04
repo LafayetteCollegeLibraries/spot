@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-require 'cgi'
-require 'uri'
-
 module Spot
   # Service for generating IIIF urls (via file_ids) for an external Cantaloupe image server.
   # Really, this could be used for _any_ external image server, save for the #download_url

@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-require 'tmpdir'
-require 'fileutils'
-
 module Spot
   module Exporters
     class ZippedWorkExporter
