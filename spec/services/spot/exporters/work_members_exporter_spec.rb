@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-require 'fileutils'
-
+#
 # Is this too much mocking? I didn't want to go down the rabbit hole
 # of generating a full item just for this spec.
 RSpec.describe Spot::Exporters::WorkMembersExporter, perform_enqueued: true do
