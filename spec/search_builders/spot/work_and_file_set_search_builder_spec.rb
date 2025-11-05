@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 RSpec.describe Spot::WorkAndFileSetSearchBuilder do
-  let(:builder) { described_class.new([]) }
+  let(:builder) { described_class.new(processor_chain, scope) }
+  let(:processor_chain) { [] }
+  let(:scope) { double('scope', blacklight_config: {}) }
 
   describe '#filter_models' do
     subject(:params) { {} }
 
     before { builder.filter_models(params) }
 
-    it 'adds a :fq key' do
+    it 'adds a :fq key that is an array' do
       expect(params).to include :fq
-    end
-
-    it 'is an array' do
       expect(params[:fq]).to be_an Array
     end
 

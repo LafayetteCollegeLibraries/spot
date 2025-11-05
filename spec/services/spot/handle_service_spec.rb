@@ -11,6 +11,14 @@ RSpec.describe Spot::HandleService do
   let(:work) { instance_double(Publication, id: 'abc123def', identifier: identifiers) }
   let(:identifiers) { [] }
   let(:handle_prefix) { '10385' }
+  let(:stubbed_env) do
+    {
+      'HANDLE_SERVER_URL' => handle_server_url,
+      'HANDLE_PREFIX' => handle_prefix,
+      'HANDLE_CLIENT_CERT_PEM' => 'client_cert',
+      'HANDLE_CLIENT_KEY_PEM' => 'client_key'
+    }
+  end
 
   before do
     stub_env('URL_HOST', 'http://localhost')
@@ -21,16 +29,17 @@ RSpec.describe Spot::HandleService do
 
     context 'when all values are provided' do
       before do
-        stub_env('HANDLE_SERVER_URL', handle_server_url)
-        stub_env('HANDLE_PREFIX', handle_prefix)
-        stub_env('HANDLE_CLIENT_CERT_PEM', 'client_cert')
-        stub_env('HANDLE_CLIENT_KEY_PEM', 'client_key')
+        stubbed_env.each_pair { |(key, val)| stub_env(key, val) }
       end
 
       it { is_expected.to be true }
     end
 
     context 'when not all values are provided' do
+      before do
+        stubbed_env.keys.each { |key| stub_env(key, nil) }
+      end
+
       it { is_expected.to be false }
     end
   end
