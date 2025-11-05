@@ -7,7 +7,7 @@ RSpec.describe Collection do
   let(:params) { base_params }
   let(:base_params) { { title: ['ok'], collection_type_gid: collection_type_gid } }
   let(:collection_type) { Hyrax::CollectionType.find_or_create_by(title: 'a cool collection type') }
-  let(:collection_type_gid) { collection_type.gid }
+  let(:collection_type_gid) { collection_type.to_global_id }
 
   it_behaves_like 'a model with hyrax core metadata'
 
@@ -37,7 +37,7 @@ RSpec.describe Collection do
       context 'when the collection does not exist' do
         it 'raises an ObjectNotFoundError' do
           expect { described_class.find(param) }
-            .to raise_error(ActiveFedora::ObjectNotFoundError, %r{'id'=#{param}$})
+            .to raise_error(Hyrax::ObjectNotFoundError, %r{'id'=#{param}$})
         end
       end
 

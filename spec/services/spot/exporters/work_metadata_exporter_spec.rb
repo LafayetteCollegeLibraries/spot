@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'fileutils'
-
 RSpec.describe Spot::Exporters::WorkMetadataExporter do
   let(:exporter) { described_class.new(solr_document, request) }
   let(:work_id) { 'spot-work_metadata_exporter_spec-obj' }

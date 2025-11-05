@@ -12,7 +12,7 @@ module Spot
       tool = ENV['FITS_SERVLET_URL'].present? ? :fits_servlet : :fits
       opts = { ch12n_tool: tool }.merge(opts)
 
-      super(characterization_proxy, filepath, opts)
+      super(characterization_proxy, filepath, **opts)
     end
   end
 end
