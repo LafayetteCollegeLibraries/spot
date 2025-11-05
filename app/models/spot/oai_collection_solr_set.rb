@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'cgi'
-
 module Spot
   # Subclass of +BlacklightOaiProvider::SolrSet+ that translates
   # spaces to underscores, making the following assumptions:

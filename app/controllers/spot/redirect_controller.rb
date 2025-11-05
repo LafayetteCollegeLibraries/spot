@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'uri'
-
 module Spot
   # Controller responsible for redirecting requests from legacy services
   # (in particular, our Islandora instance) to their migrated counterparts.

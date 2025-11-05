@@ -1,8 +1,4 @@
 # frozen_string_literal: true
-require 'aws-sdk-s3'
-require 'digest/md5'
-require 'fileutils'
-
 module Spot
   module Derivatives
     # Creates pyramidal TIFF copies of Images for serving via IIIF. Pyramidal TIFFs contain
