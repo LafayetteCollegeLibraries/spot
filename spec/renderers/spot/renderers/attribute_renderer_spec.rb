@@ -57,10 +57,10 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
     context 'options[:show_help_text]' do
       before do
         allow(I18n).to receive(:translate)
-          .with(:'simple_form.hints.defaults.title', default: [], raise: true)
+          .with(:'simple_form.hints.defaults.title', anything)
           .and_return(help_text)
         allow(I18n).to receive(:translate)
-          .with(:'blacklight.search.fields.default.show.title', raise: true)
+          .with(:'blacklight.search.fields.default.show.title', anything)
           .and_return('Title')
       end
 

@@ -56,6 +56,6 @@ module AudioVisualHelper
   # @return the network path to the thumbnail
   # @param [FileSet] file_set of the video
   def transcript_path(file_set)
-    Hyrax::Engine.routes.url_helpers.download_path(file_set.id, file: 'transcript')
+    Hyrax::Engine.routes.url_helpers.download_path(id: file_set.id, file: 'transcript')
   end
 end
