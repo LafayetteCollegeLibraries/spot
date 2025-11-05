@@ -4,7 +4,7 @@ RSpec.describe Spot::FileSetIndexer do
 
   let(:indexer) { described_class.new(file_set) }
   let(:file_set) { build(:file_set, label: 'file_set_object') }
-  let(:mock_file) { instance_double(Hydra::PCDM::File) }
+  let(:mock_file) { instance_double(Hydra::PCDM::File, id: 'file_id', versions: []) }
 
   before do
     allow(file_set).to receive(:extracted_text).and_return(mock_file)
