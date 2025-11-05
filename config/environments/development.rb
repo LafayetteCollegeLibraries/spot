@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 Rails.application.configure do
-  config.hosts << "ldr-future.lafayette.edu"
+  config.hosts << ENV['URL_HOST'] if ENV['URL_HOST'].present?
 
   config.public_file_server.enabled = true
 
