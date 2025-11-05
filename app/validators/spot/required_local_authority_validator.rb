@@ -16,13 +16,12 @@ module Spot
       authority_name = options[:authority]
       field = options[:field]
       authority = authority_for(authority_name)
-
       values = record.send(field)
-      values = Array.wrap(values) unless values.respond_to?(:each)
+      values = Array.wrap(values) unless values.class < Enumerable
 
       values.each do |v|
         value = v.is_a?(ActiveTriples::Resource) ? v.id : v.to_s
-        record.errors[field] << %("#{value}" is not a valid #{field.to_s.titleize}.) if authority.find(value).empty?
+        record.errors.add(field, :invalid, message: %("#{value}" is not a valid #{field.to_s.titleize}.)) if authority.find(value).empty?
       end
     end
 
