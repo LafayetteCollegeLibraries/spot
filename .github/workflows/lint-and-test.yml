@@ -19,7 +19,7 @@ jobs:
         run: bundle exec rubocop --format github
 
   test:
-    name: "Test (Valkyrie enabled: ${{ github.matrix.hyrax_valkyrie_enabled }})"
+    name: "Test (Valkyrie enabled: ${{ matrix.hyrax_valkyrie_enabled }})"
     runs-on: ubuntu-latest
     container:
       image: ruby:3.2.9-slim-bookworm

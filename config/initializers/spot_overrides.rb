@@ -324,7 +324,7 @@ Rails.application.reloader.to_prepare do
     module FileSetPresenterDecorator
       extend ActiveSupport::Concern
 
-      included do
+      prepended do
         delegate :original_filenames, :transcript_name,
                  :stored_derivatives, to: :solr_document
       end

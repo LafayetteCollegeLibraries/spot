@@ -11,6 +11,7 @@ describe Spot::VideoProcessor do
     end
 
     after { described_class.config = @original_config }
+
     let(:directives) { { label: :thumb, format: "mp4", url: 'http://localhost:8983/fedora/rest/dev/1234/thumbnail' } }
     let(:opts) do
       {
@@ -21,7 +22,7 @@ describe Spot::VideoProcessor do
     it "is configurable" do
       expect(subject)
         .to receive(:encode_file)
-        .with("mp4", **opts)
+        .with("mp4", opts)
 
       subject.process
     end
@@ -39,7 +40,7 @@ describe Spot::VideoProcessor do
       it "creates a fedora resource and infers the name" do
         expect(subject)
           .to receive(:encode_file)
-          .with("webm", **opts)
+          .with("webm", opts)
         subject.process
       end
     end
@@ -65,7 +66,7 @@ describe Spot::VideoProcessor do
         it "creates a fedora resource and infers the name" do
           expect(subject)
             .to receive(:encode_file)
-            .with("mkv", **opts)
+            .with("mkv", opts)
 
           subject.process
         end
@@ -82,7 +83,7 @@ describe Spot::VideoProcessor do
         it "creates a fedora resource and infers the name" do
           expect(subject)
             .to receive(:encode_file)
-            .with("mkv", **opts)
+            .with("mkv", opts)
 
           subject.process
         end
