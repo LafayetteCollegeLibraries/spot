@@ -1,26 +1,28 @@
 # frozen_string_literal: true
 RSpec.describe DeserializesRdfLiterals do
-  class TestWorkType < ActiveFedora::Base
-    property :title, predicate: ::RDF::Vocab::DC.title, multiple: false
-    property :description, predicate: ::RDF::Vocab::DC.description
+  before do
+    class TestWorkType < ActiveFedora::Base
+      property :title, predicate: ::RDF::Vocab::DC.title, multiple: false
+      property :description, predicate: ::RDF::Vocab::DC.description
+    end
+
+    class TestWorkTypeActor < Hyrax::Actors::AbstractActor
+      include DeserializesRdfLiterals
+    end
+
+    # This is all incredibly messy because the Actor mixin is relying on a class attribute
+    # for a form based on naming conventions, hence this silly unused Form class and exposing
+    # the test classes to the Object namespace (as opposed to `let(:work_type_class) { Class.new(ActiveFedora::Base) }`)
+    class Hyrax::TestWorkTypeForm < ::Spot::Forms::WorkForm
+      include LanguageTaggedFormFields
+      transforms_language_tags_for :title, :description
+    end
   end
 
-  class TestWorkTypeActor < Hyrax::Actors::AbstractActor
-    include DeserializesRdfLiterals
-  end
-
-  # This is all incredibly messy because the Actor mixin is relying on a class attribute
-  # for a form based on naming conventions, hence this silly unused Form class and exposing
-  # the test classes to the Object namespace (as opposed to `let(:work_type_class) { Class.new(ActiveFedora::Base) }`)
-  class Hyrax::TestWorkTypeForm < ::Spot::Forms::WorkForm
-    include LanguageTaggedFormFields
-    transforms_language_tags_for :title, :description
-  end
-
-  after(:suite) do
-    Object.remove_const(:TestWorkType)
-    Object.remove_const(:TestWorkTypeActor)
-    Hyrax.remove_const(:TestWorkTypeForm)
+  after do
+    Object.send(:remove_const, :TestWorkType)
+    Object.send(:remove_const, :TestWorkTypeActor)
+    Hyrax.send(:remove_const, :TestWorkTypeForm)
   end
 
   let(:work) { TestWorkType.new }
