@@ -44,11 +44,10 @@ module Spot
     config.rack_cas.service = ENV['URL_HOST'].present? ? "#{ENV['URL_HOST']}/users/service" : '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
 
-    # Zero out allowed hosts since we're doing request filtering through AWS
-    # and this was failing healthchecks bc their host is a rotating IP.
-    # Leaving the test env be for now, but we might just need to clear out
-    # the setup in config/environments/test.rb
-    config.hosts = nil unless Rails.env.test?
+    if Rails.env.test?
+      config.hosts << '127.0.0.1'
+      config.hosts << 'localhost'
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 Rails.application.configure do
-  config.hosts << ENV['URL_HOST'] if ENV['URL_HOST'].present?
-
   config.public_file_server.enabled = true
 
   # Settings specified here will take precedence over those in config/application.rb.
