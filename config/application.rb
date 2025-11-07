@@ -44,6 +44,9 @@ module Spot
     config.rack_cas.service = ENV['URL_HOST'].present? ? "#{ENV['URL_HOST']}/users/service" : '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
 
+    hostname = ENV['APPLICATION_FQDN'] || URI.parse(ENV['URL_HOST'] || '').hostname
+    config.hosts << hostname if hostname.present?
+
     if Rails.env.test?
       config.hosts << '127.0.0.1'
       config.hosts << 'localhost'
