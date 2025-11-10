@@ -36,4 +36,9 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
 
   config.active_job.queue_adapter = :test
+
+  # Additional hosts for tests
+  config.hosts << '127.0.0.1'
+  config.hosts << 'localhost'
+  config.hosts << 'www.example.com'
 end
