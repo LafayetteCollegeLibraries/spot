@@ -48,11 +48,6 @@ module Spot
     hostname = ENV['APPLICATION_FQDN'] || URI.parse(ENV['URL_HOST'] || '').hostname
     config.hosts << hostname if hostname.present?
 
-    if Rails.env.test?
-      config.hosts << '127.0.0.1'
-      config.hosts << 'localhost'
-    end
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

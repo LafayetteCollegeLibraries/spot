@@ -15,7 +15,9 @@ RSpec.describe StudentWorkIndexer do
       it { is_expected.to eq [advisor_email] }
     end
 
-    context 'when WDS key is present' do
+    # @note skipping for now, as this service hasn't ever worked in production.
+    #       2025-11-10
+    skip 'when WDS key is present' do
       let(:wds_service) { instance_double('Spot::LafayetteWdsService') }
       let(:person_payload) do
         { 'FIRST_NAME' => 'Anna', 'LAST_NAME' => 'Malantonio', 'EMAIL' => 'MALANTOA@LAFAYETTE.EDU' }
