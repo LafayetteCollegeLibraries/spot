@@ -84,6 +84,10 @@ Rails.application.reloader.to_prepare do
   Hyrax::My::WorksController.prepend(Spot::WorksControllerFacetDecorator)
   Hyrax::Dashboard::WorksController.prepend(Spot::WorksControllerFacetDecorator)
 
+  # Rewrite Hyrax::DashboardController local mods to be a decorator.
+  # @see app/controllers/concerns/spot/hyrax_dashboard_controller_decorator.rb
+  Hyrax::DashboardController.prepend(Spot::HyraxDashboardControllerDecorator)
+
   # We're using an older version of the FITSServlet tool (1.1.3 as of 2019-12-03,
   # anything higher throws an exception that I can't nail down) that predates
   # a change to set the response encoding to UTF-8. So we need to do this as
