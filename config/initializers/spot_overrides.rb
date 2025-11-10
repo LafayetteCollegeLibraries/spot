@@ -201,24 +201,6 @@ Rails.application.reloader.to_prepare do
 
   Hyrax::CollectionMemberSearchBuilder.prepend(Spot::CollectionMemberSearchBuilderDecorator)
 
-  # Override to fix Hyrax bug where calling Hyrax::AdminSetCreateService.find_or_create_default_admin_set
-  # will try to load an AdminSet's entire set of members when called.
-  #
-  # @see https://github.com/samvera/hyrax/issues/6171
-  # @see https://github.com/WGBH-MLA/ams/commit/8983c933d7ffaf587ef9dbded74845eaae41ebea
-  module Spot
-    module CollectionMemberSearchBuilderDecorator
-      extend ActiveSupport::Concern
-
-      def add_sorting_to_solr(solr_parameters)
-        return if solr_parameters[:q]
-        solr_parameters[:sort] ||= (sort || "title_sort_si asc")
-      end
-    end
-  end
-
-  Hyrax::CollectionMemberSearchBuilder.prepend(Spot::CollectionMemberSearchBuilderDecorator)
-
   # Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
 
   # Only store entitlements related to us in the session to prevent a cookie overflow.
