@@ -10,8 +10,6 @@ module Spot
 
     prepended do
       class_attribute :create_work_presenter_class, default: Hyrax::SelectTypeListPresenter
-
-      sidebar_partials[:activity] << 'hyrax/dashboard/sidebar/fixity_checks'
     end
 
     def show
@@ -22,7 +20,7 @@ module Spot
 
       # @see {Ability#depositor_abilities}
       elsif can? :read, :dashboard
-        @presenter = Hyrax::Dashboard::UserPresenter.new(current_user, view_context, params[:since])
+        @presenter = Dashboard::UserPresenter.new(current_user, view_context, params[:since])
         @create_work_presenter = create_work_presenter_class.new(current_user)
         render 'show_user'
       else
