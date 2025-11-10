@@ -24,12 +24,12 @@
 }
 
 [role="main"] {
-  margin-top: 1rem;
+  margin-top: 2rem;
   padding-bottom: 10rem;
 }
 
 .dashboard > [role="main"] {
-  margin-top: 0;
+  margin-top: 0.6rem;
 }
 
 .thumbnail.file-set {
@@ -76,7 +76,8 @@
 
 .site-footer {
   background-color: $tan-light;
-  height: 20rem;
+  font-size: .85rem;
+  min-height: 180px;
 }
 
 // duplicating styles from #facet-panel-collapse
@@ -137,4 +138,8 @@ select[multiple] {
       line-height: 1;
     }
   }
+}
+
+#metadata .form-group label {
+  font-weight: 700;
 }
