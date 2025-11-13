@@ -262,7 +262,7 @@ Hyrax.config do |config|
   # config.query_index_from_valkyrie = false
 
   ## Configure index adapter for Valkyrie::Resources to use solr readonly indexer
-  # config.index_adapter = :solr_index
+  config.index_adapter = :solr_index
 
   ## Fedora import/export tool
   #
