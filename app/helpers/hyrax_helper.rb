@@ -12,7 +12,7 @@ module HyraxHelper
   def available_translations
     { 'en' => 'English' }
   end
-
+  
   # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/helpers/hyrax/title_helper.rb#L18-L22
   def default_page_title
     i18n_key = "spot.#{controller_name.underscore}"
