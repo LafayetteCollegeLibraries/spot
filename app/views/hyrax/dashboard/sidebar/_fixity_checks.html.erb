@@ -1,0 +1,8 @@
+<% if can? :read, :admin_dashboard %>
+  <%= menu.nav_link(main_app.admin_fixity_checks_path, class: 'nav-link') do %>
+    <span class="fa fa-lock" aria-hidden="true"></span>
+    <span class="sidebar-action-text">
+      <%= t('spot.dashboard.fixity.sidebar') %>
+    </span>
+  <% end %>
+<% end %>
