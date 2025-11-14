@@ -11,15 +11,19 @@
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <% (tabs - ['share']).each_with_index do | tab, i | %>
-          <li class="nav-item" role="presentation">
-            <a class="nav-link <% if i == 0 %>active<% end %>" href="#<%= tab %>" aria-controls="<%= tab %>" role="tab" data-toggle="tab">
-              <%= form_tab_label_for(form: f.object, tab: tab) %>
-            </a>
-          </li>
+          <% if i == 0 %>
+            <li class="nav-item" role="presentation" class="active">
+          <% else %>
+            <li class="nav-item" role="presentation">
+          <% end %>
+              <a href="#<%= tab %>" aria-controls="<%= tab %>" role="tab" data-toggle="tab" class="nav-link">
+                <%= form_tab_label_for(form: f.object, tab: tab) %>
+              </a>
+            </li>
         <% end %>
 
         <% if current_user.admin? %>
-        <li role="presentation" id="tab-share" class="nav-item">
+        <li role="presentation" id="tab-share" class="hidden nav-item">
           <a href="#share" aria-controls="share" role="tab" data-toggle="tab" class="nav-link">
             <%= form_tab_label_for(form: f.object, tab: 'share') %>
           </a>
