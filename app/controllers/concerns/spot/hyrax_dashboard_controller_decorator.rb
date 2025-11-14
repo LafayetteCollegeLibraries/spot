@@ -10,6 +10,8 @@ module Spot
 
     prepended do
       class_attribute :create_work_presenter_class, default: Hyrax::SelectTypeListPresenter
+
+      sidebar_partials[:activity] << 'hyrax/dashboard/sidebar/fixity_checks'
     end
 
     def show

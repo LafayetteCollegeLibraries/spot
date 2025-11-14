@@ -6,19 +6,19 @@
                                    id: 'collapseSettings',
                                    open: menu.settings_section? do %>
         <% if can?(:manage, :collection_types) %>
-          <%= menu.nav_link(hyrax.admin_collection_types_path) do %>
+          <%= menu.nav_link(hyrax.admin_collection_types_path, class: 'nav-link') do %>
             <span class="fa fa-folder-open" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.collection_types') %></span>
           <% end %>
         <% end %>
         <% if can?(:manage, Hyrax::Feature) %>
-          <%= menu.nav_link(hyrax.admin_features_path) do %>
+          <%= menu.nav_link(hyrax.admin_features_path, class: 'nav-link') do %>
             <span class="fa fa-wrench" aria-hidden="true"></span> <span class="sidebar-action-text"><%= t('hyrax.admin.sidebar.technical') %></span>
           <% end %>
         <% end %>
       <% end %>
     </li>
     <% if can?(:manage, Sipity::WorkflowResponsibility) %>
-      <%= menu.nav_link(hyrax.admin_workflow_roles_path) do %>
+      <%= menu.nav_link(hyrax.admin_workflow_roles_path, class: 'nav-link') do %>
         <span class="fa fa-users" aria-hidden="true"></span>
         <span class="sidebar-action-text">
           <%= t('hyrax.admin.sidebar.workflow_roles') %>
@@ -26,7 +26,7 @@
       <% end %>
     <% end %>
     <% if can?(:manage, Role) %>
-      <%= menu.nav_link(role_management.roles_path) do %>
+      <%= menu.nav_link(role_management.roles_path, class: 'nav-link') do %>
         <span class="fa fa-user" aria-hidden="true"></span>
         <span class="sidebar-action-text">
           <%= t('role-management.dashboard') %>
@@ -37,7 +37,7 @@
       we won't check if the user can see the system status. we'll assume
       that they're okay because they're able to see the dashboard.
     %>
-    <%= menu.nav_link(main_app.admin_status_path) do %>
+    <%= menu.nav_link(main_app.admin_status_path, class: 'nav-link') do %>
       <span class="fa fa-tachometer" aria-hidden="true"></span>
       <span class="sidebar-action-text">
         <%= t('spot.dashboard.status.sidebar') %>
