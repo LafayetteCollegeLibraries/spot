@@ -1,8 +1,8 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
+<div class="card">
+  <div class="card-header">
     <%= render 'work_title', presenter: presenter %>
   </div>
-  <div class="panel-body">
+  <div class="card-body">
     <div class="row">
       <%= render 'workflow_actions_widget', presenter: presenter %>
       <% if current_ability.can?(:edit, presenter.id) %>
