@@ -1,4 +1,48 @@
-<div class="work-export-tools btn-toolbar" style="margin-bottom:1rem;">
-  <%= render 'export_primary_file', presenter: presenter %>
-  <%= render 'export_options', presenter: presenter %>
+<div class="container-fluid p-0 mb-3">
+  <%# "Download this item" button %>
+  <%= link_to presenter.download_url, class: 'btn btn-success', data: { turbolinks: false } do %>
+    <span class="fa fa-download"></span>
+    <%= t('spot.work.export.primary_file') %>
+  <% end %>
+
+  <%# "Additional options" dropdown %>
+  <div class="btn-group">
+    <div class="dropdown">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+        <%= t('spot.work.export.additional_options') %>
+        <span class="caret"></span>
+      </button>
+      <div class="dropdown-menu">
+        <h6 class="dropdown-header">
+          <%= t('spot.work.export.dropdown.export_header') %>
+        </h6>
+        <%= link_to presenter.export_all_text,
+                    main_app.export_path(presenter),
+                    data: { turbolinks: false },
+                    class: 'dropdown-item' %>
+
+        <% if presenter.multiple_members? %>
+        <h6 class="dropdown-header">
+          <%= t('spot.work.export.dropdown.files_header') %>
+        </h6>
+        <%= link_to t('spot.work.export.all_files'),
+                    main_app.export_path(presenter, export_type: :files),
+                    data: { turbolinks: false },
+                    class: 'dropdown-item' %>
+        <% end %>
+
+        <h6 class="dropdown-header">
+          <%= t('spot.work.export.dropdown.metadata_header') %>
+        </h6>
+
+        <% presenter.export_formats.each do |format| %>
+          <%= link_to main_app.polymorphic_path([presenter], format: format, locale: nil), class: 'dropdown-item' do %>
+            <%= t "spot.work.export.metadata.#{format}",
+                  default: 'spot.work.export.metadata.default',
+                  format: format %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
