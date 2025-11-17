@@ -1,11 +1,11 @@
 <%- presenter.rights_statement_merged.each_with_index do |(uri, label), index| -%>
 <tr>
   <% if index.zero? %>
-  <th rowspan="<%= presenter.rights_statement_merged.size %>">
+  <th class="p-2" rowspan="<%= presenter.rights_statement_merged.size %>">
     <%= t('blacklight.search.fields.rights_statement') %>
   </th>
   <% end %>
-  <td>
+  <td class="p-2">
     <%= rights_statement_icon(uri, label) %>
     <%= label %>
   </td>

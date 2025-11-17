@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'wings'
+
 Hyrax.config do |config|
   config.register_curation_concern :publication, :image, :student_work, :audio_visual
 
