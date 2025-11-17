@@ -2,13 +2,13 @@
   <div class="panel-heading panel-heading-slim">
     <h5>Repository History</h5>
   </div>
-  <table class="table table-bordered metadata-table">
+  <table class="table table-sm table-bordered metadata-table">
     <tbody>
       <%= presenter.attribute_to_html(:note) %>
       <%= presenter.attribute_to_html(:admin_set, render_as: :faceted, search_field: :admin_set_sim) %>
       <tr>
-        <th>Workflow status</th>
-        <td><%= presenter.workflow.badge %></td>
+        <th class="p-2">Workflow status</th>
+        <td class="p-2"><%= presenter.workflow.badge %></td>
       </tr>
       <%= presenter.attribute_to_html(:embargo_release_date) %>
       <%= presenter.attribute_to_html(:lease_expiration_date) %>
