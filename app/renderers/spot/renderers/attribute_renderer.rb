@@ -47,11 +47,11 @@ module Spot
 
         markup = []
         vals = Array(values)
-        attributes = microdata_object_attributes(field).merge(class: "attribute attribute-#{field}")
+        attributes = microdata_object_attributes(field).merge(class: "p-2 attribute attribute-#{field}")
 
         vals.each_with_index do |value, index|
           markup << '<tr>'
-          markup << %(<th rowspan="#{vals.size}">#{label}</th>) if index.zero?
+          markup << %(<th class="p-2" rowspan="#{vals.size}">#{label}</th>) if index.zero?
           markup << %(<td#{html_attributes(attributes)}>#{attribute_value_to_html(value)}</td>)
           markup << '</tr>'
         end
