@@ -10,6 +10,8 @@ RSpec.feature 'Create an Image', :clean, :js do
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
     Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+    ensure_deposit_access_for user
+
     login_as user
   end
 
@@ -28,14 +30,7 @@ RSpec.feature 'Create an Image', :clean, :js do
     # to uncomment the block below
     describe 'can fill out and submit a new Image' do
       scenario do
-        visit '/dashboard'
-        click_link 'Works'
-        click_link 'Add New Work'
-
-        sleep 1
-
-        choose 'Image'
-        click_button 'Create work'
+        visit Rails.application.routes.url_helpers.new_hyrax_image_path
 
         expect(page).to have_content "Add New #{i18n_term}"
 

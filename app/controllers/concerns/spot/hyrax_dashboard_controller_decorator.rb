@@ -22,7 +22,7 @@ module Spot
 
       # @see {Ability#depositor_abilities}
       elsif can? :read, :dashboard
-        @presenter = Dashboard::UserPresenter.new(current_user, view_context, params[:since])
+        @presenter = Hyrax::Dashboard::UserPresenter.new(current_user, view_context, params[:since])
         @create_work_presenter = create_work_presenter_class.new(current_user)
         render 'show_user'
       else
