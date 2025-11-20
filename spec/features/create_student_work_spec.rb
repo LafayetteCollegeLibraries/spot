@@ -9,6 +9,8 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
     Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+    ensure_deposit_access_for user
+
     login_as user
   end
 
@@ -22,16 +24,7 @@ RSpec.feature 'Create a StudentWork', :clean, :js do
     let(:user) { create(:admin_user) }
 
     scenario 'can fill out and submit a new StudentWork' do
-      visit '/dashboard'
-
-      click_link 'Works'
-      sleep 1
-      click_link 'Add New Work'
-
-      sleep 1
-
-      choose 'Student Work'
-      click_button 'Create work'
+      visit Rails.application.routes.url_helpers.new_hyrax_student_work_path
 
       expect(page).to have_content "Add New #{i18n_term}"
 
