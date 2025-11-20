@@ -10,6 +10,8 @@ RSpec.feature 'Create an Image', :clean, :js do
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
     Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+    ensure_deposit_access_for user
+
     login_as user
   end
 
