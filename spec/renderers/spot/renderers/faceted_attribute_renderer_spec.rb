@@ -6,8 +6,8 @@ RSpec.describe Spot::Renderers::FacetedAttributeRenderer do
   let(:renderer) { described_class.new(field, value, options) }
   let(:helpers) { Rails.application.routes.url_helpers }
   let(:html_result) do
-    '<tr><th rowspan="1">Keyword</th>' \
-    '<td class="attribute attribute-keyword">' \
+    '<tr><th class="p-2" rowspan="1">Keyword</th>' \
+    '<td class="p-2 attribute attribute-keyword">' \
     '<span itemprop="keywords">' \
     "<a href=\"#{url}\">emotion</a>" \
     '</span></td></tr>'

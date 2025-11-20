@@ -117,6 +117,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include StubEnv::Helpers
   config.include ControllerHelpers, type: :helper
+  config.include FeatureSpecHelpers, type: :feature
   config.include Select2Helpers, type: :feature
   config.include Mail::Matchers, type: :mailer
 
@@ -137,18 +138,34 @@ RSpec.configure do |config|
     Hyrax.config.enable_noids = false
   end
 
-  config.before do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.start
+  config.before do |example|
+    if example.metadata[:type] == :feature && Capybara.current_driver != :rack_test
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.start
+    end
   end
 
   config.after do
     DatabaseCleaner.clean
   end
 
+  # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/spec/spec_helper.rb#L121-L126
+  # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/spec/spec_helper.rb#L259-L265
   config.before clean: true do
-    DatabaseCleaner.clean
-    ActiveFedora::Cleaner.clean!
+    unless Hyrax.config.disable_wings
+      ActiveFedora::Cleaner.clean!
+      ActiveFedora.fedora.connection.send(:init_base_path)
+    end
+
+    Hyrax::SolrService.wipe! if Hyrax.config.query_index_from_valkyrie
+
+    # ensure there's an admin set to deposit to
+    admin_set = Hyrax::AdminSetCreateService.find_or_create_default_admin_set
+    Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set.id)
+
+    Hyrax.persister.save(resource: admin_set)
   end
 
   config.after clean: true do
