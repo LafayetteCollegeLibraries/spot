@@ -14,8 +14,8 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
 
     context 'when a prefix is present' do
       let(:html_result) do
-        '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-standard_identifier">' \
+        '<tr><th class="p-2" rowspan="1">Standard Identifier</th>' \
+        '<td class="p-2 attribute attribute-standard_identifier">' \
         '<span class="label label-default">ISBN</span> ' \
         '978-1467715478</td></tr>'
       end
@@ -26,8 +26,8 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
     context 'when a prefix is not present' do
       let(:value) { local_value }
       let(:html_result) do
-        '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-standard_identifier">B0023882-01</td></tr>'
+        '<tr><th class="p-2" rowspan="1">Standard Identifier</th>' \
+        '<td class="p-2 attribute attribute-standard_identifier">B0023882-01</td></tr>'
       end
 
       it { is_expected.to be_equivalent_to expected }
@@ -38,8 +38,8 @@ RSpec.describe Spot::Renderers::IdentifierAttributeRenderer do
       let(:opts) { { local: true } }
 
       let(:html_result) do
-        '<tr><th rowspan="1">Standard Identifier</th>' \
-        '<td class="attribute attribute-standard_identifier">' \
+        '<tr><th class="p-2" rowspan="1">Standard Identifier</th>' \
+        '<td class="p-2 attribute attribute-standard_identifier">' \
         '<code>isbn:978-1467715478</code></td></tr>'
       end
 

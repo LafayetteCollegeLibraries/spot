@@ -43,46 +43,20 @@ Rails.application.reloader.to_prepare do
   # "translation missing" message being provided as a fall-back label. this should
   # prevent that error from appearing by replacing the +translate+ calls with a symbolized
   # I18n key (see also 0717dee, + catalog_controller.rb)
-  module Spot
-    module CollectionsControllerFacetDecorator
-      extend ActiveSupport::Concern
-
-      class_methods do
-        def update_facet_labels!
-          blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-          blacklight_config.facet_fields[Hyrax.config.collection_type_index_field].label = :'hyrax.dashboard.my.heading.collection_type'
-          blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
-        end
-      end
-
-      included do
-        update_facet_labels!
-      end
-    end
-  end
-
-  Hyrax::My::CollectionsController.prepend(Spot::CollectionsControllerFacetDecorator)
-  Hyrax::Dashboard::CollectionsController.prepend(Spot::CollectionsControllerFacetDecorator)
-
-  module Spot
-    module WorksControllerFacetDecorator
-      extend ActiveSupport::Concern
-
-      class_methods do
-        def update_facet_labels!
-          blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
-        end
-      end
-
-      included do
-        update_facet_labels!
-      end
+  [Hyrax::My::CollectionsController, Hyrax::Dashboard::CollectionsController].each do |klass|
+    klass.class_eval do
+      blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
+      blacklight_config.facet_fields[Hyrax.config.collection_type_index_field].label = :'hyrax.dashboard.my.heading.collection_type'
+      blacklight_config.facet_fields['has_model_ssim'].label = :'hyrax.dashboard.my.heading.collection_type'
     end
   end
 
   # same as previous: updating facet labels for dashboard works controller
-  Hyrax::My::WorksController.prepend(Spot::WorksControllerFacetDecorator)
-  Hyrax::Dashboard::WorksController.prepend(Spot::WorksControllerFacetDecorator)
+  [Hyrax::My::WorksController, Hyrax::Dashboard::WorksController].each do |klass|
+    klass.class_eval do
+      blacklight_config.facet_fields['visibility_ssi'].label = :'hyrax.dashboard.my.heading.visibility'
+    end
+  end
 
   # Rewrite Hyrax::DashboardController local mods to be a decorator.
   # @see app/controllers/concerns/spot/hyrax_dashboard_controller_decorator.rb
@@ -161,13 +135,6 @@ Rails.application.reloader.to_prepare do
   end
 
   SimpleForm::Inputs::Base.prepend(Spot::SimpleFormBaseInputDecorator)
-
-  # Adding label support for metadata-only records
-  Hyrax::PermissionBadge.class_eval do
-    old_visibility_label_class = Hyrax::PermissionBadge::VISIBILITY_LABEL_CLASS.dup
-    remove_const(:VISIBILITY_LABEL_CLASS) if const_defined?(:VISIBILITY_LABEL_CLASS)
-    const_set(:VISIBILITY_LABEL_CLASS, old_visibility_label_class.tap { |h| h[:metadata] = 'label-info' }.freeze)
-  end
 
   # Define this constant, intended to be similar to AdminSet::DEFAULT_ID
   AdminSet::STUDENT_WORK_ID = Spot::StudentWorkAdminSetCreateService::ADMIN_SET_ID
