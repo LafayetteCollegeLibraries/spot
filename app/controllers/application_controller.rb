@@ -15,11 +15,11 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  # @return [Hash]
-  # @todo remove this when supporting multiple locales
-  def default_url_options
-    super.reject { |k, _v| k == :locale }
-  end
+  # # @return [Hash]
+  # # @todo remove this when supporting multiple locales
+  # def default_url_options
+  #   super.reject { |k, _v| k == :locale }
+  # end
 
   # Borrowed from pul's figgy app. Restricts our guests to a single entry
   # in the database, preventing hundreds of fake user accounts from being
