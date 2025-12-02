@@ -33,18 +33,6 @@ module Spot
       def valid?
         pdf_mime_types.include? mime_type
       end
-
-      # Since the newer Hyrax method is backwards-compatible, let's use that instead of delegating to file_set
-      #
-      # @see https://github.com/samvera/hyrax/blob/hyrax-v3.5.0/app/services/hyrax/file_set_derivatives_service.rb#L13-L20
-      def uri
-        # If given a FileMetadata object, use its parent ID.
-        if file_set.respond_to?(:file_set_id)
-          file_set.file_set_id.to_s
-        else
-          file_set.uri
-        end
-      end
     end
   end
 end

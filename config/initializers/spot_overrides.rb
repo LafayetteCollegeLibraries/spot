@@ -371,35 +371,4 @@ Rails.application.reloader.to_prepare do
   end
 
   Hyrax::UploadedFile.prepend(Spot::HyraxUploadedFileDecorator)
-
-  # Encountering an issue where Hyrax::PersistDirectlyContainedOutputFileService.retrieve_file_set requires
-  # Hyrax::UploadedFile#file_set_uri to be an URI but querying for that URI throws an error (ActiveFedora
-  # is appending the base root to the full uri, resulting in errors like:
-  #     Ldp::BadRequest: Path contains empty element! /dev/ht/tp/:/http://fedora:8080/rest/dev/2v/23/vt/36/2v23vt362")
-  Hyrax::UploadedFile.class_eval do
-    def add_file_set!(file_set)
-      uri = case file_set
-            when ActiveFedora::Base
-              file_set.uri
-            when Hyrax::Resource
-              file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
-            end
-
-      update!(file_set_uri: uri) if uri.present?
-    end
-  end
-
-  ValkyrieIngestJob.class_eval do
-    def ingest(file:, pcdm_use:)
-      file_set_id = Valkyrie::ID.new(Hyrax::Base.uri_to_id(file.file_set_uri))
-      file_set = Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: file_set_id)
-
-      upload_file(
-        file: file,
-        file_set: file_set,
-        pcdm_use: pcdm_use,
-        user: file.user
-      )
-    end
-  end
 end
