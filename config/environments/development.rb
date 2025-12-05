@@ -9,8 +9,6 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  Rails.logger.debug 'starting with classes cached' if ENV['ENABLE_CLASS_CACHE'] == 'true'
-
   # Rails' default is to not eager_load in development for speed's sake (I think?)
   # but we were encountering a lot of Missing Constant errors in our Sidekiq logs
   # and eager_loding classes seemed to help fix that.
