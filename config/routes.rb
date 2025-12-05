@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   ##
 
   # user routes
-  devise_for :users
+  devise_for :users, sign_out_via: :get
 
   # need to call `root` before mounting our engines
   root 'spot/homepage#index'
