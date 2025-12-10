@@ -38,7 +38,8 @@
 
 // Bulkrax
 //= require bulkrax/application
-//= require browse_everything
+//= require jquery.treetable
+//= require browse_everything/behavior
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require language-tagged-autocomplete-setup
