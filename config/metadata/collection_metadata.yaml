@@ -1,0 +1,71 @@
+attributes:
+  abstract:
+    predicate: http://purl.org/dc/terms/abstract
+    type: string
+    multiple: true
+    form:
+      multiple: true
+      primary: true
+    index_keys:
+      - abstract_tesim
+  description:
+    predicate: http://purl.org/dc/terms/description
+    type: string
+    multiple: true
+    form:
+      multiple: true
+      primary: true
+    index_keys:
+      - description_tesim
+  identifier:
+    predicate: http://purl.org/dc/terms/identifier
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - identifier_ssim
+  language:
+    predicate: http://purl.org/dc/elements/1.1/language
+    type: string
+    multiple: true
+    form:
+      multiple: true
+  location:
+    predicate: http://purl.org/dc/terms/spatial
+    type: uri
+    multiple: true
+    form:
+      multiple: true
+  related_resource:
+    predicate: http://www.w3.org/2000/01/rdf-schema#seeAlso
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - related_resource_tesim
+      - related_resource_sim
+  source_identifier:
+    predicate: http://ldr.lafayette.edu/ns#source_identifier
+    type: string
+    multiple: true
+    index_keys:
+      - source_identifier_ssim
+  sponsor:
+    predicate: http://schema.org/sponsor
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - sponsor_tesim
+      - sponsor_sim
+  subject:
+    predicate: http://purl.org/dc/elements/1.1/subject
+    type: uri
+    multiple: true
+    form:
+      multiple: true
+      primary: true
+      default: []

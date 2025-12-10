@@ -4,7 +4,7 @@ class Collection < ActiveFedora::Base
   include Spot::NestedCollectionBehavior
 
   class_attribute :controlled_properties
-  self.controlled_properties = [:place]
+  self.controlled_properties = [:location]
 
   validates_with ::Spot::OnlyUrlsValidator, fields: [:related_resource]
   validates_with ::Spot::SlugValidator, fields: [:identifier]

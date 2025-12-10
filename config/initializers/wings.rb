@@ -5,15 +5,15 @@
 # @todo Revisit this when Valkyrizing. This might need to be moved to config/initializers/valkyrie.rb
 # @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/.dassie/config/initializers/wings.rb
 Rails.application.config.after_initialize do
-  Wings::ModelRegistry.register(Collection, Collection)
-  Wings::ModelRegistry.register(AdminSet, AdminSet)
+  Wings::ModelRegistry.register(CollectionResource, Collection)
+  Wings::ModelRegistry.register(AdminSetResource, AdminSet)
   Wings::ModelRegistry.register(FileSet, FileSet)
   Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
   Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
 
-  Wings::ModelRegistry.register(Publication, Publication)
-  Wings::ModelRegistry.register(Image, Image)
-  Wings::ModelRegistry.register(StudentWork, StudentWork)
-  Wings::ModelRegistry.register(AudioVisual, AudioVisual)
+  Wings::ModelRegistry.register(PublicationResource, Publication)
+  Wings::ModelRegistry.register(ImageResource, Image)
+  Wings::ModelRegistry.register(StudentWorkResource, StudentWork)
+  Wings::ModelRegistry.register(AudioVisualResource, AudioVisual)
 end
