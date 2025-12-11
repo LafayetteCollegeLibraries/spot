@@ -355,20 +355,61 @@ Rails.application.reloader.to_prepare do
   # Hyrax::UploadedFile#file_set_uri to be an URI but querying for that URI throws an error (ActiveFedora
   # is appending the base root to the full uri, resulting in errors like:
   #     Ldp::BadRequest: Path contains empty element! /dev/ht/tp/:/http://fedora:8080/rest/dev/2v/23/vt/36/2v23vt362")
-  module Spot
-    module HyraxUploadedFileDecorator
-      def add_file_set!(file_set)
-        uri = case file_set
-              when ActiveFedora::Base
-                file_set.uri
-              when Hyrax::Resource
-                file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
-              end
+  # module Spot
+  #   module HyraxUploadedFileDecorator
+  #     def add_file_set!(file_set)
+  #       uri = case file_set
+  #             when ActiveFedora::Base
+  #               file_set.uri
+  #             when Hyrax::Resource
+  #               file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
+  #             end
 
-        update!(file_set_uri: uri) if uri.present?
+  #       update!(file_set_uri: uri) if uri.present?
+  #     end
+  #   end
+  # end
+
+  # Hyrax::UploadedFile.prepend(Spot::HyraxUploadedFileDecorator)
+  module Spot
+    module BulkraxCsvParserDecorator
+      extend ActiveSupport::Concern
+      def store_files(identifier, folder_count)
+        record = Bulkrax.object_factory.find(identifier)
+        return unless record
+
+        file_sets = Array.wrap(record) if record.file_set?
+        if file_sets.nil? # for valkyrie
+          file_sets = record.respond_to?(:file_sets) ? record.file_sets : record.members&.select(&:file_set?)
+        end
+
+        if importerexporter.include_thumbnails?
+          thumbnail = Bulkrax.object_factory.thumbnail_for(resource: record)
+          file_sets << thumbnail if thumbnail.present?
+        end
+
+        file_sets.each do |fs|
+          path = File.join(exporter_export_path, folder_count, 'files')
+          FileUtils.mkdir_p(path) unless File.exist? path
+
+          original_file = Bulkrax.object_factory.original_file(fileset: fs)
+          next if original_file.blank?
+          file = filename(fs)
+
+          io = original_file.respond_to?(:uri) ? open(original_file.uri) : original_file.file.io
+
+          File.open(File.join(path, file), 'wb') do |f|
+            f.write(io.read)
+            f.close
+          end
+        end
+      rescue Ldp::Gone
+        return
+      rescue StandardError => e
+        raise StandardError, "Unable to retrieve files for identifier #{identifier} - #{e.message}"
       end
     end
   end
 
-  Hyrax::UploadedFile.prepend(Spot::HyraxUploadedFileDecorator)
+  Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
 end
