@@ -51,7 +51,7 @@ gem 'blacklight_range_limit', '~> 8.5.0'
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
 
-gem 'bootstrap', '~> 4.0'
+gem 'bootstrap', '= 4.6.2'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.6.0'

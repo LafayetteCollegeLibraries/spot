@@ -396,7 +396,7 @@ Rails.application.reloader.to_prepare do
           next if original_file.blank?
           file = filename(fs)
 
-          io = original_file.respond_to?(:uri) ? open(original_file.uri) : original_file.file.io
+          io = original_file.respond_to?(:uri) ? open(RDF::URI.new(original_file.uri.to_s.sub("fedora", "localhost"))) : original_file.file.io
 
           File.open(File.join(path, file), 'wb') do |f|
             f.write(io.read)
