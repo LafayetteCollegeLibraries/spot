@@ -99,4 +99,26 @@ RSpec.shared_examples 'it includes Spot::WorksControllerBehavior' do
       end
     end
   end
+
+  describe 'iiif_manifest_presenter' do
+    let(:work) { FactoryBot.create(work_type) }
+    let(:builder) { instance_double('Hyrax::ManifestBuilderService') }
+
+    before do
+      @original_builder = described_class.iiif_manifest_builder
+      described_class.iiif_manifest_builder = builder
+
+      allow(builder).to receive(:manifest_for).and_return({})
+
+      get :manifest, params: { id: work.id }
+    end
+
+    after do
+      described_class.iiif_manifest_builder = @original_builder
+    end
+
+    it 'uses Spot::IiifManifestPresenter' do
+      expect(builder).to have_received(:manifest_for).with(presenter: instance_of(Spot::IiifManifestPresenter))
+    end
+  end
 end
