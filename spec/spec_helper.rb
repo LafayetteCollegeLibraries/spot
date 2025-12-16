@@ -27,9 +27,7 @@ require 'active_fedora/cleaner'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
-require 'hyrax/spec/matchers'
-require 'hyrax/spec/shared_examples'
-require 'hyrax/spec/factory_bot/build_strategies'
+require 'hyrax/specs/engine_routes'
 require 'hyrax/specs/shared_specs'
 require 'webmock/rspec'
 require 'rspec/matchers'
@@ -38,7 +36,7 @@ require 'equivalent-xml/rspec_matchers'
 require 'mail'
 
 # FactoryBot setup borrowed from Hyrax
-# @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/spec_helper.rb#L83-L88
+# @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/spec/spec_helper.rb#L107-L113
 require 'hyrax/specs/shared_specs/factories/strategies/valkyrie_resource'
 FactoryBot.register_strategy(:valkyrie_create, ValkyrieCreateStrategy)
 
@@ -77,6 +75,31 @@ ActiveRecord::Migration.maintain_test_schema!
 # which is how we're using our local docker setup, so we need to tell it to chill out
 DatabaseCleaner.allow_remote_database_url = true
 
+##
+# Valkyrie registrations and configuration
+##
+Valkyrie::MetadataAdapter.register(Valkyrie::Persistence::Memory::MetadataAdapter.new, :test_adapter)
+Valkyrie::MetadataAdapter.register(Valkyrie::Persistence::Postgres::MetadataAdapter.new, :postgres_adapter)
+
+version_path = Rails.root / 'tmp' / 'test_adapter_uploads'
+Valkyrie::StorageAdapter.register(Valkyrie::Storage::VersionedDisk.new(base_path: version_path), :test_disk)
+FileUtils.mkdir_p(version_path)
+
+Valkyrie::StorageAdapter.register(Valkyrie::Storage::Disk.new(base_path: File.expand_path('../fixtures', __FILE__)), :fixture_disk)
+
+##
+#  Shoulda config
+##
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
+##
+#  RSpec config
+##
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
@@ -191,10 +214,3 @@ WebMock.disable_net_connect!(
     solr
   ]
 )
-
-Shoulda::Matchers.configure do |config|
-  config.integrate do |with|
-    with.test_framework :rspec
-    with.library :rails
-  end
-end

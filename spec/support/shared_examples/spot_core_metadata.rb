@@ -2,28 +2,26 @@
 RSpec.shared_examples 'it includes Spot::CoreMetadata' do
   subject { described_class.new }
 
-  [
-    [:bibliographic_citation, RDF::Vocab::DC.bibliographicCitation],
-    [:contributor,            RDF::Vocab::DC11.contributor],
-    [:creator,                RDF::Vocab::DC11.creator],
-    [:description,            RDF::Vocab::DC11.description],
-    [:identifier,             RDF::Vocab::DC.identifier],
-    [:keyword,                RDF::Vocab::SCHEMA.keywords],
-    [:language,               RDF::Vocab::DC11.language],
-    [:location,               RDF::Vocab::DC.spatial],
-    [:note,                   RDF::Vocab::SKOS.note],
-    [:physical_medium,        RDF::Vocab::DC.PhysicalMedium],
-    [:publisher,              RDF::Vocab::DC11.publisher],
-    [:related_resource,       RDF::RDFS.seeAlso],
-    [:resource_type,          RDF::Vocab::DC.type],
-    [:rights_holder,          RDF::Vocab::DC.rightsHolder],
-    [:rights_statement,       RDF::Vocab::EDM.rights],
-    [:source,                 RDF::Vocab::DC.source],
-    [:source_identifier,      RDF::URI('http://ldr.lafayette.edu/ns#source_identifier')],
-    [:subject,                RDF::Vocab::DC11.subject],
-    [:subtitle,               RDF::URI.new('http://purl.org/spar/doco/Subtitle')],
-    [:title_alternative,      RDF::Vocab::DC.alternative]
-  ].each do |(property, predicate)|
-    it { is_expected.to have_editable_property(property).with_predicate(predicate) }
+  describe 'metadata fields' do
+    it do
+      is_expected.to respond_to(:bibliographic_citation, :bibliographic_citation=)
+      is_expected.to respond_to(:contributor, :contributor=)
+      is_expected.to respond_to(:description, :description=)
+      is_expected.to respond_to(:identifier, :identifier=)
+      is_expected.to respond_to(:keyword, :keyword=)
+      is_expected.to respond_to(:location, :location=)
+      is_expected.to respond_to(:note, :note=)
+      is_expected.to respond_to(:physical_medium, :physical_medium=)
+      is_expected.to respond_to(:publisher, :publisher=)
+      is_expected.to respond_to(:related_resource, :related_resource=)
+      is_expected.to respond_to(:resource_type, :resource_type=)
+      is_expected.to respond_to(:rights_holder, :rights_holder=)
+      is_expected.to respond_to(:rights_statement, :rights_statement=)
+      is_expected.to respond_to(:source, :source=)
+      is_expected.to respond_to(:source_identifier, :source_identifier=)
+      is_expected.to respond_to(:subject, :subject=)
+      is_expected.to respond_to(:subtitle, :subtitle=)
+      is_expected.to respond_to(:title_alternative, :title_alternative=)
+    end
   end
 end

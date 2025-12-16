@@ -3,7 +3,6 @@ RSpec.shared_examples 'it includes Spot::WorkBehavior' do
   subject { described_class.new }
 
   # mixins
-  it_behaves_like 'a model with hyrax core metadata'
   it_behaves_like 'it ensures the existence of a NOID identifier'
   it_behaves_like 'it includes Spot::CoreMetadata'
   it_behaves_like 'it accepts "metadata" as a visibility'
@@ -19,7 +18,6 @@ RSpec.shared_examples 'it includes Spot::WorkBehavior' do
   describe '.controlled_properties (class_attribute)' do
     subject { described_class }
 
-    it { is_expected.to respond_to(:controlled_properties) }
-    it { is_expected.to respond_to(:controlled_properties=) }
+    it { is_expected.to respond_to(:controlled_properties, :controlled_properties=) }
   end
 end

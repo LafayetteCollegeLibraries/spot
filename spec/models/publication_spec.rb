@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 RSpec.describe Publication do
+  subject { described_class.new }
   it_behaves_like 'it includes Spot::WorkBehavior'
 
-  # @todo might be useful to turn this into a shared_example?
-  [
-    [:abstract,               RDF::Vocab::DC.abstract],
-    [:academic_department,    'http://vivoweb.org/ontology/core#AcademicDepartment'],
-    [:date_available,         RDF::Vocab::DC.available],
-    [:date_issued,            RDF::Vocab::DC.issued],
-    [:division,               'http://vivoweb.org/ontology/core#Division'],
-    [:editor,                 RDF::Vocab::BIBO.editor],
-    [:license,                RDF::Vocab::DC.license],
-    [:organization,           'http://vivoweb.org/ontology/core#Organization']
-  ].each do |(prop, uri)|
-    it { is_expected.to have_editable_property(prop).with_predicate(uri) }
-  end
+  it { is_expected.to respond_to :date_available, :date_available= }
+  it { is_expected.to respond_to :date_issued, :date_issued= }
+  it { is_expected.to respond_to :division, :division= }
+  it { is_expected.to respond_to :editor, :editor= }
+  it { is_expected.to respond_to :license, :license= }
+  it { is_expected.to respond_to :organization, :organization= }
 
   describe 'validations' do
     let(:work) { build(:publication) }

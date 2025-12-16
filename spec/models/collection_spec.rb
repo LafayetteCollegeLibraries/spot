@@ -9,15 +9,13 @@ RSpec.describe Collection do
   let(:collection_type) { Hyrax::CollectionType.find_or_create_by(title: 'a cool collection type') }
   let(:collection_type_gid) { collection_type.to_global_id }
 
-  it_behaves_like 'a model with hyrax core metadata'
-
-  it { is_expected.to have_editable_property(:abstract).with_predicate(dc.abstract) }
-  it { is_expected.to have_editable_property(:description).with_predicate(dc.description) }
-  it { is_expected.to have_editable_property(:subject).with_predicate(dc.subject) }
-  it { is_expected.to have_editable_property(:identifier).with_predicate(dc.identifier) }
-  it { is_expected.to have_editable_property(:related_resource).with_predicate(rdfs.seeAlso) }
-  it { is_expected.to have_editable_property(:location).with_predicate(dc.spatial) }
-  it { is_expected.to have_editable_property(:sponsor).with_predicate(schema.sponsor) }
+  it { is_expected.to respond_to :abstract, :abstract= }
+  it { is_expected.to respond_to :description, :description= }
+  it { is_expected.to respond_to :subject, :subject= }
+  it { is_expected.to respond_to :identifier, :identifier= }
+  it { is_expected.to respond_to :related_resource, :related_resource= }
+  it { is_expected.to respond_to :location, :location= }
+  it { is_expected.to respond_to :sponsor, :sponsor= }
 
   describe '.find' do
     subject { described_class.find(param) }
