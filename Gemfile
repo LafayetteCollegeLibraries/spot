@@ -51,7 +51,7 @@ gem 'blacklight_range_limit', '~> 8.5.0'
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
 
-gem 'bootstrap', '= 4.6.2'
+gem 'bootstrap', '~> 4.0'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.6.0'
@@ -90,7 +90,7 @@ gem 'hydra-role-management', '~> 1.1.0'
 gem 'iso-639', '~> 0.3.6'
 
 # install jquery with rails (no longer the default)
-gem 'jquery-rails', '~> 4.6.1'
+gem 'jquery-rails', '~> 4.6.0'
 
 # gem for log management
 gem 'lograge'
