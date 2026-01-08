@@ -142,14 +142,6 @@ Rails.application.reloader.to_prepare do
   # Our own Characterization Service subclass that uses :fits_servlet by default
   CharacterizeJob.characterization_service = Spot::CharacterizationService
 
-  # Override the Browse-Everything Retreiver to take S3 URIs
-  BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
-  BrowseEverything::Retriever.class_eval do
-    class << self
-      prepend Spot::RetrievesS3Urls::ClassMethods
-    end
-  end
-
   # To be honest, I'm not sure why the Hyrax code doesn't work as-is,
   # but rewriting the solr_params[:sort] assignment to this kinda
   # wonky one-liner seems to preserve user-selected sorting. ¯\_(ツ)_/¯

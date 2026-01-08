@@ -1,7 +1,0 @@
----
-s3:
-  bucket: <%= ENV['AWS_BULKRAX_IMPORTS_BUCKET'] %>
-  app_key: <%= ENV['AWS_ACCESS_KEY_ID'] %>
-  app_secret: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
-  region: us-east-1
-  response_type: s3_uri

@@ -54,7 +54,6 @@ gem 'bootsnap', '~> 1.17', require: false
 gem 'bootstrap', '~> 4.0'
 
 # Bulkrax for batch ingesting objects
-gem 'browse-everything', '~> 1.6.0'
 gem 'bulkrax', '~> 9.3.3'
 
 # This needs to be here if we want to compile our own JS
