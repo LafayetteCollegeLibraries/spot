@@ -363,6 +363,11 @@ Rails.application.reloader.to_prepare do
   # end
 
   # Hyrax::UploadedFile.prepend(Spot::HyraxUploadedFileDecorator)
+
+  # Changing the call to open to URI.open because exporters could not find files from URIs otherwise
+  #
+  # see @https://github.com/samvera/bulkrax/blob/5e85a0760e9cc317ae11dbecd35c508d6882a5b6/app/parsers/bulkrax/csv_parser.rb
+  # rubocop:disable all 
   module Spot
     module BulkraxCsvParserDecorator
       extend ActiveSupport::Concern
@@ -402,6 +407,7 @@ Rails.application.reloader.to_prepare do
       end
     end
   end
+  # rubocop:enable all
 
   Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
 end
