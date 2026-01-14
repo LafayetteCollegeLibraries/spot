@@ -47,18 +47,18 @@ module Spot
         Rails.logger.warn('S3: Key not found.')
         return "S3: Key not found."
       end
-      # if Rails.env.development?
-      #   if ENV['AWS_ENDPOINT_URL'].blank?
-      #     Rails.logger.warn('AWS_ENDPOINT_URL environment variable is not defined.')
-      #     return "AWS_ENDPOINT_URL environment variable is not defined."
-      #   end
-      #   client_opts = { endpoint: ENV['AWS_ENDPOINT_URL'].sub('minio', 'localhost') }
-      #   client = Aws::S3::Client.new(**client_opts)
-      # end
-      obj = Aws::S3::Object.new(bucket_name: ENV['AWS_AV_ASSET_BUCKET'], key: src, client: client)
+      if Rails.env.development?
+        if ENV['AWS_ENDPOINT_URL'].blank?
+          Rails.logger.warn('AWS_ENDPOINT_URL environment variable is not defined.')
+          return "AWS_ENDPOINT_URL environment variable is not defined."
+        end
+        client_opts = { endpoint: ENV['AWS_ENDPOINT_URL'].sub('minio', 'localhost') }
+        client = Aws::S3::Client.new(**client_opts)
+      end
+      obj = Aws::S3::Object.new(bucket_name: ENV['AWS_BULKRAX_IMPORTS_BUCKET'], key: src, client: client)
       url = obj.presigned_url(:get, expires_in: 3600)
 
-      name = Bulkrax::Importer.safe_uri_filename(url)
+      name = src.split('/')[-1]
       { url: url, file_name: name }
     end
     # rubocop:enable all

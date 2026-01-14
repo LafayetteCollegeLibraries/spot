@@ -55,6 +55,7 @@ gem 'bootstrap', '~> 4.0'
 
 # Bulkrax for batch ingesting objects
 gem 'bulkrax', '~> 9.3.3'
+gem 'browse-everything', '~> 1.6.0'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
