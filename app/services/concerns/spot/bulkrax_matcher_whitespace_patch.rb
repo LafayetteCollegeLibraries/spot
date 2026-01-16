@@ -35,24 +35,6 @@ module Spot
 
       @result
     end
-
-    def parse_remote_files(src)
-      return if src.blank?
-      src.strip!
-
-      client = Aws::S3::Client.new
-      begin
-        client.head_object(key: src, bucket: ENV['AWS_BULKRAX_IMPORTS_BUCKET'])
-      rescue Aws::S3::Errors::NotFound
-        Rails.logger.warn('S3: Key not found.')
-        return "S3: Key not found."
-      end
-      obj = Aws::S3::Object.new(bucket_name: ENV['AWS_BULKRAX_IMPORTS_BUCKET'], key: src, client: client)
-      url = obj.presigned_url(:get, expires_in: 3600)
-
-      name = src.split('/')[-1]
-      { url: url, file_name: name }
-    end
     # rubocop:enable all
   end
 end

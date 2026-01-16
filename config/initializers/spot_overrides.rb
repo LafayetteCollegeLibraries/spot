@@ -323,9 +323,14 @@ Rails.application.reloader.to_prepare do
   # and newlines. Our patch modifies the base #result method to only replace tabs with
   # spaces and strip lead/trailing spaces.
   #
+  # A secondary patch adds an s3 files matcher to remotely import files without the Browse
+  # Everything UI.
+  #
   # @see app/services/concerns/spot/bulkrax_matcher_whitespace_patch.rb
+  # @see app/services/concerns/spot/bulkrax_s3_files_matcher.rb
   # @see spec/matchers/bulkrax/application_matcher_spec.rb
   Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxMatcherWhitespacePatch)
+  Bulkrax::ApplicationMatcher.prepend(Spot::BulkraxS3FilesMatcher)
 
   # Modifying the Downloads Controller to not send an unauthorized status for requests.
   # The unauthorized status breaks the laf only thumbnail.
