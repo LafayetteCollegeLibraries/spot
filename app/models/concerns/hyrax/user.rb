@@ -4,10 +4,10 @@ require 'oauth'
 # This class is taken directly from Hyrax as overrides doesnt seem to correctly
 # patch concerns. The only modification made is to the 'find_or_create_system_user'
 # method, which was to remove the password field as we don't use it. Ideally, we
-# should see about another method of making these changes so we don't have to 
+# should see about another method of making these changes so we don't have to
 # maintain this file.
 #
-# rubocop:disable all 
+# rubocop:disable all
 module Hyrax::User
   extend ActiveSupport::Concern
 
@@ -204,5 +204,5 @@ module Hyrax::User
       User.where(created_at: start_date..end_date)
     end
   end
-  # rubocop:enable all 
+  # rubocop:enable all
 end
