@@ -10,7 +10,7 @@ module Spot
   module BulkraxS3FilesMatcher
     extend ActiveSupport::Concern
 
-    def parse_s3_files(src)
+    def parse_remote_files(src)
       return if src.blank?
       src.strip!
 

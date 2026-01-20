@@ -37,7 +37,7 @@ Bulkrax.setup do |config|
       'model' => { from: ['model', 'work_type'], split: false },
       'premade_derivatives' => { from: ['premade_derivatives'] },
       'stored_derivatives' => { from: ['stored_derivatives'] },
-      's3_files' => { from: ["s3_file"], parsed: true },
+      'remote_files' => { from: ["s3_file"], parsed: true },
 
       # Descriptive metadata
       'title' => { from: ['title'] },
