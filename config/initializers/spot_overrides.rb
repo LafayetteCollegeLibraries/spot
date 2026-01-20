@@ -423,10 +423,4 @@ Rails.application.reloader.to_prepare do
   # rubocop:enable all
 
   Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
-
-  Hyrax::User.class_eval do
-    def find_or_create_system_user(user_key)
-      User.find_by_user_key(user_key) || User.create!(user_key_field => user_key)
-    end
-  end
 end
