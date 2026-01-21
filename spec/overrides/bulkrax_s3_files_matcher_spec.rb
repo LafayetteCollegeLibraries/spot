@@ -23,6 +23,7 @@ RSpec.describe Spot::BulkraxS3FilesMatcher do
       let(:mock_s3_client) { instance_double(Aws::S3::Client) }
       let(:mock_s3_object) { instance_double(Aws::S3::Object) }
       let(:url) { "s3://#{s3_bucket}/#{key}" }
+      let(:ret_val) { { url: url, file_name: name } }
 
       before do
         stub_env('AWS_AV_ASSET_BUCKET', s3_bucket)
@@ -53,7 +54,7 @@ RSpec.describe Spot::BulkraxS3FilesMatcher do
         end
 
         it 'returns the name and url' do
-          expect(matcher.parse_remote_files(src)).to eq { url: url, file_name: name }
+          expect(matcher.parse_remote_files(src)).to eq ret_val
         end
       end
     end
