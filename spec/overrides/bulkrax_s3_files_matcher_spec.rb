@@ -6,7 +6,7 @@ RSpec.describe Spot::BulkraxS3FilesMatcher do
   subject(:matcher) { described_class.new }
 
   describe '#parse_remote_files' do
-    subject {matcher.parse_remote_files(src)}
+    subject { matcher.parse_remote_files(src) }
 
     context 'src is empty' do
       let(:src) { '' }
