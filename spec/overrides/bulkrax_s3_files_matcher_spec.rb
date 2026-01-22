@@ -3,7 +3,7 @@
 # Test format is copied from original Browse Everything tests
 #
 RSpec.describe Spot::BulkraxS3FilesMatcher do
-  subject(:matcher) { described_class.new }
+  subject(:matcher) { described_class }
 
   describe '#parse_remote_files' do
     subject { matcher.parse_remote_files(src) }
@@ -11,8 +11,8 @@ RSpec.describe Spot::BulkraxS3FilesMatcher do
     context 'src is empty' do
       let(:src) { '' }
 
-      it 'returns the correct size' do
-        expect(retriever.send(:get_file_size, options)).to eq file_size
+      it 'returns nil' do
+        expect(matcher.parse_remote_files(src)).to eq nil
       end
     end
 
