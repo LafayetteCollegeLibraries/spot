@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Tests to make sure that browse everything can read s3 urls
 # Test format is copied from original Browse Everything tests
 #
@@ -14,7 +15,7 @@ RSpec.describe Bulkrax::ApplicationMatcher do
     end
 
     context 'src is not empty' do
-      let(:src) { 'project/file.jpg' }
+      let(:src) { 'project/file.jpg'.dup }
       let(:key) { src }
       let(:s3_bucket) { 'ldr-imports' }
       let(:mock_s3_client) { instance_double(Aws::S3::Client) }
