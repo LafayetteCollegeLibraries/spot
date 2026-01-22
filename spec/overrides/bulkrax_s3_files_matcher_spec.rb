@@ -1,13 +1,10 @@
-# frozen_string_literal: true
 # Tests to make sure that browse everything can read s3 urls
 # Test format is copied from original Browse Everything tests
 #
-RSpec.describe Spot::BulkraxS3FilesMatcher do
-  subject(:matcher) { described_class }
+RSpec.describe Bulkrax::ApplicationMatcher do
+  subject(:matcher) { described_class.new(split: false) }
 
   describe '#parse_remote_files' do
-    subject { matcher.parse_remote_files(src) }
-
     context 'src is empty' do
       let(:src) { '' }
 
@@ -50,7 +47,7 @@ RSpec.describe Spot::BulkraxS3FilesMatcher do
         let(:name) { 'file.jpg' }
 
         before do
-          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: 'av-derivatives').and_return(mock_s3_head)
+          allow(mock_s3_client).to receive(:head_object).with(key: key, bucket: s3_bucket).and_return(mock_s3_head)
         end
 
         it 'returns the name and url' do
