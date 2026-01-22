@@ -24,7 +24,7 @@ RSpec.describe Bulkrax::ApplicationMatcher do
       let(:ret_val) { { url: url, file_name: name } }
 
       before do
-        stub_env('AWS_AV_ASSET_BUCKET', s3_bucket)
+        stub_env('AWS_BULKRAX_IMPORTS_BUCKET', s3_bucket)
         allow(Aws::S3::Client).to receive(:new).and_return(mock_s3_client)
         allow(Aws::S3::Object).to receive(:new).with(bucket_name: s3_bucket, key: src, client: mock_s3_client).and_return(mock_s3_object)
         allow(mock_s3_object).to receive(:presigned_url).with(:get, expires_in: 3600).and_return(url)
