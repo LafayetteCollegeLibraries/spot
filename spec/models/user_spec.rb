@@ -101,4 +101,32 @@ RSpec.describe User do
       expect(user.username).to eq 'cool_beans'
     end
   end
+
+  describe '#find_or_create_system_user' do
+    let(:user_key) { "test key" }
+
+    context 'user exists' do
+      before do
+        allow(described_class).to receive(:find_by_user_key).with(user_key).and_return(user)
+      end
+
+      it 'returns the user' do
+        expect(described_class.find_or_create_system_user(user_key)).to eq user
+        expect(described_class).to have_received(:find_by_user_key).with(user_key)
+      end
+    end
+
+    context 'user does not exist' do
+      before do
+        allow(described_class).to receive(:find_by_user_key).with(user_key).and_return(false)
+        allow(described_class).to receive(:create!).with(user_key_field: user_key).and_return(user)
+      end
+
+      it 'returns the user' do
+        expect(described_class.find_or_create_system_user(user_key)).to eq user
+        expect(described_class).to have_received(:find_by_user_key).with(user_key)
+        expect(described_class).to have_received(:create!).with(user_key_field: user_key)
+      end
+    end
+  end
 end
