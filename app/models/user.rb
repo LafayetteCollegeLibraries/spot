@@ -93,14 +93,6 @@ class User < ApplicationRecord
     update_roles_from_attributes(attributes)
   end
 
-  # Copied over from Hyrax to overwrite the same method in the user concern.
-  # We remove the password parameter since we don't use it.
-  #
-  # @see https://github.com/samvera/hyrax/blob/0af11acf9088cc90c7c9dcf2b4969bd45a101fe2/app/models/concerns/hyrax/user.rb#L183C5-L185C8
-  def find_or_create_system_user(user_key)
-    User.find_by_user_key(user_key) || User.create!(user_key_field => user_key)
-  end
-
   private
 
   # Delegates the updating of User Roles to `Spot::CasUserRolesService`, which will
