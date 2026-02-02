@@ -1,0 +1,44 @@
+///
+// global site overrides
+///
+
+// padding-bottom gives us plenty of spacing to prevent the
+// footer from displaying on top of any page content.
+#content-wrapper {
+  margin-top: 2rem;
+  padding-bottom: 10rem !important;
+}
+
+// adjust content-wrapper margin specifically for the dashboard views
+body.dashboard {
+  #content-wrapper {
+    margin-top: .6rem;
+  }
+}
+
+///
+// masthead / navbar stylings
+///
+
+#masthead { // scss-lint:disable IdSelector
+  background-color: $red-light;
+  border-bottom: 0;
+
+  @media(min-width: 768px) {
+    #search-field-header { // scss-lint:disable IdSelector
+      width: 50rem;
+    }
+  }
+}
+
+.ldr-logo img {
+  height: 50px;
+}
+
+///
+//  Footer bits and bobs
+///
+.site-footer {
+  background-color: $tan-light;
+  min-height: 180px;
+}

@@ -16,8 +16,8 @@ en:
       page_title: 'Advanced Search // %{name}'
 
     catalog:
-      index:
-        page_title: 'Search Results // %{name}'
+      page_title: 'Search Results: %{query} // %{name}'
+      page_title_with_pagination: 'Search Results: %{query} (page %{page}) // %{name}'
 
     collections:
       breadcrumb: Collections
