@@ -12,8 +12,8 @@ Rails.application.config.after_initialize do
   Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
 
-  Wings::ModelRegistry.register(Publication, Publication)
-  Wings::ModelRegistry.register(Image, Image)
-  Wings::ModelRegistry.register(StudentWork, StudentWork)
-  Wings::ModelRegistry.register(AudioVisual, AudioVisual)
+  Wings::ModelRegistry.register(Publication, PublicationResource)
+  Wings::ModelRegistry.register(Image, ImageResource)
+  Wings::ModelRegistry.register(StudentWork, StudentWorkResource)
+  Wings::ModelRegistry.register(AudioVisual, AudioVisualResource)
 end
