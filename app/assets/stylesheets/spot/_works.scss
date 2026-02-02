@@ -3,10 +3,9 @@
 //  - global metadata for work views
 //  - iiif viewer
 //  - a/v playlists
-
-//
-.tab-content .form-group label {
-  font-weight: bolder;
+///
+#metadata .form-group label {
+  font-weight: 700;
 }
 
 .panel-heading-slim {
@@ -23,21 +22,9 @@
 .rights-statement-icon {
   max-width: 120px;
 }
-
 .thumbnail.file-set {
   margin: auto;
   max-width: 250px;
-}
-
-.thumbnail.file-set.image {
-  width: 100%;
-  height: auto;
-}
-
-.thumbnail.collection-thumb img {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain
 }
 
 // bootstrap is very specific in targeting table cells,
@@ -48,26 +35,6 @@
     vertical-align: middle;
   }
 }
-
-.work-show dd {
-  margin-left: 0;
-}
-
-.work-representative-media {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
-
-.attribute-identifier-with-label {
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-// styling badges to default to the right on activity-log
-.activity-log {
-  float: right;
-}
-
 ///
 // styling the iiif viewer iframe to fill the space
 ///
