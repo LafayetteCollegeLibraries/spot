@@ -26,7 +26,7 @@ module Spot
     #
     # @return [Spot::IiifManifestPresenter]
     def iiif_manifest_presenter
-      ::Spot::IiifManifestPresenter.new(curation_concern_from_search_results).tap do |p|
+      ::Spot::IiifManifestPresenter.new(search_result_document(id: params[:id], defType: 'lucene')).tap do |p|
         p.hostname = request.hostname
         p.ability = current_ability
       end
