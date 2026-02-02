@@ -1,7 +1,6 @@
 <% provide(:page_title) { t('.page_title', name: t('hyrax.product_name')) } %>
 
 <%= render 'splash' %>
-<hr />
 
 <% if @presenter.show_senior_honors_thesis_block? %>
   <%= render 'senior_honors_thesis', presenter: @presenter %>
