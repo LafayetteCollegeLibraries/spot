@@ -433,4 +433,12 @@ Rails.application.reloader.to_prepare do
       User.find_by_user_key(user_key) || User.create!(user_key_field => user_key)
     end
   end
+
+  Bulkrax::ObjectFactory.class_eval do
+    class << self
+      prepend Spot::BulkraxObjectFactoryFindPatch::ClassMethods
+    end
+  end
+  
+  Bulkrax::ObjectFactory.prepend(Spot::BulkraxObjectFactoryFindPatch)
 end
