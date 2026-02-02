@@ -1,18 +1,22 @@
-<div class="col-md-10">
+<div class="col-md-9 col-lg-6">
   <div class="metadata">
-    <dl class="dl-horizontal">
+    <dl>
     <% doc_presenter = index_presenter(document) %>
     <% index_fields(document).each do |field_name, field| -%>
       <% if should_render_index_field? document, field %>
-          <dt><%= render_index_field_label document, field: field_name %></dt>
-          <dd><%= doc_presenter.field_value field %></dd>
+        <div class="row">
+          <dt class="col-5 text-right" data-solr-field-name="<%= field_name %>"><%= render_index_field_label document, field: field_name %></dt>
+          <dd class="col-7"><%= doc_presenter.field_value field %></dd>
+        </div>
       <% end %>
     <% end %>
     <%# there's probably a better way to do this, but we want to ensure that
         the permalink is always at the bottom when it exists %>
     <% if document.permalink.present? %>
-      <dt><%= t 'blacklight.search.fields.permalink' %></dt>
-      <dd><%= document.permalink %></dd>
+      <div class="row">
+        <dt class="col-5 text-right" data-solr-field-name="permalink_ss"><%= t 'blacklight.search.fields.permalink' %></dt>
+        <dd class="col-7"><%= document.permalink %></dd>
+      </div>
     <% end %>
     </dl>
   </div>

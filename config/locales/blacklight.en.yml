@@ -1,5 +1,8 @@
 en:
   blacklight:
+    search_page:
+      page_title:
+        title: 'Search Results: %{constraints} // %{application_name}'
     search:
       facets:
         # We don't want to spell out the OCM acronym on the facet labels,
