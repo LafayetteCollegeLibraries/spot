@@ -434,11 +434,5 @@ Rails.application.reloader.to_prepare do
     end
   end
 
-  Bulkrax::ObjectFactory.class_eval do
-    class << self
-      prepend Spot::BulkraxObjectFactoryFindPatch::ClassMethods
-    end
-  end
-
   Bulkrax::ObjectFactory.prepend(Spot::BulkraxObjectFactoryFindPatch)
 end
