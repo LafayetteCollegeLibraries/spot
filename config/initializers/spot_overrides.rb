@@ -380,7 +380,7 @@ Rails.application.reloader.to_prepare do
   # Changing the call to open to URI.open because exporters could not find files from URIs otherwise
   #
   # see @https://github.com/samvera/bulkrax/blob/5e85a0760e9cc317ae11dbecd35c508d6882a5b6/app/parsers/bulkrax/csv_parser.rb
-  # rubocop:disable all 
+  # rubocop:disable all
   module Spot
     module BulkraxCsvParserDecorator
       extend ActiveSupport::Concern

@@ -15,6 +15,8 @@ class CatalogController < ApplicationController
   before_action :enforce_show_permissions, only: :show
 
   configure_blacklight do |config|
+    config.http_method = :post
+
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
     # config.advanced_search[:qt] ||= 'advanced'
@@ -50,31 +52,21 @@ class CatalogController < ApplicationController
     config.index.display_type_field = 'has_model_ssim'
     config.index.thumbnail_field = 'thumbnail_path_ss'
 
-    # solr fields that will be treated as facets by the blacklight application
-    #   The ordering of the field names is the order of the display
+    # Field configuration for Facets.
     #
-    # @note: when defining a field (facet, index, show, search), define the
-    #        +:label+ option as a Symbol that refers to the field _without_
-    #        the "solr jargon" (ex. "_tesim", "_ssim", etc) suffix. it _needs_
-    #        to be a Symbol in order for +I18n.translate+ to use it as
-    #        a fall-back when the lookup with the "solr jargon" ultimately fails.
-    #        this will save us from having to provide multiple locale definitions
-    #        for each attribute.
     #
-    #        @example
-    #          config.add_index_field('keyword_ssim', label: :'blacklight.search.fields.keyword')
-
-    config.add_facet_field 'member_of_collections_ssim', label: :'blacklight.search.fields.member_of_collection'
-    config.add_facet_field 'resource_type_sim',          label: :'blacklight.search.fields.resource_type'
-    config.add_facet_field 'creator_sim',                label: :'blacklight.search.fields.creator'
-    config.add_facet_field 'publisher_sim',              label: :'blacklight.search.fields.publisher'
-    config.add_facet_field 'division_sim',               label: :'blacklight.search.fields.division'
-    config.add_facet_field 'academic_department_sim',    label: :'blacklight.search.fields.academic_department'
-    config.add_facet_field 'advisor_label_ssim',         label: :'blacklight.search.fields.advisor_label'
-    config.add_facet_field 'subject_label_sim',          label: :'blacklight.search.fields.subject'
-    config.add_facet_field 'keyword_sim',                label: :'blacklight.search.fields.keyword'
-    config.add_facet_field 'language_label_ssim',        label: :'blacklight.search.fields.language'
-    config.add_facet_field 'location_label_sim',         label: :'blacklight.search.fields.location'
+    #
+    config.add_facet_field 'member_of_collection_ids_ssim', helper_method: :collection_title_by_id
+    config.add_facet_field 'resource_type_sim'
+    config.add_facet_field 'creator_sim'
+    config.add_facet_field 'publisher_sim'
+    config.add_facet_field 'division_sim'
+    config.add_facet_field 'academic_department_sim'
+    config.add_facet_field 'advisor_label_ssim'
+    config.add_facet_field 'subject_label_sim'
+    config.add_facet_field 'keyword_sim'
+    config.add_facet_field 'language_label_ssim'
+    config.add_facet_field 'location_label_sim'
     config.add_facet_field 'years_encompassed_iim',
                            include_in_advanced_search: false,
                            label: :'blacklight.search.fields.years_encompassed',
@@ -87,11 +79,16 @@ class CatalogController < ApplicationController
     #
     config.add_facet_field 'visibility_ssi',
                            label: :'blacklight.search.fields.visibility',
-                           helper_method: :render_catalog_visibility_facet,
-                           admin: true
-    config.add_facet_field 'depositor_ssim', label: :'blacklight.search.fields.depositor', admin: true
-    config.add_facet_field 'proxy_depositor_ssim', label: :'blacklight.search.fields.proxy_depositor', admin: true
-    config.add_facet_field 'admin_set_sim', label: :'blacklight.search.fields.admin_set', admin: true
+                           item_component: Spot::VisibilityFacetItemComponent,
+                           group: :admin
+    config.add_facet_field 'depositor_ssim', label: :'blacklight.search.fields.depositor', group: :admin
+    config.add_facet_field 'proxy_depositor_ssim', label: :'blacklight.search.fields.proxy_depositor', group: :admin
+    config.add_facet_field 'admin_set_sim', label: :'blacklight.search.fields.admin_set', group: :admin
+
+    #
+    # By configuring these fields with `if: false`, we're hiding facets from the sidebar
+    # but allowing them to be used within Works show pages (ex. "Research Assistance" and "Organization" fields)
+    #
 
     # The generic_type isn't displayed on the facet list
     # It's used to give a label to the filter that comes from the user profile
@@ -104,8 +101,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'research_assistance_ssim', label: :'blacklight.search.fields.research_assistance', if: false
     config.add_facet_field 'organization_sim', label: :'blacklight.search.fields.organization', if: false
 
+    #
     # Blacklight will default a facet's limit to the +blacklight_config.default_facet_limit+ value
     # only if the field config +:limit+ entry is true. This does that.
+    #
     config.facet_fields.each { |(_key, val)| val[:limit] = true }
 
     # Have BL send all facet field names to Solr, which has been the default
