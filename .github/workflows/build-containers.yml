@@ -21,6 +21,10 @@ on:
         description: Stringified JSON array of GitHub environments to use for variables
         default: '["stage","production"]'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build_containers:
     name: Build containers
