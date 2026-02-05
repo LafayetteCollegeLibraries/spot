@@ -30,6 +30,7 @@ on:
 
 permissions:
   checks: write
+  id-token: write
 
 jobs:
   parse_inputs:

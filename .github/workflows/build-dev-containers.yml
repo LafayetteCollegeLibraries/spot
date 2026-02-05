@@ -10,6 +10,7 @@ on:
 
 permissions:
   checks: write
+  id-token: write
 
 jobs:
   lint_and_test:
