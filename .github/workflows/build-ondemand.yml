@@ -105,9 +105,7 @@ jobs:
     needs: [parse_inputs, lint_and_test]
     if: ${{ always() }}
     secrets:
-      registry: ${{ secrets.CONTAINER_REGISTRY }}
-      username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-      password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+      aws_role_to_assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
     with:
       tag: ${{ needs.parse_inputs.outputs.tag }}
       services: ${{ needs.parse_inputs.outputs.containers }}

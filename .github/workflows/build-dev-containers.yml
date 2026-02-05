@@ -21,9 +21,7 @@ jobs:
     uses: ./.github/workflows/build-containers.yml
     needs: [lint_and_test]
     secrets:
-      registry: ${{ secrets.CONTAINER_REGISTRY }}
-      username: ${{ secrets.CONTAINER_REGISTRY_USERNAME }}
-      password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+      aws_role_to_assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
     with:
       tag: ${{ github.event.release.tag_name || github.ref_name }}
       environments: '["stage"]'
