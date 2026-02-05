@@ -1,5 +1,5 @@
 name: Build Spot container
-description: "Build and push a container to LDR's container repository"
+description: "Build and push a container to LDR's repository"
 inputs:
   image_name:
     required: true
