@@ -2,7 +2,7 @@
 # the very recently patched 4.7.6 release of Fedora.
 #
 # @todo remove this when 4.7.6 release is published
-FROM        openjdk:8 AS warfile
+FROM        amazoncorretto AS warfile
 RUN         mkdir -p /build /unpack
 WORKDIR     /unpack
 ADD         https://raw.githubusercontent.com/samvera-labs/docker-fcrepo/main/assets/repack.sh ./repack.sh
