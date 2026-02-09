@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 RSpec.describe Bulkrax::ObjectFactory do
-  subject(:factory)
+  subject(:factory) =>
     { 
       described_class.new(
         attributes: {},
