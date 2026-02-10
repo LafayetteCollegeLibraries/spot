@@ -1,19 +1,18 @@
 # frozen_string_literal: true
 RSpec.describe Bulkrax::ObjectFactory do
-  subject(:factory) =>
-    { 
-      described_class.new(
-        attributes: {},
-        source_identifier_value: :source_identifier,
-        work_identifier: :source,
-        work_identifier_search_field: 'source_sim'
-      )
-    }
+  subject(:factory) { 
+                      described_class.new(
+                        attributes: {},
+                        source_identifier_value: :source_identifier,
+                        work_identifier: :source,
+                        work_identifier_search_field: 'source_sim'
+                      )
+                    }
 
-  let(:mock_user) { instance_double(Spot::User) }
+  let(:mock_user) { instance_double(User) }
 
   before do
-    allow(Spot::User).to receive(:find_or_create_system_user).and_return(mock_user)
+    allow(User).to receive(:find_or_create_system_user).and_return(mock_user)
   end
 
   describe '#find' do
