@@ -82,7 +82,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
     let(:mock_attributes) { instance_double(ActiveSupport::HashWithIndifferentAccess) }
 
-    before(:each) { attributes = mock_attributes } # rubocop:disable Lint/UselessAssignment
+    before(:each) { factory.instance_variable_set(:@attributes, mock_attributes) }
 
     context "there is no source_identifier" do
       before do
@@ -119,7 +119,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
       context "the solr query matches with an object" do
         context "the id is empty" do
-          let(:id_doc) { { 'response': { 'docs': [{ 'id': nil }] } } }
+          let(:id_doc) { { "response"=> { "docs"=> [{ "id"=> nil }] } } }
 
           before do
             allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
@@ -130,7 +130,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
         context "the id is not empty" do
           let(:id) { "0a0a0a0a" }
-          let(:id_doc) { { 'response': { 'docs': [{ 'id': id }] } } }
+          let(:id_doc) { { "response"=> { "docs"=> [{ "id"=> id }] } } }
           let(:mock_work) { instance_double(Hyrax::Work) }
 
           before do
