@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 RSpec.describe Bulkrax::ObjectFactory do
-  subject(:factory) { 
-                      described_class.new(
-                        attributes: {},
-                        source_identifier_value: :source_identifier,
-                        work_identifier: :source_identifier,
-                        work_identifier_search_field: 'source_identifier_ssim'
-                      )
-                    }
+  subject(:factory) do
+    described_class.new(
+      attributes: {},
+      source_identifier_value: :source_identifier,
+      work_identifier: :source_identifier,
+      work_identifier_search_field: 'source_identifier_ssim'
+    )
+  end
 
   let(:mock_user) { instance_double(User) }
 
@@ -119,7 +119,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
       context "the solr query matches with an object" do
         context "the id is empty" do
-          let(:id_doc) { { "response"=> { "docs"=> [{ "id"=> nil }] } } }
+          let(:id_doc) { { "response" => { "docs" => [{ "id" => nil }] } } }
 
           before do
             allow(Hyrax::SolrService).to receive(:get).with("source_identifier_ssim:#{identifier}", fl: ['id', 'source_identifier_ssim'], defType: 'lucene').and_return(id_doc)
@@ -130,7 +130,7 @@ RSpec.describe Bulkrax::ObjectFactory do
 
         context "the id is not empty" do
           let(:id) { "0a0a0a0a" }
-          let(:id_doc) { { "response"=> { "docs"=> [{ "id"=> id }] } } }
+          let(:id_doc) { { "response" => { "docs" => [{ "id" => id }] } } }
           let(:mock_work) { instance_double(Hyrax::Work) }
 
           before do
