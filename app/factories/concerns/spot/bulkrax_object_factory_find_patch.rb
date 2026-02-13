@@ -42,6 +42,7 @@ module Spot
     end
 
     # We have to implement these for testing purposes.
+    # :nocov:
     def find_by_id
       super
     end
@@ -49,5 +50,6 @@ module Spot
     def search_by_identifier
       super
     end
+    # :nocov:
   end
 end
