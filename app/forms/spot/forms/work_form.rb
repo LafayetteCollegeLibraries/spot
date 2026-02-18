@@ -37,6 +37,12 @@ module Spot
         self.class.multiple?(term)
       end
 
+      unless defined?(:object)
+        def object
+          self
+        end
+      end
+
       # An array to iterate through when building our custom portion
       # of the form. The Hyrax-specific fields are excluded.
       # @return [Array<Symbol>]
