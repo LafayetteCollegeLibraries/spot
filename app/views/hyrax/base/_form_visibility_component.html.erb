@@ -1,11 +1,19 @@
-<%# controls the display of visibility on the base hyrax form %>
-<% if f.object.embargo_release_date %>
+<%# controls the display of visibility on the base hyrax form;
+    we're customizing this add support for "metadata" only visibility options
+
+    @todo Is there a way to add custom visibilities within Hyrax proper?
+ %>
+<% if embargo_enforced?(f.object) %>
   <%= render 'form_permission_under_embargo', f: f %>
-<% elsif f.object.lease_expiration_date %>
+<% elsif lease_enforced?(f.object) %>
   <%= render 'form_permission_under_lease', f: f %>
 <% else %>
     <fieldset>
-      <legend class="legend-save-work">Visibility</legend>
+      <% if local_assigns[:save_work] %>
+        <legend class="legend-save-work"><%= t('.visibility') %></legend>
+      <% else %>
+        <legend><%= t('.visibility') %><%= raw(t('.subtitle_html')) %></legend>
+      <% end %>
       <ul class="visibility">
         <li class="radio">
           <label>
