@@ -37,6 +37,15 @@ module Spot
         self.class.multiple?(term)
       end
 
+      # We were running into issues with Hyrax partials expecting the form to have an API
+      # that matches the newer ResourceForm components. Since we're upgrading Hyrax but not
+      # enabling Valkyrie at the moment, we need to make sure this method exists.
+      #
+      # Generally this is used to access the work object from within the view:
+      #   f.object == <Hyrax::ImageForm>
+      #   f.object.model == #<::Image>
+      #
+      # @return [Spot::Forms::WorkForm] the form object itself
       unless defined?(:object)
         def object
           self
