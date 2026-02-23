@@ -19,7 +19,7 @@ a {
 // adjust content-wrapper margin specifically for the dashboard views
 body.dashboard {
   #content-wrapper {
-    margin-top: .6rem;
+    margin-top: -4px;
   }
 }
 
@@ -30,6 +30,7 @@ body.dashboard {
 #masthead { // scss-lint:disable IdSelector
   background-color: $red-light;
   border-bottom: 0;
+  padding: 0.06rem 0.25rem;
 
   @media(min-width: 768px) {
     #search-field-header { // scss-lint:disable IdSelector
@@ -38,8 +39,16 @@ body.dashboard {
   }
 }
 
-.ldr-logo img {
-  height: 50px;
+#user_utility_links a.nav-link {
+  color: $white;
+}
+
+.ldr-logo {
+  margin-left: 0.5rem;
+
+  img {
+    height: 50px;
+  }
 }
 
 ///
@@ -47,6 +56,7 @@ body.dashboard {
 ///
 .site-footer {
   background-color: $tan-light;
+  font-size: 0.85rem;
   min-height: 180px;
 }
 
