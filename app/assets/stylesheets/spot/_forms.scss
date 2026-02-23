@@ -35,3 +35,17 @@ select[multiple] {
     margin-right: 0.3rem;
   }
 }
+
+// undoing `max-width: 40em` that hydra-editor sets;
+// scss-lint:disable SelectorFormat
+.multi_value .listing,
+.controlled_vocabulary .listing {
+  max-width: 100%;
+}
+// scss-lint:enable SelectorFormat
+
+.control-label {
+  .required-tag {
+    vertical-align: baseline;
+  }
+}
