@@ -13,10 +13,10 @@
         <% type_class = type == 'File' ? 'default' : 'primary' %>
         <tr>
           <td class="text-center">
-            <span class="label label-<%= type_class %>"><%= type %></span>
+            <span class="badge badge-secondary"><%= type %></span>
             <% if type == 'File' && member.transcript_name != nil %>
               <br>
-              <span class="label label-<%= type_class %>">Captioned</span>
+              <span class="badge badge-secondary">Captioned</span>
             <% end %>
           </td>
           <td>
