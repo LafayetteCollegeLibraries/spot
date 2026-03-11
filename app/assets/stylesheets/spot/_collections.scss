@@ -32,7 +32,7 @@
 }
 
 #accordion .card {
-  margin-bottom: 0px;
+  margin-bottom: .5rem;
 }
 
 .collection-list-item {
@@ -44,8 +44,13 @@
     margin: 1em;
   }
 
-  .thumbnail .caption {
-    min-height: 2em;
+  .card .card-body {
+    text-align: center;
+
+    .card-title {
+      min-height: 2em;
+      font-size: 24px;
+    }
   }
 
   .collection-counts-wrapper {
