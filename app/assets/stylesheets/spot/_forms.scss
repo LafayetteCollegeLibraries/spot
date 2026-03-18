@@ -53,3 +53,7 @@ select[multiple] {
 .language_tagged li.field-wrapper {
   display: inline-block;
 }
+
+.table caption {
+  caption-side: top;
+}
