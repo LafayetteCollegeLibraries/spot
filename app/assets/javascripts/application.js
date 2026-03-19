@@ -40,6 +40,7 @@
 //= require bulkrax/application
 
 //= require spot/editor/multi_auth_controlled_vocabulary
+//= require spot/hyrax_overrides
 //= require language-tagged-autocomplete-setup
 //= require multi-auth-input
 //= require workflow-action-form-validation
