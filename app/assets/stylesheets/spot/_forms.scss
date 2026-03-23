@@ -44,6 +44,10 @@ select[multiple] {
 }
 // scss-lint:enable SelectorFormat
 
+.multi_value .listing li:first-of-type { 
+  width: 100%;
+}
+
 .control-label {
   .required-tag {
     vertical-align: baseline;
