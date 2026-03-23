@@ -45,28 +45,29 @@ class SolrDocument
       contributor: 'contributor_tesim',
       coverage: 'location_label_ssim',
       creator: 'creator_tesim',
-      date: 'date_issued_ssim',
+      date: ['date_issued_ssim', 'date_ssim'],
       description: 'description_tesim',
       format: 'file_format_ssim',
       identifier: ['id', 'permalink_ss', 'thumbnail_url_ss'],
       language: 'language_ssim',
       publisher: 'publisher_tesim',
+      relation: 'related_resource_tesim',
       rights: 'rights_statement_ssim',
       source: 'source_tesim',
-      subject: 'subject_label_ssim',
-      title: 'title_tesim',
+      subject: 'subject_label_tesim',
+      title: ['title_tesim', 'title_alternative_tesim'],
       type: 'resource_type_tesim'
     }
+  end
+
+  def discoverable?
+    public? || discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
   end
 
   # Less involved than the same method on WorkShowPresenters,
   # all we want to know is if the item's visibility is "metadata"
   #
   # @return [true, false]
-  def discoverable?
-    public? || discover_groups.include?(Hydra::AccessControls::AccessRight::PERMISSION_TEXT_VALUE_PUBLIC)
-  end
-
   def metadata_only?
     visibility == 'metadata'
   end
