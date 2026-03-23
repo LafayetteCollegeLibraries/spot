@@ -27,9 +27,7 @@ class LanguageTaggedMultiInputGroupInput < MultiValueInput
   def inner_wrapper
     <<-HTML
       <li class="field-wrapper">
-        <div class="form-row">
-          #{yield}
-        </div>
+        #{yield}
       </li>
     HTML
   end
