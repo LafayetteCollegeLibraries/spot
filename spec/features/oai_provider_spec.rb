@@ -48,10 +48,11 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)', clean: true do
         date_issued_ssim: date, description_tesim: description,
         file_format_ssim: format, language_ssim: language,
         location_label_ssim: location, permalink_ss: permalink,
-        publisher_tesim: publisher, resource_type_tesim: type,
-        rights_statement_ssim: rights, source_tesim: source,
-        subject_label_ssim: subjects, thumbnail_url_ss: thumbnail_url,
-        title_tesim: title }
+        publisher_tesim: publisher, related_resource_tesim: related_resource,
+        resource_type_tesim: type, rights_statement_ssim: rights,
+        source_tesim: source, subject_label_tesim: subjects,
+        thumbnail_url_ss: thumbnail_url, title_tesim: title,
+        title_alternative_tesim: alternate_title }
     end
     let(:contributor) { ['Contributor 1', 'Contributor 2'] }
     let(:creator) { ['Creator 1', 'Creator 2'] }
@@ -64,8 +65,11 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)', clean: true do
     let(:rights) { ['http://ok-go-ahead-and-use-it.org'] }
     let(:source) { ['The Source'] }
     let(:title) { ['Item 3'] }
+    let(:alternate_title) { ['Another Title'] }
+    let(:titles) { title + alternate_title }
     let(:type) { ['Periodical'] }
     let(:permalink) { 'https://ldr.lafayette.edu/path/to/object' }
+    let(:related_resource) { ['A related resource'] }
     let(:thumbnail_url) { 'https://ldr.lafayette.edu/downloads/fsabc123?file=thumbnail' }
     let(:subjects) { ['Little libraries'] }
     let(:dc_uri) { 'http://purl.org/dc/elements/1.1/' }
@@ -82,10 +86,11 @@ RSpec.feature 'OAI-PMH provider (via Blacklight)', clean: true do
       expect(xml.xpath('//dc:identifier', dc: dc_uri).map(&:text))
         .to include permalink, thumbnail_url, 'item_3'
       expect(xml.xpath('//dc:publisher', dc: dc_uri).map(&:text)).to eq publisher
+      expect(xml.xpath('//dc:relation', dc: dc_uri).map(&:text)).to eq related_resource
       expect(xml.xpath('//dc:rights', dc: dc_uri).map(&:text)).to eq rights
       expect(xml.xpath('//dc:source', dc: dc_uri).map(&:text)).to eq source
       expect(xml.xpath('//dc:subject', dc: dc_uri).map(&:text)).to eq subjects
-      expect(xml.xpath('//dc:title', dc: dc_uri).map(&:text)).to eq title
+      expect(xml.xpath('//dc:title', dc: dc_uri).map(&:text)).to eq titles
       expect(xml.xpath('//dc:type', dc: dc_uri).map(&:text)).to eq type
     end
   end
