@@ -45,7 +45,13 @@ select[multiple] {
 // scss-lint:enable SelectorFormat
 
 .multi_value .listing li:first-of-type { 
-  width: 100%;
+  width: 84%;
+}
+
+.multi_value{
+  &.language_tagged .listing li:first-of-type { 
+    width: 100%;
+  }
 }
 
 .control-label {
@@ -54,8 +60,17 @@ select[multiple] {
   }
 }
 
-.language_tagged li.field-wrapper {
-  display: inline-block;
+.language_tagged li.field-wrapper .row {
+  width: 84%;
+}
+
+.language_tagged .row .col-sm-2 {
+  padding-left: 0px;
+}
+
+.language_tagged li.field-wrapper .row .col-sm-2 {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .table caption {
