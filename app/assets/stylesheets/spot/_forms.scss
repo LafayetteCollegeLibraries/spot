@@ -76,3 +76,19 @@ select[multiple] {
 .table caption {
   caption-side: top;
 }
+
+.controlled_vocabulary .listing li .remove {
+  display: inline-block;
+}
+
+.controlled_vocabulary .listing li:first-of-type .remove {
+  display: none;
+}
+
+.multi_auth_controlled_vocabulary .listing li:first-of-type .remove {
+  display: none;
+}
+
+.controlled_vocabulary .listing li:first-of-type {
+  width: 84%;
+}
