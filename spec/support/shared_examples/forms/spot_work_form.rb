@@ -13,6 +13,14 @@ RSpec.shared_examples 'a Spot work form' do
     end
   end
 
+  describe '.object' do
+    subject(:object) { described_class.object }
+
+    it 'returns itself' do
+      expect(object).to eq described_class
+    end
+  end
+
   describe '#rights_statement' do
     subject(:rights) { form.rights_statement }
 
