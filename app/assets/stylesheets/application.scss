@@ -31,3 +31,9 @@
   font-size: 1.4rem;
   font-style: italic;
 }
+
+// fix for the dashboard Admin Sets subheading, which is just kinda smushed in there
+.main-content #admin_sets .card-subtitle {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}

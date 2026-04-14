@@ -44,12 +44,51 @@ select[multiple] {
 }
 // scss-lint:enable SelectorFormat
 
+.multi_value .listing li:first-of-type { 
+  width: 84%;
+}
+
+.multi_value{
+  &.language_tagged .listing li:first-of-type { 
+    width: 100%;
+  }
+}
+
 .control-label {
   .required-tag {
     vertical-align: baseline;
   }
 }
 
-.language_tagged li.field-wrapper {
+.language_tagged li.field-wrapper .row {
+  width: 84%;
+}
+
+.language_tagged .row .col-sm-2 {
+  padding-left: 0px;
+}
+
+.language_tagged li.field-wrapper .row .col-sm-2 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.table caption {
+  caption-side: top;
+}
+
+.controlled_vocabulary .listing li .remove {
   display: inline-block;
+}
+
+.controlled_vocabulary .listing li:first-of-type .remove {
+  display: none;
+}
+
+.multi_auth_controlled_vocabulary .listing li:first-of-type .remove {
+  display: none;
+}
+
+.controlled_vocabulary .listing li:first-of-type {
+  width: 84%;
 }

@@ -31,6 +31,10 @@
   padding-bottom: 0;
 }
 
+#accordion .card {
+  margin-bottom: .5rem;
+}
+
 .collection-list-item {
   .collection-logo-container {
     background-position: center center;
@@ -40,8 +44,13 @@
     margin: 1em;
   }
 
-  .thumbnail .caption {
-    min-height: 2em;
+  .card .card-body {
+    text-align: center;
+
+    .card-title {
+      min-height: 2em;
+      font-size: 24px;
+    }
   }
 
   .collection-counts-wrapper {
