@@ -13,7 +13,6 @@ RSpec.shared_examples 'a Spot work form' do
     end
   end
 
-
   describe '#rights_statement' do
     subject(:rights) { form.rights_statement }
 
