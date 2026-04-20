@@ -101,7 +101,8 @@ gem 'kaminari', '~> 1.2.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '~> 4.13.2'
+# gem 'mini_magick', '~> 4.11'
+gem 'posix-spawn'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.1.6'
@@ -155,6 +156,9 @@ gem 'simple_form', '< 5.2'
 
 # sprockets support gets cagey after 1.0
 gem 'openseadragon', '~> 0.9.0'
+
+# need to be 1.20.1 or higher to avoid an incompatibility with json gem
+gem 'multi_json', '~> 1.20.1'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do

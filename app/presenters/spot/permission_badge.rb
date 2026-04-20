@@ -9,5 +9,13 @@ module Spot
       open: "badge-success",
       restricted: "badge-danger"
     }.freeze
+
+    def badge_class
+      dom_label_class
+    end
+
+    def visibility_label
+      text
+    end
   end
 end

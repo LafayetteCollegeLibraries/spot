@@ -1,0 +1,94 @@
+///
+// Form-related stylings
+///
+select[multiple] {
+  min-height: 15rem;
+}
+
+// these are adjustments we need to make to the multi-authority controlled vocabulary
+// inputs so that they resemble their '.multi_value' or '.controlled_vocabulary' siblings.
+.multi_auth_controlled_vocabulary {
+  .listing {
+    margin-bottom: 0;
+    margin-left: 0;
+    max-width: 100%;
+    padding-left: 0;
+  }
+
+  .btn {
+    &.add {
+      padding-left: 0;
+    }
+
+    &.remove {
+      color: #d33a35;
+    }
+
+    &.add,
+    &.remove {
+      text-decoration: underline;
+    }
+  }
+
+  .add .glyphicon-plus,
+  .remove .glyphicon-remove {
+    margin-right: 0.3rem;
+  }
+}
+
+// undoing `max-width: 40em` that hydra-editor sets;
+// scss-lint:disable SelectorFormat
+.multi_value .listing,
+.controlled_vocabulary .listing {
+  max-width: 100%;
+}
+// scss-lint:enable SelectorFormat
+
+.multi_value .listing li:first-of-type { 
+  width: 84%;
+}
+
+.multi_value{
+  &.language_tagged .listing li:first-of-type { 
+    width: 100%;
+  }
+}
+
+.control-label {
+  .required-tag {
+    vertical-align: baseline;
+  }
+}
+
+.language_tagged li.field-wrapper .row {
+  width: 84%;
+}
+
+.language_tagged .row .col-sm-2 {
+  padding-left: 0px;
+}
+
+.language_tagged li.field-wrapper .row .col-sm-2 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.table caption {
+  caption-side: top;
+}
+
+.controlled_vocabulary .listing li .remove {
+  display: inline-block;
+}
+
+.controlled_vocabulary .listing li:first-of-type .remove {
+  display: none;
+}
+
+.multi_auth_controlled_vocabulary .listing li:first-of-type .remove {
+  display: none;
+}
+
+.controlled_vocabulary .listing li:first-of-type {
+  width: 84%;
+}

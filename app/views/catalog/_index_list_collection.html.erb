@@ -15,13 +15,13 @@
   <% end %>
 </div>
 
-<div class="col-md-<%= col_count.zero? ? '2' : '4' %>">
+<div class="col-md-<%= col_count.zero? ? '1' : '3' %>">
   <div class="collection-counts-wrapper pull-right">
-    <% unless col_count.zero? %>
+    <%# unless col_count.zero? %>
     <div class="collection-counts-item">
-      <span><%= col_count %></span>Sub-Collections
+      <span><%= col_count %></span>Collections
     </div>
-    <% end %>
+    <%# end %>
     <div class="collection-counts-item">
       <span><%= collection_presenter.total_viewable_works %></span>Items
     </div>

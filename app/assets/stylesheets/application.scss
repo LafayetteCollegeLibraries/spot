@@ -27,29 +27,13 @@
   background: #fff image-url("spinner-24.gif") right center no-repeat;
 }
 
-.work-show dd {
-  margin-left: 0;
-}
-
-.work-representative-media {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
-
-.attribute-identifier-with-label {
-  margin-bottom: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-// undoing `max-width: 40em` that hydra-editor sets;
-// scss-lint:disable SelectorFormat
-.multi_value .listing,
-.controlled_vocabulary .listing {
-  max-width: 100%;
-}
-// scss-lint:enable SelectorFormat
-
 .full-text-excerpt {
   font-size: 1.4rem;
   font-style: italic;
+}
+
+// fix for the dashboard Admin Sets subheading, which is just kinda smushed in there
+.main-content #admin_sets .card-subtitle {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }

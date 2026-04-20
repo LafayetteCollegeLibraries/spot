@@ -1,0 +1,73 @@
+///
+// global site overrides
+///
+
+// flip Bootstrap's defaults back to not underlining links unless hovered.
+a {
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+// padding-bottom gives us plenty of spacing to prevent the
+// footer from displaying on top of any page content.
+#content-wrapper {
+  margin-top: 2rem;
+  padding-bottom: 10rem !important;
+}
+
+// adjust content-wrapper margin specifically for the dashboard views
+body.dashboard {
+  #content-wrapper {
+    margin-top: -4px;
+  }
+}
+
+///
+// masthead / navbar stylings
+///
+
+#masthead { // scss-lint:disable IdSelector
+  background-color: $red-light;
+  border-bottom: 0;
+  padding: 0.06rem 0.25rem;
+
+  @media(min-width: 768px) {
+    #search-field-header { // scss-lint:disable IdSelector
+      width: 50rem;
+    }
+  }
+}
+
+#user_utility_links a.nav-link {
+  color: $white;
+}
+
+.ldr-logo {
+  margin-left: 0.5rem;
+
+  img {
+    height: 50px;
+  }
+}
+
+///
+//  Footer bits and bobs
+///
+.site-footer {
+  background-color: $tan-light;
+  font-size: 0.85rem;
+  min-height: 180px;
+}
+
+
+///
+// Bootstrap overrides (should these be in a separate file?)
+///
+a.badge {
+  text-decoration: none;
+}
+
+.facets .card {
+  margin-bottom: 5px;
+}
