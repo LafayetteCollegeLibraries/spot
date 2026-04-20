@@ -16,6 +16,7 @@ RSpec.describe Spot::VisibilityFacetItemComponent, type: :component do
     )
   end
 
+
   it 'renders the value as a PermissionBadge' do
     expect(rendered).to have_selector 'li'
     expect(rendered).to have_selector 'a.facet-select.badge.badge-danger'
