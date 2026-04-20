@@ -36,6 +36,7 @@ require 'rspec/matchers'
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
 require 'mail'
+require 'view_component/test_helpers'
 
 # FactoryBot setup borrowed from Hyrax
 # @see https://github.com/samvera/hyrax/blob/hyrax-v3.6.0/spec/spec_helper.rb#L83-L88
@@ -120,6 +121,7 @@ RSpec.configure do |config|
   config.include FeatureSpecHelpers, type: :feature
   config.include Select2Helpers, type: :feature
   config.include Mail::Matchers, type: :mailer
+  config.include ViewComponent::TestHelpers, type: :component
 
   config.use_transactional_fixtures = false
   config.render_views = true
