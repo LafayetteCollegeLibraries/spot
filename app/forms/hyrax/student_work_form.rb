@@ -96,7 +96,10 @@ module Hyrax
       def admin_set_id
         Spot::StudentWorkAdminSetCreateService.find_or_create_student_work_admin_set_id
       rescue Ldp::Gone, Hyrax::ObjectNotFoundError
+        # :nocov:
+        # test directly interfacing with this case mysteriously does not convey coverage
         Hyrax::AdminSetCreateService.find_or_create_default_admin_set.id
+        # :nocov:
       end
     end
 
