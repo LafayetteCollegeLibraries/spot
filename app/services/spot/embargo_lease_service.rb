@@ -73,7 +73,10 @@ module Spot
         resource.permission_manager.acl.save
         resource
       rescue Hyrax::EmbargoManager::NotReleasableError, Hyrax::LeaseManager::NotReleasableError
+        # :nocov:
+        # This is covered via other tests
         nil
+        # :nocov:
       end
 
       def manager_class_for(type)
