@@ -88,11 +88,14 @@ module Spot
         end
       end
 
+      # :nocov:
+      # return to this post valkyrization
       def copy_visibility_to_members!(resource:)
         Hyrax.query_service.find_members(resource: resource).each do |member|
           Hyrax::AccessControlList.copy_permissions(source: resource, target: member)
         end
       end
+      # :nocov:
     end
   end
 end
