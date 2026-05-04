@@ -61,6 +61,7 @@ jobs:
           - solr:/var/solr
         env:
           SOLR_OPTS: "-Dsolr.config.lib.enabled=true -Dsolr.modules=analysis-extras"
+          SOLR_HOST: solr
     env:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
@@ -76,7 +77,7 @@ jobs:
       PSQL_HOST: database
       RAILS_ENV: test
       SOLR_TEST_URL: http://solr:8983/solr/spot-test
-      SOLR_VERSION: "8.11.4"
+      SOLR_VERSION: "9.10.1"
       URL_HOST: http://localhost:3000
 
     steps:
@@ -84,7 +85,7 @@ jobs:
       - name: Copy Solr config to mount
         run: |
           mkdir -p /tmp/solr/spot-test/data
-          cp -r docker/solr/config/* /tmp/solr/spot-test
+          cp -r docker/solr/config/* /tmp/solr/spot-test/conf
           touch /tmp/solr/spot-test/core.properties
           chown -R 8983:8983 /tmp/solr/spot-test
       - name: Restart Solr service
