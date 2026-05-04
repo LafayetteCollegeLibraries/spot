@@ -9,9 +9,6 @@ RSpec.feature 'Create an Image', :clean, :js do
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
-    Hyrax::AdminSetCreateService.find_or_create_default_admin_set
-    ensure_deposit_access_for user
-
     login_as user
   end
 
