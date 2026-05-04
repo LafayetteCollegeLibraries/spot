@@ -85,7 +85,7 @@ jobs:
       - name: Copy Solr config to mount
         run: |
           mkdir -p /tmp/solr/spot-test/data
-          cp -r docker/solr/config/* /tmp/solr/spot-test/conf
+          cp -r docker/solr/config /tmp/solr/spot-test/conf
           touch /tmp/solr/spot-test/core.properties
           chown -R 8983:8983 /tmp/solr/spot-test
       - name: Restart Solr service
