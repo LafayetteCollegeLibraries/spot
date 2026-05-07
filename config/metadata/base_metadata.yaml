@@ -51,7 +51,6 @@ attributes:
     index_keys:
       - keyword_tesim
       - keyword_sim
-  # @see IndexesLanguageAndLabel mixin for indexing info, uses
   language:
     predicate: http://purl.org/dc/elements/1.1/language
     type: string
