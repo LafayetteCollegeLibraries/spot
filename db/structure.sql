@@ -1,7 +1,7 @@
-\restrict zGnP9xNrj5vXJP6eZcBchqhC4KoF4Tbn1lTESweMCy6CGbvkCQR9hwyeVf05jRP
+\restrict 3tq1NbQsJWPHVS4qUFpTdLUpqfZeRSkN6zTmZeAcPmrO9aozielEKOgJcAmVCRD
 
--- Dumped from database version 15.15
--- Dumped by pg_dump version 15.14 (Debian 15.14-0+deb12u1)
+-- Dumped from database version 15.17
+-- Dumped by pg_dump version 15.16 (Debian 15.16-0+deb12u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -13,6 +13,20 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
 
 SET default_tablespace = '';
 
@@ -994,6 +1008,20 @@ CREATE SEQUENCE public.minter_states_id_seq
 --
 
 ALTER SEQUENCE public.minter_states_id_seq OWNED BY public.minter_states.id;
+
+
+--
+-- Name: orm_resources; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.orm_resources (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    metadata jsonb DEFAULT '{}'::jsonb NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    internal_resource character varying,
+    lock_version integer
+);
 
 
 --
@@ -2802,6 +2830,14 @@ ALTER TABLE ONLY public.minter_states
 
 
 --
+-- Name: orm_resources orm_resources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orm_resources
+    ADD CONSTRAINT orm_resources_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: permission_template_accesses permission_template_accesses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3383,6 +3419,34 @@ CREATE UNIQUE INDEX index_minter_states_on_namespace ON public.minter_states USI
 
 
 --
+-- Name: index_orm_resources_on_internal_resource; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_internal_resource ON public.orm_resources USING btree (internal_resource);
+
+
+--
+-- Name: index_orm_resources_on_metadata; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_metadata ON public.orm_resources USING gin (metadata);
+
+
+--
+-- Name: index_orm_resources_on_metadata_jsonb_path_ops; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_metadata_jsonb_path_ops ON public.orm_resources USING gin (metadata jsonb_path_ops);
+
+
+--
+-- Name: index_orm_resources_on_updated_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_orm_resources_on_updated_at ON public.orm_resources USING btree (updated_at);
+
+
+--
 -- Name: index_permission_template_accesses_on_permission_template_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3873,7 +3937,7 @@ ALTER TABLE ONLY public.mailboxer_receipts
 -- PostgreSQL database dump complete
 --
 
-\unrestrict zGnP9xNrj5vXJP6eZcBchqhC4KoF4Tbn1lTESweMCy6CGbvkCQR9hwyeVf05jRP
+\unrestrict 3tq1NbQsJWPHVS4qUFpTdLUpqfZeRSkN6zTmZeAcPmrO9aozielEKOgJcAmVCRD
 
 SET search_path TO "$user", public;
 
@@ -3997,6 +4061,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240916182737'),
 ('20240916182823'),
 ('20241203010707'),
-('20241205212513');
+('20241205212513'),
+('20260507181541'),
+('20260507181542'),
+('20260507181543'),
+('20260507181544'),
+('20260507181545'),
+('20260507181546'),
+('20260507181547'),
+('20260507181548');
 
 
