@@ -1,4 +1,12 @@
 attributes:
+  barcode:
+    predicate: https://schema.org/Barcode
+    type: string
+    multiple: true
+    form:
+      multiple: true
+    index_keys:
+      - barcode_ssim
   date:
     predicate: http://purl.org/dc/terms/date
     type: string
@@ -57,11 +65,3 @@ attributes:
       multiple: true
     index_keys:
       - provenance_tesim
-  barcode:
-    predicate: https://schema.org/Barcode
-    type: string
-    multiple: true
-    form:
-      multiple: true
-    index_keys:
-      - barcode_ssim
