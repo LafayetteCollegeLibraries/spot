@@ -8,8 +8,8 @@ class StudentWorkResourceIndexer < BaseResourceIndexer
 
   def to_solr
     super.tap do |solr_doc|
-      solr_doc['advisor_ssim'] = object.advisor.to_a
-      solr_doc['advisor_label_ssim'] = object.advisor.map { |email| advisor_label_from(email: email) }
+      solr_doc['advisor_ssim'] = (resource.try(:advisor) || []).to_a
+      solr_doc['advisor_label_ssim'] = (resource.try(:advisor) || []).map { |email| advisor_label_from(email: email) }
     end
   end
 

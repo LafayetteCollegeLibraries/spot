@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 #
 # @todo add location + subject URI handling
-RSpec.describe PublicationResourceIndexer, valkyrization: true do
+RSpec.describe StudentWorkResourceIndexer, valkyrization: true do
   subject(:solr_document) { described_class.for(resource: resource).to_solr }
-  let(:resource) { PublicationResource.new(**metadata) }
+  let(:resource) { StudentWorkResource.new(**metadata) }
 
   let(:default_thumbnail_path) { ActionController::Base.helpers.image_path('default.png').to_s }
   let(:date) { Time.zone.today }
@@ -41,12 +41,12 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       division: ['Humanities'],
       organization: ['Lafayette College'],
 
-      # publication metadata
+      # student_work metadata
       abstract: ['A short description'],
-      date_issued: ['2026-05-07'],
-      date_available: ['2026-05-07'],
-      editor: ['Editor, Anne'],
-      license: ['Some licensing info']
+      advisor: ['Professor, A'],
+      access_note: ['upon request only'],
+      date: ['2026-05-08'],
+      date_available: ['2026-05-08'],
     }
   end
 
@@ -54,11 +54,15 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
   it 'generates a solr document' do
     expect(solr_document).to eq({
       abstract_tesim: ['A short description'],
+      access_note_tesim: ['upon request only'],
       academic_department_sim: ['Libraries'],
       academic_department_tesim: ['Libraries'],
       admin_set_id_ssim: [''], # hyrax-managed field
       admin_set_sim: nil, # hyrax-managed field
       admin_set_tesim: nil, # hyrax-managed field
+      advisor_ssim: ['Professor, A'],
+      advisor_tesim: ['Professor, A'],
+      advisor_label_ssim: ['Professor, A'],
       alternate_ids_sim: [], # hyrax-managed field
       bibliographic_citation_tesim: ['Last, First. "Title." Journal 1.2 (2000): 1-2.'],
       citation_firstpage_ss: '1',
@@ -70,10 +74,10 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       contributor_sim: ['Contributor A', 'Contributor B'],
       creator_tesim: ['Malantonio, Anna'],
       creator_sim: ['Malantonio, Anna'],
-      date_issued_ssim: ['2026-05-07'],
-      date_available_ssim: ['2026-05-07'],
+      date_ssim: ['2026-05-08'],
+      date_available_ssim: ['2026-05-08'],
       date_modified_dtsi: nil, # Hyrax-managed field
-      date_sort_dtsi: '2026-05-07T00:00:00Z',
+      date_sort_dtsi: '2026-05-08T00:00:00Z',
       date_uploaded_dtsi: nil, # not applied before save
       depositor_ssim: ['repository@lafayette.edu'], # Hyrax-managed field
       depositor_tesim: ['repository@lafayette.edu'], # Hyrax-managed field
@@ -82,16 +86,13 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       division_tesim: ['Humanities'],
       edit_access_group_ssim: [], # Hyrax-managed field
       edit_access_person_ssim: [], # Hyrax-managed field
-      editor_sim: ['Editor, Anne'],
-      editor_tesim: ['Editor, Anne'],
       embargo_history_ssim: nil, # Hyrax-managed field
-      english_language_date_teim: ['Spring 2026', 'May 2026'],
       generic_type_si: 'Work', # Hyrax-managed field
       hasRelatedImage_ssim: [''], # Hyrax-managed field
       hasRelatedMediaFragment_ssim: [''], # Hyrax-managed field
-      has_model_ssim: 'PublicationResource', # Hyrax-managed field
-      human_readable_type_sim: 'Publication Resource', # Hyrax-managed field
-      human_readable_type_tesim: 'Publication Resource', # Hyrax-managed field
+      has_model_ssim: 'StudentWorkResource', # Hyrax-managed field
+      human_readable_type_sim: 'Student Work Resource', # Hyrax-managed field
+      human_readable_type_tesim: 'Student Work Resource', # Hyrax-managed field
       id: '', # Hyrax-managed field
       identifier_ssim: ['local:abc123'],
       isPartOf_ssim: [''], # Hyrax-managed field
@@ -100,7 +101,6 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       language_ssim: ['en'],
       language_label_ssim: ['English'],
       lease_history_ssim: nil, # Hyrax-managed field
-      license_tsm: ['Some licensing info'],
       member_ids_ssim: [], # Hyrax-managed field
       member_of_collection_ids_ssim: [], # Hyrax-managed field
       note_tesim: ['A note about the thing'],
