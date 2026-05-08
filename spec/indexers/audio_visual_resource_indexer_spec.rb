@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 #
 # @todo add location + subject URI handling
-RSpec.describe PublicationResourceIndexer, valkyrization: true do
+RSpec.describe AudioVisualResourceIndexer, valkyrization: true do
   subject(:solr_document) { described_class.for(resource: resource).to_solr }
-  let(:resource) { PublicationResource.new(**metadata) }
+  let(:resource) { AudioVisualResource.new(**metadata) }
 
   let(:default_thumbnail_path) { ActionController::Base.helpers.image_path('default.png').to_s }
   let(:date) { Time.zone.today }
@@ -28,7 +28,7 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       physical_medium: ['none'],
       publisher: ['Great Thoughts Pub'],
       related_resource: ['https://ldr.lafayette.edux'],
-      resource_type: ['Article', 'Other'],
+      resource_type: ['Video', 'Other'],
       rights_holder: ['Malantonio, Anna'],
       rights_statement: ['http://creativecommons.org/publicdomain/mark/1.0/'],
       source: ['Lafayette College'],
@@ -36,30 +36,26 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       subtitle: ['a curious work'],
       title_alternative: ['another name'],
 
-      # institutional metadata
-      academic_department: ['Libraries'],
-      division: ['Humanities'],
-      organization: ['Lafayette College'],
-
-      # publication metadata
-      abstract: ['A short description'],
-      date_issued: ['2026-05-07'],
-      date_available: ['2026-05-07'],
-      editor: ['Editor, Anne'],
-      license: ['Some licensing info']
+      # audio_visual metadata
+      barcode: ['00000000'],
+      date: ['2026-05-08'],
+      date_associated: ['2026-05-08'],
+      inscription: ['a note on the back'],
+      original_item_extent: ['9cm', '6oz'],
+      repository_location: ['in the back room'],
+      research_assistance: ['yes', 'we did'],
+      provenance: ['found it online']
     }
   end
 
   # rubocop:disable Layout/FirstHashElementIndentation
   it 'generates a solr document' do
     expect(solr_document).to eq({
-      abstract_tesim: ['A short description'],
-      academic_department_sim: ['Libraries'],
-      academic_department_tesim: ['Libraries'],
       admin_set_id_ssim: [''], # hyrax-managed field
       admin_set_sim: nil, # hyrax-managed field
       admin_set_tesim: nil, # hyrax-managed field
       alternate_ids_sim: [], # hyrax-managed field
+      barcode_ssim: ['00000000'],
       bibliographic_citation_tesim: ['Last, First. "Title." Journal 1.2 (2000): 1-2.'],
       citation_firstpage_ss: '1',
       citation_issue_ss: '2',
@@ -70,51 +66,49 @@ RSpec.describe PublicationResourceIndexer, valkyrization: true do
       contributor_sim: ['Contributor A', 'Contributor B'],
       creator_tesim: ['Malantonio, Anna'],
       creator_sim: ['Malantonio, Anna'],
-      date_issued_ssim: ['2026-05-07'],
-      date_available_ssim: ['2026-05-07'],
+      date_ssim: ['2026-05-08'],
+      date_associated_ssim: ['2026-05-08'],
+      date_associated_tesim: ['2026-05-08'],
       date_modified_dtsi: nil, # Hyrax-managed field
-      date_sort_dtsi: '2026-05-07T00:00:00Z',
+      date_sort_dtsi: '2026-05-08T00:00:00Z',
       date_uploaded_dtsi: nil, # not applied before save
       depositor_ssim: ['repository@lafayette.edu'], # Hyrax-managed field
       depositor_tesim: ['repository@lafayette.edu'], # Hyrax-managed field
       description_tesim: ['Description of work'],
-      division_sim: ['Humanities'],
-      division_tesim: ['Humanities'],
       edit_access_group_ssim: [], # Hyrax-managed field
       edit_access_person_ssim: [], # Hyrax-managed field
-      editor_sim: ['Editor, Anne'],
-      editor_tesim: ['Editor, Anne'],
       embargo_history_ssim: nil, # Hyrax-managed field
-      english_language_date_teim: ['Spring 2026', 'May 2026'],
       generic_type_si: 'Work', # Hyrax-managed field
       hasRelatedImage_ssim: [''], # Hyrax-managed field
       hasRelatedMediaFragment_ssim: [''], # Hyrax-managed field
-      has_model_ssim: 'PublicationResource', # Hyrax-managed field
-      human_readable_type_sim: 'Publication Resource', # Hyrax-managed field
-      human_readable_type_tesim: 'Publication Resource', # Hyrax-managed field
+      has_model_ssim: 'AudioVisualResource', # Hyrax-managed field
+      human_readable_type_sim: 'Audio Visual Resource', # Hyrax-managed field
+      human_readable_type_tesim: 'Audio Visual Resource', # Hyrax-managed field
       id: '', # Hyrax-managed field
       identifier_ssim: ['local:abc123'],
+      inscription_tesim: ['a note on the back'],
       isPartOf_ssim: [''], # Hyrax-managed field
       keyword_tesim: ['libraries', 'test'],
       keyword_sim: ['libraries', 'test'],
       language_ssim: ['en'],
       language_label_ssim: ['English'],
       lease_history_ssim: nil, # Hyrax-managed field
-      license_tsm: ['Some licensing info'],
       member_ids_ssim: [], # Hyrax-managed field
       member_of_collection_ids_ssim: [], # Hyrax-managed field
       note_tesim: ['A note about the thing'],
-      organization_sim: ['Lafayette College'],
-      organization_tesim: ['Lafayette College'],
+      original_item_extent_tesim: ['9cm', '6oz'],
       physical_medium_sim: ['none'],
       physical_medium_tesim: ['none'],
+      provenance_tesim: ['found it online'],
       publisher_sim: ['Great Thoughts Pub'],
       publisher_tesim: ['Great Thoughts Pub'],
       read_access_group_ssim: [], # Hyrax-managed field
       read_access_person_ssim: [], # Hyrax-managed field
       related_resource_sim: ['https://ldr.lafayette.edux'],
       related_resource_tesim: ['https://ldr.lafayette.edux'],
-      resource_type_ssim: ['Article', 'Other'],
+      repository_location_ssim: ['in the back room'],
+      research_assistance_ssim: ['yes', 'we did'],
+      resource_type_ssim: ['Video', 'Other'],
       rights_holder_tesim: ['Malantonio, Anna'],
       rights_holder_sim: ['Malantonio, Anna'],
       rights_statement_ssim: ['http://creativecommons.org/publicdomain/mark/1.0/'],
