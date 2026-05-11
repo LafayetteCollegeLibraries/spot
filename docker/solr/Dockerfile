@@ -28,6 +28,6 @@ COPY --chown=solr:solr assets/solr.in.sh $SOLR_INCLUDE
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 # add '--user-managed' flag to disable cloud mode while we use the single server approach
-CMD ["solr-foreground", "--user-managed"]
+CMD ["solr-foreground"]
 
 HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
