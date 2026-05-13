@@ -22,6 +22,16 @@ COPY --chown=solr:solr config $SOLR_CORE_CONF_DIR/conf
 # custom scripts to be run on solr inits
 COPY --chown=solr:solr scripts/*.sh /docker-entrypoint-initdb.d/
 
+RUN server/scripts/cloud-scripts/zkcli.sh \
+    -cmd upconfig \
+    -z $ZK_HOST \
+    -d $SOLR_CORE_CONF_DIR/conf
+
+RUN server/scripts/cloud-scripts/zkcli.sh \
+    -cmd bootstrap \
+    -z $ZK_HOST \
+    -solrhome /var/solr/data
+
 # custom env settings
 COPY --chown=solr:solr assets/solr.in.sh $SOLR_INCLUDE
 
