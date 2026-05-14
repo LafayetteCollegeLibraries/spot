@@ -2,8 +2,6 @@
 #
 # Set up cribbed from the Dassie example app within Hyrax, which itself is adapted from Hyku.
 #
-# @note I have VALKYRIE_TRANSITION=true defined in .env.local but I'm unsure if it's neccessary?
-# @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/.dassie/config/initializers/wings.rb
 Rails.application.config.after_initialize do
   # active_fedora models we're migrating
   [Publication, Image, StudentWork, AudioVisual].each do |work_type|
@@ -14,14 +12,20 @@ Rails.application.config.after_initialize do
     Wings::ModelRegistry.register(work_type, work_type)
   end
 
-  Wings::ModelRegistry.register(Collection, Collection)
+  # Map AdminSets and Collections
+  Wings::ModelRegistry.register(AdminSetResource, AdminSet)
   Wings::ModelRegistry.register(AdminSet, AdminSet)
-  Wings::ModelRegistry.register(FileSet, FileSet)
+  Wings::ModelRegistry.register(CollectionResource, Collection)
+  Wings::ModelRegistry.register(Collection, Collection)
+
   Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
-  Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
+  Wings::ModelRegistry.register(FileSet, FileSet)
+
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
+  Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
 
   Valkyrie::MetadataAdapter.register(Freyja::MetadataAdapter.new, :freyja)
+  Valkyrie.config.metadata_adapter = :freyja
 
   Valkyrie::StorageAdapter.register(
     Valkyrie::Storage::VersionedDisk.new(
@@ -30,12 +34,10 @@ Rails.application.config.after_initialize do
     ),
     :disk
   )
+  Valkyrie.config.storage_adapter  = :disk
 
   Hyrax.config.query_index_from_valkyrie = true
   Hyrax.config.index_adapter = :solr_index
-
-  Valkyrie.config.metadata_adapter = :freyja
-  Valkyrie.config.storage_adapter  = :disk
   Valkyrie.config.indexing_adapter = :solr_index
 
   # load all the sql based custom queries
@@ -61,13 +63,13 @@ Rails.application.config.after_initialize do
 end
 
 Rails.application.config.to_prepare do
-  # AdminSetResource.class_eval do
-  #   attribute :internal_resource, Valkyrie::Types::Any.default("AdminSet"), internal: true
-  # end
+  AdminSetResource.class_eval do
+    attribute :internal_resource, Valkyrie::Types::Any.default('AdminSet'), internal: true
+  end
 
-  # CollectionResource.class_eval do
-  #   attribute :internal_resource, Valkyrie::Types::Any.default("Collection"), internal: true
-  # end
+  CollectionResource.class_eval do
+    attribute :internal_resource, Valkyrie::Types::Any.default('Collection'), internal: true
+  end
 
   Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
     # TODO: Can we use some kind of lookup.

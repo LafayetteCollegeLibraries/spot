@@ -1,4 +1,4 @@
-\restrict 3tq1NbQsJWPHVS4qUFpTdLUpqfZeRSkN6zTmZeAcPmrO9aozielEKOgJcAmVCRD
+\restrict lx2vxHyypdaSFHgcml7gnYOwJSn6kWDgeI4fkIiDH4YbMpXFTHeLTbbUiVFAd06
 
 -- Dumped from database version 15.17
 -- Dumped by pg_dump version 15.16 (Debian 15.16-0+deb12u1)
@@ -3937,7 +3937,7 @@ ALTER TABLE ONLY public.mailboxer_receipts
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 3tq1NbQsJWPHVS4qUFpTdLUpqfZeRSkN6zTmZeAcPmrO9aozielEKOgJcAmVCRD
+\unrestrict lx2vxHyypdaSFHgcml7gnYOwJSn6kWDgeI4fkIiDH4YbMpXFTHeLTbbUiVFAd06
 
 SET search_path TO "$user", public;
 
