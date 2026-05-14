@@ -2,14 +2,21 @@
 require 'wings'
 
 Hyrax.config do |config|
-  config.register_curation_concern :publication, :image, :student_work, :audio_visual
+  # Dassie seems to be explicitly _not_ registering the _resource concern, so maybe we shouldn't either?
+  %i[publication image student_work audio_visual].each do |type|
+    # config.register_curation_concern :"#{type}_resource"
+    config.register_curation_concern type
+  end
 
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
 
-  config.admin_set_model = '::AdminSet'
-  config.collection_model = '::Collection'
-  config.file_set_model = '::FileSet'
+  # config.admin_set_model = '::AdminSet'
+  # config.collection_model = '::Collection'
+  # config.file_set_model = '::FileSet'
+  config.admin_set_model = 'AdminSetResource'
+  config.collection_model = 'CollectionResource'
+  config.file_set_model = 'Hyrax::FileSet'
 
   config.solr_default_method = :post
 

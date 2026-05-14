@@ -3,7 +3,10 @@ module Hyrax
   class ImagesController < ApplicationController
     include ::Spot::WorksControllerBehavior
 
-    self.curation_concern_type = ::Image
+    # self.curation_concern_type = ::Image
+    self.curation_concern_type = ::PublicationResource
+    self.work_form_service = Hyrax::FormFactory.new
+
     self.show_presenter = Hyrax::ImagePresenter
   end
 end

@@ -168,8 +168,6 @@ Rails.application.reloader.to_prepare do
 
   Hyrax::CollectionMemberSearchBuilder.prepend(Spot::CollectionMemberSearchBuilderDecorator)
 
-  # Hyrax::AdminSetCreateService.singleton_class.send(:prepend, Spot::AdminSetCreateServiceDecorator)
-
   # Only store entitlements related to us in the session to prevent a cookie overflow.
   #
   # @see https://github.com/biola/rack-cas/blob/v0.16.1/lib/rack/cas.rb#L96-L102
