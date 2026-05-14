@@ -22,16 +22,6 @@ COPY --chown=solr:solr config $SOLR_CORE_CONF_DIR/conf
 # custom scripts to be run on solr inits
 COPY --chown=solr:solr scripts/*.sh /docker-entrypoint-initdb.d/
 
-RUN server/scripts/cloud-scripts/zkcli.sh \
-    -cmd upconfig \
-    -z $ZK_HOST \
-    -d $SOLR_CORE_CONF_DIR/conf
-
-RUN server/scripts/cloud-scripts/zkcli.sh \
-    -cmd bootstrap \
-    -z $ZK_HOST \
-    -solrhome /var/solr/data
-
 # custom env settings
 COPY --chown=solr:solr assets/solr.in.sh $SOLR_INCLUDE
 
@@ -39,5 +29,9 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 # add '--user-managed' flag to disable cloud mode while we use the single server approach
 CMD ["solr-foreground"]
+
+RUN bin/solr zk upconfig -n spot-development -d /var/solr/data/spot-development
+
+RUN bin/solr zk upconfig -n spot-test -d /var/solr/data/spot-test
 
 HEALTHCHECK CMD curl http://localhost:8983/solr/ || exit 1
