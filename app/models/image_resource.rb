@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-class ImageResource < ::Hyrax::Work
-  include Hyrax::Schema(:base_metadata, schema_loader: Spot::SimpleSchemaLoader.new)
+class ImageResource < BaseResource
   include Hyrax::Schema(:image_metadata, schema_loader: Spot::SimpleSchemaLoader.new)
 
   Hyrax::ValkyrieLazyMigration.migrating(self, from: ::Image)

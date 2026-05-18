@@ -10,7 +10,7 @@
 # data is being pulled from the same source as the RDF data, it seems
 # Okay to store the API label value.
 module Spot::ControlledVocabularies
-  class Location < Base
+  class GeonamesLocation < Base
     # Now that we're caching label values, this is not called unless
     # the resource's label matches the RDF subject. As part of the
     # preferred_label check, we call {#pick_preferred_label} which,
