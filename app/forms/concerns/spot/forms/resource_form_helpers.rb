@@ -7,7 +7,8 @@ module Spot
 
       module ClassMethods
         # Adds a <field>_attributes virtual property to the form which
-        # is used for Select2 typeahead dropdowns. This maps URI values
+        # is used for Select2 typeahead dropdowns. When sync'd with the
+        # resource, it converts this form into
         #
         # @example
         #   resource.subject
@@ -27,7 +28,6 @@ module Spot
           end
         end
 
-        # We store certain fields tagged
         def language_tagged_field(*fields)
           fields.each do |field|
             property(:"#{field}_value",
@@ -48,7 +48,6 @@ module Spot
                           .zip(Array.wrap(doc["#{field}_language"]))
                           .map { |(value, language)| rdf_literal_from(value, language) }
                           .compact
-                          .map { |literal| rdf_serializer.serialize(literal) }
 
             send(:"#{field}=", values)
           end
