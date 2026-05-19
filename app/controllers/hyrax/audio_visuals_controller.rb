@@ -4,7 +4,7 @@ module Hyrax
     include ::Spot::WorksControllerBehavior
 
     # self.curation_concern_type = ::AudioVisual
-    self.curation_concern_type = ::PublicationResource
+    self.curation_concern_type = ::AudioVisualResource
     self.work_form_service = Hyrax::FormFactory.new
 
     self.show_presenter = Hyrax::AudioVisualPresenter
