@@ -4,7 +4,7 @@ module Hyrax
     include Spot::WorksControllerBehavior
 
     # self.curation_concern_type = ::StudentWork
-    self.curation_concern_type = ::PublicationResource
+    self.curation_concern_type = ::StudentWorkResource
     self.work_form_service = Hyrax::FormFactory.new
 
     self.show_presenter = Hyrax::StudentWorkPresenter

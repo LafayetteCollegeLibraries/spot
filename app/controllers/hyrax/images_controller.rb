@@ -4,7 +4,7 @@ module Hyrax
     include ::Spot::WorksControllerBehavior
 
     # self.curation_concern_type = ::Image
-    self.curation_concern_type = ::PublicationResource
+    self.curation_concern_type = ::ImageResource
     self.work_form_service = Hyrax::FormFactory.new
 
     self.show_presenter = Hyrax::ImagePresenter
