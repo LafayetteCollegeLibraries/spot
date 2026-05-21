@@ -5,5 +5,5 @@ class AdminSetResource < Hyrax::AdministrativeSet
   include Hyrax::ArResource
   include Hyrax::Permissions::Readable
 
-  Hyrax::ValkyrieLazyMigration.migrating(self, from: ::AdminSet)
+  attribute :internal_resource, Valkyrie::Types::Any.default('AdminSet'), internal: true
 end

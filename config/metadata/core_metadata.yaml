@@ -11,6 +11,7 @@ attributes:
     form:
       multiple: false
       required: true
+      primary: true
   date_modified:
     predicate: http://purl.org/dc/terms/modified
     type: date_time
