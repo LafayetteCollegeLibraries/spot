@@ -77,14 +77,7 @@ class MultiAuthorityControlledVocabularyInput < ControlledVocabularyInput
   def collection_values
     val = object[attribute_name]
     col = val.respond_to?(:to_ary) ? val.to_ary : val
-    col.reject { |value| value.respond_to?(:node?) ? value.node? : value.to_s.strip.blank? } + [cv_klass.new]
-  end
-
-  # class name of the controlled vocabulary for this property
-  #
-  # @return [Class]
-  def cv_klass
-    object.model.class.properties[attribute_name.to_s].class_name
+    col.reject { |value| value.try(:node?) == true }
   end
 
   def id_for_select(index)
