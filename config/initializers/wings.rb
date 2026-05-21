@@ -5,21 +5,25 @@
 Rails.application.config.after_initialize do
   # active_fedora models we're migrating
   [Publication, Image, StudentWork, AudioVisual].each do |work_type|
-    Wings::ModelRegistry.register("#{work_type}Resource".constantize, work_type)
+    # Wings::ModelRegistry.register("#{work_type}Resource".constantize, work_type)
 
     # from dassie:
     #   "we register itself so we can pre-translate the class in Freyja instead of having to translate in each query_service"
-    Wings::ModelRegistry.register(work_type, work_type)
+    # Wings::ModelRegistry.register(work_type, work_type)
+
+    Hyrax::ValkyrieLazyMigration.migrating("#{work_type}Resource".constantize, from: work_type)
   end
 
   # Map AdminSets and Collections
-  Wings::ModelRegistry.register(AdminSetResource, AdminSet)
-  Wings::ModelRegistry.register(AdminSet, AdminSet)
-  Wings::ModelRegistry.register(CollectionResource, Collection)
-  Wings::ModelRegistry.register(Collection, Collection)
+  Hyrax::ValkyrieLazyMigration.migrating(AdminSetResource, from: AdminSet)
+  Hyrax::ValkyrieLazyMigration.migrating(CollectionResource, from: Collection)
+
+  # Wings::ModelRegistry.register(AdminSet, AdminSet)
+  # Wings::ModelRegistry.register(Collection, Collection)
+
 
   Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
-  Wings::ModelRegistry.register(FileSet, FileSet)
+  # Wings::ModelRegistry.register(FileSet, FileSet)
 
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
   Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
@@ -34,7 +38,7 @@ Rails.application.config.after_initialize do
     ),
     :disk
   )
-  Valkyrie.config.storage_adapter  = :disk
+  Valkyrie.config.storage_adapter = :disk
 
   Hyrax.config.query_index_from_valkyrie = true
   Hyrax.config.index_adapter = :solr_index
@@ -64,20 +68,20 @@ end
 
 Rails.application.config.to_prepare do
   AdminSetResource.class_eval do
-    attribute :internal_resource, Valkyrie::Types::Any.default('AdminSet'), internal: true
+
   end
 
   CollectionResource.class_eval do
     attribute :internal_resource, Valkyrie::Types::Any.default('Collection'), internal: true
   end
 
+  # Copied from
   Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
-    # TODO: Can we use some kind of lookup.
     klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')
     klass_name = klass_name.gsub(/Resource$/, '')
-    if %w[
-      GenericWork
-    ].include?(klass_name)
+    resource_types = Hyrax.config.curation_concerns.map(&:to_s).concat(['Collection', 'AdminSet'])
+
+    if resource_types.include?(klass_name)
       "#{klass_name}Resource".constantize
     elsif 'Collection' == klass_name
       CollectionResource

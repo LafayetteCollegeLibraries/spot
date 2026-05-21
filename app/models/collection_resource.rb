@@ -2,5 +2,5 @@
 class CollectionResource < Hyrax::PcdmCollection
   include Hyrax::Schema(:core_metadata)
 
-  Hyrax::ValkyrieLazyMigration.migrating(self, from: ::Collection)
+  attribute :internal_resource, Valkyrie::Types::Any.default('Collection'), internal: true
 end
