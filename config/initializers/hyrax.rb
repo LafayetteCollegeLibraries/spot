@@ -321,15 +321,4 @@ end
 
 Rails.application.reloader.to_prepare do
   Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
-
-  # Hyrax v4 adds a helper method on the Hyrax constant that Bulkrax v9 depends on,
-  # so we'll patch it in if it doesn't exist yet. This came up while having issues
-  # with Bulkrax exports.
-  unless Hyrax.respond_to?(:index_field_mapper)
-    module Hyrax
-      def self.index_field_mapper
-        config.index_field_mapper
-      end
-    end
-  end
 end

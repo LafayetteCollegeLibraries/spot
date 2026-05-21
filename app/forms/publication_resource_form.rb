@@ -1,12 +1,43 @@
 # frozen_string_literal: true
 class PublicationResourceForm < Hyrax::Forms::ResourceForm(PublicationResource)
-  include Spot::Forms::ResourceFormHelpers
+  include Spot::Forms::BaseResourceFormBehavior
 
-  include Hyrax::FormFields(:core_metadata)
-  include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:publication_metadata)
   include Hyrax::FormFields(:institutional_metadata)
 
-  language_tagged_field(:title, :title_alternative, :subtitle, :abstract, :description)
-  nested_attributes_for(:subject, :location, :language, :academic_department, :division)
+  nested_attributes_for(:academic_department, :division)
+
+  def primary_terms # rubocop:disable Metrics/MethodLength
+    [
+      :title,
+      :date_issued,
+      :resource_type,
+      :rights_statement,
+
+      # starting with rights holder since it relates to rights_statement
+      :rights_holder,
+      :subtitle,
+      :title_alternative,
+      :creator,
+      :contributor,
+      :editor,
+      :publisher,
+      :source,
+      :bibliographic_citation,
+      :standard_identifier,
+      :local_identifier,
+      :abstract,
+      :description,
+      :subject,
+      :keyword,
+      :language,
+      :physical_medium,
+      :location,
+      :related_resource,
+      :academic_department,
+      :division,
+      :organization,
+      :note
+    ]
+  end
 end
