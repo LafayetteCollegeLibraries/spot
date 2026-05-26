@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class PublicationResourceForm < Hyrax::Forms::ResourceForm(PublicationResource)
-  include Spot::Forms::BaseResourceFormBehavior
+  #include Spot::Forms::BaseResourceFormBehavior
 
   include Hyrax::FormFields(:publication_metadata)
   include Hyrax::FormFields(:institutional_metadata)
