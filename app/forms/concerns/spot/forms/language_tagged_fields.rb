@@ -4,6 +4,18 @@ module Spot
     module LanguageTaggedFields
       extend ActiveSupport::Concern
 
+      # Helper methods for the language (pre-)populator methods
+      def rdf_literal_or_value_from(value, language)
+        return if value.blank?
+        return value if language.blank?
+
+        RDF::Literal.new(value.to_s, language: language.to_sym)
+      end
+
+      def deserialize_rdf(value)
+        (@rdf_serializer ||= RdfLiteralSerializer.new).deserialize(value)
+      end
+
       module ClassMethods
         # Provides the option for a field's values to be tagged with a language.
         # In the form, a field's values are mapped to a <field>_value virtual property
@@ -55,7 +67,7 @@ module Spot
           lambda do
             values = Array.wrap(model.send(field)).map do |value|
               if value.is_a?(RDF::Literal)
-                rdf_serializer.deserialize(value)&.value
+                deserialize_rdf(value)&.value
               else
                 value.to_s
               end
@@ -70,22 +82,11 @@ module Spot
         def language_prepopulator_for(field)
           lambda do
             languages = Array.wrap(model.send(field)).map do |value|
-              rdf_serializer.deserialize(value)&.language
+              deserialize_rdf(value)&.language
             end
 
             send(:"#{field}_language=", languages)
           end
-        end
-
-        def rdf_literal_or_value_from(value, language)
-          return if value.blank?
-          return value if language.blank?
-
-          RDF::Literal.new(value.to_s, language: language.to_sym)
-        end
-
-        def rdf_serializer
-          @rdf_serializer ||= RdfLiteralSerializer.new
         end
       end
     end
