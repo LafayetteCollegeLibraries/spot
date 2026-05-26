@@ -15,7 +15,7 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
   class_attribute :years_encompassed_fields, default: [:date]
 
   # @todo update the HandleService to generate this and then call from here
-  # include Spot::IndexesPermalink
+  # include IndexesPermalink
 
   def to_solr
     super.tap do |doc|
@@ -34,7 +34,7 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
   private
 
   def citation_metadata
-    return {} unless resource.respond_to?(:bibliographic_citation)
+    return {} unless resource.respond_to?(:bibliographic_citation) && resource.bibliographic_citation.present?
 
     raw = Array.wrap(resource.bibliographic_citation).first
     parsed = ::AnyStyle.parse(raw)&.first
