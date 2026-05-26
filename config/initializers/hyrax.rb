@@ -20,6 +20,14 @@ Hyrax.config do |config|
 
   config.solr_default_method = :post
 
+  # Use our own FileSetDerivativesService first and fall back to the Hyrax services
+  # for formats we don't currently handle uniquely.
+  config.derivative_services = [
+    Spot::Derivatives::ImageDerivativeService,
+    Spot::Derivatives::BaseDerivativeService,
+    Hyrax::FileSetDerivativesService
+  ]
+
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
   # @note there are magical roles as defined in Hyrax::RoleRegistry::MAGIC_ROLES
