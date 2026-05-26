@@ -137,6 +137,9 @@ gem 'slack-ruby-client'
 # used in the Hyrax 4 upgrade but not a dependency??
 gem 'twitter-typeahead-rails', '~> 0.11.1'
 
+# use valkyrie-shrine to connect s3 storage to valkyrie
+gem 'valkyrie-shrine', '~> 1.1'
+
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
 #
