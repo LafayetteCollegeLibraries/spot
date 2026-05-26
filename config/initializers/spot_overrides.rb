@@ -354,26 +354,29 @@ Rails.application.reloader.to_prepare do
 
   Hyrax::DownloadsController.prepend(Spot::HyraxDownloadsControllerDecorator)
 
+  #
   # Encountering an issue where Hyrax::PersistDirectlyContainedOutputFileService.retrieve_file_set requires
   # Hyrax::UploadedFile#file_set_uri to be an URI but querying for that URI throws an error (ActiveFedora
   # is appending the base root to the full uri, resulting in errors like:
   #     Ldp::BadRequest: Path contains empty element! /dev/ht/tp/:/http://fedora:8080/rest/dev/2v/23/vt/36/2v23vt362")
+  #
+  # @todo This is probably no longer necessary, but keeping it around just in case
+  #       we run into issues converting ActiveFedora objects to ValkyrieResources
   # module Spot
   #   module HyraxUploadedFileDecorator
   #     def add_file_set!(file_set)
   #       uri = case file_set
   #             when ActiveFedora::Base
   #               file_set.uri
-  #             when Hyrax::Resource
+  #             when Hyrax::Resource, Hyrax::FileSet
   #               file_set.id.is_a?(URI::HTTP) ? file_set.id : Hyrax::Base.id_to_uri(file_set.id.to_s)
   #             end
-
   #       update!(file_set_uri: uri) if uri.present?
   #     end
   #   end
   # end
-
   # Hyrax::UploadedFile.prepend(Spot::HyraxUploadedFileDecorator)
+  #
 
   # Changing the call to open to URI.open because exporters could not find files from URIs otherwise
   #
@@ -422,15 +425,8 @@ Rails.application.reloader.to_prepare do
 
   Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
 
-  # Copied over from Hyrax to overwrite the method in the user concern.
-  # We remove the password parameter since we don't use it.
-  #
-  # @see https://github.com/samvera/hyrax/blob/0af11acf9088cc90c7c9dcf2b4969bd45a101fe2/app/models/concerns/hyrax/user.rb#L183C5-L185C8
-  Hyrax::User.class_eval do
-    def find_or_create_system_user(user_key)
-      User.find_by_user_key(user_key) || User.create!(user_key_field => user_key)
-    end
-  end
-
   Bulkrax::ObjectFactory.prepend(Spot::BulkraxObjectFactoryFindPatch)
+
+  # Patch to use Lucene search to retrieve PCDM Members
+  Hyrax::PcdmMemberPresenterFactory.prepend(Spot::LucenePatchForPcdmMemberPresentersFactory)
 end
