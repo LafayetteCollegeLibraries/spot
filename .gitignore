@@ -48,6 +48,9 @@
 /public/uv/*
 !/public/uv/.keep
 
+# Locally stored files (tbd if this stays?)
+/storage
+
 # vendor files
 /vendor/*
 !/vendor/.keep

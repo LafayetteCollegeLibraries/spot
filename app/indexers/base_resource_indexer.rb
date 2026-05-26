@@ -28,6 +28,14 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
           'years_encompassed_iim' => parse_years_encompassed
         }
       )
+
+      # Ensure that the solr_document doesn't contain any RDF::Literals,
+      # as they convert to JSON-LD and Solr throws a fit about JSON-LD keys.
+      doc.each_pair do |key, val|
+        if val.is_a?(Array)
+          doc[key] = val.map { |v| v.is_a?(RDF::Literal) ? v.value : v }
+        end
+      end
     end
   end
 

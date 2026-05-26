@@ -38,8 +38,6 @@ module Spot
         include Hyrax::FormFields(:core_metadata)
         include Hyrax::FormFields(:base_metadata)
 
-        # form = PublicationResourceForm.for(resource: PublicationResource.new(identifier:['abc:123']))
-
         if model_class.attribute_names.include?(:identifier)
           # for local_identifier, we exclude the noid: identifier so as to not let it be user-editable.
           property :local_identifier, virtual: true, prepopulator: -> { self.local_identifier = model.local_identifier.reject { |id| id.try(:prefix) == 'noid' }.map(&:to_s) }

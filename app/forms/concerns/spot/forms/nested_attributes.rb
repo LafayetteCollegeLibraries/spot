@@ -35,7 +35,8 @@ module Spot
             adds = []
             deletes = []
 
-            fragment.each do |_idx, attrs|
+            # :fragment is an ActionController::Parameters object
+            fragment.to_unsafe_hash.each do |_idx, attrs|
               value = attrs[value_key]
               if attrs[destroy_key] == 'true'
                 deletes << value
@@ -44,7 +45,9 @@ module Spot
               end
             end
 
-            merged_values = ((Array.wrap(send(field)).map(&:to_s) + adds) - deletes).uniq
+            original_values = Array.wrap(model.send(field)).map(&:to_s)
+            merged_values = ((original_values + adds) - deletes).uniq
+
             send(:"#{field}=", merged_values)
           end
         end
