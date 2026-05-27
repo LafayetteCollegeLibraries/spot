@@ -77,7 +77,7 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
 
     parsed = Date.edtf(value)
     parsed = parsed.first if parsed.class < ::Enumerable # guard for EDTF sets/intervals/etc
-    parsed ||= Date.parse(resource.create_date.to_s)
+    parsed ||= Date.parse(resource.created_at.to_s)
 
     parsed.strftime('%FT%TZ')
   end
