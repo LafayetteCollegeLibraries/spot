@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 class AudioVisualResourceForm < Hyrax::Forms::ResourceForm(AudioVisualResource)
+  include Spot::Forms::BaseResourceFormBehavior
 
   include Hyrax::FormFields(:core_metadata)
   include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:audio_visual_metadata)
+
+  language_tagged_field(:inscription)
 
   def primary_terms
     [
@@ -22,7 +25,6 @@ class AudioVisualResourceForm < Hyrax::Forms::ResourceForm(AudioVisualResource)
       :contributor,
       :publisher,
       :source,
-      :standard_identifier,
       :local_identifier,
       :description,
       :inscription,
