@@ -20,13 +20,15 @@ module Spot
         Hyrax::Workflow::ActivateObject.call(target: target, **kwargs)
         return true if target.respond_to?(:date_available) && target.date_available.present?
 
-        date = if target.try(:embargo) && target.embargo.try(:embargo_release_date).present?
-                 target.embargo.embargo_release_date
-               else
-                 Time.zone.now
-               end
+        if target.respond_to?(:date_available=) && target.date_available.blank?
+          date = if target.try(:embargo) && target.embargo.try(:embargo_release_date).present?
+                  target.embargo.embargo_release_date
+                else
+                  Time.zone.now
+                end
 
-        target.date_available = [date.strftime('%Y-%m-%d')]
+          target.date_available = [date.strftime('%Y-%m-%d')]      
+        end
 
         true
       end

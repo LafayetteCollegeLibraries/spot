@@ -2,9 +2,7 @@
 class StudentWorkResourceForm < Hyrax::Forms::ResourceForm(StudentWorkResource)
   include Spot::Forms::BaseResourceFormBehavior
 
-  include Hyrax::FormFields(:core_metadata)
-  include Hyrax::FormFields(:base_metadata)
-  include Hyrax::FormFields(:Student_work_metadata)
+  include Hyrax::FormFields(:student_work_metadata)
   include Hyrax::FormFields(:institutional_metadata)
 
   nested_attributes_for(:academic_department, :division, :advisor)
