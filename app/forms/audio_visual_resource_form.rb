@@ -2,8 +2,6 @@
 class AudioVisualResourceForm < Hyrax::Forms::ResourceForm(AudioVisualResource)
   include Spot::Forms::BaseResourceFormBehavior
 
-  include Hyrax::FormFields(:core_metadata)
-  include Hyrax::FormFields(:base_metadata)
   include Hyrax::FormFields(:audio_visual_metadata)
 
   language_tagged_field(:inscription)
