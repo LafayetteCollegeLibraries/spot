@@ -9,6 +9,10 @@ class AudioVisualResource < BaseResource
   def local_identifier
     identifier.select(&:local?)
   end
+
+  def standard_identifier
+    identifier.select(&:standard?)
+  end
   
   attribute :stored_derivatives, Valkyrie::Types::String
 end
