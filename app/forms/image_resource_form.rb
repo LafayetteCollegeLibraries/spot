@@ -41,8 +41,4 @@ class ImageResourceForm < Hyrax::Forms::ResourceForm(ImageResource)
       :note
     ]
   end
-
-  def secondary_terms
-    []
-  end
 end
