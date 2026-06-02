@@ -5,6 +5,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - barcode_ssim
   date:
@@ -14,6 +15,7 @@ attributes:
     required: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - date_ssim
   date_associated:
@@ -22,6 +24,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - date_associated_ssim
       - date_associated_tesim
@@ -31,6 +34,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - inscription_tesim
   original_item_extent:
@@ -39,6 +43,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - original_item_extent_tesim
   repository_location:
@@ -47,6 +52,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - repository_location_ssim
   research_assistance:
@@ -55,6 +61,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - research_assistance_ssim
   provenance:
@@ -63,5 +70,6 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - provenance_tesim
