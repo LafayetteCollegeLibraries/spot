@@ -5,6 +5,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - abstract_tesim
   date_issued:
@@ -14,6 +15,7 @@ attributes:
     form:
       multiple: false
       required: true
+      primary: true
     index_keys:
       - date_issued_ssim
   # @todo should this be a date field?
@@ -23,6 +25,7 @@ attributes:
     multiple: true
     form:
       multiple: false
+      primary: true
     index_keys:
       - date_available_ssim
   editor:
@@ -31,6 +34,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - editor_sim
       - editor_tesim
