@@ -5,6 +5,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - abstract_tesim
   access_note:
@@ -13,6 +14,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - access_note_tesim
   advisor:
@@ -21,6 +23,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - advisor_ssim
       - advisor_tesim
@@ -32,6 +35,7 @@ attributes:
     required: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - date_ssim
   date_available:
@@ -40,5 +44,6 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - date_available_ssim
