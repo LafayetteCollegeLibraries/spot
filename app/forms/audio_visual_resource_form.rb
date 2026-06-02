@@ -40,8 +40,4 @@ class AudioVisualResourceForm < Hyrax::Forms::ResourceForm(AudioVisualResource)
       :barcode
     ]
   end
-  
-  def secondary_terms
-    []
-  end
 end
