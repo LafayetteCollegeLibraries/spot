@@ -95,8 +95,12 @@
      -->
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
 
+    <!-- 2026-04-15 am
+          Commenting out configuration for LatLongType (no longer supported
+          on Solr 9 and not used by us.)-->
+
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+    <!-- <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/> -->
 
     <!-- An alternative geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
       For more information about this and other Spatial fields new to Solr 4, see:
@@ -313,12 +317,14 @@
     <dynamicField name="*_coordinate" type="tdouble" indexed="true"  stored="false" />
 
     <!-- location (_ll...) -->
+    <!--
     <dynamicField name="*_lli" type="location" stored="false" indexed="true" multiValued="false"/>
     <dynamicField name="*_llim" type="location" stored="false" indexed="true" multiValued="true"/>
     <dynamicField name="*_lls" type="location" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_llsm" type="location" stored="true" indexed="false" multiValued="true"/>
     <dynamicField name="*_llsi" type="location" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_llsim" type="location" stored="true" indexed="true" multiValued="true"/>
+    -->
 
     <dynamicField name="*_suggest" type="textSuggest" indexed="true" stored="false" multiValued="true" />
   </fields>
