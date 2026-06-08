@@ -162,17 +162,11 @@ RSpec.configure do |config|
     end
 
     Hyrax::SolrService.wipe! if Hyrax.config.query_index_from_valkyrie
-
-    # ensure there's an admin set to deposit to
-    admin_set = Hyrax::AdminSetCreateService.find_or_create_default_admin_set
-    Hyrax::PermissionTemplate.find_or_create_by!(source_id: admin_set.id)
-
-    Hyrax.persister.save(resource: admin_set)
   end
 
-  config.after clean: true do
-    DatabaseCleaner.clean
-  end
+  # config.after clean: true do
+  #   DatabaseCleaner.clean
+  # end
 
   config.before js: true do
     DatabaseCleaner.strategy = :truncation
