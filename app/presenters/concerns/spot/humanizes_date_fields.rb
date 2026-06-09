@@ -31,7 +31,7 @@ module Spot
       Date.edtf(val)
           .humanize
           .gsub(/0{0,3}(\d+)/, '\1') # remove leading zeroes
-          .gsub(/-(\d{1,4})/, '\1 BCE') # convert negative dates to BCE
+          .gsub(/-(\d{1,4}[\?\~\%]?)/, '\1 BCE') # convert negative dates to BCE
     rescue
       val
     end

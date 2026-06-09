@@ -32,15 +32,15 @@ RSpec.shared_examples 'it humanizes date fields' do |opts|
       end
 
       context 'circa dates' do
-        let(:original_value) { ['2000%/2010%'] }
+        let(:original_value) { ['0077%/0080'] }
 
-        it { is_expected.to eq ['circa 2000 to circa 2010'] }
+        it { is_expected.to eq ['circa 77? to 80'] }
       end
 
       context 'bce dates' do
-        let(:original_value) { ['-1000/0800%'] }
+        let(:original_value) { ['-0080/-0077%'] }
 
-        it { is_expected.to eq ['1000 BCE to circa 800'] }
+        it { is_expected.to eq ['80 BCE to circa 77? BCE'] }
       end
     end
   end
