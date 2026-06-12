@@ -67,6 +67,5 @@ RSpec.describe ImageResource, valkyrization: true do
         .to change { resource.subject_ocm }
         .to contain_exactly('000 VALUE')
     end
-
   end
 end
