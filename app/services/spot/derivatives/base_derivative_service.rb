@@ -92,7 +92,7 @@ module Spot
       # Copied from Hyrax::FileSetDerivativeService
       #
       # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/app/services/hyrax/file_set_derivatives_service.rb#L119-L127
-      def extract_and_save_full_text(src_path)
+      def extract_and_save_full_text(_src_path)
         return unless Hyrax.config.extract_full_text?
 
         Rails.logger.warn 'Skipping full-text extraction for the moment'
