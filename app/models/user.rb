@@ -30,7 +30,6 @@ class User < ApplicationRecord
     end
   end
 
-
   # Does this user belong to the Alumni group?
   #
   # @return [true, false]
