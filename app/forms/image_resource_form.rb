@@ -6,7 +6,7 @@ class ImageResourceForm < Hyrax::Forms::ResourceForm(ImageResource)
 
   language_tagged_field(:inscription)
 
-  def primary_terms
+  def primary_terms # rubocop:disable Metrics/MethodLength
     [
       :title,
       :date,
