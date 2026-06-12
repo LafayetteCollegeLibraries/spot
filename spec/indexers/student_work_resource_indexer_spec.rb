@@ -46,7 +46,7 @@ RSpec.describe StudentWorkResourceIndexer, valkyrization: true do
       advisor: ['Professor, A'],
       access_note: ['upon request only'],
       date: ['2026-05-08'],
-      date_available: ['2026-05-08'],
+      date_available: ['2026-05-08']
     }
   end
 
