@@ -5,6 +5,7 @@ module Spot
     extend ActiveSupport::Concern
 
     module ClassMethods
+      # rubocop:disable Naming/PredicateName
       def has_controlled_field(field, vocabulary_class: ActiveTriples::Resource)
         controlled_fields << field unless controlled_fields.include?(field)
 

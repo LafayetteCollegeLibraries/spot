@@ -6,7 +6,7 @@ class AudioVisualResourceForm < Hyrax::Forms::ResourceForm(AudioVisualResource)
 
   language_tagged_field(:inscription)
 
-  def primary_terms
+  def primary_terms # rubocop:disable Metrics/MethodLength
     [
       # required_fields first
       :title,
