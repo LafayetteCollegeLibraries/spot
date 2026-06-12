@@ -41,6 +41,7 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
 
   private
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def citation_metadata
     return {} unless resource.respond_to?(:bibliographic_citation) && resource.bibliographic_citation.present?
 
@@ -85,10 +86,11 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
   # "Years Encompassed" meaning what years are covered by the metadata dates for a resource.
   # Handles individual dates and EDTF ranges (so "2001/2003" encompasses "2001", "2002", "2003").
   # Used for the blacklight_range_limit plugin.
-  def parse_years_encompassed
+  def parse_years_encompassed 
     fields = Array.wrap(years_encompassed_fields)
     return [] unless fields.any? { |field| resource.respond_to?(field) }
 
+    # rubocop:disable Style/BlockDelimiters
     fields.map { |f| resource.try(f).try(:to_a) || [] }
           .flatten
           .reduce([]) { |dates, date|
