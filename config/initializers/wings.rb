@@ -33,6 +33,8 @@ Rails.application.config.after_initialize do
 
   Valkyrie::MetadataAdapter.register(Freyja::MetadataAdapter.new, :freyja)
   Valkyrie.config.metadata_adapter = :freyja
+  Hyrax.config.query_index_from_valkyrie = true
+  Hyrax.config.index_adapter = :solr_index
 
   Valkyrie::StorageAdapter.register(
     Valkyrie::Storage::VersionedDisk.new(
@@ -42,6 +44,7 @@ Rails.application.config.after_initialize do
     :disk
   )
   Valkyrie.config.storage_adapter = :disk
+  Valkyrie.config.indexing_adapter = :solr_index
 
   # Use valkyrie-shrine's s3 capabilities to store iiif source images as a way
   # to use more Samvera-community code rather than rolling our own AWS client usage.
