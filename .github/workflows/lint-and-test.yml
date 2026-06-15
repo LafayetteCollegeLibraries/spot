@@ -76,6 +76,8 @@ jobs:
       SOLR_TEST_URL: http://solr:8983/solr/spot-test
       SOLR_VERSION: "8.11.4"
       URL_HOST: http://localhost:3000
+      AWS_IIIF_ASSET_BUCKET: iiif-derivatives
+      AWS_AV_ASSET_BUCKET: av-derivatives
 
     steps:
       - uses: actions/checkout@v4
