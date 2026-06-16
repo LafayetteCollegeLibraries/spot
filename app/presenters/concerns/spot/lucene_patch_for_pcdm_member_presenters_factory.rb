@@ -11,12 +11,7 @@ module Spot
 
     def query_docs(generic_type: nil, ids: object.member_ids)
       query = "{!terms f=id}#{ids.join(',')}"
-
-      if generic_type
-        query += "{!term f=generic_type_si}#{generic_type}"
-        # works created via ActiveFedora use the _sim field
-        query += "{!term f=generic_type_sim}#{generic_type}"
-      end
+      query = "(generic_type_si:#{generic_type} OR generic_type_sim:#{generic_type}) AND #{query}" if generic_type
 
       Hyrax::SolrService
         .post(q: query, rows: 10_000, defType: 'lucene')

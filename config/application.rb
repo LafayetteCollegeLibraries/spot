@@ -76,6 +76,5 @@ module Spot
         end
       end
     end
-
   end
 end
