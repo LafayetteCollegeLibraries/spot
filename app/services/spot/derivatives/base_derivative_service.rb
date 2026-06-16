@@ -43,7 +43,7 @@ module Spot
     #
     #   Hyrax.config.derivative_services = [
     #     CoolCustomDerivativeService,
-    #     Spot::Derivatives::BaseDerivativeService
+    #     Spot::Derivatives::BaseDerivativeService,
     #     Hyrax::FileSetDerivativesService
     #   ]
     #
