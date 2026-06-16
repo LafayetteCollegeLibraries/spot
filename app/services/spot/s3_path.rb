@@ -26,13 +26,7 @@ module Spot
     # IIIF source images are created on disk before sending to S3,
     # so the desired filename has already been generated.
     class IiifPathGenerator < Base
-      def generate(resource:, file:, original_filename:)
-        puts "****** IIIFPATH GENERATOR ********"
-        puts "resource.id: #{resource.id}"
-        puts "file.id: #{file.inspect}"
-        puts "original_filename: #{original_filename}"
-        puts "****** /IIIFPATH GENERATOR *******"
-
+      def generate(resource:, file:, original_filename:) # rubocop:disable Lint/UnusedMethodArgument
         "#{resource.id}-access#{File.extname(original_filename)}"
       end
     end
