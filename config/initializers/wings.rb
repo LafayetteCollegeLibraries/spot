@@ -17,12 +17,12 @@ Rails.application.config.after_initialize do
   # Map AdminSets and Collections
   Hyrax::ValkyrieLazyMigration.migrating(AdminSetResource, from: ::AdminSet)
   Hyrax::ValkyrieLazyMigration.migrating(CollectionResource, from: ::Collection)
+  Hyrax::ValkyrieLazyMigration.migrating(Hyrax::FileSet, from: ::FileSet)
 
   Wings::ModelRegistry.register(AdminSet, AdminSet)
   Wings::ModelRegistry.register(Collection, Collection)
   Wings::ModelRegistry.register(FileSet, FileSet)
 
-  Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
   Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
 
@@ -104,23 +104,23 @@ Rails.application.config.to_prepare do
   # Copied from Dassie but modified to map our CurationConcern work types to Hyrax::Resource classes
   Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
     resource_types = Hyrax.config.curation_concerns.map(&:to_s).concat(['Collection', 'AdminSet'])
-
     klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')
     klass_name = klass_name.gsub(/Resource$/, '')
 
-    if resource_types.include?(klass_name)
-      "#{klass_name}Resource".constantize
+    next "#{klass_name}Resource".constantize if resource_types.include?(klass_name)
+
+    case klass_name
+    when 'Hydra::AccessControl'
       # Without this mapping, we'll see cases of Postgres Valkyrie adapter attempting to write to
       # Fedora.  Yeah!
-    elsif 'Hydra::AccessControl' == klass_name
       Hyrax::AccessControl
-    elsif 'FileSet' == klass_name
+    when 'FileSet'
       Hyrax::FileSet
-    elsif 'Hydra::AccessControls::Embargo' == klass_name
+    when 'Hydra::AccessControls::Embargo'
       Hyrax::Embargo
-    elsif 'Hydra::AccessControls::Lease' == klass_name
+    when 'Hydra::AccessControls::Lease'
       Hyrax::Lease
-    elsif 'Hydra::PCDM::File' == klass_name
+    when 'Hydra::PCDM::File'
       Hyrax::FileMetadata
     else
       klass_name.constantize
