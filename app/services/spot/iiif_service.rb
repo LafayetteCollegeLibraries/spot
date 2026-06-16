@@ -67,7 +67,7 @@ module Spot
     # @note this produces a URL _without_ the final 'info.json' of the path.
     #       Somewhere in the pipeline this is added (possibly by the viewer?)
     def info_url
-      URI.join(base_url, file_set_id).to_s
+      URI.join(base_url, asset_id).to_s
     end
 
     # Generates a IIIF image URL for an item
@@ -80,13 +80,13 @@ module Spot
     # @option [String] format (default: 'jpg')
     # @return [String]
     def image_url(region: 'full', size: DEFAULT_SIZE, rotation: '0', quality: 'default', format: 'jpg')
-      URI.join(base_url, "#{file_set_id}/#{region}/#{size}/#{rotation}/#{quality}.#{format}").to_s
+      URI.join(base_url, "#{asset_id}/#{region}/#{size}/#{rotation}/#{quality}.#{format}").to_s
     end
 
     # Generates a IIIF image URL for an item that will trigger a download
     #
     # @param [Hash] options
-    # @option [String] filename (default: "#{file_set_id}.jpg")
+    # @option [String] filename (default: "#{asset_id}.jpg")
     # @option [String] region (default: 'full')
     # @option [String] size (default: DEFAULT_SIZE)
     # @option [String] rotation (default: '0')
@@ -95,18 +95,27 @@ module Spot
     # @return [String]
     # @see https://cantaloupe-project.github.io/manual/4.1/endpoints.html#Response%20Content%20Disposition
     def download_url(filename: nil, format: 'jpg', **args)
-      filename = "#{file_set_id}.#{format}" if filename.nil?
+      filename = "#{asset_id}.#{format}" if filename.nil?
       base_url = image_url(format: format, **args)
 
       "#{base_url}?response-content-disposition=attachment%3B%20#{filename}"
     end
 
-    # file_id will look like "abc123def/files/00000000-0000-0000-0000-000000000000", but all
-    # we really need is the first part (the id of the file_set)
+    private
+
+    # file_ids are generally "<file_set.id>/files/<af_file.id>" although
+    # Valkyrized FileMetadata objects appear to have a fourth value after file id (version id?).
+    # With ActiveFedora, we tied the file to the FileSet id, but with Valkyrie
+    # we're using the FileMetadata id.
     #
     # @return [String]
-    def file_set_id
-      @file_set_id ||= CGI.unescape(file_id).split('/files/').first
+    def asset_id
+      @asset_id ||=
+        if Hyrax.config.use_valkyrie?
+          CGI.unescape(file_id).split('/')[2]
+        else
+          CGI.unescape(file_id).split('/files/').first
+        end
     end
   end
 end
