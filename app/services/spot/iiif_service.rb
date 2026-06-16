@@ -103,12 +103,10 @@ module Spot
 
     private
 
-    # file_ids are generally "<file_set.id>/files/<af_file.id>" although
-    # Valkyrized FileMetadata objects appear to have a fourth value after file id (version id?).
-    # With ActiveFedora, we tied the file to the FileSet id, but with Valkyrie
-    # we're using the FileMetadata id.
+    # file_ids look like "<file_set.id>/files/<file_id>(/<md5 digest of version_id>)"
     #
     # @return [String]
+    # @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/app/models/hyrax/file_set.rb#L76-L83
     def asset_id
       @asset_id ||=
         if Hyrax.config.use_valkyrie?
