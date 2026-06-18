@@ -3,8 +3,7 @@ module Hyrax
   class PublicationsController < ApplicationController
     include Spot::WorksControllerBehavior
 
-    # self.curation_concern_type = ::Publication
-    self.curation_concern_type = ::PublicationResource
+    self.curation_concern_type = Hyrax.config.use_valkyrie? ? PublicationResource : Publication
     self.work_form_service = Hyrax::FormFactory.new
 
     self.show_presenter = Hyrax::PublicationPresenter
