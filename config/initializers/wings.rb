@@ -26,52 +26,6 @@ Rails.application.config.after_initialize do
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
   Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
 
-  ##
-  #  ADAPTERS SETUP
-  #  metadata, indexing, storage
-  ##
-
-  Valkyrie::MetadataAdapter.register(Freyja::MetadataAdapter.new, :freyja)
-  Valkyrie.config.metadata_adapter = :freyja
-  Hyrax.config.query_index_from_valkyrie = true
-  Hyrax.config.index_adapter = :solr_index
-
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::VersionedDisk.new(
-      base_path: Rails.root.join('storage', 'files'),
-      file_mover: FileUtils.method(:cp)
-    ),
-    :disk
-  )
-  Valkyrie.config.storage_adapter = :disk
-  Valkyrie.config.indexing_adapter = :solr_index
-
-  # Use valkyrie-shrine's s3 capabilities to store iiif source images as a way
-  # to use more Samvera-community code rather than rolling our own AWS client usage.
-  #
-  # @see app/services/spot/derivatives/image_derivative_service.rb (:s3_iiif)
-  # @see https://github.com/samvera-labs/valkyrie-shrine/
-  aws_opts = { force_path_style: !Rails.env.production? }
-
-  Shrine.storages = {
-    s3_iiif: Shrine::Storage::S3.new(bucket: ENV.fetch('AWS_IIIF_ASSET_BUCKET'), **aws_opts),
-    s3_av: Shrine::Storage::S3.new(bucket: ENV.fetch('AWS_AV_ASSET_BUCKET'), **aws_opts)
-  }
-
-  # @note We need to use a custom PathGenerator for the valkyrie-shrine adapter, as the default one
-  #       appends a uuid to the path to prevent overwrites, but as these are access derivatives, we're not
-  #       particularly concerned about that.
-  #
-  # @see app/services/spot/s3_path.rb
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Shrine.new(Shrine.storages[:s3_iiif], nil, Spot::S3Path::IiifPathGenerator),
-    :iiif_source_s3
-  )
-
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Shrine.new(Shrine.storages[:s3_av], nil, Spot::S3Path::AvPathGenerator),
-    :av_source_s3
-  )
 
   # The :solr_index adapter is set up in a Hyrax initializer, so we just need to ensure
   # that Hyrax and Valkyrie are configured to use it
@@ -79,7 +33,6 @@ Rails.application.config.after_initialize do
   # @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/config/initializers/indexing_adapter_initializer.rb
   Hyrax.config.query_index_from_valkyrie = true
   Hyrax.config.index_adapter = :solr_index
-  Valkyrie.config.indexing_adapter = :solr_index
 
   # load all the sql based custom queries
   [
