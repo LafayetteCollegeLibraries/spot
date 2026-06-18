@@ -3,8 +3,7 @@ module Hyrax
   class StudentWorksController < ApplicationController
     include Spot::WorksControllerBehavior
 
-    # self.curation_concern_type = ::StudentWork
-    self.curation_concern_type = ::StudentWorkResource
+    self.curation_concern_type = Hyrax.config.use_valkyrie? ? StudentWorkResource : StudentWork
     self.work_form_service = Hyrax::FormFactory.new
 
     self.show_presenter = Hyrax::StudentWorkPresenter
