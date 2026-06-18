@@ -4,7 +4,7 @@ module Hyrax
     include ::Spot::WorksControllerBehavior
 
     # self.curation_concern_type = ::Image
-    self.curation_concern_type = ::ImageResource
+    self.curation_concern_type = Hyrax.config.use_valkyrie? ? ImageResource : Image
     self.work_form_service = Hyrax::FormFactory.new
 
     self.show_presenter = Hyrax::ImagePresenter
