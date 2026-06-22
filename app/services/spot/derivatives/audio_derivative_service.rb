@@ -1,72 +1,35 @@
 # frozen_string_literal: true
 module Spot
   module Derivatives
-    # Checks the 'premade_derivatives' property on the associated work. If the property is empty,
-    # generates derivatives (mp3 for audio) and sends them to an s3 bucket. If
-    # the 'premade_derivatives' field is not empty, then moves the associated derivative to the
-    # correct bucket with a new name.
+    # Creates a single mp3 derivative of the base file.
     #
-    # Derivatives are either generated locally and then posted to the s3 bucet defined by
-    # the AWS_AUDIO_VISUAL_BUCKET environment variable, or they exist already and are moved from
-    # the AWS_BULKRAX_IMPORTS_BUCKET to the AWS_AUDIO_VISUAL_BUCKET. Local copies are deleted afterwards.
+    # This generates the file locally and then uploads to an S3 bucket defined by the
+    # AWS_IIIF_ASSET_BUCKET environment variable. The local copy is deleted afterwards.
     #
-    # These derivatives are created for an FileSets that include Audio or Video mime_types.
-    #
-    # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
-    class AudioDerivativeService < AudioVisualBaseDerivativeService
-      # Checks for premade derivatives, calls for derivative generation if none exist.
-      #
-      # @param [String,Pathname] filename, the src path of the file
+    # These derivatives are created for an FileSets that include Audio mime_types.
+    class AudioDerivativeService < BaseDerivativeService
+      # Deletes the derivative from the S3 bucket using the Valkyrie storage adapter
+      # @todo maybe we should hang onto these when we delete + put them in a glacier grave?
       # @return [void]
+      def cleanup_derivatives
+        super
+
+        storage_adapter.delete(id: File.basename(shuttle_file))
+      end
+
+      # Generates an mp3 (basic hydra derivatives)
+      # and uploads it to the S3 bucket via Valkyrie StorageAdapter.
+      #
+      # @param [String,Pathname] filename the src path of the file
+      # @return [void]
+      # @todo do we delete the working copy or just let it hang in tmp/uploads?
       def create_derivatives(filename)
-        return if check_premade_derivatives(filename)
+        super
 
-        create_derivative_files(filename)
-        upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
-        derivative_paths.each do |path|
-          FileUtils.rm_f(path) if File.exist?(path)
-        end
+        create_and_upload_access_copy(filename)
       end
 
-      # Check to see if any premade derivatives exist, process them if so.
-      #
-      # @return [Boolean]
-      def check_premade_derivatives(filename)
-        prefix = premade_derivative_key_with_suffix(filename, suffix: '_derivative')
-        object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
-
-        return false if object_list.nil?
-
-        premade_derivatives = object_list.map { |object| object[:key] }
-        premade_derivatives.each_with_index do |derivative, index|
-          rename_premade_derivative(derivative, index)
-        end
-        true
-      end
-
-      # Check to see if any premade derivatives exist, process them if so.
-      #
-      # @param [String] derivative, the s3 key of a premade derivative
-      # @param [Integer] index, index of premade derivative in array
-      # @return [void]
-      def rename_premade_derivative(derivative, index)
-        file_path = Rails.root.join('tmp', 'premade_derivatives', derivative).to_s
-        destination = File.dirname(file_path)
-        FileUtils.mkdir_p(destination) unless Dir.exist?(destination)
-
-        s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
-        # add any other checks to the file here
-        key = format('%s-%d-access.mp3', file_set.id, index)
-        FileUtils.rm_f(file_path) if File.exist?(file_path)
-        transfer_s3_derivative(derivative, key)
-      end
-
-      # paths for generated derivatives
-      def derivative_paths
-        [Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access.mp3').to_s.gsub(/\.access\.mp3$/, '')]
-      end
-
-      # only run service if bucket is defined and file includes audio mime types
+      # Only create derivatives if the source mime_type is an audio file and if we defined the bucket.
       def valid?
         return no_bucket_warning if s3_bucket.blank?
 
@@ -75,18 +38,55 @@ module Spot
 
       private
 
-      # Uses Hydra to create one mp3 derivative of the original file.
-      #
-      # @param [String,Pathname] filename, the src path of the file
-      # @return [void]
-      def create_derivative_files(filename)
-        Hydra::Derivatives::AudioDerivatives.create(filename,
-                                                    outputs: [{ label: 'mp3', format: 'mp3', url: derivative_urls[0] }])
+      # Create an mp3 derivative from the pathname provided
+      # and upload it to our AV S3 bucket with the name `<file_set.id>-access.mp3`.
+      # The intermediary file is deleted after upload.
+      def create_and_upload_access_copy(filename)
+        return no_bucket_warning if s3_bucket.blank?
+
+        create_access_copy_from(filename)
+        upload_derivatives_to_s3 && delete_shuttle_file!
       end
 
-      # Keys for generated derivatives.
-      def s3_derivative_keys
-        [format('%s-0-access.mp3', file_set.id)]
+      def create_access_copy_from(src)
+        Hydra::Derivatives::AudioDerivatives.create(src,
+                                                    outputs: [{ label: 'mp3', format: 'mp3', url: URI("file://#{shuttle_file}").to_s }])
+      end
+
+      def delete_shuttle_file!
+        FileUtils.rm_f(shuttle_file) if File.exist?(shuttle_file)
+      end
+
+      def no_bucket_warning
+        Rails.logger.warn('Skipping derivative generation because the AWS_AV_ASSET_BUCKET environment variable is not defined.')
+        false
+      end
+
+      def s3_bucket
+        ENV['AWS_AV_ASSET_BUCKET']
+      end
+
+      def shuttle_file
+        working_directory.join("#{file_set.id}-access.mp3")
+      end
+
+      def storage_adapter
+        Valkyrie::StorageAdapter.find(:av_source_s3)
+      end
+
+      def upload_derivatives_to_s3
+        storage_adapter.upload(
+          resource: file_set,
+          file: File.open(shuttle_file),
+          original_filename: File.basename(shuttle_file),
+          metadata: {}
+        )
+      end
+
+      def working_directory
+        @working_directory ||= Rails.root.join('tmp', 'audio-src').tap do |src|
+          FileUtils.mkdir_p(src) unless Dir.exist?(src)
+        end
       end
     end
   end
