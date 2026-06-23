@@ -78,8 +78,7 @@ module Spot
         storage_adapter.upload(
           resource: file_set,
           file: File.open(shuttle_file),
-          original_filename: File.basename(shuttle_file),
-          metadata: {}
+          original_filename: File.basename(shuttle_file)
         )
       end
 
