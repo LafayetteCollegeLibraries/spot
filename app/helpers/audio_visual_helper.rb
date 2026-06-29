@@ -53,9 +53,26 @@ module AudioVisualHelper
     File.basename(derivative, '.*').split('-').last
   end
 
-  # @return the network path to the thumbnail
+  # @return the network path to the transcript
   # @param [FileSet] file_set of the video
   def transcript_path(file_set)
     Hyrax::Engine.routes.url_helpers.download_path(id: file_set.id, file: 'transcript')
+  end
+
+  def deriv_for_fileset(file_set)
+    stream = Valkyrie::StorageAdapter.find(:av_source_s3).find_by(id: shrine_id_for_fileset(file_set))
+    stream_file_uri(stream)
+  end
+
+  def shrine_id_for_fileset(file_set)
+    # id=file_set.id.to_s
+    # id+= "-access.mp3"
+    "0957c3e3-9f94-4ecb-8a45-2057cc897c50-access.mp3"
+  end
+
+  def stream_file_uri(stream_file)
+    disk = stream_file.disk_path.to_s
+    uri = URI.join(request.base_url, disk)
+    uri.to_s
   end
 end
