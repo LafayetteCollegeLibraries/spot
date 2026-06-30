@@ -29,6 +29,11 @@
   max-width: 250px;
 }
 
+.thumbnail.file-set.image {
+  width: 100%;
+  height: auto;
+}
+
 // bootstrap is very specific in targeting table cells,
 // so we also need to be that specific to override
 .metadata-table > tbody > tr {
@@ -50,6 +55,11 @@
 .attribute-identifier-with-label {
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
+}
+
+// styling badges to default to the right on activity-log
+.activity-log {
+  float: right;
 }
 
 ///
