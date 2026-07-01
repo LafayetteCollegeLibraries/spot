@@ -22,6 +22,7 @@ on:
           - Both
           - Stage
           - Production
+          - Future
       skip_tests:
         description: Build containers without tests
         required: true
@@ -84,6 +85,9 @@ jobs:
             ;;
           "Production")
             output_txt='environments=["production"]'
+            ;;
+          "Future")
+            output_txt='environments=["future"]'
             ;;
         esac
 

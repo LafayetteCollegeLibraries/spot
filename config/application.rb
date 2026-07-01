@@ -45,7 +45,7 @@ module Spot
     config.lograge.enabled = ENV.fetch('SPOT_ENABLE_LOGRAGE') { false }
 
     config.rack_cas.server_url = ENV['CAS_BASE_URL']
-    config.rack_cas.service = '/users/service'
+    config.rack_cas.service = ENV['URL_HOST'].present? ? "#{ENV['URL_HOST']}/users/service" : '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
 
     # Settings in config/environments/* take precedence over those specified here.

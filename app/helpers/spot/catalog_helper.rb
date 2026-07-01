@@ -5,9 +5,14 @@ module Spot
     # Falls back to the original value.
     #
     # @return [String]
+    # @todo since we're also utilizing this code in the Spot::HumanizesDateFields mixin
+    #       for presenters, it might be good to deduplicate.
     def humanize_edtf_values(args)
       Array.wrap(args[:value]).map do |value|
-        Date.edtf(value).humanize
+        Date.edtf(value)
+            .humanize
+            .gsub(/0{0,3}(\d+)/, '\1') # remove leading zeroes
+            .gsub(/-(\d{1,4}[\?\~\%]?)/, '\1 BCE') # convert negative dates to BCE
       rescue
         value
       end.to_sentence
