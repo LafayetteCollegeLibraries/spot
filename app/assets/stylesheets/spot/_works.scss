@@ -34,6 +34,12 @@
   height: auto;
 }
 
+.thumbnail.collection-thumb img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain
+}
+
 // bootstrap is very specific in targeting table cells,
 // so we also need to be that specific to override
 .metadata-table > tbody > tr {
