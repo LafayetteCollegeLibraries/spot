@@ -15,6 +15,12 @@ RSpec.describe Spot::CatalogHelper, type: :helper do
 
       it { is_expected.to eq 'unparseable' }
     end
+
+    context 'when a date is negative' do
+      let(:value) { ['-0023'] }
+
+      it { is_expected.to eq '23 BCE' }
+    end
   end
 
   describe 'visibility helpers' do
