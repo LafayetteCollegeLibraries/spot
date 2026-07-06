@@ -4,8 +4,9 @@
 
 <div class="row work-type">
   <%= render 'metadata_and_viewer_panel', presenter: @presenter %>
-  <%= render 'relationships', presenter: @presenter, polymorphic_url: method(:polymorphic_url) %>
 </div>
+
+<%= render 'relationships', presenter: @presenter, polymorphic_url: method(:polymorphic_url) %>
 
 <script>
   // need to initialize the popovers in the metadata
