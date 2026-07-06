@@ -26,13 +26,7 @@ Rails.application.config.after_initialize do
   Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
   Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
 
-
-  # The :solr_index adapter is set up in a Hyrax initializer, so we just need to ensure
-  # that Hyrax and Valkyrie are configured to use it
-  #
-  # @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/config/initializers/indexing_adapter_initializer.rb
-  Hyrax.config.query_index_from_valkyrie = true
-  Hyrax.config.index_adapter = :solr_index
+  next if Hyrax.query_service.try(:services).nil?
 
   # load all the sql based custom queries
   [

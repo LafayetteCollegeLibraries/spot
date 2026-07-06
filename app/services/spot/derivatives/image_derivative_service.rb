@@ -37,7 +37,7 @@ module Spot
       def valid?
         return no_bucket_warning if s3_bucket.blank?
 
-        image_mime_types.include?(mime_type)
+        Hyrax.config.use_valkyrie? && image_mime_types.include?(mime_type)
       end
 
       private

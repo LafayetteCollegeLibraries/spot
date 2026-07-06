@@ -46,6 +46,7 @@ module Spot
       # Check mime types, overwritten by children
       def valid?
         return no_bucket_warning if s3_bucket.blank?
+        return false if Hyrax.config.use_valkyrie?
 
         audio_mime_types.include?(mime_type) || video_mime_types.include?(mime_type)
       end

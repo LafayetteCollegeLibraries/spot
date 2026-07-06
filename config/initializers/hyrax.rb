@@ -11,13 +11,18 @@ Hyrax.config do |config|
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
 
-  # config.admin_set_model = '::AdminSet'
-  # config.collection_model = '::Collection'
-  # config.file_set_model = '::FileSet'
-  config.admin_set_model = 'AdminSetResource'
-  config.collection_model = 'CollectionResource'
-  config.file_set_model = 'Hyrax::FileSet'
+  if Hyrax.config.use_valkyrie?
+    config.admin_set_model = 'AdminSetResource'
+    config.collection_model = 'CollectionResource'
+    config.file_set_model = 'Hyrax::FileSet'
+    config.index_adapter = :solr_index
+  else
+    config.admin_set_model = '::AdminSet'
+    config.collection_model = '::Collection'
+    config.file_set_model = '::FileSet'
+  end
 
+  config.query_index_from_valkyrie = Hyrax.config.use_valkyrie?
   config.solr_default_method = :post
 
   # Use our own FileSetDerivativesService first and fall back to the Hyrax services
@@ -25,6 +30,7 @@ Hyrax.config do |config|
   config.derivative_services = [
     Spot::Derivatives::ImageDerivativeService,
     Spot::Derivatives::BaseDerivativeService,
+    Spot::Derivatives::FileSetDerivativesService,
     Hyrax::FileSetDerivativesService
   ]
 

@@ -69,7 +69,7 @@ module Spot
       end
 
       def valid?
-        [*pdf_mime_types, *office_document_mime_types].include?(mime_type)
+        Hyrax.config.use_valkyrie? && [*pdf_mime_types, *office_document_mime_types].include?(mime_type)
       end
 
       private

@@ -31,7 +31,9 @@ module Spot
       #
       # @return [true, false]
       def valid?
-        pdf_mime_types.include? mime_type
+        return false if Hyrax.config.use_valkyrie?
+
+        pdf_mime_types.include?(mime_type)
       end
     end
   end
