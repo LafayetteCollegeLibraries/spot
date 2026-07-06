@@ -59,6 +59,8 @@ module Spot
 
       # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
       def valid?
+        return false unless Hyrax.config.use_valkyrie?
+
         if s3_bucket.blank?
           Rails.logger.warn('Skipping IIIF Access Copy generation because the AWS_IIIF_ASSET_BUCKET environment variable is not defined.')
           return false

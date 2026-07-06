@@ -140,6 +140,13 @@ gem 'twitter-typeahead-rails', '~> 0.11.1'
 # use valkyrie-shrine to connect s3 storage to valkyrie
 gem 'valkyrie-shrine', '~> 1.1'
 
+# Pinned sub-dependencies
+#
+# hydra-derivatives 4.1.0 introduced a `require 'ruby-vips'` call
+# that in turn requires VIPS to be installed even when we're not
+# intending to use it (we're sticking with ImageMagick for the time being)
+gem 'hydra-derivatives', '4.0.0'
+
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
 #
