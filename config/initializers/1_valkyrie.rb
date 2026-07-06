@@ -2,6 +2,8 @@
 #
 # Configuration for Valkyrie
 Rails.application.config.after_initialize do
+  next unless Hyrax.config.use_valkyrie?
+
   # We're using the "Freyja" metadata adapter, included with Hyrax, as a way to migrate off of our
   # Fedora 4 instance and onto PostgreSQL (assets stored in S3): Freyja writes to Postgres and tries
   # reading from Fedora before falling over to Postgres. This requires Hyrax's "Wings" adapter
@@ -36,8 +38,7 @@ Rails.application.config.after_initialize do
   # we'll want to utilize the `identifier_prefix` to store the intended bucket as part of the file's remote uri.
   #
   # @example prefixed remote uri
-  #
-  #
+  #   iiif-shrine://<file_identifier>  #
   #
   # @note We need to use a custom PathGenerator for the valkyrie-shrine adapter, as the default one
   #       appends a uuid to the path to prevent overwrites, but as these are access derivatives, we're not
