@@ -26,9 +26,9 @@ module Spot
     # @return [ActiveFedora::File, nil]
     # :nocov:
     def load_file
-      return super unless params[:file] == 'transcript'
-      pcdm_file = dereference_file(params[:file]).find_target
-      ActiveFedora::File.find(pcdm_file.id) if pcdm_file&.id
+      return super unless params[:file] == 'derivative'
+      stream = Valkyrie::StorageAdapter.find(:av_source_s3).find_by(id: "8964ddd2-8b10-4b1e-b7a1-40683f810d95-access.mp3")
+      stream.disk_path
     end
     # :nocov:
   end

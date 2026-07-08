@@ -1,6 +1,6 @@
 <div>
     <audio id="audio" preload="none" controls="controls" style="width:100%" controlsList="nodownload" >
-        <source src="<%= deriv_for_fileset(file_set) %>" type="audio/mp3" data-track-number="1" />   
+        <source src="<%=  hyrax.download_path(file_set, file: 'derivative', mime_type: 'audio/mpeg')  %>" type="audio/mp3" data-track-number="1" />   
         <%= t('hyrax.file_set.show.downloadable_content.audio_tag_not_supported') %>
     </audio>
 </div>
