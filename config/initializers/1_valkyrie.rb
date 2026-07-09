@@ -28,8 +28,7 @@ Rails.application.config.after_initialize do
 
   Shrine.storages = {
     s3_object_store: Valkyrie::Shrine::Storage::S3.new(bucket: ENV.fetch('AWS_OBJECT_STORE_BUCKET') { 'ldr-object-store' }, **aws_opts),
-    s3_iiif: Valkyrie::Shrine::Storage::S3.new(bucket: ENV.fetch('AWS_IIIF_ASSET_BUCKET') { 'iiif-derivatives' }, **aws_opts),
-    s3_av: Valkyrie::Shrine::Storage::S3.new(bucket: ENV.fetch('AWS_AV_ASSET_BUCKET') { 'av-derivatives' }, **aws_opts)
+    s3_iiif: Valkyrie::Shrine::Storage::S3.new(bucket: ENV.fetch('AWS_IIIF_ASSET_BUCKET') { 'iiif-derivatives' }, **aws_opts)
   }
 
   # As we're using multiple buckets for different purposes (IIIF derivatives vs AV derivatives vs Object Store)
@@ -47,11 +46,6 @@ Rails.application.config.after_initialize do
   Valkyrie::StorageAdapter.register(
     Valkyrie::Storage::Shrine.new(Shrine.storages[:s3_iiif], nil, Spot::S3Path::IiifPathGenerator, identifier_prefix: 'iiif'),
     :iiif_source_s3
-  )
-
-  Valkyrie::StorageAdapter.register(
-    Valkyrie::Storage::Shrine.new(Shrine.storages[:s3_av], nil, Spot::S3Path::AvPathGenerator, identifier_prefix: 'av'),
-    :av_source_s3
   )
 
   if ENV['AWS_OBJECT_STORE_BUCKET'].present?
