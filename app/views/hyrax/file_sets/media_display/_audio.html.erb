@@ -1,7 +1,7 @@
 <div>
     <audio id="audio" preload="none" controls="controls" style="width:100%" controlsList="nodownload" >
-        <% get_derivative_list(@presenter.member_presenters).each_with_index do |derivative, index| %>
-            <source src="<%= s3_url(derivative) %>" type="audio/mp3" data-track-number="<%= index %>" />
+        <% @presenter.member_presenters.each_with_index do |file_set_member, index| %>
+            <source src="<%= hyrax.download_path(file_set_member, file: 'mp3', mime_type: 'audio/mpeg') %>" type="audio/mpeg" />
         <% end %>    
         <%= t('hyrax.file_set.show.downloadable_content.audio_tag_not_supported') %>
     </audio>
@@ -12,13 +12,13 @@
         </div>
         <table class="table table-bordered metadata-table">
             <tbody>
-            <% get_derivative_list(@presenter.member_presenters).each_with_index do |derivative, index| %>
+            <% @presenter.member_presenters.each_with_index do |file_set_member, index| %>
                 <tr class = "play-list-row" data-track-row="<%= index %>">
                     <th>Track <%= index+1 %></th>
                     <% if index == 0 %>
-                        <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= get_original_name(@presenter.member_presenters, derivative) %></a></td>
+                        <td class="track-title active-track"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.original_filenames[index-1] %></a></td>
                     <% else %>
-                        <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= get_original_name(@presenter.member_presenters, derivative) %></a></td>
+                        <td class="track-title"><a class="playlist-track" href="#" data-play-track="<%= index %>"><%= @presenter.original_filenames[index-1] %></a></td>
                     <% end %>
                 </tr>
             <% end %>
