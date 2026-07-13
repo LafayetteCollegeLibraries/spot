@@ -10,9 +10,9 @@ module Hyrax
         # the current repository. This change should be able to be undone once we're Valkyrized.
         #
         # See @https://github.com/samvera/hyrax/blob/main/app/models/concerns/hyrax/file_set/derivatives.rb
-        Hydra::Derivatives.source_file_service = Hyrax::LocalFileService
+        Hydra::Derivatives.source_file_service = Hyrax.config.use_valkyrie? ? Hyrax::ValkyriePersistDerivatives : Hyrax::LocalFileService
         Hydra::Derivatives.output_file_service = Hyrax::PersistDerivatives
-        Hydra::Derivatives::FullTextExtract.output_file_service = Hyrax::PersistDirectlyContainedOutputFileService
+        Hydra::Derivatives::FullTextExtract.output_file_service = Hyrax.config.use_valkyrie? ? Hyrax::ValkyriePersistDerivatives : Hyrax::PersistDirectlyContainedOutputFileService
         before_destroy :cleanup_derivatives
         # This completely overrides the version in Hydra::Works so that we
         # read and write to a local file. It's important that characterization runs
