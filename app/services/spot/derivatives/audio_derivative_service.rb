@@ -13,26 +13,57 @@ module Spot
     # These derivatives are created for an FileSets that include Audio or Video mime_types.
     #
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
-    class AudioDerivativeService < BaseDerivativeService
+    class AudioDerivativeService < AudioVisualBaseDerivativeService
       # Checks for premade derivatives, calls for derivative generation if none exist.
       #
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        create_derivative_files(filename)
-      end
+        return if check_premade_derivatives(filename)
 
-      def cleanup_derivatives
-        derivative_path_factory.derivatives_for_reference(file_set).each do |path|
-          FileUtils.rm_f(path)
+        create_derivative_files(filename)
+        upload_derivatives_to_s3(s3_derivative_keys, derivative_paths)
+        derivative_paths.each do |path|
+          FileUtils.rm_f(path) if File.exist?(path)
         end
       end
 
-      # The destination_name parameter has to match up with the file parameter
-      # passed to the DownloadsController
-      def derivative_url(destination_name)
-        path = derivative_path_factory.derivative_path_for_reference(derivative_url_target, destination_name)
-        URI("file://#{path}").to_s
+      # Check to see if any premade derivatives exist, process them if so.
+      #
+      # @return [Boolean]
+      def check_premade_derivatives(filename)
+        prefix = premade_derivative_key_with_suffix(filename, suffix: '_derivative')
+        object_list = s3_client.list_objects(bucket: s3_source, prefix: prefix).to_h[:contents]
+
+        return false if object_list.nil?
+
+        premade_derivatives = object_list.map { |object| object[:key] }
+        premade_derivatives.each_with_index do |derivative, index|
+          rename_premade_derivative(derivative, index)
+        end
+        true
+      end
+
+      # Check to see if any premade derivatives exist, process them if so.
+      #
+      # @param [String] derivative, the s3 key of a premade derivative
+      # @param [Integer] index, index of premade derivative in array
+      # @return [void]
+      def rename_premade_derivative(derivative, index)
+        file_path = Rails.root.join('tmp', 'premade_derivatives', derivative).to_s
+        destination = File.dirname(file_path)
+        FileUtils.mkdir_p(destination) unless Dir.exist?(destination)
+
+        s3_client.get_object(key: derivative, bucket: s3_source, response_target: file_path)
+        # add any other checks to the file here
+        key = format('%s-%d-access.mp3', file_set.id, index)
+        FileUtils.rm_f(file_path) if File.exist?(file_path)
+        transfer_s3_derivative(derivative, key)
+      end
+
+      # paths for generated derivatives
+      def derivative_paths
+        [Hyrax::DerivativePath.derivative_path_for_reference(file_set, 'access.mp3').to_s.gsub(/\.access\.mp3$/, '')]
       end
 
       # only run service if bucket is defined and file includes audio mime types
@@ -40,7 +71,7 @@ module Spot
         return false if Hyrax.config.use_valkyrie?
         return no_bucket_warning if s3_bucket.blank?
 
-        audio_mime_types.include?(mime_type)
+        audio_mime_types.include?(mime_type) && !Hyrax.config.use_valkyrie?
       end
 
       private
@@ -51,21 +82,12 @@ module Spot
       # @return [void]
       def create_derivative_files(filename)
         Hydra::Derivatives::AudioDerivatives.create(filename,
-                                                    outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url('mp3') }])
+                                                    outputs: [{ label: 'mp3', format: 'mp3', url: derivative_urls[0] }])
       end
 
-      # If given a FileMetadata object pass the file_set_id for derivative URL
-      # creation.
-      def derivative_url_target
-        if file_set.try(:file_set_id)
-          file_set.file_set_id.to_s
-        else
-          file_set
-        end
-      end
-
-      def derivative_path_factory
-        Hyrax::DerivativePath
+      # Keys for generated derivatives.
+      def s3_derivative_keys
+        [format('%s-0-access.mp3', file_set.id)]
       end
     end
   end
