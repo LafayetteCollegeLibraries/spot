@@ -29,8 +29,9 @@ Hyrax.config do |config|
   # for formats we don't currently handle uniquely.
   config.derivative_services = [
     Spot::Derivatives::ImageDerivativeService,
+    Spot::Derivatives::AudioValkyrieDerivativeService,
     Spot::Derivatives::BaseDerivativeService,
-    Spot::Derivatives::FileSetDerivativesService,
+    Spot::FileSetDerivativesService,
     Hyrax::FileSetDerivativesService
   ]
 
