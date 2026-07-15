@@ -5,10 +5,8 @@
 
 <div class="viewer-wrapper">
     <video id="video" controls class="video-js vjs-default-skin vjs-fill" style="width:100%;height:100%" preload="auto">
-        <% file_set.stored_derivatives.each do |derivative| %>
-            <source src="<%= s3_url(derivative) %>" type="video/mp4" label="<%= get_derivative_res(derivative) %>" />
-        <% end %>
-        <track label="CC" kind="subtitles" srclang="en" src="<%= transcript_path(file_set) %>" default />
+        <source src="<%= hyrax.download_path(file_set, file: 'webm', mime_type: 'video/webm') %>" type="video/webm" label="480" />
+        <source src="<%= hyrax.download_path(file_set, file: 'mp4', mime_type: 'video/mp4') %>" type="video/mp4" label="1080" />
         <%= t('hyrax.file_set.show.downloadable_content.video_tag_not_supported') %>
     </video>
 
