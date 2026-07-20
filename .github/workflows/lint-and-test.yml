@@ -10,7 +10,7 @@ jobs:
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
@@ -81,7 +81,7 @@ jobs:
       URL_HOST: http://localhost:3000
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Copy Solr config to mount
         run: |
           mkdir -p /tmp/solr/data/spot-test/data
