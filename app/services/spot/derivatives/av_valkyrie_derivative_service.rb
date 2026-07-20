@@ -65,6 +65,7 @@ module Spot
                                                                 format: 'webm', 
                                                                 url: derivative_url('webm'),
                                                                 size: get_derivative_resolution(filename, 480),
+                                                                mime_type: 'video/webm',
                                                                 input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 2500k",
                                                                 audio: "-b:a 256k -ar 44100" },
@@ -72,6 +73,7 @@ module Spot
                                                                 format: 'mp4', 
                                                                 url: derivative_url('mp4'),
                                                                 size: get_derivative_resolution(filename, 1080),
+                                                                mime_type: 'video/mp4',
                                                                 input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 8000k",
                                                                 audio: "-b:a 256k -ar 44100" }])

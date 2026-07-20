@@ -5,7 +5,7 @@
 
 <div class="viewer-wrapper">
     <video id="video" controls class="video-js vjs-default-skin vjs-fill" style="width:100%;height:100%" preload="auto">
-        <source src="<%= hyrax.download_path(file_set, file: 'webm', mime_type: 'video/webm') %>" type="video/webm" label="480" />
+        <source src="<%= hyrax.download_path(file_set, file: 'webm', mime_type: 'video/webm') %>" type="video/webm" label="480" selected="true" />
         <source src="<%= hyrax.download_path(file_set, file: 'mp4', mime_type: 'video/mp4') %>" type="video/mp4" label="1080" />
         <%= t('hyrax.file_set.show.downloadable_content.video_tag_not_supported') %>
     </video>
@@ -16,7 +16,7 @@
         define.amd = null;
     </script>
     <script src="https://vjs.zencdn.net/8.10.0/video.js" defer></script>
-    <script src="https://unpkg.com/@silvermine/videojs-quality-selector/dist/js/silvermine-videojs-quality-selector.min.js" defer></script>
+    <script src="https://unpkg.com/@silvermine/videojs-quality-selector/dist/js/silvermine-videojs-quality-selector.js" defer></script>
     <script>
         document.addEventListener('turbolinks:load', function (_event) {
             videojs('video', {}, function () {
