@@ -48,7 +48,7 @@ module Spot
     config.hosts << hostname if hostname.present?
 
     # add internal IP range so things can communicate in the AWS VPC
-    config.hosts << IPAddr.new('10.0.0.0/16') if Rails.env.production?
+    config.hosts << IPAddr.new('10.0.0.0/24') if Rails.env.production?
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
