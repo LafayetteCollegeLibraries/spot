@@ -2,7 +2,7 @@
 #
 # Configuration for Valkyrie
 Rails.application.config.after_initialize do
-  next unless Hyrax.config.use_valkyrie?
+  # next unless Hyrax.config.use_valkyrie?
 
   # We're using the "Freyja" metadata adapter, included with Hyrax, as a way to migrate off of our
   # Fedora 4 instance and onto PostgreSQL (assets stored in S3): Freyja writes to Postgres and tries

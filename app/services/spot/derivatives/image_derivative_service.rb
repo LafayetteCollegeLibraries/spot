@@ -12,13 +12,17 @@ module Spot
     #
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
     class ImageDerivativeService < BaseDerivativeService
+      class_attribute :service_file_use, default: Hyrax::FileMetadata::Use::SERVICE_FILE
+
       # Deletes the derivative from the S3 bucket using the Valkyrie storage adapter
       # @todo maybe we should hang onto these when we delete + put them in a glacier grave?
       # @return [void]
       def cleanup_derivatives
         super
 
-        storage_adapter.delete(id: File.basename(shuttle_file))
+        find_service_files_from_file_set.each do |file|
+          storage_adapter.delete(id: file.id)
+        end
       end
 
       # Generates a pyramidal TIFF using ImageMagick (via MiniMagick gem)
@@ -30,10 +34,10 @@ module Spot
       def create_derivatives(filename)
         super
 
-        create_and_upload_iiif_access_copy(filename)
+        create_and_attach_iiif_access_copy(filename)
       end
 
-      # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined
+      # Only create pyramidal TIFFs if the source mime_type is an Image and if we defined the bucket
       def valid?
         return no_bucket_warning if s3_bucket.blank?
 
@@ -42,14 +46,31 @@ module Spot
 
       private
 
+      # Use Hyrax::ValkyrieUpload service (see #upload_service) to move the shuttle
+      # file to S3, create a FileMetadata object for the file, and attach the
+      # object to the file_set as a Hyrax::FileMetadata::Use::SERVICE_FILE.
+      #
+      # @return Hyrax::FileMetadata
+      def attach_service_file_to_file_set
+        upload_service.upload(
+          filename: File.basename(shuttle_filename),
+          file_set: file_set,
+          mime_type: 'image/tiff',
+          io: File.open(shuttle_filename),
+          skip_derivatives: true,
+          use: service_file_use,
+          user: deposit_user
+        )
+      end
+
       # Create a pyramidal tiff derivative from the pathname provided
       # and upload it to our IIIF S3 bucket with the name `<file_set.id>-access.tif`.
       # The intermediary file is deleted after upload.
-      def create_and_upload_iiif_access_copy(filename)
+      def create_and_attach_iiif_access_copy(filename)
         return no_bucket_warning if s3_bucket.blank?
 
         create_access_copy_from(filename)
-        upload_derivatives_to_s3 && delete_shuttle_file!
+        attach_service_file_to_file_set && delete_shuttle_file!
       end
 
       def create_access_copy_from(src)
@@ -59,14 +80,25 @@ module Spot
               "#{src}[0]",
               "-define", "tiff:tile-geometry=128x128",
               "-compress", "jpeg",
-              "ptif:#{shuttle_file}"
+              "ptif:#{shuttle_filename}"
             ]
           )
         end
       end
 
       def delete_shuttle_file!
-        FileUtils.rm_f(shuttle_file) if File.exist?(shuttle_file)
+        FileUtils.rm_f(shuttle_filename) if File.exist?(shuttle_filename)
+      end
+
+      def deposit_user
+        User.find_or_create_system_user(Hyrax.config.system_user_key)
+      end
+
+      def find_service_file_from_file_set
+        Hyrax.query_service
+             .custom_queries
+             .find_many_file_metadata_from_ids(ids: file_set.file_ids)
+             .select { |file| file.pcdm_use.include?(service_file_use) }
       end
 
       def no_bucket_warning
@@ -78,24 +110,16 @@ module Spot
         ENV['AWS_IIIF_ASSET_BUCKET']
       end
 
-      def shuttle_file
+      def shuttle_filename
         working_directory.join("#{file_set.id}-access.tif")
       end
 
-      def storage_adapter
+      def iiif_storage_adapter
         Valkyrie::StorageAdapter.find(:iiif_source_s3)
       end
 
-      def upload_derivatives_to_s3
-        storage_adapter.upload(
-          resource: file_set,
-          file: File.open(shuttle_file),
-          original_filename: File.basename(shuttle_file),
-          metadata: {
-            'width' => file_set.width.first,
-            'height' => file_set.height.first
-          }
-        )
+      def upload_service
+        Hyrax::ValkyrieUpload.new(storage_adapter: iiif_storage_adapter)
       end
 
       def working_directory
