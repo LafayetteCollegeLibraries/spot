@@ -17,7 +17,7 @@ $featured-info-text-color: $white;
   background-color: $featured-info-bg-color;
   bottom: 0;
   color: $featured-info-text-color;
-  margin: 4rem;
+  margin: 3rem;
   padding: 1rem;
   position: absolute;
   right: 0;
@@ -33,7 +33,7 @@ $featured-info-text-color: $white;
 
 .featured-collection {
   background-size: cover;
-  min-height: 26rem;
+  min-height: 18rem;
   margin: 1rem 0;
   padding-top: 7rem;
   position: relative;
@@ -43,7 +43,7 @@ $featured-info-text-color: $white;
     bottom: 0;
     color: $featured-info-text-color;
     display: block;
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     left: 0;
     margin-top: 0;
     padding: 1rem;
@@ -52,7 +52,7 @@ $featured-info-text-color: $white;
   }
 
   .collection-title {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: normal;
     margin: 0.5rem 0;
   }
