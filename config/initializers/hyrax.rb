@@ -190,7 +190,7 @@ Hyrax.config do |config|
   # This user is logged as the acting user for jobs and other processes that
   # run without being attributed to a specific user (e.g. creation of the
   # default admin set).
-  # config.system_user_key = 'systemuser@example.com'
+  config.system_user_key = 'repository@lafayette.edu'
 
   # The user who runs batch jobs. Update this if you aren't using emails
   config.batch_user_key = 'dss@lafayette.edu'

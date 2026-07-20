@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 module Spot
   module Derivatives
-    #
-    #
     # Hyrax derivative service options are set in Hyrax.config.derivative_services and
     # determined by the first to return true to #valid? Hyrax provides a catch-all
     # Hyrax::FileSetDerivativesService that I recommend including at the end of the
@@ -51,12 +49,11 @@ module Spot
     # @see https://github.com/samvera/hyrax/blob/hyrax-v4.0.0/app/services/hyrax/file_set_derivatives_service.rb
     class BaseDerivativeService
       delegate :audio_mime_types, :image_mime_types, :pdf_mime_types, :office_document_mime_types, :video_mime_types, to: :FileSet
-      delegate :mime_type, to: :file_set
+      delegate :mime_type, to: :file_metadata
+      attr_reader :file_metadata
 
-      attr_reader :file_set
-
-      def initialize(file_set)
-        @file_set = file_set
+      def initialize(file_metadata)
+        @file_metadata = file_metadata
       end
 
       def cleanup_derivatives
@@ -66,6 +63,10 @@ module Spot
       def create_derivatives(src_path)
         create_thumbnail_from(src_path)
         extract_and_save_full_text(src_path) if full_text_eligible_types.include?(mime_type)
+      end
+
+      def file_set
+        @file_set ||= Hyrax.query_service.find_by(id: file_metadata.file_set_id)
       end
 
       def valid?
