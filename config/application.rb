@@ -36,7 +36,7 @@ module Spot
 
     # Enables `lograge` gem which makes Rails logs more manageable (read: easier to work with using AWS tooling).
     #
-    # @note if RAILS_LOG_LEVEL is set to anything higher than :debug, lograte will not have log
+    # @note if RAILS_LOG_LEVEL is set to anything higher than :debug, lograge will not have log
     #       entries to process, effectively making it useless.
     # @see https://github.com/roidrage/lograge/
     config.lograge.enabled = ENV.fetch('SPOT_ENABLE_LOGRAGE') { false }

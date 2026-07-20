@@ -104,20 +104,12 @@ module Spot
     private
 
     # file_ids look like "<file_set.id>/files/<file_id>(/<md5 digest of version_id>)".
-    # When we were on ActiveFedora, we used the file_set.id portion to determine the
-    # filename in S3. When using Valkyrie's storage adapters, the practice is to use
-    # the FileMetadata id (nee: file_id) to name the object.
     #
     # @return [String]
     # @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/app/models/hyrax/file_set.rb#L76-L83
     # @see app/services/spot/s3_path.rb
     def asset_id
-      @asset_id ||=
-        if Hyrax.config.use_valkyrie?
-          CGI.unescape(file_id).split('/')[2]
-        else
-          CGI.unescape(file_id).split('/files/').first
-        end
+      @asset_id ||= CGI.unescape(file_id).split('/files/').first
     end
   end
 end
