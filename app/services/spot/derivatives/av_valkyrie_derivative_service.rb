@@ -61,16 +61,16 @@ module Spot
       # @return [void]
       def create_video_derivative_files(filename)
         Hydra::Derivatives::AudioDerivatives.create(filename,
-                                                    outputs: [{ label: 'webm', 
-                                                                format: 'webm', 
+                                                    outputs: [{ label: 'webm',
+                                                                format: 'webm',
                                                                 url: derivative_url('webm'),
                                                                 size: get_derivative_resolution(filename, 480),
                                                                 mime_type: 'video/webm',
                                                                 input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 2500k",
                                                                 audio: "-b:a 256k -ar 44100" },
-                                                              { label: 'mp4', 
-                                                                format: 'mp4', 
+                                                              { label: 'mp4',
+                                                                format: 'mp4',
                                                                 url: derivative_url('mp4'),
                                                                 size: get_derivative_resolution(filename, 1080),
                                                                 mime_type: 'video/mp4',
@@ -101,7 +101,7 @@ module Spot
         width = width - width % 16 + 16 if (width % 16).positive?
         format('%dx%d', width, height)
       end
-      
+
       # If given a FileMetadata object pass the file_set_id for derivative URL
       # creation.
       def derivative_url_target
