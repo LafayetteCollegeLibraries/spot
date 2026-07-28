@@ -28,7 +28,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        hyrax_valkyrie_enabled: [false]
+        hyrax_valkyrie_enabled: [true]
     services:
       database:
         image: postgres:13-alpine
