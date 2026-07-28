@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::ControlledVocabularies::Location do
+RSpec.describe Spot::ControlledVocabularies::GeonamesLocation do
   subject(:resource) { described_class.new(location_uri) }
 
   let(:location_id) { '4931353' }
