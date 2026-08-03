@@ -32,6 +32,7 @@ module Spot
       # but rather a glorified identifier
       singular_form_fields :title, :abstract, :description
 
+      self.model_class = Collection
       self.required_fields = [:title]
       self.terms = [
         :slug,
