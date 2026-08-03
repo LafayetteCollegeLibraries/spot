@@ -332,6 +332,8 @@ Hyrax.config do |config|
   ]
 
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
+
+  config.file_set_include_metadata = true
 end
 
 Rails.application.reloader.to_prepare do
