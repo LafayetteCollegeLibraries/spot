@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Forms::CollectionForm do
+RSpec.describe Spot::Forms::CollectionForm, :skip_if_valkyrie do
   subject(:form) { described_class.new(collection, Ability.new(user), nil) }
 
   let(:collection) { Collection.new }
