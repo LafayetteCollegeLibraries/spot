@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Derivatives::ThumbnailService, derivatives: true, :skip_if_valkyrie do
+RSpec.describe Spot::Derivatives::ThumbnailService, :skip_if_valkyrie, derivatives: true do
   subject(:service) { described_class.new(file_set) }
 
   let(:file_set) { FileSet.new }

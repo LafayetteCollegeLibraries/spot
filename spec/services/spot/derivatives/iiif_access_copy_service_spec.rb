@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Derivatives::IiifAccessCopyService, derivatives: true, :skip_if_valkyrie do
+RSpec.describe Spot::Derivatives::IiifAccessCopyService, :skip_if_valkyrie, derivatives: true do
   subject(:service) { described_class.new(file_set) }
 
   let(:_file_set) { build(:file_set) }
