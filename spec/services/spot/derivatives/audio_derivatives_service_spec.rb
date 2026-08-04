@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true do
+RSpec.describe Spot::Derivatives::AudioDerivativeService, derivatives: true, :skip_if_valkyrie do
   let(:service) { described_class.new(file_set) }
 
   let(:_file_set) { build(:file_set, id: '1234') }
