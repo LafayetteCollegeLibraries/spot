@@ -55,12 +55,12 @@ module Spot
 
       # @return [String]
       def generate_csv_content
-        Spot::WorkCSVService.new(solr_document).csv
+        Spot::WorkCsvService.new(solr_document).csv
       end
 
       # @return [RDF::Graph]
       def graph
-        @graph ||= Hyrax::GraphExporter.new(solr_document, request).fetch
+        @graph ||= Hyrax::GraphExporter.new(solr_document, hostname: request.host).fetch
       end
     end
   end

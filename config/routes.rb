@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   ##
 
   # user routes
-  devise_for :users
+  devise_for :users, sign_out_via: :get
 
   # need to call `root` before mounting our engines
   root 'spot/homepage#index'
@@ -46,7 +46,6 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
   mount Qa::Engine => '/authorities'
   mount Bulkrax::Engine, at: '/'
-  mount BrowseEverything::Engine => '/browse'
 
   concern :exportable, Blacklight::Routes::Exportable.new
   concern :oai_provider, BlacklightOaiProvider::Routes.new

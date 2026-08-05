@@ -7,7 +7,7 @@ RSpec.describe Collection do
   let(:params) { base_params }
   let(:base_params) { { title: ['ok'], collection_type_gid: collection_type_gid } }
   let(:collection_type) { Hyrax::CollectionType.find_or_create_by(title: 'a cool collection type') }
-  let(:collection_type_gid) { collection_type.gid }
+  let(:collection_type_gid) { collection_type.to_global_id }
 
   it_behaves_like 'a model with hyrax core metadata'
 

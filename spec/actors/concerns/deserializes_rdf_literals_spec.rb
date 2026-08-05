@@ -1,36 +1,37 @@
 # frozen_string_literal: true
 RSpec.describe DeserializesRdfLiterals do
   before do
-    class WorkType < ActiveFedora::Base
+    class TestWorkType < ActiveFedora::Base
       property :title, predicate: ::RDF::Vocab::DC.title, multiple: false
       property :description, predicate: ::RDF::Vocab::DC.description
     end
 
-    # need to define this to be able to access the `language_tagged_fields` array
-    class Hyrax::WorkTypeForm < Hyrax::Forms::WorkForm
-      include LanguageTaggedFormFields
-      transforms_language_tags_for :title, :description
+    class TestWorkTypeActor < Hyrax::Actors::AbstractActor
+      include DeserializesRdfLiterals
     end
 
-    class WorkTypeActor < Hyrax::Actors::AbstractActor
-      include DeserializesRdfLiterals
+    # This is all incredibly messy because the Actor mixin is relying on a class attribute
+    # for a form based on naming conventions, hence this silly unused Form class and exposing
+    # the test classes to the Object namespace (as opposed to `let(:work_type_class) { Class.new(ActiveFedora::Base) }`)
+    class Hyrax::TestWorkTypeForm < ::Spot::Forms::WorkForm
+      include LanguageTaggedFormFields
+      transforms_language_tags_for :title, :description
     end
   end
 
   after do
-    Object.send(:remove_const, :WorkType)
-    Object.send(:remove_const, :WorkTypeActor)
-    Hyrax.send(:remove_const, :WorkTypeForm)
+    Object.send(:remove_const, :TestWorkType)
+    Object.send(:remove_const, :TestWorkTypeActor)
+    Hyrax.send(:remove_const, :TestWorkTypeForm)
   end
 
-  let(:work) { WorkType.new }
-  let(:ability) { Ability.new(build(:user)) }
-  let(:env) { Hyrax::Actors::Environment.new(work, ability, attributes) }
-  let(:actor) { WorkTypeActor.new(Hyrax::Actors::Terminator.new) }
+  let(:work) { TestWorkType.new }
+  let(:ability) { Ability.new(create(:user)) }
+  let(:actor) { TestWorkTypeActor.new(Hyrax::Actors::Terminator.new) }
 
   # when the actor receives the form attributes, it should have already
   # been run through the serializer
-  let(:attributes) do
+  let(:string_attributes) do
     {
       title: '"Cool Beans"@en',
       description: ['"A work of importance"']
@@ -44,57 +45,71 @@ RSpec.describe DeserializesRdfLiterals do
     }
   end
 
-  shared_examples 'it transforms fields' do
-    it 'transforms single fields' do
-      expect(env.attributes[:title]).to eq RDF::Literal('Cool Beans', language: :en)
-    end
-
-    it 'transforms multiple fields' do
-      expect(env.attributes[:description]).to eq [RDF::Literal('A work of importance')]
-    end
-  end
-
   describe '#create' do
-    before { actor.create(env) }
+    context 'with string values' do
+      let(:env) { Hyrax::Actors::Environment.new(work, ability, string_attributes) }
 
-    it_behaves_like 'it transforms fields'
+      it 'transforms single fields' do
+        expect { actor.create(env) }
+          .to change { env.attributes[:title] }
+          .from(string_attributes[:title])
+          .to(literal_attributes[:title])
+      end
 
-    context 'when attributes are already RDF::Literals (from ingest)' do
-      let(:attributes) { literal_attributes }
+      it 'transforms multiple fields' do
+        expect { actor.create(env) }
+          .to change { env.attributes[:title] }
+          .from(string_attributes[:title])
+          .to(literal_attributes[:title])
+      end
+    end
 
-      it_behaves_like 'it transforms fields'
+    context 'with literal values' do
+      let(:env) { Hyrax::Actors::Environment.new(work, ability, literal_attributes) }
+
+      it 'transforms single fields' do
+        expect { actor.create(env) }
+          .not_to change { env.attributes[:title] }
+      end
+
+      it 'transforms multiple fields' do
+        expect { actor.create(env) }
+          .not_to change { env.attributes[:title] }
+      end
     end
   end
 
   describe '#update' do
-    before { actor.update(env) }
+    context 'with string values' do
+      let(:env) { Hyrax::Actors::Environment.new(work, ability, string_attributes) }
 
-    it_behaves_like 'it transforms fields'
+      it 'transforms single fields' do
+        expect { actor.update(env) }
+          .to change { env.attributes[:title] }
+          .from(string_attributes[:title])
+          .to(literal_attributes[:title])
+      end
 
-    context 'when attributes are already RDF::Literals (from ingest)' do
-      let(:attributes) { literal_attributes }
-
-      it_behaves_like 'it transforms fields'
-    end
-  end
-
-  # because of how the the create/update tests are set up, testing this case in each
-  # causes a race between their +before+ blocks, which call the methods, and this
-  # +before+ block, which invalidates the fields method. having it run as a shared_example
-  # causes the parent +before+ block to run first, which runs the attributes through
-  # the transformation, and then invalidates the method, which then does nothing.
-  # we can make the logical jump from this test -- when there's no method on the
-  # form, are we getting back an empty array of fields? -- to the inference that
-  # no forms are iterated through.
-  describe '#tagged_fields (private)' do
-    subject { actor.send(:tagged_fields) }
-
-    before do
-      allow(Hyrax::WorkTypeForm).to receive(:language_tagged_fields).and_raise(NoMethodError)
+      it 'transforms multiple fields' do
+        expect { actor.update(env) }
+          .to change { env.attributes[:title] }
+          .from(string_attributes[:title])
+          .to(literal_attributes[:title])
+      end
     end
 
-    context 'when language tagged fields are not defined on the form' do
-      it { is_expected.to be_empty }
+    context 'with literal values' do
+      let(:env) { Hyrax::Actors::Environment.new(work, ability, literal_attributes) }
+
+      it 'transforms single fields' do
+        expect { actor.update(env) }
+          .not_to change { env.attributes[:title] }
+      end
+
+      it 'transforms multiple fields' do
+        expect { actor.update(env) }
+          .not_to change { env.attributes[:title] }
+      end
     end
   end
 end

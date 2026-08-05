@@ -3,7 +3,6 @@ require_relative 'boot'
 
 require 'rails/all'
 require 'sprockets/es6'
-require 'rack-cas/session_store/active_record'
 
 # Some gems in the Samvera stack use the 'deprecation' gem instead of
 # ActiveSupport::Deprecation calls, so we need to also set _that_ gem's
@@ -13,21 +12,18 @@ require 'rack-cas/session_store/active_record'
 if ActiveModel::Type::Boolean.new.cast(ENV.fetch('SPOT_IGNORE_DEPRECATIONS', false))
   require 'deprecation'
 
-  ActiveSupport::Deprecation.silence do
-    Deprecation.default_deprecation_behavior = :silence
-
-    Bundler.require(*Rails.groups)
-  end
-else
-  # Require the gems listed in Gemfile, including any gems
-  # you've limited to :test, :development, or :production.
-  Bundler.require(*Rails.groups)
+  ActiveSupport::Deprecation.silenced = true
+  Deprecation.default_deprecation_behavior = :silence
 end
+
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module Spot
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 6.1
 
     # use sidekiq for async jobs
     config.active_job.queue_adapter = :sidekiq
@@ -47,6 +43,12 @@ module Spot
     config.rack_cas.server_url = ENV['CAS_BASE_URL']
     config.rack_cas.service = ENV['URL_HOST'].present? ? "#{ENV['URL_HOST']}/users/service" : '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
+
+    hostname = ENV['APPLICATION_FQDN'] || URI.parse(ENV['URL_HOST'] || '').hostname
+    config.hosts << hostname if hostname.present?
+
+    # add internal IP range so things can communicate in the AWS VPC
+    config.hosts << IPAddr.new('10.0.0.0/24') if Rails.env.production?
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

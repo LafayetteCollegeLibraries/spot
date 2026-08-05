@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # borrows heavily from
 # samvera/questioning_authority:spec/lib/services/rdf_authority_parser_spec.rb
-RSpec.describe Spot::RDFAuthorityParser do
+RSpec.describe Spot::RdfAuthorityParser do
   let(:source) { [Rails.root.join('spec', 'fixtures', 'iso639-1-en.nt')] }
   let(:format) { :ntriples }
   let(:predicate) { ::RDF::Vocab::SKOS.prefLabel }

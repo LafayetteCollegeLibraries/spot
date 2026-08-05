@@ -3,10 +3,6 @@ module Spot
   # Various model attributes for the single SolrDocument model. Since that model wraps
   # every kind of Solr document, we need to ensure that _all_ of the models attributes
   # are available.
-  #
-  #
-  #
-  # @todo Remove {.attribute} definition when Hyrax upgrades to Blacklight >=7
   module SolrDocumentAttributes
     extend ActiveSupport::Concern
 
@@ -106,14 +102,6 @@ module Spot
       attribute :citation_issue,         ::Blacklight::Types::String, 'citation_issue_ss'
       attribute :citation_firstpage,     ::Blacklight::Types::String, 'citation_firstpage_ss'
       attribute :citation_lastpage,      ::Blacklight::Types::String, 'citation_lastpage_ss'
-    end
-
-    module ClassMethods
-      def attribute(name, type, field)
-        define_method name do
-          type.coerce(self[field])
-        end
-      end
     end
   end
 end

@@ -13,16 +13,13 @@ class ApplicationController < ActionController::Base
 
   before_action :store_user_location!, if: :storable_location?
 
-  # from Blacklight: 'Discarding flash messages on XHR requests is deprecated.'
-  skip_after_action :discard_flash_if_xhr
-
   protect_from_forgery with: :exception
 
-  # @return [Hash]
-  # @todo remove this when supporting multiple locales
-  def default_url_options
-    super.reject { |k, _v| k == :locale }
-  end
+  # # @return [Hash]
+  # # @todo remove this when supporting multiple locales
+  # def default_url_options
+  #   super.reject { |k, _v| k == :locale }
+  # end
 
   # Borrowed from pul's figgy app. Restricts our guests to a single entry
   # in the database, preventing hundreds of fake user accounts from being

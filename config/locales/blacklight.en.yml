@@ -1,14 +1,38 @@
 en:
   blacklight:
+    search_page:
+      page_title:
+        title: 'Search Results: %{constraints} // %{application_name}'
     search:
       facets:
         # We don't want to spell out the OCM acronym on the facet labels,
         # which have limited space available.
         subject_ocm: OCM Classification
-        admin:
-          title: Admin Facets
+      facets-admin:
+        title: Admin Facets
+
       fields:
+        facet:
+          academic_department_sim: Academic Department
+          advisor_label_ssim: Advisor
+          creator_sim: Creator
+          depositor_ssim: Deposited by
+          division_sim: Division
+          language_label_ssim: Language
+          location_label_sim: Location
+          member_of_collections_ssim: Collections
+          member_of_collection_ids_ssim: Collections
+          organization_sim: Organization
+          proxy_depositor_ssim: Proxy Depositor
+          publisher_sim: Publisher
+          resource_type_sim: Type
+          rights_statement_shortcode_ssim: Rights Statement
+          subject_label_sim: Subject
+          subject_ocm_ssim: Outline of Cultural Materials classification
+          years_encompassed_iim: Year
+
         academic_department: Academic Department
+        admin_set_sim: Administrative Set
         advisor_label: Advisor
         author: Author
         barcode: Barcode
@@ -32,6 +56,7 @@ en:
         has_model: LDR Type
         inscription: Inscription
         keyword: Keyword
+        keyword_sim: Keyword
         language: Language
         language_label: Language
         lease_expiration_date: Lease Expiration Date
@@ -54,6 +79,7 @@ en:
         repository_location: Repository Location
         requested_by: Requested By
         research_assistance: Research Assistance
+        research_assistance_ssim: Research Assistance
         resource_type: Type
         rights_holder: Rights Holders
         rights_statement: Rights Statement
@@ -61,6 +87,7 @@ en:
         source: Source
         standard_identifier: Standard Identifier
         subject: Subject
+        subject_label: Subject
         subject_ocm: Outline of Cultural Materials classification
         subtitle: Subtitle
         title: Title

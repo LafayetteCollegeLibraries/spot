@@ -13,26 +13,34 @@
 //= require turbolinks
 
 // Required by Blacklight
-//= require jquery
+//= require jquery3
+//= require rails-ujs
+
+//= require popper
+//= require twitter/typeahead
+//= require bootstrap
+
+//= require jquery.dataTables
+//= require dataTables.bootstrap4
+//= require blacklight/blacklight
 //= require blacklight_advanced_search
 //= require blacklight_range_limit
-//= require jquery_ujs
-//= require dataTables/jquery.dataTables
-//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
-//= require blacklight/blacklight
 
-// local require that in turn calls a require
-//= require blacklight_gallery
+//= require blacklight_gallery/default
+//= require blacklight_gallery/osd_viewer
 
-//= require openseadragon
+// require openseadragon
+//= require openseadragon/openseadragon
+//= require openseadragon/rails
+
 //= require hyrax
 //= require almond
 
 // Bulkrax
 //= require bulkrax/application
-//= require browse_everything
 
 //= require spot/editor/multi_auth_controlled_vocabulary
+//= require spot/hyrax_overrides
 //= require language-tagged-autocomplete-setup
 //= require multi-auth-input
 //= require workflow-action-form-validation

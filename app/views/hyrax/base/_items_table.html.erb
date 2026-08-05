@@ -1,43 +1,45 @@
-<% members = presenter.member_presenters_for(presenter.list_of_item_ids_to_display) %>
+<% members = presenter.member_presenters %>
 
-<div class="panel panel-default">
-  <div class="panel-heading panel-heading-slim">
+<div class="card">
+  <div class="card-header">
     <h5>Contains</h5>
   </div>
-  <table class="table table-bordered metadata-table">
-    <tbody>
-    <% members.each do |member| %>
-      <% model_name = member.model_name.singular.to_sym %>
-      <% type = %i[file_set file].include?(model_name) ? 'File' : 'Work' %>
-      <% type_class = type == 'File' ? 'default' : 'primary' %>
-      <tr>
-        <td class="text-center">
-          <span class="label label-<%= type_class %>"><%= type %></span>
-          <% if type == 'File' && member.transcript_name != nil %>
-            <br>
-            <span class="label label-<%= type_class %>">Captioned</span>
+  <div class="card-body">
+    <table class="table table-sm table-bordered metadata-table">
+      <tbody>
+      <% members.each do |member| %>
+        <% model_name = member.model_name.singular.to_sym %>
+        <% type = %i[file_set file].include?(model_name) ? 'File' : 'Work' %>
+        <% type_class = type == 'File' ? 'default' : 'primary' %>
+        <tr>
+          <td class="text-center">
+            <span class="badge badge-secondary"><%= type %></span>
+            <% if type == 'File' && member.transcript_name != nil %>
+              <br>
+              <span class="badge badge-secondary">Captioned</span>
+            <% end %>
+          </td>
+          <td>
+            <% if presenter.metadata_only? %>
+              <%= member.first_title %>
+            <% else %>
+              <%= link_to(member.link_name, contextual_path(member, presenter)) %>
+            <% end %>
+          </td>
+          <td>
+            Uploaded <%= member.try(:date_uploaded) %>
+          </td>
+          <td class="text-center">
+            <%= member.permission_badge %>
+          </td>
+          <% if !presenter.metadata_only? && model_name == :file_set -%>
+          <td class="text-center">
+            <%= render "hyrax/file_sets/actions", file_set: member -%>
+          </td>
           <% end %>
-        </td>
-        <td>
-          <% if presenter.metadata_only? %>
-            <%= member.first_title %>
-          <% else %>
-            <%= link_to(member.link_name, contextual_path(member, presenter)) %>
-          <% end %>
-        </td>
-        <td>
-          Uploaded <%= member.try(:date_uploaded) %>
-        </td>
-        <td class="text-center">
-          <%= member.permission_badge %>
-        </td>
-        <% if !presenter.metadata_only? && model_name == :file_set -%>
-        <td class="text-center">
-          <%= render "hyrax/file_sets/actions", file_set: member -%>
-        </td>
-        <% end %>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

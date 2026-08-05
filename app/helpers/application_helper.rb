@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'hyrax/version'
+
 module ApplicationHelper
   delegate :advanced_search_path, to: :blacklight_advanced_search_engine
 
@@ -14,6 +16,10 @@ module ApplicationHelper
     document.highlight_field('extracted_text_tsimv').reject(&:blank?)
   end
 
+  def hyrax_footer_text
+    "Powered by Hyrax (v#{Hyrax::VERSION})"
+  end
+
   # rubocop:disable Style/ClassVars
   # @return [String, nil]
   def site_last_updated
@@ -23,9 +29,9 @@ module ApplicationHelper
 
   # @api private
   def generate_site_last_updated
-    return if ENV['SPOT_BUILD_DATE'].blank?
-    Date.parse(ENV['SPOT_BUILD_DATE']).strftime('%B %d, %Y')
-  rescue
+    return '(in development)' if Rails.env.development? || ENV['SPOT_BUILD_DATE'].blank?
+    Date.parse(ENV['SPOT_BUILD_DATE'].to_s).strftime('%B %d, %Y')
+  rescue Date::Error
     ENV['SPOT_BUILD_DATE']
   end
 end

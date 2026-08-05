@@ -4,31 +4,31 @@
   <h1><%= t('.header') %></h1>
 </div>
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+<div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="color: black;">
           Lafayette Scholarship
         </a>
-      </h4>
+      </h5>
     </div>
-    <div id="collapseOne" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingOne">
+    <div id="collapseOne" class="collapse" data-parent="#accordion" aria-labelledby="headingOne">
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><%= link_to 'Faculty Publications', hyrax.collection_path(id: 'faculty-publications') %></li>
         <li class="list-group-item"><%= link_to 'Student Honors Theses', hyrax.collection_path(id: 'honors-theses') %></li>
       </ul>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="color: black;">
           Lafayette College Archives
         </a>
-      </h4>
+      </h5>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingTwo">
+    <div id="collapseTwo" class="collapse" data-parent="#accordion" aria-labelledby="headingTwo">
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><%= link_to 'College Administration', hyrax.collection_path(id: 'college-administration') %></li>
         <li class="list-group-item"><%= link_to 'College Archives Image Collection', hyrax.collection_path(id: 'historical-photos') %></li>
@@ -41,19 +41,20 @@
         <li class="list-group-item"><%= link_to 'Library Newsletters', hyrax.collection_path(id: 'library-newsletters') %></li>
         <li class="list-group-item"><%= link_to 'McKelvy House', hyrax.collection_path(id: 'mckelvy-house') %></li>
         <li class="list-group-item"><%= link_to 'Public Safety', hyrax.collection_path(id: 'public-safety') %></li>
+        <li class="list-group-item"><%= link_to 'Selections from the Lafayette College Songbook', hyrax.collection_path(id: 'college-songbook') %></li>
         <li class="list-group-item"><%= link_to 'Student Publications', hyrax.collection_path(id: 'student-publications') %></li>
       </ul>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h5 class="mb-0">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="color: black;">
           Special Collections
         </a>
-      </h4>
+      </h5>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingThree">
+    <div id="collapseThree" class="collapse" data-parent="#accordion" aria-labelledby="headingThree">
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><%= link_to 'Alsace-Lorraine Picture Postcard Collection', hyrax.collection_path(id: 'alsace-images') %></li>
         <li class="list-group-item"><%= link_to 'Dīvān-i Jāmī', hyrax.collection_path(id: 'persian-mss') %></li>
@@ -61,66 +62,71 @@
         <li class="list-group-item"><%= link_to 'Hubbard Collection of Letters from the Marquis de Lafayette to George Washington', hyrax.collection_path(id: 'mdl-letters') %></li>
         <li class="list-group-item"><%= link_to 'Marquis de Lafayette Prints Collection', hyrax.collection_path(id: 'mdl-prints') %></li>
         <li class="list-group-item"><%= link_to 'Shakespeare Bulletin Archive', hyrax.collection_path(id: 'shakespeare-bulletin-archive') %></li>
+        <li class="list-group-item"><%= link_to 'William Baxter Owen Ancient Coin Collection', hyrax.collection_path(id: 'ancient-coins') %></li>
       </ul>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingFour">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+  <div class="card">
+    <div class="card-header" id="headingFour">
+      <h5 class="mb-0">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style="color: black;">
           East Asia Image Collection
         </a>
-      </h4>
+      </h5>
     </div>
-    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+    <div id="collapseFour" class="collapse" data-parent="#accordion" aria-labelledby="headingFour">
       <div class="container-fluid" style="margin-top: 1rem;">
         <div class="row">
           <div class="col-sm-6">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Dutch East Indies Negatives', hyrax.collection_path(id: 'warner-negs-indonesia') %></li>
-              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Japan Slides', hyrax.collection_path(id: 'warner-slides-japan') %></li>
-              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Manchuria Negatives', hyrax.collection_path(id: 'warner-negs-manchuria') %></li>
-              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Postcards', hyrax.collection_path(id: 'warner-postcards') %></li>
-              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Souvenirs of Beijing and Tokyo', hyrax.collection_path(id: 'warner-souvenirs') %></li>
-              <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Taiwan Negatives', hyrax.collection_path(id: 'warner-negs-taiwan') %></li>
-              <li class="list-group-item"><%= link_to 'Imperial Postcards', hyrax.collection_path(id: 'imperial-postcards') %></li>
-              <li class="list-group-item"><%= link_to 'Japanese History Study Cards', hyrax.collection_path(id: 'gc-iroha01') %></li>
-              <li class="list-group-item"><%= link_to 'Japanese Imperial House Postcard Album', hyrax.collection_path(id: 'pa-koshitsu') %></li>
-              <li class="list-group-item"><%= link_to 'Lin Chia-Feng Family Postcards', hyrax.collection_path(id: 'lin-postcards') %></li>
-              <li class="list-group-item"><%= link_to 'Michael Lewis Postcards', hyrax.collection_path(id: 'lewis-postcards') %></li>
-            </ul>
+            <div class="card">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Dutch East Indies Negatives', hyrax.collection_path(id: 'warner-negs-indonesia') %></li>
+                <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Japan Slides', hyrax.collection_path(id: 'warner-slides-japan') %></li>
+                <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Manchuria Negatives', hyrax.collection_path(id: 'warner-negs-manchuria') %></li>
+                <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Postcards', hyrax.collection_path(id: 'warner-postcards') %></li>
+                <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Souvenirs of Beijing and Tokyo', hyrax.collection_path(id: 'warner-souvenirs') %></li>
+                <li class="list-group-item"><%= link_to 'Gerald and Rella Warner Taiwan Negatives', hyrax.collection_path(id: 'warner-negs-taiwan') %></li>
+                <li class="list-group-item"><%= link_to 'Imperial Postcards', hyrax.collection_path(id: 'imperial-postcards') %></li>
+                <li class="list-group-item"><%= link_to 'Japanese History Study Cards', hyrax.collection_path(id: 'gc-iroha01') %></li>
+                <li class="list-group-item"><%= link_to 'Japanese Imperial House Postcard Album', hyrax.collection_path(id: 'pa-koshitsu') %></li>
+                <li class="list-group-item"><%= link_to 'Lin Chia-Feng Family Postcards', hyrax.collection_path(id: 'lin-postcards') %></li>
+                <li class="list-group-item"><%= link_to 'Michael Lewis Postcards', hyrax.collection_path(id: 'lewis-postcards') %></li>
+              </ul>
+            </div>  
           </div>
           <div class="col-sm-6">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><%= link_to 'Pacific War Postcards', hyrax.collection_path(id: 'pacwar-postcards') %></li>
-              <li class="list-group-item"><%= link_to 'Richard Mammana Japanese Empire Postcard Collection', hyrax.collection_path(id: 'mammana-postcards') %></li>
-              <li class="list-group-item"><%= link_to 'Scenic Taiwan Book', hyrax.collection_path(id: 'cpw-nofuko') %></li>
-              <li class="list-group-item"><%= link_to 'Sino-Japanese War Postcard Album 01', hyrax.collection_path(id: 'pa-omitsu01') %></li>
-              <li class="list-group-item"><%= link_to 'Sino-Japanese War Postcard Album 02', hyrax.collection_path(id: 'pa-omitsu02') %></li>
-              <li class="list-group-item"><%= link_to 'Sven Saaler Postcards of Japanese Bronze Statues', hyrax.collection_path(id: 'japan-bronzes') %></li>
-              <li class="list-group-item"><%= link_to 'T.W. Ingersoll Co. Stereoviews of the Siege of Port Arthur', hyrax.collection_path(id: 'rjw-stereo') %></li>
-              <li class="list-group-item"><%= link_to 'Taiwan Photographic Monthly Periodical', hyrax.collection_path(id: 'cpw-shashinkai') %></li>
-              <li class="list-group-item"><%= link_to 'The Truku-Japanese War Commemorative Postcard Collection', hyrax.collection_path(id: 'tjwar-postcards') %></li>
-              <li class="list-group-item"><%= link_to 'Tsubokura Russo-Japanese War Postcard Album', hyrax.collection_path(id: 'pa-tsubokura') %></li>
-              <li class="list-group-item"><%= link_to 'Woodsworth Images', hyrax.collection_path(id: 'woodsworth-images') %></li>
-            </ul>
+            <div class="card">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><%= link_to 'Pacific War Postcards', hyrax.collection_path(id: 'pacwar-postcards') %></li>
+                <li class="list-group-item"><%= link_to 'Richard Mammana Japanese Empire Postcard Collection', hyrax.collection_path(id: 'mammana-postcards') %></li>
+                <li class="list-group-item"><%= link_to 'Scenic Taiwan Book', hyrax.collection_path(id: 'cpw-nofuko') %></li>
+                <li class="list-group-item"><%= link_to 'Sino-Japanese War Postcard Album 01', hyrax.collection_path(id: 'pa-omitsu01') %></li>
+                <li class="list-group-item"><%= link_to 'Sino-Japanese War Postcard Album 02', hyrax.collection_path(id: 'pa-omitsu02') %></li>
+                <li class="list-group-item"><%= link_to 'Sven Saaler Postcards of Japanese Bronze Statues', hyrax.collection_path(id: 'japan-bronzes') %></li>
+                <li class="list-group-item"><%= link_to 'T.W. Ingersoll Co. Stereoviews of the Siege of Port Arthur', hyrax.collection_path(id: 'rjw-stereo') %></li>
+                <li class="list-group-item"><%= link_to 'Taiwan Photographic Monthly Periodical', hyrax.collection_path(id: 'cpw-shashinkai') %></li>
+                <li class="list-group-item"><%= link_to 'The Truku-Japanese War Commemorative Postcard Collection', hyrax.collection_path(id: 'tjwar-postcards') %></li>
+                <li class="list-group-item"><%= link_to 'Tsubokura Russo-Japanese War Postcard Album', hyrax.collection_path(id: 'pa-tsubokura') %></li>
+                <li class="list-group-item"><%= link_to 'Woodsworth Images', hyrax.collection_path(id: 'woodsworth-images') %></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingFive">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+  <div class="card">
+    <div class="card-header" id="headingFive">
+      <h5 class="mb-0">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style="color: black;">
           Academic Partnership Collections
         </a>
-      </h4>
+      </h5>
     </div>
-    <div id="collapseFive" class="panel-collapse collapse card" role="tabpanel" aria-labelledby="headingFive">
+    <div id="collapseFive" class="collapse" data-parent="#accordion" aria-labelledby="headingFive">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><%= link_to 'Deep Time Maps', hyrax.collection_path(id: 'time-slice-maps') %> <span class="label label-info">Lafayette College</span></li>
-        <li class="list-group-item"><%= link_to 'John S. Shelton Earth Science Image Collection', hyrax.collection_path(id: 'geology-slides-esi') %> <span class="label label-info">Lafayette College</span></a></li>
+        <li class="list-group-item"><%= link_to 'Deep Time Maps', hyrax.collection_path(id: 'time-slice-maps') %> <span class="badge badge-info">Lafayette College</span></li>
+        <li class="list-group-item"><%= link_to 'John S. Shelton Earth Science Image Collection', hyrax.collection_path(id: 'geology-slides-esi') %> <span class="badge badge-info">Lafayette College</span></a></li>
       </ul>
     </div>
   </div>

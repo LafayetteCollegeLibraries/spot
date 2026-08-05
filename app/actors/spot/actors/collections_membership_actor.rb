@@ -26,8 +26,6 @@ module Spot
           col = collection_stack.shift
           next if collection_ids.include?(col.id)
 
-          col.reindex_extent = Hyrax::Adapters::NestingIndexAdapter::LIMITED_REINDEX
-
           collection_ids << col.id
           env.curation_concern.member_of_collections << col
           collection_stack += col.member_of_collections

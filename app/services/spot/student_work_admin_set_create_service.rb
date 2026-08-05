@@ -2,7 +2,7 @@
 module Spot
   # @todo do we need this service anymore?
   class StudentWorkAdminSetCreateService
-    ADMIN_SET_ID = 'admin_set/student_work'
+    ADMIN_SET_ID = 'admin_set_student_work'
     DEFAULT_TITLE = ['Student Work'].freeze
     WORKFLOW_NAME = 'mediated_student_work_deposit'
 

@@ -9,16 +9,16 @@ end
 #
 # the base rails stack (installed with 'rails new spot')
 #
-gem 'rails', '~> 5.2.7'
+gem 'rails', '~> 6.1'
 
 # use Puma as the app server
 gem 'puma', '~> 6.4.0'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.1.0'
+gem 'sass-rails', '~> 6.0'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '~> 4.2.0'
+# Use Terser as compressor for JavaScript assets
+gem 'terser', '~> 1.2.7'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5.2.1'
@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 3.6.0'
+gem 'hyrax', '~> 5.2.0'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -44,16 +44,18 @@ gem 'aws-sdk-s3', '~> 1.142.0'
 gem 'bagit', '~> 0.6.0'
 
 # blacklight plugins for enhanced searching
-gem 'blacklight_advanced_search', '~> 6.4.1'
-gem 'blacklight_oai_provider', '~> 6.0.0'
-gem 'blacklight_range_limit', '~> 6.3.3'
+gem 'blacklight_advanced_search', '~> 7.0.0'
+gem 'blacklight_oai_provider', '~> 7.0.2'
+gem 'blacklight_range_limit', '~> 8.5.0'
 
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
 
+gem 'bootstrap', '~> 4.0'
+
 # Bulkrax for batch ingesting objects
-gem 'browse-everything', '~> 1.1.2'
-gem 'bulkrax', '~> 9.0.2'
+gem 'browse-everything', '~> 1.6.0'
+gem 'bulkrax', '~> 9.3.3'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -73,7 +75,7 @@ gem 'edtf-humanize', '~> 2.1.0'
 
 # a bunch of samvera gems rely on Faraday already, but we'll
 # require it as we're explicitly using it.
-gem 'faraday', '~> 0.17.6'
+gem 'faraday', '~> 2.0'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
@@ -99,7 +101,8 @@ gem 'kaminari', '~> 1.2.2'
 
 # mini_magick is a dependency of hydra-derivatives, but since we're
 # calling it explicitly, we should require it.
-gem 'mini_magick', '~> 4.11'
+# gem 'mini_magick', '~> 4.11'
+gem 'posix-spawn'
 
 # manually add this gem to enable questioning_authority to parse linked-data results
 gem 'linkeddata', '~> 3.1.6'
@@ -116,7 +119,7 @@ gem 'pg', '~> 1.5.4'
 
 # this is bundled somewhere within the hyrax stack, but since we're
 # calling it within our code we shouldn't expect it to always be there
-gem 'rdf-vocab', '~> 3.2.7'
+gem 'rdf-vocab', '~> 3.3.3'
 
 # solr client for interacting with rails (installed w/ hyrax)
 gem 'rsolr', '~> 2.5.0'
@@ -129,7 +132,10 @@ gem 'sidekiq', '~> 5.2.9'
 gem 'sidekiq-cron', '~> 1.9.1'
 
 # using Slack for some of our messaging
-gem 'slack-ruby-client', '~> 0.14.6'
+gem 'slack-ruby-client'
+
+# used in the Hyrax 4 upgrade but not a dependency??
+gem 'twitter-typeahead-rails', '~> 0.11.1'
 
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
@@ -148,12 +154,18 @@ gem 'redlock', '>= 0.1.2', '< 2.0'
 # that throws off how forms are built in Hyrax.
 gem 'simple_form', '< 5.2'
 
+# sprockets support gets cagey after 1.0
+gem 'openseadragon', '~> 0.9.0'
+
+# need to be 1.20.1 or higher to avoid an incompatibility with json gem
+gem 'multi_json', '~> 1.20.1'
+
 # development dependencies (not as necessary to lock down versions here)
 group :development do
   # Seed data
   # gem 'ldr-development-seeds', github: 'LafayetteCollegeLibraries/ldr-development-seeds', branch: 'main'
 
-  gem 'listen', '>= 3.0.5', '< 3.8'
+  gem 'listen', '~> 3.9.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '~> 2.1.1'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -177,7 +189,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4'
   gem 'simplecov', '~> 0.22.0', require: false
-  gem 'simplecov-cobertura', '~> 2.1', require: false
+  gem 'simplecov-cobertura', '~> 3', require: false
   gem 'stub_env', '~> 1.0.4'
   gem 'webmock', '~> 3.8'
 end

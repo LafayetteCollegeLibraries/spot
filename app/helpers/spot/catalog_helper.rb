@@ -53,5 +53,12 @@ module Spot
         'default_html' # not expecting to get here, but we should have a generic message just in case
       end
     end
+
+    def page_title_for_search_results
+      key = params[:page].present? ? 'spot.catalog.page_title_with_pagination' : 'spot.catalog.page_title'
+      I18n.t(key, query: params[:q] || '""',
+                  page: params[:page]&.to_i,
+                  name: application_name).html_safe
+    end
   end
 end

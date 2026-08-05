@@ -19,14 +19,13 @@ module Spot
 
     # @param [true, false] :force Ignore the 'max days between check' parameter
     def perform(force: false)
+      @count = 0
       opts = { async_jobs: false }
       opts[:max_days_between_fixity_checks] = -1 if force
 
-      @count = 0
-
       ::FileSet.find_each do |file_set|
         @count += 1
-        Hyrax::FileSetFixityCheckService.new(file_set, opts).fixity_check
+        Hyrax::FileSetFixityCheckService.new(file_set, **opts).fixity_check
       end
     end
 

@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'rdf/ntriples'
-
 class RdfLiteralSerializer
   # @return [String]
   def serialize(literal)

@@ -3,22 +3,22 @@
 <% item_count = collection.total_items %>
 
 <div class="collection-list-item col-md-4">
-  <div class="thumbnail">
+  <div class="card">
     <div class="collection-logo-container" style="background-image:url('<%= collection_logo_file_path(collection) %>');"></div>
-    <div class="caption">
-      <h3><%= collection.title.first %></h3>
-      <p><%= collection.abstract.first %></p>
+    <div class="card-body">
+      <h3 class="card-title"><%= collection.title.first %></h3>
+      <p class= "card-text"><%= collection.abstract.first %></p>
       <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
+        <div class="col-sm-10 offset-sm-1">
           <div class="row collection-counts-wrapper">
             <% unless subcollection_count.zero? %>
-            <div class="col-xs-6">
+            <div class="col-6">
               <div class="collection-counts-item">
                 <span><%= subcollection_count %></span><%= 'Collection'.pluralize(subcollection_count) %>
               </div>
             </div>
             <% end %>
-            <div class="col-xs-<%= subcollection_count.zero? ? '12' : '6' %>">
+            <div class="col-<%= subcollection_count.zero? ? '12' : '6' %>">
               <div class="collection-counts-item">
                 <span><%= item_count %></span><%= 'Item'.pluralize(item_count) %>
               </div>

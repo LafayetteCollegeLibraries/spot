@@ -14,8 +14,8 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
       let(:values) { 'Emotion' }
 
       let(:html_result) do
-        '<tr><th rowspan="1">Title</th>' \
-        '<td class="attribute attribute-title">' \
+        '<tr><th class="p-2" rowspan="1">Title</th>' \
+        '<td class="p-2 attribute attribute-title">' \
         '<span itemprop="name">Emotion</span>' \
         '</td></tr>'
       end
@@ -27,11 +27,11 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
       let(:values) { ['Party for One', 'Cut to the Feeling'] }
 
       let(:html_result) do
-        '<tr><th rowspan="2">Title</th>' \
-        '<td class="attribute attribute-title">' \
+        '<tr><th class="p-2" rowspan="2">Title</th>' \
+        '<td class="p-2 attribute attribute-title">' \
         '<span itemprop="name">Party for One</span>' \
         '</td></tr>' \
-        '<tr><td class="attribute attribute-title">' \
+        '<tr><td class="p-2 attribute attribute-title">' \
         '<span itemprop="name">Cut to the Feeling</span>' \
         '</td></tr>'
       end
@@ -47,8 +47,8 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
       end
 
       let(:html_result) do
-        '<tr><th rowspan="1">Title</th>' \
-        '<td class="attribute attribute-title">Run Away With Me</td></tr>'
+        '<tr><th class="p-2" rowspan="1">Title</th>' \
+        '<td class="p-2 attribute attribute-title">Run Away With Me</td></tr>'
       end
 
       it { is_expected.to be_equivalent_to expected }
@@ -57,10 +57,10 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
     context 'options[:show_help_text]' do
       before do
         allow(I18n).to receive(:translate)
-          .with(:'simple_form.hints.defaults.title', default: [], raise: true)
+          .with(:'simple_form.hints.defaults.title', anything)
           .and_return(help_text)
         allow(I18n).to receive(:translate)
-          .with(:'blacklight.search.fields.default.show.title', raise: true)
+          .with(:'blacklight.search.fields.default.show.title', anything)
           .and_return('Title')
       end
 
@@ -69,7 +69,7 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
 
       let(:html_result) do
         %(<tr>
-          <th rowspan="1">Title
+          <th class="p-2" rowspan="1">Title
             <span
               class="fa fa-question-circle-o"
               data-html="true"
@@ -78,7 +78,7 @@ RSpec.describe Spot::Renderers::AttributeRenderer do
               data-content="#{help_text}"
             ></span>
           </th>
-          <td class="attribute attribute-title">
+          <td class="p-2 attribute attribute-title">
             <span itemprop="name">Run Away With Me</span>
           </td>
         </tr>)
