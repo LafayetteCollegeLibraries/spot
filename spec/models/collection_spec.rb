@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Collection do
+RSpec.describe Collection, skip_if_valkyrie: true do
   let(:collection) { described_class.new(params) }
   let(:dc) { RDF::Vocab::DC }
   let(:rdfs) { RDF::RDFS }

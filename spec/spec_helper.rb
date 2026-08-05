@@ -149,7 +149,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.after do
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
