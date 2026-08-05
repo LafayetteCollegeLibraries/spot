@@ -33,7 +33,7 @@ RSpec.shared_examples 'it has base metadata fields' do
 
   it 'has identifiers' do
     expect { resource.identifier = ['local:abc123', 'ldr:000000'] }
-      .to change { resource.identifier }
+      .to change { resource.identifier.map(&:to_s) }
       .to contain_exactly('local:abc123', 'ldr:000000')
   end
 
@@ -49,10 +49,10 @@ RSpec.shared_examples 'it has base metadata fields' do
       .to contain_exactly('en', 'fr')
   end
 
-  it 'has locations' do
+  it 'wraps locations in Spot::ControlledVocabulries::GeonamesLocation classes' do
     expect { resource.location = ['http://sws.geonames.org/5188140/'] }
       .to change { resource.location }
-      .to contain_exactly('http://sws.geonames.org/5188140/')
+      .to contain_exactly(Spot::ControlledVocabularies::GeonamesLocation.new('http://sws.geonames.org/5188140/'))
   end
 
   it 'has notes' do
@@ -112,7 +112,7 @@ RSpec.shared_examples 'it has base metadata fields' do
   it 'has subjects' do
     expect { resource.subject = ['http://id.worldcat.org/fast/1061714'] }
       .to change { resource.subject }
-      .to contain_exactly('http://id.worldcat.org/fast/1061714')
+      .to contain_exactly(Spot::ControlledVocabularies::AssignFastSubject.new('http://id.worldcat.org/fast/1061714'))
   end
 
   it 'has subtitles' do
