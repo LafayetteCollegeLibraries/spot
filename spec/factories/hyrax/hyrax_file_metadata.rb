@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 ##
+# Copied directly from https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/lib/hyrax/specs/shared_specs/factories/hyrax_file_metadata.rb
 # Use this factory for FileMetadata for Files in valkyrie.
 FactoryBot.define do
   factory :hyrax_file_metadata, class: 'Hyrax::FileMetadata', aliases: [:file_metadata] do
@@ -58,6 +59,11 @@ FactoryBot.define do
 
     trait :video_file do
       mime_type { 'video/mp4' }
+    end
+
+    # added to test the BaseDerivativeService
+    trait :pdf_file do
+      mime_type { 'application/pdf' }
     end
 
     trait :with_file do
