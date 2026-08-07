@@ -46,7 +46,9 @@ module Spot
 
     # Zero out allowed hosts since we're doing request filtering through AWS
     # and this was failing healthchecks bc their host is a rotating IP.
-    config.hosts = nil
+    # Leaving the test env be for now, but we might just need to clear out
+    # the setup in config/environments/test.rb
+    config.hosts = nil unless Rails.env.test?
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
