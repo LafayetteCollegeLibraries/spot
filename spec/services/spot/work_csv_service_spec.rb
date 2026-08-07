@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-require 'tmpdir'
-
-RSpec.describe Spot::WorkCSVService do
+RSpec.describe Spot::WorkCsvService do
   let(:service) { described_class.new(work, terms: terms) }
   let(:work) { build(:publication, id: 'abc123', title: ['one title', 'two titles']) }
   let(:terms) { %i[id title creator] }

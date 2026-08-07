@@ -5,7 +5,7 @@ module Spot
   # the Hyrax join query for extracted text, and conditionally (for now)
   # display highlight matches (where present).
   class CatalogSearchBuilder < ::Hyrax::CatalogSearchBuilder
-    include BlacklightAdvancedSearch::AdvancedSearchBuilder
+    # include BlacklightAdvancedSearch::AdvancedSearchBuilder
     include BlacklightRangeLimit::RangeLimitBuilder
 
     self.default_processor_chain -= [:show_works_or_works_that_contain_files]

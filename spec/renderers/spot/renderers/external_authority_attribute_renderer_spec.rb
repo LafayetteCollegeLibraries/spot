@@ -15,8 +15,8 @@ RSpec.describe Spot::Renderers::ExternalAuthorityAttributeRenderer do
     end
 
     let(:html_result) do
-      '<tr><th rowspan="1">Creator</th>' \
-      '<td itemprop="creator" itemscope itemtype="http://schema.org/Person" class="attribute attribute-creator">' \
+      '<tr><th class="p-2" rowspan="1">Creator</th>' \
+      '<td itemprop="creator" itemscope itemtype="http://schema.org/Person" class="p-2 attribute attribute-creator">' \
       '<span itemprop="name">' \
       "<a href=\"#{search_path}\">Carly Rae Jepsen</a> (" \
         '<a target="_blank" rel="noopener" href="https://www.carlyraemusic.com/">' \

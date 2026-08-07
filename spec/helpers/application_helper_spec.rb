@@ -72,7 +72,7 @@ RSpec.describe ApplicationHelper do
         stub_env('SPOT_BUILD_DATE', '')
       end
 
-      it { is_expected.to be nil }
+      it { is_expected.to be '(in development)' }
     end
   end
 end

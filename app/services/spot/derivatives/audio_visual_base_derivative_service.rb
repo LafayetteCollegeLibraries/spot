@@ -1,9 +1,4 @@
 # frozen_string_literal: true
-require 'aws-sdk-s3'
-require 'digest/md5'
-require 'fileutils'
-require 'ffprober'
-
 module Spot
   module Derivatives
     # Base file that audio and video derivative services inherit from. Contains functionality common to both.

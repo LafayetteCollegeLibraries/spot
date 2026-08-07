@@ -8,7 +8,6 @@ RSpec.feature 'Create a Publication', :clean, :js do
     # (h/t: https://github.com/curationexperts/mahonia/blob/89b036c/spec/features/access_etd_spec.rb#L9-L10)
     ActiveJob::Base.queue_adapter.filter = [IngestJob]
 
-    AdminSet.find_or_create_default_admin_set_id
     login_as user
   end
 
@@ -25,14 +24,7 @@ RSpec.feature 'Create a Publication', :clean, :js do
 
     describe 'can fill out and submit a new Publication' do
       scenario do
-        visit '/dashboard'
-        click_link 'Works'
-        click_link 'Add New Work'
-
-        sleep 1
-
-        choose 'Publication'
-        click_button 'Create work'
+        visit Rails.application.routes.url_helpers.new_hyrax_publication_path
 
         expect(page).to have_content "Add New #{i18n_term}"
 

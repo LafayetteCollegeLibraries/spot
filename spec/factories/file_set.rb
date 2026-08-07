@@ -7,6 +7,7 @@ FactoryBot.define do
     transient do
       user { create(:user) }
       content { nil }
+      original_file { nil }
       visibility { Hydra::AccessControls::AccessRight::VISIBILITY_TEXT_VALUE_PRIVATE }
     end
 

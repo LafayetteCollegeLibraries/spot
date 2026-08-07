@@ -1,9 +1,17 @@
 # frozen_string_literal: true
+require 'wings'
+
 Hyrax.config do |config|
   config.register_curation_concern :publication, :image, :student_work, :audio_visual
 
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
+
+  config.admin_set_model = '::AdminSet'
+  config.collection_model = '::Collection'
+  config.file_set_model = '::FileSet'
+
+  config.solr_default_method = :post
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
@@ -51,9 +59,6 @@ Hyrax.config do |config|
   # Defaults to false
   # Requires a Google Analytics id and OAuth2 keyfile.  See README for more info
   # config.analytics = false
-
-  # Google Analytics tracking ID to gather usage statistics
-  config.google_analytics_id = ENV.fetch('GOOGLE_ANALYTICS_ID', nil)
 
   # Date you wish to start collecting Google Analytic statistics for
   # Leaving it blank will set the start date to when ever the file was uploaded by
@@ -299,7 +304,7 @@ Hyrax.config do |config|
   # ingest files from the file system that are not part of the BrowseEverything
   # mount point.
   #
-  config.whitelisted_ingest_dirs = [
+  config.registered_ingest_dirs = [
     Rails.root.join('tmp', 'ingest').to_s,
     Rails.root.to_s
   ]
@@ -307,15 +312,17 @@ Hyrax.config do |config|
   config.branding_path = ENV.fetch('HYRAX_COLLECTION_BRANDING_PATH', Rails.root.join('public', 'branding'))
 end
 
-Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
+Rails.application.reloader.to_prepare do
+  Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
 
-# Hyrax v4 adds a helper method on the Hyrax constant that Bulkrax v9 depends on,
-# so we'll patch it in if it doesn't exist yet. This came up while having issues
-# with Bulkrax exports.
-unless Hyrax.respond_to?(:index_field_mapper)
-  module Hyrax
-    def self.index_field_mapper
-      config.index_field_mapper
+  # Hyrax v4 adds a helper method on the Hyrax constant that Bulkrax v9 depends on,
+  # so we'll patch it in if it doesn't exist yet. This came up while having issues
+  # with Bulkrax exports.
+  unless Hyrax.respond_to?(:index_field_mapper)
+    module Hyrax
+      def self.index_field_mapper
+        config.index_field_mapper
+      end
     end
   end
 end

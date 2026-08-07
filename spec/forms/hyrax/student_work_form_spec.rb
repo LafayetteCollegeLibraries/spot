@@ -123,13 +123,22 @@ RSpec.describe Hyrax::StudentWorkForm do
         end
 
         context 'when the StudentWork AdminSet no longer exists' do
+          let(:mock_admin_set) { instance_double(AdminSet) }
+
           before do
             allow(Spot::StudentWorkAdminSetCreateService)
               .to receive(:find_or_create_student_work_admin_set_id)
               .and_raise(Ldp::Gone)
+            allow(Hyrax::AdminSetCreateService)
+              .to receive(:find_or_create_default_admin_set)
+              .and_return(mock_admin_set)
+            allow(mock_admin_set).to receive(:id).and_return(AdminSet::DEFAULT_ID)
           end
 
           it 'uses the default admin_set id' do
+            expect(Hyrax::AdminSetCreateService)
+              .to have_received(:find_or_create_default_admin_set)
+            expect(mock_admin_set).to have_recieved(:id)
             expect(attributes[:admin_set_id]).to eq AdminSet::DEFAULT_ID
           end
         end

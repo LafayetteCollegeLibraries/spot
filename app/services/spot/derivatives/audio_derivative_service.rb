@@ -1,9 +1,4 @@
 # frozen_string_literal: true
-require 'aws-sdk-s3'
-require 'digest/md5'
-require 'fileutils'
-require 'ffprober'
-
 module Spot
   module Derivatives
     # Checks the 'premade_derivatives' property on the associated work. If the property is empty,

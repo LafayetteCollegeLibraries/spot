@@ -59,7 +59,7 @@ RSpec.describe Spot::ExportController do
 
       it 'redirects to login' do
         expect(response)
-          .to redirect_to(Rails.application.routes.url_helpers.new_user_session_path)
+          .to redirect_to(Rails.application.routes.url_helpers.new_user_session_path + "?locale=en")
       end
     end
 

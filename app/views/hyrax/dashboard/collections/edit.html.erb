@@ -1,10 +1,14 @@
-<% provide :page_title, construct_page_title( t('.header', type_title: @collection.collection_type.title, title: @form.title) ) %>
+<%#
+  duplicating this from Hyrax to modify the value being passed to the page title/header.
+  when we look at refactoring for valkyrie, there might be a more config-orientated way
+  to achieve singular form fields for multiple valued keys.
+%>
+<% type_title = collection_type_label_for(collection: @collection) %>
+
+<% provide :page_title, construct_page_title( t('.header', type_title: type_title, title: @form.title) ) %>
 
 <% provide :page_header do %>
-  <h1>
-    <span class="fa fa-edit" aria-hidden="true"></span>
-    <%= t('.header', type_title: @collection.collection_type.title, title: @form.title) %>
-  </h1>
+  <h1><span class="fa fa-edit" aria-hidden="true"></span><%= t('.header', type_title: type_title, title: @form.title) %></h1>
 <% end %>
 
 <div class="row">

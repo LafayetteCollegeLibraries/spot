@@ -86,6 +86,13 @@ module Spot
       "#{title.first} // #{I18n.t('hyrax.product_name')}"
     end
 
+    # Replacing Hyrax::PermissionBadge with our own subclass that can handle :metadata visibility
+    #
+    # @return [Spot::PermissionBadge]
+    def permission_badge_class
+      Spot::PermissionBadge
+    end
+
     # @return [Array<Array<String>>]
     def rights_statement_merged
       solr_document.rights_statement.zip(solr_document.rights_statement_label)

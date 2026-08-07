@@ -22,6 +22,16 @@ class LanguageTaggedMultiInputGroupInput < MultiValueInput
     'multi_value language_tagged'
   end
 
+  protected
+
+  def inner_wrapper
+    <<-HTML
+      <li class="field-wrapper">
+        #{yield}
+      </li>
+    HTML
+  end
+
   private
 
   # Explicitly state that this is a multi-value property, rather than

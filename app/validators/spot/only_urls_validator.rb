@@ -1,8 +1,4 @@
 # frozen_string_literal: true
-#
-#
-require 'uri'
-
 module Spot
   class OnlyUrlsValidator < ActiveModel::Validator
     # @param record [ActiveModel::Base]
@@ -15,7 +11,7 @@ module Spot
         next if values.empty?
 
         values.each do |val|
-          record.errors[field] << "#{val} is not a valid URL" unless val.match?(uri_regex)
+          record.errors.add(field, :invalid, message: "#{val} is not a valid URL") unless val.match?(uri_regex)
         end
       end
     end

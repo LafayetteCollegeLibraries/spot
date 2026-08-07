@@ -90,8 +90,8 @@ RSpec.shared_examples 'a Spot presenter' do
     let(:_solr_data) { {} }
 
     # `metadata_only?` calls `can?(:read, solr_document)` so the data needs to be persisted
-    before { ActiveFedora::SolrService.add(solr_data, commit: true) }
-    after { ActiveFedora::SolrService.delete(solr_data[:id]) }
+    before { Hyrax::SolrService.add(solr_data, commit: true) }
+    after { Hyrax::SolrService.delete(solr_data[:id]) }
 
     context 'when the ability is admin' do
       let(:ability) { admin_ability }

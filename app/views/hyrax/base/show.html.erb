@@ -2,10 +2,11 @@
 
 <%= render 'shared/citations' %>
 
-<div class="work-type" itemscope itemtype="http://schema.org/CreativeWork">
+<div class="work-type">
   <%= render 'metadata_and_viewer_panel', presenter: @presenter %>
   <%= render 'relationships', presenter: @presenter, polymorphic_url: method(:polymorphic_url) %>
 </div>
+
 
 <script>
   // need to initialize the popovers in the metadata

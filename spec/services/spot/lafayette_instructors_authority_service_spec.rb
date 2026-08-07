@@ -18,6 +18,7 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
       allow(wds_service).to receive(:person).with(email: email).and_return(wds_response)
     end
 
+    let(:user) { create(:user, given_name: first_name, surname: last_name, email: email) }
     let(:email) { 'malantoa@lafayette.edu' }
     let(:last_name) { 'Malantonio' }
     let(:first_name) { 'Anna' }
@@ -46,8 +47,6 @@ RSpec.describe Spot::LafayetteInstructorsAuthorityService do
 
     context 'when a QA entry exists in the database' do
       before { described_class.label_for(email: user.email) }
-
-      let(:user) { create(:user, given_name: first_name, surname: last_name, email: email) }
 
       it { is_expected.to eq user.authority_name }
 
