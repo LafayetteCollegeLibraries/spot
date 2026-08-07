@@ -44,11 +44,9 @@ module Spot
     config.rack_cas.service = ENV['URL_HOST'].present? ? "#{ENV['URL_HOST']}/users/service" : '/users/service'
     config.rack_cas.extra_attributes_filter = %w[uid email givenName surname lnumber eduPersonEntitlement]
 
-    hostname = ENV['APPLICATION_FQDN'] || URI.parse(ENV['URL_HOST'] || '').hostname
-    config.hosts << hostname if hostname.present?
-
-    # add internal IP range so things can communicate in the AWS VPC
-    config.hosts << IPAddr.new('10.0.0.0/8') if Rails.env.production?
+    # Zero out allowed hosts since we're doing request filtering through AWS
+    # and this was failing healthchecks bc their host is a rotating IP.
+    config.hosts = nil
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
