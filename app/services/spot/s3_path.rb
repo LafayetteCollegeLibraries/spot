@@ -30,10 +30,5 @@ module Spot
         "#{resource.id}-access#{File.extname(original_filename)}"
       end
     end
-
-    # @todo get this from Jenn's work
-    class AvPathGenerator < Base
-      def generate(resource:, file:, original_filename:); end
-    end
   end
 end
