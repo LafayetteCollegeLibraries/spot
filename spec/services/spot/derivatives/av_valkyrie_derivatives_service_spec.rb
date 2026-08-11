@@ -13,7 +13,7 @@ RSpec.describe Spot::Derivatives::AvValkyrieDerivativeService, derivatives: true
 
     it_behaves_like "a Spot::DerivativeService"
 
-    before do 
+    before do
       allow(file_metadata).to receive(:file_set_id).and_return('abcd1234')
       allow(Hyrax.query_service).to receive(:find_by).with(id: 'abcd1234').and_return(file_set)
     end
@@ -46,7 +46,7 @@ RSpec.describe Spot::Derivatives::AvValkyrieDerivativeService, derivatives: true
 
     it_behaves_like "a Spot::DerivativeService"
 
-    before do 
+    before do
       allow(file_metadata).to receive(:file_set_id).and_return('abcd1234')
       allow(Hyrax.query_service).to receive(:find_by).with(id: 'abcd1234').and_return(file_set)
     end
