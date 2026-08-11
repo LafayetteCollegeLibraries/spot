@@ -40,7 +40,7 @@
     <% unless @presenter.logo_record.blank? %>
     <div class="col-md-2">
       <% logo = @presenter.logo_record.first %>
-      <% image_html = image_tag(logo[:file_location], class: 'img-responsive', alt: logo[:alttext]) %>
+      <% image_html = image_tag(logo[:file_location], class: 'img-fluid', alt: logo[:alttext]) %>
       <% if logo[:linkurl].present? %>
         <%= link_to(logo[:linkurl]) { image_html } %>
       <% else %>
