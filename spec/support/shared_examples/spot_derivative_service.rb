@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 RSpec.shared_examples 'a Spot::DerivativeService' do
   before do
     raise 'valid_file_metadata must be set with `let(:valid_file_metadata)`' unless
