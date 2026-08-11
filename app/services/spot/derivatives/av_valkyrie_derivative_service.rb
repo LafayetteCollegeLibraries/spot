@@ -27,6 +27,8 @@ module Spot
       end
 
       def cleanup_derivatives
+        super
+
         derivative_path_factory.derivatives_for_reference(file_set).each do |path|
           FileUtils.rm_f(path)
         end
