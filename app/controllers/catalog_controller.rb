@@ -10,8 +10,6 @@ class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
-
-
   # This filter applies the hydra access controls
   # @todo is this doing anything? we're not using Blacklight/CatalogController for :show views...
   before_action :enforce_show_permissions, only: :show
