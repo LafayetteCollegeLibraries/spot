@@ -10,6 +10,8 @@ class CatalogController < ApplicationController
   include Hydra::Catalog
   include Hydra::Controller::ControllerBehavior
 
+
+
   # This filter applies the hydra access controls
   # @todo is this doing anything? we're not using Blacklight/CatalogController for :show views...
   before_action :enforce_show_permissions, only: :show
@@ -26,6 +28,10 @@ class CatalogController < ApplicationController
 
     config.view.gallery.document_component = Blacklight::Gallery::DocumentComponent
     config.view.gallery.partials = [:index_header, :index]
+
+    config.view.gallery(document_component: Blacklight::Gallery::DocumentComponent)
+    config.view.masonry(document_component: Blacklight::Gallery::DocumentComponent)
+    config.view.slideshow(document_component: Blacklight::Gallery::SlideshowComponent)
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
