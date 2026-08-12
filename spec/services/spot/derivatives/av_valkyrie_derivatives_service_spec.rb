@@ -82,7 +82,8 @@ RSpec.describe Spot::Derivatives::AvValkyrieDerivativeService, derivatives: true
                             mime_type: 'video/webm',
                             input_options: "-ss 1",
                             video: "-g 30 -b:v 2500k",
-                            audio: "-b:a 256k -ar 44100"),
+                            audio: "-b:a 256k -ar 44100"
+                          ),
             hash_including(
                             label: 'mp4',
                             format: 'mp4',
@@ -91,7 +92,8 @@ RSpec.describe Spot::Derivatives::AvValkyrieDerivativeService, derivatives: true
                             mime_type: 'video/mp4',
                             input_options: "-ss 1",
                             video: "-g 30 -b:v 8000k",
-                            audio: "-b:a 256k -ar 44100")
+                            audio: "-b:a 256k -ar 44100"
+                          )
           )
         )
       end
