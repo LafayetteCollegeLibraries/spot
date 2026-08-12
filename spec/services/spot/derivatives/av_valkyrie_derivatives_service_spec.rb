@@ -24,11 +24,17 @@ RSpec.describe Spot::Derivatives::AvValkyrieDerivativeService, derivatives: true
       let(:filename) { src_path }
 
       before do
+        allow(Hydra::Derivatives::AudioDerivatives).to receive(:create)
         service.create_derivatives(filename)
       end
 
       it 'creates derivative files' do
-        expect(Hydra::Derivatives::AudioDerivatives).to have_received(:create).with(filename)
+        expect(Hydra::Derivatives::AudioDerivatives).to have_received(:create).with(
+          filename,
+          outputs: contain_exactly(
+            hash_including(label: 'mp3', format: 'mp3', url: 'file:///spot/tmp/derivatives/ab/cd/12/34-mp3.mp3')
+          )
+        )
       end
     end
   end
@@ -59,12 +65,35 @@ RSpec.describe Spot::Derivatives::AvValkyrieDerivativeService, derivatives: true
       let(:stream) { double(width: 100, height: 200) }
 
       before do
-        service.create_derivatives(filename)
         allow(Ffprober::Parser).to receive(:from_file).with(filename).and_return(mock_ffprobe)
+        allow(Hydra::Derivatives::VideoDerivatives).to receive(:create)
+        service.create_derivatives(filename)
       end
 
       it 'creates derivative files' do
-        expect(Hydra::Derivatives::VideoDerivatives).to have_received(:create).with(filename)
+        expect(Hydra::Derivatives::VideoDerivatives).to have_received(:create).with(
+          filename,
+          outputs: contain_exactly(
+            hash_including(
+                            label: 'webm',
+                            format: 'webm',
+                            url: 'file:///spot/tmp/derivatives/ab/cd/12/34-webm.webm',
+                            size: '240x480',
+                            mime_type: 'video/webm',
+                            input_options: "-ss 1",
+                            video: "-g 30 -b:v 2500k",
+                            audio: "-b:a 256k -ar 44100"),
+            hash_including(
+                            label: 'mp4',
+                            format: 'mp4',
+                            url: 'file:///spot/tmp/derivatives/ab/cd/12/34-mp4.mp4',
+                            size: '544x1080',
+                            mime_type: 'video/mp4',
+                            input_options: "-ss 1",
+                            video: "-g 30 -b:v 8000k",
+                            audio: "-b:a 256k -ar 44100")
+          )
+        )
       end
     end
   end
