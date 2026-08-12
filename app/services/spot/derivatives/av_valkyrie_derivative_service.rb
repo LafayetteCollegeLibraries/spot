@@ -57,12 +57,12 @@ module Spot
                                                     outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url('mp3') }])
       end
 
-      # Uses Hydra to create one mp4 and one ogg derivative of the original file.
+      # Uses Hydra to create one mp4 and one webm derivative of the original file.
       #
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_video_derivative_files(filename)
-        Hydra::Derivatives::AudioDerivatives.create(filename,
+        Hydra::Derivatives::VideoDerivatives.create(filename,
                                                     outputs: [{ label: 'webm',
                                                                 format: 'webm',
                                                                 url: derivative_url('webm'),
