@@ -13,6 +13,6 @@
         <button type="submit" class="btn btn-primary" id="collection_submit"><i class="glyphicon glyphicon-search"></i> <%= t('hyrax.collections.search_form.button_label') %></button>
       </div>
     </div>
-    <%= hidden_field_tag :'f[member_of_collections_ssim][]', presenter.title.first %>
+    <%= hidden_field_tag :'f[member_of_collection_ids_ssim][]', presenter.id %>
     <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:cq, :sort, :qt, :page)) %>
 <% end %>
