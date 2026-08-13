@@ -19,6 +19,9 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
+        #thumbnails
+        super
+
         if audio_mime_types.include?(mime_type)
           create_audio_derivative_files(filename)
         else
@@ -27,6 +30,7 @@ module Spot
       end
 
       def cleanup_derivatives
+        #thumbnails
         super
 
         derivative_path_factory.derivatives_for_reference(file_set).each do |path|
@@ -68,7 +72,6 @@ module Spot
                                                                 url: derivative_url('webm'),
                                                                 size: get_derivative_resolution(filename, 480),
                                                                 mime_type: 'video/webm',
-                                                                input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 2500k",
                                                                 audio: "-b:a 256k -ar 44100" },
                                                               { label: 'mp4',
@@ -76,7 +79,6 @@ module Spot
                                                                 url: derivative_url('mp4'),
                                                                 size: get_derivative_resolution(filename, 1080),
                                                                 mime_type: 'video/mp4',
-                                                                input_options: "-ss 1",
                                                                 video: "-g 30 -b:v 8000k",
                                                                 audio: "-b:a 256k -ar 44100" }])
       end
