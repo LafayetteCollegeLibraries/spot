@@ -19,7 +19,7 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_derivatives(filename)
-        #thumbnails
+        # thumbnails
         super
 
         if audio_mime_types.include?(mime_type)
@@ -30,7 +30,7 @@ module Spot
       end
 
       def cleanup_derivatives
-        #thumbnails
+        # thumbnails
         super
 
         derivative_path_factory.derivatives_for_reference(file_set).each do |path|
