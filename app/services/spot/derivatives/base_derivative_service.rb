@@ -61,7 +61,7 @@ module Spot
       end
 
       def create_derivatives(src_path)
-        create_thumbnail_from(src_path)
+        create_thumbnail_from(src_path) unless audio_mime_types.include?(mime_type)
         extract_and_save_full_text(src_path) if full_text_eligible_types.include?(mime_type)
       end
 
