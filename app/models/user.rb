@@ -93,6 +93,11 @@ class User < ApplicationRecord
     update_roles_from_attributes(attributes)
   end
 
+  # Changed to remove the password parameter.
+  def find_or_create_system_user(user_key)
+    User.find_by_user_key(user_key) || User.create!(user_key_field => user_key)
+  end
+
   private
 
   # Delegates the updating of User Roles to `Spot::CasUserRolesService`, which will
