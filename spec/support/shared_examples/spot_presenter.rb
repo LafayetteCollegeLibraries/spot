@@ -14,8 +14,8 @@ RSpec.shared_examples 'a Spot presenter' do
     let(:solr_doc) { instance_double(SolrDocument) }
 
     [
-      :contributor, :creator, :description, :identifier, :keyword, :note, :permalink,
-      :physical_medium, :publisher, :related_resource, :resource_type, :rights_holder,
+      :contributor, :creator, :description, :identifier, :keyword, :note,
+      :permalink, :publisher, :related_resource, :resource_type, :rights_holder,
       :rights_statement, :source, :subtitle, :title_alternative, :title, :visibility,
       :source_identifier
     ].each do |method_name|
@@ -28,6 +28,16 @@ RSpec.shared_examples 'a Spot presenter' do
 
         it { is_expected.to eq dummy_value }
       end
+    end
+  end
+
+  describe '#format' do
+    subject { presenter.format }
+
+    let(:solr_data) { { 'physical_medium_tesim' => ['Carte postale', 'Postcard'], 'format_tesim' => ['Postcard'] } }
+
+    describe 'combines :format and :physical_medium values' do
+      it { is_expected.to eq ['Postcard', 'Carte postale'] }
     end
   end
 

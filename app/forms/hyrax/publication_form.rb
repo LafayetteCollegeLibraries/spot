@@ -31,7 +31,7 @@ module Hyrax
       :subject,
       :keyword,
       :language,
-      :physical_medium,
+      :format,
       :location,
       :note,
       :related_resource,

@@ -28,10 +28,10 @@ RSpec.describe Qa::Authorities::SolrSuggest do
 
     [
       ['bibliographic_citation', 'bibliographic_citation_sim'],
+      ['format', 'format_sim'],
       ['keyword', 'keyword_sim'],
       ['name', 'name_suggest_ssim'],
       ['organization', 'organization_sim'],
-      ['physical_medium', 'physical_medium_sim'],
       ['publisher', 'publisher_sim'],
       ['source', 'source_sim']
     ].each do |dict, field|
