@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.feature 'Create a Publication', :clean, :js do
+RSpec.feature 'Create a Publication', :js do
   before do
     stub_request(:get, subject_uri)
     stub_request(:get, /fast\.oclc\.org\/fastsuggest/)
