@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Hyrax::Actors::PublicationActor do
+RSpec.describe Hyrax::Actors::PublicationActor, :skip_if_valkyrie do
   it_behaves_like 'a Spot actor'
 
   describe '#apply_date_available' do

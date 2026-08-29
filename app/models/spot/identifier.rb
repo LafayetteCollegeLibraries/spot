@@ -49,6 +49,7 @@ module Spot
       # @param [String] string_value
       # @return [Spot::Identifier]
       def from_string(string_value)
+        string_value = string_value.to_s unless string_value.is_a?(String)
         return new(nil, string_value) unless string_value.include?(SEPARATOR)
 
         prefix, id = string_value.split(SEPARATOR, 2)

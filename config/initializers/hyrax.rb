@@ -2,16 +2,37 @@
 require 'wings'
 
 Hyrax.config do |config|
-  config.register_curation_concern :publication, :image, :student_work, :audio_visual
+  # Dassie seems to be explicitly _not_ registering the _resource concern, so maybe we shouldn't either?
+  %i[publication image student_work audio_visual].each do |type|
+    # config.register_curation_concern :"#{type}_resource"
+    config.register_curation_concern type
+  end
 
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
 
-  config.admin_set_model = '::AdminSet'
-  config.collection_model = '::Collection'
-  config.file_set_model = '::FileSet'
+  if Hyrax.config.use_valkyrie?
+    config.admin_set_model = 'AdminSetResource'
+    config.collection_model = 'CollectionResource'
+    config.file_set_model = 'Hyrax::FileSet'
+    config.index_adapter = :solr_index
+  else
+    config.admin_set_model = '::AdminSet'
+    config.collection_model = '::Collection'
+    config.file_set_model = '::FileSet'
+  end
 
+  config.query_index_from_valkyrie = Hyrax.config.use_valkyrie?
   config.solr_default_method = :post
+
+  # Use our own FileSetDerivativesService first and fall back to the Hyrax services
+  # for formats we don't currently handle uniquely.
+  config.derivative_services = [
+    Spot::Derivatives::ImageDerivativeService,
+    Spot::Derivatives::BaseDerivativeService,
+    Spot::Derivatives::FileSetDerivativesService,
+    Hyrax::FileSetDerivativesService
+  ]
 
   # Register roles that are expected by your implementation.
   # @see Hyrax::RoleRegistry for additional details.
@@ -95,7 +116,7 @@ Hyrax.config do |config|
   # config.redis_namespace = "hyrax"
 
   # Path to the file characterization tool
-  config.fits_path = ENV.fetch('FITS_PATH') { 'fits.sh' }
+  config.characterization_options = { ch12n_tool: :fits_servlet }
 
   # Path to the file derivatives creation tool
   config.libreoffice_path = ENV.fetch('SOFFICE_PATH') { 'soffice' }
@@ -169,7 +190,7 @@ Hyrax.config do |config|
   # This user is logged as the acting user for jobs and other processes that
   # run without being attributed to a specific user (e.g. creation of the
   # default admin set).
-  # config.system_user_key = 'systemuser@example.com'
+  config.system_user_key = 'repository@lafayette.edu'
 
   # The user who runs batch jobs. Update this if you aren't using emails
   config.batch_user_key = 'dss@lafayette.edu'
@@ -314,15 +335,4 @@ end
 
 Rails.application.reloader.to_prepare do
   Date::DATE_FORMATS[:standard] = "%m/%d/%Y"
-
-  # Hyrax v4 adds a helper method on the Hyrax constant that Bulkrax v9 depends on,
-  # so we'll patch it in if it doesn't exist yet. This came up while having issues
-  # with Bulkrax exports.
-  unless Hyrax.respond_to?(:index_field_mapper)
-    module Hyrax
-      def self.index_field_mapper
-        config.index_field_mapper
-      end
-    end
-  end
 end
