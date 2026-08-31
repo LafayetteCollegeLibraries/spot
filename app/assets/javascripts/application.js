@@ -19,6 +19,7 @@
 //= require popper
 //= require twitter/typeahead
 //= require bootstrap
+//= require browse_everything
 
 //= require jquery.dataTables
 //= require dataTables.bootstrap4
