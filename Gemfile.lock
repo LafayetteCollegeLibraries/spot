@@ -378,8 +378,7 @@ GEM
     faraday-retry (2.3.2)
       faraday (~> 2.0)
     ffi (1.17.2)
-    ffprober (1.0)
-      sorbet-runtime
+    ffprober (2.0)
     flipflop (2.8.0)
       activesupport (>= 4.0)
       terminal-table (>= 1.8)
@@ -1070,7 +1069,6 @@ GEM
     snaky_hash (2.0.3)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
-    sorbet-runtime (0.5.12443)
     sparql (3.2.6)
       builder (~> 3.2, >= 3.2.4)
       ebnf (~> 2.3, >= 2.3.5)
