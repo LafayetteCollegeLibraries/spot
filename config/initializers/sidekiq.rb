@@ -2,7 +2,7 @@
 #
 # Configuration for Sidekiq services
 Sidekiq.configure_server do |config|
-  ActiveJob::Base.logger = Sidekiq::Logging.logger
+  ActiveJob::Base.logger = Sidekiq::Logger.new($stdout)
 
   # tell Sidekiq about our redis customizations
   if ENV['REDIS_URL'].present? || ENV['REDIS_PASSWORD'].present?
