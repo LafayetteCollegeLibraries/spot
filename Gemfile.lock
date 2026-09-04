@@ -244,6 +244,9 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    cronex (0.15.0)
+      tzinfo
+      unicode (>= 0.4.4.5)
     csv (3.3.5)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
@@ -352,7 +355,7 @@ GEM
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
     erubi (1.13.1)
-    et-orbi (1.4.0)
+    et-orbi (1.4.2)
       tzinfo
     execjs (2.10.0)
     factory_bot (6.4.5)
@@ -387,7 +390,7 @@ GEM
       jquery-rails
     font-awesome-rails (4.7.0.9)
       railties (>= 3.2, < 9.0)
-    fugit (1.12.1)
+    fugit (1.13.0)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
     gapic-common (1.2.0)
@@ -789,7 +792,7 @@ GEM
       nokogiri (~> 1.6)
       rails (>= 5.0, < 8.1)
       rdf
-    raabro (1.4.0)
+    raabro (1.5.0)
     racc (1.8.1)
     rack (2.2.24)
     rack-cas (0.16.1)
@@ -1039,9 +1042,11 @@ GEM
       logger
       rack (>= 2.2.4, < 3.3)
       redis-client (>= 0.23.0, < 1)
-    sidekiq-cron (1.9.1)
-      fugit (~> 1.8)
-      sidekiq (>= 4.2.1)
+    sidekiq-cron (2.4.0)
+      cronex (>= 0.13.0)
+      fugit (~> 1.8, >= 1.11.1)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6.5.0)
     signet (0.21.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -1125,6 +1130,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
+    unicode (0.4.4.5)
     unicode-display_width (2.6.0)
     unicode-types (1.11.0)
     uri (1.1.1)
@@ -1229,7 +1235,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 4)
   sidekiq (~> 7.3.10)
-  sidekiq-cron (~> 1.9.1)
+  sidekiq-cron (~> 2.0)
   simple_form (< 5.2)
   simplecov (~> 0.22.0)
   simplecov-cobertura (~> 3)
