@@ -9,7 +9,7 @@ ADD         https://raw.githubusercontent.com/samvera-labs/docker-fcrepo/main/as
 ARG         FCREPO_VERSION=4.7.6
 RUN         bash ./repack.sh
 
-FROM        jetty:9-jre17
+FROM        jetty:9-jre8
 USER        root
 RUN         mkdir -p /data ${JETTY_BASE}/etc ${JETTY_BASE}/modules
 ADD         --chown=jetty:jetty assets/fedora.xml ${JETTY_BASE}/webapps/fedora.xml
