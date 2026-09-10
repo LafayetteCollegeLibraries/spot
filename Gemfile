@@ -80,9 +80,6 @@ gem 'faraday', '~> 2.0'
 # video file resource for getting information on video derivatives
 gem 'ffprober'
 
-# error trackijng
-gem 'honeybadger', '~> 4.12.1'
-
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '~> 1.1.0'
 
