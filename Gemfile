@@ -80,9 +80,6 @@ gem 'faraday', '~> 2.0'
 # video file resource for getting information on video derivatives
 gem 'ffprober'
 
-# error trackijng
-gem 'honeybadger', '~> 4.12.1'
-
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '~> 1.1.0'
 
@@ -128,8 +125,8 @@ gem 'rsolr', '~> 2.5.0'
 gem 'rubyzip', '~> 2.3.2'
 
 # our jobs server
-gem 'sidekiq', '~> 5.2.9'
-gem 'sidekiq-cron', '~> 1.9.1'
+gem 'sidekiq', '~> 7.3.10'
+gem 'sidekiq-cron', '~> 2.0'
 
 # using Slack for some of our messaging
 gem 'slack-ruby-client'
@@ -167,8 +164,8 @@ group :development do
 
   gem 'listen', '~> 3.9.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring', '~> 2.1.1'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring', '~> 4.7.0'
+  gem 'spring-watcher-listen', '~> 2.1.0'
 end
 
 # things used for development + testing (again, not as necessary to lock down versions)
