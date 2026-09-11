@@ -19,6 +19,7 @@
 //= require popper
 //= require twitter/typeahead
 //= require bootstrap
+//= require browse_everything
 
 //= require jquery.dataTables
 //= require dataTables.bootstrap4
@@ -38,6 +39,8 @@
 
 // Bulkrax
 //= require bulkrax/application
+//= require spot/browse-everything-button-patch
+//= require browse_everything
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require spot/hyrax_overrides
