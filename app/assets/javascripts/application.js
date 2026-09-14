@@ -19,8 +19,10 @@
 //= require popper
 //= require twitter/typeahead
 //= require bootstrap-sprockets
+//= require browse_everything
 
 //= require spot/range-slider-patch-1
+
 
 //= require blacklight/blacklight
 //= require blacklight_advanced_search
@@ -43,6 +45,8 @@
 
 // Bulkrax
 //= require bulkrax/application
+//= require spot/browse-everything-button-patch
+//= require browse_everything
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require spot/hyrax_overrides
