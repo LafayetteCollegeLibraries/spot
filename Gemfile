@@ -46,12 +46,12 @@ gem 'bagit', '~> 0.6.0'
 # blacklight plugins for enhanced searching
 gem 'blacklight_advanced_search', '~> 7.0.0'
 gem 'blacklight_oai_provider', '~> 7.0.2'
-gem 'blacklight_range_limit', '~> 8.5.0'
+gem 'blacklight_range_limit', '~> 8.5'
 
 # start up the server faster
 gem 'bootsnap', '~> 1.17', require: false
 
-gem 'bootstrap', '~> 4.0'
+gem 'bootstrap', '~> 4.6.2.1'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.6.0'
@@ -79,9 +79,6 @@ gem 'faraday', '~> 2.0'
 
 # video file resource for getting information on video derivatives
 gem 'ffprober'
-
-# error trackijng
-gem 'honeybadger', '~> 4.12.1'
 
 # allows us to create admin (and more!) roles for users
 gem 'hydra-role-management', '~> 1.1.0'
