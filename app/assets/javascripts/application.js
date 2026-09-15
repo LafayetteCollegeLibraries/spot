@@ -18,16 +18,23 @@
 
 //= require popper
 //= require twitter/typeahead
-//= require bootstrap
+//= require bootstrap-sprockets
+//= require browse_everything
 
-//= require jquery.dataTables
-//= require dataTables.bootstrap4
+//= require spot/range-slider-patch-1
+
+
 //= require blacklight/blacklight
 //= require blacklight_advanced_search
 //= require blacklight_range_limit
 
+//= require spot/range-slider-patch-2
+
 //= require blacklight_gallery/default
 //= require blacklight_gallery/osd_viewer
+
+//= require jquery.dataTables
+//= require dataTables.bootstrap4
 
 // require openseadragon
 //= require openseadragon/openseadragon
@@ -38,9 +45,13 @@
 
 // Bulkrax
 //= require bulkrax/application
+//= require spot/browse-everything-button-patch
+//= require browse_everything
 
 //= require spot/editor/multi_auth_controlled_vocabulary
 //= require spot/hyrax_overrides
 //= require language-tagged-autocomplete-setup
 //= require multi-auth-input
 //= require workflow-action-form-validation
+
+//= require spot/range-slider-patch-3

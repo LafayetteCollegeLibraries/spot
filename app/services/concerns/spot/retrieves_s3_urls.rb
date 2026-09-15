@@ -22,16 +22,6 @@ module Spot
         uri_parsed = ::Addressable::URI.parse(uri)
 
         case uri_parsed.scheme
-        when "http"
-          if Rails.env.development?
-            client = Aws::S3::Client.new
-            kv = uri_parsed.path[1..-1].split('/', 2)
-            resp = client.head_object(bucket: kv[0], key: kv[1])
-            return true unless resp.nil?
-            false
-          else
-            super(uri, headers)
-          end
         when "s3"
           client = Aws::S3::Client.new
           resp = client.head_object(bucket: uri_parsed.host, key: uri_parsed.path[1..-1])

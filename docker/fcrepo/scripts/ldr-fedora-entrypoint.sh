@@ -46,7 +46,7 @@ if [[ -d /jetty-overrides ]]; then
   cd -
 fi
 
-su -s /bin/bash -c "echo $JAVA_OPTIONS" jetty
+su -s /bin/bash -c "JAVA_HOME=/opt/java/openjdk; PATH=$PATH:/usr/local/jetty/bin:/opt/java/openjdk/bin; exec /docker-entrypoint.sh $@" jetty
 
 # see: https://github.com/nulib/docker-fcrepo/blob/master/assets/fedora-entrypoint.sh#L40
-su -s /bin/bash -c "exec /docker-entrypoint.sh $@" jetty
+# su -s /bin/bash -c "exec /docker-entrypoint.sh $@" jetty
