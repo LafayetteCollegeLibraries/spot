@@ -37,7 +37,7 @@ class ZipService
 
     ::Zip::File.open(src_path) do |zip_file|
       zip_file.each do |entry|
-        entry.extract(File.join(dest_path, entry.name))
+        entry.extract(destination_directory: dest_path)
       end
     end
   end
@@ -47,7 +47,7 @@ class ZipService
   # @param [String, Pathname] dest_path Destination path (should contain '.zip')
   # @return [Zip::File]
   def zip!(dest_path:)
-    ::Zip::File.open(dest_path, ::Zip::File::CREATE) do |zipfile|
+    ::Zip::File.open(dest_path, create: true) do |zipfile|
       write_entries(entries, '', zipfile)
     end
   end
