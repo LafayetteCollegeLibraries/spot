@@ -1,0 +1,27 @@
+  <div class="row">
+    <div class="col-md-12">
+      <fieldset id="representative-image">
+        <legend>
+          <%= t("hyrax.base.form_thumbnail.legend_html") %>
+        </legend>
+        <div class="form-group">
+          <span class="help-block"><%= t("hyrax.base.form_thumbnail.help_html") %></span>
+          <% @form.select_files.each_slice(3) do |group| %>
+          <div class="row">
+            <% group.each do |filename, fs_id| %>
+            <div class="col-md-4">
+              <div class="radio-inline">
+                <label>
+                  <img class="img-thumbnail" src="/downloads/<%= fs_id %>?file=thumbnail" role="presentation"/>
+                  <input type="radio" value="<%= fs_id %>" name="thumbnail_id" <%= 'checked' if @form.thumbnail_id == fs_id %>>
+                  <p><%= filename %></p>
+                </label>
+              </div>
+            </div>
+            <% end %>
+          </div>
+          <% end %>
+          </div>
+        </div>
+      </fieldset>
+    </div>
