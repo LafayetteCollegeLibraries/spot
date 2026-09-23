@@ -32,8 +32,8 @@ module Spot
     def content
       ::CSV.generate do |csv|
         csv << terms.map do |term|
-          values = work.respond_to?(term) ? work.send(term) : ''
-          values = values.respond_to?(:to_a) ? values.to_a : [values]
+          value = work_has_property?(term) ? work.public_send(term) : ''
+          values = Array.wrap(value)
           values = values.map(&:to_s)
           values.join(multi_value_separator)
         end
@@ -59,7 +59,7 @@ module Spot
         editor
         source
         resource_type
-        physical_medium
+        format
         language
         abstract
         description
@@ -76,6 +76,15 @@ module Spot
         rights_statement
         visibility
       ]
+    end
+
+    def work_has_property?(term)
+      case work
+      when ActiveFedora::Base
+        work.class.properties.include?(term)
+      else
+        work.respond_to?(term)
+      end
     end
   end
 end
