@@ -41,6 +41,8 @@ module Spot
       #
       # @return [true, false]
       def valid?
+        return false if Hyrax.config.use_valkyrie?
+
         !audio_mime_types.include?(mime_type)
       end
 

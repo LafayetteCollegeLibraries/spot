@@ -17,6 +17,8 @@ module Spot
     included do
       before_action :load_workflow_presenter, only: :edit
       after_action  :update_workflow_flash, only: :update
+
+      self.work_form_service = Hyrax::FormFactory.new if Hyrax.config.use_valkyrie?
     end
 
     private

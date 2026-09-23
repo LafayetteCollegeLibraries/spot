@@ -1,19 +1,79 @@
 # frozen_string_literal: true
 #
-# Copied from Dassie example in Hyrax—register our models with Wings so they convert correctly
+# Set up cribbed from the Dassie example app within Hyrax, which itself is adapted from Hyku.
 #
-# @todo Revisit this when Valkyrizing. This might need to be moved to config/initializers/valkyrie.rb
-# @see https://github.com/samvera/hyrax/blob/hyrax-v5.2.0/.dassie/config/initializers/wings.rb
 Rails.application.config.after_initialize do
-  Wings::ModelRegistry.register(Collection, Collection)
-  Wings::ModelRegistry.register(AdminSet, AdminSet)
-  Wings::ModelRegistry.register(FileSet, FileSet)
-  Wings::ModelRegistry.register(Hyrax::FileSet, FileSet)
-  Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
-  Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
+  # active_fedora models we're migrating
+  [Publication, Image, StudentWork, AudioVisual].each do |work_type|
+    # ValkyrieLazyMigration sets up connections between an AF-based work_type and its Valkyrized equivalent
+    # and also registers the connection in the Wings::ModelRegistry
+    Hyrax::ValkyrieLazyMigration.migrating("#{work_type}Resource".constantize, from: work_type)
 
-  Wings::ModelRegistry.register(Publication, PublicationResource)
-  Wings::ModelRegistry.register(Image, ImageResource)
-  Wings::ModelRegistry.register(StudentWork, StudentWorkResource)
-  Wings::ModelRegistry.register(AudioVisual, AudioVisualResource)
+    # from dassie:
+    #   "we register itself so we can pre-translate the class in Freyja instead of having to translate in each query_service"
+    Wings::ModelRegistry.register(work_type, work_type)
+  end
+
+  # Map AdminSets and Collections
+  Hyrax::ValkyrieLazyMigration.migrating(AdminSetResource, from: ::AdminSet)
+  Hyrax::ValkyrieLazyMigration.migrating(CollectionResource, from: ::Collection)
+  Hyrax::ValkyrieLazyMigration.migrating(Hyrax::FileSet, from: ::FileSet)
+
+  Wings::ModelRegistry.register(AdminSet, AdminSet)
+  Wings::ModelRegistry.register(Collection, Collection)
+  Wings::ModelRegistry.register(FileSet, FileSet)
+
+  Wings::ModelRegistry.register(Hyrax::FileMetadata, Hydra::PCDM::File)
+  Wings::ModelRegistry.register(Hydra::PCDM::File, Hydra::PCDM::File)
+
+  next if Hyrax.query_service.try(:services).nil?
+
+  # load all the sql based custom queries
+  [
+    Hyrax::CustomQueries::Navigators::CollectionMembers,
+    Hyrax::CustomQueries::Navigators::ChildCollectionsNavigator,
+    Hyrax::CustomQueries::Navigators::ParentCollectionsNavigator,
+    Hyrax::CustomQueries::Navigators::ChildFileSetsNavigator,
+    Hyrax::CustomQueries::Navigators::ChildWorksNavigator,
+    Hyrax::CustomQueries::Navigators::FindFiles,
+    Hyrax::CustomQueries::FindAccessControl,
+    Hyrax::CustomQueries::FindCollectionsByType,
+    Hyrax::CustomQueries::FindFileMetadata,
+    Hyrax::CustomQueries::FindIdsByModel,
+    Hyrax::CustomQueries::FindManyByAlternateIds,
+    Hyrax::CustomQueries::FindModelsByAccess,
+    Hyrax::CustomQueries::FindCountBy,
+    Hyrax::CustomQueries::FindByDateRange,
+    Hyrax::CustomQueries::FindBySourceIdentifier # from bulkrax
+  ].each do |handler|
+    Hyrax.query_service.services[0].custom_queries.register_query_handler(handler)
+  end
+end
+
+Rails.application.config.to_prepare do
+  # Copied from Dassie but modified to map our CurationConcern work types to Hyrax::Resource classes
+  Valkyrie.config.resource_class_resolver = lambda do |resource_klass_name|
+    resource_types = Hyrax.config.curation_concerns.map(&:to_s).concat(['Collection', 'AdminSet'])
+    klass_name = resource_klass_name.gsub(/^Wings\((.+)\)$/, '\1')
+    klass_name = klass_name.gsub(/Resource$/, '')
+
+    next "#{klass_name}Resource".constantize if resource_types.include?(klass_name)
+
+    case klass_name
+    when 'Hydra::AccessControl'
+      # Without this mapping, we'll see cases of Postgres Valkyrie adapter attempting to write to
+      # Fedora.  Yeah!
+      Hyrax::AccessControl
+    when 'FileSet'
+      Hyrax::FileSet
+    when 'Hydra::AccessControls::Embargo'
+      Hyrax::Embargo
+    when 'Hydra::AccessControls::Lease'
+      Hyrax::Lease
+    when 'Hydra::PCDM::File'
+      Hyrax::FileMetadata
+    else
+      klass_name.constantize
+    end
+  end
 end

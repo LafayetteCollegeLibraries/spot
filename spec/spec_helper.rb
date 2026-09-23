@@ -149,7 +149,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.after do
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
@@ -164,12 +164,16 @@ RSpec.configure do |config|
     Hyrax::SolrService.wipe! if Hyrax.config.query_index_from_valkyrie
   end
 
-  # config.after clean: true do
-  #   DatabaseCleaner.clean
-  # end
-
   config.before js: true do
     DatabaseCleaner.strategy = :truncation
+  end
+
+  config.around(skip_if_valkyrie: true) do |example|
+    if Hyrax.config.use_valkyrie?
+      example.skip
+    else
+      example.run
+    end
   end
 end
 
