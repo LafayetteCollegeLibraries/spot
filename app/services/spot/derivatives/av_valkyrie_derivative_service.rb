@@ -14,7 +14,10 @@ module Spot
     #
     # @see https://www.loc.gov/preservation/digital/formats/fdd/fdd000237.shtml
     class AvValkyrieDerivativeService < BaseDerivativeService
-      # Checks for premade derivatives, calls for derivative generation if none exist.
+      class_attribute :service_file_use, default: Hyrax::FileMetadata::Use::SERVICE_FILE
+
+      # Generates one derivative file for audio and two for video and then uploads them
+      # to the S3 bucket via Valkyrie StorageAdapter.
       #
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
@@ -23,9 +26,9 @@ module Spot
         super
 
         if audio_mime_types.include?(mime_type)
-          create_audio_derivative_files(filename)
+          create_and_attach_audio_derivatives(filename)
         else
-          create_video_derivative_files(filename)
+          create_and_attach_video_derivatives(filename)
         end
       end
 
@@ -33,16 +36,9 @@ module Spot
         # thumbnails
         super
 
-        derivative_path_factory.derivatives_for_reference(file_set).each do |path|
-          FileUtils.rm_f(path)
+        find_service_files_from_file_set.each do |file|
+          storage_adapter.delete(id: file.id)
         end
-      end
-
-      # The destination_name parameter has to match up with the file parameter
-      # passed to the DownloadsController
-      def derivative_url(destination_name)
-        path = derivative_path_factory.derivative_path_for_reference(derivative_url_target, destination_name)
-        URI("file://#{path}").to_s
       end
 
       # only run service if bucket is defined and file includes audio mime types
@@ -52,31 +48,35 @@ module Spot
 
       private
 
+      def shuttle_filename(suffix)
+        working_directory.join("#{file_set.id.to_s}-access#{suffix}")
+      end
+
       # Uses Hydra to create one mp3 derivative of the original file.
       #
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_audio_derivative_files(filename)
         Hydra::Derivatives::AudioDerivatives.create(filename,
-                                                    outputs: [{ label: 'mp3', format: 'mp3', url: derivative_url('mp3') }])
+                                                    outputs: [{ label: 'mp3', format: 'mp3', url: URI("file://#{shuttle_filename(".mp3")}").to_s }])
       end
 
-      # Uses Hydra to create one mp4 and one webm derivative of the original file.
+      # Uses Hydra to create two mp4 derivatives of the original file.
       #
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_video_derivative_files(filename)
         Hydra::Derivatives::VideoDerivatives.create(filename,
-                                                    outputs: [{ label: 'webm',
-                                                                format: 'webm',
-                                                                url: derivative_url('webm'),
+                                                    outputs: [{ label: 'low',
+                                                                format: 'mp4',
+                                                                url: URI("file://#{shuttle_filename("-480.mp4")}").to_s,
                                                                 size: get_derivative_resolution(filename, 480),
                                                                 mime_type: 'video/webm',
                                                                 video: "-g 30 -b:v 2500k",
                                                                 audio: "-b:a 256k -ar 44100" },
-                                                              { label: 'mp4',
+                                                              { label: 'high',
                                                                 format: 'mp4',
-                                                                url: derivative_url('mp4'),
+                                                                url: URI("file://#{shuttle_filename("-1080.mp4")}").to_s,
                                                                 size: get_derivative_resolution(filename, 1080),
                                                                 mime_type: 'video/mp4',
                                                                 video: "-g 30 -b:v 8000k",
@@ -106,18 +106,79 @@ module Spot
         format('%dx%d', width, height)
       end
 
-      # If given a FileMetadata object pass the file_set_id for derivative URL
-      # creation.
-      def derivative_url_target
-        if file_set.try(:file_set_id)
-          file_set.file_set_id.to_s
-        else
-          file_set
+      # Use Hyrax::ValkyrieUpload service (see #upload_service) to move the shuttle
+      # file(s) to S3, create a FileMetadata object for each file, and attach the
+      # object(s) to the file_set as a Hyrax::FileMetadata::Use::SERVICE_FILE.
+      #
+      # @return Hyrax::FileMetadata
+      def attach_service_file_to_file_set(shuttles)
+        for file in shuttles do
+          upload_service.upload(
+            filename: File.basename(file),
+            file_set: file_set,
+            mime_type: 'image/tiff',
+            io: File.open(file),
+            skip_derivatives: true,
+            use: service_file_use,
+            user: deposit_user
+          )
         end
       end
 
-      def derivative_path_factory
-        Hyrax::DerivativePath
+      # Manages the file creation, upload, and deletion for audio derivatives
+      def create_and_attach_audio_derivatives(filename)
+        return no_bucket_warning if s3_bucket.blank?
+
+        create_audio_derivative_files(filename)
+        attach_service_file_to_file_set([shuttle_filename(".mp3")]) && delete_shuttle_file!
+      end
+
+      # Manages the file creation, upload, and deletion for video derivatives
+      def create_and_attach_video_derivatives(filename)
+        return no_bucket_warning if s3_bucket.blank?
+
+        create_video_derivative_files(filename)
+        attach_service_file_to_file_set([shuttle_filename("-480.mp4"), shuttle_filename("-1080.mp4")]) && delete_shuttle_file!
+      end
+
+      def delete_shuttle_file!
+        FileUtils.rm_f(shuttle_filename(".mp3")) if File.exist?(shuttle_filename(".mp3"))
+        FileUtils.rm_f(shuttle_filename("-480.mp4")) if File.exist?(shuttle_filename("-480.mp4"))
+        FileUtils.rm_f(shuttle_filename("-1080.mp4")) if File.exist?(shuttle_filename("-1080.mp4"))
+      end
+
+      def deposit_user
+        User.find_or_create_system_user(Hyrax.config.system_user_key)
+      end
+
+      def find_service_files_from_file_set
+        Hyrax.query_service
+             .custom_queries
+             .find_many_file_metadata_from_ids(ids: file_set.file_ids)
+             .select { |file| file.pcdm_use.include?(service_file_use) }
+      end
+
+      def no_bucket_warning
+        Rails.logger.warn('Skipping AV derivative generation because the AWS_AV_ASSET_BUCKET environment variable is not defined.')
+        false
+      end
+
+      def s3_bucket
+        ENV['AWS_AV_ASSET_BUCKET']
+      end
+
+      def av_storage_adapter
+        Valkyrie::StorageAdapter.find(:av_source_s3)
+      end
+
+      def upload_service
+        Hyrax::ValkyrieUpload.new(storage_adapter: av_storage_adapter)
+      end
+
+      def working_directory
+        @working_directory ||= Rails.root.join('tmp', 'av-src').tap do |src|
+          FileUtils.mkdir_p(src) unless Dir.exist?(src)
+        end
       end
     end
   end
