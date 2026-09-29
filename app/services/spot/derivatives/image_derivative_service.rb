@@ -94,7 +94,7 @@ module Spot
         User.find_or_create_system_user(Hyrax.config.system_user_key)
       end
 
-      def find_service_file_from_file_set
+      def find_service_files_from_file_set
         Hyrax.query_service
              .custom_queries
              .find_many_file_metadata_from_ids(ids: file_set.file_ids)
