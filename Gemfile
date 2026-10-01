@@ -185,8 +185,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 5.1'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4'
-  gem 'simplecov', '~> 0.22.0', require: false
-  gem 'simplecov-cobertura', '~> 3', require: false
+  gem 'simplecov', '~> 1.2.0', require: false
+  gem 'simplecov-cobertura', '~> 4', require: false
   gem 'stub_env', '~> 1.0.4'
   gem 'webmock', '~> 3.8'
 end
