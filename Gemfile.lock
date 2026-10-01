@@ -131,6 +131,7 @@ GEM
       i18n
     bcp47_spec (0.2.1)
     bcrypt (3.1.20)
+    benchmark (0.5.0)
     bibtex-ruby (6.2.0)
       latex-decode (~> 0.0)
       logger (~> 1.7)
@@ -764,7 +765,8 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 4)
-    okcomputer (1.18.6)
+    okcomputer (1.20.0)
+      benchmark
     openseadragon (0.9.0)
       rails (> 6.1.0)
     orm_adapter (0.5.0)
@@ -1216,7 +1218,7 @@ DEPENDENCIES
   lograge
   multi_json (~> 1.20.1)
   non-digest-assets (~> 2.2.0)
-  okcomputer (~> 1.18.5)
+  okcomputer (~> 1.20.0)
   openseadragon (~> 0.9.0)
   pg (~> 1.5.4)
   posix-spawn
