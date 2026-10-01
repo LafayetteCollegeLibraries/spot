@@ -57,8 +57,8 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_audio_derivative_files(filename)
-        Hydra::Derivatives::AudioDerivatives.create(filename,
-                                                    outputs: [{ label: 'mp3', format: 'mp3', url: URI("file://#{shuttle_filename(".mp3")}").to_s }])
+          Spot::FfmpegRunner.new.create(filename, shuttle_filename(".mp3"),
+                                    { format: 'mp3' })
       end
 
       # Uses Hydra to create two mp4 derivatives of the original file.
@@ -66,21 +66,16 @@ module Spot
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_video_derivative_files(filename)
-        Hydra::Derivatives::VideoDerivatives.create(filename,
-                                                    outputs: [{ label: 'low',
-                                                                format: 'mp4',
-                                                                url: URI("file://#{shuttle_filename("-480.mp4")}").to_s,
-                                                                size: get_derivative_resolution(filename, 480),
-                                                                mime_type: 'video/webm',
-                                                                video: "-g 30 -b:v 2500k",
-                                                                audio: "-b:a 256k -ar 44100" },
-                                                              { label: 'high',
-                                                                format: 'mp4',
-                                                                url: URI("file://#{shuttle_filename("-1080.mp4")}").to_s,
-                                                                size: get_derivative_resolution(filename, 1080),
-                                                                mime_type: 'video/mp4',
-                                                                video: "-g 30 -b:v 8000k",
-                                                                audio: "-b:a 256k -ar 44100" }])
+        Spot::FfmpegRunner.new.create(filename, shuttle_filename("-480.mp4"), 
+                                  { format: 'mp4',
+                                    size: get_derivative_resolution(filename, 480),                                          
+                                    video: "-g 30 -b:v 2500k",
+                                    audio: "-b:a 256k -ar 44100" })
+        Spot::FfmpegRunner.new.create(filename, shuttle_filename("-1080.mp4"), 
+                                  {format: 'mp4',
+                                    size: get_derivative_resolution(filename, 1080),                                          
+                                    video: "-g 30 -b:v 8000k",
+                                    audio: "-b:a 256k -ar 44100" })
       end
 
       # Returns the resolution of a video file.
