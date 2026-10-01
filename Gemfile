@@ -155,7 +155,7 @@ gem 'simple_form', '< 5.2'
 gem 'openseadragon', '~> 0.9.0'
 
 # need to be 1.20.1 or higher to avoid an incompatibility with json gem
-gem 'multi_json', '~> 1.20.1'
+gem 'multi_json', '~> 1.21.2'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do
