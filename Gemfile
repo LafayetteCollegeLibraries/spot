@@ -174,7 +174,7 @@ group :development, :test do
   gem 'byebug', '~> 11.1.3'
   gem 'capybara', '~> 3.38'
   gem 'capybara-screenshot', '~> 1.0.26'
-  gem 'database_cleaner', '~> 2.0.1'
+  gem 'database_cleaner', '~> 2.1.0'
   gem 'equivalent-xml', '~> 0.6.0', require: false
   gem 'factory_bot_rails', '~> 6', require: false
   gem 'hyrax-spec', '~> 0.3.2'
