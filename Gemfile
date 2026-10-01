@@ -49,7 +49,7 @@ gem 'blacklight_oai_provider', '~> 7.0.2'
 gem 'blacklight_range_limit', '~> 8.5'
 
 # start up the server faster
-gem 'bootsnap', '~> 1.17', require: false
+gem 'bootsnap', '~> 1.26', require: false
 
 gem 'bootstrap', '~> 4.6.2.1'
 
