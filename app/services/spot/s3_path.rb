@@ -33,7 +33,9 @@ module Spot
 
     # @todo get this from Jenn's work
     class AvPathGenerator < Base
-      def generate(resource:, file:, original_filename:); end
+      def generate(resource:, file:, original_filename:)
+        original_filename
+      end
     end
   end
 end

@@ -48,7 +48,7 @@ module Spot
         return no_bucket_warning if s3_bucket.blank?
         return false if Hyrax.config.use_valkyrie?
 
-        audio_mime_types.include?(mime_type) || video_mime_types.include?(mime_type)
+        (audio_mime_types.include?(mime_type) || video_mime_types.include?(mime_type)) && !Hyrax.config.use_valkyrie?
       end
 
       private

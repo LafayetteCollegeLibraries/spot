@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Derivatives::TextExtractionService, derivatives: true do
+RSpec.describe Spot::Derivatives::TextExtractionService, :skip_if_valkyrie, derivatives: true do
   let(:service) { described_class.new(file_set) }
   let(:file_set) { instance_double('FileSet', mime_type: fs_mime_type, uri: '<file_set uri>') }
   let(:fs_mime_type) { 'application/pdf' }
