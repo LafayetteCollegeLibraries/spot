@@ -61,13 +61,13 @@ module Spot
                                     { format: 'mp3' })
       end
 
-      # Uses Hydra to create two mp4 derivatives of the original file.
+      # Uses Ffmpeg (avoiding Hydra) to create one mp4 and one webm derivative of the original file.
       #
       # @param [String,Pathname] filename, the src path of the file
       # @return [void]
       def create_video_derivative_files(filename)
-        Spot::FfmpegRunner.new.create(filename, shuttle_filename("-480.mp4"), 
-                                  { format: 'mp4',
+        Spot::FfmpegRunner.new.create(filename, shuttle_filename("-480.webm"), 
+                                  { format: 'webm',
                                     size: get_derivative_resolution(filename, 480),                                          
                                     video: "-g 30 -b:v 2500k",
                                     audio: "-b:a 256k -ar 44100" })
@@ -106,18 +106,16 @@ module Spot
       # object(s) to the file_set as a Hyrax::FileMetadata::Use::SERVICE_FILE.
       #
       # @return Hyrax::FileMetadata
-      def attach_service_file_to_file_set(shuttles, mime)
-        for file in shuttles do
-          upload_service.upload(
-            filename: File.basename(file),
-            file_set: file_set,
-            mime_type: mime,
-            io: File.open(file),
-            skip_derivatives: true,
-            use: service_file_use,
-            user: deposit_user
-          )
-        end
+      def attach_service_file_to_file_set(shuttle, mime)
+        upload_service.upload(
+          filename: File.basename(shuttle),
+          file_set: file_set,
+          mime_type: mime,
+          io: File.open(shuttle),
+          skip_derivatives: true,
+          use: service_file_use,
+          user: deposit_user
+        )
       end
 
       # Manages the file creation, upload, and deletion for audio derivatives
@@ -125,7 +123,7 @@ module Spot
         return no_bucket_warning if s3_bucket.blank?
 
         create_audio_derivative_files(filename)
-        attach_service_file_to_file_set([shuttle_filename(".mp3")], 'audio/mpeg') && delete_shuttle_file!
+        attach_service_file_to_file_set(shuttle_filename(".mp3"), 'audio/mpeg') && delete_shuttle_file!
       end
 
       # Manages the file creation, upload, and deletion for video derivatives
@@ -133,12 +131,14 @@ module Spot
         return no_bucket_warning if s3_bucket.blank?
 
         create_video_derivative_files(filename)
-        attach_service_file_to_file_set([shuttle_filename("-480.mp4"), shuttle_filename("-1080.mp4")], 'video/mp4') && delete_shuttle_file!
+        attach_service_file_to_file_set(shuttle_filename("-480.webm"), 'video/mp4')
+        attach_service_file_to_file_set(shuttle_filename("-1080.mp4"), 'video/webm')
+        delete_shuttle_file!
       end
 
       def delete_shuttle_file!
         FileUtils.rm_f(shuttle_filename(".mp3")) if File.exist?(shuttle_filename(".mp3"))
-        FileUtils.rm_f(shuttle_filename("-480.mp4")) if File.exist?(shuttle_filename("-480.mp4"))
+        FileUtils.rm_f(shuttle_filename("-480.webm")) if File.exist?(shuttle_filename("-480.webm"))
         FileUtils.rm_f(shuttle_filename("-1080.mp4")) if File.exist?(shuttle_filename("-1080.mp4"))
       end
 
