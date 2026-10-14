@@ -46,8 +46,8 @@ module Spot
     #
     # @param [#to_s] schema_name
     # @return [Enumerable<Spot::SimpleSchemaLoader::AttributeDefinition]
-    def definitions(schema_name)
-      super(schema_name).map { |prev| AttributeDefinition.new(prev.name, prev.config) }
+    def definitions(schema_name, _version, _contexts = nil)
+      super(schema_name, _version, _contexts).map { |prev| AttributeDefinition.new(prev.name, prev.config) }
     end
   end
 end
