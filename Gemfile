@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 5.2.0'
+gem 'hyrax', '~> 5.3.1'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -134,6 +134,16 @@ gem 'slack-ruby-client'
 # used in the Hyrax 4 upgrade but not a dependency??
 gem 'twitter-typeahead-rails', '~> 0.11.1'
 
+# use valkyrie-shrine to connect s3 storage to valkyrie
+gem 'valkyrie-shrine', '~> 1.1'
+
+# Pinned sub-dependencies
+#
+# hydra-derivatives 4.1.0 introduced a `require 'ruby-vips'` call
+# that in turn requires VIPS to be installed even when we're not
+# intending to use it (we're sticking with ImageMagick for the time being)
+gem 'hydra-derivatives', '4.0.0'
+
 # now that we're writing es6 javascript of our own (+ not just using the hyrax js)
 # we need to compile it in sprockets.
 #
@@ -154,8 +164,8 @@ gem 'simple_form', '< 5.2'
 # sprockets support gets cagey after 1.0
 gem 'openseadragon', '~> 0.9.0'
 
-# need to be 1.20.1 or higher to avoid an incompatibility with json gem
-gem 'multi_json', '~> 1.20.1'
+# formerly set to 1.20.1 to avoid an imncompatability with the base json gem, but 1.18.0 is required for Hyrax 5.3.0+
+gem 'multi_json', '~> 1.18.0'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do

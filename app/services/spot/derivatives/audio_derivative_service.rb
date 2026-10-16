@@ -68,9 +68,10 @@ module Spot
 
       # only run service if bucket is defined and file includes audio mime types
       def valid?
+        return false if Hyrax.config.use_valkyrie?
         return no_bucket_warning if s3_bucket.blank?
 
-        audio_mime_types.include?(mime_type)
+        audio_mime_types.include?(mime_type) && !Hyrax.config.use_valkyrie?
       end
 
       private

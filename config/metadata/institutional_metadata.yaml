@@ -5,6 +5,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - academic_department_tesim
       - academic_department_sim
@@ -14,6 +15,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - division_tesim
       - division_sim
@@ -23,6 +25,7 @@ attributes:
     multiple: true
     form:
       multiple: true
+      primary: true
     index_keys:
       - organization_tesim
       - organization_sim

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe DeserializesRdfLiterals do
+RSpec.describe DeserializesRdfLiterals, :skip_if_valkyrie do
   before do
     class TestWorkType < ActiveFedora::Base
       property :title, predicate: ::RDF::Vocab::DC.title, multiple: false

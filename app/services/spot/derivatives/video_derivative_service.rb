@@ -118,9 +118,10 @@ module Spot
 
       # only run service if bucket is defined and file includes video mime types
       def valid?
+        return false if Hyrax.config.use_valkyrie?
         return no_bucket_warning if s3_bucket.blank?
 
-        video_mime_types.include?(mime_type)
+        video_mime_types.include?(mime_type) && !Hyrax.config.use_valkyrie?
       end
 
       private

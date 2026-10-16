@@ -34,7 +34,7 @@ ENV HYRAX_CACHE_PATH=/spot/tmp/cache \
     HYRAX_UPLOAD_PATH=/spot/tmp/uploads \
     BUNDLE_FORCE_RUBY_PLATFORM=1
 
-RUN corepack enable
+RUN corepack enable yarn
 
 COPY Gemfile Gemfile.lock /spot/
 RUN gem install bundler:$(tail -n 1 Gemfile.lock | sed -e 's/\s*//')
@@ -61,7 +61,8 @@ FROM spot-base AS spot-asset-builder
 ENV RAILS_ENV=production
 COPY . /spot
 
-RUN SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
+RUN echo y | yarn install \
+    && SECRET_KEY_BASE="$(bin/rake secret)" FEDORA_URL="http://fakehost:8080/rest" bundle exec rake assets:precompile
 
 ##
 # TARGET: pdfjs-installer

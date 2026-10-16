@@ -61,7 +61,7 @@ class Ability
   def authenticated_users_can_deposit_student_works
     return unless registered_user?
 
-    can(:create, StudentWork)
+    can(:create, StudentWorkResource)
   end
 
   # Delegates abilities for users that have the 'depositor' role
@@ -71,13 +71,13 @@ class Ability
   def depositor_abilities
     return unless current_user.depositor?
 
-    can(:create, Publication)
+    can(:create, PublicationResource)
 
     # can view the user dashboard
     can(:read, :dashboard)
 
     # can add items to collections
-    can(:deposit, Collection)
+    can(:deposit, CollectionResource)
   end
 
   # Delegates abilities for users that have the 'student' role
@@ -95,7 +95,7 @@ class Ability
   def student_abilities
     return unless current_user.student?
 
-    can(:create, StudentWork)
+    can(:create, StudentWorkResource)
     can(:read, :dashboard)
   end
 
