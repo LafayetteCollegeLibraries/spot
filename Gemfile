@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.11.5'
 #
 # the hyrax/spot stack
 #
-gem 'hyrax', '~> 5.2.0'
+gem 'hyrax', '~> 5.3.1'
 
 # modularize our javascripts
 gem 'almond-rails', '~> 0.3.0'
@@ -165,7 +165,7 @@ gem 'simple_form', '< 5.2'
 gem 'openseadragon', '~> 0.9.0'
 
 # need to be 1.20.1 or higher to avoid an incompatibility with json gem
-gem 'multi_json', '~> 1.20.1'
+gem 'multi_json', '~> 1.18.0'
 
 # development dependencies (not as necessary to lock down versions here)
 group :development do
