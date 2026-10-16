@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 module Spot
+  # Functions as a work around for the HydraDerivatives processors and runners for ffmpeg.
+  # Hydra derivatives automatically tries to persist the derivatives it generates, and we
+  # want to handle that process manually for av derivatives.
   class FfmpegRunner
     def create (file, output_file, options)
       if options[:format] == "mp3"
