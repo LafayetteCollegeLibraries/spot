@@ -82,7 +82,7 @@ module Spot
           Hyrax.logger.warn('Transcript not found.')
         else
           # enqueue job
-          Spot::TranscriptJob.perform_later(file_set: file_set, transcript_name: transcript_name)
+          Spot::TranscriptDownloadJob.perform_later(file_set: file_set, transcript_name: transcript_name)
           Hyrax.logger.debug('Transcript job enqueued.')
         end
       end

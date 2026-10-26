@@ -2,7 +2,7 @@
 module Spot
   # Tiny job wrapper that calls our TranscriptDownloadService
   # to do the heavy-lifting.
-  class TranscriptJob < ApplicationJob
+  class TranscriptDownloadJob < ApplicationJob
     # @option [FileSet] file_set
     # @option [String] transcript_Name
     def perform(file_set:, transcript_name:)

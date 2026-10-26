@@ -134,6 +134,9 @@ module Spot
         attach_service_file_to_file_set(shuttle_filename("-480.webm"), 'video/mp4')
         attach_service_file_to_file_set(shuttle_filename("-1080.mp4"), 'video/webm')
         delete_shuttle_file!
+
+        # enqueue job to search for and attach sibling transcript file sets
+        Spot::TranscriptAttachmentJob.perform_later(file_set_id: file_set.id.to_s)
       end
 
       def delete_shuttle_file!
