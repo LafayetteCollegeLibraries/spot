@@ -2,11 +2,15 @@
 require 'wings'
 
 Hyrax.config do |config|
+  # prevent Hyrax from inserting opinionated metadata defaults
+  config.disable_include_metadata = true
+  config.work_default_metadata = false
+
   # Dassie seems to be explicitly _not_ registering the _resource concern, so maybe we shouldn't either?
-  %i[publication image student_work audio_visual].each do |type|
-    # config.register_curation_concern :"#{type}_resource"
-    config.register_curation_concern type
-  end
+  config.register_curation_concern :publication
+  config.register_curation_concern :image
+  config.register_curation_concern :student_work
+  config.register_curation_concern :audio_visual
 
   # Can't define this within the Bulkrax initializer as it runs _before_ this
   Bulkrax.default_work_type = Hyrax.config.curation_concerns.first.name
