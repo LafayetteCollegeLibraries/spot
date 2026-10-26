@@ -18,15 +18,19 @@ module Spot
         # Since Hyrax::Workflow::ActivateObject is a module (and not a class)
         # we can't really inherit it, so instead we'll call it
         Hyrax::Workflow::ActivateObject.call(target: target, **kwargs)
+        return true if target.respond_to?(:date_available) && target.date_available.present?
 
         if target.respond_to?(:date_available=) && target.date_available.blank?
-          date = target.embargo_release_date || Time.zone.now
+          date =
+            if target.try(:embargo) && target.embargo.try(:embargo_release_date).present?
+              target.embargo.embargo_release_date
+            else
+              Time.zone.now
+            end
+
           target.date_available = [date.strftime('%Y-%m-%d')]
         end
 
-        # Explicitly returning true because the :date_available= guard may return false
-        # for models without the property defined, which will cause the work to not be saved
-        # @see https://github.com/samvera/hyrax/blob/v2.9.6/app/services/hyrax/workflow/action_taken_service.rb#L24-L32
         true
       end
     end

@@ -3,7 +3,7 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
   # testing on a Publication, but theoretically this should behave the same on all resources.
   # since we're not validating the resources, we don't really need metadata.
   let(:original_resource) { FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only) }
-  let(:resource) { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: original_resource.id) }
+  let(:resource) { Hyrax.query_service.find_by(id: original_resource.id) }
   let(:embargo) { FactoryBot.valkyrie_create(:embargo, embargo_release_date: embargo_release_date) }
   let(:lease) { FactoryBot.valkyrie_create(:lease, lease_expiration_date: lease_expiration_date) }
   let(:embargo_release_date) { DateTime.now.utc + 1.day }
@@ -39,7 +39,7 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
 
         it 'does nothing' do
           expect { described_class.clear_all_expired }
-            .not_to change { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: resource.id).visibility }
+            .not_to change { Hyrax.query_service.find_by(id: resource.id).visibility }
         end
       end
 
@@ -48,15 +48,15 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
 
         it "updates the item's visibility" do
           expect { described_class.clear_all_expired }
-            .to change { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: resource.id).visibility }
+            .to change { Hyrax.query_service.find_by(id: resource.id).visibility }
             .from(embargo.visibility_during_embargo)
             .to(embargo.visibility_after_embargo)
         end
 
         context 'for a resource with children' do
-          let(:resource) { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: original_resource.id) }
+          let(:resource) { Hyrax.query_service.find_by(id: original_resource.id) }
           let(:child) { FactoryBot.valkyrie_create(:publication_resource_with_required_fields_only) }
-          let(:child_resource) { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: child.id) }
+          let(:child_resource) { Hyrax.query_service.find_by(id: child.id) }
 
           before do
             allow(Hyrax::AccessControlList).to receive(:copy_permissions)
@@ -95,7 +95,7 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
 
         it "updates the item's visibility" do
           expect { described_class.clear_all_expired }
-            .to change { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: resource.id).visibility }
+            .to change { Hyrax.query_service.find_by(id: resource.id).visibility }
             .from(lease.visibility_during_lease)
             .to(lease.visibility_after_lease)
         end
@@ -106,7 +106,7 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
 
         it 'does nothing' do
           expect { described_class.clear_all_expired }
-            .not_to change { Hyrax.query_service.find_by_alternate_identifier(alternate_identifier: resource.id).visibility }
+            .not_to change { Hyrax.query_service.find_by(id: resource.id).visibility }
         end
       end
     end

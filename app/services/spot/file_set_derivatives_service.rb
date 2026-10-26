@@ -27,6 +27,7 @@ module Spot
     end
 
     def valid?
+      return false if Hyrax.config.use_valkyrie?
       services.any?(&:valid?)
     end
 

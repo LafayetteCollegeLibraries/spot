@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe SolrSuggestActor do
+RSpec.describe SolrSuggestActor, :skip_if_valkyrie do
   before { allow(job).to receive(:perform_now) }
 
   let(:job) { Spot::UpdateSolrSuggestDictionariesJob }

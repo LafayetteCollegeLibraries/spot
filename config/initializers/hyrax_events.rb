@@ -9,9 +9,9 @@ module Spot
   class ApplicationListener
     # Mint Handles for records when they are deposited
     def on_object_deposited(event)
-      MintHandleJob.perform_later(event[:object])
+      # MintHandleJob.perform_later(event[:object])
     end
   end
 end
 
-Hyrax::Publisher.instance.subscribe(Spot::ApplicationListener.new)
+# Hyrax::Publisher.instance.subscribe(Spot::ApplicationListener.new)

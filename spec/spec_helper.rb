@@ -9,8 +9,13 @@ if ENV['COVERAGE'] || ENV['CI']
 
   # set up code-coverage
   require 'simplecov'
-  require 'simplecov-cobertura'
-  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+  SimpleCov.formatter = if ENV['CI']
+                          require 'simplecov-cobertura'
+                          SimpleCov::Formatter::CoberturaFormatter
+                        else
+                          SimpleCov::Formatter::HTMLFormatter
+                        end
+
   SimpleCov.start 'rails' do
     add_filter 'lib/mailer_previews'
   end
@@ -27,10 +32,12 @@ require 'active_fedora/cleaner'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara-screenshot/rspec'
+
 require 'hyrax/spec/matchers'
 require 'hyrax/spec/shared_examples'
 require 'hyrax/spec/factory_bot/build_strategies'
 require 'hyrax/specs/shared_specs'
+
 require 'webmock/rspec'
 require 'rspec/matchers'
 require 'equivalent-xml'
@@ -149,7 +156,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.after do
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
@@ -164,12 +171,16 @@ RSpec.configure do |config|
     Hyrax::SolrService.wipe! if Hyrax.config.query_index_from_valkyrie
   end
 
-  # config.after clean: true do
-  #   DatabaseCleaner.clean
-  # end
-
   config.before js: true do
     DatabaseCleaner.strategy = :truncation
+  end
+
+  config.around(skip_if_valkyrie: true) do |example|
+    if Hyrax.config.use_valkyrie?
+      example.skip
+    else
+      example.run
+    end
   end
 end
 

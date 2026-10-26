@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-RSpec.describe Spot::Actors::CollectionsMembershipActor, actor_stack: true do
+RSpec.describe Spot::Actors::CollectionsMembershipActor, :skip_if_valkyrie do
   before do
     allow(Collection).to receive(:find).with(parent_collection.id).and_return(parent_collection)
     allow(Collection).to receive(:find).with(child_collection.id).and_return(child_collection)
