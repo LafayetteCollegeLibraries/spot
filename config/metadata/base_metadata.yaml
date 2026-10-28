@@ -37,6 +37,8 @@ attributes:
       primary: true
     index_keys:
       - description_tesim
+
+  # @see app/indexers/base_resource_indexer.rb
   identifier:
     predicate: http://purl.org/dc/terms/identifier
     type: string
@@ -44,8 +46,6 @@ attributes:
     form:
       multiple: true
       primary: true
-    index_keys:
-      - identifier_ssim
   keyword:
     predicate: http://schema.org/keywords
     type: string

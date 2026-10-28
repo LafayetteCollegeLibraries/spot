@@ -417,4 +417,8 @@ Rails.application.reloader.to_prepare do
 
   # Patch to use Lucene search to retrieve PCDM Members
   Hyrax::PcdmMemberPresenterFactory.prepend(Spot::LucenePatchForPcdmMemberPresentersFactory)
+
+  # This is _super_ ugly, but AdminSetCreateService wants to provide the default id
+  Hyrax::AdminSetCreateService.send(:remove_const, :DEFAULT_ID)
+  Hyrax::AdminSetCreateService::DEFAULT_ID = ''
 end
