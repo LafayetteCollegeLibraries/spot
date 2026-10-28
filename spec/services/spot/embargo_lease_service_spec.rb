@@ -11,23 +11,9 @@ RSpec.describe Spot::EmbargoLeaseService, valkyrization: true do
 
   describe '.clear_all_expired' do
     describe 'embargoes' do
-      # @note In Hyrax < 5.0.1 there's not a way to use the Wings persister without triggering
-      #       ActiveFedora validations (which will ultimately not allow an Embargo to be applied
-      #       with a date in the past), so instead we'll cast the Resource + Embargo/Leases to
-      #       ActiveFedora objects and assign the Embargo/Lease that way, allowing us to call
-      #       #save(validate: false).
-      #
-      # @todo When we upgrade to Hyrax 5.0.1, we should be able to replace this block with:
-      #       before do
-      #         resource.embargo = embargo
-      #         Hyrax.persister.save(resource: resource, perform_af_validation: false)
-      #       end
       before do
-        af_resource = Hyrax.persister.resource_factory.from_resource(resource: resource)
-        af_embargo = Hyrax.persister.resource_factory.from_resource(resource: embargo)
-        af_resource.visibility = af_embargo.visibility_during_embargo
-        af_resource.embargo = af_embargo
-        af_resource.save(validate: false)
+        resource.embargo = embargo
+        Hyrax.persister.save(resource: resource, perform_af_validation: false)
       end
 
       after do
