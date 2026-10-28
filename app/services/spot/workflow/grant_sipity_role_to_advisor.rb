@@ -29,11 +29,12 @@ module Spot
       end
 
       def target_gid
-        @target.to_global_id.to_s
+        Hyrax::GlobalID(@target).to_s
       end
 
       def workflow_role
-        Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: @target.admin_set.active_workflow)
+        workflow = Sipity::Workflow.find_active_workflow_for(admin_set_id: @target.admin_set_id)
+        Sipity::WorkflowRole.find_or_create_by!(role: Sipity::Role[:advising], workflow: workflow)
       end
     end
   end

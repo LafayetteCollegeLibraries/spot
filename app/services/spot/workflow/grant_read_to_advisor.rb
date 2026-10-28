@@ -9,7 +9,10 @@ module Spot
         advisor_emails = target.advisor.select { |advisor| advisor.end_with?('@lafayette.edu') }
         return if advisor_emails.empty?
 
-        target.read_users += advisor_emails
+        permissions = Hyrax::PermissionManager.new(resource: target)
+        permissions.read_users += advisor_emails
+        permissions.acl.save
+
         advisor_emails.each { |email| ::Hyrax::GrantReadToMembersJob.perform_later(target, email) }
       end
     end

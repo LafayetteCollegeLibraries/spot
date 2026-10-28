@@ -21,6 +21,7 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
     super.tap do |doc|
       doc.merge!(
         citation_metadata,
+        identifier_metadata,
         language_and_label,
         rights_statement_and_labels,
         {
@@ -43,7 +44,7 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
 
   # rubocop:disable Metrics/CyclomaticComplexity
   def citation_metadata
-    return {} unless resource.respond_to?(:bibliographic_citation) && resource.bibliographic_citation.present?
+    return {} if resource&.bibliographic_citation.blank?
 
     raw = Array.wrap(resource.bibliographic_citation).first
     parsed = ::AnyStyle.parse(raw)&.first
@@ -61,6 +62,16 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
     }
   end
 
+  def identifier_metadata
+    return {} if resource&.identifier.blank?
+
+    {
+      'identifier_ssim' => resource.identifier.map(&:to_s),
+      'identifier_local_ssim' => resource.identifier.select(&:local?).map(&:to_s),
+      'identifier__standard_ssim' => resource.identifier.select(&:standard?).map(&:to_s)
+    }
+  end
+
   def language_and_label
     return {} if resource.language.empty?
 
@@ -73,12 +84,11 @@ class BaseResourceIndexer < Hyrax::Indexers::PcdmObjectIndexer
   # Uses either the earliest date in metadata (using .sortable_date_field attribute)
   # or falls back to the create_date of the resource to determine a date to use for sorting.
   def parse_sortable_date
-    value = (resource.try(sortable_date_field) || []).sort.first
-    return if value.blank?
+    value = resource.try(sortable_date_field)&.sort&.first
+    value ||= resource.created_at.to_s
 
     parsed = Date.edtf(value)
     parsed = parsed.first if parsed.class < ::Enumerable # guard for EDTF sets/intervals/etc
-    parsed ||= Date.parse(resource.created_at.to_s)
 
     parsed.strftime('%FT%TZ')
   end

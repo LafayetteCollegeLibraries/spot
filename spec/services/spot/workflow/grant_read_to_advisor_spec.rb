@@ -4,7 +4,7 @@ RSpec.describe Spot::Workflow::GrantReadToAdvisor do
   let(:advisors) { [create(:user), create(:user)] }
   let(:advisor_emails) { advisors.map(&:email) }
   let(:depositor) { create(:user) }
-  let(:work) { build(:student_work, id: 'abc123', advisor: advisor_emails, user: depositor) }
+  let(:work) { FactoryBot.valkyrie_create(:student_work_resource, advisor: advisor_emails, depositor: depositor.email) }
 
   it_behaves_like 'a Hyrax workflow method'
 
@@ -12,7 +12,7 @@ RSpec.describe Spot::Workflow::GrantReadToAdvisor do
     # using #sort bc the users aren't in the same order (sent to Hyrax::GrantReadToMembersJob,
     # which processes them last-in-first-out, i think)
     expect { described_class.call(target: work) }
-      .to change { work.read_users.sort }
+      .to change { Hyrax::PermissionManager.new(resource: work).read_users.sort }
       .from([])
       .to(advisor_emails.sort)
   end
@@ -20,7 +20,7 @@ RSpec.describe Spot::Workflow::GrantReadToAdvisor do
   context 'when the work does not have an "advisor" field' do
     subject { described_class.call(target: work) }
 
-    let(:work) { build(:publication, id: 'cba321') }
+    let(:work) { FactoryBot.valkyrie_create(:publication_resource) }
 
     it { is_expected.to be nil }
   end
