@@ -12,18 +12,24 @@ module Spot
     end
 
     def attach_transcripts
+      Hyrax.logger.warn("Transcript Job Start")
       file_set = Hyrax.query_service.find_by(id: @file_set_id)
+      Hyrax.logger.warn("File Set ID: " + file_set.id.to_s)
       parent = Hyrax.query_service.find_parents(resource: file_set)
+      Hyrax.logger.warn("Parent: " + parent.to_s)
       return if parent.blank?
-      parent = parent[0];
+      parent = parent[0]
       transcripts = available_transcripts(parent: parent)
+      Hyrax.logger.warn("Transcripts: " + transcripts.to_s)
       return if transcripts.blank?
       transcript_ids = []
       for t in transcripts do
         transcript_ids.push(t.id)
       end
+      Hyrax.logger.warn("Transcript IDs: " + transcript_ids.to_s)
       file_set.transcript_ids = transcript_ids
-      Valkyrie.config.metadata_adapter.persister.save(resource: file_set)
+      Hyrax.persister.save(resource: file_set)
+      Hyrax.logger.warn("Transcript Job End")
     end
 
     def available_transcripts(parent:)

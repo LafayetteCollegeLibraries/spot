@@ -136,7 +136,7 @@ module Spot
         delete_shuttle_file!
 
         # enqueue job to search for and attach sibling transcript file sets
-        Spot::TranscriptAttachmentJob.perform_later(file_set_id: file_set.id.to_s)
+        Spot::TranscriptAttachmentJob.set(wait: 10.minutes).perform_later(file_set_id: file_set.id.to_s)
       end
 
       def delete_shuttle_file!
