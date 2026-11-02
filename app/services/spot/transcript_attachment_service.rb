@@ -29,6 +29,7 @@ module Spot
       Hyrax.logger.warn("Transcript IDs: " + transcript_ids.to_s)
       file_set.transcript_ids = transcript_ids
       Hyrax.persister.save(resource: file_set)
+      Hyrax.index_adapter.save(resource: file_set)
       Hyrax.logger.warn("Transcript Job End")
     end
 
