@@ -3,7 +3,7 @@
 # !! This is a builder image. Not for general use !!
 # Use this as the base image for the Rails / Sidekiq services.
 ##
-FROM ruby:3.2.11-slim-bookworm AS spot-base
+FROM ruby:3.2.9-slim-bookworm AS spot-base
 
 RUN apt-get clean && \
     apt-get update -y && \
