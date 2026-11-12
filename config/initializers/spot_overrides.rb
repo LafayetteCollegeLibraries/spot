@@ -317,7 +317,8 @@ Rails.application.reloader.to_prepare do
     end
   end
 
-  Bulkrax::ImporterJob.prepend(Spot::BulkraxImporterJobDecorator)
+  # no longer necessary after moving away from s3 urls
+  # Bulkrax::ImporterJob.prepend(Spot::BulkraxImporterJobDecorator)
 
   # Bulkrax's parser replaces any whitespace character with a space, which kills paragraph breaks
   # and newlines. Our patch modifies the base #result method to only replace tabs with
@@ -417,7 +418,7 @@ Rails.application.reloader.to_prepare do
   end
   # rubocop:enable all
 
-  Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
+  # Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
 
   # Copied over from Hyrax to overwrite the method in the user concern.
   # We remove the password parameter since we don't use it.
