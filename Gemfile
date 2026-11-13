@@ -55,7 +55,7 @@ gem 'bootstrap', '~> 4.6.2.1'
 
 # Bulkrax for batch ingesting objects
 gem 'browse-everything', '~> 1.6.0'
-gem 'bulkrax', '~> 9.5.1'
+gem 'bulkrax', '~> 9.5.2'
 
 # This needs to be here if we want to compile our own JS
 # (there's like a single coffee-script file still remaining in hyrax)
@@ -122,7 +122,7 @@ gem 'rdf-vocab', '~> 3.3.3'
 gem 'rsolr', '~> 2.5.0'
 
 # used in conjunction with our importers to zip/unzip files
-gem 'rubyzip', '~> 2.3.2'
+gem 'rubyzip', '~> 3.6.0'
 
 # our jobs server
 gem 'sidekiq', '~> 7.3.10'

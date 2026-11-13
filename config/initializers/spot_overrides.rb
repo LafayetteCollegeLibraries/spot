@@ -143,12 +143,12 @@ Rails.application.reloader.to_prepare do
   CharacterizeJob.characterization_service = Spot::CharacterizationService
 
   # Override the Browse-Everything Retreiver to take S3 URIs
-  BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
-  BrowseEverything::Retriever.class_eval do
-    class << self
-      prepend Spot::RetrievesS3Urls::ClassMethods
-    end
-  end
+  # BrowseEverything::Retriever.prepend(Spot::RetrievesS3Urls)
+  # BrowseEverything::Retriever.class_eval do
+  #   class << self
+  #     prepend Spot::RetrievesS3Urls::ClassMethods
+  #   end
+  # end
 
   # To be honest, I'm not sure why the Hyrax code doesn't work as-is,
   # but rewriting the solr_params[:sort] assignment to this kinda
@@ -317,7 +317,8 @@ Rails.application.reloader.to_prepare do
     end
   end
 
-  Bulkrax::ImporterJob.prepend(Spot::BulkraxImporterJobDecorator)
+  # no longer necessary after moving away from s3 urls
+  # Bulkrax::ImporterJob.prepend(Spot::BulkraxImporterJobDecorator)
 
   # Bulkrax's parser replaces any whitespace character with a space, which kills paragraph breaks
   # and newlines. Our patch modifies the base #result method to only replace tabs with
