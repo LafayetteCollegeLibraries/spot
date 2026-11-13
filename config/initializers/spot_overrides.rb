@@ -418,7 +418,7 @@ Rails.application.reloader.to_prepare do
   end
   # rubocop:enable all
 
-  # Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
+  Bulkrax::CsvParser.prepend(Spot::BulkraxCsvParserDecorator)
 
   # Copied over from Hyrax to overwrite the method in the user concern.
   # We remove the password parameter since we don't use it.
