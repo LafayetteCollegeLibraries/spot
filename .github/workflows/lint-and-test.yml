@@ -14,7 +14,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libpq-dev libxml2-dev libxslt-dev libpthread
+          sudo apt-get install -y build-essential libpq-dev libxml2-dev libxslt-dev glibc
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2"
