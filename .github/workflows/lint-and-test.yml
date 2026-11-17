@@ -7,7 +7,6 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     env:
-      CFLAGS: "-std=gnu17"
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
     steps:
@@ -20,6 +19,8 @@ jobs:
             libxslt-dev netcat-openbsd nodejs openssl postgresql ruby-dev tzdata zip \
             libasound2t64 libdbus-glib-1-dev libgtk-3-0t64 libpq-dev unzip libx11-xcb1
       - uses: ruby/setup-ruby@v1
+        env:
+          CFLAGS: "-std=gnu17"
         with:
           ruby-version: "3.2"
           bundler-cache: true
