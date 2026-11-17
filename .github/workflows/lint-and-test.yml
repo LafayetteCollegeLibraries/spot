@@ -7,6 +7,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     env:
+      CFLAGS: "-std=gnu99"
       BUNDLE_PATH: vendor/bundle
       BUNDLE_WITH: test
     steps:
