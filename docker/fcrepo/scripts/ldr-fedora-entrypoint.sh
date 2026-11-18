@@ -28,6 +28,7 @@ export JAVA_OPTIONS="${JAVA_OPTIONS} \
   -XX:MaxMetaspaceSize=256m \
   -XX:+UseG1GC \
   -XX:+DisableExplicitGC \
+  -XX:-UseBASE64Intrinsics \
   -Dfcrepo.modeshape.configuration=classpath:/config/jdbc-postgresql/repository.json \
   -Dfcrepo.postgresql.username=${FCREPO_POSTGRES_USER} \
   -Dfcrepo.postgresql.password=${FCREPO_POSTGRES_PASSWORD} \
