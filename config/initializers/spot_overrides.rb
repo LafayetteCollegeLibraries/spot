@@ -431,4 +431,16 @@ Rails.application.reloader.to_prepare do
   end
 
   Bulkrax::ObjectFactory.prepend(Spot::BulkraxObjectFactoryFindPatch)
+
+  # 'work_identifier' is undefined in the scope of FileFactory::InnerWorkings
+  # so we need to pull it in from the object factory.
+  #
+  # @see https://github.com/samvera/bulkrax/blob/main/app/models/concerns/bulkrax/file_factory.rb
+  # @see https://github.com/samvera/bulkrax/blob/main/app/concerns/loggable.rb
+  # @see https://github.com/samvera/bulkrax/blob/main/app/factories/bulkrax/object_factory_interface.rb
+  Bulkrax::FileFactory::InnerWorkings.class_eval do
+    def work_identifier 
+      object_factory.work_identifier
+    end
+  end
 end

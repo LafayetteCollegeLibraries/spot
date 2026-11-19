@@ -105,6 +105,8 @@ Bulkrax.setup do |config|
     }
   }
 
+  config.removed_image_path = 'app/assets/images/removed.png'
+
   # Not sure if it's a bug or intentional, but the way Bulkrax generates default field_configs
   # will overwrite the default with the configured value (if one exists). What we want instead
   # is to use the default_field_mapping value as the base for every field and merge the parser
