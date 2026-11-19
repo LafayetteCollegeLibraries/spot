@@ -439,8 +439,8 @@ Rails.application.reloader.to_prepare do
   # @see https://github.com/samvera/bulkrax/blob/main/app/concerns/loggable.rb
   # @see https://github.com/samvera/bulkrax/blob/main/app/factories/bulkrax/object_factory_interface.rb
   Bulkrax::FileFactory::InnerWorkings.class_eval do
-    def work_identifier 
-      object_factory.work_identifier
-    end
+    attr_reader :object_factory
+
+    delegate :object, :klass, :attributes, :user, :work_identifier, to: :object_factory
   end
 end
