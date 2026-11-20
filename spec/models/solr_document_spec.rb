@@ -32,6 +32,7 @@ RSpec.describe SolrDocument do
     editor: { type: Array, suffix: 'tesim' },
     file_set_ids: { type: Array, suffix: 'ssim', value: ['abc123', 'def456'] },
     file_size: { type: String, suffix: 'lts' },
+    format: { type: Array, suffix: 'tesim' },
     identifier: { type: Array, suffix: 'ssim' },
     inscription: { type: Array, suffix: 'tesim' },
     keyword: { type: Array, suffix: 'tesim' },

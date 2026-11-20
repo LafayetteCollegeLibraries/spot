@@ -29,7 +29,7 @@ module Hyrax
       :location,
       :language,
       :source,
-      :physical_medium,
+      :format,
       :original_item_extent,
       :repository_location,
       :requested_by,
