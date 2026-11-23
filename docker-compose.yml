@@ -85,7 +85,7 @@ services:
     restart: unless-stopped
 
   minio:
-    image: minio/minio:latest
+    image: dhi.io/minio:latest
     environment:
       MINIO_ROOT_USER: minio_root_user
       MINIO_ROOT_PASSWORD: minio_root_password

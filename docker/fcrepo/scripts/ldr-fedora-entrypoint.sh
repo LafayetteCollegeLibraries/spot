@@ -11,7 +11,6 @@ do
   sleep 1
 done
 
-
 # JAVA_OPTIONS from our on-campus deploy, as recommended by FCRepo wiki,
 # with pathways in for changing the min/max memory allotted to fcrepo.
 # Metadata is stored in a PostgreSQL database named "fcrepo" (not configurable)
@@ -28,7 +27,6 @@ export JAVA_OPTIONS="${JAVA_OPTIONS} \
   -XX:MaxMetaspaceSize=256m \
   -XX:+UseG1GC \
   -XX:+DisableExplicitGC \
-  -XX:-UseBASE64Intrinsics \
   -Dfcrepo.modeshape.configuration=classpath:/config/jdbc-postgresql/repository.json \
   -Dfcrepo.postgresql.username=${FCREPO_POSTGRES_USER} \
   -Dfcrepo.postgresql.password=${FCREPO_POSTGRES_PASSWORD} \
