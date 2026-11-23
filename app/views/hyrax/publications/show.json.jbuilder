@@ -27,7 +27,7 @@ json.extract!(@curation_concern, :bibliographic_citation)
 json.subject(map_uris(@curation_concern.subject))
 json.extract!(@curation_concern, :keyword)
 json.location(map_uris(@curation_concern.location))
-json.extract!(@curation_concern, :identifier, :source, :language, :physical_medium, :related_resource)
+json.extract!(@curation_concern, :identifier, :source, :language, :format, :related_resource)
 
 # dates
 json.extract!(@curation_concern, :date_issued, :date_available, :date_uploaded, :date_modified)

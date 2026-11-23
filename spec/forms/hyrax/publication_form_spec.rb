@@ -101,7 +101,7 @@ RSpec.describe Hyrax::PublicationForm do
     it { is_expected.to include(note: []) }
     it { is_expected.to include(:date_issued) }
     it { is_expected.to include(resource_type: []) }
-    it { is_expected.to include(physical_medium: []) }
+    it { is_expected.to include(format: []) }
     it { is_expected.to include(language: []) }
     it { is_expected.to include(keyword: []) }
     it { is_expected.to include(bibliographic_citation: []) }

@@ -8,12 +8,12 @@ FactoryBot.define do
     contributor { ['Contributor, First-Name', 'Person, Another'] }
     creator { ['Creator, Anne'] }
     description { ['An account of the resource'] }
+    format { ['Photograph'] }
     identifier { ['hdl:10385/abc123'] }
     keyword { ['photo'] }
     language { ['en'] }
     location { ['http://sws.geonames.org/5188140/'] }
     note { ['Some staff-side information'] }
-    physical_medium { ['Photograph'] }
     publisher { ['Lafayette College'] }
     related_resource { ['http://another-resource.com'] }
     resource_type { ['Other'] }
